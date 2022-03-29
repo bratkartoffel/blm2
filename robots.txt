@@ -1,8 +1,6 @@
 User-agent: *
 
 Disallow: *
-Disallow: /forum/*
-
 
 Allow: /?p=anmelden
 Allow: /?p=index

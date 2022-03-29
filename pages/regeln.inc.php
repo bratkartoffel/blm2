@@ -130,15 +130,8 @@
         </td>
     </tr>
     <tr>
-        <td id="p11">
-            <b>11. Forum</b><br/>
-            <br/>
-            Diese Regeln gelten auch (soweit anwendbar) für das integrierte Forum.
-        </td>
-    </tr>
-    <tr>
         <td id="p12">
-            <b>12. Accountpushing</b><br/>
+            <b>11. Accountpushing</b><br/>
             <br/>
             Es ist verboten, einen anderen Account (z.B durch überhöhte Preise bei Verträgen) unspielbar zu machen, und
             somit einem anderen Account einem Vorteil zu verschaffen.

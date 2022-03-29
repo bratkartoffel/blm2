@@ -278,9 +278,6 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     <div class="NaviLink" onclick="Navigation(this);">
                         <a href="./?p=index&amp;<?= intval(time()); ?>">Startseite</a>
                     </div>
-                    <div class="NaviLink" onclick="Navigation(this); return false;" style="margin-bottom: 5px;">
-                        <a href="./forum/" target="_blank" onclick="return false;">Forum</a>
-                    </div>
                     <div class="NaviLinkHeader">Gebäude:</div>
                     <?php
                     if ($ich->Sitter->Gebaeude || !$_SESSION['blm_sitter']) {
@@ -412,8 +409,6 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     <div class="NaviLink" style="margin-top: 10px;" onclick="Navigation(this);"><a href="./?p=regeln">Regeln</a>
                     </div>
                     <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=impressum">Impressum</a></div>
-                    <br/>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./forum/">Forum</a></div>
                     <?php
                 }        // Der letzte Block war die Navigationsleiste für nicht angemeldete Benutzer
                 ?>

@@ -72,14 +72,11 @@ AND
 mysql_query($sql_abfrage);        // Dann löschen wir den Auftrag
 $_SESSION['blm_queries']++;
 
+$affected = mysql_affected_rows();
 DisconnectDB();
-if (mysql_affected_rows() == 0) {        // Wenn wir keinen Auftrag löschen konnten...
+if ($affected == 0) {        // Wenn wir keinen Auftrag löschen konnten...
     // dann stimmt was nicht
     header("location: ../?p=" . $_GET['back'] . "&m=112&" . time());
 } else {
     header("location: ../?p=" . $_GET['back'] . "&m=222&" . time() . "#" . substr($_GET['back'], 0, 1) . intval($_GET['was']));
 }
-die();
-
-// Was hier? :)
-// Hier dürfte er niemals sein ^^

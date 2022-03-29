@@ -35,7 +35,6 @@ if ($_GET['art'] != "") {
 }
 
 switch ($_GET['sort']) {
-    default:
     case "0":
         $sort = "IP";
         break;
@@ -43,6 +42,7 @@ switch ($_GET['sort']) {
         $sort = "Wer";
         break;
     case "2":
+    default:
         $sort = "Wann";
         break;
     case "3":

@@ -544,31 +544,4 @@ LIMIT 0,1;";
                             echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a>. Einer muss den Zufallsgenerator ja testen.';
                             ?></td>
                     </tr>
-                    <tr>
-                        <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=7&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
-                                Der Sponsor:
-                            </a>
-                        </th>
-                        <td><?php
-                            $sql_abfrage = "SELECT
-    ID,
-    Name,
-    BannerViews
-FROM
-    mitglieder
-WHERE
-    ID>1
-ORDER BY
-    BannerViews DESC,
-    RAND(" . date("H") . ")
-LIMIT 0,1;";
-                            $sql_ergebnis = mysql_query($sql_abfrage);
-                            $_SESSION['blm_queries']++;
-
-                            $user = mysql_fetch_object($sql_ergebnis);
-
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ' . $user->BannerViews . ' Banner Ansichten.';
-                            ?></td>
-                    </tr>
                 </table>

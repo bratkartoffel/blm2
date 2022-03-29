@@ -155,12 +155,6 @@ $statistik->AnzahlAuftraege = $statistik2->Auto_increment;
             ?></td>
     </tr>
     <tr>
-        <td>Gedeckte Serverkosten seit Rundenstart:</td>
-        <td style="text-align: right; white-space: nowrap;"><?php
-            echo number_format($statistik->BannerViews * BANNER_PAY_PER_VIEW, 2, ",", ".") . " " . $CurrencyC;
-            ?></td>
-    </tr>
-    <tr>
         <td>Die Antwort auf die Frage nach dem Sinn des Lebens, des Universums und allem:</td>
         <td style="text-align: right; white-space: nowrap;">42</td>
     </tr>

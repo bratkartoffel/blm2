@@ -134,26 +134,15 @@ ORDER BY
 LIMIT 0,5;";
 
 
-$Spezial[7][0] = '<b>Der Sponsor</b><br /><br />Dieser Spieler ist der Liebling des Entwicklers. Dadurch dass er jedes Banner ansieht und <u><i>keinen Werbeblocker</i></u> installiert hat, entgeht ihm auch keines der Werbebanner. Da das Spiel von einer solchen Finanzierung abhängt, hilft er dadurch dem Spiel immens.';
-$Spezial[7][1] = "SELECT
-    ID,
-    Name,
-    BannerViews AS Wert
-FROM
-    mitglieder
-WHERE
-    ID>1
-ORDER BY
-    BannerViews DESC,
-    RAND(" . date("H") . ")
-LIMIT 0,5;";
-
-
 /*
     Jetzt wird der gewünschte Rang aus der URL geholt, und die Daten ausgegeben...
 */
 
 $rang = intval($_GET['rang']);
+if ($rang > sizeof($Spezial)) {
+    header("location: ../?p=rangliste&m=112&" . time());
+    die();
+}
 
 ?>
 <table id="SeitenUeberschrift">

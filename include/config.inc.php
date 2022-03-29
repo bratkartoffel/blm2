@@ -20,7 +20,7 @@ Changelog:
 /*
     Allgemeine Konstanten (wichtiger Teil, bedürfen Anpassung!
 */
-define("VERSION", "1.9.4");                                            // Die aktuelle Versionsnummer
+define("VERSION", "1.9.4+1");                                            // Die aktuelle Versionsnummer
 
 if (!file_exists(dirname(__FILE__) . "/config_live.inc.php")) {
     /*

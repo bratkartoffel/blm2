@@ -33,16 +33,16 @@ define('CAPTCHA_BILD_PFAD', dirname(__FILE__) . '/pics/');
 define('CAPTCHA_CODE_PFAD', dirname(__FILE__) . '/tmp/');
 
 /** Konstante für die Standardgröße (Breite) des Bildes */
-const CAPTCHA_STD_BREITE = 160;
+const CAPTCHA_STD_BREITE = 200;
 
 /** Konstante für die Standardgröße (Höhe) des Bildes */
-const CAPTCHA_STD_HOEHE = 55;
+const CAPTCHA_STD_HOEHE = 60;
 
 /** Konstante für die Standardlänge des Codes */
-const CAPTCHA_STD_LAENGE = 4;
+const CAPTCHA_STD_LAENGE = 6;
 
 /** Konstante für die Standardzeichen des Codes */
-const CAPTCHA_STD_ZEICHEN = CAPTCHA_HEX;
+const CAPTCHA_STD_ZEICHEN = CAPTCHA_ZAHLEN;
 
 /** Konstante für die Standardschriftgröße */
 const CAPTCHA_STD_SCHRIFT_GROESE = 22;
@@ -51,13 +51,13 @@ const CAPTCHA_STD_SCHRIFT_GROESE = 22;
 const CAPTCHA_STD_SCHRIFT_DATEI = 'fonts/listen_up.ttf';
 
 /** Wie sicher soll das Captcha sein? Größer = Besser = Langsamer */
-const CAPTCHA_SICHERHEIT = 1000;
+const CAPTCHA_SICHERHEIT = 2000;
 
 /** Wie lange soll das Captcha gültig sein? (In Sekunden) */
-const CAPTCHA_GUELTIGKEIT = 180;
+const CAPTCHA_GUELTIGKEIT = 300;
 
 /** Wie sicher sollen die Rechtecke auf dem Hintergrund sein? Größer = Schlechter = Schneller */
-const CAPTCHA_GROESE_RECHTECKE = 8;
+const CAPTCHA_GROESE_RECHTECKE = 6;
 
 /** Ist der Sicherheitscode Groß- / Kleinschreibungsabhängig? */
 const CAPTCHA_SENSITIV = false;

@@ -1,0 +1,12 @@
+table#SeitenUeberschrift {
+	top: -5px;
+}
+
+div#Navigation {
+	top: -15px;
+	left: -10px;
+	height: 850px;
+	
+	padding-bottom: 0;
+	margin-bottom: 0;
+}

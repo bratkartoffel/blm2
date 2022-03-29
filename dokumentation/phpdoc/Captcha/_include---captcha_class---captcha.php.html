@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs for page captcha.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="file-name">/include/captcha_class/captcha.php</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-classes">Classes</a>
+			|									<a href="#sec-constants">Constants</a>
+										</div>
+	<div class="info-box-body">	
+		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Klassendefinitionen für Captchas</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Simon Frankenberger</li>
+			</ul>
+		
+			</div>
+</div>
+		
+	<a name="sec-classes"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Classes</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Classes</span>
+			|										<a href="#sec-constants">Constants</a>
+															</div>
+		<div class="info-box-body">	
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em; vertical-align: top">
+						<a href="../Captcha/Captcha.html">Captcha</a>
+					</td>
+					<td>
+											Klasse zur Erstellung und Prüfen von Captchas
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+	
+	<a name="sec-constants"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-classes">Classes</a>
+				|									<span class="disabled">Constants</span>
+											</div>
+		<div class="info-box-body">	
+			<a name="defineCAPTCHA_ALPHABET_GROSS"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_ALPHABET_GROSS</span> = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;
+			(line <span class="line-number">17</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für alle Großbuchstaben</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_ALPHABET_GROSS_ZAHLEN"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_ALPHABET_GROSS_ZAHLEN</span> = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;
+			(line <span class="line-number">26</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für alle Großbuchstaben und Zahlen</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_ALPHABET_KLEIN"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_ALPHABET_KLEIN</span> = &quot;abcdefghijklmnopqrstuvxyz&quot;
+			(line <span class="line-number">14</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für alle Kleinbuchstaben</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_ALPHABET_KLEIN_ZAHLEN"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_ALPHABET_KLEIN_ZAHLEN</span> = &quot;abcdefghijklmnopqrstuvxyz0123456789&quot;
+			(line <span class="line-number">23</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für alle Kleinbuchstaben und Zahlen</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_BILD_PFAD"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_BILD_PFAD</span> = dirname(__FILE__).'/pics/'
+			(line <span class="line-number">30</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Wo sollen die Bilder gespeichert werden?</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_CODE_PFAD"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_CODE_PFAD</span> = dirname(__FILE__).'/tmp/'
+			(line <span class="line-number">33</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Wo sollen die Codes gespeichert werden?</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_GROESE_RECHTECKE"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_GROESE_RECHTECKE</span> = 8
+			(line <span class="line-number">60</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Wie sicher sollen die Rechtecke auf dem Hintergrund sein? Größer = Schlechter = Schneller</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_GUELTIGKEIT"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_GUELTIGKEIT</span> = 180
+			(line <span class="line-number">57</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Wie lange soll das Captcha gültig sein? (In Sekunden)</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_HEX"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_HEX</span> = &quot;ABCDEF0123456789&quot;
+			(line <span class="line-number">20</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für alle Hexadezimalen Zeichen</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_SENSITIV"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_SENSITIV</span> = false
+			(line <span class="line-number">63</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Ist der Sicherheitscode Groß- / Kleinschreibungsabhängig?</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_SICHERHEIT"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_SICHERHEIT</span> = 1000
+			(line <span class="line-number">54</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Wie sicher soll das Captcha sein? Größer = Besser = Langsamer</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_STD_BREITE"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_STD_BREITE</span> = 160
+			(line <span class="line-number">36</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für die Standardgröße (Breite) des Bildes</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_STD_HOEHE"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_STD_HOEHE</span> = 55
+			(line <span class="line-number">39</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für die Standardgröße (Höhe) des Bildes</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_STD_LAENGE"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_STD_LAENGE</span> = 4
+			(line <span class="line-number">42</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für die Standardlänge des Codes</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_STD_SCHRIFT_DATEI"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_STD_SCHRIFT_DATEI</span> = 'fonts/listen_up.ttf'
+			(line <span class="line-number">51</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für die Standardschriftart</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_STD_SCHRIFT_GROESE"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_STD_SCHRIFT_GROESE</span> = 22
+			(line <span class="line-number">48</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für die Standardschriftgröße</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_STD_ZEICHEN"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_STD_ZEICHEN</span> = CAPTCHA_HEX
+			(line <span class="line-number">45</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für die Standardzeichen des Codes</p>
+	
+		
+</div>
+<a name="defineCAPTCHA_ZAHLEN"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">CAPTCHA_ZAHLEN</span> = &quot;0123456789&quot;
+			(line <span class="line-number">11</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Konstante für alle Zahlen</p>
+	
+		
+</div>
+		</div>
+	</div>
+	
+	
+	
+	<p class="notes" id="credit">
+		Documentation generated on Tue, 27 Jan 2009 18:42:56 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.1</a>
+	</p>
+	</div></body>
+</html>

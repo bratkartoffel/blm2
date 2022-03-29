@@ -1,0 +1,318 @@
+/*
+	Allgemeine Style-Definitionen
+*/
+
+body {
+	background-color: #afd087;
+	background-image: url('../pics/style/bg_inhalt.png');
+	
+	font-family: 'DejaVu Sans', 'Arial';
+	font-size: 10pt;
+	
+}
+
+a {
+	text-decoration: none;
+	color: #be2a00;
+	font-weight: bold;
+}
+
+
+ul {
+	padding-left: 10px;
+	margin: 4px;
+	
+	list-style: square;
+}
+
+div#Werbung {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	
+	z-index: 5;
+}
+
+div#Footer {
+	font-size: 9pt;
+	font-family: "Courir New";
+	text-align: center;
+	
+	border: dotted 2px #ffdc55;
+	
+	margin-top: 20px;
+	
+	margin-bottom: 10px;
+}
+
+div#Hilfe {
+	background-color: #ffffdd;
+	border: dashed 2px #b6b6b6;
+	padding: 5px;
+	
+	margin-bottom: 20px;
+}
+
+div#HilfeHeader {
+	font-size: 120%;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+div#Inhalt {	
+	position: absolute;
+	left: 252px;
+	right: 10px;
+	top: 8px;
+	
+	padding: 5px 5px 5px 8px;
+	
+	max-width: 990px;
+	min-width: 735px;
+	
+	font-size: 9pt;
+	z-index: 3;
+}
+
+div#Navigation {
+	position: relative;
+	top: -8px;
+	left: -8px;
+	
+	background-image: url('../pics/style/bg_navi.jpg');
+	background-repeat: no-repeat;
+	
+	padding: 4px 0 10px 5px;
+	
+	width: 250px;
+	z-index: 1;
+}
+
+div.bbQUOTE {
+	margin: 5px 20px 5px 20px;
+	padding: 5px;
+	border: solid 2px #bbbbbb;
+	background-color: #ffffdd;
+}
+
+div.bbPHP {
+	font-family: 'Courier New', 'Terminal';
+	font-size: 11pt;
+	
+	margin: 5px 20px 5px 20px;
+	padding: 5px;
+	
+	background-color: black;
+	color: white;
+}
+
+div.Header {
+	padding-left: 5px;
+	padding-bottom: 5px;
+	
+	padding-top: 0;
+	font-weight: bold;
+	font-size: 10pt;
+	
+	background-color: #7abb32;
+}
+
+div.NaviHeader {
+	font-size: 130%;
+	font-weight: bold;
+	margin-bottom: 5px;
+	border-bottom: solid 2px #006800;
+	
+	text-align: center;
+}
+
+div.NaviOben {
+	font-size: 1px;
+	height: 5px;
+	width: 230px;
+	
+	background-image: url('../pics/style/navi_oben.gif');
+	background-repeat: no-repeat;
+}
+
+div.NaviMitte {
+	width: 213px;
+	min-height: 50px;
+	padding: 3px 8px 3px 8px;
+	
+	background-color: #98d057;
+	background-image: url('../pics/style/navi_mitte.gif');
+	background-repeat: repeat-y;
+}
+
+div.NaviUnten {
+	font-size: 1px;
+	height: 5px;
+	width: 230px;
+	
+	background-image: url('../pics/style/navi_unten.gif');
+	background-repeat: no-repeat;
+	
+	padding-bottom: 20px;
+}
+
+div.NaviLink {
+	padding-left: 8px;
+	cursor: pointer;
+}
+
+div.NaviLink:hover {
+	background-color: #bddbbd;
+}
+
+div.NaviLinkHeader {
+	font-size: 10pt; 
+	font-weight: bold;
+}
+
+table#SeitenUeberschrift {
+	position: relative;
+	top: -5px;
+	left: -8px;
+	
+	width: 500px;
+	height: 102px;
+	margin-bottom: 0;
+	
+	background-image: url('../pics/style/bg_ueberschrift.png');
+}
+
+table.UserStatistik {
+	width: 100%;
+}
+
+table.UserStatistik td {
+	font-size: 80%;
+}
+
+span.MeldungR {
+	font-weight: bold;
+	font-size: 10pt;
+	color: #ff0000;
+}
+
+span.MeldungG {
+	font-weight: bold;
+	font-size: 10pt;
+	color: #00aa00;
+}
+
+table.Meldung {
+	border: solid 1px #777777;
+	background-color: #ddddaa;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+table.Liste {
+	border: dotted 1px #444444;
+	
+	width: 100%;
+	
+	border-spacing: 0;
+	padding: 0;
+	margin: 0;
+}
+
+table.Liste th {
+	background-color: #9fcf68;
+	
+	border-bottom: solid 1px #cc0000;
+	
+	text-align: left;
+	
+	padding-left: 3px;
+	margin: 0;
+}
+
+table.Liste td {
+	border-bottom: solid 1px #999999;
+	
+	background-color: #cede7b;
+	
+	padding-left: 3px;
+	margin: 0;
+}
+
+table.Liste td.Rangliste {
+	background-color: #bece6b;
+}
+
+table.Stats td {
+	background-color: #92d049;
+	
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 2px;
+}
+
+tr.Ungelesen td, tr.RanglisteFett td, tr.RanglisteFettH td {
+	font-weight: bold;
+}
+
+tr.Red td {
+	color: #dd0000;
+}
+
+tr.Yellow td {
+	color: #e67400;
+}
+
+tr.Green td {
+	color: #008200;
+	font-weight: bold;
+}
+
+tr.RanglisteH td, tr.RanglisteFettH td {
+	background-color: #ffff77;
+}
+
+tr.Rangliste:hover td, tr.RanglisteFett:hover td, table.Liste tr:hover td {
+	background-color: #d5dea7;
+}
+
+input[type="submit"], input[type="button"] {
+	font-weight: bold;
+}
+
+input[type="submit"]:hover {
+	background-color: #ffffbb;
+}
+
+input[type="text"]:hover, input[type="file"]:hover, input[type="password"]:hover, input[type="button"]:hover {
+	background-color: #ffffce;
+}
+
+div.ZITAT {
+	padding: 10px;
+	
+	border: solid 1px #aaaaaa;
+	background-color: #ffffcc;
+}
+
+span.ZITAT_KOPF {
+	font-size: 90%;
+	font-weight: bold;
+	
+	border-bottom: solid 1px black;
+}
+
+div.CODE, div.HTML, div.CSS, div.SQL, div.PHP, div.BASH, div.CPP, div.JAVA, div.JS {
+	padding: 10px;
+	font-family: 'Lucida Console', 'FixedSys';
+	
+	border: solid 1px #aaaaaa;
+	background-color: #eeeeee;
+}
+
+span.CODE_KOPF, span.HTML_KOPF, span.CSS_KOPF, span.SQL_KOPF, span.PHP_KOPF, span.CPP_KOPF, span.BASH_KOPF, span.JAVA_KOPF, span.JS_KOPF {
+	font-size: 90%;
+	font-weight: bold;
+	
+	border-bottom: solid 1px black;
+}

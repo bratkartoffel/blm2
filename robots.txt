@@ -1,0 +1,12 @@
+User-agent: *
+
+Disallow: *
+Disallow: /forum/*
+
+
+Allow: /?p=anmelden
+Allow: /?p=index
+Allow: /?p=registrieren
+Allow: /?p=regeln
+Allow: /?p=impressum
+Allow: /

@@ -89,6 +89,7 @@ VALUES
 
         DisconnectDB();
         header("location: ../?p=bank&m=207&" . time());
+        break;
     case 2:    // Auszahlen / Kredit aufnehmen...
         if ($ich->Punkte <= 100000) {
             if ($ich->Bank - $betrag < -25000) {        // Das Kreditlimit liegt bei -25.000 €; Wird das Limit bei dem angeforderten Betrag überschritten?
@@ -134,6 +135,7 @@ VALUES
 
         DisconnectDB();
         header("location: ../?p=bank&m=207&" . time());
+        break;
     case 3:    // In die Gruppenkasse zahlen
         if ($betrag > $ich->Geld) {        // Will der Benutzer mehr einzahlen, als er Bar hat?
             DisconnectDB();
@@ -168,8 +170,10 @@ WHERE
 
         DisconnectDB();
         header("location: ../?p=bank&m=235&" . time());
+        break;
     default:        // Was zum Teufel will er überhaupt??? Abbrechen!!!
         DisconnectDB();
         header("location: ../?p=bank&m=112&" . time());
+        break;
 }
 die();

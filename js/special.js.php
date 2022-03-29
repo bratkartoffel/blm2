@@ -53,7 +53,7 @@ $sql_ergebnis = mysql_query($sql_abfrage);
 
 DisconnectDB();
 
-srand(microtime() + time(true));
+srand(microtime(true) + time());
 ?>
 var z = document.getElementById('weihnachtsspecial');
 

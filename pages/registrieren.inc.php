@@ -97,7 +97,7 @@
                 (*) EMail-Adresse:
             </td>
             <td>
-                <input name="email" type="text" size="15" maxlength="32" onkeyup="CheckAll(); return false;"/>
+                <input name="email" type="text" size="15" maxlength="96" onkeyup="CheckAll(); return false;"/>
             </td>
             <td id="EMailUnique" style="width: 330px;">
                 <img src="./pics/small/error.png" alt="EMail-Adressen-Überprüfung" style="margin-right: 10px;"/>

@@ -29,6 +29,8 @@ ALTER TABLE `nachrichten`
 ALTER TABLE `gruppe_nachrichten`
     ADD `Festgepinnt` BOOL NOT NULL DEFAULT '0';
 
+ALTER TABLE `mitglieder`
+    CHANGE `EMail` `EMail` VARCHAR(96);
 
 -- Verträge.An Relationen Mitglieder.ID:						ON DELETE SET NULL
 -- Mitglieder.Gruppe Relation Gruppe.ID:						ON DELETE SET NULL

@@ -167,7 +167,7 @@ ORDER BY
             <td style="font-weight: bold;">N&auml;chstes Einkommen:</td>
             <td id="a_000"><?php
                 if ($LetztesEinkommen + EINKOMMEN_DAUER - time() < 0) {    // Wann bekommt der User sein nächstes Einkommen?
-                    echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - 3600);
+                    echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - date_offset_get(new DateTime()));
                 } else {
                     echo '00:00:00';
                 }
@@ -177,7 +177,7 @@ ORDER BY
             <td style="font-weight: bold;">N&auml;chste Zinsen:</td>
             <td id="a_001"><?php
                 if ($LetztesEinkommen + EINKOMMEN_DAUER - time() < 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
-                    echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - 3600);
+                    echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - date_offset_get(new DateTime()));
                 } else {
                     echo '00:00:00';
                 }
@@ -187,7 +187,7 @@ ORDER BY
             <td style="font-weight: bold;">N&auml;chste Mafia:</td>
             <td id="a_002"><?php
                 if ($ich->LastMafia + 600 - time() > 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
-                    echo date("H:i:s", $ich->LastMafia + 600 - time() - 3600);
+                    echo date("H:i:s", $ich->LastMafia + 600 - time() - date_offset_get(new DateTime()));
                 } else {
                     echo '00:00:00';
                 }

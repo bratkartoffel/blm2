@@ -45,14 +45,14 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                         $produktion_kosten = $Produktion->BasisKosten + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN);                    // und berechnet, was es uns kostet
 
                         $kosten_pro_kg = $produktion_kosten / $produktion_menge;        // Rechnet nun die Kosten / kg aus...
-                        $erloes_pro_kg = $Preis[$i];                                                            // ... und auch gleich den Erl�s / kg
+                        $erloes_pro_kg = $Preis[$i];                                                            // ... und auch gleich den Erlös / kg
 
                         echo '<tr>
 											<td>' . WarenName($i) . '</td>
 											<td>' . number_format($kosten_pro_kg, 2, ',', '.') . ' ' . $Currency . '</td>
 											<td>' . number_format($erloes_pro_kg, 2, ',', '.') . ' ' . $Currency . '</td>
 											<td style="font-weight: bold;">' . number_format($erloes_pro_kg - $kosten_pro_kg, 2, ',', '.') . ' ' . $Currency . '</td>
-										</tr>';    // Gibt dann die Kosten, den Erl�s und den somit enstehenden Gewinn pro Kilo aus
+										</tr>';    // Gibt dann die Kosten, den Erlös und den somit enstehenden Gewinn pro Kilo aus
                     }
                 }
                 ?>
@@ -70,13 +70,13 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Rennt alle Waren durch
                     $temp = "Forschung" . $i;
                     if ($ich->$temp > 0) {            // Druckt nur die Kurse der Waren, die wir schon erforscht haben
-                        if ($KursWare[$i] >= 0.92) {                // Wenn der Kurs über 91 % liegt, dann schreib es gr�m
+                        if ($KursWare[$i] >= 1.05) {                // Wenn der Kurs über 105 % liegt, dann schreib es grüm
                             echo '<tr class="Green">';
                         } else {
-                            if ($KursWare[$i] >= 0.82) {        // Wenn der Kurs �ber 81 % liegt, dann gelb
+                            if ($KursWare[$i] >= 0.90) {        // Wenn der Kurs über 90 % liegt, dann gelb
                                 echo '<tr class="Yellow">';
                             } else {
-                                echo '<tr class="Red">';            // Ansonsten (zwischen 75% und 81%) rot
+                                echo '<tr class="Red">';            // Ansonsten (zwischen 75% und 90%) rot
                             }
                         }
 

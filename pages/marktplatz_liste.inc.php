@@ -151,8 +151,8 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
     ?>
     <br/>
     <?php
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Als wird noch �berpr�ft, ob der Benutzer �berhaupt waren hat,
-        $temp = "Lager" . $i;        // damit man �berpr�fen kann, ob er ein neues Angebot einstellen kann
+    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Als wird noch überprüft, ob der Benutzer überhaupt waren hat,
+        $temp = "Lager" . $i;        // damit man überprüfen kann, ob er ein neues Angebot einstellen kann
         if ($ich->$temp > 0)
             $hat_waren = true;        // Ja, der Benutzer hat Waren
     }

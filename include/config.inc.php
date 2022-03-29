@@ -94,7 +94,7 @@ const RANGLISTE_OFFSET = 15;                        // Wieviele Einträge sollen
 const GRUPPE_OFFSET = 10;                            // Wieviele Gruppennachrichten sollten pro Seite angezeigt werden?
 const MARKTPLATZ_OFFSET = 25;                    // Wieviele Marktplatzangebote sollen pro Seite angezeigt werden?
 
-const BILD_GROESE_MAXIMAL = 65536;            // Die maximale Bildgröße fürs Profil in Byte
+const BILD_GROESE_MAXIMAL = 131072;            // Die maximale Bildgröße fürs Profil in Byte (128 kb)
 
 const MAFIA_DIEBSTAHL_MIN_RATE = 40;        // Die minimale und maximale Rate was bei
 const MAFIA_DIEBSTAHL_MAX_RATE = 75;        // einem Bargeldangriff gestohlen werden kann

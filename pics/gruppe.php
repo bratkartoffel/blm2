@@ -7,29 +7,37 @@
  * @package blm2.includes
  */
 
-if (!$_GET['id'])
+if (!$_GET['id']) {
     die();        // Falls keine User_ID angegeben wurde, dann abbrechen
+}
 
 $pfad = "./gruppe/" . intval($_GET['id']);
+header("cache-control: max-age=86400, public");
 
-if (file_exists($pfad . ".jpg"))        // Der Benutzer hat ein JPG-Bild hochgeladen?
+if (file_exists($pfad . ".jpg")) {        // Der Benutzer hat ein JPG-Bild hochgeladen?
     $suffix = "jpg";
-else
-    if (file_exists($pfad . ".png"))        // oder doch ein PNG?
+} else {
+    if (file_exists($pfad . ".png")) {        // oder doch ein PNG?
         $suffix = "png";
-    else
-        if (file_exists($pfad . ".gif"))        // Ne, aber ein GIF
+    } else {
+        if (file_exists($pfad . ".gif")) {        // Ne, aber ein GIF
             $suffix = "gif";
-
+        } else {                                        // Hmm, der User hat gar kein Bild...
+            $bild = ImageCreateFromPNG("./spieler/nopic.png");        // Also das Standardpic einlesen
+            header("content-type: image/png");            // Dem Browser sagen, dass wir ein Bild senden
+            ImagePNG($bild);        // Und das Bild rüber schicken
+            die();        // Zum Schluss abbrechen, denn wir sind ja fertig :)
+        }
+    }
+}
 // Je nachdem, was der Benutzer für einen Typ beim Benutzerbild hat, reagieren wir.
 // Standardmäßig habe ich mal nur JPG, GIF und PNG erlaubt.
 
-// TODO: Transparente PNGs funzen nicht :(
 switch ($suffix) {
     case "jpg":
         $bild = ImageCreateFromJPEG($pfad . "." . $suffix);
         header("content-type: image/jpeg");
-        ImageJPEG($bild, "", 75);
+        ImageJPEG($bild;
         break;
     case "png":
         $bild = ImageCreateFromPNG($pfad . "." . $suffix);
@@ -42,5 +50,3 @@ switch ($suffix) {
         ImageGIF($bild);
         break;
 }
-
-// Fertisch :)

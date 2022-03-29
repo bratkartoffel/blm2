@@ -1,9 +1,9 @@
 # One day for image files
-<filesMatch ".(jpg|jpeg|png|gif|ico|webp)$">
+<FilesMatch ".(jpg|jpeg|png|gif|ico|webp)$">
     Header set Cache-Control "max-age=86400, public"
-</filesMatch>
+</FilesMatch>
 
 # 4 hours for scripts
-<filesMatch ".(css|js)$">
+<FilesMatch ".(css|js)$">
     Header set Cache-Control "max-age=14400, public"
-</filesMatch>
+</FilesMatch>

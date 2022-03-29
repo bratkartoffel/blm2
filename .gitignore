@@ -2,3 +2,5 @@
 include/config_live.inc.php
 include/captcha_class/pics/*.jpg
 include/captcha_class/tmp/*
+pics/spieler/*
+pics/gruppe/*

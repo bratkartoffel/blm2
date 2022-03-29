@@ -127,7 +127,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align: center;"><input type="text" name="captcha_code" maxlength="4" size="3"/>
+            <td colspan="2" style="text-align: center;"><input type="text" name="captcha_code" maxlength="6" size="5"/>
             </td>
         </tr>
         <tr>

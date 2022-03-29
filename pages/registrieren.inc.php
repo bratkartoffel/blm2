@@ -17,8 +17,8 @@
 <?= $m; ?>
 
 <b>
-    Hier k&ouml;nnen Sie einen neuen Spieler anlegen. Bitte geben Sie hierzu einen Spielernamen ein, welcher noch nicht
-    belegt ist und w&auml;hlen Sie ein Passwort, welches nur Sie wissen sollten.
+    Hier können Sie einen neuen Spieler anlegen. Bitte geben Sie hierzu einen Spielernamen ein, welcher noch nicht
+    belegt ist und wählen Sie ein Passwort, welches nur Sie wissen sollten.
 </b>
 <br/>
 <br/>
@@ -105,11 +105,11 @@
         <tr>
             <td style="text-align: right;">Passwort:</td>
             <td><input name="pwd1" type="password" size="15" onkeyup="CheckAll(); return false;"/></td>
-            <td rowspan="2" id="PasswordOK"><img src="./pics/small/error.png" alt="Passwort&uuml;berpr&uuml;fung"
+            <td rowspan="2" id="PasswordOK"><img src="./pics/small/error.png" alt="Passwortüberprüfung"
                                                  style="margin-right: 10px;"/> <span></span></td>
         </tr>
         <tr>
-            <td style="text-align: right;">Best&auml;tigung:</td>
+            <td style="text-align: right;">Bestätigung:</td>
             <td><input name="pwd2" type="password" size="15" onkeyup="CheckAll(); return false;"/></td>
         </tr>
         <tr>

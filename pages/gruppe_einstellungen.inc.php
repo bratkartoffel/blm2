@@ -125,14 +125,14 @@ WHERE
             <input type="hidden" name="a" value="10"/>
             <table class="Liste" style="width: 600px; margin-top: 30px;" cellspacing="0">
                 <tr>
-                    <th colspan="2">Beitrittspasswort &auml;ndern</th>
+                    <th colspan="2">Beitrittspasswort ändern</th>
                 </tr>
                 <tr>
                     <td>Passwort:</td>
                     <td><input type="password" name="pwd_1"/></td>
                 </tr>
                 <tr>
-                    <td>Best&auml;tigung:</td>
+                    <td>Bestätigung:</td>
                     <td><input type="password" name="pwd_2"/></td>
                 </tr>
                 <tr>
@@ -151,17 +151,17 @@ WHERE
             <input type="hidden" name="a" value="11"/>
             <table class="Liste" style="width: 600px; margin-top: 30px;" cellspacing="0">
                 <tr>
-                    <th>Gruppe l&ouml;schen</th>
+                    <th>Gruppe löschen</th>
                 </tr>
                 <tr>
                     <td>
                         <em>ACHTUNG!</em><br/>
-                        <b>Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!</b>
+                        <b>Dieser Schritt kann nicht rückgängig gemacht werden!</b>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: center;" colspan="2">
-                        <input type="submit" value="Gruppe l&ouml;schen"
+                        <input type="submit" value="Gruppe löschen"
                                onclick="return confirm('Wollen Sie die Gruppe wirklich löschen?');"/>
                     </td>
                 </tr>

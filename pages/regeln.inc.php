@@ -66,7 +66,7 @@
             <b>4. Spamming:</b><br/>
             <br/>
             Spamming ist verboten.<br/>
-            Durch Spamming enstehen enorm große Datenmengen, die den Server nur unnö;tig belasten.<br/>
+            Durch Spamming enstehen enorm große Datenmengen, die den Server nur unnötig belasten.<br/>
             Falls diese Regel missachtet wird, brauchen wir irgendwann einen neuen Server mit größeren Kapazitäten, was
             letztendlich zu mehr Werbung und/oder Premium-Accounts führen wird.
         </td>

@@ -18,7 +18,7 @@
 
 <?= $m; ?>
 
-<b>Hier k&ouml;nnen Sie verschiedene Informationen speichern.</b><br/>
+<b>Hier können Sie verschiedene Informationen speichern.</b><br/>
 <br/>
 <form action="./actions/notizblock.php" method="post" name="form_notizblock">
     <table class="Liste" cellspacing="0" style="width: 500px;">
@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <td style="text-align: center;">
-                Noch <span>4096</span> Zeichen &uuml;brig.
+                Noch <span>4096</span> Zeichen übrig.
                 <input type="submit" value="Speichern"/>
             </td>
         </tr>

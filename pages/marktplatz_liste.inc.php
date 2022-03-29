@@ -25,7 +25,7 @@ if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
     <?= $m; ?>
 
     <b>
-        Hier sehen Sie die aktuellen Angebote auf dem anonymen Marktplatz. Die Preise k&ouml;nnen selbst bestimmt werden
+        Hier sehen Sie die aktuellen Angebote auf dem anonymen Marktplatz. Die Preise können selbst bestimmt werden
         und richten sich wahrscheinlich nach dem aktuellen Fortschritt des Spiels.
     </b>
     <br/>
@@ -119,7 +119,7 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
 							<td>' . number_format($angebot->Preis * $angebot->Menge, 2, ",", ".") . ' ' . $Currency . '</td>
 							<td><a href="./actions/marktplatz.php?a=2&amp;id=' . $angebot->ID . $url_string . '">Kaufen</a>';
             if ($angebot->Von == $_SESSION['blm_user']) {        // Wenn das Angebot vom Betrachter ist, dann zeig den Zurückziehen-Link
-                echo ' | <a href="./actions/marktplatz.php?a=3&amp;id=' . $angebot->ID . $url_string . '">Zur&uuml;ckziehen</a>';
+                echo ' | <a href="./actions/marktplatz.php?a=3&amp;id=' . $angebot->ID . $url_string . '">Zurückziehen</a>';
             }
             echo '</td></tr>';            // ...und ausgeben
             $eintrag = true;        // Jetzt haben wir mindestens einen Eintrag

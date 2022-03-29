@@ -27,7 +27,7 @@ if (!$ich->Sitter->Mafia && $_SESSION['blm_sitter']) {
     } else {
         ?>
         <b>
-            Hier finden Sie Jungs die f&uuml;r Sie die Konkurrenz in Bedr&auml;ngnis setzen und die Drecksarbeit f&uuml;r
+            Hier finden Sie Jungs die für Sie die Konkurrenz in Bedrängnis setzen und die Drecksarbeit für
             Sie erledigen.
         </b>
         <br/><br/>
@@ -40,7 +40,7 @@ if (!$ich->Sitter->Mafia && $_SESSION['blm_sitter']) {
             </tr>
             <tr>
                 <td>Spionage</td>
-                <td>Sammelt Informationen &uuml;ber den Gegner</td>
+                <td>Sammelt Informationen über den Gegner</td>
                 <td><?= (MAFIA_SPERRZEIT_SPIONAGE / 60); ?> Minuten</td>
                 <td><?= MAFIA_PUNKTE_SPIONAGE; ?></td>
             </tr>
@@ -79,12 +79,12 @@ if (!$ich->Sitter->Mafia && $_SESSION['blm_sitter']) {
                 <tr>
                     <th>Gegner</th>
                     <th>Aktion</th>
-                    <th colspan="2">Kosten / Wahrscheinlichkeit f&uuml;r Erfolg</th>
+                    <th colspan="2">Kosten / Wahrscheinlichkeit für Erfolg</th>
                 </tr>
                 <tr>
                     <td rowspan="4" style="text-align: center; border-right: solid 1px #999999;">
                         <select name="gegner" style="min-width: 150px;">
-                            <option value="0" selected="selected" disabled="disabled">Bitte w&auml;hlen...</option>
+                            <option value="0" selected="selected" disabled="disabled">Bitte wählen...</option>
                             <?php
                             $punkte_minimal = $ich->Punkte / MAFIA_FAKTOR_MIN_PUNKTE;        // Wieviele Punkte muss der Gegner mindestens haben?
                             $punkte_maximal = $ich->Punkte * MAFIA_FAKTOR_MAX_PUNKTE;        // und wieviele darf er maximal haben?

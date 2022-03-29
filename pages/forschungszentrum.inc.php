@@ -25,7 +25,7 @@ if (!$ich->Sitter->Forschung && $_SESSION['blm_sitter']) {
     echo $m;
 
     if ($ich->Gebaeude2 == 0) {
-        echo '<span class="MeldungR" style="font-size: 12pt;">Sie m&uuml;ssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten k&ouml;nnen!</span>';
+        echo '<span class="MeldungR" style="font-size: 12pt;">Sie müssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten können!</span>';
     } else {
         $sql_abfrage = "SELECT
     ID,
@@ -51,9 +51,9 @@ AND
         }
         ?>
         <b>
-            Hier k&ouml;nnen Sie das entsprechende Gem&uuml;se erforschen bzw. verbessern.<br/>
-            Stufe 1 erm&ouml;glicht den Anbau des Gem&uuml;ses, und jede weitere Stufe
-            erh&ouml;ht die Menge, die produziert wird.<br/>
+            Hier können Sie das entsprechende Gemüse erforschen bzw. verbessern.<br/>
+            Stufe 1 ermöglicht den Anbau des Gemüses, und jede weitere Stufe
+            erhöht die Menge, die produziert wird.<br/>
         </b>
         <br/>
         <?php
@@ -94,15 +94,15 @@ AND
 
                                     if (intval($auftraege->$temp->ID) > 0) {        // Gibt es schon einen derartigen Auftrag?
                                         echo '<input type="submit" name="anbauen" disabled="disabled" value="Forschen"/><br />';
-                                        echo '<i>Es l&auml;uft bereits eine Forschung!</i><br />
+                                        echo '<i>Es läuft bereits eine Forschung!</i><br />
 										(noch ' . (date("d", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) - 1) . " Tage " . date("H:i:s", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) . ' verbleibend.)<br />
-										<a onclick="return confirm(\'Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen  nur ' . (AUFTRAG_RUECKZIEH_RETURN * 100) . '% (' . number_format($forschung_kosten * AUFTRAG_RUECKZIEH_RETURN, 2, ",", ".") . ' ' . $Currency . ') der Kosten zur&uuml;ck erstattet!\');" href="actions/auftrag.php?a=1&amp;id=' . $auftraege->$temp->ID . '&amp;back=forschungszentrum&amp;was=' . $i . '">Abbrechen</a>';
+										<a onclick="return confirm(\'Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen  nur ' . (AUFTRAG_RUECKZIEH_RETURN * 100) . '% (' . number_format($forschung_kosten * AUFTRAG_RUECKZIEH_RETURN, 2, ",", ".") . ' ' . $Currency . ') der Kosten zurück erstattet!\');" href="actions/auftrag.php?a=1&amp;id=' . $auftraege->$temp->ID . '&amp;back=forschungszentrum&amp;was=' . $i . '">Abbrechen</a>';
                                     } else {                        // Nein:
                                         if ($ich->Geld >= $forschung_kosten) {            //Habe ich genügend Geld? Wenn ja, dann...
                                             echo '<input type="submit" name="anbauen" value="Forschen"  onclick="document.forms[' . ($i - 1) . '].submit(); this.disabled=\'disabled\'; this.value=\'Bitte warten...\'; return false;" />';
                                         } else {        // ... ansonsten:
                                             echo '<input type="submit" name="anbauen" disabled="disabled" value="Forschen"/><br />';
-                                            echo '<i>Sie haben nicht gen&uuml;gend Geld!</i>';
+                                            echo '<i>Sie haben nicht genügend Geld!</i>';
                                         }
                                     }
                                     ?>

@@ -49,10 +49,10 @@ Hier ist noch eine Liste mit den verfügbaren Gebäuden und deren Vorraussetunge
 [b]Plantage Stufe >= 8 und Forschungszentrum Stufe >= 9:[/b]
 - Bauhof (gesenkte Bauzeit für Gebäude)
 
-[b]Plantage Stufe >= 10 und Ausgaben für Mafia >= 10.000 " . $CurrencyC . ":[/b]
+[b]Plantage Stufe >= 10 und Ausgaben für Mafia >= 10.000 " . $Currency . ":[/b]
 - Zaun (gesenkte Erfolgschance für gegnerischen Mafiaangriff)
 
-[b]Plantage Stufe >= 12 und Ausgaben für Mafia >= 25.000 " . $CurrencyC . ":[/b]
+[b]Plantage Stufe >= 12 und Ausgaben für Mafia >= 25.000 " . $Currency . ":[/b]
 - Pizzeria (Erhöht die Erfolgschancen der Mafia)
 ";
 
@@ -88,13 +88,13 @@ usw.
 
 Ausserdem werden die Forschungen für jede Stufe, welche das Gebäude erreicht, schneller abgeschlossen.
 
-Stufe 1 einer Forschung ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die Anbaumenge um " . PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE . " kg, erhöht aber auch die Kosten für den Anbau um " . number_format(PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN, 2, ",", ".") . " " . $CurrencyC . ".
+Stufe 1 einer Forschung ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die Anbaumenge um " . PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE . " kg, erhöht aber auch die Kosten für den Anbau um " . number_format(PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN, 2, ",", ".") . " " . $Currency . ".
 ";
 
 $HilfeText[107][] = "Bioladen";
 $HilfeText[107][] = "In diesem Gebäude können Sie Ihre produzierten Pflanzen an virtuelle Kunden verkaufen.
 
-Es gibt keine Beschränkung, wie viel Gemüse Sie am Tag verkaufen können. Der Verkaufspreis wird aus einem Grundpreis, dem Marktkurs, der Stufe der Forschung des entsprechenden Gemüses, der Stufe des Bioladens und der Verkäuferschule berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um " . number_format(WAREN_PREIS_BIOLADEN, 2, ",", ".") . " " . $CurrencyC . ".
+Es gibt keine Beschränkung, wie viel Gemüse Sie am Tag verkaufen können. Der Verkaufspreis wird aus einem Grundpreis, dem Marktkurs, der Stufe der Forschung des entsprechenden Gemüses, der Stufe des Bioladens und der Verkäuferschule berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um " . number_format(WAREN_PREIS_BIOLADEN, 2, ",", ".") . " " . $Currency . ".
 
 Der Verkaufspreis kann nicht selbst direkt eingegeben oder verändert werden.";
 
@@ -106,14 +106,14 @@ Hier sehen Sie zum Beispiel die aktuellen Marktkurse (bewegen sich zwischen 75% 
 $HilfeText[109][] = "Bank";
 $HilfeText[109][] = "Diese verwaltet Ihr Vermögen, gibt Zinsen auf Anlagen und vergibt Kredite.
 
-Sie haben von Anfang an ein Bankkonto mit " . number_format($Start["geld"], 2, ",", ".") . " " . $CurrencyC . " Startguthaben.
-Die maximale Summe, welche Sie einzahlen können liegt bei 99.999,99 " . $CurrencyC . " (Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt 25.000 " . $CurrencyC . ".
+Sie haben von Anfang an ein Bankkonto mit " . number_format($Start["geld"], 2, ",", ".") . " " . $Currency . " Startguthaben.
+Die maximale Summe, welche Sie einzahlen können liegt bei 99.999,99 " . $Currency . " (Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt 25.000 " . $Currency . ".
 
 Die Zinsen werden alle " . (ZINSEN_DAUER / 60) . " Minuten abgerechnet.
 
 Das Geld auf der Bank kann nicht (im Gegensatz zum Bargeld) von anderen Spielern geklaut werden.
 
-[color=red]Wichtig: Falls Ihr Kontostand unter " . number_format(DISPO_LIMIT, 0, ",", ".") . " " . $CurrencyC . " fällt, wird Ihr Account automatisch resettet![/color]";
+[color=red]Wichtig: Falls Ihr Kontostand unter " . number_format(DISPO_LIMIT, 0, ",", ".") . " " . $Currency . " fällt, wird Ihr Account automatisch resettet![/color]";
 
 $HilfeText[1010][] = "Verträge";
 $HilfeText[1010][] = "Hier können Sie Waren direkt an einen anderen Mitspieler schicken. Die Preise können frei gewählt werden.

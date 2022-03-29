@@ -30,7 +30,7 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
     <form action="./actions/nachrichten.php?a=1" method="post" name="form_message">
         <table class="Liste" style="width: 600px; margin-top: 20px;" cellspacing="0">
             <tr>
-                <th style="border:none; border-right: solid 1px darkred;">Empf&auml;nger:</th>
+                <th style="border:none; border-right: solid 1px darkred;">Empfänger:</th>
                 <td>
                     Benutzer:
                     <select name="an" style="min-width: 150px;">

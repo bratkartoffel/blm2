@@ -17,7 +17,7 @@
 <?= $m; ?>
 
 <b>
-    Hier k&ouml;nnen Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten, mit denen Sie sich registriert haben,
+    Hier können Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten, mit denen Sie sich registriert haben,
     ein.
 </b>
 <br/>
@@ -25,7 +25,7 @@
 <form action="./actions/login.php" method="post">
     <table class="Liste" style="width: 250px" cellspacing="0">
         <tr>
-            <th colspan="2">Login f&uuml;r registrierte Benutzer</th>
+            <th colspan="2">Login für registrierte Benutzer</th>
         </tr>
         <tr>
             <td style="width: 90px; text-align: right;">Benutzername:</td>

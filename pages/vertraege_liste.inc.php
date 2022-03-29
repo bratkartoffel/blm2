@@ -10,7 +10,7 @@
     <table id="SeitenUeberschrift">
         <tr>
             <td style="width: 80px;"><img src="pics/big/vertraege.png" alt="Vertragsliste"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre vorliegenden Vertr&auml;ge
+            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre vorliegenden Verträge
                 <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
@@ -24,7 +24,7 @@ if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
 
     <?= $m; ?>
 
-    <b>Hier sehen Sie alle Ihre eingehenden Vertr&auml;ge, die Sie noch nicht angenommen oder abgelehnt haben.</b>
+    <b>Hier sehen Sie alle Ihre eingehenden Verträge, die Sie noch nicht angenommen oder abgelehnt haben.</b>
     <table class="Liste" style="width: 600px; margin-top: 20px; margin-bottom: 10px;" cellspacing="0">
     <tr>
         <th>Nr</th>
@@ -74,7 +74,7 @@ ORDER BY
     }
 
     if (!$eintrag) {        // falls wir keinen Eintrag haben, dann gib ne entsprechende Zeile aus
-        echo '<tr><td colspan="7" style="text-align: center;"><i>Sie haben keine Vertr&auml;ge in diesem Ordner.</i></td></tr>';
+        echo '<tr><td colspan="7" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
     }
 
     echo '</table>';
@@ -98,13 +98,13 @@ ORDER BY
     <table cellspacing="0">
         <tr>
             <td style="width: 80px;"><img src="pics/big/vertraege.png" alt="Vertragsliste"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre ausgehenden Vertr&auml;ge
+            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre ausgehenden Verträge
                 <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
     </table>
-    <b>Hier sehen Sie alle ausgehenden Vertr&auml;ge, die Ihr Gegen&uuml;ber noch nicht angenommen hat.</b>
+    <b>Hier sehen Sie alle ausgehenden Verträge, die Ihr Gegenüber noch nicht angenommen hat.</b>
     <table class="Liste" style="width: 600px; margin-top: 20px; margin-bottom: 10px;" cellspacing="0">
         <tr>
             <th>Nr</th>
@@ -154,7 +154,7 @@ ORDER BY
         }
 
         if (!$eintrag) {
-            echo '<tr><td colspan="7" style="text-align: center;"><i>Sie haben keine Vertr&auml;ge in diesem Ordner.</i></td></tr>';
+            echo '<tr><td colspan="7" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
         }
         ?>
     </table>

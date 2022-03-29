@@ -405,16 +405,16 @@ function CheckMessage($meldung)
             $zurueck[] = 'Sie sind nicht angemeldet. Bitte melden Sie sich erst an.';
             break;
         case 103:
-            $zurueck[] = 'Das Bild ist zu gro&szlig;. Die maximale Gr&ouml;&szlig;e des Bildes ist 64 KB.';
+            $zurueck[] = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist 64 KB.';
             break;
         case 104:
-            $zurueck[] = 'Bitte f&uuml;llen Sie alle Felder aus.';
+            $zurueck[] = 'Bitte füllen Sie alle Felder aus.';
             break;
         case 105:
-            $zurueck[] = 'Bitte geben Sie Ihr gew&uuml;nschtes Passwort 2x ein, um Tipfehler zu vermeiden.';
+            $zurueck[] = 'Bitte geben Sie Ihr gewünschtes Passwort 2x ein, um Tipfehler zu vermeiden.';
             break;
         case 106:
-            $zurueck[] = 'Der Benutzername ist bereits vergeben. Bitte w&auml;hlen Sie einen anderen.';
+            $zurueck[] = 'Der Benutzername ist bereits vergeben. Bitte wählen Sie einen anderen.';
             break;
         case 107:
             $zurueck[] = 'Die hochgeladene Datei ist kein Bild vom Typ jpg, gif oder png!';
@@ -423,13 +423,13 @@ function CheckMessage($meldung)
             $zurueck[] = 'Unbekannter Benutzername und / oder falsches Passwort!';
             break;
         case 109:
-            $zurueck[] = 'Sie haben Ihr Kreditlimit schon erreicht oder ein zu gro&szlig;er Betrag wurde ausgew&auml;hlt!';
+            $zurueck[] = 'Sie haben Ihr Kreditlimit schon erreicht oder ein zu grosser Betrag wurde ausgewählt!';
             break;
         case 110:
-            $zurueck[] = 'Ung&uuml;ltiger Betrag!';
+            $zurueck[] = 'Ungültiger Betrag!';
             break;
         case 111:
-            $zurueck[] = 'Sie haben nicht gen&uuml;gend Geld!';
+            $zurueck[] = 'Sie haben nicht genügend Geld!';
             break;
         case 112:
             $zurueck[] = 'Das darfst du nicht!';
@@ -438,16 +438,16 @@ function CheckMessage($meldung)
             $zurueck[] = 'Der Auftrag wurde bereits erteilt!';
             break;
         case 114:
-            $zurueck[] = 'Ihr Account wurde soeben resettet, da Sie Ihren Kredit bei der Bank nicht decken konnten und die Bank alles gepf&auml;ndet hat.';
+            $zurueck[] = 'Ihr Account wurde soeben resettet, da Sie Ihren Kredit bei der Bank nicht decken konnten und die Bank alles gepfändet hat.';
             break;
         case 115:
-            $zurueck[] = 'Bitte geben Sie eine g&uuml;ltige Menge ein.';
+            $zurueck[] = 'Bitte geben Sie eine gültige Menge ein.';
             break;
         case 116:
             $zurueck[] = 'Sie haben gar nicht so viel Waren auf Lager!';
             break;
         case 117:
-            $zurueck[] = 'Ung&uuml;ltige Angaben oder Angaben nicht vollst&auml;dig.';
+            $zurueck[] = 'Ungültige Angaben oder Angaben nicht vollstädig.';
             break;
         case 118:
             $zurueck[] = 'Der Benutzer konnte nicht gefunden werden.';
@@ -456,7 +456,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Das Angebot mit der ID konnte nicht gefunden werden. Vermutlich war einer schneller als Sie.';
             break;
         case 120:
-            $zurueck[] = 'Bitte geben Sie eine Menge und einen Preis gr&ouml;&szlig;er 1 ein!';
+            $zurueck[] = 'Bitte geben Sie eine Menge und einen Preis grösser 1 ein!';
             break;
         case 121:
             $zurueck[] = 'Das alte Kennwort ist nicht korrekt!';
@@ -474,7 +474,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Ungültige Menge eingegeben!';
             break;
         case 126:
-            $zurueck[] = 'Es exisitiert bereits eine Gruppe mit diesem Namen oder K&uuml;rzel!';
+            $zurueck[] = 'Es exisitiert bereits eine Gruppe mit diesem Namen oder Kürzel!';
             break;
         case 127:
             $zurueck[] = 'Entweder existiert die eingegebene Gruppe nicht, oder das eingegebene Passwort ist falsch!';
@@ -536,7 +536,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Nachricht wurde gesendet.';
             break;
         case 205:
-            $zurueck[] = 'Ihr Account wurde gel&ouml;scht. Ich hoffe, das Spiel hat Ihnen gefallen!';
+            $zurueck[] = 'Ihr Account wurde gelöscht. Ich hoffe, das Spiel hat Ihnen gefallen!';
             break;
         case 206:
             $zurueck[] = 'Die Beschreibung wurde gespeichert.';
@@ -548,16 +548,16 @@ function CheckMessage($meldung)
             $zurueck[] = 'Die Waren wurden verkauft.';
             break;
         case 209:
-            $zurueck[] = 'Das Bild wurde gel&ouml;scht.';
+            $zurueck[] = 'Das Bild wurde gelöscht.';
             break;
         case 210:
             $zurueck[] = 'Das Bild wurde erfolgreich hochgeladen.';
             break;
         case 211:
-            $zurueck[] = 'Die Nachricht wurde gel&ouml;scht.';
+            $zurueck[] = 'Die Nachricht wurde gelöscht.';
             break;
         case 212:
-            $zurueck[] = 'Alle Nachrichten wurden gel&ouml;scht.';
+            $zurueck[] = 'Alle Nachrichten wurden gelöscht.';
             break;
         case 213:
             $zurueck[] = 'Der Notizblock wurde gespeichert.';
@@ -578,16 +578,16 @@ function CheckMessage($meldung)
             $zurueck[] = 'Das Angebot wurde eingestellt.';
             break;
         case 219:
-            $zurueck[] = 'Das Passwort wurde erfolgreich ge&auml;ndert.';
+            $zurueck[] = 'Das Passwort wurde erfolgreich geändert.';
             break;
         case 220:
-            $zurueck[] = 'Der Account wurde wieder auf Standardeinstellungen zur&uuml;ckgesetzt.';
+            $zurueck[] = 'Der Account wurde wieder auf Standardeinstellungen zurückgesetzt.';
             break;
         case 221:
-            $zurueck[] = 'Das Angebot wurde zur&uuml;ckgezogen.';
+            $zurueck[] = 'Das Angebot wurde zurückgezogen.';
             break;
         case 222:
-            $zurueck[] = 'Der Auftrag wurde gel&ouml;scht.';
+            $zurueck[] = 'Der Auftrag wurde gelöscht.';
             break;
         case 223:
             $zurueck[] = 'Die Gruppe wurde erstellt!';
@@ -605,7 +605,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Das Mitglied wurde aus der Gruppe verwiesen.';
             break;
         case 228:
-            $zurueck[] = 'Die Gruppe wurde gel&ouml;scht!';
+            $zurueck[] = 'Die Gruppe wurde gelöscht!';
             break;
         case 229:
             $zurueck[] = 'Die Beziehung wurde eingetragen!';
@@ -655,7 +655,7 @@ function CheckMessage($meldung)
 						</td>
 						<td style="vertical-align: top; text-align :right;">
 							<a href="#">
-								<img src="./pics/small/error.png" style="margin: 0; padding: 0; border: none;" alt="Fenster schlie&szlig;en" onclick="MeldungAusblenden(\'m_' . $meldung . '\'); return false;" />
+								<img src="./pics/small/error.png" style="margin: 0; padding: 0; border: none;" alt="Fenster schliessen" onclick="MeldungAusblenden(\'m_' . $meldung . '\'); return false;" />
 							</a>
 						</td>
 					</tr>
@@ -2173,14 +2173,13 @@ WHERE
  * Hilfsfunktion: Liefert den Warenname einer WarenID zurück
  *
  * @param int $waren_id
- * @param boolean $igm
  *
  * @return string
  **@version 1.0.0
  *
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  */
-function WarenName($waren_id, $igm = false)
+function WarenName($waren_id)
 {
     switch (intval($waren_id)) {
         case 0:
@@ -2194,10 +2193,7 @@ function WarenName($waren_id, $igm = false)
         case 4:
             return "Salat";
         case 5:
-            if ($igm)
-                return "Äpfel";
-            else
-                return "&Auml;pfel";
+            return "Äpfel";
         case 6:
             return "Birnen";
         case 7:

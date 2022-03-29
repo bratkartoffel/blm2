@@ -52,15 +52,15 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
         </tr>
         <tr>
             <th style="padding: 3px 8px 3px 8px;">Nachricht schreiben:</th>
-            <th style="padding: 3px 8px 3px 8px;">Nachricht l&ouml;schen:</th>
+            <th style="padding: 3px 8px 3px 8px;">Nachricht löschen:</th>
             <th style="padding: 3px 8px 3px 8px;">Bild bearbeiten</th>
-            <th style="padding: 3px 8px 3px 8px;">Beschreibung &auml;ndern:</th>
-            <th style="padding: 3px 8px 3px 8px;">Diplomatie &auml;ndern:</th>
+            <th style="padding: 3px 8px 3px 8px;">Beschreibung ändern:</th>
+            <th style="padding: 3px 8px 3px 8px;">Diplomatie ändern:</th>
             <th style="padding: 3px 8px 3px 8px;">Kasse verwalten:</th>
             <th style="padding: 3px 8px 3px 8px;">Mitglied kicken:</th>
-            <th style="padding: 3px 8px 3px 8px;">Passwort &auml;ndern:</th>
+            <th style="padding: 3px 8px 3px 8px;">Passwort ändern:</th>
             <th style="padding: 3px 8px 3px 8px;">Rechte bearbeiten:</th>
-            <th style="padding: 3px 8px 3px 8px;">Gruppe l&ouml;schen:</th>
+            <th style="padding: 3px 8px 3px 8px;">Gruppe löschen:</th>
         </tr>
         <?php
         $sql_abfrage = "SELECT

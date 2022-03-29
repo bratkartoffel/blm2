@@ -306,7 +306,7 @@ LIMIT
                 }
 
                 if (mysql_num_rows($sql_ergebnis) == 0) {
-                    echo '<tr><td colspan="3" style="text-align: center;"><i>Bisher sind noch keine Punkte f&uuml;r die ewige Higscoreliste vergeben worden!</i></td></tr>';
+                    echo '<tr><td colspan="3" style="text-align: center;"><i>Bisher sind noch keine Punkte für die ewige Higscoreliste vergeben worden!</i></td></tr>';
                 }
 
                 echo '</table>';
@@ -373,7 +373,7 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMafia, 0, ",", ".") . ' ' . $CurrencyC . ' für die Mafia.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMafia, 0, ",", ".") . ' ' . $Currency . ' für die Mafia.';
                             ?></td>
                     </tr>
                     <tr>
@@ -400,7 +400,7 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMarkt, 0, ",", ".") . ' ' . $CurrencyC . ' auf dem freien Markt.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMarkt, 0, ",", ".") . ' ' . $Currency . ' auf dem freien Markt.';
                             ?></td>
                     </tr>
                     <tr>
@@ -491,7 +491,7 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Einnahmen von ' . number_format($user->EinnahmenZinsen, 0, ",", ".") . ' ' . $CurrencyC . ' durch Zinsen.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Einnahmen von ' . number_format($user->EinnahmenZinsen, 0, ",", ".") . ' ' . $Currency . ' durch Zinsen.';
                             ?></td>
                     </tr>
                     <tr>

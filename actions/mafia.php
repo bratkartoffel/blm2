@@ -276,10 +276,10 @@ WHERE
                 Nachfolgend die Nachricht, wie sie der Angreifer erhält mit allen wichtigen Daten des Gegners
             */
             $nachricht = "Die Spionage war erfolgreich. Hier die Daten des Gegners:\n\n";
-            $nachricht .= "Geld: " . number_format($lager->Geld, 2, ", ", ".") . " " . $CurrencyC . "\n\n";
+            $nachricht .= "Geld: " . number_format($lager->Geld, 2, ", ", ".") . " " . $Currency . "\n\n";
             for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
                 $temp = "Lager" . $i;
-                $nachricht .= Warenname($i, true) . ": " . $lager->$temp . " kg\n";
+                $nachricht .= Warenname($i) . ": " . $lager->$temp . " kg\n";
             }
             for ($i = 1; $i <= ANZAHL_GEBAEUDE; $i++) {
                 $temp = "Gebaeude" . $i;
@@ -327,7 +327,7 @@ WHERE
             $nachricht = "Hallo Chef,\n\nDer Diebstahl war [b]erfolgreich[/b], es wurden alle Waren gestohlen. Nachfolgend eine Liste:\n\n";
             for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
                 $temp = "Lager" . $i;
-                $nachricht .= str_replace("&Auml;", "Ä", Warenname($i)) . ": " . $lager->$temp . " kg\n";
+                $nachricht .= Warenname($i) . ": " . $lager->$temp . " kg\n";
             }
             $nachricht .= "\nDie Waren befinden sich schon in Ihrem Lager.\n\n";
             $nachricht .= "[i]Ihre Mafia[/i]";
@@ -464,7 +464,7 @@ WHERE
 
             $GeldGestohlen = round($lager->Geld * $diebstahlrate, 2);        // Wieviel wird dem Gegner nun gestohlen?
 
-            $nachricht = "Hallo Chef,\n\nUnser Diebstahl war [b]erfolgreich[/b]!\n\nAls Ihr Konkurrent mal nicht aufpasste, konnte unser Dieb seine Geldbörse erbeuten. Dabei konnte er " . number_format($GeldGestohlen, 2, ",", ".") . " " . $CurrencyC . " (" . number_format($diebstahlrate * 100, 2, ",", ".") . "%) stehlen!\n";        // Nachricht schreiben
+            $nachricht = "Hallo Chef,\n\nUnser Diebstahl war [b]erfolgreich[/b]!\n\nAls Ihr Konkurrent mal nicht aufpasste, konnte unser Dieb seine Geldbörse erbeuten. Dabei konnte er " . number_format($GeldGestohlen, 2, ",", ".") . " " . $Currency . " (" . number_format($diebstahlrate * 100, 2, ",", ".") . "%) stehlen!\n";        // Nachricht schreiben
 
             $nachricht .= "\nWir haben das Geld schon auf Ihr Konto überwiesen.\n\n[i]Ihre Mafia[/i]";    // Ein paar abschließende Worte ;)
 

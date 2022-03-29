@@ -24,9 +24,9 @@ if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
     <?= $m; ?>
 
     <b>
-        Hier k&ouml;nnen Sie Ihr verdientes Geld anlegen oder auch Kredite aufnehmen, wenns mal knapp wird. Die Zinsen
+        Hier können Sie Ihr verdientes Geld anlegen oder auch Kredite aufnehmen, wenns mal knapp wird. Die Zinsen
         werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen alle <?php echo(ZINSEN_DAUER / 60); ?> Minuten. Die
-        maximale Summe, die Sie anlegen k&ouml;nnen, sind <span style="color: red;"><?php
+        maximale Summe, die Sie anlegen können, sind <span style="color: red;"><?php
             if ($ich->Punkte < 100000) {
                 echo '99.999,99';
             } else {
@@ -46,7 +46,7 @@ if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
             } else {
                 echo number_format((-0.33 * $ich->Punkte), 0, ",", ".") . " " . $Currency;
             }
-            ?> f&auml;llt, wird Ihr Account automatisch resettet!</span><br/>
+            ?> fällt, wird Ihr Account automatisch resettet!</span><br/>
         <br/>
         Die aktuellen Anlagenzinsen: <?php echo number_format(($ZinsenAnlage - 1) * 100, 2, ",", "."); ?> %<br/>
         Die aktuellen Kreditzinsen: <?php echo number_format(($ZinsenKredit - 1) * 100, 2, ",", "."); ?> %<br/>
@@ -56,11 +56,11 @@ if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
     <?php
     if ($ich->Punkte < 100000) {
         if ($ich->Bank <= (DISPO_LIMIT * 0.90)) {
-            echo '<h3 style="color: red;">WICHTIG: Falls der Kredit unter -' . number_format(DISPO_LIMIT, 0, ",", ".") . " " . $Currency . ' f&auml;llt, wird der Account automatisch resettet!</h3>';
+            echo '<h3 style="color: red;">WICHTIG: Falls der Kredit unter -' . number_format(DISPO_LIMIT, 0, ",", ".") . " " . $Currency . ' fällt, wird der Account automatisch resettet!</h3>';
         }
     } else {
         if ($ich->Bank <= (-0.25 * $ich->Punkte)) {
-            echo '<h3 style="color: red;">WICHTIG: Falls der Kredit unter ' . number_format((-0.33 * $ich->Punkte) - 0.01, 0, ",", ".") . " " . $Currency . ' f&auml;llt, wird der Account automatisch resettet!</h3>';
+            echo '<h3 style="color: red;">WICHTIG: Falls der Kredit unter ' . number_format((-0.33 * $ich->Punkte) - 0.01, 0, ",", ".") . " " . $Currency . ' fällt, wird der Account automatisch resettet!</h3>';
         }
     }
 
@@ -100,7 +100,7 @@ if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
             <tr>
                 <th>Art</th>
                 <th>Betrag</th>
-                <th>Best&auml;tigen</th>
+                <th>Bestätigen</th>
             </tr>
             <tr>
                 <td>
@@ -122,7 +122,7 @@ if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
                            onkeyup="changed=true;"/> <?= $Currency; ?>
                 </td>
                 <td>
-                    <input type="submit" value="Best&auml;tigen"
+                    <input type="submit" value="Bestätigen"
                            onclick="document.forms[0].submit(); this.disabled='disabled'; this.value='Bitte warten...'; return false;"/>
                 </td>
             </tr>

@@ -154,7 +154,7 @@ ORDER BY
 
 
         if (!$eintrag)    // Wenn kein Auftrag gefunden wurde, dann gib ne entsprechende Meldung aus.
-            echo '<tr><td colspan="2"><i>Keine aktiven Auftr&auml;ge gefunden!</td></tr>';
+            echo '<tr><td colspan="2"><i>Keine aktiven Aufträge gefunden!</td></tr>';
         ?>
     </table>
     <table class="Liste" style="margin-top: 15px;">
@@ -163,7 +163,7 @@ ORDER BY
             <th>Dauer / Wert</th>
         </tr>
         <tr>
-            <td style="font-weight: bold;">N&auml;chstes Einkommen:</td>
+            <td style="font-weight: bold;">Nächstes Einkommen:</td>
             <td id="a_000"><?php
                 if ($LetztesEinkommen + EINKOMMEN_DAUER - time() < 0) {    // Wann bekommt der User sein nächstes Einkommen?
                     echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - date_offset_get(new DateTime()));
@@ -173,7 +173,7 @@ ORDER BY
                 ?></td>
         </tr>
         <tr>
-            <td style="font-weight: bold;">N&auml;chste Zinsen:</td>
+            <td style="font-weight: bold;">Nächste Zinsen:</td>
             <td id="a_001"><?php
                 if ($LetztesEinkommen + EINKOMMEN_DAUER - time() < 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
                     echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - date_offset_get(new DateTime()));
@@ -183,7 +183,7 @@ ORDER BY
                 ?></td>
         </tr>
         <tr>
-            <td style="font-weight: bold;">N&auml;chste Mafia:</td>
+            <td style="font-weight: bold;">Nächste Mafia:</td>
             <td id="a_002"><?php
                 if ($ich->LastMafia + 600 - time() > 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
                     echo date("H:i:s", $ich->LastMafia + 600 - time() - date_offset_get(new DateTime()));
@@ -193,7 +193,7 @@ ORDER BY
                 ?></td>
         </tr>
         <tr>
-            <td style="font-weight: bold;">Logout wegen Inaktivit&auml;t:</td>
+            <td style="font-weight: bold;">Logout wegen Inaktivität:</td>
             <td id="a_003"><?php
                 echo date("H:i:s", $ich->LastAction - time());
                 ?></td>
@@ -207,7 +207,7 @@ ORDER BY
         </tr>
         <tr>
             <td><a style="font-weight: normal;" href="../?p=vertraege_liste&amp;<?= time(); ?>"
-                   onclick="BLMNavigation(this.href); return false;">Neue Vertr&auml;ge:</a></td>
+                   onclick="BLMNavigation(this.href); return false;">Neue Verträge:</a></td>
             <td><?= Vertraege(); ?></td>
         </tr>
         <tr>
@@ -233,10 +233,10 @@ ORDER BY
     </table>
     <div style="text-align: center; margin-top: 20px;">
         <a href="../?p=startseite&amp;<?= time(); ?>" onclick="BLMzeigen(this.href); return false;">
-            BLM anzeigen / &ouml;ffnen
+            BLM anzeigen / öffnen
         </a><br/>
         <a href="../?p=startseite&amp;<?= time(); ?>" onclick="BLMEnde(); return false;">
-            Fenster schlie&szlig;en
+            Fenster schliessen
         </a>
     </div>
     <script type="text/javascript">

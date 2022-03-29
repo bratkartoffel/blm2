@@ -23,7 +23,7 @@
 <?= $m; ?>
 
 <span style="font-weight: bold;">
-	 Das gesamte Spiel ist <em>komplett kostenlos</em> und OpenSource, und kann <a href="./blm2.zip">(bald) hier</a> (Letzte &Auml;nderung: <?= date("Y/m/d H:i", filemtime("./blm2.zip")) ?>) heruntergeladen werden.<br/>
+	 Das gesamte Spiel ist <em>komplett kostenlos</em> und OpenSource, und kann (bald) <a href="https://github.com/bratkartoffel/blm2">hier</a> heruntergeladen werden.<br/>
 	 <br/>
 	 Die Lizenz (MIT Licence) kann <a href="LICENCE.md">hier</a> eingesehen werden.<br/>
 	 <br/>
@@ -42,16 +42,16 @@
 
 <h2>Disclaimer</h2>
 <span style="font-weight: bold;">
-	Ich &uuml;bernehme keinerlei Haftung f&uuml;r Links, die auf andere Seiten verweisen.<br/>
-	Die Links werden kontrolliert, jedoch kann es passieren, dass mal der eine oder andere Link &uuml;bersehen
+	Ich übernehme keinerlei Haftung für Links, die auf andere Seiten verweisen.<br/>
+	Die Links werden kontrolliert, jedoch kann es passieren, dass mal der eine oder andere Link übersehen
 	wird.<br/>
 </span>
 
 <h2>Bilder und Grafiken</h2>
 <span style="font-weight: bold;">
-	Alle Bilder der Geb&auml;ude und der Gem&uuml;sesorten sind von mir aufgenommen, und sind somit frei
-	verf&uuml;gbar und d&uuml;rfen beliebig weiterverwendet werden.<br/>
+	Alle Bilder der Gebäude und der Gemüsesorten sind von mir aufgenommen, und sind somit frei
+	verfügbar und dürfen beliebig weiterverwendet werden.<br/>
 	Die Grafiken und die Smileys sind dem &quot;CrystalPack&quot; von <a
             href="http://www.crystalxp.net">CrystalXP.net</a> entnommen und sind
-	frei verf&uuml;gbar unter der GPL.
+	frei verfügbar unter der GPL.
 </span>

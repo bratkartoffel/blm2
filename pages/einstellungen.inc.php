@@ -19,7 +19,7 @@
 <?= $m; ?>
 
 <b>
-    Hier k&ouml;nnen Sie verschiedene Einstellungen f&uuml;r Ihren Account &auml;ndern.<br/>
+    Hier können Sie verschiedene Einstellungen für Ihren Account ändern.<br/>
 </b>
 <br/>
 <form action="./actions/einstellungen.php" method="post">
@@ -54,7 +54,7 @@
             <td><input type="password" name="new_pw1" value=""/></td>
         </tr>
         <tr>
-            <td>Best&auml;tigen:</td>
+            <td>Bestätigen:</td>
             <td><input type="password" name="new_pw2" value=""/></td>
         </tr>
         <tr>
@@ -66,7 +66,7 @@
     <input type="hidden" name="a" value="4"/>
     <table class="Liste" style="width: 300px; margin-top: 30px;" cellspacing="0" id="Beschreibung">
         <tr>
-            <th>Beschreibung &auml;ndern</th>
+            <th>Beschreibung ändern</th>
         </tr>
         <tr>
             <td><textarea maxlength="4096" name="beschreibung" cols="33" rows="10"
@@ -145,7 +145,7 @@
                        value="<?= htmlentities(stripslashes($ich->Sitter->Passwort), ENT_QUOTES, "UTF-8"); ?>"
                        size="50"/> <?php
                 if ($ich->Sitter->Passwort != "") {
-                    echo "<i>(Das ist das verschl&uuml;sselte Passwort, wenn nur die Rechte ge&auml;ndert werden sollen, dann einfach stehen lassen.)</i>";
+                    echo "<i>(Das ist das verschlüsselte Passwort, wenn nur die Rechte geändert werden sollen, dann einfach stehen lassen.)</i>";
                 }
                 ?></td>
         </tr>

@@ -183,7 +183,7 @@ VALUES
     '" . $vertrag->Von . "',
     '" . time() . "',
     'Vertrag angenommen',
-    'Hallo,\n\nIhr Vertrag über " . $vertrag->Menge . ' kg ' . WarenName($vertrag->Was, true) . ' zu insgesamt ' . number_format(VERTRAEGE_PROVISION_FAKTOR * $vertrag->Menge * $vertrag->Preis, 2, ",", ".") . " " . $CurrencyC . " wurde angenommen.\n\n[i]-System-[/i]',
+    'Hallo,\n\nIhr Vertrag über " . $vertrag->Menge . ' kg ' . WarenName($vertrag->Was) . ' zu insgesamt ' . number_format(VERTRAEGE_PROVISION_FAKTOR * $vertrag->Menge * $vertrag->Preis, 2, ",", ".") . " " . $Currency . " wurde angenommen.\n\n[i]-System-[/i]',
     '0'
 );";
         mysql_query($sql_abfrage);        // Noch eine kleine Meldung an den Verkäufer, dass sein Vertrag angenommen wurde.
@@ -296,7 +296,7 @@ VALUES
     '" . $v->Von . "',
     '" . time() . "',
     'Vertrag abgelehnt',
-    'Hallo,\n\nIhr Vertrag über " . $v->Menge . ' kg ' . WarenName($v->Was, true) . ' zu insgesamt ' . number_format($v->Menge * $v->Preis, 2, ",", ".") . " " . $CurrencyC . " wurde abgelehnt.\n\n[i]-System-[/i]',
+    'Hallo,\n\nIhr Vertrag über " . $v->Menge . ' kg ' . WarenName($v->Was) . ' zu insgesamt ' . number_format($v->Menge * $v->Preis, 2, ",", ".") . " " . $Currency . " wurde abgelehnt.\n\n[i]-System-[/i]',
     '0'
 );";
         mysql_query($sql_abfrage);        // Dann wird der Absender noch informiert, dass sein Angebot Schrott war, und abgelehnt wurde :)

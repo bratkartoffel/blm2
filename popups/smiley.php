@@ -95,8 +95,8 @@ header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist U
         <td style="font-weight: bold;"> :D</td>
         <td style="border-right: solid 1px #555555;"><a href="#" onclick="Auswahl(' :D'); return false;"><img
                         style="border: none;" src="../pics/emoticons/kopete017.png"/></a></td>
-        <td style="font-weight: bold;"> :&Ouml;</td>
-        <td><a href="#" onclick="Auswahl(' :&ouml;'); return false;"><img style="border: none;"
+        <td style="font-weight: bold;"> :Ö</td>
+        <td><a href="#" onclick="Auswahl(' :ö'); return false;"><img style="border: none;"
                                                                           src="../pics/emoticons/kopete018.png"/></a>
         </td>
     </tr>
@@ -111,7 +111,7 @@ header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist U
 </table>
 <br/>
 <div style="text-align: center;">
-    <a href="../?p=nachrichten_schreiben" onclick="self.close(); return false;">Fenster schlie&szlig;en</a>
+    <a href="../?p=nachrichten_schreiben" onclick="self.close(); return false;">Fenster schliessen</a>
 </div>
 </body>
 </html>

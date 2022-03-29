@@ -26,7 +26,7 @@ if (!$ich->Sitter->Bioladen && $_SESSION['blm_sitter']) {
     <?= $m; ?>
 
     <b>
-        Hier k&ouml;nnen Sie Ihr produziertes Obst und Gem&uuml;se zum Festpreis verkaufen.<br/>
+        Hier können Sie Ihr produziertes Obst und Gemüse zum Festpreis verkaufen.<br/>
         Dieser richtet sich nach der Stufe der Schule und nach der Ausbaustufe des Bioladens.<br/>
     </b>
     <br/>
@@ -60,11 +60,11 @@ if (!$ich->Sitter->Bioladen && $_SESSION['blm_sitter']) {
         }
 
         if ($eintrag == 0) {
-            echo '<tr><td colspan="4" style="text-align: center;"><i>Sie haben kein Obst/Gem&uuml;se auf Lager.</i></td></tr>';
+            echo '<tr><td colspan="4" style="text-align: center;"><i>Sie haben kein Obst/Gemüse auf Lager.</i></td></tr>';
         }
 
         if ($eintrag > 1) {
-            echo '<tr><td colspan="4" style="text-align: center; border-top: darkred solid 1px;"><i>Alles (' . number_format($menge, 0, ",", ".") . ' kg) f&uuml;r ' . number_format($erloese, 2, ",", ".") . ' ' . $Currency . ') verkaufen:</i><form action="actions/bioladen.php" method="post"><input type="hidden" name="was" value="1337" /><input type="submit" value="Verkaufen" /></form></td></tr>';
+            echo '<tr><td colspan="4" style="text-align: center; border-top: darkred solid 1px;"><i>Alles (' . number_format($menge, 0, ",", ".") . ' kg) für ' . number_format($erloese, 2, ",", ".") . ' ' . $Currency . ') verkaufen:</i><form action="actions/bioladen.php" method="post"><input type="hidden" name="was" value="1337" /><input type="submit" value="Verkaufen" /></form></td></tr>';
         }
         ?>
     </table>

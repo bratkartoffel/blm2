@@ -11,8 +11,8 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/buero.png" alt="B&uuml;ro"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Das B&uuml;ro
+        <td style="width: 80px;"><img src="pics/big/buero.png" alt="Büro"/></td>
+        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Das Büro
             <a href="./?p=hilfe&amp;mod=1&amp;cat=8"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
@@ -29,12 +29,12 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
         <td style="vertical-align: top;">
             <table class="Liste" style="width: 350px; margin-right: 25px;" cellspacing="0">
                 <tr>
-                    <th colspan="4">Kosten / Erl&ouml;s&uuml;bersicht</th>
+                    <th colspan="4">Kosten / Erlösübersicht</th>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Ware</td>
                     <td style="font-weight: bold;">Kosten / kg</td>
-                    <td style="font-weight: bold;">Erl&ouml;s / kg</td>
+                    <td style="font-weight: bold;">Erlös / kg</td>
                     <td style="font-weight: bold;">Gewinn / kg</td>
                 </tr>
                 <?php
@@ -63,8 +63,8 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 </tr>
                 <tr>
                     <th>Ware</th>
-                    <th>Erl&ouml;s<br/>in %</th>
-                    <th>Erl&ouml;s<br/>in <?= $Currency; ?></th>
+                    <th>Erlös<br/>in %</th>
+                    <th>Erlös<br/>in <?= $Currency; ?></th>
                 </tr>
                 <?php
                 for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Rennt alle Waren durch
@@ -103,7 +103,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 </tr>
                 <tr>
                     <td>+</td>
-                    <td>Einnahmen Geb&auml;ude:</td>
+                    <td>Einnahmen Gebäude:</td>
                     <td style="text-align: right;"><?= number_format($ich->EinnahmenGebaeude, 2, ',', '.') . " " . $Currency;
                         $EinnahmenGesamt += $ich->EinnahmenGebaeude;
                         ?></td>
@@ -124,7 +124,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 </tr>
                 <tr>
                     <td>+</td>
-                    <td>Einnahmen Vertr&auml;ge:</td>
+                    <td>Einnahmen Verträge:</td>
                     <td style="text-align: right;"><?= number_format($ich->EinnahmenVertraege, 2, ',', '.') . " " . $Currency;
                         $EinnahmenGesamt += $ich->EinahmenVertraege;
                         ?></td>
@@ -144,7 +144,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 </tr>
                 <tr>
                     <td>-</td>
-                    <td>Ausgaben Geb&auml;ude:</td>
+                    <td>Ausgaben Gebäude:</td>
                     <td style="text-align: right;"><?= number_format($ich->AusgabenGebaeude, 2, ',', '.') . " " . $Currency;
                         $AusgabenGesamt += $ich->AusgabenGebaeude;
                         ?></td>
@@ -179,7 +179,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 </tr>
                 <tr>
                     <td>-</td>
-                    <td>Ausgaben Vertr&auml;ge:</td>
+                    <td>Ausgaben Verträge:</td>
                     <td style="text-align: right;"><?= number_format($ich->AusgabenVertraege, 2, ',', '.') . " " . $Currency;
                         $AusgabenGesamt += $ich->AusgabenVertraege;
                         ?></td>

@@ -47,7 +47,6 @@ define("LAST_RESET", 1648540800);                   // Wann war der letzte Reset
 require_once(dirname(__FILE__) . "/config_live.inc.php");
 
 
-
 /*
  * Folgende Werte können geändert werden, müssen aber nicht ;)
 */
@@ -173,12 +172,11 @@ $Start["lager"][15] = 0;
 */
 
 // Hier kommt die Währung des Spiels in 2 verschiedenen Formen.
-$Currency = "&euro;";        // Währung als HTML-kodiertes Zeichen
-$CurrencyC = "€";                // Währung als direktes Zeichen
+$Currency = "€";                // Währung als direktes Zeichen
 
 // Hier wird der Titel der Seite anhand des Namens der Unterseite generiert
 if ($_GET['p'] != "")
-    $Titel = str_replace("ae", "&auml;", explode("_", $_GET['p']));
+    $Titel = explode("_", $_GET['p']);
 else
     $Titel[] = "index";
 

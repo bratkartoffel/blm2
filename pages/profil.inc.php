@@ -63,7 +63,7 @@ $platz = GetPlatz($profil->ID);
 
 <b>
     Hier sehen Sie das Profil des Benutzers &quot;<?= htmlentities($profil->Name, ENT_QUOTES, "UTF-8"); ?>&quot;. Der
-    Spieler ist f&uuml;r sein Profil selbst verantwortlich!
+    Spieler ist für sein Profil selbst verantwortlich!
 </b>
 <br/>
 <br/>

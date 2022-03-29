@@ -72,7 +72,7 @@ ORDER BY
 									<img src="./pics/small/readmail.png" border="0" alt="Nachricht lesen" />
 								</a>
 								<a href="./actions/nachrichten.php?a=2&amp;id=' . $nachricht->ID . '" onclick="delNachricht(' . $nachricht->ID . ', document.getElementById(\'nl_' . $nachricht->ID . '\')); this.removeAttribute(\'onclick\'); return false;">
-									<img src="./pics/small/error.png" border="0" alt="Nachricht l&ouml;schen" />
+									<img src="./pics/small/error.png" border="0" alt="Nachricht löschen" />
 								</a>
 								';
             if ($nachricht->Absender != "-User gelöscht-" && $nachricht->Absender != "-System-") {
@@ -99,7 +99,7 @@ ORDER BY
         ?>
     </table>
     <a href="./?p=nachrichten_schreiben">Neue Nachricht verfassen</a> |
-    <a href="actions/nachrichten.php?a=3">Alle Nachrichten l&ouml;schen</a>
+    <a href="actions/nachrichten.php?a=3">Alle Nachrichten löschen</a>
     <table cellspacing="0" style="margin-top: 20px;">
         <tr>
             <td style="width: 80px;"><img src="pics/big/nachrichten.png" alt="Nachrichten"/></td>
@@ -154,7 +154,7 @@ ORDER BY
 								</a>';
             if ($nachricht->Gelesen == 0) {
                 echo '<a href="./actions/nachrichten.php?a=2&amp;id=' . $nachricht->ID . '" onclick="delNachricht(' . $nachricht->ID . ', document.getElementById(\'nl_' . $nachricht->ID . '\')); this.removeAttribute(\'onclick\'); return false;">
-									<img src="./pics/small/error.png" border="0" alt="Nachricht l&ouml;schen" />
+									<img src="./pics/small/error.png" border="0" alt="Nachricht löschen" />
 								</a>';
             }
             echo '</td>

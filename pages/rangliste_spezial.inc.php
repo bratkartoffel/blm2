@@ -173,7 +173,7 @@ if ($rang > sizeof($Spezial)) {
     while ($s = mysql_fetch_object($sql_ergebnis)) {
         if (is_numeric($s->Wert)) {
             if (intval($s->Wert) != $s->Wert) {
-                $s->Wert = number_format($s->Wert, 2, ",", ".") . " " . $CurrencyC;
+                $s->Wert = number_format($s->Wert, 2, ",", ".") . " " . $Currency;
             }
         }
         ?>

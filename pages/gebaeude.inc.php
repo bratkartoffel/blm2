@@ -48,7 +48,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
     <?= $m; ?>
 
     <b>
-        Hier k&ouml;nnen Sie alle Ihre Gebäude ausbauen, und ihre aktuelle Stufe abfragen.<br/>
+        Hier können Sie alle Ihre Gebäude ausbauen, und ihre aktuelle Stufe abfragen.<br/>
     </b>
     <br/>
     <table class="Liste" cellspacing="0">
@@ -62,7 +62,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             <td colspan="2">
                 Dies ist das wichtigste Gebäude des Spiels.<br/>
                 Je weiter Sie die Plantage ausbauen, desto mehr Gemüse kann schneller angebaut werden.<br/>
-                Ausserdem k&ouml;nnen auch neue Gemüsesorten erst mit einem gewissen Plantagenlevel angebaut werden.
+                Ausserdem können auch neue Gemüsesorten erst mit einem gewissen Plantagenlevel angebaut werden.
             </td>
         </tr>
     </table>
@@ -131,9 +131,9 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             </td>
             <td colspan="2">
                 Dies ist ebenfalls ein sehr wichtiges Gebäude in Ihrem Betrieb.<br/>
-                Hier k&ouml;nnen Sie neue Gemüsesorten erforschen (damit Sie sie anbauen k&ouml;nnen) oder
+                Hier können Sie neue Gemüsesorten erforschen (damit Sie sie anbauen können) oder
                 bestehende verbessern (schnellerer Anbau).<br/>
-                Ausserdem werden neue Gemüsesorten bekannt, je h&ouml;her das Forschungszentrum ist und die
+                Ausserdem werden neue Gemüsesorten bekannt, je höher das Forschungszentrum ist und die
                 Forschungszeit für eine Stufe um <?= BONUS_FAKTOR_FORSCHUNGSZENTRUM * 100; ?>% je Stufe gesenkt.
             </td>
         </tr>
@@ -204,7 +204,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             </td>
             <td colspan="2">
                 Dieses Gebäude ist genau so wichtig, wie die Plantage und das Forschungszentrum,
-                denn hier k&ouml;nnen Sie Ihre Gemüse verkaufen.<br/>
+                denn hier können Sie Ihre Gemüse verkaufen.<br/>
                 Ausserdem steigt Ihr Grundeinkommen und der Preis, den Sie pro Kilogramm erhalten, mit jeder
                 Stufe, die der Laden erreicht.
             </td>
@@ -277,16 +277,16 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
         <div style="padding-top: 10px;">&nbsp;</div>
         <table class="Liste" cellspacing="0">
             <tr>
-                <th colspan="3"><a id="g4"></a>D&ouml;nerstand, aktuell Stufe <?= $ich->Gebaeude4; ?></th>
+                <th colspan="3"><a id="g4"></a>Dönerstand, aktuell Stufe <?= $ich->Gebaeude4; ?></th>
             </tr>
             <tr>
                 <td style="width: 170px;">
-                    <img src="pics/gebaeude/doenerstand.jpg" alt="D&ouml;nerstand"/>
+                    <img src="pics/gebaeude/doenerstand.jpg" alt="Dönerstand"/>
                 </td>
                 <td colspan="2">
                     Dieses Gebäude hat zwar nicht viel mit &quot;Biowaren&quot; zu tun, <br/>
                     aber Sie haben erkannt, dass alleine mit Biolebensmitteln kein Geld zu verdienen ist.<br/>
-                    Deshalb kann man sich hier einen D&ouml;nerstand mieten, der das Grundeinkommen des Spielers erh&ouml;ht.
+                    Deshalb kann man sich hier einen Dönerstand mieten, der das Grundeinkommen des Spielers erhöht.
                 </td>
             </tr>
         </table>
@@ -360,7 +360,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                     <img src="pics/gebaeude/schule.jpg" alt="Verkäuferschule"/>
                 </td>
                 <td colspan="2">
-                    Hier bilden Sie Ihre Verkäufer aus, so dass diese in Ihrem Bioshop mehr Gewinn erzielen k&ouml;nnen.<br/>
+                    Hier bilden Sie Ihre Verkäufer aus, so dass diese in Ihrem Bioshop mehr Gewinn erzielen können.<br/>
                     Dabei steigt der Gewinn pro Kilo und Stufe
                     um <?= number_format(WAREN_PREIS_VERKAEUFERSCHULE, 2, ",", ".") . " " . $Currency; ?>!
                 </td>
@@ -585,7 +585,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                 </td>
                 <td colspan="2">
                     Dieses Gebäude ist das genaue Gegenstück zum Zaun.<br/>
-                    Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto h&ouml;her
+                    Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto höher
                     sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um <?= BONUS_FAKTOR_PIZZERIA; ?>%.
                 </td>
             </tr>

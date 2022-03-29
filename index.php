@@ -169,7 +169,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
         $Beschreibung = "Der Bioladenamanger 2 wurde programmiert von Simon Frankenberger und steht kostenlos zum Download bereit. Das Spiel wurde unter der \"Creative Commons Namensnennung-NichtKommerziell-Weitergabe unter gleichen Bedingungen 2.0 Deutschland\" veröffentlicht.";
         break;
     default:
-        $Beschreibung = "Willkommen beim Bioladenmanager 2, ein Browsergame um Gem&uuml;se, Obst und Macht... Werden Sie der K&ouml;nig der Biobauern!";
+        $Beschreibung = "Willkommen beim Bioladenmanager 2, ein Browsergame um Gemüse, Obst und Macht... Werden Sie der König der Biobauern!";
         break;
 }
 ?>
@@ -265,7 +265,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 <a href="./?p=impressum">
                     &copy; 2007-2008, Simon Frankenberger.
                 </a><br/>
-                Letzte &Auml;nderung: <a href="?p=changelog"><?= date("d.m.Y", LetzteAenderung()); ?></a>
+                Letzte Änderung: <a href="?p=changelog"><?= date("d.m.Y", LetzteAenderung()); ?></a>
             </div>
         </div>
         <div id="Navigation">
@@ -313,7 +313,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
 
                     <br/>
                     <div class="NaviLinkHeader">Finanzen:</div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">B&uuml;ro</a>
+                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">Büro</a>
                     </div>
                     <?php
                     if ($ich->Sitter->Bank || !$_SESSION['blm_sitter']) {
@@ -326,7 +326,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     if ($ich->Sitter->Vertraege || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=vertraege_liste&amp;<?= time(); ?>">Vertr&auml;ge
+                                    href="./?p=vertraege_liste&amp;<?= time(); ?>">Verträge
                                 (<?= Vertraege(); ?>)</a></div>
                         <?php
                     }
@@ -348,7 +348,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     ?>
 
                     <br/>
-                    <div class="NaviLinkHeader">Pers&ouml;nlich:</div>
+                    <div class="NaviLinkHeader">Persönlich:</div>
                     <?php
                     if ($ich->Sitter->Gruppe || !$_SESSION['blm_sitter']) {
                         ?>
@@ -448,7 +448,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                             <td style="text-align: right"><?= date("H:i:s", time()); ?></td>
                         </tr>
                         <tr>
-                            <td>N&auml;chstes Einkommen:</td>
+                            <td>Nächstes Einkommen:</td>
                             <td style="text-align: right"><?= date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER); ?></td>
                         </tr>
                     </table>

@@ -68,7 +68,7 @@ $statistik->AnzahlAuftraege = $statistik2->Auto_increment;
         <td style="text-align: right;"><?= number_format($statistik->EinnahmenGesamt - $statistik->AusgabenGesamt, 2, ",", ".") . " " . $Currency; ?></td>
     </tr>
     <tr>
-        <td>Anzahl aller Auftr&auml;ge:</td>
+        <td>Anzahl aller Aufträge:</td>
         <td style="text-align: right;"><?php
             $statistik->AnzahlAuftraege++;
             echo $statistik->AnzahlAuftraege - 1; ?></td>
@@ -85,7 +85,7 @@ $statistik->AnzahlAuftraege = $statistik2->Auto_increment;
         <th colspan="2">Forschung</th>
     </tr>
     <tr>
-        <td>Ausgaben f&uuml;r Forschung:</td>
+        <td>Ausgaben für Forschung:</td>
         <td style="text-align: right;"><?= number_format($statistik->AusgabenForschung, 2, ",", ".") . " " . $Currency; ?></td>
     </tr>
     <tr>
@@ -99,18 +99,18 @@ $statistik->AnzahlAuftraege = $statistik2->Auto_increment;
 </table>
 <table class="Liste" cellspacing="0" style="width: 300px; margin-top: 30px;">
     <tr>
-        <th colspan="2">Geb&auml;ude</th>
+        <th colspan="2">Gebäude</th>
     </tr>
     <tr>
-        <td>Ausgaben f&uuml;r Geb&auml;ude:</td>
+        <td>Ausgaben für Gebäude:</td>
         <td style="text-align: right;"><?= number_format($statistik->AusgabenGebaeude, 2, ",", ".") . " " . $Currency; ?></td>
     </tr>
     <tr>
-        <td>Gesamtgeb&auml;udelevel:</td>
+        <td>Gesamtgebäudelevel:</td>
         <td style="text-align: right;"><?= $statistik->GesamtGebaeude; ?></td>
     </tr>
     <tr>
-        <td>Kosten / Geb&auml;udelevel:</td>
+        <td>Kosten / Gebäudelevel:</td>
         <td style="text-align: right;"><?= number_format(($statistik->AusgabenGebaeude / $statistik->GesamtGebaeude), 2, ",", ".") . " " . $Currency; ?></td>
     </tr>
 </table>

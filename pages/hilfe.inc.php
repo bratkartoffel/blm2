@@ -17,7 +17,7 @@
 <?= $m; ?>
 
 <b>
-    Hier finden Sie Hilfe, falls Sie mal was suchen oder nicht genau wissen, wie Sie eine Aktion durchf&uuml;hren.
+    Hier finden Sie Hilfe, falls Sie mal was suchen oder nicht genau wissen, wie Sie eine Aktion durchführen.
 </b>
 <br/>
 <br/>
@@ -72,13 +72,13 @@ switch ($cmb) {
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=1">Registrieren</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=2">Anmelden</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=3">Startseite</a></li>
-    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=4">Geb&auml;ude</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=4">Gebäude</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=5">Plantage</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=6">Forschungszentrum</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=7">Bioladen</a></li>
-    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=8">B&uuml;ro</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=8">Büro</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=9">Bank</a></li>
-    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=10">Vertr&auml;ge</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=10">Verträge</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=11">Marktplatz</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=12">Mafia</a></li>
     <li><a href="./?p=hilfe&amp;mod=1&amp;cat=13">Nachrichten</a></li>

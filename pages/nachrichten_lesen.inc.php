@@ -123,7 +123,7 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
                     if ($nachricht->Absender != "") {
                         echo 'Absender:';
                     } else {
-                        echo 'Empf&auml;nger:';
+                        echo 'Empfänger:';
                     }
                     ?></b></td>
             <td><?php
@@ -155,14 +155,14 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
             <td style="padding-top: 20px; border-right: solid 1px black;"><b>Aktion:</b></td>
             <td style="padding-top: 20px;">
                 <a href="./?p=nachrichten_liste">
-                    <img src="pics/small/back.png" border="0" alt="Zur&uuml;ck"/>
+                    <img src="pics/small/back.png" border="0" alt="Zurück"/>
                 </a>
                 <?php
                 if ($nachricht->Absender != "-User gelöscht-") {
                     if ($post_eingang || !$nachricht->Gelesen) {
                         ?>
                         <a href="./actions/nachrichten.php?a=2&amp;id=<?= $nachricht_id; ?>">
-                            <img src="./pics/small/error.png" border="0" alt="Nachricht l&ouml;schen"/>
+                            <img src="./pics/small/error.png" border="0" alt="Nachricht löschen"/>
                         </a>
                         <?php
                     }

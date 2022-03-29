@@ -70,7 +70,7 @@ header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist U
 </table>
 <br/>
 <div style="text-align: center;">
-    <a href="../?p=nachrichten_schreiben" onclick="self.close(); return false;">Fenster schlie&szlig;en</a>
+    <a href="../?p=nachrichten_schreiben" onclick="self.close(); return false;">Fenster schliessen</a>
 </div>
 </body>
 </html>

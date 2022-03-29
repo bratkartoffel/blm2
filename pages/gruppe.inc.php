@@ -24,9 +24,9 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
     if (intval($ich->Gruppe) == 0) {
         ?>
         <b>
-            Hier k&ouml;nnen Sie einer bereits bestehenden Gruppe beitreten, oder eine neue gr&uuml;nden.<br/>
-            Zum Beitreten ben&ouml;tigen Sie die Plantage auf mindestens Stufe 5,<br/>
-            zum gr&uuml;nden m&uuml;ssen Sie Ihre Plantage mindestens auf Stufe 8 haben.
+            Hier können Sie einer bereits bestehenden Gruppe beitreten, oder eine neue gründen.<br/>
+            Zum Beitreten benötigen Sie die Plantage auf mindestens Stufe 5,<br/>
+            zum gründen müssen Sie Ihre Plantage mindestens auf Stufe 8 haben.
         </b><br/>
         <br/>
         <?php
@@ -37,7 +37,7 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
 
     <?php
     if ($ich->Gebaeude1 < 5) {
-        echo '<span class="MeldungR" style="font-size: 12pt;">Sie m&uuml;ssen Ihre Plantage mindestens auf Stufe 5 haben, um einer Gruppe beizutreten.</span><br />';
+        echo '<span class="MeldungR" style="font-size: 12pt;">Sie müssen Ihre Plantage mindestens auf Stufe 5 haben, um einer Gruppe beizutreten.</span><br />';
     }
 
     if (intval($_GET['id']) > 0) {
@@ -209,7 +209,7 @@ ORDER BY
                     ?>
                     <br/>
                     <br/>
-                    <b>B&uuml;ndnisse:</b><br/>
+                    <b>Bündnisse:</b><br/>
                     <br/>
                     <?php
                     $sql_abfrage = "SELECT
@@ -437,7 +437,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                 <table class="Liste" cellspacing="0" style="width: 300px; margin-bottom: 30px;">
                     <tr>
                         <th colspan="2">
-                            Neue Gruppe gr&uuml;nden
+                            Neue Gruppe gründen
                         </th>
                     </tr>
                     <tr>
@@ -445,7 +445,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                         <td><input type="text" name="name" maxlength="32"/></td>
                     </tr>
                     <tr>
-                        <td>K&uuml;rzel:</td>
+                        <td>Kürzel:</td>
                         <td><input type="text" name="kuerzel" maxlength="6"/></td>
                     </tr>
                     <tr>
@@ -454,14 +454,14 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;">
-                            <input type="submit" value="Gr&uuml;nden"/>
+                            <input type="submit" value="Gründen"/>
                         </td>
                     </tr>
                 </table>
             </form>
             <?php
         } else {
-            echo '<span class="MeldungR" style="font-size: 12pt;">Sie m&uuml;ssen Ihre Plantage mindestens auf Stufe 8 haben, um eine neue Gruppe gr&uuml;nden zu k&ouml;nnen.</span><br /><br />';
+            echo '<span class="MeldungR" style="font-size: 12pt;">Sie müssen Ihre Plantage mindestens auf Stufe 8 haben, um eine neue Gruppe gründen zu können.</span><br /><br />';
         }
 
         if ($ich->Gebaeude1 >= 5) {

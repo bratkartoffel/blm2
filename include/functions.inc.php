@@ -1577,7 +1577,7 @@ VALUES
 
     $empfaenger = $email;
     $betreff = "Bioladenmanager 2: Aktivierung Ihres Accounts";
-    $nachricht = 'Willkommen beim Bioladenmanager 2,<br />
+    $nachricht = '<html>Willkommen beim Bioladenmanager 2,<br />
 <br />
 doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:<br />
 <br />
@@ -1587,14 +1587,16 @@ Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail
 ' . ADMIN_EMAIL . '<br />
 <br />
 MfG
-' . SPIEL_BETREIBER;
-    $header = "From: " . ADMIN_EMAIL . "
-Reply-To: " . ADMIN_EMAIL . "
-X-Mailer: PHP
-MIME-Version: 1.0
-Content-type: text/html; charset=utf-8";
+' . SPIEL_BETREIBER . '</html>';
+    $headers =
+        "From: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
+        "Reply-To: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
+        "X-Mailer: " .  "PHP\n" .
+        "MIME-Version: " . "1.0\n" .
+        "Content-type: " . "text/html; charset=utf-8\n" .
+        "Date: " . date(DATE_RFC2822);
 
-    if (!@mail($empfaenger, $betreff, $nachricht, $header)) {
+    if (!@mail($empfaenger, $betreff, $nachricht, $headers, '-f ' . ADMIN_EMAIL)) {
         die('Der Aktivierungscode konnte nicht versendet werden! Wahrscheinlich gibt es ein Problem mit dem Mailserver. Bitte senden Sie folgenden Code an <a href="mailto:' . ADMIN_EMAIL . '">' . ADMIN_EMAIL . '</a>, um Ihren Account manuell aktivieren zu lassen:<br />
 			<br />
 			<pre>' . substr(base64_encode($name . "|" . $code), 0, -2) . "</pre>");

@@ -127,11 +127,11 @@ AND
 										(noch ' . date("H:i:s", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) . ' verbleibend.)<br />
 										<a onclick="return confirm(\'Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge (~ ' . intval($auftraege->$temp->Menge * $ProzentFertig) . ' kg) wird Ihnen gut geschrieben.!\');" href="actions/auftrag.php?id=' . $auftraege->$temp->ID . '&amp;back=plantage&amp;was=' . $i . '">Abbrechen</a>';
                                 } else {    // Der Auftrag wurde noch nicht erteilt:
-                                    echo '<b>Menge: <input type="text" size="3" maxlength="5" name="menge" value="' . $menge . '" onkeyup="RechneProduktionsKosten(' . $menge . ', ' . $kosten . ', document.pr_' . $i . '.menge.value, ' . $ich->Geld . ', document.getElementById(\'pr_ko_' . $i . '\'));" />  kg</b><br /><span id="pr_ko_' . $i . '">Kosten: ' . number_format($kosten, 2) . ' €</span><br />';
-                                    echo '<input type="submit" name="anbauen" value="Ware anbauen" style="margin-top: 8px;" onclick="document.forms[' . $i . '].submit(); this.disabled=\'disabled\'; this.value=\'Bitte warten...\'; return false;" />';
+                                    echo '<b>Menge: <input type="text" size="3" maxlength="5" name="menge" value="' . $menge . '" onkeyup="RechneProduktionsKosten(' . $menge . ', ' . $kosten . ', document.pr_' . $i . '.menge.value, ' . $ich->Geld . ', document.getElementById(\'pr_ko_' . $i . '\'), document.getElementById(\'anbauen_' . $i . '\'));" />  kg</b><br /><span id="pr_ko_' . $i . '">Kosten: ' . number_format($kosten, 2) . ' €</span><br />';
+                                    echo '<input type="submit" name="anbauen" id="anbauen_' . $i . '" value="Ware anbauen" style="margin-top: 8px;" onclick="document.forms[' . $i . '].submit(); this.disabled=\'disabled\'; this.value=\'Bitte warten...\'; return false;" />';
                                     ?>
                                     <script type="text/javascript">
-                                        RechneProduktionsKosten(<?=$menge; ?>, <?=$kosten; ?>, document.pr_<?=$i; ?>.menge.value, <?=$ich->Geld; ?>, document.getElementById('pr_ko_<?=$i; ?>'));
+                                        RechneProduktionsKosten(<?=$menge; ?>, <?=$kosten; ?>, document.pr_<?=$i; ?>.menge.value, <?=$ich->Geld; ?>, document.getElementById('pr_ko_<?=$i; ?>'), document.getElementById('anbauen_<?=$i; ?>'));
                                     </script>
                                     <?php
                                 }

@@ -58,18 +58,18 @@ function Navigation(Button) {
     return false;
 }
 
-function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld) {
+function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, Button) {
     // Rechnet die Produktionskosten aus und schreibt diese in ein Feld
     // Deaktiviert den Submit-Button, falls die Kosten gößer als das Geld des Benutzers sind
 
     // Rechnet die Kosten für den Auftrag aus
-    const kosten = Menge * (BasisMenge / BasisPreis);
+    const kosten = Menge * (BasisPreis / BasisMenge);
 
     // Schreibt die Produktionskosten für die angegebene Menge in das Feld
     TextFeld.innerHTML = "Kosten: " + kosten.toFixed(2) + " €";
 
     // Kann sich der Benutzer die Produktion leisten?
-    if (kosten <= Geld) {
+    if (kosten > Geld) {
         Button.enabled = "";					// Wenn nicht, dann Button deaktivieren
         Button.disabled = "disabled";
     } else {

@@ -91,6 +91,7 @@ const PRODUKTIONS_PLANTAGE_FAKTOR_MENGE = 10;            // Wieviel wird pro Stu
 
 const RANGLISTE_OFFSET = 15;                        // Wieviele Einträge sollen in der Rangliste pro Seite stehen?
 const GRUPPE_OFFSET = 10;                            // Wieviele Gruppennachrichten sollten pro Seite angezeigt werden?
+const ADMIN_LOG_OFFSET = 25;                      // Wieviele Einträge sollten pro Seite im Adminlog angezeigt werden?
 const MARKTPLATZ_OFFSET = 25;                    // Wieviele Marktplatzangebote sollen pro Seite angezeigt werden?
 
 const BILD_GROESE_MAXIMAL = 131072;            // Die maximale Bildgröße fürs Profil in Byte (128 kb)

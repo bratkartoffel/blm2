@@ -327,7 +327,7 @@ LIMIT
 FROM
     mitglieder
 WHERE
-    ID>1
+    Admin = 0
 ORDER BY
     Onlinezeit DESC,
     RAND(CURDATE())
@@ -363,7 +363,7 @@ LIMIT 0,1;";
 FROM
     mitglieder m NATURAL JOIN statistik s
 WHERE
-    m.ID>1
+    Admin = 0
 ORDER BY
     s.AusgabenMafia DESC,
     RAND(HOUR(CURDATE()))
@@ -390,7 +390,7 @@ LIMIT 0,1;";
 FROM
     mitglieder m NATURAL JOIN statistik s
 WHERE
-    m.ID>1
+    Admin = 0
 ORDER BY
     s.AusgabenMarkt DESC,
     RAND(CURDATE()+2)
@@ -481,7 +481,7 @@ LIMIT 0,1;";
 FROM
     mitglieder m NATURAL JOIN statistik s
 WHERE
-    m.ID>1
+    Admin = 0
 ORDER BY
     s.EinnahmenZinsen DESC,
     RAND(DAY(CURDATE()))
@@ -508,7 +508,7 @@ LIMIT 0,1;";
 FROM
     mitglieder
 WHERE
-    ID>1
+    Admin = 0
 ORDER BY
     IgmGesendet DESC,
     RAND(WEEK(CURDATE()))
@@ -532,7 +532,7 @@ LIMIT 0,1;";
 FROM
     mitglieder
 WHERE
-    ID>1
+    Admin = 0
 ORDER BY
     RAND(" . date("dmY") . ")
 LIMIT 0,1;";

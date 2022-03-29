@@ -205,7 +205,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
         <meta name="language" content="de"/>
         <title><?= $Titel ?></title>
         <script type="text/javascript" src="js/functions.js?<?= VERSION; ?>"></script>
-        <script type="text/javascript" src="js/ajax.js.php?<?= VERSION; ?>"></script>
+        <script type="text/javascript" src="js/ajax.js?<?= VERSION; ?>"></script>
         <script type="text/javascript">
             <!--
             function MarkActiveLink() {

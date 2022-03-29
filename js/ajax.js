@@ -1,22 +1,3 @@
-<?php
-/**
- * AJAX-Javascript Funktionen.
- *
- * @version 1.0.1
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.includes
- */
-
-/*
-Changelog:
-
-[1.0.1]
-    - Serverpfad durch Konstante ersetzt
-    - Admin-Mailadresse durch Konstante ersetzt
-
-*/
-header('Content-Type: application/javascript');
-?>
 function CreateNewAJAXreq() {
     try {
         req = new XMLHttpRequest();

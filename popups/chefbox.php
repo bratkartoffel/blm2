@@ -44,8 +44,8 @@ if ($ich->LastAction + 3600 < time()) {
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <!--
 	Site generated: 	<?= date("r", time()); ?>
-	Client: 		<?= getenv("REMOTE_ADDR") ?>
-	Server: 		<?= getenv("SERVER_ADDR"); ?>
+	Client: 		<?= $_SERVER['REMOTE_ADDR'] ?>
+	Server: 		<?= $_SERVER['SERVER_ADDR']; ?>
 	Script: 		<?= $_SERVER['PHP_SELF']; ?>
 -->
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">

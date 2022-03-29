@@ -176,12 +176,12 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <!--
 	Site generated: 	<?= date("r", time()); ?>
-	Client: 		<?= getenv('REMOTE_ADDR') ?>
-	Server: 		<?= getenv('SERVER_ADDR'); ?>
+	Client: 		<?= $_SERVER['REMOTE_ADDR'] ?>
+	Server: 		<?= $_SERVER['SERVER_ADDR']; ?>
 	Script: 		<?= $_SERVER['PHP_SELF']; ?>
-	Query-String:		<?= getenv('QUERY_STRING'); ?>
-	User-Agent:		<?= getenv('HTTP_USER_AGENT'); ?>
-	Referer:		<?= getenv('HTTP_REFERER'); ?>
+	Query-String:		<?= $_SERVER['QUERY_STRING']; ?>
+	User-Agent:		<?= $_SERVER['HTTP_USER_AGENT']; ?>
+	Referer:		<?= $_SERVER['HTTP_REFERER']; ?>
 -->
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
     <head>

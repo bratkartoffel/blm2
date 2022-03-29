@@ -72,7 +72,7 @@ AND
 )
 VALUES
 (
-    '" . getenv("REMOTE_ADDR") . "',
+    '" . $_SERVER['REMOTE_ADDR'] . "',
     '" . $temp->ID . "',
     NOW(),
     '1'
@@ -128,7 +128,7 @@ $sql_abfrage = "INSERT INTO
 )
 VALUES
 (
-    '" . getenv("REMOTE_ADDR") . "',
+    '" . $_SERVER['REMOTE_ADDR'] . "',
     '" . $temp->ID . "',
     NOW(),
     '0'

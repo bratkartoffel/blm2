@@ -45,7 +45,7 @@ $_SESSION['blm_queries']++;
 
 $statistik = mysql_fetch_object($sql_ergebnis);        // Ruft die Infos ab
 
-$sql_abfrage2 = "SHOW TABLE STATUS FROM d0076b20 WHERE Name='auftrag';";
+$sql_abfrage2 = "SHOW TABLE STATUS FROM " . DB_DATENBANK . " WHERE Name='auftrag';";
 $sql_ergebnis2 = mysql_query($sql_abfrage2);
 $statistik2 = mysql_fetch_object($sql_ergebnis2);
 

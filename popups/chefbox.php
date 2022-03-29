@@ -34,7 +34,7 @@ CheckAllAuftraege();        // die Aufträge abarbeiten
 $ich = LoadSettings();            // Meine Daten nochmals laden, vielleicht hat sich ja was geändert...
 $Einkommen = (EINKOMMEN_BASIS + ($ich->Gebaeude3 * EINKOMMEN_BIOLADEN_BONUS) + ($ich->Gebaeude4 * EINKOMMEN_DOENERSTAND_BONUS));        // Das Einkommen berechnen
 
-if ($ich->LastAction + 3600 < time()) {
+if ($ich->LastAction + TIMEOUT_INAKTIV < time()) {
     DisconnectDB();
     session_unset();
     session_destroy();
@@ -53,7 +53,7 @@ if ($ich->LastAction + 3600 < time()) {
         <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <meta http-equiv="creator" content="Simon Frankenberger"/>
-        <meta http-equiv="refresh" content="10; url=./chefbox.php?<?= time() + 13; ?>"/>
+        <meta http-equiv="refresh" content="60; url=./chefbox.php?<?= time() + 13; ?>"/>
         <title>BLM2 - Chefbox</title>
         <style type="text/css">
             table.Liste td, table.Liste th {
@@ -185,8 +185,8 @@ ORDER BY
         <tr>
             <td style="font-weight: bold;">Nächste Mafia:</td>
             <td id="a_002"><?php
-                if ($ich->LastMafia + 600 - time() > 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
-                    echo date("H:i:s", $ich->LastMafia + 600 - time() - date_offset_get(new DateTime()));
+                if ($ich->LastMafia + MAFIA_SPERRZEIT_SPIONAGE - time() > 0) {        // Wann kann die nächste Mafiaaktion ausgeführt werden?
+                    echo date("H:i:s", $ich->LastMafia + MAFIA_SPERRZEIT_SPIONAGE - time() - date_offset_get(new DateTime()));
                 } else {
                     echo '00:00:00';
                 }
@@ -195,7 +195,7 @@ ORDER BY
         <tr>
             <td style="font-weight: bold;">Logout wegen Inaktivität:</td>
             <td id="a_003"><?php
-                echo date("H:i:s", $ich->LastAction - time());
+                echo date("H:i:s", $ich->LastAction + TIMEOUT_INAKTIV - time());
                 ?></td>
         </tr>
     </table>

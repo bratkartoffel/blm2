@@ -1,1 +1,2 @@
-<?php define("LAST_RESET","1232996400"); ?>
+<?php
+define("LAST_RESET", "1232996400");

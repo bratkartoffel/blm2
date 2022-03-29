@@ -1,35 +1,35 @@
 <?php
-	/**
-		* Das "Hirn" des Programms, hier stehen die Hilfetexte.
-		* 
-		* @version 1.0.1
-		* @author Simon Frankenberger <simonfrankenberger@web.de>
-		* @package blm2.includes
-	*/
-	
-	/*
-		Ich denke, weitere Kommentare sind in dieser Datei überflüssig ;)
-	*/
-	$HilfeText[101][]="Registrieren";
-	$HilfeText[101][]="Hier können Sie einen neuen Spieler registrieren. Zugang zum Spiel haben nur registrierte Spieler.
+/**
+ * Das "Hirn" des Programms, hier stehen die Hilfetexte.
+ *
+ * @version 1.0.1
+ * @author Simon Frankenberger <simonfrankenberger@web.de>
+ * @package blm2.includes
+ */
+
+/*
+    Ich denke, weitere Kommentare sind in dieser Datei überflüssig ;)
+*/
+$HilfeText[101][] = "Registrieren";
+$HilfeText[101][] = "Hier können Sie einen neuen Spieler registrieren. Zugang zum Spiel haben nur registrierte Spieler.
 Füllen Sie hierzu alle Felder aus und klicken Sie dann auf \"Abschicken\" um die Registrierung abzuschließen.
 
 Wenn die Registrierung erfolgreich ist, dann werden Sie sofort auf die Anmeldeseite weitergeleitet, wo Sie sich im Spiel anmelden können.";
-	
-	$HilfeText[102][]="Anmelden";
-	$HilfeText[102][]="Damit Sie das Spiel spielen können, müssen Sie am Server angemeldet sein. Dazu geben Sie bitte Ihre Daten, welche Sie für die Registrierung verwendet haben, ein und schicken das Formular ab.
+
+$HilfeText[102][] = "Anmelden";
+$HilfeText[102][] = "Damit Sie das Spiel spielen können, müssen Sie am Server angemeldet sein. Dazu geben Sie bitte Ihre Daten, welche Sie für die Registrierung verwendet haben, ein und schicken das Formular ab.
 
 	Wenn die Daten überprüft wurden und richtig sind, befinden Sie sich im Spiel und die Navigationsleiste links bietet nun andere Optionen.
 	";
-	
-	$HilfeText[103][]="Startseite";
-	$HilfeText[103][]="Hier sehen Sie eine kurze Beschreibung des Spiels und eine kurze Liste mit den wichtigsten News oder Änderungen des Spiels.
+
+$HilfeText[103][] = "Startseite";
+$HilfeText[103][] = "Hier sehen Sie eine kurze Beschreibung des Spiels und eine kurze Liste mit den wichtigsten News oder Änderungen des Spiels.
 
 Wenn die Runde beendet ist, sehen Sie dort ausserdem noch die letzten Rundengewinner.
 Wenn die Runde läuft, dann sehen Sie einige Informationen über die Runde, zum Beispiel wann diese gestartet ist und wann diese endet.";
 
-	$HilfeText[104][]="Gebäude";
-	$HilfeText[104][]="Über diesen Menüpunkt können Sie neue Gebäude bauen oder bereits vorhandene ausbauen. Von Anfang an sind jedoch nicht alle Gebäude freigeschaltet, da man manche erst bei fortschreitenden Spielverlauf bekommt.
+$HilfeText[104][] = "Gebäude";
+$HilfeText[104][] = "Über diesen Menüpunkt können Sie neue Gebäude bauen oder bereits vorhandene ausbauen. Von Anfang an sind jedoch nicht alle Gebäude freigeschaltet, da man manche erst bei fortschreitenden Spielverlauf bekommt.
 	
 Bei jedem Gebäude steht ein kurzer Informationstext, der den Zweck des Gebäudes erklärt. Ausserdem stehen auch immer die Ausbauzeit und Ausbaukosten dabei. Diese werden von Stufe zu Stufe erhöht, meist um einen Faktor von ~1,3 je Stufe (genaueres können Sie dem Changelog oder dem Quelltext direkt entnehmen).
 
@@ -55,9 +55,9 @@ Hier ist noch eine Liste mit den verfügbaren Gebäuden und deren Vorraussetunge
 [b]Plantage Stufe >= 12 und Ausgaben für Mafia >= 25.000 " . $CurrencyC . ":[/b]
 - Pizzeria (Erhöht die Erfolgschancen der Mafia)
 ";
-	
-	$HilfeText[105][]="Plantage";
-	$HilfeText[105][]="Die Plantage ist das wichtigste Gebäude im Spiel, denn hier bauen Sie Ihr erforschtes Gemüse an.
+
+$HilfeText[105][] = "Plantage";
+$HilfeText[105][] = "Die Plantage ist das wichtigste Gebäude im Spiel, denn hier bauen Sie Ihr erforschtes Gemüse an.
 
 Je weiter die Plantage ausgebaut ist, desto mehr andere Gebäude werden bekannt. Ausserdem muss die Plantage eine bestimmte Stufe besitzen, um ein Gemüse forschen oder überhaupt anbauen zu können.
 
@@ -73,9 +73,9 @@ Sobald die Plantage durch einen Angriff unter die für ein Gemüse erforderliche
 
 Die Produktionsmenge kann frei bestimmt werden, jedoch beträgt die maximale Produktionsdauer am Stück 12 Stunden.
 ";
-	
-	$HilfeText[106][]="Forschungszentrum";
-	$HilfeText[106][]="In Ihrem Forschungszentrum können Sie neue Gemüsesorten erfoschen oder bestehende verbessern.
+
+$HilfeText[106][] = "Forschungszentrum";
+$HilfeText[106][] = "In Ihrem Forschungszentrum können Sie neue Gemüsesorten erfoschen oder bestehende verbessern.
 
 Die Stufe des Forschungszentrum ist ein Kriterium dafür, welche Gemüsesorten Sie forschen können. Dabei gilt das selbe wie für den Anbau der Gemüssorten auf der Plantage:
 
@@ -88,35 +88,35 @@ usw.
 
 Ausserdem werden die Forschungen für jede Stufe, welche das Gebäude erreicht, schneller abgeschlossen.
 
-Stufe 1 einer Forschung ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die Anbaumenge um " . PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE . " kg, erhöht aber auch die Kosten für den Anbau um " . number_format(PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN,2,",",".") . " " . $CurrencyC . ".
+Stufe 1 einer Forschung ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die Anbaumenge um " . PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE . " kg, erhöht aber auch die Kosten für den Anbau um " . number_format(PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN, 2, ",", ".") . " " . $CurrencyC . ".
 ";
-	
-	$HilfeText[107][]="Bioladen";
-	$HilfeText[107][]="In diesem Gebäude können Sie Ihre produzierten Pflanzen an virtuelle Kunden verkaufen.
 
-Es gibt keine Beschränkung, wie viel Gemüse Sie am Tag verkaufen können. Der Verkaufspreis wird aus einem Grundpreis, dem Marktkurs, der Stufe der Forschung des entsprechenden Gemüses, der Stufe des Bioladens und der Verkäuferschule berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um " . number_format(WAREN_PREIS_BIOLADEN,2,",",".") . " " . $CurrencyC . ".
+$HilfeText[107][] = "Bioladen";
+$HilfeText[107][] = "In diesem Gebäude können Sie Ihre produzierten Pflanzen an virtuelle Kunden verkaufen.
+
+Es gibt keine Beschränkung, wie viel Gemüse Sie am Tag verkaufen können. Der Verkaufspreis wird aus einem Grundpreis, dem Marktkurs, der Stufe der Forschung des entsprechenden Gemüses, der Stufe des Bioladens und der Verkäuferschule berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um " . number_format(WAREN_PREIS_BIOLADEN, 2, ",", ".") . " " . $CurrencyC . ".
 
 Der Verkaufspreis kann nicht selbst direkt eingegeben oder verändert werden.";
-	
-	$HilfeText[108][]="Büro";
-	$HilfeText[108][]="Das Büro ist eine Art Schaltzentrale des Spiels, wo alle wichtigen Informationen Ihres Accounts zusammenlaufen.
+
+$HilfeText[108][] = "Büro";
+$HilfeText[108][] = "Das Büro ist eine Art Schaltzentrale des Spiels, wo alle wichtigen Informationen Ihres Accounts zusammenlaufen.
 	
 Hier sehen Sie zum Beispiel die aktuellen Marktkurse (bewegen sich zwischen 75% und 100%, werden stündlich neu berechnet), eine Übersicht über Ihre Eingaben und Ausgaben, sowie eine Aufschlüsselung über die Punkterechnung.";
-	
-	$HilfeText[109][]="Bank";
-	$HilfeText[109][]="Diese verwaltet Ihr Vermögen, gibt Zinsen auf Anlagen und vergibt Kredite.
+
+$HilfeText[109][] = "Bank";
+$HilfeText[109][] = "Diese verwaltet Ihr Vermögen, gibt Zinsen auf Anlagen und vergibt Kredite.
 
 Sie haben von Anfang an ein Bankkonto mit " . number_format($Start["geld"], 2, ",", ".") . " " . $CurrencyC . " Startguthaben.
 Die maximale Summe, welche Sie einzahlen können liegt bei 99.999,99 " . $CurrencyC . " (Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt 25.000 " . $CurrencyC . ".
 
-Die Zinsen werden alle " . (ZINSEN_DAUER/60) . " Minuten abgerechnet.
+Die Zinsen werden alle " . (ZINSEN_DAUER / 60) . " Minuten abgerechnet.
 
 Das Geld auf der Bank kann nicht (im Gegensatz zum Bargeld) von anderen Spielern geklaut werden.
 
 [color=red]Wichtig: Falls Ihr Kontostand unter " . number_format(DISPO_LIMIT, 0, ",", ".") . " " . $CurrencyC . " fällt, wird Ihr Account automatisch resettet![/color]";
-	
-	$HilfeText[1010][]="Verträge";
-	$HilfeText[1010][]="Hier können Sie Waren direkt an einen anderen Mitspieler schicken. Die Preise können frei gewählt werden.
+
+$HilfeText[1010][] = "Verträge";
+$HilfeText[1010][] = "Hier können Sie Waren direkt an einen anderen Mitspieler schicken. Die Preise können frei gewählt werden.
 
 Auf dieser Seite haben Sie auch eine Übersicht darüber, welche Verträge noch ausstehen.
 Die Vertäge sind einmalig und werden nicht über Zeiträume abgerechnet.
@@ -125,19 +125,19 @@ Anders als beim Marktplatz gibt es hier keine extra Gebühren, das heißt, der V
 
 Die Waren werden direkt beim Versandt des Vertrags reserviert und aus dem Lager entfernt.
 Verträge können wieder zurückgezogen werden, solange der Gegenüber diesen noch nicht angenommen hat.";
-	
-	$HilfeText[1011][]="Marktplatz";
-	$HilfeText[1011][]="Hier können alle Spieler Ihre Waren zu frei wählbaren Preisen zum Verkauf anbieten oder andere Angebote kaufen.
+
+$HilfeText[1011][] = "Marktplatz";
+$HilfeText[1011][] = "Hier können alle Spieler Ihre Waren zu frei wählbaren Preisen zum Verkauf anbieten oder andere Angebote kaufen.
 
 Es können keine Teilmengen gekauft werden, es muss also das gesammte Angebot gekauft werden. Deshalb ist zu empfehlen, nicht 1x 1000kg zu verkaufen, sondern lieber 4x 250kg einzustellen.
 
-Der Markt verlangt " . (100-MARKT_PROVISION_FAKTOR*100) . "% des Gesamtpreises als Provision. Diese wird beim Kauf direkt vom Erlös abgezogen.
+Der Markt verlangt " . (100 - MARKT_PROVISION_FAKTOR * 100) . "% des Gesamtpreises als Provision. Diese wird beim Kauf direkt vom Erlös abgezogen.
 
 [b]Wichtig![/b]
-Man kann Angebote wieder vom Markt zurückziehen, jedoch gehen dabei " . (100-MARKT_ZURUECKZIEH_FAKTOR*100) . "% der Ware verloren!.";
-	
-	$HilfeText[1012][]="Mafia";
-	$HilfeText[1012][]="Die Mafia ermöglicht Angriffe auf andere Spieler, um diese zu bestehlen oder deren Plantagen anzugreifen.
+Man kann Angebote wieder vom Markt zurückziehen, jedoch gehen dabei " . (100 - MARKT_ZURUECKZIEH_FAKTOR * 100) . "% der Ware verloren!.";
+
+$HilfeText[1012][] = "Mafia";
+$HilfeText[1012][] = "Die Mafia ermöglicht Angriffe auf andere Spieler, um diese zu bestehlen oder deren Plantagen anzugreifen.
 
 Bei der Mafia gibt es 4 verschiedene Arten von Attacken:
 - Spionage
@@ -165,20 +165,20 @@ c) Maximal so viele Punkte haben, wie Ihre Punktzahl mal " . MAFIA_FAKTOR_MAX_PU
 
 [b]Hinweis:[/b]
 Im Krieg zählen die oben genannten Angriffsbeschränkungen nicht!";
-	
-	$HilfeText[1013][]="Nachrichten (IGM's)";
-	$HilfeText[1013][]="Hier können Sie empfangene Nachrichten lesen oder löschen, und neue Nachrichten verfassen.
+
+$HilfeText[1013][] = "Nachrichten (IGM's)";
+$HilfeText[1013][] = "Hier können Sie empfangene Nachrichten lesen oder löschen, und neue Nachrichten verfassen.
 
 In diesem Modul findet die komplette Kommunikation zwischen den Spielern und dem System statt.
 [b]Bei den Nachrichten können auch BB-Code und Smileys verwendet werden.[/b]";
-	
-	$HilfeText[1014][]="Notizblock";
-	$HilfeText[1014][]="Hier können Sie eigene Notizen festhalten und bearbeiten.
+
+$HilfeText[1014][] = "Notizblock";
+$HilfeText[1014][] = "Hier können Sie eigene Notizen festhalten und bearbeiten.
 
 Die maximale Länge des Notizblock sind 2048 Zeichen.";
-	
-	$HilfeText[1015][]="Einstellungen";
-	$HilfeText[1015][]="Hier können Sie die Einstellungen zu Ihrem Konto ändern.
+
+$HilfeText[1015][] = "Einstellungen";
+$HilfeText[1015][] = "Hier können Sie die Einstellungen zu Ihrem Konto ändern.
 
 Sie können hier:
 - das Passwort ändern
@@ -190,7 +190,7 @@ Sie können hier:
 
 Um ein bereits hochgeladenes Bild zu löschen, klicken Sie einfach auf den Button \"Absenden\" ohne eine Datei auszuwählen.
 
-Die maximale Größe des Profilbildes beträgt " . (BILD_GROESE_MAXIMAL/1024) . " KB.
+Die maximale Größe des Profilbildes beträgt " . (BILD_GROESE_MAXIMAL / 1024) . " KB.
 
 [b]Was ist ein Sitter?[/b]
 
@@ -206,20 +206,20 @@ Multiaccounts sind laut den Regeln verboten. Dazu zählen auch wiederholte Anmel
 
 [b]Wichtig![/b]
 Sobald Sie das Konto resettet oder gelöscht haben, kann man es nicht mehr wiederherstellen!";
-	
-	$HilfeText[1016][]="Chefbox";
-	$HilfeText[1016][]="Die wichtigsten Informationen zu den aktuellen Vorgängen und Aufträgen auf einen Blick.
+
+$HilfeText[1016][] = "Chefbox";
+$HilfeText[1016][] = "Die wichtigsten Informationen zu den aktuellen Vorgängen und Aufträgen auf einen Blick.
 
 Diese Box wird in einem neuen Fenster (\"Popup\") geöffnet und zeigt auf einen Blick alle aktive Aufträge mit der verbleibenden Dauer, die Anzahl der zur Zeit angemeldeten Spieler, ob neue Nachrichten, Verträge, Marktplatzangebote vorliegen und wann die das nächste Grundeinkommen oder die Zinsen verbucht werden.";
-	
-	$HilfeText[1017][]="Rangliste";
-	$HilfeText[1017][]="Zeigt die besten Spieler nach Punkten sortiert an. Als zweite Sortierung gibt es noch eine Liste der \"Bioladenfreaks\", welches die Spieler nach der bisherigen Spielzeit sortiert ausgibt.
+
+$HilfeText[1017][] = "Rangliste";
+$HilfeText[1017][] = "Zeigt die besten Spieler nach Punkten sortiert an. Als zweite Sortierung gibt es noch eine Liste der \"Bioladenfreaks\", welches die Spieler nach der bisherigen Spielzeit sortiert ausgibt.
 
 [b]Wichtig:[/b]
 Die Aktualisierung der Loginzeit findet nur statt, wenn der Benutzer sich über den Menüpunkt \"Logout\" ordnungsgemäß abmeldet! Wird der Browser einfach geschlossen, oder die Seite anderweitig verlassen, ohne sich abzumelden, wird die Zeit nicht aktualisiert!";
-	
-	$HilfeText[1018][]="Serverstatistik";
-	$HilfeText[1018][]="Zeigt verschiedene spielerübergreifende Statistikenan, zum Beispiel:
+
+$HilfeText[1018][] = "Serverstatistik";
+$HilfeText[1018][] = "Zeigt verschiedene spielerübergreifende Statistikenan, zum Beispiel:
 
 - Anzahl der bisher erteilten Aufträge,
 - Gesamteinnahmen,
@@ -229,28 +229,28 @@ Die Aktualisierung der Loginzeit findet nur statt, wenn der Benutzer sich über 
 - Anzahl aller bisher verschickten IGMs
 
 Und noch viele mehr.";
-	
-	$HilfeText[1019][]="Regeln";
-	$HilfeText[1019][]="Wie bei jedem Spiel gibt es auch bei diesem hier Regeln.
+
+$HilfeText[1019][] = "Regeln";
+$HilfeText[1019][] = "Wie bei jedem Spiel gibt es auch bei diesem hier Regeln.
 
 Hier wird der Umgang mit anderen Spielern und eventuelle Problemfaktoren geregelt. Alle Spieler müssen sich an diese Regeln halten.
 
 Bei nicht-Einhaltung der Regeln werden nach Ermessen der Admins Strafen verteilt.";
-	
-	$HilfeText[1020][]="Changelog";
-	$HilfeText[1020][]="Zeigt den Entwicklungsstand des Spiels und informiert über die Änderungen.
+
+$HilfeText[1020][] = "Changelog";
+$HilfeText[1020][] = "Zeigt den Entwicklungsstand des Spiels und informiert über die Änderungen.
 
 Das Changelog ist sortiert nach Datum und Kategorie. Jede größere Änderung am Spiel wird hier festgehalten und in die jeweilige Kategorie (Optimierung, Bugfix, Feature, Balancing...) eingeteilt. Somit kann jeder Spieler sehen, was und wie etwas geändert wurde.";
-	
-	$HilfeText[1021][]="Impressum";
-	$HilfeText[1021][]="Zeigt Informationen zu der Lizenz des Spiels und über den Verantwortlichen an. Ausserdem kann hier auch immer die aktuelle Version als Quelltext heruntergeladen werden.";
-	
-	$HilfeText[1022][]="Abmelden";
-	$HilfeText[1022][]="Sobald Sie das Spiel beenden wollen, klicken Sie bitte auf diesen Link.
+
+$HilfeText[1021][] = "Impressum";
+$HilfeText[1021][] = "Zeigt Informationen zu der Lizenz des Spiels und über den Verantwortlichen an. Ausserdem kann hier auch immer die aktuelle Version als Quelltext heruntergeladen werden.";
+
+$HilfeText[1022][] = "Abmelden";
+$HilfeText[1022][] = "Sobald Sie das Spiel beenden wollen, klicken Sie bitte auf diesen Link.
 Somit wird die Sitzung beendet und für ungültig erklärt, so dass kein Fremder in Ihren Account rein kommt. Ausserdem werden Sie dann in der Rangliste sofort als Offline gekennzeichnet.";
-	
-	$HilfeText[1023][]="Gruppen";
-	$HilfeText[1023][]="Hier findet die komplette Gruppenverwaltung des Spiels statt.
+
+$HilfeText[1023][] = "Gruppen";
+$HilfeText[1023][] = "Hier findet die komplette Gruppenverwaltung des Spiels statt.
 
 Falls Sie noch keine Gruppe haben, dann können Sie hier:
 a) Eine neue Gruppe erstellen (Plantage mind. Stufe 8 )
@@ -274,4 +274,3 @@ Die diplomatischen Beziehungen brauchen immer das beidseitige Einverständnis. E
 
 [b]Wichtig:[/b]
 Sobald alle Mitglieder eine Gruppe verlassen haben, wird diese umgehend gelöscht!";
-?>

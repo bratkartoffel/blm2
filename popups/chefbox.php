@@ -1,317 +1,318 @@
 <?php
-	/**
-		* Die Chefbox bietet viele Informationen zum Spiel auf einen Blick an
-		* 
-		* @version 1.0.0
-		* @author Simon Frankenberger <simonfrankenberger@web.de>
-		* @package blm2.includes
-	*/
-	header('Content-type: text/html; charset="utf-8"',true);		// Das Dokument ist UTF-8 kodiert...
-	
-	/*
-		Einbinden aller wichtigen Datein, wie die Einstellungen, den Zeitpunkt des letzten Resets und die Funktionen
-	*/
-	include("../include/last_reset.inc.php");
-	include("../include/config.inc.php");
-	include("../include/functions.inc.php");
-	
-	ConnectDB();		// Verbindung mit der Datenbank aufbauen
-	
-	error_reporting(0);		// Das Error-Reporting ausschalten, das stört den normalen Benutzer nur...
-	ignore_user_abort(true);		// Ignoriert den Abbruch des Benutzers
-	
-	if(!IstAngemeldet()) {		// Wenn der Benutzer nicht angemeldet ist, dann....
-		DisconnectDB();		// ... trennen wir die Verbindung mit der Datenbank, und...
-		echo '<script type="text/javascript">self.close();</script>';	// ...schließen das Fenster, da er das ja nicht mehr braucht...
-		die();		// ... und brechen dann ganz ab.
-	}
-	
-	if(CheckRundenEnde()) {		// Wenn die Runde abgelaufen ist, dann...
-		ResetAll(true, $Start);		// ... mache einen Reset
-	}
-	
-	$ich=LoadSettings();		// Eigene Einstellugnen laden
-	CheckAllAuftraege($ZinsenAnlage, $ZinsenKredit);		// die Aufträge abarbeiten
-	$ich=LoadSettings();			// Meine Daten nochmals laden, vielleicht hat sich ja was geändert...
-	$Einkommen=(EINKOMMEN_BASIS+($ich->Gebaeude3*EINKOMMEN_BIOLADEN_BONUS)+($ich->Gebaeude4*EINKOMMEN_DOENERSTAND_BONUS));		// Das Einkommen berechnen
-	
-	if($ich->LastAction+3600 < time()) {
-		DisconnectDB();
-		session_unset();
-		session_destroy();
-		echo '<script type="text/javascript">self.close();</script>';	// ...schließen das Fenster, da er das ja nicht mehr braucht...
-	}
+/**
+ * Die Chefbox bietet viele Informationen zum Spiel auf einen Blick an
+ *
+ * @version 1.0.0
+ * @author Simon Frankenberger <simonfrankenberger@web.de>
+ * @package blm2.includes
+ */
+header('Content-type: text/html; charset="utf-8"', true);        // Das Dokument ist UTF-8 kodiert...
+
+/*
+    Einbinden aller wichtigen Datein, wie die Einstellungen, den Zeitpunkt des letzten Resets und die Funktionen
+*/
+include("../include/last_reset.inc.php");
+include("../include/config.inc.php");
+include("../include/functions.inc.php");
+
+ConnectDB();        // Verbindung mit der Datenbank aufbauen
+
+error_reporting(0);        // Das Error-Reporting ausschalten, das stört den normalen Benutzer nur...
+ignore_user_abort(true);        // Ignoriert den Abbruch des Benutzers
+
+if (!IstAngemeldet()) {        // Wenn der Benutzer nicht angemeldet ist, dann....
+    DisconnectDB();        // ... trennen wir die Verbindung mit der Datenbank, und...
+    echo '<script type="text/javascript">self.close();</script>';    // ...schließen das Fenster, da er das ja nicht mehr braucht...
+    die();        // ... und brechen dann ganz ab.
+}
+
+if (CheckRundenEnde()) {        // Wenn die Runde abgelaufen ist, dann...
+    ResetAll(true, $Start);        // ... mache einen Reset
+}
+
+$ich = LoadSettings();        // Eigene Einstellugnen laden
+CheckAllAuftraege($ZinsenAnlage, $ZinsenKredit);        // die Aufträge abarbeiten
+$ich = LoadSettings();            // Meine Daten nochmals laden, vielleicht hat sich ja was geändert...
+$Einkommen = (EINKOMMEN_BASIS + ($ich->Gebaeude3 * EINKOMMEN_BIOLADEN_BONUS) + ($ich->Gebaeude4 * EINKOMMEN_DOENERSTAND_BONUS));        // Das Einkommen berechnen
+
+if ($ich->LastAction + 3600 < time()) {
+    DisconnectDB();
+    session_unset();
+    session_destroy();
+    echo '<script type="text/javascript">self.close();</script>';    // ...schließen das Fenster, da er das ja nicht mehr braucht...
+}
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-	Site generated: 	<?=date("r", time()); ?> 
-	Client: 		<?=getenv("REMOTE_ADDR") ?> 
-	Server: 		<?=getenv("SERVER_ADDR"); ?> 
-	Script: 		<?=$_SERVER['PHP_SELF']; ?>  
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <!--
+	Site generated: 	<?= date("r", time()); ?>
+	Client: 		<?= getenv("REMOTE_ADDR") ?>
+	Server: 		<?= getenv("SERVER_ADDR"); ?>
+	Script: 		<?= $_SERVER['PHP_SELF']; ?>
 -->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
-	<head>
-		<link rel="stylesheet" type="text/css" href="../styles/style.css" />
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta http-equiv="creator" content="Simon Frankenberger" />
-		<meta http-equiv="refresh" content="10; url=./chefbox.php?<?=intval(time()+13); ?>" />
-		<title>BLM2 - Chefbox</title>
-		<style type="text/css">
-			table.Liste td, table.Liste th {
-				font-size: 11px;
-			}
-			
-			tr.Kategorie1 td {
-				font-weight: bold;
-				color: #cc0000;
-			}
-			
-			tr.Kategorie2 td {
-				font-weight: bold;
-			}
-			
-			tr.Kategorie3 td {
-				font-weight: bold;
-				color: #0000ee;
-			}
-		</style>
-		<script type="text/javascript">
-			<!--
-			function BLMzeigen(link) {
-				// Bringt das Hauptfenster in den Vordergrund, oder macht ein neues Fenster auf, falls das alte geschlossen wurde.
-				if (opener) {
-					opener.focus();
-				}
-				else {
-					blm=window.open(link, 'blm', 'fullscreen=yes,location=yes,resizable=yes,menubar=yes,scrollbars=yes,status=yes,toolbar=yes');
-					
-					blm.focus();
-				}
-			}
-			
-			function BLMEnde(link) {
-				// Schließt das Popup, und loggt den User aus, falls das Hauptfenster wschon zu ist.
-				if (opener) {
-					opener.focus();
-					self.close();
-				}
-				else
-				{
-					document.location.href="../actions/logout.php?popup=true";
-				}
-			}
-			
-			function BLMNavigation(link) {
-				// Lädt im Hauptfenster eine andere Seite oder macht ein neues Fenster mit der Hauptseite auf, falls noch nicht vorhanden.
-				if (opener) {
-					opener.document.location.href=link;
-					opener.focus();
-				}
-				else {
-					BLMzeigen(link);
-				}
-			}
-			// -->
-		</script>
-	</head>
-	<body>
-		<div style="text-align: center;">
-			<h1 style="margin: 0 auto; margin-top: -8px; width: 200px; height: 35px; background-image: url('../pics/style/bg_chefbox_h1.png');">BLM 2</h1>
-			<h3 style="margin: 5px; margin-bottom: 20px; text-decoration: underline;">Chefbox
-				<a href="../?p=hilfe&amp;mod=1&amp;cat=16&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;"> <img src="../pics/help.gif" alt="Hilfe" style="border: none;" /></a>
-			</h3>
-		</div>
-		
-		<table class="Liste" cellspacing="0">
-			<tr>
-				<th>Auftrag</th>
-				<th>Restzeit</th>
-			</tr>
-			<?php
-				$sql_abfrage="SELECT
-												*
-											FROM
-												auftrag
-											WHERE
-												Von='" . $_SESSION['blm_user'] . "'
-											AND
-												Start+Dauer>" . time() . "
-											ORDER BY
-												(Start+Dauer) ASC;";
-				$sql_ergebnis=mysql_query($sql_abfrage);		// Alle Aufträge abrufen
-				$_SESSION['blm_queries']++;
-				
-				$eintrag=false;		// Bisher haben wir noch keinen Auftrag gefunden...
-				
-				while($auftrag=mysql_fetch_object($sql_ergebnis)) {		// Holt sich nun die Auftragsliste					
-					echo '<tr class="Kategorie' . intval($auftrag->Was/100) . '">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+    <head>
+        <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="creator" content="Simon Frankenberger"/>
+        <meta http-equiv="refresh" content="10; url=./chefbox.php?<?= intval(time() + 13); ?>"/>
+        <title>BLM2 - Chefbox</title>
+        <style type="text/css">
+            table.Liste td, table.Liste th {
+                font-size: 11px;
+            }
+
+            tr.Kategorie1 td {
+                font-weight: bold;
+                color: #cc0000;
+            }
+
+            tr.Kategorie2 td {
+                font-weight: bold;
+            }
+
+            tr.Kategorie3 td {
+                font-weight: bold;
+                color: #0000ee;
+            }
+        </style>
+        <script type="text/javascript">
+            <!--
+            function BLMzeigen(link) {
+                // Bringt das Hauptfenster in den Vordergrund, oder macht ein neues Fenster auf, falls das alte geschlossen wurde.
+                if (opener) {
+                    opener.focus();
+                } else {
+                    blm = window.open(link, 'blm', 'fullscreen=yes,location=yes,resizable=yes,menubar=yes,scrollbars=yes,status=yes,toolbar=yes');
+
+                    blm.focus();
+                }
+            }
+
+            function BLMEnde(link) {
+                // Schließt das Popup, und loggt den User aus, falls das Hauptfenster wschon zu ist.
+                if (opener) {
+                    opener.focus();
+                    self.close();
+                } else {
+                    document.location.href = "../actions/logout.php?popup=true";
+                }
+            }
+
+            function BLMNavigation(link) {
+                // Lädt im Hauptfenster eine andere Seite oder macht ein neues Fenster mit der Hauptseite auf, falls noch nicht vorhanden.
+                if (opener) {
+                    opener.document.location.href = link;
+                    opener.focus();
+                } else {
+                    BLMzeigen(link);
+                }
+            }
+
+            // -->
+        </script>
+    </head>
+    <body>
+    <div style="text-align: center;">
+        <h1 style="margin: 0 auto; margin-top: -8px; width: 200px; height: 35px; background-image: url('../pics/style/bg_chefbox_h1.png');">
+            BLM 2</h1>
+        <h3 style="margin: 5px; margin-bottom: 20px; text-decoration: underline;">Chefbox
+            <a href="../?p=hilfe&amp;mod=1&amp;cat=16&amp;<?= intval(time()); ?>"
+               onclick="BLMNavigation(this.href); return false;"> <img src="../pics/help.gif" alt="Hilfe"
+                                                                       style="border: none;"/></a>
+        </h3>
+    </div>
+
+    <table class="Liste" cellspacing="0">
+        <tr>
+            <th>Auftrag</th>
+            <th>Restzeit</th>
+        </tr>
+        <?php
+        $sql_abfrage = "SELECT
+    *
+FROM
+    auftrag
+WHERE
+    Von='" . $_SESSION['blm_user'] . "'
+AND
+    Start+Dauer>" . time() . "
+ORDER BY
+    (Start+Dauer) ASC;";
+        $sql_ergebnis = mysql_query($sql_abfrage);        // Alle Aufträge abrufen
+        $_SESSION['blm_queries']++;
+
+        $eintrag = false;        // Bisher haben wir noch keinen Auftrag gefunden...
+
+        while ($auftrag = mysql_fetch_object($sql_ergebnis)) {        // Holt sich nun die Auftragsliste
+            echo '<tr class="Kategorie' . intval($auftrag->Was / 100) . '">
 									<td>' . AuftragText($auftrag->Was) . '</td>
-									<td style="font-weight: normal; text-align: right; padding-right: 3px;">' . (date("d", $auftrag->Start+$auftrag->Dauer-3600-time())-1) . ' T <span id="a_' . $auftrag->ID . '">' . date("H:i:s", $auftrag->Start+$auftrag->Dauer-3600-time()) . '</span> h</td>
-								</tr>';	// gibt die Infos zum Auftrag aus.
-					
-					$eintrag=true;		// ja, wir haben einen Auftrag
-					
-					$js_dauer_rechnen[]="'a_" . $auftrag->ID . "'";		// enthält das Array für das JavaScript, welches die Zeit runterzählt.
-				}
-				
-				
-				if(!$eintrag)	// Wenn kein Auftrag gefunden wurde, dann gib ne entsprechende Meldung aus.
-					echo '<tr><td colspan="2"><i>Keine aktiven Auftr&auml;ge gefunden!</td></tr>';
-			?>
-		</table>
-		<table class="Liste" style="margin-top: 15px;">
-			<tr>
-				<th>Kategorie</th>
-				<th>Dauer / Wert</th>
-			</tr>
-			<tr>
-				<td style="font-weight: bold;">N&auml;chstes Einkommen:</td>
-				<td id="a_000"><?php 
-					if($LetztesEinkommen+EINKOMMEN_DAUER-time() < 0) { 	// Wann bekommt der User sein nächstes Einkommen?
-						echo date("H:i:s", $LetztesEinkommen+EINKOMMEN_DAUER-time()-3600);
-					}
-					else {
-						echo '00:00:00';
-					}
-				?></td>
-			</tr>
-			<tr>
-				<td style="font-weight: bold;">N&auml;chste Zinsen:</td>
-				<td id="a_001"><?php 
-					if($LetztesEinkommen+EINKOMMEN_DAUER-time() < 0) {		// Wie lange dauert es noch bis zu den nächsten Zinsen?
-						echo date("H:i:s", $LetztesEinkommen+EINKOMMEN_DAUER-time()-3600);
-					}
-					else {
-						echo '00:00:00';
-					}
-				?></td>
-			</tr>
-			<tr>
-				<td style="font-weight: bold;">N&auml;chste Mafia:</td>
-				<td id="a_002"><?php 
-					if($ich->LastMafia+600-time() > 0) {		// Wie lange dauert es noch bis zu den nächsten Zinsen?
-						echo date("H:i:s", $ich->LastMafia+600-time()-3600);
-					}
-					else {
-						echo '00:00:00';
-					}
-				?></td>
-			</tr>
-			<tr>
-				<td style="font-weight: bold;">Logout wegen Inaktivit&auml;t:</td>
-				<td id="a_003"><?php
-					echo date("H:i:s", $ich->LastAction-time());
-				?></td>
-			</tr>
-		</table>
-		<table style="margin-top: 15px; width: 100%;" cellspacing="0">
-			<tr>
-				<td><a style="font-weight: normal;" href="../?p=nachrichten_liste&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;">Neue Nachrichten:</a></td>
-				<td><?=NeueNachrichten();?></td>
-			</tr>
-			<tr>
-				<td><a style="font-weight: normal;" href="../?p=vertraege_liste&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;">Neue Vertr&auml;ge:</a></td>
-				<td><?=Vertraege(); ?></td>
-			</tr>
-			<tr>
-				<td><a style="font-weight: normal;" href="../?p=marktplatz_liste&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;">Marktangebote:</a></td>
-				<td><?=AngeboteMarkt(); ?></td>
-			</tr>
-			<tr>
-				<td><a style="font-weight: normal;" href="../?p=rangliste&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;">Spieler online:</a></td>
-				<td><?=SpielerOnline(); ?></td>
-			</tr>
-			<tr>
-				<td><a style="font-weight: normal;" href="../?p=bank&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;">Bargeld:</a></td>
-				<td style="white-space: nowrap;"><?=number_format($ich->Geld, 2, ",", ".") . " " . $Currency; ?></td>
-			</tr>
-			<tr>
-				<td><a style="font-weight: normal;" href="../?p=bank&amp;<?=intval(time()); ?>" onclick="BLMNavigation(this.href); return false;">Bank-Guthaben:</a></td>
-				<td style="white-space: nowrap;"><?=number_format($ich->Bank, 2, ",", ".") . " " . $Currency; ?></td>
-			</tr>
-		</table>
-		<div style="text-align: center; margin-top: 20px;">
-			<a href="../?p=startseite&amp;<?=intval(time()); ?>" onclick="BLMzeigen(this.href); return false;">
-				BLM anzeigen / &ouml;ffnen
-			</a><br />
-			<a href="../?p=startseite&amp;<?=intval(time()); ?>" onclick="BLMEnde(this.href); return false;">
-				Fenster schlie&szlig;en
-			</a>
-		</div>
-		<script type="text/javascript">
-			<!--
-				/*
-					Diese Funktion steht hier unten, weil ich das Array mit den Zeiten erst habe, wenn die Aufträge ausgegeben sind...
-					Ansonsten würde ich sie in den HERAD schreiben...
-				*/
-				<?php
-					$js_dauer_rechnen[]="'a_000'";		// Die 4 Felder mit den Zeiten für das Einkommen,
-					$js_dauer_rechnen[]="'a_001'";		// nächsten Zinsen, Verfügbarkeit der Mafia
-					$js_dauer_rechnen[]="'a_002'";		// und Zeit bis zum Logout wegen Inaktivität
-					$js_dauer_rechnen[]="'a_003'";		// sollen auch automatisch runterzählen
-				?>
-				function DauerRechnen() {		// Rechnet alle Aufträge die Zeit jede Sekunde runter
-					var Felder=new Array(<?=implode(", ", $js_dauer_rechnen); ?>);		// Hier stehen die IDs aller Aufträge
-					
-					var ZeitAlt="";		// Enthält den String der alten Zeit
-					
-					var Stunden=0;		// 
-					var Minuten=0;		// Enthalten die Zeit aufgeteilt in Stunden, Minuten und Sekunden
-					var Sekunden=0;		//
-					
-					var ZeitNeu="";
-					
-					for(var i=0; i<Felder.length; i++) {		// geht alle Aufträge durch
-						var Feld=document.getElementById(Felder[i]);		// Zeiger auf das aktuelle Feld
-						ZeitAlt=Feld.innerHTML;		// Holt sich die alte Zeit direkt aus dem HTML-Code
-						
-						Stunden=ZeitAlt.split(":")[0];		// Dann werden die Teile des Array aufgeteilt
-						Minuten=ZeitAlt.split(":")[1];		// in Stunden, Minuten und
-						Sekunden=ZeitAlt.split(":")[2];		// Sekunden zum Berechnen
-						
-						Sekunden=Sekunden-1;										// Die Funktion ruft sich jede Sekudne rekursiv selbst auf, als ist seit dem letzten Aufruf 1 Sekunde vergangen.
-						
-						if(Sekunden == -1) {						// Wenn die Sekunden unten überlaufen würden, dann wird
-							Minuten=Minuten-1;									// die Minute um eins gesenkt
-							Sekunden=59;								// und die Sekunden wieder auf 59 gesetzt.
-						}
-						
-						if(Minuten == -1) {			// Wenn die Minuten unten überlaufen, dann
-							Stunden=Stunden-1;					// wird ne Stunde abgezogen
-							Minuten=59					// und die Minuten wieder auf 59 gesetzt.
-						}
-						
-						if(Stunden == -1) {			// Wenn dann auch noch die Stunden unten überlaufen, dann ist der Auftrag fertig...
-							Feld.innerHTML="00:00:00";		// und wir geben ein leere Dauer aus
-						}
-						else		// Wenn der Auftrag jedoch noch nicht fertig ist, dann
-						{
-							if(Number(Stunden) < 10)
-								ZeitNeu="0"+Number(Stunden)+":";
-							else
-								ZeitNeu=Number(Stunden)+":";
-							
-							if(Number(Minuten) < 10)
-								ZeitNeu+="0"+Number(Minuten)+":";
-							else
-								ZeitNeu+=Number(Minuten)+":";
-							
-							if(Number(Sekunden) < 10)
-								ZeitNeu+="0"+Number(Sekunden);
-							else
-								ZeitNeu+=Number(Sekunden);
-							
-							Feld.innerHTML=ZeitNeu;		// Zum Schluss schreiben wir das ganze wieder zurück
-						}
-					}
-					
-				}
-				
-				window.setInterval('DauerRechnen();', 1000);		// Diese Zeile sorgt dafür, dass die Funktion alle 1000 ms (also jede Sekunde) aufgerufen wird.
-			-->
-		</script>
-	</body>
-</html>
+									<td style="font-weight: normal; text-align: right; padding-right: 3px;">' . (date("d", $auftrag->Start + $auftrag->Dauer - 3600 - time()) - 1) . ' T <span id="a_' . $auftrag->ID . '">' . date("H:i:s", $auftrag->Start + $auftrag->Dauer - 3600 - time()) . '</span> h</td>
+								</tr>';    // gibt die Infos zum Auftrag aus.
+
+            $eintrag = true;        // ja, wir haben einen Auftrag
+
+            $js_dauer_rechnen[] = "'a_" . $auftrag->ID . "'";        // enthält das Array für das JavaScript, welches die Zeit runterzählt.
+        }
+
+
+        if (!$eintrag)    // Wenn kein Auftrag gefunden wurde, dann gib ne entsprechende Meldung aus.
+            echo '<tr><td colspan="2"><i>Keine aktiven Auftr&auml;ge gefunden!</td></tr>';
+        ?>
+    </table>
+    <table class="Liste" style="margin-top: 15px;">
+        <tr>
+            <th>Kategorie</th>
+            <th>Dauer / Wert</th>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">N&auml;chstes Einkommen:</td>
+            <td id="a_000"><?php
+                if ($LetztesEinkommen + EINKOMMEN_DAUER - time() < 0) {    // Wann bekommt der User sein nächstes Einkommen?
+                    echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - 3600);
+                } else {
+                    echo '00:00:00';
+                }
+                ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">N&auml;chste Zinsen:</td>
+            <td id="a_001"><?php
+                if ($LetztesEinkommen + EINKOMMEN_DAUER - time() < 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
+                    echo date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER - time() - 3600);
+                } else {
+                    echo '00:00:00';
+                }
+                ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">N&auml;chste Mafia:</td>
+            <td id="a_002"><?php
+                if ($ich->LastMafia + 600 - time() > 0) {        // Wie lange dauert es noch bis zu den nächsten Zinsen?
+                    echo date("H:i:s", $ich->LastMafia + 600 - time() - 3600);
+                } else {
+                    echo '00:00:00';
+                }
+                ?></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Logout wegen Inaktivit&auml;t:</td>
+            <td id="a_003"><?php
+                echo date("H:i:s", $ich->LastAction - time());
+                ?></td>
+        </tr>
+    </table>
+    <table style="margin-top: 15px; width: 100%;" cellspacing="0">
+        <tr>
+            <td><a style="font-weight: normal;" href="../?p=nachrichten_liste&amp;<?= intval(time()); ?>"
+                   onclick="BLMNavigation(this.href); return false;">Neue Nachrichten:</a></td>
+            <td><?= NeueNachrichten(); ?></td>
+        </tr>
+        <tr>
+            <td><a style="font-weight: normal;" href="../?p=vertraege_liste&amp;<?= intval(time()); ?>"
+                   onclick="BLMNavigation(this.href); return false;">Neue Vertr&auml;ge:</a></td>
+            <td><?= Vertraege(); ?></td>
+        </tr>
+        <tr>
+            <td><a style="font-weight: normal;" href="../?p=marktplatz_liste&amp;<?= intval(time()); ?>"
+                   onclick="BLMNavigation(this.href); return false;">Marktangebote:</a></td>
+            <td><?= AngeboteMarkt(); ?></td>
+        </tr>
+        <tr>
+            <td><a style="font-weight: normal;" href="../?p=rangliste&amp;<?= intval(time()); ?>"
+                   onclick="BLMNavigation(this.href); return false;">Spieler online:</a></td>
+            <td><?= SpielerOnline(); ?></td>
+        </tr>
+        <tr>
+            <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= intval(time()); ?>"
+                   onclick="BLMNavigation(this.href); return false;">Bargeld:</a></td>
+            <td style="white-space: nowrap;"><?= number_format($ich->Geld, 2, ",", ".") . " " . $Currency; ?></td>
+        </tr>
+        <tr>
+            <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= intval(time()); ?>"
+                   onclick="BLMNavigation(this.href); return false;">Bank-Guthaben:</a></td>
+            <td style="white-space: nowrap;"><?= number_format($ich->Bank, 2, ",", ".") . " " . $Currency; ?></td>
+        </tr>
+    </table>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="../?p=startseite&amp;<?= intval(time()); ?>" onclick="BLMzeigen(this.href); return false;">
+            BLM anzeigen / &ouml;ffnen
+        </a><br/>
+        <a href="../?p=startseite&amp;<?= intval(time()); ?>" onclick="BLMEnde(this.href); return false;">
+            Fenster schlie&szlig;en
+        </a>
+    </div>
+    <script type="text/javascript">
+        <!--
+        /*
+            Diese Funktion steht hier unten, weil ich das Array mit den Zeiten erst habe, wenn die Aufträge ausgegeben sind...
+            Ansonsten würde ich sie in den HERAD schreiben...
+        */
+        <?php
+        $js_dauer_rechnen[] = "'a_000'";        // Die 4 Felder mit den Zeiten für das Einkommen,
+        $js_dauer_rechnen[] = "'a_001'";        // nächsten Zinsen, Verfügbarkeit der Mafia
+        $js_dauer_rechnen[] = "'a_002'";        // und Zeit bis zum Logout wegen Inaktivität
+        $js_dauer_rechnen[] = "'a_003'";        // sollen auch automatisch runterzählen
+        ?>
+        function DauerRechnen() {		// Rechnet alle Aufträge die Zeit jede Sekunde runter
+            var Felder = new Array(<?=implode(", ", $js_dauer_rechnen); ?>);		// Hier stehen die IDs aller Aufträge
+
+            var ZeitAlt = "";		// Enthält den String der alten Zeit
+
+            var Stunden = 0;		//
+            var Minuten = 0;		// Enthalten die Zeit aufgeteilt in Stunden, Minuten und Sekunden
+            var Sekunden = 0;		//
+
+            var ZeitNeu = "";
+
+            for (var i = 0; i < Felder.length; i++) {		// geht alle Aufträge durch
+                var Feld = document.getElementById(Felder[i]);		// Zeiger auf das aktuelle Feld
+                ZeitAlt = Feld.innerHTML;		// Holt sich die alte Zeit direkt aus dem HTML-Code
+
+                Stunden = ZeitAlt.split(":")[0];		// Dann werden die Teile des Array aufgeteilt
+                Minuten = ZeitAlt.split(":")[1];		// in Stunden, Minuten und
+                Sekunden = ZeitAlt.split(":")[2];		// Sekunden zum Berechnen
+
+                Sekunden = Sekunden - 1;										// Die Funktion ruft sich jede Sekudne rekursiv selbst auf, als ist seit dem letzten Aufruf 1 Sekunde vergangen.
+
+                if (Sekunden == -1) {						// Wenn die Sekunden unten überlaufen würden, dann wird
+                    Minuten = Minuten - 1;									// die Minute um eins gesenkt
+                    Sekunden = 59;								// und die Sekunden wieder auf 59 gesetzt.
+                }
+
+                if (Minuten == -1) {			// Wenn die Minuten unten überlaufen, dann
+                    Stunden = Stunden - 1;					// wird ne Stunde abgezogen
+                    Minuten = 59					// und die Minuten wieder auf 59 gesetzt.
+                }
+
+                if (Stunden == -1) {			// Wenn dann auch noch die Stunden unten überlaufen, dann ist der Auftrag fertig...
+                    Feld.innerHTML = "00:00:00";		// und wir geben ein leere Dauer aus
+                } else		// Wenn der Auftrag jedoch noch nicht fertig ist, dann
+                {
+                    if (Number(Stunden) < 10)
+                        ZeitNeu = "0" + Number(Stunden) + ":";
+                    else
+                        ZeitNeu = Number(Stunden) + ":";
+
+                    if (Number(Minuten) < 10)
+                        ZeitNeu += "0" + Number(Minuten) + ":";
+                    else
+                        ZeitNeu += Number(Minuten) + ":";
+
+                    if (Number(Sekunden) < 10)
+                        ZeitNeu += "0" + Number(Sekunden);
+                    else
+                        ZeitNeu += Number(Sekunden);
+
+                    Feld.innerHTML = ZeitNeu;		// Zum Schluss schreiben wir das ganze wieder zurück
+                }
+            }
+
+        }
+
+        window.setInterval('DauerRechnen();', 1000);		// Diese Zeile sorgt dafür, dass die Funktion alle 1000 ms (also jede Sekunde) aufgerufen wird.
+        -->
+    </script>
+    </body>
+    </html>
 <?php
-	DisconnectDB();		// Verbindung mit der Datenbank trennen, brauchen wir jetzt nicht mehr :)
-?>
+DisconnectDB();        // Verbindung mit der Datenbank trennen, brauchen wir jetzt nicht mehr :)

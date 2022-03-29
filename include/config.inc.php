@@ -12,7 +12,6 @@
 Changelog:
 
 [1.0.5]
-    - AJAX_SERVER_PFAD: hinzugefügt
     - ADMIN_EMAIL: hinzugefügt
     - SPIEL_BETREIBER: hinzugefügt
 
@@ -22,21 +21,28 @@ Changelog:
     Allgemeine Konstanten (wichtiger Teil, bedürfen Anpassung!
 */
 define("VERSION", "1.9.4");                                            // Die aktuelle Versionsnummer
-define("WARTUNGS_ARBEITEN", false);                            // Sperrt jedlichen Zugriff auf den Server
-define("WARTUNGS_TEXT", "Das Spiel befindet sich gerade im Wartungsmodus (Einspielen von Updates und Bugfixes). Bitte versuchen Sie es in ein paar Minuten erneut.");                                                                            // Definiert den Text der bei einer Wartung angezeigt werden soll.
-define("SPECIAL_STYLE", true);                                // Wird ein Spezialstyle verwendet?
-define("SPECIAL_RUNNING", false);                                // Läuft gerade ein Special?
 
+if (!file_exists(dirname(__FILE__) . "/config_live.inc.php")) {
+    /*
+     * Sollte folgende defines drin haben:
 
-define("DB_SERVER", "localhost");                                //
-define("DB_BENUTZER", "");                            // Hier stehen die Zugangsdaten zum Datenbankserver.
-define("DB_PASSWORT", "");            // ROOT als Benutzer sollte _ NIE _ verwendet werden!
-define("DB_DATENBANK", "");                            //
+define("DB_SERVER", "localhost");    // Datenbankserver
+define("DB_BENUTZER", "");           // Benutzername, sollte niemals 'root' sein!
+define("DB_PASSWORT", "");           // Passwort
+define("DB_DATENBANK", "");          // Datenbank Name
 
-define("SERVER_PFAD", "http://blm2.onlinefangbuch.de"); // Definiert den Serverpfad für AJAX-Requests und die eMails
-define("AJAX_SERVER_PFAD", "");
-define("ADMIN_EMAIL", "simon@onlinefangbuch.de");                // Definiert die EMailadresse des Admins
-define("SPIEL_BETREIBER", "Simon Frankenberger");                // Mit diesem Namen wird die Registrierungsmail unterschrieben
+define("SERVER_PFAD", "https://blm2.fraho.eu");     // Definiert den Serverpfad für die eMails
+define("ADMIN_EMAIL", "simon-blm2@fraho.eu");       // Definiert die EMailadresse des Admins
+define("SPIEL_BETREIBER", "Simon Frankenberger");   // Mit diesem Namen wird die Registrierungsmail unterschrieben
+define("WARTUNGS_ARBEITEN", false);                 // Sperrt jeglichen Zugriff auf den Server
+define("WARTUNGS_TEXT", "Das Spiel befindet sich gerade im Wartungsmodus (Einspielen von Updates und Bugfixes). Bitte versuchen Sie es in ein paar Minuten erneut.");
+define("SPECIAL_STYLE", true);                      // Wird ein Spezialstyle verwendet?
+define("SPECIAL_RUNNING", false);                   // Läuft gerade ein Special?
+    */
+    die(dirname(__FILE__) . "config_live.inc.php not found");
+}
+require_once(dirname(__FILE__) . "/config_live.inc.php");
+
 
 
 /*

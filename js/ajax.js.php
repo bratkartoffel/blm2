@@ -44,7 +44,7 @@ function delGruppeNachricht(id, container) {
         return;
     }
 
-    req.open("GET", '<?=AJAX_SERVER_PFAD; ?>/actions/gruppe.php?a=5&id=' + id + '&ajax=1', true);
+    req.open("GET", '/actions/gruppe.php?a=5&id=' + id + '&ajax=1', true);
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req.send(null);
 
@@ -70,7 +70,7 @@ function updGruppeRechte(id, recht, bild) {
         return;
     }
 
-    req.open("GET", '<?=AJAX_SERVER_PFAD; ?>/actions/gruppe.php?a=6&id=' + id + '&recht=' + recht + '&ajax=1', true);
+    req.open("GET", '/actions/gruppe.php?a=6&id=' + id + '&recht=' + recht + '&ajax=1', true);
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req.send(null);
 
@@ -78,10 +78,10 @@ function updGruppeRechte(id, recht, bild) {
         switch (req.readyState) {
             case 4:
                 if (req.responseText == "1") {
-                    if (bild.src == '<?=AJAX_SERVER_PFAD; ?>/pics/small/error.png') {
-                        bild.src = '<?=AJAX_SERVER_PFAD; ?>/pics/small/ok.png';
+                    if (bild.src == '/pics/small/error.png') {
+                        bild.src = '/pics/small/ok.png';
                     } else {
-                        bild.src = '<?=AJAX_SERVER_PFAD; ?>/pics/small/error.png';
+                        bild.src = '/pics/small/error.png';
                     }
                 } else {
                     alert("Das darfst du nicht :)");
@@ -99,7 +99,7 @@ function delNachricht(id, zeile) {
         return;
     }
 
-    req.open("GET", '<?=AJAX_SERVER_PFAD; ?>/actions/nachrichten.php?a=2&id=' + id + '&ajax=1', true);
+    req.open("GET", '/actions/nachrichten.php?a=2&id=' + id + '&ajax=1', true);
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req.send(null);
 
@@ -124,7 +124,7 @@ function VertragAnnehmen(id, zeile) {
         return;
     }
 
-    req.open("GET", '<?=AJAX_SERVER_PFAD; ?>/actions/vertraege.php?a=2&vid=' + id + '&ajax=1', true);
+    req.open("GET", '/actions/vertraege.php?a=2&vid=' + id + '&ajax=1', true);
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req.send(null);
 
@@ -149,7 +149,7 @@ function VertragAblehnen(id, zeile) {
         return;
     }
 
-    req.open("GET", '<?=AJAX_SERVER_PFAD; ?>/actions/vertraege.php?a=3&vid=' + id + '&ajax=1', true);
+    req.open("GET", '/actions/vertraege.php?a=3&vid=' + id + '&ajax=1', true);
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req.send(null);
 
@@ -180,7 +180,7 @@ function ajaxCheckUserName() {
 
     var submit_btn = document.form_login.Submit;		// Zeiger auf den Abschicken-Button
 
-    req3.open("GET", '<?=AJAX_SERVER_PFAD; ?>/js/check_username.php?uname=' + uname, true);
+    req3.open("GET", '/js/check_username.php?uname=' + uname, true);
     req3.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req3.send(null);
 
@@ -227,7 +227,7 @@ function ajaxCheckEMail() {
 
     var submit_btn = document.form_login.Submit;		// Zeiger auf den Abschicken-Button
 
-    req2.open("GET", '<?=AJAX_SERVER_PFAD; ?>/js/check_email.php?uemail=' + uemail, true);
+    req2.open("GET", '/js/check_email.php?uemail=' + uemail, true);
     req2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req2.send(null);
 

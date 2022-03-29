@@ -265,18 +265,6 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     &copy; 2007-2008, Simon Frankenberger.
                 </a><br/>
                 Letzte &Auml;nderung: <a href="?p=changelog"><?= date("d.m.Y", LetzteAenderung()); ?></a>
-                <p>
-                    <a onclick="window.open(this.href); return false;" href="http://validator.w3.org/check?uri=referer">
-                        <img src="pics/valid-xhtml10.png" alt="Valid XHTML 1.0 Strict" style="border: none"/></a>
-                    <a onclick="window.open(this.href); return false;"
-                       href="http://jigsaw.w3.org/css-validator/validator?uri=<?= urlencode(AJAX_SERVER_PFAD); ?>%2Fstyles%2Fstyle.css&amp;warning=1&amp;profile=css21&amp;usermedium=all">
-                        <img src="pics/valid-css.png" alt="Valid CSS" style="border: none"/>
-                    </a>
-                    <a onclick="window.open(this.href); return false;"
-                       href="http://www.CynthiaSays.com/org/cynthiatested.htm">
-                        <img src="pics/Ctested.png" alt="Cynthia Tested!" style="border: none;"/>
-                    </a>
-                </p>
             </div>
         </div>
         <div id="Navigation">

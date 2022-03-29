@@ -1581,7 +1581,7 @@ VALUES
 <br />
 doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:<br />
 <br />
-<a href="' . AJAX_SERVER_PFAD . '/actions/activate.php?user=' . htmlentities(stripslashes($name), ENT_QUOTES, "utf-8") . '&amp;code=' . $code . '">' . AJAX_SERVER_PFAD . '/actions/activate.php?user=' . htmlentities(stripslashes($name), ENT_QUOTES, "utf-8") . '&amp;code=' . $code . '</a><br />
+<a href="' . SERVER_PFAD . '/actions/activate.php?user=' . htmlentities(stripslashes($name), ENT_QUOTES, "utf-8") . '&amp;code=' . $code . '">' . SERVER_PFAD . '/actions/activate.php?user=' . htmlentities(stripslashes($name), ENT_QUOTES, "utf-8") . '&amp;code=' . $code . '</a><br />
 <br />
 Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an:<br />
 ' . ADMIN_EMAIL . '<br />

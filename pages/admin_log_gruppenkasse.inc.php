@@ -7,12 +7,6 @@
  * @package blm2.pages
  */
 
-if (!istAdmin()) {
-    header("location: ./?p=index&m=101");
-    header("HTTP/1.0 404 Not Found");
-    die();
-}
-
 if ($_GET['wer'] != "") {
     $filter_wer = '%' . mysql_real_escape_string($_GET['wer']) . '%';
 } else {
@@ -66,17 +60,17 @@ if ($_GET['gruppe'] != "") {
     </tr>
     <?php
     $sql_abfrage = "SELECT
-									*,
-									UNIX_TIMESTAMP(Wann) AS Wann
-								FROM
-									log_gruppenkasse_view
-								WHERE
-									Wer LIKE '" . $filter_wer . "'
-								AND
-									Wen LIKE '" . $filter_wen . "'
-								AND
-									Gruppe LIKE '" . $filter_gr . "'
-								;";
+    *,
+    UNIX_TIMESTAMP(Wann) AS Wann
+FROM
+    log_gruppenkasse_view
+WHERE
+    Wer LIKE '" . $filter_wer . "'
+AND
+    Wen LIKE '" . $filter_wen . "'
+AND
+    Gruppe LIKE '" . $filter_gr . "'
+;";
     $sql_ergebnis = mysql_query($sql_abfrage);
 
     while ($l = mysql_fetch_object($sql_ergebnis)) {
@@ -100,5 +94,7 @@ if ($_GET['gruppe'] != "") {
         <?php
     }
     ?>
-    ?>
 </table>
+<p>
+    <a href="./?p=admin">Zurück...</a>
+</p>

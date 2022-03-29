@@ -6,12 +6,6 @@
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  * @package blm2.pages
  */
-
-if (!istAdmin()) {
-    header("location: ./?p=index&m=101");
-    header("HTTP/1.0 404 Not Found");
-    die();
-}
 ?>
 <table id="SeitenUeberschrift">
     <tr>
@@ -46,3 +40,6 @@ if (!istAdmin()) {
         </tr>
     </table>
 </form>
+<p>
+    <a href="./?p=admin">Zurück...</a>
+</p>

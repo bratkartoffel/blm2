@@ -8,12 +8,6 @@
  *
  * @todo Eintrag löschen
  */
-
-if (!istAdmin()) {
-    header("location: ./?p=index&m=101");
-    header("HTTP/1.0 404 Not Found");
-    die();
-}
 ?>
 <table id="SeitenUeberschrift">
     <tr>
@@ -69,4 +63,7 @@ ORDER BY
     ?>
 </table>
 <br/>
-<a href="./?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a>
+<p>
+    <a href="./?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
+    <a href="./?p=admin">Zurück...</a>
+</p>

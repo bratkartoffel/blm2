@@ -6,12 +6,6 @@
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  * @package blm2.pages
  */
-
-if (!istAdmin()) {
-    header("location: ./?p=index&m=101");
-    header("HTTP/1.0 404 Not Found");
-    die();
-}
 ?>
 <table id="SeitenUeberschrift">
     <tr>
@@ -31,5 +25,8 @@ echo '<pre>' . wordwrap($vorlage_admin[intval($_GET['cat'])], 100) . '</pre>';
 ?><br/>
 <br/>
 <br/>
-<a href="./?p=nachrichten_schreiben&amp;betreff=Verwarnung&amp;admin_vorlage=<?= intval($_GET['cat']); ?>&amp;<?= time(); ?>">Nachricht
-    erstellen</a>
+<p>
+    <a href="./?p=nachrichten_schreiben&amp;betreff=Verwarnung&amp;admin_vorlage=<?= intval($_GET['cat']); ?>&amp;<?= time(); ?>">Nachricht
+        erstellen</a><br/>
+    <a href="./?p=admin">Zurück...</a>
+</p>

@@ -12,12 +12,6 @@
  *
  * @todo Logbuch Nachrichten
  */
-
-if (!istAdmin()) {
-    header("location: ./?p=index&m=101");
-    header("HTTP/1.0 404 Not Found");
-    die();
-}
 ?>
 <table id="SeitenUeberschrift">
     <tr>

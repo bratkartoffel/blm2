@@ -78,7 +78,7 @@ const ZINSEN_SOLL_MAX = 250;            // die maximalen Sollzinsen
 const DISPO_LIMIT = -35000;            // Der maximale Dispo, jeder größer oder gleich dem Betrag wird resettet!!
 
 const WAREN_KURS_MIN = 75;                                        // Der minimale Warenkurs
-const WAREN_KURS_MAX = 100;                                    // der maximale Warenkurs
+const WAREN_KURS_MAX = 115;                                    // der maximale Warenkurs
 const WAREN_PREIS_GRUND = 1.35;                            // Grundverkaufspreis der Waren
 const WAREN_PREIS_FORSCHUNG = 0.15;                    // Um wieviel erhöht eine Stufe der Forschung den Verkaufspreis?
 const WAREN_PREIS_BIOLADEN = 0.08;                        // Um wieviel erhöht eine Stufe des Bioladens den Verkaufspreis?

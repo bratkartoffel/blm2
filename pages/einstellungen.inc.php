@@ -229,9 +229,9 @@
     </table>
 </form>
 <script type="text/javascript">
-    var z = document.getElementsByTagName("input");
+    const z = document.getElementsByTagName("input");
 
-    for (i = 0; i < z.length; i++) {
+    for (let i = 0; i < z.length; i++) {
         if (z[i].type == "password") {
             z[i].value = "";
         }

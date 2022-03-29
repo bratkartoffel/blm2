@@ -28,11 +28,11 @@ if (!istAdmin()) {
 <br/>
 <?php
 $sql_abfrage = "SELECT
-									*
-								FROM
-									vertraege
-								WHERE
-									ID='" . intval($_GET['id']) . "';";
+    *
+FROM
+    vertraege
+WHERE
+    ID='" . intval($_GET['id']) . "';";
 $sql_ergebnis = mysql_query($sql_abfrage);
 
 $v = mysql_fetch_object($sql_ergebnis);
@@ -49,12 +49,12 @@ $v = mysql_fetch_object($sql_ergebnis);
                 <select name="von">
                     <?php
                     $sql_abfrage = "SELECT
-														ID,
-														Name
-													FROM
-														mitglieder
-													ORDER BY
-														Name ASC;";
+    ID,
+    Name
+FROM
+    mitglieder
+ORDER BY
+    Name ASC;";
                     $sql_ergebnis = mysql_query($sql_abfrage);
 
                     while ($u = mysql_fetch_object($sql_ergebnis)) {
@@ -73,13 +73,6 @@ $v = mysql_fetch_object($sql_ergebnis);
             <td>
                 <select name="an">
                     <?php
-                    $sql_abfrage = "SELECT
-														ID,
-														Name
-													FROM
-														mitglieder
-													ORDER BY
-														Name ASC;";
                     $sql_ergebnis = mysql_query($sql_abfrage);
 
                     while ($u = mysql_fetch_object($sql_ergebnis)) {

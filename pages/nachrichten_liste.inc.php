@@ -78,7 +78,6 @@ ORDER BY
             if ($nachricht->Absender != "-User gelöscht-" && $nachricht->Absender != "-System-") {
                 echo '<a href="./?p=nachrichten_schreiben&amp;an=' . $nachricht->AbsenderID . '&amp;answer=' . $nachricht->ID . '">
 									<img src="./pics/small/answermail.png" border="0" alt="Antworten" />';
-            } else {
             }
             echo '
 								</a>

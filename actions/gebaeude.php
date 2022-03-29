@@ -74,44 +74,43 @@ switch (intval($_POST['was']))        // Was will er denn bauen?
         break;
     default:        // Haben wir nicht, gibts nicht, also abbrechen
         DisconnectDB();
-        header("location: ../?p=gebaeude&m=112&" . intval(time()));
+        header("location: ../?p=gebaeude&m=112&" . time());
         die();
-        break;
 }
 
 if ($ich->Geld < $gebaeude_kosten) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann Abbruch!
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=112&" . intval(time()));
+    header("location: ../?p=gebaeude&m=112&" . time());
     die();
 }
 
 if ($ich->Gebaeude3 < 5 && intval($_POST['was']) == 4) {        // Darf er überhaupt den Dönerstand bauen? (Vorraussetzungen)
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=112&" . intval(time()));
+    header("location: ../?p=gebaeude&m=112&" . time());
     die();
 }
 
 if ($ich->Gebaeude1 < 5 && intval($_POST['was']) == 6) {        // Darf er überhaupt eine Schule bauen? (Vorraussetzungen)
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=112&" . intval(time()));
+    header("location: ../?p=gebaeude&m=112&" . time());
     die();
 }
 
 if (($ich->Gebaeude1 < 8 || $ich->Gebaeude2 < 9) && intval($_POST['was']) == 5) {        // Darf er überhaupt den Bauhof bauen? (Vorraussetzungen)
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=112&" . intval(time()));
+    header("location: ../?p=gebaeude&m=112&" . time());
     die();
 }
 
 if (($ich->AusgabenMafia < 10000 || $ich->Gebaeude1 < 10) && intval($_POST['was'] == 7)) { // Darf er überhaupt schon nen Zaun bauen?
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=112&" . intval(time()));
+    header("location: ../?p=gebaeude&m=112&" . time());
     die();
 }
 
 if (($ich->AusgabenMafia < 25000 || $ich->Gebaeude1 < 12) && intval($_POST['was'] == 8)) { // Darf er überhaupt schon nen Zaun bauen?
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=112&" . intval(time()));
+    header("location: ../?p=gebaeude&m=112&" . time());
     die();
 }
 
@@ -141,9 +140,9 @@ VALUES
 mysql_query($sql_abfrage);        // Auftrag in die DB einfügen,
 $_SESSION['blm_queries']++;
 
-if (intval(mysql_errno()) > 0) {        // Der Auftrag ist schon in der DB (Spalten `Was`+`Von` sind UNIQUE!)
+if (mysql_errno() > 0) {        // Der Auftrag ist schon in der DB (Spalten `Was`+`Von` sind UNIQUE!)
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=113&" . intval(time()));
+    header("location: ../?p=gebaeude&m=113&" . time());
     die();
 }
 
@@ -158,5 +157,5 @@ mysql_query($sql_abfrage);    // Falls der Auftrag noch nicht erteilt wurde, das
 $_SESSION['blm_queries']++;
 
 // Alles erledigt :)
-header("location: ../?p=gebaeude&m=207&" . intval(time()) . "#g" . intval($_POST['was']));
+header("location: ../?p=gebaeude&m=207&" . time() . "#g" . intval($_POST['was']));
 die();

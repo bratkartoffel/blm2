@@ -48,9 +48,7 @@ WHERE
     m.ID='" . $_SESSION['blm_user'] . "';";
     mysql_query($sql_abfrage);        // das Geld in die Geldbörse...
 
-    $sql_abfrage = "UPDATE
-										lagerhaus
-									SET ";
+    $sql_abfrage = "UPDATE lagerhaus SET ";
     for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
         $sql_abfrage .= "Lager" . $i . "=0, ";
     }
@@ -60,7 +58,7 @@ WHERE
     mysql_query($sql_abfrage);        // und die Waren aus dem Lager raus.
 
     DisconnectDB();
-    header("location: ../?p=bioladen&m=208&" . intval(time()));
+    header("location: ../?p=bioladen&m=208&" . time());
     die();
 }
 
@@ -74,13 +72,13 @@ if ($verkaufs_menge <= 0) {        // Er will ne negative Menge verkaufen? Geht 
 
 if (intval($_POST['was']) <= 0 || intval($_POST['was']) > ANZAHL_WAREN) {        // Er will was verkaufen, was es nicht gibt ;)
     DisconnectDB();        // Verbindung trennen und abbrechen
-    header("location: ../?p=bioladen&m=112&" . intval(time()));
+    header("location: ../?p=bioladen&m=112&" . time());
     die();
 }
 
 if (intval($ich->$temp) < $verkaufs_menge) {        // Will der Spieler mehr verkaufen, als er auf Lager hat? - Abbruch
     DisconnectDB();
-    header("location: ../?p=bioladen&m=116&" . intval(time()));
+    header("location: ../?p=bioladen&m=116&" . time());
     die();
 }
 
@@ -117,5 +115,5 @@ $_SESSION['blm_queries']++;
 
 // Verbindung mit DB trennen, zurück zum Laden...
 DisconnectDB();
-header("location: ../?p=bioladen&m=208&" . intval(time()));
+header("location: ../?p=bioladen&m=208&" . time());
 die();

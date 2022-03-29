@@ -23,7 +23,7 @@
 <?= $m; ?>
 
 <span style="font-weight: bold;">
-	 Das gesamte Spiel ist <em>komplett kostenlos</em> und OpenSource, und kann <a href="./blm2.zip">(bald) hier</a> (Letzte &Auml;nderung: <? echo date("Y/m/d H:i", filemtime("./blm2.zip")) ?>) heruntergeladen werden.<br/>
+	 Das gesamte Spiel ist <em>komplett kostenlos</em> und OpenSource, und kann <a href="./blm2.zip">(bald) hier</a> (Letzte &Auml;nderung: <?= date("Y/m/d H:i", filemtime("./blm2.zip")) ?>) heruntergeladen werden.<br/>
 	 <br/>
 	 Die Lizenz (MIT Licence) kann <a href="LICENCE.md">hier</a> eingesehen werden.<br/>
 	 <br/>

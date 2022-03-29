@@ -162,7 +162,7 @@ WHERE
 ";
                             }
                             $sql_abfrage .= "ORDER BY Name;";
-                            $sql_ergebnis = mysql_query($sql_abfrage) or die("<pre>" . $sql_abfrage . "\n\n" . mysql_error() . "</pre>");; // Alle in Frage kommenden Gegner abrufen
+                            $sql_ergebnis = mysql_query($sql_abfrage) or die("<pre>" . $sql_abfrage . "\n\n" . mysql_error() . "</pre>"); // Alle in Frage kommenden Gegner abrufen
                             $_SESSION['blm_queries']++;
 
                             while ($user = mysql_fetch_object($sql_ergebnis)) {        // und gleich mal ausgeben

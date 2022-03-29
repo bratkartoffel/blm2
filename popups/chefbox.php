@@ -6,7 +6,7 @@
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  * @package blm2.includes
  */
-header('Content-type: text/html; charset="utf-8"', true);        // Das Dokument ist UTF-8 kodiert...
+header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist UTF-8 kodiert...
 
 /*
     Einbinden aller wichtigen Datein, wie die Einstellungen, den Zeitpunkt des letzten Resets und die Funktionen
@@ -30,7 +30,7 @@ if (CheckRundenEnde()) {        // Wenn die Runde abgelaufen ist, dann...
 }
 
 $ich = LoadSettings();        // Eigene Einstellugnen laden
-CheckAllAuftraege($ZinsenAnlage, $ZinsenKredit);        // die Aufträge abarbeiten
+CheckAllAuftraege();        // die Aufträge abarbeiten
 $ich = LoadSettings();            // Meine Daten nochmals laden, vielleicht hat sich ja was geändert...
 $Einkommen = (EINKOMMEN_BASIS + ($ich->Gebaeude3 * EINKOMMEN_BIOLADEN_BONUS) + ($ich->Gebaeude4 * EINKOMMEN_DOENERSTAND_BONUS));        // Das Einkommen berechnen
 
@@ -53,7 +53,7 @@ if ($ich->LastAction + 3600 < time()) {
         <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <meta http-equiv="creator" content="Simon Frankenberger"/>
-        <meta http-equiv="refresh" content="10; url=./chefbox.php?<?= intval(time() + 13); ?>"/>
+        <meta http-equiv="refresh" content="10; url=./chefbox.php?<?= time() + 13; ?>"/>
         <title>BLM2 - Chefbox</title>
         <style type="text/css">
             table.Liste td, table.Liste th {
@@ -81,13 +81,12 @@ if ($ich->LastAction + 3600 < time()) {
                 if (opener) {
                     opener.focus();
                 } else {
-                    blm = window.open(link, 'blm', 'fullscreen=yes,location=yes,resizable=yes,menubar=yes,scrollbars=yes,status=yes,toolbar=yes');
-
+                    const blm = window.open(link, 'blm', 'fullscreen=yes,location=yes,resizable=yes,menubar=yes,scrollbars=yes,status=yes,toolbar=yes');
                     blm.focus();
                 }
             }
 
-            function BLMEnde(link) {
+            function BLMEnde() {
                 // Schließt das Popup, und loggt den User aus, falls das Hauptfenster wschon zu ist.
                 if (opener) {
                     opener.focus();
@@ -112,10 +111,10 @@ if ($ich->LastAction + 3600 < time()) {
     </head>
     <body>
     <div style="text-align: center;">
-        <h1 style="margin: 0 auto; margin-top: -8px; width: 200px; height: 35px; background-image: url('../pics/style/bg_chefbox_h1.png');">
+        <h1 style="margin: -8px auto 0;width: 200px; height: 35px; background-image: url('../pics/style/bg_chefbox_h1.png');">
             BLM 2</h1>
-        <h3 style="margin: 5px; margin-bottom: 20px; text-decoration: underline;">Chefbox
-            <a href="../?p=hilfe&amp;mod=1&amp;cat=16&amp;<?= intval(time()); ?>"
+        <h3 style="margin: 5px 5px 20px;text-decoration: underline;">Chefbox
+            <a href="../?p=hilfe&amp;mod=1&amp;cat=16&amp;<?= time(); ?>"
                onclick="BLMNavigation(this.href); return false;"> <img src="../pics/help.gif" alt="Hilfe"
                                                                        style="border: none;"/></a>
         </h3>
@@ -202,41 +201,41 @@ ORDER BY
     </table>
     <table style="margin-top: 15px; width: 100%;" cellspacing="0">
         <tr>
-            <td><a style="font-weight: normal;" href="../?p=nachrichten_liste&amp;<?= intval(time()); ?>"
+            <td><a style="font-weight: normal;" href="../?p=nachrichten_liste&amp;<?= time(); ?>"
                    onclick="BLMNavigation(this.href); return false;">Neue Nachrichten:</a></td>
             <td><?= NeueNachrichten(); ?></td>
         </tr>
         <tr>
-            <td><a style="font-weight: normal;" href="../?p=vertraege_liste&amp;<?= intval(time()); ?>"
+            <td><a style="font-weight: normal;" href="../?p=vertraege_liste&amp;<?= time(); ?>"
                    onclick="BLMNavigation(this.href); return false;">Neue Vertr&auml;ge:</a></td>
             <td><?= Vertraege(); ?></td>
         </tr>
         <tr>
-            <td><a style="font-weight: normal;" href="../?p=marktplatz_liste&amp;<?= intval(time()); ?>"
+            <td><a style="font-weight: normal;" href="../?p=marktplatz_liste&amp;<?= time(); ?>"
                    onclick="BLMNavigation(this.href); return false;">Marktangebote:</a></td>
             <td><?= AngeboteMarkt(); ?></td>
         </tr>
         <tr>
-            <td><a style="font-weight: normal;" href="../?p=rangliste&amp;<?= intval(time()); ?>"
+            <td><a style="font-weight: normal;" href="../?p=rangliste&amp;<?= time(); ?>"
                    onclick="BLMNavigation(this.href); return false;">Spieler online:</a></td>
             <td><?= SpielerOnline(); ?></td>
         </tr>
         <tr>
-            <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= intval(time()); ?>"
+            <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= time(); ?>"
                    onclick="BLMNavigation(this.href); return false;">Bargeld:</a></td>
             <td style="white-space: nowrap;"><?= number_format($ich->Geld, 2, ",", ".") . " " . $Currency; ?></td>
         </tr>
         <tr>
-            <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= intval(time()); ?>"
+            <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= time(); ?>"
                    onclick="BLMNavigation(this.href); return false;">Bank-Guthaben:</a></td>
             <td style="white-space: nowrap;"><?= number_format($ich->Bank, 2, ",", ".") . " " . $Currency; ?></td>
         </tr>
     </table>
     <div style="text-align: center; margin-top: 20px;">
-        <a href="../?p=startseite&amp;<?= intval(time()); ?>" onclick="BLMzeigen(this.href); return false;">
+        <a href="../?p=startseite&amp;<?= time(); ?>" onclick="BLMzeigen(this.href); return false;">
             BLM anzeigen / &ouml;ffnen
         </a><br/>
-        <a href="../?p=startseite&amp;<?= intval(time()); ?>" onclick="BLMEnde(this.href); return false;">
+        <a href="../?p=startseite&amp;<?= time(); ?>" onclick="BLMEnde(); return false;">
             Fenster schlie&szlig;en
         </a>
     </div>
@@ -253,18 +252,18 @@ ORDER BY
         $js_dauer_rechnen[] = "'a_003'";        // sollen auch automatisch runterzählen
         ?>
         function DauerRechnen() {		// Rechnet alle Aufträge die Zeit jede Sekunde runter
-            var Felder = new Array(<?=implode(", ", $js_dauer_rechnen); ?>);		// Hier stehen die IDs aller Aufträge
+            const Felder = new Array(<?=implode(", ", $js_dauer_rechnen); ?>);		// Hier stehen die IDs aller Aufträge
 
-            var ZeitAlt = "";		// Enthält den String der alten Zeit
+            let ZeitAlt = "";		// Enthält den String der alten Zeit
 
-            var Stunden = 0;		//
-            var Minuten = 0;		// Enthalten die Zeit aufgeteilt in Stunden, Minuten und Sekunden
-            var Sekunden = 0;		//
+            let Stunden = 0;		//
+            let Minuten = 0;		// Enthalten die Zeit aufgeteilt in Stunden, Minuten und Sekunden
+            let Sekunden = 0;		//
 
-            var ZeitNeu = "";
+            let ZeitNeu = "";
 
-            for (var i = 0; i < Felder.length; i++) {		// geht alle Aufträge durch
-                var Feld = document.getElementById(Felder[i]);		// Zeiger auf das aktuelle Feld
+            for (let i = 0; i < Felder.length; i++) {		// geht alle Aufträge durch
+                const Feld = document.getElementById(Felder[i]);		// Zeiger auf das aktuelle Feld
                 ZeitAlt = Feld.innerHTML;		// Holt sich die alte Zeit direkt aus dem HTML-Code
 
                 Stunden = ZeitAlt.split(":")[0];		// Dann werden die Teile des Array aufgeteilt

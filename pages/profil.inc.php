@@ -129,6 +129,6 @@ $platz = GetPlatz($profil->ID);
     </tr>
     <tr>
         <td>Beschreibung:</td>
-        <td><?= ReplaceBBCode($profil->Beschreibung, 75); ?></td>
+        <td><?= ReplaceBBCode($profil->Beschreibung); ?></td>
     </tr>
 </table>

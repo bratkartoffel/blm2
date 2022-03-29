@@ -144,7 +144,7 @@ while ($opfer = mysql_fetch_object($sql_ergebnis)) {
 
 if (intval($opfer->ID) == 0) {
     DisconnectDB();
-    header("location: ../?p=mafia&m=112&" . intval(time()));
+    header("location: ../?p=mafia&m=112&" . time());
     die();
 }
 
@@ -169,13 +169,13 @@ switch ($a)        // Was will der Benutzer, dementsprechend das Level des jewei
 
 if ($ich->Geld < $kosten[$a][$w]) {        // Der Benutzer hat nicht genügend Geld...
     DisconnectDB();
-    header("location: ../?p=mafia&m=111&" . intval(time()));
+    header("location: ../?p=mafia&m=111&" . time());
     die();
 }
 
 if ($ich->LastMafia + 600 > time()) {        // Der Timeout für Angriffe ist noch nicht abgelaufen!
     DisconnectDB();
-    header("location: ../?p=mafia&m=112&" . intval(time()));
+    header("location: ../?p=mafia&m=112&" . time());
     die();
 }
 
@@ -586,5 +586,5 @@ $_SESSION['blm_queries']++;
 
 // Puh, fertig... :)
 DisconnectDB();
-header("location: ../?p=nachrichten_liste&" . intval(time()));
+header("location: ../?p=nachrichten_liste&" . time());
 die();

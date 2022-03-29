@@ -52,7 +52,7 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
 FROM
     gruppe
 WHERE
-    ID='" . intval($id) . "';";
+    ID='" . $id . "';";
         $sql_ergebnis = mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
@@ -68,18 +68,18 @@ WHERE
             ?>
             <div style="width: 650px; text-align: center; margin-bottom: 5px;">
                 <u><b>Board</b></u> |
-                <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= intval(time()); ?>">Mitgliederverwaltung</a>
+                <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= time(); ?>">Mitgliederverwaltung</a>
                 <?php
                 if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-                    echo ' | <a href="./?p=gruppe_einstellungen&amp;' . intval(time()) . '">Einstellungen</a>';
+                    echo ' | <a href="./?p=gruppe_einstellungen&amp;' . time() . '">Einstellungen</a>';
                 }
 
                 if ($ich->Rechte->Diplomatie) {
-                    echo ' | <a href="./?p=gruppe_diplomatie&amp;' . intval(time()) . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
+                    echo ' | <a href="./?p=gruppe_diplomatie&amp;' . time() . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
                 }
                 ?>
-                | <a href="./?p=gruppe_kasse&amp;<?= intval(time()); ?>">Gruppenkasse</a>
-                | <a href="./?p=gruppe_logbuch&amp;<?= intval(time()); ?>">Logbuch</a>
+                | <a href="./?p=gruppe_kasse&amp;<?= time(); ?>">Gruppenkasse</a>
+                | <a href="./?p=gruppe_logbuch&amp;<?= time(); ?>">Logbuch</a>
             </div>
             <?php
         }
@@ -93,13 +93,13 @@ WHERE
             <tr>
                 <td>
                     <div style="text-align: center;">
-                        <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>&amp;<?= intval(time()); ?>"
+                        <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>&amp;<?= time(); ?>"
                              alt="Hier k&ouml;nnte das Gruppenbild sein..."/>
                     </div>
                     <div style="margin-top: 30px;">
                         <?php
                         if ($gruppe->Beschreibung != NULL) {
-                            echo ReplaceBBCode(stripslashes($gruppe->Beschreibung), 90);
+                            echo ReplaceBBCode(stripslashes($gruppe->Beschreibung));
                         } else {
                             echo '<div style="text-align: center;"><i>Die Gruppe hat keine Beschreibung eingegeben.</i></div>';
                         }
@@ -167,7 +167,7 @@ ORDER BY
                                 echo '<img src="./pics/small/' . $status . '.png" alt="' . $status . '" title="' . $status . '" width="16" height="16" />';
                             }
 
-                            echo '<a href="./?p=profil&amp;uid=' . $mitglied->ID . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($mitglied->Name), ENT_QUOTES, "UTF-8") . " (" . intval($mitglied->Punkte) . ")</a></li>";
+                            echo '<a href="./?p=profil&amp;uid=' . $mitglied->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($mitglied->Name), ENT_QUOTES, "UTF-8") . " (" . intval($mitglied->Punkte) . ")</a></li>";
 
                             if ($maximale_rechte < $mitglied->GruppeRechte) {
                                 $maximale_rechte = $mitglied->GruppeRechte;
@@ -200,7 +200,7 @@ ORDER BY
                     if (mysql_num_rows($sql_ergebnis) > 0) {
                         echo '<ul style="text-align: left; margin-left: 20px;">';
                         while ($nap = mysql_fetch_assoc($sql_ergebnis)) {
-                            echo '<li><a href="./?p=gruppe&amp;id=' . $nap["An"] . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($nap["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
+                            echo '<li><a href="./?p=gruppe&amp;id=' . $nap["An"] . '&amp;' . time() . '">' . htmlentities(stripslashes($nap["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
                         }
                         echo '</ul>';
                     } else {
@@ -231,7 +231,7 @@ ORDER BY
                     if (mysql_num_rows($sql_ergebnis) > 0) {
                         echo '<ul style="text-align: left; margin-left: 20px;">';
                         while ($bnd = mysql_fetch_assoc($sql_ergebnis)) {
-                            echo '<li><a href="./?p=gruppe&amp;id=' . $bnd["An"] . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($bnd["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
+                            echo '<li><a href="./?p=gruppe&amp;id=' . $bnd["An"] . '&amp;' . time() . '">' . htmlentities(stripslashes($bnd["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
                         }
                         echo '</ul>';
                     } else {
@@ -262,7 +262,7 @@ ORDER BY
                     if (mysql_num_rows($sql_ergebnis) > 0) {
                         echo '<ul style="text-align: left; margin-left: 20px;">';
                         while ($krieg = mysql_fetch_assoc($sql_ergebnis)) {
-                            echo '<li><a href="./?p=gruppe&amp;id=' . $krieg["An"] . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($krieg["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
+                            echo '<li><a href="./?p=gruppe&amp;id=' . $krieg["An"] . '&amp;' . time() . '">' . htmlentities(stripslashes($krieg["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
                         }
                         echo '</ul>';
                     } else {
@@ -291,8 +291,8 @@ ORDER BY
                     if ($anzahl->anzahl < MAX_ANZAHL_GRUPPENMITGLIEDER) {
                     if ($ich->Gebaeude1 >= 5) {
                     ?>
-                    <a href="./?p=nachrichten_schreiben&amp;an=<?= $maximale_rechte_user; ?>&amp;betreff=Bewerbung+bei+der+Gruppe&amp;nachricht=<?= htmlentities(urlencode("Hallo, \nich würde gerne in deine Gruppe. Wäre nett, wenn du mir das Passwort sagen kannst.\n\nGruß,\n" . stripslashes($ich->Name)), ENT_QUOTES, "UTF-8") . "&amp;" . intval(time()); ?>">Bewerben</a><br/><a
-                            href="./?p=gruppe&amp;gruppe=<?= htmlentities(stripslashes($gruppe->Name), ENT_QUOTES, "UTF-8") . "&amp;" . intval(time()); ?>">Beitreten
+                    <a href="./?p=nachrichten_schreiben&amp;an=<?= $maximale_rechte_user; ?>&amp;betreff=Bewerbung+bei+der+Gruppe&amp;nachricht=<?= htmlentities(urlencode("Hallo, \nich würde gerne in deine Gruppe. Wäre nett, wenn du mir das Passwort sagen kannst.\n\nGruß,\n" . stripslashes($ich->Name)), ENT_QUOTES, "UTF-8") . "&amp;" . time(); ?>">Bewerben</a><br/><a
+                            href="./?p=gruppe&amp;gruppe=<?= htmlentities(stripslashes($gruppe->Name), ENT_QUOTES, "UTF-8") . "&amp;" . time(); ?>">Beitreten
                         <?php
                         }
                         else {
@@ -399,7 +399,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
 									</th>
 								</tr>
 								<tr>
-									<td>' . ReplaceBBCode(stripslashes($nachricht->Nachricht), 55) . '</td>
+									<td>' . ReplaceBBCode(stripslashes($nachricht->Nachricht)) . '</td>
 								</tr>
 							</table>';
             }
@@ -418,7 +418,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                 for ($i = 0; $i < $anzahl_nachrichten; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                     if ($i % GRUPPE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                         if (($i / GRUPPE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                            $temp .= '<a href="./?p=gruppe&amp;o=' . ($i / GRUPPE_OFFSET) . '&amp;id=' . $gruppe->ID . '&amp;' . intval(time()) . '">' . (($i / GRUPPE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                            $temp .= '<a href="./?p=gruppe&amp;o=' . ($i / GRUPPE_OFFSET) . '&amp;id=' . $gruppe->ID . '&amp;' . time() . '">' . (($i / GRUPPE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                         } else {
                             $temp .= (($i / GRUPPE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                         }

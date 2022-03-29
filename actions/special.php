@@ -48,7 +48,7 @@ if ($temp->Abgeholt != '0') {
     die();
 }
 
-srand(time() + microtime());
+srand(time() + microtime(true));
 
 $ware = rand(1, ANZAHL_WAREN);
 $menge = rand(500, 5000);

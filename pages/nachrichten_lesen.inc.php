@@ -149,7 +149,7 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
         <tr>
             <td style="border-top-style: solid; border-top-width: 1px; border-right: solid 1px black;"><b>Nachricht:</b>
             </td>
-            <td style="border-top-style: solid; border-top-width: 1px;"><?= stripslashes(ReplaceBBCode($nachricht->Nachricht, 115)); ?></td>
+            <td style="border-top-style: solid; border-top-width: 1px;"><?= stripslashes(ReplaceBBCode($nachricht->Nachricht)); ?></td>
         </tr>
         <tr>
             <td style="padding-top: 20px; border-right: solid 1px black;"><b>Aktion:</b></td>

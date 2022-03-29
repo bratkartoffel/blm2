@@ -47,13 +47,13 @@ switch (intval($_REQUEST['a'])) {    // Was will der Benutzer überhaupt?
 
             // Fertig, Aufgabe erfüllt :)
             DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=204&" . intval(time()));
+            header("location: ../?p=nachrichten_liste&m=204&" . time());
             die();
         }
 
         if ($an <= 0 || $nachricht == "" || $an == $_SESSION['blm_user']) { // Ist ein Empfänger ausgewählt? Ist ne Nachricht eingegeben worden? Will er sich selbst was schreiben? Wenn eines davon wahr ist, dann abbrechen...
             DisconnectDB();
-            header("location: ../?p=nachrichten_schreiben&m=104&" . intval(time()));
+            header("location: ../?p=nachrichten_schreiben&m=104&" . time());
             die();
         }
 
@@ -131,9 +131,8 @@ WHERE
 
         // Fertig :)
         DisconnectDB();
-        header("location: ../?p=nachrichten_liste&m=204&" . intval(time()));
+        header("location: ../?p=nachrichten_liste&m=204&" . time());
         die();
-        break;
     case 2:        // eine Nachricht löschen
         $sql_abfrage = "DELETE FROM
     nachrichten
@@ -154,7 +153,7 @@ AND
 
         if (mysql_affected_rows() == 0) {        // Wenn die Nachricht nicht gelöscht werden konnte, dann wurde eine ungültige ausgewählt
             DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=124&" . intval(time()));
+            header("location: ../?p=nachrichten_liste&m=124&" . time());
             die();
         }
 
@@ -177,12 +176,11 @@ AND
 
         if ($_GET['ajax'] != "1") {
             DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=211&" . intval(time()));
+            header("location: ../?p=nachrichten_liste&m=211&" . time());
             die();
         } else {
             die("1");
         }
-        break;
     case 3:        // alle löschen
         $sql_abfrage = "DELETE FROM
     nachrichten
@@ -204,9 +202,8 @@ WHERE
 
         // Feierabend :)
         DisconnectDB();
-        header("location: ../?p=nachrichten_liste&m=212&" . intval(time()));
+        header("location: ../?p=nachrichten_liste&m=212&" . time());
         die();
-        break;
 }
 
 // TODO: So, was jetzt?

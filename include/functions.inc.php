@@ -170,6 +170,8 @@ function BildVonWare($waren_id)
             return "orangen.jpg";
         case 15:
             return "kiwi.jpg";
+        default:
+            return "notfound.jpg";
     }
 }
 
@@ -204,7 +206,7 @@ FROM
 /**
  * Kernfunktion. Bearbeitet alle Aufträge, welche beendet sind und reagiert dementsprechend.
  *
- * @param array $benutzer
+ * @param object $benutzer
  *
  * @return void
  **@author Simon Frankenberger <simonfrankenberger@web.de>
@@ -325,7 +327,7 @@ AND
  *
  * @param string $email
  *
- * @return boolean
+ * @return int
  **@author Simon Frankenberger <simonfrankenberger@web.de>
  * @version 1.0.1
  *
@@ -614,9 +616,6 @@ function CheckMessage($meldung)
         case 231:
             $zurueck[] = 'Der Vertrag wurde angenommen.';
             break;
-        case 232:
-            $zurueck[] = 'Der Vertrag wurde abgelehnt.';
-            break;
         case 233:
             $zurueck[] = 'Das Angebot wurde gelöscht.';
             break;
@@ -700,14 +699,12 @@ function ConnectDB()
     }
 
     $sql_abfrage = "SET CHARACTER SET utf8;";            //
-    $sql_ergebnis = mysql_query($sql_abfrage);        // Wählt als Übertragungskodierung UTF-8
+    mysql_query($sql_abfrage);        // Wählt als Übertragungskodierung UTF-8
     $_SESSION['blm_queries']++;
 
     $sql_abfrage = "SET NAMES utf8;";                            // Alle Daten von und in die Datenbank haben diese.
-    $sql_ergebnis = mysql_query($sql_abfrage);        //
+    mysql_query($sql_abfrage);        //
     $_SESSION['blm_queries']++;
-
-    return true;
 }
 
 /**
@@ -726,14 +723,14 @@ function DeleteAccount($benutzer_id)
 	mitglieder
 WHERE
 	ID='" . intval($benutzer_id) . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
+    mysql_query($sql_abfrage);
     $_SESSION['blm_queries']++;
 }
 
 /**
  * Kernfunktion: Trennt die Verbindung mit der Datenbank wieder
  *
- * @return void
+ * @return bool
  **@version 1.0.0
  *
  * @author Simon Frankenberger <simonfrankenberger@web.de>
@@ -742,8 +739,6 @@ function DisconnectDB()
 {
     mysql_close($_SESSION['blm_link']);        // Verbindung trennen
     unset($_SESSION['blm_link']);                    // SESSION-Variable löschen, ist jetzt ungültig
-
-    return true;
 }
 
 /**
@@ -881,7 +876,7 @@ LIMIT " . (intval($platz) - 1) . ", 1;";
  *
  * @param int $benutzer_id
  *
- * @return int
+ * @return float
  **@author Simon Frankenberger <simonfrankenberger@web.de>
  * @version 1.0.0
  *
@@ -1210,19 +1205,14 @@ function MafiaAuftragsText($aktion)
     switch ($aktion) {
         case 1:
             return 'Wir sollten Sie ausspionieren und unseren Auftragsgeber alles über Sie erzählen...';
-            break;
         case 2:
             return 'Wir sollten Ihr Lager ausräumen...';
-            break;
         case 3:
             return 'Ihr Konkurrent machte sich richtig Sorgen um Sie, deshalb sollten wir Ihre Plantage ein bisschen modernisieren...';
-            break;
         case 4:
             return 'Sie haben doch so viel Geld, da wollten wir Ihre Geldbörse ein bisschen leichter machen...';
-            break;
         default:
             return 'Wir sollten Ihnen das Leben zur Hölle machen!';
-            break;
     }
 }
 
@@ -1463,7 +1453,6 @@ WHERE
 
     if ($rechte - 1 >= 0) { // Gruppennachricht schreiben
         $back->NachrichtSchreiben = true;
-        $rechte -= 1;
     }
 
     return $back;
@@ -1608,14 +1597,13 @@ MfG
  * Hilfsfunktion: Sucht und ersetzt BBCode in einem Text. Sorgt ausserdem für die sichere Ausgabe des Textes.
  *
  * @param string $text
- * @param void $dummy
  *
  * @return string
  **@version 1.0.0
  *
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  */
-function ReplaceBBCode($text, $dummy = null)
+function ReplaceBBCode($text)
 {
     $text = stripslashes($text);    // Entfernt die Escapezeichen (Backslashes)
 
@@ -1676,12 +1664,6 @@ function ReplaceBBCode($text, $dummy = null)
     $footer['quote'] = '</div>';
 
     /*
-        Wie wird der Loginname in Zitaten eingeschlossen?
-    */
-    $header['quote_loginname'] = '<span class="ZITAT_KOPF">Zitat von &quot;';
-    $footer['quote_loginname'] = '&quot;:</span>';
-
-    /*
         Wie werden Codeteile eingeschlossen?
     */
     $header['code'] = '<div class="CODE"><span class="CODE_KOPF">Code:</span>';
@@ -1736,7 +1718,6 @@ function ReplaceBBCode($text, $dummy = null)
     $footer['html'] = '</div>';
 
     $text = sichere_ausgabe($text, "UTF-8");        // dann escapen wir den String
-    $quote = '&quot;';        // Und setzen den Trenner " auf sein HTML-Pendant
 
     for ($i = 0; $i < $anzPHP; $i++) {
         $php_['search'] = $php[1][$i];
@@ -1813,8 +1794,8 @@ function ReplaceBBCode($text, $dummy = null)
     $text = preg_replace(
         array(
             '/\[center\](.*)\[\/center\]/Uis',
-            "/\[size=(1|2?){1}([0-9]{1})\](.*)\[\/size\]/Uis",
-            "/\[url=&quot;(http\:\/\/|www.|http\:\/\/www.){1}([a-z0-9\-\_\.]{3,32}\.[a-z]{2,4})&quot;\](.*)\[\/url\]/SiU",
+            "/\[size=(1|2?)([0-9])\](.*)\[\/size\]/Uis",
+            "/\[url=&quot;(http\:\/\/|www.|http\:\/\/www.)([a-z0-9\-\_\.]{3,32}\.[a-z]{2,4})&quot;\](.*)\[\/url\]/SiU",
             "/\[img=&quot;(http\:\/\/[a-z0-9\-\_\.\/]{3,32}\.[a-z]{3,4})&quot;\](.*)\[\/img\]/SiU",
             "/\[email=&quot;([a-z0-9\-\_\.]{3,32}@[a-z0-9\-\_\.]{3,32}\.[a-z]{2,4})&quot;\](.*)\[\/email\]/SiU",
             "/\[emoticon=&quot;([a-z0-9\-\_\.\/]{3,64})&quot; \/\]/Si",
@@ -2000,27 +1981,27 @@ function ResetAll($RundeZuEnde, $start_werte)
             Wenn ja, dann leere gleich mal die Tabellen, die nur für eine Runde wichtig sind
         */
         $sql_abfrage = "TRUNCATE TABLE auftrag;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
+        mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
         $sql_abfrage = "TRUNCATE TABLE marktplatz;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
+        mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
         $sql_abfrage = "TRUNCATE TABLE vertraege;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
+        mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
         $sql_abfrage = "TRUNCATE TABLE gruppe;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
+        mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
         $sql_abfrage = "TRUNCATE TABLE gruppe_nachrichten;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
+        mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
         $sql_abfrage = "TRUNCATE TABLE gruppe_diplomatie;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
+        mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
         $sql_abfrage = "SELECT
@@ -2158,7 +2139,7 @@ SET
 	LastAction='" . time() . "'
 WHERE
 	ID='" . $_SESSION['blm_user'] . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);    // Zeitstempel der letzten Aktion auf jetzt setzen.
+    mysql_query($sql_abfrage);    // Zeitstempel der letzten Aktion auf jetzt setzen.
     $_SESSION['blm_queries']++;
 }
 

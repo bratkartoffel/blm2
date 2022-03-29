@@ -31,38 +31,38 @@ if (!istAdmin()) {
 <br/>
 <br/>
 <ul style="margin-left: 20px;">
-    <li><a href="./?p=admin_test&amp;<?= intval(time()); ?>">Variablen Testseite</a></li>
-    <li><a href="./?p=admin_markt&amp;<?= intval(time()); ?>">Marktplatz</a></li>
-    <li><a href="./?p=admin_vertrag&amp;<?= intval(time()); ?>">Verträge</a></li>
-    <li><a href="./?p=admin_gruppe&amp;<?= intval(time()); ?>">Gruppen</a></li>
-    <li><a href="./?p=admin_benutzer&amp;<?= intval(time()); ?>">Benutzer</a></li>
-    <li><a href="./?p=admin_auftrag&amp;<?= intval(time()); ?>">Aufträge</a></li>
-    <li><a href="./?p=admin_changelog&amp;<?= intval(time()); ?>">Changelog</a></li>
+    <li><a href="./?p=admin_test&amp;<?= time(); ?>">Variablen Testseite</a></li>
+    <li><a href="./?p=admin_markt&amp;<?= time(); ?>">Marktplatz</a></li>
+    <li><a href="./?p=admin_vertrag&amp;<?= time(); ?>">Verträge</a></li>
+    <li><a href="./?p=admin_gruppe&amp;<?= time(); ?>">Gruppen</a></li>
+    <li><a href="./?p=admin_benutzer&amp;<?= time(); ?>">Benutzer</a></li>
+    <li><a href="./?p=admin_auftrag&amp;<?= time(); ?>">Aufträge</a></li>
+    <li><a href="./?p=admin_changelog&amp;<?= time(); ?>">Changelog</a></li>
     <li>
         Logbücher:
         <ul>
-            <li><a href="./?p=admin_log_bank&amp;<?= intval(time()); ?>">Bank</a></li>
-            <li><a href="./?p=admin_log_bioladen&amp;<?= intval(time()); ?>">Bioladen</a></li>
-            <li><a href="./?p=admin_log_gruppenkasse&amp;<?= intval(time()); ?>">Gruppenkasse</a></li>
-            <li><a href="./?p=admin_log_login&amp;<?= intval(time()); ?>">Login</a></li>
-            <li><a href="./?p=admin_log_mafia&amp;<?= intval(time()); ?>">Mafia</a></li>
-            <li><a href="./?p=admin_log_vertraege&amp;<?= intval(time()); ?>">Verträge</a></li>
+            <li><a href="./?p=admin_log_bank&amp;<?= time(); ?>">Bank</a></li>
+            <li><a href="./?p=admin_log_bioladen&amp;<?= time(); ?>">Bioladen</a></li>
+            <li><a href="./?p=admin_log_gruppenkasse&amp;<?= time(); ?>">Gruppenkasse</a></li>
+            <li><a href="./?p=admin_log_login&amp;<?= time(); ?>">Login</a></li>
+            <li><a href="./?p=admin_log_mafia&amp;<?= time(); ?>">Mafia</a></li>
+            <li><a href="./?p=admin_log_vertraege&amp;<?= time(); ?>">Verträge</a></li>
         </ul>
     </li>
     <li>
         Vorlagen:
         <ul>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=1&amp;<?= intval(time()); ?>">Verwarnung
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=1&amp;<?= time(); ?>">Verwarnung
                     Multiaccounts</a></li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=2&amp;<?= intval(time()); ?>">Verwarnung
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=2&amp;<?= time(); ?>">Verwarnung
                     Passwortweitergabe</a></li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=3&amp;<?= intval(time()); ?>">Verwarnung Bugusing</a>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=3&amp;<?= time(); ?>">Verwarnung Bugusing</a>
             </li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=4&amp;<?= intval(time()); ?>">Verwarnung Spamming</a>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=4&amp;<?= time(); ?>">Verwarnung Spamming</a>
             </li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=5&amp;<?= intval(time()); ?>">Verwarnung Ausnutzung</a>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=5&amp;<?= time(); ?>">Verwarnung Ausnutzung</a>
             </li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=6&amp;<?= intval(time()); ?>">Verwarnung
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=6&amp;<?= time(); ?>">Verwarnung
                     Accountpushing</a></li>
         </ul>
     </li>

@@ -59,7 +59,7 @@ switch ($cmb) {
         echo '<div id="Hilfe">
 							<div id="HilfeHeader">' . $cat . '. ' . $HilfeText[$cmb][0] . ':</div>
 							<div id="HilfeText">
-								' . ReplaceBBCode($HilfeText[$cmb][1], 120, false) . '
+								' . ReplaceBBCode($HilfeText[$cmb][1]) . '
 							</div>
 						</div>';        // Den Hilfetext (welcher BB-Code haben darf) ausgeben.
         break;

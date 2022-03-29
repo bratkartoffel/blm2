@@ -30,4 +30,3 @@ if (mysql_num_rows($sql_ergebnis) == 0) {
 } else {
     die('2');
 }
-?>

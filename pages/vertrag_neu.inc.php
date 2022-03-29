@@ -115,7 +115,7 @@ WHERE
             for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Hier wird die kleine Hilfstabelle ausgegeben, bei der der User sehen kann, wieviel er für das Gemüse im Laden bekommen würde
                 $temp = "Lager" . $i;
                 if ($lager->$temp > 0) {
-                    echo '<tr><td>' . WarenName($i) . '</td><td style="text-align: right;">' . number_format($lager->$temp, 0, ",", ".") . ' kg</td><td style="text-align: right;">' . number_format($Preis[$i], 2, ",", ".") . ' ' . $Currency . '</td><td style="padding: 0 5px 0 15px;"><a href="#" onclick="var z=document.form_vertrag; z.menge.value=\'' . $lager->$temp . '\'; z.Ware.selectedIndex=\'' . $Ware[$i] . '\'; return false;">Übernehmen</a></td></tr>';
+                    echo '<tr><td>' . WarenName($i) . '</td><td style="text-align: right;">' . number_format($lager->$temp, 0, ",", ".") . ' kg</td><td style="text-align: right;">' . number_format($Preis[$i], 2, ",", ".") . ' ' . $Currency . '</td><td style="padding: 0 5px 0 15px;"><a href="#" onclick="const z=document.form_vertrag; z.menge.value=\'' . $lager->$temp . '\'; z.Ware.selectedIndex=\'' . $Ware[$i] . '\'; return false;">Übernehmen</a></td></tr>';
                 }
             }
             ?>

@@ -37,19 +37,19 @@ WHERE
     $gruppe = mysql_fetch_object($sql_ergebnis);
     ?>
     <div style="width: 700px; text-align: center; margin-bottom: 5px;">
-        <a href="./?p=gruppe&amp;<?= intval(time()); ?>">Board</a> |
-        <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= intval(time()); ?>">Mitgliederverwaltung</a>
+        <a href="./?p=gruppe&amp;<?= time(); ?>">Board</a> |
+        <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= time(); ?>">Mitgliederverwaltung</a>
         <?php
         if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
             echo ' | <u><b>Einstellungen</b></u>';
         }
 
         if ($ich->Rechte->Diplomatie) {
-            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . intval(time()) . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
+            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . time() . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
         }
         ?>
-        | <a href="./?p=gruppe_kasse&amp;<?= intval(time()); ?>">Gruppenkasse</a>
-        | <a href="./?p=gruppe_logbuch&amp;<?= intval(time()); ?>">Logbuch</a>
+        | <a href="./?p=gruppe_kasse&amp;<?= time(); ?>">Gruppenkasse</a>
+        | <a href="./?p=gruppe_logbuch&amp;<?= time(); ?>">Logbuch</a>
     </div>
 
     <?php
@@ -63,7 +63,7 @@ WHERE
                 <tr>
                     <td style="text-align: center;">
                         <i>
-                            <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>&amp;<?= intval(time()); ?>"
+                            <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>&amp;<?= time(); ?>"
                                  alt="Bisher wurde kein Bild hochgeladen..."/>
                         </i>
                     </td>
@@ -95,7 +95,7 @@ WHERE
                             <u><i><b>Aktuell:</b></i></u><br/>
                             <br/>
                             <?php
-                            echo ReplaceBBCode($gruppe->Beschreibung, 75);
+                            echo ReplaceBBCode($gruppe->Beschreibung);
                             ?>
                         </td>
                     </tr>

@@ -26,19 +26,19 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
 
 
     <div style="width: 650px; text-align: center; margin-bottom: 5px;">
-        <a href="./?p=gruppe&amp;<?= intval(time()); ?>">Board</a> |
+        <a href="./?p=gruppe&amp;<?= time(); ?>">Board</a> |
         <u><b>Mitgliederverwaltung</b></u>
         <?php
         if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-            echo ' | <a href="./?p=gruppe_einstellungen&amp;' . intval(time()) . '">Einstellungen</a>';
+            echo ' | <a href="./?p=gruppe_einstellungen&amp;' . time() . '">Einstellungen</a>';
         }
 
         if ($ich->Rechte->Diplomatie) {
-            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . intval(time()) . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
+            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . time() . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
         }
         ?>
-        | <a href="./?p=gruppe_kasse&amp;<?= intval(time()); ?>">Gruppenkasse</a>
-        | <a href="./?p=gruppe_logbuch&amp;<?= intval(time()); ?>">Logbuch</a>
+        | <a href="./?p=gruppe_kasse&amp;<?= time(); ?>">Gruppenkasse</a>
+        | <a href="./?p=gruppe_logbuch&amp;<?= time(); ?>">Logbuch</a>
     </div>
     <table class="Liste" style="width: 600px;" cellspacing="0">
         <tr>

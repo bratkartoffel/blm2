@@ -87,7 +87,7 @@ ORDER BY
     }
 
     if ($hat_waren) {        // Wenn der Benutzer Waren hat, dann...
-        echo '<a href="./?p=vertrag_neu&amp;' . intval(time()) . '">Neuen Vertrag aufsetzen</a><br />';        // Zeige den Link für ein neues Angebot an.
+        echo '<a href="./?p=vertrag_neu&amp;' . time() . '">Neuen Vertrag aufsetzen</a><br />';        // Zeige den Link für ein neues Angebot an.
     }
 
     /*

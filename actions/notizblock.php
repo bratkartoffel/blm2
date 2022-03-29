@@ -44,5 +44,5 @@ $_SESSION['blm_queries']++;
 
 // Erledigt :)
 DisconnectDB();
-header("location: ../?p=notizblock&m=213&" . intval(time()));
+header("location: ../?p=notizblock&m=213&" . time());
 die();

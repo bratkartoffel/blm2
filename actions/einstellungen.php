@@ -29,13 +29,13 @@ switch (intval($_REQUEST['a'])) {            // Was will der Benutzer überhaupt
     case 1:        // Passwort ändern
         if ($ich->Passwort != sha1($_POST['pwd_alt'])) {        // Stimmt das alte Passwort welches er eingegeben hat? Wenn nicht, dann Abbruch
             DisconnectDB();
-            header("location: ../?p=einstellungen&m=121&" . intval(time()));
+            header("location: ../?p=einstellungen&m=121&" . time());
             die();
         }
 
         if (sha1($_POST['new_pw1']) != sha1($_POST['new_pw2']) || $_POST['new_pw1'] == "") {        // Hat der Benutzer 2x das gleiche Kennwort eingegeben? Wenn nicht, dann Abbruch
             DisconnectDB();
-            header("location: ../?p=einstellungen&m=105&" . intval(time()));
+            header("location: ../?p=einstellungen&m=105&" . time());
             die();
         }
 
@@ -49,26 +49,24 @@ WHERE
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=einstellungen&m=219&" . intval(time()) . "#Passwort");
+        header("location: ../?p=einstellungen&m=219&" . time() . "#Passwort");
         die();
-        break;
     case 2:        // Account resetten
         if ($ich->Passwort != sha1($_POST['pwd_reset'])) {    // Stimmt das alte Passwort welches er eingegeben hat? Wenn nicht, dann Abbruch
             DisconnectDB();
-            header("location: ../?p=einstellungen&m=121&" . intval(time()));
+            header("location: ../?p=einstellungen&m=121&" . time());
             die();
         }
 
         ResetAccount($_SESSION['blm_user'], $Start);        // Account resetten
 
         DisconnectDB();
-        header("location: ../?p=einstellungen&m=220&" . intval(time()) . "#Reset");
+        header("location: ../?p=einstellungen&m=220&" . time() . "#Reset");
         die();
-        break;
     case 3:        // Account löschen
         if ($ich->Passwort != sha1($_POST['pwd_delete'])) {    // Stimmt das alte Passwort welches er eingegeben hat? Wenn nicht, dann Abbruch
             DisconnectDB();
-            header("location: ../?p=einstellungen&m=121&" . intval(time()));
+            header("location: ../?p=einstellungen&m=121&" . time());
             die();
         }
 
@@ -77,7 +75,6 @@ WHERE
         DisconnectDB();
         header("location: ./logout.php?del=1");
         die();
-        break;
     case 4:        // Beschreibung ändern
         $beschreibung = $_POST['beschreibung'];        // Beschreibungstext abrufen
 
@@ -96,9 +93,8 @@ WHERE
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=einstellungen&m=206&" . intval(time()) . "#Beschreibung");
+        header("location: ../?p=einstellungen&m=206&" . time() . "#Beschreibung");
         die();
-        break;
     case 5:        // Profilbild hochladen
         DisconnectDB();        // Erst mal die Verbindung mit der Datenbank trennen, brauchen wir nicht mehr
 
@@ -106,13 +102,12 @@ WHERE
             @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".jpg");        //...
             @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".png");        // lösche alle bisherigen Bilder, welche er haben könnte.
             @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".gif");        //
-            header("location: ../?p=einstellungen&m=209&" . intval(time()));        // Somit wären wir fertig...
+            header("location: ../?p=einstellungen&m=209&" . time());        // Somit wären wir fertig...
             die();
-            break;
         }
 
         if (filesize($_FILES['bild']['tmp_name']) > BILD_GROESE_MAXIMAL) {        // Wenn das Bild größer als 64K ist, dann abbrechen!
-            header("location: ../?p=einstellungen&m=103&" . intval(time()));
+            header("location: ../?p=einstellungen&m=103&" . time());
             die();
         }
 
@@ -131,9 +126,8 @@ WHERE
                 $suffix = "png";
                 break;
             default:                        // Alles andere ist verboten!
-                header("location: ../?p=einstellungen&m=107&" . intval(time()));
+                header("location: ../?p=einstellungen&m=107&" . time());
                 die();
-                break;
         }
 
         @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".jpg");        // Wenn er hier ankommt, dann will er wirklich ein Bild hochladen
@@ -143,7 +137,7 @@ WHERE
         move_uploaded_file($_FILES['bild']['tmp_name'], "../pics/spieler/" . $_SESSION['blm_user'] . "." . $suffix);    // Die hochgeladene Datei in das Profilbilderverzeichnis schieben
         chmod("../pics/spieler/" . $_SESSION['blm_user'] . "." . $suffix, 0766);        // Die Rechte des Bildes ändern (TODO: Muss das sein?)
 
-        header("location: ../?p=einstellungen&m=210&" . intval(time()) . "#Bild"); // Alles erledigt :)
+        header("location: ../?p=einstellungen&m=210&" . time() . "#Bild"); // Alles erledigt :)
         die();
     case 6:        // EMail-Adresse ändern
         $email = $_POST['email'];
@@ -156,7 +150,7 @@ WHERE
         mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
-        header("location: ../?p=einstellungen&m=238&" . intval(time()) . "#EMail");
+        header("location: ../?p=einstellungen&m=238&" . time() . "#EMail");
         die();
     case 7:        // Sitterrechte bearbeiten
         $aktiviert = intval($_POST['aktiviert']);
@@ -241,6 +235,6 @@ VALUES
         mysql_query($sql_abfrage) or die(mysql_error());
         $_SESSION['blm_queries']++;
 
-        header("location: ../?p=einstellungen&m=240&" . intval(time()) . "#Sitter");
+        header("location: ../?p=einstellungen&m=240&" . time() . "#Sitter");
         die();
 }

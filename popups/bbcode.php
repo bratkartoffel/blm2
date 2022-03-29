@@ -6,7 +6,7 @@
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  * @package blm2.popups
  */
-header('Content-type: text/html; charset="utf-8"', true);        // Das Dokument ist UTF-8 kodiert...
+header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist UTF-8 kodiert...
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">

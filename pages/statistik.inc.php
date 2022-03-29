@@ -72,7 +72,7 @@ $statistik->AnzahlAuftraege = $statistik2->Auto_increment;
         <td>Anzahl aller Auftr&auml;ge:</td>
         <td style="text-align: right;"><?php
             $statistik->AnzahlAuftraege++;
-            echo intval($statistik->AnzahlAuftraege) - 1; ?></td>
+            echo $statistik->AnzahlAuftraege - 1; ?></td>
     </tr>
     <tr>
         <td>Gewinn / Auftrag:</td>

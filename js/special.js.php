@@ -13,7 +13,7 @@ if (!SPECIAL_RUNNING) {
     die();
 }
 
-srand(time() + microtime());
+srand(time() + microtime(true));
 
 $rand = rand(0, 100);
 
@@ -53,7 +53,7 @@ $sql_ergebnis = mysql_query($sql_abfrage);
 
 DisconnectDB();
 
-srand(microtime() + time());
+srand(microtime() + time(true));
 ?>
 var z = document.getElementById('weihnachtsspecial');
 

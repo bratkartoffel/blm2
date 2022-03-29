@@ -30,10 +30,9 @@ AND
 ;";
 $sql_ergebnis = mysql_query($sql_abfrage);
 
+DisconnectDB();
 if (mysql_affected_rows() == 0) {
-    DisconnectDB();
     die("Ungültiger Aktivierungscode, oder Account bereits aktiviert!");
 } else {
-    DisconnectDB();
     die('<h2>Account erfolgreich aktiviert. Sie können sich nun einloggen. Viel Spaß beim BLM2!<br /><br /><a href="../?p=anmelden" style="color: blue;">Zur Anmeldung</a></h2>');
 }

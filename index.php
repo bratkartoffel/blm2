@@ -15,11 +15,11 @@ Changelog:
 */
 
 ini_set("url_rewriter.tags", "");        // Parameter werden nun nicht mehr automatisch an jeden Link angehängt. (Leider Standard auf meinem Server...)
-header('Content-type: text/html; charset="utf-8"', true);        // Wir teilen dem Browser mit, dass dieses Dokument als UTF-8 kodiert ist.
+header('Content-type: text/html; charset="utf-8"');        // Wir teilen dem Browser mit, dass dieses Dokument als UTF-8 kodiert ist.
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 ignore_user_abort(true);        // Ignoriert den Abbruch des Benutzers
 
-$start = time() + microtime();    // Die Startzeit des Scripts für den Benchmark
+$start = time() + microtime(true);    // Die Startzeit des Scripts für den Benchmark
 
 /*
     Dann werden alle wichtigen Dateien mit den Konstanten, Variablen und Funktionen eingebunden.
@@ -87,6 +87,7 @@ if (istAngemeldet()) {        // Ist der Benutzer angemeldet? Wenn ja, dann...
         case "admin_log_login":
         case "admin_log_mafia":
         case "admin_log_vertraege":
+        /** @noinspection PhpMissingBreakStatementInspection */
         case "admin_vorlage_verwarnungen":
             if (!istAdmin()) {
                 header("location: ./?p=index&m=101");
@@ -209,13 +210,13 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
             <!--
             function MarkActiveLink() {
                 // Markiert den aktuellen Menüpunkt (Standort) des Users
-                var z_links = document.getElementById("Navigation").getElementsByTagName("a");		// Zeigt auf alle Links der NAvigation
-                var Seite = '<?=$Seite; ?>';		// Beinhaltet die aktuelle Seite
+                const z_links = document.getElementById("Navigation").getElementsByTagName("a");		// Zeigt auf alle Links der NAvigation
+                const Seite = '<?=$Seite; ?>';		// Beinhaltet die aktuelle Seite
 
                 try {
-                    for (var i = 0; i < z_links.length; i++) {		// Läuft alle Links der Navigation durch
+                    for (let i = 0; i < z_links.length; i++) {		// Läuft alle Links der Navigation durch
                         if (z_links[i].target != "_blank") {
-                            var aktLink = z_links[i].href.split("/");		// Zerteilt den Link in seine Bestandteile
+                            let aktLink = z_links[i].href.split("/");		// Zerteilt den Link in seine Bestandteile
                             aktLink = aktLink[aktLink.length - 1];				// Holt sich nur den Teil nach dem letzten "/"
 
                             aktLink = aktLink.split("?p=");		// Dann holen wir uns die Seite raus
@@ -236,7 +237,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
         </script>
         <!-- Kleiner Hack für den IE -->
         <!--[if IE]>
-			<link rel="stylesheet" type="text/css" href="styles/style_ie.css?<?= intval(time()); ?>" />
+			<link rel="stylesheet" type="text/css" href="styles/style_ie.css?<?= time(); ?>" />
 		<![endif]-->
     </head>
     <body onload="MarkActiveLink();">
@@ -255,7 +256,8 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     ?>
                     <div id="weihnachtsspecial" style="position: relative; display: none; float: left;">
                     </div>
-                    <img src="pics/tree.png" height="100" width="100" style="float: left; margin-left: 30px;"/>
+                    <img src="pics/tree.png" height="100" width="100" style="float: left; margin-left: 30px;"
+                         alt="Weihnachtsbaum"/>
                     <?php
                 }
                 ?>
@@ -268,7 +270,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
         </div>
         <div id="Navigation">
             <img src="./pics/logo.png" alt="BLM 2"
-                 style="margin: 0; padding: 0; margin-bottom: 7px; margin-left: 30px;"/>
+                 style="padding: 0; margin: 0 0 7px 30px;"/>
             <div class="NaviOben">&nbsp;</div>
             <div class="NaviMitte">
                 <div class="NaviHeader">Navigation</div>
@@ -276,71 +278,71 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 if (IstAngemeldet()) {        // Folgenden Block (Navigationsleiste) nur für angemeldete Benutzer anzeigen
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);">
-                        <a href="./?p=index&amp;<?= intval(time()); ?>">Startseite</a>
+                        <a href="./?p=index&amp;<?= time(); ?>">Startseite</a>
                     </div>
                     <div class="NaviLinkHeader">Gebäude:</div>
                     <?php
                     if ($ich->Sitter->Gebaeude || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=gebaeude&amp;<?= intval(time()); ?>">Gebäude</a></div>
+                                    href="./?p=gebaeude&amp;<?= time(); ?>">Gebäude</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Produktion || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=plantage&amp;<?= intval(time()); ?>">Plantage</a></div>
+                                    href="./?p=plantage&amp;<?= time(); ?>">Plantage</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Forschung || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=forschungszentrum&amp;<?= intval(time()); ?>">Forschungszentrum</a></div>
+                                    href="./?p=forschungszentrum&amp;<?= time(); ?>">Forschungszentrum</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Bioladen || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=bioladen&amp;<?= intval(time()); ?>">Bioladen</a></div>
+                                    href="./?p=bioladen&amp;<?= time(); ?>">Bioladen</a></div>
                         <?php
                     }
                     ?>
 
                     <br/>
                     <div class="NaviLinkHeader">Finanzen:</div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= intval(time()); ?>">B&uuml;ro</a>
+                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">B&uuml;ro</a>
                     </div>
                     <?php
                     if ($ich->Sitter->Bank || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=bank&amp;<?= intval(time()); ?>">Bank</a></div>
+                                    href="./?p=bank&amp;<?= time(); ?>">Bank</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Vertraege || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=vertraege_liste&amp;<?= intval(time()); ?>">Vertr&auml;ge
-                                (<?= intval(Vertraege()); ?>)</a></div>
+                                    href="./?p=vertraege_liste&amp;<?= time(); ?>">Vertr&auml;ge
+                                (<?= Vertraege(); ?>)</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Marktplatz || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=marktplatz_liste&amp;<?= intval(time()); ?>">Marktplatz
-                                (<?= intval(AngeboteMarkt()); ?>)</a></div>
+                                    href="./?p=marktplatz_liste&amp;<?= time(); ?>">Marktplatz
+                                (<?= AngeboteMarkt(); ?>)</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Mafia || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=mafia&amp;<?= intval(time()); ?>">Mafia</a></div>
+                                    href="./?p=mafia&amp;<?= time(); ?>">Mafia</a></div>
                         <?php
                     }
                     ?>
@@ -351,25 +353,25 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     if ($ich->Sitter->Gruppe || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=gruppe&amp;<?= intval(time()); ?>">Gruppe
-                                (<?= intval(NeueGruppenNachrichten($ich)); ?>)</a></div>
+                                    href="./?p=gruppe&amp;<?= time(); ?>">Gruppe
+                                (<?= NeueGruppenNachrichten($ich); ?>)</a></div>
                         <?php
                     }
 
                     if ($ich->Sitter->Nachrichten || !$_SESSION['blm_sitter']) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=nachrichten_liste&amp;<?= intval(time()); ?>">Nachrichten
-                                (<?= intval(NeueNachrichten()); ?>)</a></div>
+                                    href="./?p=nachrichten_liste&amp;<?= time(); ?>">Nachrichten
+                                (<?= NeueNachrichten(); ?>)</a></div>
                         <?php
                     }
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=notizblock&amp;<?= intval(time()); ?>">Notizblock</a></div>
+                                href="./?p=notizblock&amp;<?= time(); ?>">Notizblock</a></div>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=einstellungen&amp;<?= intval(time()); ?>">Einstellungen</a></div>
+                                href="./?p=einstellungen&amp;<?= time(); ?>">Einstellungen</a></div>
                     <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);"><a
-                                href="popups/chefbox.php?<?= intval(time()); ?>"
+                                href="popups/chefbox.php?<?= time(); ?>"
                                 onclick="return ChefboxZeigen(this.href);" target="_blank">Chefbox</a></div>
 
                     <br/>
@@ -378,26 +380,26 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     if (istAdmin()) {
                         ?>
                         <div class="NaviLink" onclick="Navigation(this);" style="margin-bottom: 9px;"><a
-                                    href="./?p=admin&amp;<?= intval(time()); ?>">Admin-Bereich</a></div>
+                                    href="./?p=admin&amp;<?= time(); ?>">Admin-Bereich</a></div>
 
                         <?php
                     }
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=rangliste&amp;o=<?= $ich->RanglisteOffset; ?>&amp;highlight=<?= $_SESSION['blm_user']; ?>&amp;<?= intval(time()); ?>">Rangliste</a>
+                                href="./?p=rangliste&amp;o=<?= $ich->RanglisteOffset; ?>&amp;highlight=<?= $_SESSION['blm_user']; ?>&amp;<?= time(); ?>">Rangliste</a>
                     </div>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=statistik&amp;<?= intval(time()); ?>">Serverstatistik</a></div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=regeln&amp;<?= intval(time()); ?>">Regeln</a>
+                                href="./?p=statistik&amp;<?= time(); ?>">Serverstatistik</a></div>
+                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=regeln&amp;<?= time(); ?>">Regeln</a>
                     </div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=hilfe&amp;<?= intval(time()); ?>">Hilfe</a>
+                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=hilfe&amp;<?= time(); ?>">Hilfe</a>
                     </div>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=changelog&amp;<?= intval(time()); ?>">Changelog</a></div>
+                                href="./?p=changelog&amp;<?= time(); ?>">Changelog</a></div>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=impressum&amp;<?= intval(time()); ?>">Impressum</a></div>
+                                href="./?p=impressum&amp;<?= time(); ?>">Impressum</a></div>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./actions/logout.php?p=dummy&amp;<?= intval(time()); ?>">Abmelden</a></div>
+                                href="./actions/logout.php?p=dummy&amp;<?= time(); ?>">Abmelden</a></div>
                     <?php
                 }    // Der letzte Block war die Navigationsleiste für angemeldete Benutzer
                 else {        // Der Benutzer ist nicht angemeldet
@@ -477,7 +479,7 @@ if ($_SESSION['blm_user']) {
 }
 DisconnectDB();        // Finally; die Verbindug mit der DB kappen :)
 
-$dauer = 1000 * (time() + microtime() - $start);        // Wie lange haben wir gebraucht, um die Seite zu generieren?
+$dauer = 1000 * (time() + microtime(true) - $start);        // Wie lange haben wir gebraucht, um die Seite zu generieren?
 
 $queries = intval($_SESSION['blm_queries']);        // Wieviele Queries haben wir gebraucht?
 $_SESSION['blm_queries'] = 0;        // Die Anzahl der Queries wieder auf 0 setzen

@@ -4,14 +4,14 @@ a:hover, a:active, a:focus { color: highlighttext; background-color: highlight; 
 body { background: #FFFFFF; }
 body, table { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt; }
 
-a img { border: 0px; }
+a img { border: 0; }
 
 /* Page layout/boxes */
 
 .info-box {  }
-.info-box-title { margin: 1em 0em 0em 0em; font-weight: normal; font-size: 14pt; color: #999999; border-bottom: 2px solid #999999; }
+.info-box-title { margin: 1em 0 0 0; font-weight: normal; font-size: 14pt; color: #999999; border-bottom: 2px solid #999999; }
 .info-box-body { border: 1px solid #999999; padding: .5em; }
-.nav-bar { font-size: 8pt; white-space: nowrap; text-align: right; padding: .2em; margin: 0em 0em 1em 0em; }
+.nav-bar { font-size: 8pt; white-space: nowrap; text-align: right; padding: .2em; margin: 0 0 1em 0; }
 
 .oddrow { background-color: #F8F8F8; border: 1px solid #AAAAAA; padding: .5em; margin-bottom: 1em}
 .evenrow { border: 1px solid #AAAAAA; padding: .5em; margin-bottom: 1em}
@@ -19,8 +19,9 @@ a img { border: 0px; }
 .page-body { max-width: 800px; margin: auto; }
 .tree { white-space: nowrap; font: icon }
 .tree dd { margin-left: 19px }
-.tree dl { margin: 0px }
-.tree-icon { 	vertical-align: middle; border: 0px; margin-right: 3px }
+.tree dl { margin: 0
+}
+.tree-icon { 	vertical-align: middle; border: 0; margin-right: 3px }
 
 /* Index formatting classes */
 
@@ -36,9 +37,9 @@ a img { border: 0px; }
 
 .description {}
 .short-description { font-weight: bold; color: #666666; }
-.tags {	padding-left: 0em; margin-left: 3em; color: #666666; list-style-type: square; }
-.parameters {	padding-left: 0em; margin-left: 3em; color: #014fbe; list-style-type: square; }
-.redefinitions { font-size: 8pt; padding-left: 0em; margin-left: 2em; }
+.tags {	padding-left: 0; margin-left: 3em; color: #666666; list-style-type: square; }
+.parameters {	padding-left: 0; margin-left: 3em; color: #014fbe; list-style-type: square; }
+.redefinitions { font-size: 8pt; padding-left: 0; margin-left: 2em; }
 .package { font-weight: bold; }
 .package-title { font-weight: bold; font-size: 14pt; border-bottom: 1px solid black }
 .package-details { font-size: 85%; }
@@ -69,7 +70,8 @@ a img { border: 0px; }
 .method-definition { margin-bottom: .2em }
 .method-title { color: #009000; font-weight: bold; }
 .method-name { font-weight: bold; }
-.method-signature { font-size: 85%; color: #666666; margin: .5em 0em }
+.method-signature { font-size: 85%; color: #666666; margin: .5em 0
+}
 .method-result { font-style: italic; }
 
 .var-summary { padding-left: 1em; font-size: 8pt; }
@@ -129,18 +131,21 @@ a img { border: 0px; }
 
 .authors {  }
 .author { font-style: italic; font-weight: bold }
-.author-blurb { margin: .5em 0em .5em 2em; font-size: 85%; font-weight: normal; font-style: normal }
+.author-blurb { margin: .5em 0 .5em 2em; font-size: 85%; font-weight: normal; font-style: normal }
 .example { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; }
 *[class="example"] { line-height : 1.0em; }
 .listing { border: 1px dashed #999999; background-color: #EEEEEE; padding: .5em; white-space: nowrap; }
 *[class="listing"] { line-height : 1.0em; }
-.release-info { font-size: 85%; font-style: italic; margin: 1em 0em }
+.release-info { font-size: 85%; font-style: italic; margin: 1em 0
+}
 .ref-title-box {  }
 .ref-title {  }
 .ref-purpose { font-style: italic; color: #666666 }
 .ref-synopsis {  }
 .title { font-weight: bold; border-bottom: 1px solid #999999; color: #999999;  }
-.cmd-synopsis { margin: 1em 0em }
+.cmd-synopsis { margin: 1em 0
+}
 .cmd-title { font-weight: bold }
-.toc { margin-left: 2em; padding-left: 0em }
+.toc { margin-left: 2em; padding-left: 0
+}
 

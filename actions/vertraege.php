@@ -40,13 +40,13 @@ switch (intval($_REQUEST['a'])) {    // Was will der überhaupt?
 
         if ($an <= 0 || $menge <= 0 || $preis < 3 || $preis > 15) {        // Es wurde nungültige Werte angegeben
             DisconnectDB();
-            header("location: ../?p=vertrag_neu&m=117&" . intval(time()));
+            header("location: ../?p=vertrag_neu&m=117&" . time());
             die();
         }
 
         if ($ich->$temp < $menge) {        // Will der Benutzer mehr verschicken als er auf Lager hat? Abbruch!
             DisconnectDB();
-            header("location: ../?p=vertrag_neu&m=116&" . intval(time()));
+            header("location: ../?p=vertrag_neu&m=116&" . time());
             die();
         }
 
@@ -111,9 +111,7 @@ VALUES
 
         // Vertrag ist verschickt, Fertig!
         DisconnectDB();
-        header("location: ../?p=vertrag_neu&m=214&" . intval(time()));
-        die();
-        break;
+        header("location: ../?p=vertrag_neu&m=214&" . time());
     case 2:        // Vertrag annehmen
         $id = intval($_GET['vid']);        // Welchen Vertrag will er annehmen?
         $sql_abfrage = "SELECT
@@ -134,7 +132,7 @@ AND
             if ($ajax == 1) {
                 die("111");
             } else {
-                header("location: ../?p=vertraege_liste&m=111&" . intval(time()));
+                header("location: ../?p=vertraege_liste&m=111&" . time());
             }
             die();
         }
@@ -232,10 +230,8 @@ VALUES
         if ($ajax == 1) {
             die("1");
         } else {
-            header("location: ../?p=vertraege_liste&m=215&" . intval(time()));
+            header("location: ../?p=vertraege_liste&m=215&" . time());
         }
-        die();
-        break;
     case 3:        // Vertrag ablehnen
         $id = intval($_GET['vid']);        // Welchen Vertrag will er ablehnen?
 
@@ -261,7 +257,7 @@ AND
             if ($ajax == 1) {
                 die("112");
             } else {
-                header("location: ../?p=vertraege_liste&m=112&" . intval(time()));
+                header("location: ../?p=vertraege_liste&m=112&" . time());
             }
             die();
         }
@@ -312,13 +308,10 @@ VALUES
         if ($ajax == 1) {
             die("1");
         } else {
-            header("location: ../?p=vertraege_liste&m=216&" . intval(time()));
+            header("location: ../?p=vertraege_liste&m=216&" . time());
         }
-        die();
-        break;
     default:
         DisconnectDB();
-        header("location: ../?p=vertraege_liste&" . intval(time()));
-        die();
-        break;
+        header("location: ../?p=vertraege_liste&" . time());
 }
+die();

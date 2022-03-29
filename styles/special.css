@@ -6,7 +6,7 @@ body {
     background-color: #afd087;
     background-image: url('../pics/style/bg_inhalt_s.png');
 
-    font-family: 'DejaVu Sans', 'Arial';
+    font-family: 'DejaVu Sans', 'Arial', serif;
     font-size: 10pt;
 
 }
@@ -25,17 +25,9 @@ ul {
     list-style: square;
 }
 
-div#Werbung {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-
-    z-index: 5;
-}
-
 div#Footer {
     font-size: 9pt;
-    font-family: "Courir New";
+    font-family: "Courir New", serif;
     text-align: center;
 
     border: dotted 2px #ffdc55;
@@ -96,7 +88,7 @@ div.bbQUOTE {
 }
 
 div.bbPHP {
-    font-family: 'Courier New', 'Terminal';
+    font-family: 'Courier New', 'Terminal', serif;
     font-size: 11pt;
 
     margin: 5px 20px 5px 20px;
@@ -304,7 +296,7 @@ span.ZITAT_KOPF {
 
 div.CODE, div.HTML, div.CSS, div.SQL, div.PHP, div.BASH, div.CPP, div.JAVA, div.JS {
     padding: 10px;
-    font-family: 'Lucida Console', 'FixedSys';
+    font-family: 'Lucida Console', 'FixedSys', serif;
 
     border: solid 1px #aaaaaa;
     background-color: #eeeeee;

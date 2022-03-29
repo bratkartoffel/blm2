@@ -32,13 +32,13 @@
 
     function CheckPassword() {
         // Überprüft, ob die eingegebenen Passwörter übereinstimmen
-        var pwd1 = document.form_login.pwd1;		// Zeiger auf das erste Passwort
-        var pwd2 = document.form_login.pwd2;		// und auf das zweite Passwort
+        const pwd1 = document.form_login.pwd1;		// Zeiger auf das erste Passwort
+        const pwd2 = document.form_login.pwd2;		// und auf das zweite Passwort
 
-        var pbild = document.getElementById("PasswordOK").getElementsByTagName("img")[0];		// Zeiger auf das Bild und dem
-        var ptext = document.getElementById("PasswordOK").getElementsByTagName("span")[0];	// Text neben den Eingabefeldern
+        const pbild = document.getElementById("PasswordOK").getElementsByTagName("img")[0];		// Zeiger auf das Bild und dem
+        const ptext = document.getElementById("PasswordOK").getElementsByTagName("span")[0];	// Text neben den Eingabefeldern
 
-        var submit_btn = document.form_login.Submit;									// Zeiger auf den Absenden-Button
+        const submit_btn = document.form_login.Submit;									// Zeiger auf den Absenden-Button
 
         if (pwd1.value.length < 4) {		// Wenn das Passwort zu kurz ist
             pbild.src = "./pics/small/error.png";										//
@@ -69,8 +69,6 @@
 
         submit_btn.disabled = "";							//
         submit_btn.enabled = "enabled";				// und schließlich wird auch noch der Abschickenbutton aktiviert.
-
-        return;
     }
 
     -->

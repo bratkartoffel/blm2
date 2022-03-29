@@ -30,55 +30,52 @@ if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
     </b>
     <br/>
     <br/>
-    <form action="./?<?= time(); ?>" method="get"/>
-    <input type="hidden" name="p" value="marktplatz_liste"/>
-    <input type="hidden" name="o" value="0"/>
-    <table class="Liste" style="width: 500px;" cellspacing="0">
-        <tr>
-            <th>Filter</th>
-            <th colspan="3" style="text-align: right;"><a href="./?p=marktplatz_liste&amp;o=0"
-                                                          onclick="AllesAuswaehlen(document.forms[0], ''); return false;"/>Alles
-                abwählen</a> | <a href="./?p=marktplatz_liste&amp;o=0&amp;<?= time(); ?>"
-                                  onclick="AllesAuswaehlen(document.forms[0], 'checked'); return false;"/>Alles
-                auswählen</a></th>
-        </tr>
-        <tr>
-            <?php
-            $filter = $_GET['w'];
+    <form action="./?<?= time(); ?>" method="get">
+        <input type="hidden" name="p" value="marktplatz_liste"/>
+        <input type="hidden" name="o" value="0"/>
+        <table class="Liste" style="width: 500px;" cellspacing="0">
+            <tr>
+                <th>Filter</th>
+                <th colspan="3" style="text-align: right;"><a href="./?p=marktplatz_liste&amp;o=0"
+                                                              onclick="AllesAuswaehlen(document.forms[0], ''); return false;">Alles
+                        abwählen</a> | <a href="./?p=marktplatz_liste&amp;o=0&amp;<?= time(); ?>"
+                                          onclick="AllesAuswaehlen(document.forms[0], 'checked'); return false;">Alles
+                        auswählen</a></th>
+            </tr>
+            <tr>
+                <?php
+                $filter = $_GET['w'];
 
-            if (!is_array($filter)) {
+                if (!is_array($filter)) {
+                    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
+                        $filter[] = $i;
+                    }
+                }
+                $url_string = implode("&amp;w[]=", $filter);
+                $url_string = "&amp;w[]=" . $filter[0] . substr($url_string, 1);
+
+                $i = 0;
+
                 for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-                    $filter[] = $i;
+                    echo '<td style="width: 25%;"><input type="checkbox" name="w[]" value="' . $i . '" ';
+                    if (in_array($i, $filter)) {
+                        echo 'checked="checked" ';
+                    }
+                    echo '/> ' . WarenName($i) . '</td>';
+                    if ($i % 4 == 0) {
+                        echo '</tr><tr>';
+                    }
                 }
-                $url_string = implode("&amp;w[]=", $filter);
-                $url_string = "&amp;w[]=" . $filter[0] . substr($url_string, 1);
-            } else {
-                $url_string = implode("&amp;w[]=", $filter);
-                $url_string = "&amp;w[]=" . $filter[0] . substr($url_string, 1);
-            }
-
-            $i = 0;
-
-            for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-                echo '<td style="width: 25%;"><input type="checkbox" name="w[]" value="' . $i . '" ';
-                if (in_array($i, $filter)) {
-                    echo 'checked="checked" ';
+                for (/* es wird keine variable initialisiert! */; ($i - 1) % 4 > 0; $i++) {
+                    echo '<td>&nbsp;</td>';
                 }
-                echo '/> ' . WarenName($i) . '</td>';
-                if ($i % 4 == 0) {
-                    echo '</tr><tr>';
-                }
-            }
-            for (/* es wird keine variable initialisiert! */; ($i - 1) % 4 > 0; $i++) {
-                echo '<td>&nbsp;</td>';
-            }
-            ?>
-        </tr>
-    </table>
-    <br/>
-    <div style="width: 500px; text-align: center;">
-        <input type="submit" value="Filtern"/>
-    </div>
+                ?>
+            </tr>
+        </table>
+        <br/>
+        <div style="width: 500px; text-align: center;">
+            <input type="submit" value="Filtern"/>
+        </div>
     </form>
     <br/>
     <table class="Liste" style="width: 490px" cellspacing="0">
@@ -141,7 +138,7 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
         for ($i = 0; $i < $anzahl_markt; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
             if ($i % MARKTPLATZ_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                 if (($i / MARKTPLATZ_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                    $temp .= '<a href="./?p=marktplatz_liste&amp;o=' . ($i / MARKTPLATZ_OFFSET) . $url_string . '&amp;' . intval(time()) . '">' . (($i / MARKTPLATZ_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                    $temp .= '<a href="./?p=marktplatz_liste&amp;o=' . ($i / MARKTPLATZ_OFFSET) . $url_string . '&amp;' . time() . '">' . (($i / MARKTPLATZ_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                 } else {
                     $temp .= (($i / MARKTPLATZ_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                 }
@@ -161,6 +158,6 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
     }
 
     if ($hat_waren) {        // Wenn der Benutzer was auf Lager hat, dann zeige den Link zum Einstellen eines neuen Angebots an.
-        echo '<a href="./?p=marktplatz_verkaufen&amp;' . intval(time()) . '">Neues Angebot einstellen</a><br />';
+        echo '<a href="./?p=marktplatz_verkaufen&amp;' . time() . '">Neues Angebot einstellen</a><br />';
     }
 }

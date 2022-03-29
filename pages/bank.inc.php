@@ -67,20 +67,17 @@ if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
     ?>
     <script type="text/javascript">
         <!--
-        var changed = false;
+        let changed = false;
 
         function AuswahlBank(option) {
             // Funktion zum Eintragen der Werte, falls die Option Einzahlen / Auszaheln verändert wurde.
             // Wenn Einzahlen gewählt wurde, dann schreib das aktuelle Guthaben in die Box,
             // falls auszahlen gewählt wurde, schreibe den Kontostand rein.
 
-            var KontostandAusgabe = '<?=number_format($ich->Bank, 2, ",", ""); ?>';
-            var KontoStand = <?=$ich->Bank; ?>;
-
-            var Bargeld = <?=$ich->Geld; ?>;
-            var BargeldAusgabe = '<?=number_format($ich->Geld, 2, ",", ""); ?>';
-
-            var Zeiger = document.form_bank.betrag;
+            const KontostandAusgabe = '<?=number_format($ich->Bank, 2, ",", ""); ?>';
+            const KontoStand = <?=$ich->Bank; ?>;
+            const BargeldAusgabe = '<?=number_format($ich->Geld, 2, ",", ""); ?>';
+            const Zeiger = document.form_bank.betrag;
 
             if (changed) {
                 return false;

@@ -57,13 +57,6 @@ ORDER BY
             <td>
                 <select name="an">
                     <?php
-                    $sql_abfrage = "SELECT
-    ID,
-    Name
-FROM
-    mitglieder
-ORDER BY
-    Name ASC;";
                     $sql_ergebnis = mysql_query($sql_abfrage);
 
                     while ($u = mysql_fetch_object($sql_ergebnis)) {

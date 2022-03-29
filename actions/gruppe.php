@@ -38,7 +38,7 @@ switch (intval($_REQUEST['a'])) {
     case 1:    // neue Gruppe gründen
         if ($ich->Gebaeude1 < 8 || intval($ich->Gruppe) > 0) {        // Darf der Benutzer überhaupt eine neue Gruppe gründen? Wenn nicht, dann...
             DisconnectDB();
-            header("location: ../?p=gruppe&m=112&" . intval(time()));
+            header("location: ../?p=gruppe&m=112&" . time());
             die();
         }
 
@@ -48,7 +48,7 @@ switch (intval($_REQUEST['a'])) {
 
         if ($name == "" || $kuerzel == "" || $passwort == sha1("")) {        // Alle Felder sind Pflichtfelder, das heisst,
             DisconnectDB();                                                                                                // wenn er eines leer gelassen hat, dann brechen wir ab
-            header("location: ../?p=gruppe&m=104&" . intval(time()));
+            header("location: ../?p=gruppe&m=104&" . time());
             die();
         }
 
@@ -74,7 +74,7 @@ VALUES
 
         if (mysql_errno() > 0) {            // Falls ein Fehler auftritt, dann existiert die Gruppe bereits
             DisconnectDB();
-            header("location: ../?p=gruppe&m=126&" . intval(time()));
+            header("location: ../?p=gruppe&m=126&" . time());
             die();
         }
 
@@ -111,15 +111,12 @@ VALUES
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=223&" . intval(time()));
-        die();
+        header("location: ../?p=gruppe&m=223&" . time());
         // Fertig! Zurück zum Gruppenbildschirm, wo jetzt das Gruppenboard stehen sollte :)
-
-        break;
     case 2:        // bestehender Gruppe beitreten
         if ($ich->Gebaeude1 < 5 || intval($ich->Gruppe) > 0) {        // Darf der USer überhaupt einer Gruppe beitreten?
             DisconnectDB();                                                                                // Wenn nicht, dann brechen wir mal wieder ab
-            header("location: ../?p=gruppe&m=112&" . intval(time()));
+            header("location: ../?p=gruppe&m=112&" . time());
             die();
         }
 
@@ -143,13 +140,13 @@ AND
 
         if (intval($gruppe->ID) == 0) {            // Wenn die ID 0 ist, dann gibts die Gruppe nicht, also brechen wir ab
             DisconnectDB();
-            header("location: ../?p=gruppe&m=127&" . intval(time()));
+            header("location: ../?p=gruppe&m=127&" . time());
             die();
         }
 
         if ($gruppe->anzMitglieder >= MAX_ANZAHL_GRUPPENMITGLIEDER) {    // Die Gruppe ist voll
             DisconnectDB();
-            header("location: ../?p=gruppe&m=140&" . intval(time()));
+            header("location: ../?p=gruppe&m=140&" . time());
             die();
         }
 
@@ -186,11 +183,8 @@ VALUES
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=224&" . intval(time()));
-        die();
+        header("location: ../?p=gruppe&m=224&" . time());
         // Fertig. Der USer ist in der Gruppe, und sollte nun zum Gruppenboard weitergeleitet werden.
-
-        break;
     case 3:        // Gruppe verlassen
         $sql_abfrage = "UPDATE
     mitglieder
@@ -265,12 +259,9 @@ VALUES
         $_SESSION['blm_queries']++;
 
         DisconnectDB();        // Verbindung mit der DB trennen
-        header("location: ../?p=gruppe&m=225&" . intval(time()));        // Und Weiterleitung machen
-        die();
+        header("location: ../?p=gruppe&m=225&" . time());        // Und Weiterleitung machen
 
         // Fertig! Benutzer ist nicht mehr in der Gruppe
-
-        break;
     case 4:        // Gruppennachricht schreiben
         $nachricht = mysql_real_escape_string(trim($_POST['nachricht']));    // Zuerst holen wir uns alle
         $zeit = time();                                                                                                        // relevanten Daten zusammen,
@@ -279,7 +270,7 @@ VALUES
 
         if ($gruppe == 0 || $nachricht == "") {            // Wenn der Benutzer gar keine Gruppe hat, oder die Nachricht leer ist, dann abbrechen!
             DisconnectDB();
-            header("location: ../?p=gruppe&m=128&" . intval(time()));
+            header("location: ../?p=gruppe&m=128&" . time());
             die();
         }
 
@@ -304,15 +295,13 @@ VALUES
             mysql_query($sql_abfrage);        // Wenn ja, dann schreib die Nachricht in die DB
 
             DisconnectDB();
-            header("location: ../?p=gruppe&m=204&" . intval(time()));
+            header("location: ../?p=gruppe&m=204&" . time());
             die(); // Fertig. STIRB!!! Aber erst nach der Weiterleitung :)
         }
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // schafft, dann darf er keine
-        die();                                                                        // Nachrichten schreiben...
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // schafft, dann darf er keine
+        // Nachrichten schreiben...
     case 5:            // Gruppennachricht löschen
         $id = intval($_GET['id']);            // Zuerst holen wir uns wieder
         $gruppe = intval($ich->Gruppe);    // alle wichtigen Daten zusammen
@@ -328,7 +317,7 @@ AND
 
             if ($_GET['ajax'] != "1") {
                 DisconnectDB();                                                        // Verbindung trennen,
-                header("location: ../?p=gruppe&m=211&" . intval(time()));        // Weiterleitung,
+                header("location: ../?p=gruppe&m=211&" . time());        // Weiterleitung,
                 die();                                                                        // Skript stoppen
             } else {
                 die("1");
@@ -336,10 +325,8 @@ AND
         }
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // schafft, dann darf er keine
-        die();                                                                        // Nachrichten löschen...
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // schafft, dann darf er keine
+        // Nachrichten löschen...
     case 6:    // Rechte ändern
         $id = intval($_GET['id']);
         $recht = intval($_GET['recht']);
@@ -395,7 +382,7 @@ VALUES
 
             if ($_GET['ajax'] != "1") {
                 DisconnectDB();        // Verbindung trennen,
-                header("location: ../?p=gruppe_mitgliederverwaltung&m=226&" . intval(time())); // und zurück zur Mitgliederverwaltung,
+                header("location: ../?p=gruppe_mitgliederverwaltung&m=226&" . time()); // und zurück zur Mitgliederverwaltung,
                 die();                            // wir sind hier fertig.
             } else {
                 die("1");
@@ -403,10 +390,8 @@ VALUES
         }
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // schafft, dann darf er keine
-        die();                                                                        // Rechte ändern...
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // schafft, dann darf er keine
+        // Rechte ändern...
     case 7:        // Mitglied kicken
         $id = intval($_GET['id']);
 
@@ -447,15 +432,13 @@ VALUES
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen,
-            header("location: ../?p=gruppe_mitgliederverwaltung&m=227&" . intval(time()));    // und weiterleitung
+            header("location: ../?p=gruppe_mitgliederverwaltung&m=227&" . time());    // und weiterleitung
             die();        // und abbrechen
         }
 
         DisconnectDB();        // Wenn er es bis hierher schafft, dann darf er keine Mitglieder kicken, also
-        header("location: ../?p=gruppe&m=112&" . intval(time()));    // Verbindung mit DB trennen,
-        die();    // Weiterleitung & Meldung ausgeben, abbrechen
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());    // Verbindung mit DB trennen,
+        // Weiterleitung & Meldung ausgeben, abbrechen
     case 8:    // Gruppenbild hochladen
         DisconnectDB();        // Erst mal die Verbindung mit der Datenbank trennen, brauchen wir nicht mehr
 
@@ -464,13 +447,12 @@ VALUES
                 @unlink("../pics/gruppe/" . $ich->Gruppe . ".jpg");        //...
                 @unlink("../pics/gruppe/" . $ich->Gruppe . ".png");        // lösche alle bisherigen Bilder, welche er haben könnte.
                 @unlink("../pics/gruppe/" . $ich->Gruppe . ".gif");        //
-                header("location: ../?p=gruppe_einstellungen&m=209&" . intval(time()));        // Somit wären wir fertig...
+                header("location: ../?p=gruppe_einstellungen&m=209&" . time());        // Somit wären wir fertig...
                 die();
-                break;
             }
 
             if (filesize($_FILES['bild']['tmp_name']) > BILD_GROESE_MAXIMAL) {        // Wenn das Bild größer als 64K ist, dann abbrechen!
-                header("location: ../?p=gruppe_einstellungen&m=103&" . intval(time()));
+                header("location: ../?p=gruppe_einstellungen&m=103&" . time());
                 die();
             }
 
@@ -489,9 +471,8 @@ VALUES
                     $suffix = "png";
                     break;
                 default:                        // Alles andere ist verboten!
-                    header("location: ../?p=gruppe_einstellungen&m=107&" . intval(time()));
+                    header("location: ../?p=gruppe_einstellungen&m=107&" . time());
                     die();
-                    break;
             }
 
             @unlink("../pics/gruppe/" . $ich->Gruppe . ".jpg");        // Wenn er hier ankommt, dann will er wirklich ein Bild hochladen
@@ -501,7 +482,7 @@ VALUES
             move_uploaded_file($_FILES['bild']['tmp_name'], "../pics/gruppe/" . $ich->Gruppe . "." . $suffix);    // Die hochgeladene Datei in das Profilbilderverzeichnis schieben
             chmod("../pics/gruppe/" . $ich->Gruppe . "." . $suffix, 0766);        // Die Rechte des Bildes ändern (TODO: Muss das sein?)
 
-            header("location: ../?p=gruppe_einstellungen&m=210&" . intval(time())); // Alles erledigt :)
+            header("location: ../?p=gruppe_einstellungen&m=210&" . time()); // Alles erledigt :)
             die();
         }
 
@@ -510,10 +491,7 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . intval(time()));
-        die();
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());
     case 9:    // Beschreibung bearbeiten
         $beschreibung = mysql_real_escape_string(trim($_POST['beschreibung']));        // Holt sioch die Beschreibung erst mal aus den POST-Daten raus
 
@@ -534,7 +512,7 @@ WHERE
 
             // Alles erfolgreich, also Standard, Verbindung trennen, Weiterleitung, Abbrechen
             DisconnectDB();
-            header("location: ../?p=gruppe_einstellungen&m=206&" . intval(time()));
+            header("location: ../?p=gruppe_einstellungen&m=206&" . time());
             die();
         }
 
@@ -544,16 +522,13 @@ WHERE
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
-        die();
-
-        break;
     case 10:    // Beitrittskennwort ändern
         $pwd1 = $_POST['pwd_1'];        // Das erste Textfeld
         $pwd2 = $_POST['pwd_2'];        // Die Bestätigung des Passworts
 
         if ($pwd1 == "" || $pwd1 != $pwd2) {        // Falls beide Kennwörter nicht übereinstimmen, oder leer sind
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_einstellungen&m=105&" . intval(time()));    // Weiterleitung
+            header("location: ../?p=gruppe_einstellungen&m=105&" . time());    // Weiterleitung
             die();    // Abbrechen
         }
 
@@ -567,7 +542,7 @@ WHERE
             mysql_query($sql_abfrage);        // Ändert das Passwort
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_einstellungen&m=219&" . intval(time()));    // Weiterleitung
+            header("location: ../?p=gruppe_einstellungen&m=219&" . time());    // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -577,10 +552,7 @@ WHERE
         */
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . intval(time()));
-        die();
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());
     case 11:    // Gruppe löschen
         if ($ich->Rechte->GruppeLoeschen) {        // Hat der Benutzer ausreichende Rechte zum Löschen der Gruppe?
             $sql_abfrage = "UPDATE
@@ -630,7 +602,7 @@ WHERE
             @unlink("../pics/gruppe/" . $ich->Gruppe . ".gif");        //
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe&m=228&" . intval(time()));        // Weiterleitung
+            header("location: ../?p=gruppe&m=228&" . time());        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -641,10 +613,7 @@ WHERE
         */
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . intval(time()));
-        die();
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());
     case 12:        // Diplomatische Beziehung eintragen
         $partner = intval($_POST['partner']);        // Mit wem soll der Vertrag geschlossen werden?
         $typ = intval($_POST['typ']);        // Welchen Typ von Vertrag soll es werden? (NAP, BND, Krieg)
@@ -688,8 +657,8 @@ VALUES
 
             if (mysql_errno() == 1062 || mysql_errno() == 1452) {        // Gibts schon eine Beziehung mit dem Partner, wenn ja
                 DisconnectDB();        // Dann Verbindung trennen
-                header("location: ../?p=gruppe_diplomatie&m=129&" . intval(time()));    // Weiterleitung
-                die();        // Abbrechen
+                header("location: ../?p=gruppe_diplomatie&m=129&" . time());    // Weiterleitung
+                // Abbrechen
             } else {            // Beziehung erfolgreich eingetragen
                 $sql_abfrage = "INSERT INTO
     gruppe_logbuch
@@ -732,9 +701,10 @@ VALUES
                 $_SESSION['blm_queries']++;
 
                 DisconnectDB();            // Verbindung trennen
-                header("location: ../?p=gruppe_diplomatie&m=229&" . intval(time()));        // Weiterleitung
-                die();        // Abbrechen
+                header("location: ../?p=gruppe_diplomatie&m=229&" . time());        // Weiterleitung
+                // Abbrechen
             }
+            die();
         }
 
         /*
@@ -743,9 +713,6 @@ VALUES
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
-        die();
-
-        break;
     case 13:        // Diplomatisches Angebot zurückziehen
         $id = intval($_GET['id']);        // Welches Angebot soll zurückgezogen werden?
 
@@ -817,7 +784,7 @@ VALUES
 
             // Beziehung erfolgreich gelöscht
             DisconnectDB();            // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=230&" . intval(time()));        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=230&" . time());        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -827,9 +794,6 @@ VALUES
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
-        die();
-
-        break;
     case 14:            // Diplomatische Anfrage annehmen
         $id = intval($_GET['id']);        // Ruft die ID des Vertrag ab
 
@@ -943,7 +907,7 @@ OR
             }
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=231&" . intval(time()));        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=231&" . time());        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -952,9 +916,7 @@ OR
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . intval(time()));
-        die();
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());
     case 15:            // Diplomatische Anfrage ablehnen
         $id = intval($_GET['id']);
 
@@ -1024,7 +986,7 @@ VALUES
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=232&" . intval(time()));        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=216&" . time());        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -1033,9 +995,8 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // Weiterleitung
-        die();        // Abbrechen
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        // Abbrechen
     case 16:    // Geld aus Kasse an Mitglied überweisen
         $betrag = mysql_real_escape_string(str_replace(",", ".", $_POST['betrag']));
         $an = intval($_POST['an']);
@@ -1067,13 +1028,13 @@ WHERE
 
             if (intval($gruppe->ID) == 0) {        // Gruppe wurde nicht gefunden
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe_kasse&m=112&" . intval(time()));        // Weiterleitung
+                header("location: ../?p=gruppe_kasse&m=112&" . time());        // Weiterleitung
                 die();        // Abbrechen
             }
 
             if ($gruppe->Kasse < $betrag || $betrag <= 0) {        // Soviel haben die gar nicht in der Kasse
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe_kasse&m=110&" . intval(time()));        // Weiterleitung
+                header("location: ../?p=gruppe_kasse&m=110&" . time());        // Weiterleitung
                 die();        // Abbrechen
             }
 
@@ -1081,13 +1042,13 @@ WHERE
                 if ($mitglied->Punkte <= 100000) {
                     if ($mitglied->Bank + $betrag > 100000) {        // Die Bank des Mitglieds ist VOLL! (Hier fix 99.999,99 €)
                         DisconnectDB();        // Verbindung trennen
-                        header("location: ../?p=gruppe_kasse&m=131&" . intval(time()));        // Weiterleitung
+                        header("location: ../?p=gruppe_kasse&m=131&" . time());        // Weiterleitung
                         die();        // Abbrechen
                     }
                 } else {
                     if ($mitglied->Bank + $betrag > $mitglied->Punkte) {        // Die Bank des Mitglieds ist VOLL! (Hier variabel seine Punkte)
                         DisconnectDB();        // Verbindung trennen
-                        header("location: ../?p=gruppe_kasse&m=131&" . intval(time()));        // Weiterleitung
+                        header("location: ../?p=gruppe_kasse&m=131&" . time());        // Weiterleitung
                         die();        // Abbrechen
                     }
                 }
@@ -1119,8 +1080,6 @@ VALUES
     '" . $betrag . "',
     '1'
 );";
-                $sql_ergebnis = mysql_query($sql_abfrage);
-                $_SESSION['blm_queries']++;
             } else {
                 $sql_abfrage = "UPDATE
     mitglieder
@@ -1149,9 +1108,9 @@ VALUES
     '" . $betrag . "',
     '0'
 );";
-                $sql_ergebnis = mysql_query($sql_abfrage);
-                $_SESSION['blm_queries']++;
             }
+            $sql_ergebnis = mysql_query($sql_abfrage);
+            $_SESSION['blm_queries']++;
 
             $sql_abfrage = "UPDATE
 	gruppe
@@ -1163,7 +1122,7 @@ WHERE
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_kasse&m=236&" . intval(time()));        // Weiterleitung
+            header("location: ../?p=gruppe_kasse&m=236&" . time());        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -1172,9 +1131,8 @@ WHERE
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // Weiterleitung
-        die();        // Abbrechen
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        // Abbrechen
     case 17:            // Diplomatische Beziehung kündigen
         $id = intval($_GET['id']);
 
@@ -1197,7 +1155,7 @@ AND
 
             if (intval($vertrag->ID) == 0) {
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe_diplomatie&m=112&" . intval(time()));        // Weiterleitung
+                header("location: ../?p=gruppe_diplomatie&m=112&" . time());        // Weiterleitung
                 die();        // Abbrechen
             }
 
@@ -1261,7 +1219,7 @@ VALUES
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=230&" . intval(time()));        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=230&" . time());        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -1270,9 +1228,8 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // Weiterleitung
-        die();        // Abbrechen
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        // Abbrechen
     case 18:
         $id = intval($_GET['id']);
 
@@ -1380,13 +1337,14 @@ VALUES
                 $_SESSION['blm_queries']++;
 
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe&m=237&" . intval(time()));        // Weiterleitung
-                die();        // Abbrechen
+                header("location: ../?p=gruppe&m=237&" . time());        // Weiterleitung
+                // Abbrechen
             } else {
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe&m=112&" . intval(time()));        // Weiterleitung
-                die();        // Abbrechen
+                header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+                // Abbrechen
             }
+            die();
         }
 
         /*
@@ -1394,12 +1352,10 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // Weiterleitung
-        die();        // Abbrechen
-
-        break;
+        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        // Abbrechen
     default:    // Was will der User überhaupt? Ham'ma nicht :D
         DisconnectDB();            // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . intval(time()));        // Weiterleitung
-        die();        // Abbrechen
+        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung        // Abbrechen
 }
+die();

@@ -60,7 +60,6 @@ function delGruppeNachricht(id, container) {
                 break;
             default:
                 return false;
-                break;
         }
     };
 }
@@ -89,7 +88,6 @@ function updGruppeRechte(id, recht, bild) {
                 break;
             default:
                 return false;
-                break;
         }
     };
 }
@@ -114,7 +112,6 @@ function delNachricht(id, zeile) {
                 break;
             default:
                 return false;
-                break;
         }
     };
 }
@@ -139,7 +136,6 @@ function VertragAnnehmen(id, zeile) {
                 break;
             default:
                 return false;
-                break;
         }
     };
 }
@@ -164,7 +160,6 @@ function VertragAblehnen(id, zeile) {
                 break;
             default:
                 return false;
-                break;
         }
     };
 }
@@ -211,7 +206,6 @@ function ajaxCheckUserName() {
                 break;
             default:
                 return;
-                break;
         }
     };
 }
@@ -258,7 +252,6 @@ function ajaxCheckEMail() {
                 break;
             default:
                 return;
-                break;
         }
     };
 }

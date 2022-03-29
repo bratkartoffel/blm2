@@ -110,16 +110,16 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             }
 
             if ($spieler->Kuerzel != "") {
-                echo ' (<a href="./?p=gruppe&amp;id=' . $spieler->Gruppe . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($spieler->Kuerzel), ENT_QUOTES, "UTF-8") . '</a>)';
+                echo ' (<a href="./?p=gruppe&amp;id=' . $spieler->Gruppe . '&amp;' . time() . '">' . htmlentities(stripslashes($spieler->Kuerzel), ENT_QUOTES, "UTF-8") . '</a>)';
             }
 
             echo '</td><td style="text-align: right; padding-right: 8px;">' . number_format($spieler->Punkte, 0, ",", ".") . '</td>';
 
             if (IstAngemeldet()) {        // Nur wenn der Betrachter angemeldet ist, dann zeig auf die Aktionsfelder an
                 if ($spieler->nID != $_SESSION['blm_user']) {
-                    echo '<td>(<a href="./?p=nachrichten_schreiben&amp;an=' . $spieler->nID . '&amp;' . intval(time()) . '">IGM</a> | <a href="./?p=vertrag_neu&amp;an=' . $spieler->nID . '&amp;' . intval(time()) . '">Vertrag</a> | <a href="./?p=profil&amp;uid=' . $spieler->nID . '&amp;' . intval(time()) . '">Profil</a>)</td>';
+                    echo '<td>(<a href="./?p=nachrichten_schreiben&amp;an=' . $spieler->nID . '&amp;' . time() . '">IGM</a> | <a href="./?p=vertrag_neu&amp;an=' . $spieler->nID . '&amp;' . time() . '">Vertrag</a> | <a href="./?p=profil&amp;uid=' . $spieler->nID . '&amp;' . time() . '">Profil</a>)</td>';
                 } else {
-                    echo '<td>(IGM | Vertrag | <a href="./?p=profil&amp;uid=' . $spieler->nID . '&amp;' . intval(time()) . '">Profil</a>)</td>';
+                    echo '<td>(IGM | Vertrag | <a href="./?p=profil&amp;uid=' . $spieler->nID . '&amp;' . time() . '">Profil</a>)</td>';
                 }
             }
             echo '</tr>';
@@ -138,7 +138,7 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             for ($i = 0; $i < $anzahl_spieler; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                 if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                     if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                        $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . intval($_GET['o_gr']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . intval(time()) . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                        $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . intval($_GET['o_gr']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                     } else {
                         $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                     }
@@ -231,7 +231,7 @@ WHERE
                 }
 
                 echo '<td style="text-align: right;">' . $nr . '</td>
-						<td><a href="./?p=gruppe&amp;id=' . $gruppe->Gruppe . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($temp->Name), ENT_QUOTES, "UTF-8") . '</a></td>
+						<td><a href="./?p=gruppe&amp;id=' . $gruppe->Gruppe . '&amp;' . time() . '">' . htmlentities(stripslashes($temp->Name), ENT_QUOTES, "UTF-8") . '</a></td>
 						<td>' . htmlentities(stripslashes($temp->Kuerzel), ENT_QUOTES, "UTF-8") . '</td>
 						<td>' . $gruppe->anzMitglieder . '</td>
 						<td>' . number_format($gruppe->GruppenPunkte, 0, ",", ".") . '</td>
@@ -253,7 +253,7 @@ WHERE
                 for ($i = 0; $i < $anzahl_gruppen; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                     if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                         if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                            $temp .= '<a href="./?p=rangliste&amp;o=' . intval($_GET['o']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;o_gr=' . ($i / RANGLISTE_OFFSET) . '&amp;' . intval(time()) . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                            $temp .= '<a href="./?p=rangliste&amp;o=' . intval($_GET['o']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;o_gr=' . ($i / RANGLISTE_OFFSET) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                         } else {
                             $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                         }
@@ -300,7 +300,7 @@ LIMIT
                         echo '<tr class="Rangliste">';                // Ansonsten mach sie normal
                     }
                     echo '<td>' . $platz . '</td>
-						<td><a href="./?p=profil&amp;uid=' . $spieler->ID . '&amp;' . intval(time()) . '">' . htmlentities(stripslashes($spieler->Name), ENT_QUOTES, "UTF-8") . '</a></td>
+						<td><a href="./?p=profil&amp;uid=' . $spieler->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($spieler->Name), ENT_QUOTES, "UTF-8") . '</a></td>
 						<td>' . $spieler->EwigePunkte . '</td>
 					</tr>';
                 }

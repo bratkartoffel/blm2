@@ -37,18 +37,18 @@ WHERE
     $gruppe = mysql_fetch_object($sql_ergebnis);
     ?>
     <div style="width: 650px; text-align: center; margin-bottom: 5px;">
-        <a href="./?p=gruppe&amp;<?= intval(time()); ?>">Board</a> |
-        <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= intval(time()); ?>">Mitgliederverwaltung</a>
+        <a href="./?p=gruppe&amp;<?= time(); ?>">Board</a> |
+        <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= time(); ?>">Mitgliederverwaltung</a>
         <?php
         if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-            echo ' | <a href="./?p=gruppe_einstellungen&amp;' . intval(time()) . '">Einstellungen</a>';
+            echo ' | <a href="./?p=gruppe_einstellungen&amp;' . time() . '">Einstellungen</a>';
         }
 
         if ($ich->Rechte->Diplomatie) {
-            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . intval(time()) . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
+            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . time() . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
         }
         ?>
-        | <a href="./?p=gruppe_kasse&amp;<?= intval(time()); ?>">Gruppenkasse</a>
+        | <a href="./?p=gruppe_kasse&amp;<?= time(); ?>">Gruppenkasse</a>
         | <u><b>Logbuch</b></u>
     </div>
 
@@ -73,7 +73,7 @@ LIMIT
         while ($log = mysql_fetch_object($sql_ergebnis)) {
             ?>
             <tr>
-                <td style="text-align: top; text-align: center;"><?= date("d.m.Y H:i", $log->Datum); ?></td>
+                <td style="text-align: center;"><?= date("d.m.Y H:i", $log->Datum); ?></td>
                 <td><?= stripslashes($log->Text); ?></td>
             </tr>
             <?php

@@ -38,7 +38,7 @@ $auftrag = mysql_fetch_object($sql_ergebnis);        // des Auftrags abrufen
 
 if (!$auftrag->ID) {        // Der Auftrag konnte nicht gefunden werden
     DisconnectDB();
-    header("location: ../?p=" . $_GET['back'] . "&m=112&" . intval(time()));
+    header("location: ../?p=" . $_GET['back'] . "&m=112&" . time());
     die();
 }
 
@@ -72,15 +72,14 @@ AND
 mysql_query($sql_abfrage);        // Dann löschen wir den Auftrag
 $_SESSION['blm_queries']++;
 
+DisconnectDB();
 if (mysql_affected_rows() == 0) {        // Wenn wir keinen Auftrag löschen konnten...
-    DisconnectDB();                                        // dann stimmt was nicht
-    header("location: ../?p=" . $_GET['back'] . "&m=112&" . intval(time()));
-    die();
+    // dann stimmt was nicht
+    header("location: ../?p=" . $_GET['back'] . "&m=112&" . time());
 } else {
-    DisconnectDB();
-    header("location: ../?p=" . $_GET['back'] . "&m=222&" . intval(time()) . "#" . substr($_GET['back'], 0, 1) . intval($_GET['was']));
-    die();
+    header("location: ../?p=" . $_GET['back'] . "&m=222&" . time() . "#" . substr($_GET['back'], 0, 1) . intval($_GET['was']));
 }
+die();
 
 // Was hier? :)
 // Hier dürfte er niemals sein ^^

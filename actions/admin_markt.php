@@ -75,5 +75,4 @@ WHERE
         // Fertig :)
         DisconnectDB();
         header("location: ../?p=admin_markt&m=233&" . time());
-        die();
 }

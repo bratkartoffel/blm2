@@ -219,5 +219,4 @@ VALUES
         // Fertig :)
         DisconnectDB();
         header("location: ../?p=marktplatz_liste&m=221" . $url_string . "&" . time());
-        die();
 }

@@ -53,4 +53,3 @@ if (!Registrieren($Start, $name, $pwd1, $email)) {        // Ist die Registrieru
 // Fertig :)
 DisconnectDB();
 header("location: ../?p=anmelden&m=201");
-die();

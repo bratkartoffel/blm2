@@ -142,4 +142,3 @@ $_SESSION['blm_queries']++;
 // Fertisch :)
 DisconnectDB();
 header("location: ../?p=index&m=202&" . time());
-die();

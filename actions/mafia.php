@@ -587,4 +587,3 @@ $_SESSION['blm_queries']++;
 // Puh, fertig... :)
 DisconnectDB();
 header("location: ../?p=nachrichten_liste&" . time());
-die();

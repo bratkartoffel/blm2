@@ -99,4 +99,3 @@ $_SESSION['blm_queries']++;
 // Alles erledigt :)
 DisconnectDB();
 header("location: ../?p=forschungszentrum&m=207&" . time() . "#f" . $_POST['was']);
-die();

@@ -37,8 +37,6 @@ if ($_GET['popup']) {        // Das Script wurde vom Popup aufgerufen, das heiss
 
 if (intval($_GET['del']) > 0) {        // Hat sich der Benutzer gelöscht?
     header("location: ../?p=anmelden&m=205");        // Ja: Bye bye...
-    die();
+} else {
+    header("location: ../?p=anmelden&m=203");        // Nein: Bis bald :)
 }
-
-header("location: ../?p=anmelden&m=203");        // Nein: Bis bald :)
-die();        // Stirb, stirb, stirb :)

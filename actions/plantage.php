@@ -187,4 +187,3 @@ $_SESSION['blm_queries']++;
 // Alles erledigt :)
 DisconnectDB();
 header("location: ../?p=plantage&m=207&" . time() . "#p" . intval($_POST['was']));
-die();

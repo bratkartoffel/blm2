@@ -176,4 +176,3 @@ WHERE
         header("location: ../?p=bank&m=112&" . time());
         break;
 }
-die();

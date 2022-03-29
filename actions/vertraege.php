@@ -314,4 +314,3 @@ VALUES
         DisconnectDB();
         header("location: ../?p=vertraege_liste&" . time());
 }
-die();

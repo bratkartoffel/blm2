@@ -1358,4 +1358,3 @@ VALUES
         DisconnectDB();            // Verbindung trennen
         header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung        // Abbrechen
 }
-die();

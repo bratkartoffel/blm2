@@ -158,4 +158,3 @@ $_SESSION['blm_queries']++;
 
 // Alles erledigt :)
 header("location: ../?p=gebaeude&m=207&" . time() . "#g" . intval($_POST['was']));
-die();

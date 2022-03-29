@@ -116,4 +116,3 @@ $_SESSION['blm_queries']++;
 // Verbindung mit DB trennen, zurück zum Laden...
 DisconnectDB();
 header("location: ../?p=bioladen&m=208&" . time());
-die();

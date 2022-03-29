@@ -23,4 +23,3 @@ ResetAll(false, $Start);        // Alle Accounts zurücksetzen
 
 DisconnectDB();                            // Die Verbindung mit der Datenbank wieder trennen
 header("location: ../?p=login");        // Auf die Einloggenseite weiterleiten
-die();

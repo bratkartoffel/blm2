@@ -203,7 +203,4 @@ WHERE
         // Feierabend :)
         DisconnectDB();
         header("location: ../?p=nachrichten_liste&m=212&" . time());
-        die();
 }
-
-// TODO: So, was jetzt?

@@ -236,5 +236,4 @@ VALUES
         $_SESSION['blm_queries']++;
 
         header("location: ../?p=einstellungen&m=240&" . time() . "#Sitter");
-        die();
 }

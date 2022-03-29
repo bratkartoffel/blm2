@@ -63,4 +63,3 @@ WHERE
 mysql_query($sql_abfrage);
 
 header("location: ../?p=special&hash=" . $hash . "&ware=" . $ware . "&menge=" . $menge);
-die();

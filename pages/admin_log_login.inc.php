@@ -42,18 +42,23 @@ switch ($_GET['sort']) {
         $sort = "Wer";
         break;
     case "2":
-    default:
         $sort = "Wann";
         break;
     case "3":
         $sort = "Art";
         break;
+    default:
+        $_GET['sort'] = "2";
+        $sort = "Wann";
 }
 
-if ($_GET['order'] == "1")
-    $order = "DESC";
-else
+if ($_GET['order'] == "0") {
     $order = "ASC";
+    $_GET['order'] = "0";
+} else {
+    $order = "DESC";
+    $_GET['order'] = "1";
+}
 ?>
 <table id="SeitenUeberschrift">
     <tr>

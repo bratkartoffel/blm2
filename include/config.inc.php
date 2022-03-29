@@ -20,7 +20,7 @@ Changelog:
 /*
     Allgemeine Konstanten (wichtiger Teil, bedürfen Anpassung!
 */
-define("VERSION", "1.9.4+1");                                            // Die aktuelle Versionsnummer
+const VERSION = "1.9.4+1";                                            // Die aktuelle Versionsnummer
 
 if (!file_exists(dirname(__FILE__) . "/config_live.inc.php")) {
     /*
@@ -38,6 +38,9 @@ define("WARTUNGS_ARBEITEN", false);                 // Sperrt jeglichen Zugriff 
 define("WARTUNGS_TEXT", "Das Spiel befindet sich gerade im Wartungsmodus (Einspielen von Updates und Bugfixes). Bitte versuchen Sie es in ein paar Minuten erneut.");
 define("SPECIAL_STYLE", true);                      // Wird ein Spezialstyle verwendet?
 define("SPECIAL_RUNNING", false);                   // Läuft gerade ein Special?
+
+// strtotime("2022-03-29 10:00:00")
+define("LAST_RESET", 1648540800);                   // Wann war der letzte Reset?
     */
     die(dirname(__FILE__) . "config_live.inc.php not found");
 }
@@ -48,77 +51,77 @@ require_once(dirname(__FILE__) . "/config_live.inc.php");
 /*
  * Folgende Werte können geändert werden, müssen aber nicht ;)
 */
-define("SERVER_KOSTEN", 0.000006);                                // Serverkosten pro Sekunde, Standard: ~16 € / Monat
-define("TIMEOUT_INAKTIV", 3600);                                    // Wann wird der Benutzer automatisch ausgeloggt, wenn er nichts unternimmt? (in Sekunden, Standard: 3600)
-define("ANZAHL_WAREN", 15);
-define("ANZAHL_GEBAEUDE", 8);
+const SERVER_KOSTEN = 0.000006;                                // Serverkosten pro Sekunde, Standard: ~16 € / Monat
+const TIMEOUT_INAKTIV = 3600;                                    // Wann wird der Benutzer automatisch ausgeloggt, wenn er nichts unternimmt? (in Sekunden, Standard: 3600)
+const ANZAHL_WAREN = 15;
+const ANZAHL_GEBAEUDE = 8;
 
-define("RUNDEN_DAUER", 7776000);    // Die Dauer einer Runde in Sekunden (Standard: 7776000 Sekunden = 3 Monate)
-define("RUNDEN_PAUSE", 259200);        // Gibt die Dauer der Pause zwischen 2 Runden in Sekunden an (Standard: 259200 = 3 Tage)
+const RUNDEN_DAUER = 7776000;    // Die Dauer einer Runde in Sekunden (Standard: 7776000 Sekunden = 3 Monate)
+const RUNDEN_PAUSE = 259200;        // Gibt die Dauer der Pause zwischen 2 Runden in Sekunden an (Standard: 259200 = 3 Tage)
 
-define("EINKOMMEN_DAUER", 1800);                        // Was ist das Einkommens-Interval? (in Sekunden, vom CronJob abhängig!)
-define("EINKOMMEN_BASIS", 30);                            // Wieviel ist die Einkommensbasis?
-define("EINKOMMEN_BIOLADEN_BONUS", 5);            // Wieviel Bonus bringt eine Stufe des Bioladens?
-define("EINKOMMEN_DOENERSTAND_BONUS", 8);        // Wieviel Bonus bringt eine Stufe des Dönerstands?
+const EINKOMMEN_DAUER = 1800;                        // Was ist das Einkommens-Interval? (in Sekunden, vom CronJob abhängig!)
+const EINKOMMEN_BASIS = 30;                            // Wieviel ist die Einkommensbasis?
+const EINKOMMEN_BIOLADEN_BONUS = 5;            // Wieviel Bonus bringt eine Stufe des Bioladens?
+const EINKOMMEN_DOENERSTAND_BONUS = 8;        // Wieviel Bonus bringt eine Stufe des Dönerstands?
 
-define("BONUS_FAKTOR_FORSCHUNGSZENTRUM", 0.037);        // Zeitbonus absolut für Forschungen je Stufe des Forschungszentrums
-define("BONUS_FAKTOR_BAUHOF", 0.036);                            // Zeitbonus absolut für Gebäude je Stufe des Bauhofs
-define("BONUS_FAKTOR_ZAUN", 2.5);                                        // Bonus des Zauns in % gegen die Mafia
-define("BONUS_FAKTOR_PIZZERIA", 2.5);                                // Bonus des Zauns in % für die Mafia
+const BONUS_FAKTOR_FORSCHUNGSZENTRUM = 0.037;        // Zeitbonus absolut für Forschungen je Stufe des Forschungszentrums
+const BONUS_FAKTOR_BAUHOF = 0.036;                            // Zeitbonus absolut für Gebäude je Stufe des Bauhofs
+const BONUS_FAKTOR_ZAUN = 2.5;                                        // Bonus des Zauns in % gegen die Mafia
+const BONUS_FAKTOR_PIZZERIA = 2.5;                                // Bonus des Zauns in % für die Mafia
 
-define("ZINSEN_DAUER", 1800);                // Was ist das Zins-Interval? (in Sekunden, vom CronJob abhängig!)
-define("ZINSEN_HABEN_MIN", 150);        // die minimalen Habenzinsen
-define("ZINSEN_HABEN_MAX", 180);        // die maximalen Habenzinsen
-define("ZINSEN_SOLL_MIN", 200);            // die minimalen Sollzinsen
-define("ZINSEN_SOLL_MAX", 250);            // die maximalen Sollzinsen
+const ZINSEN_DAUER = 1800;                // Was ist das Zins-Interval? (in Sekunden, vom CronJob abhängig!)
+const ZINSEN_HABEN_MIN = 150;        // die minimalen Habenzinsen
+const ZINSEN_HABEN_MAX = 180;        // die maximalen Habenzinsen
+const ZINSEN_SOLL_MIN = 200;            // die minimalen Sollzinsen
+const ZINSEN_SOLL_MAX = 250;            // die maximalen Sollzinsen
 
-define("DISPO_LIMIT", -35000);            // Der maximale Dispo, jeder größer oder gleich dem Betrag wird resettet!!
+const DISPO_LIMIT = -35000;            // Der maximale Dispo, jeder größer oder gleich dem Betrag wird resettet!!
 
-define("WAREN_KURS_MIN", 75);                                        // Der minimale Warenkurs
-define("WAREN_KURS_MAX", 100);                                    // der maximale Warenkurs
-define("WAREN_PREIS_GRUND", 1.35);                            // Grundverkaufspreis der Waren
-define("WAREN_PREIS_FORSCHUNG", 0.15);                    // Um wieviel erhöht eine Stufe der Forschung den Verkaufspreis?
-define("WAREN_PREIS_BIOLADEN", 0.08);                        // Um wieviel erhöht eine Stufe des Bioladens den Verkaufspreis?
-define("WAREN_PREIS_VERKAEUFERSCHULE", 0.12);        // Um wieviel erhöht eine Stufe der Verkäuferschule den Verkaufspreis?
-define("WAREN_PREIS_WARE", 0.40);                                // Wieviel ist eine Ware mehr wert als die vorherige?
+const WAREN_KURS_MIN = 75;                                        // Der minimale Warenkurs
+const WAREN_KURS_MAX = 100;                                    // der maximale Warenkurs
+const WAREN_PREIS_GRUND = 1.35;                            // Grundverkaufspreis der Waren
+const WAREN_PREIS_FORSCHUNG = 0.15;                    // Um wieviel erhöht eine Stufe der Forschung den Verkaufspreis?
+const WAREN_PREIS_BIOLADEN = 0.08;                        // Um wieviel erhöht eine Stufe des Bioladens den Verkaufspreis?
+const WAREN_PREIS_VERKAEUFERSCHULE = 0.12;        // Um wieviel erhöht eine Stufe der Verkäuferschule den Verkaufspreis?
+const WAREN_PREIS_WARE = 0.40;                                // Wieviel ist eine Ware mehr wert als die vorherige?
 
-define("PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE", 8);            // Wieviel kg bringt eine Stufe des Gemüses?
-define("PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN", 4);        // Wieveil muss man pro Stufe Forschung des Gemüses mehr zahlen?
-define("PRODUKTIONS_WAREN_FAKTOR_MENGE", 20);                    // Wieviel bringt eine Ware Bonus zur Vorherigen in kg?
-define("PRODUKTIONS_PLANTAGE_FAKTOR_MENGE", 10);            // Wieviel wird pro Stufe der Plantage mehr produziert?
+const PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE = 8;            // Wieviel kg bringt eine Stufe des Gemüses?
+const PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN = 4;        // Wieveil muss man pro Stufe Forschung des Gemüses mehr zahlen?
+const PRODUKTIONS_WAREN_FAKTOR_MENGE = 20;                    // Wieviel bringt eine Ware Bonus zur Vorherigen in kg?
+const PRODUKTIONS_PLANTAGE_FAKTOR_MENGE = 10;            // Wieviel wird pro Stufe der Plantage mehr produziert?
 
-define("RANGLISTE_OFFSET", 15);                        // Wieviele Einträge sollen in der Rangliste pro Seite stehen?
-define("GRUPPE_OFFSET", 10);                            // Wieviele Gruppennachrichten sollten pro Seite angezeigt werden?
-define("MARKTPLATZ_OFFSET", 25);                    // Wieviele Marktplatzangebote sollen pro Seite angezeigt werden?
+const RANGLISTE_OFFSET = 15;                        // Wieviele Einträge sollen in der Rangliste pro Seite stehen?
+const GRUPPE_OFFSET = 10;                            // Wieviele Gruppennachrichten sollten pro Seite angezeigt werden?
+const MARKTPLATZ_OFFSET = 25;                    // Wieviele Marktplatzangebote sollen pro Seite angezeigt werden?
 
-define("BILD_GROESE_MAXIMAL", 65536);            // Die maximale Bildgröße fürs Profil in Byte
+const BILD_GROESE_MAXIMAL = 65536;            // Die maximale Bildgröße fürs Profil in Byte
 
-define("MAFIA_DIEBSTAHL_MIN_RATE", 40);        // Die minimale und maximale Rate was bei
-define("MAFIA_DIEBSTAHL_MAX_RATE", 75);        // einem Bargeldangriff gestohlen werden kann
-define("MAFIA_FAKTOR_MIN_PUNKTE", 1.5);    // Ihre Punkte / FAKTOR = Minimale Punktezahl, welche angegriffen werden kann
-define("MAFIA_FAKTOR_MAX_PUNKTE", 1.5);    // Ihre Punkte * FAKTOR = Maximale Punktezahl, welche angegriffen werden kann
+const MAFIA_DIEBSTAHL_MIN_RATE = 40;        // Die minimale und maximale Rate was bei
+const MAFIA_DIEBSTAHL_MAX_RATE = 75;        // einem Bargeldangriff gestohlen werden kann
+const MAFIA_FAKTOR_MIN_PUNKTE = 1.5;    // Ihre Punkte / FAKTOR = Minimale Punktezahl, welche angegriffen werden kann
+const MAFIA_FAKTOR_MAX_PUNKTE = 1.5;    // Ihre Punkte * FAKTOR = Maximale Punktezahl, welche angegriffen werden kann
 
-define("MARKT_ZURUECKZIEH_FAKTOR", 0.90);    // Wieviel (als Faktor) bekommt der Benutzer beim rückziehen eines Angebotes zurück?
-define("MARKT_PROVISION_FAKTOR", 0.98);        // Wieviel (als Faktor) bekommt der Benutzer beim Markt abzüglich Provision?
+const MARKT_ZURUECKZIEH_FAKTOR = 0.90;    // Wieviel (als Faktor) bekommt der Benutzer beim rückziehen eines Angebotes zurück?
+const MARKT_PROVISION_FAKTOR = 0.98;        // Wieviel (als Faktor) bekommt der Benutzer beim Markt abzüglich Provision?
 
-define("VERTRAEGE_PROVISION_FAKTOR", 1.00);        // Wieviel (als Faktor) bekommt der Verkäufer bei einem Vertrag?
+const VERTRAEGE_PROVISION_FAKTOR = 1.00;        // Wieviel (als Faktor) bekommt der Verkäufer bei einem Vertrag?
 
-define("MAFIA_SPERRZEIT_SPIONAGE", 300);            //
-define("MAFIA_SPERRZEIT_DIEBSTAHL", 1800);        // Wie lange ist die Mafia
-define("MAFIA_SPERRZEIT_ANGRIFF", 900);                // nach einer bestimmten Aktion
-define("MAFIA_SPERRZEIT_BOMBEN", 14400);                //	gesperrt?
+const MAFIA_SPERRZEIT_SPIONAGE = 300;            //
+const MAFIA_SPERRZEIT_DIEBSTAHL = 1800;        // Wie lange ist die Mafia
+const MAFIA_SPERRZEIT_ANGRIFF = 900;                // nach einer bestimmten Aktion
+const MAFIA_SPERRZEIT_BOMBEN = 14400;                //	gesperrt?
 
-define("MAFIA_PUNKTE_SPIONAGE", 25);                //
-define("MAFIA_PUNKTE_DIEBSTAHL", 150);            // Wieviel Punkte gibt ein erfolgreicher
-define("MAFIA_PUNKTE_ANGRIFF", 75);                    //	Angriff per Mafia?
-define("MAFIA_PUNKTE_BOMBEN", 1000);                    //
-define("MAFIA_PUNKTE_SUB", 1.25);                        // Wieviele Punkte verliert der Gegner bei erfolgreichen Bomben der Plantage? (in % von den Punkten der aktuellen Stufe)
+const MAFIA_PUNKTE_SPIONAGE = 25;                //
+const MAFIA_PUNKTE_DIEBSTAHL = 150;            // Wieviel Punkte gibt ein erfolgreicher
+const MAFIA_PUNKTE_ANGRIFF = 75;                    //	Angriff per Mafia?
+const MAFIA_PUNKTE_BOMBEN = 1000;                    //
+const MAFIA_PUNKTE_SUB = 1.25;                        // Wieviele Punkte verliert der Gegner bei erfolgreichen Bomben der Plantage? (in % von den Punkten der aktuellen Stufe)
 
-define("AUFTRAG_RUECKZIEH_RETURN", 0.75);        // Wieviel bekommt der User beim abbrechen eines Auftrag zurück?
+const AUFTRAG_RUECKZIEH_RETURN = 0.75;        // Wieviel bekommt der User beim abbrechen eines Auftrag zurück?
 
-define("FORSCHUNG_MIN_DAUER", 7200);            // Wie lange dauert jede Forschung mindestens?
+const FORSCHUNG_MIN_DAUER = 7200;            // Wie lange dauert jede Forschung mindestens?
 
-define("MAX_ANZAHL_GRUPPENMITGLIEDER", 15);    // Wie viele Mitglieder kann eine Gruppe maximal haben?
+const MAX_ANZAHL_GRUPPENMITGLIEDER = 15;    // Wie viele Mitglieder kann eine Gruppe maximal haben?
 
 /*
     Nachfolgend kommen die Startwerte für die Spieler als assoziatives Array

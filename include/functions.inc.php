@@ -2098,9 +2098,9 @@ Das Spiel wurde schon resettet, die neue Runde startet am " . date("d.m.Y \u\m H
             
             Schreibt den Zeitpunkt des letzten Resets in eine Datei
         */
-        $datei = fopen("include/last_reset.inc.php", "w");
+        $datei = fopen("include/config_prod.inc.php", "a");
 
-        fwrite($datei, '<?php define("LAST_RESET","' . $rundenstart . '"); ?>');
+        fwrite($datei, 'define("LAST_RESET", ' . $rundenstart . '";' . "\n");
         fclose($datei);
         if (!$datei) {
             die("möp");

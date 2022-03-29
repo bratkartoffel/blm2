@@ -10,7 +10,6 @@
 // Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
-include("../include/last_reset.inc.php");
 
 ConnectDB();        // Verbindung mit der Datenbank aufbauen
 

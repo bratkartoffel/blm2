@@ -8,22 +8,22 @@
 **/
 
 /** Konstante für alle Zahlen */
-define('CAPTCHA_ZAHLEN', "0123456789");
+const CAPTCHA_ZAHLEN = "0123456789";
 
 /** Konstante für alle Kleinbuchstaben */
-define('CAPTCHA_ALPHABET_KLEIN', "abcdefghijklmnopqrstuvxyz");
+const CAPTCHA_ALPHABET_KLEIN = "abcdefghijklmnopqrstuvxyz";
 
 /** Konstante für alle Großbuchstaben */
-define('CAPTCHA_ALPHABET_GROSS', "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+const CAPTCHA_ALPHABET_GROSS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /** Konstante für alle Hexadezimalen Zeichen */
-define('CAPTCHA_HEX', "ABCDEF0123456789");
+const CAPTCHA_HEX = "ABCDEF0123456789";
 
 /** Konstante für alle Kleinbuchstaben und Zahlen */
-define('CAPTCHA_ALPHABET_KLEIN_ZAHLEN', "abcdefghijklmnopqrstuvxyz0123456789");
+const CAPTCHA_ALPHABET_KLEIN_ZAHLEN = "abcdefghijklmnopqrstuvxyz0123456789";
 
 /** Konstante für alle Großbuchstaben und Zahlen */
-define('CAPTCHA_ALPHABET_GROSS_ZAHLEN', "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+const CAPTCHA_ALPHABET_GROSS_ZAHLEN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 
 /** Wo sollen die Bilder gespeichert werden? */
@@ -33,34 +33,34 @@ define('CAPTCHA_BILD_PFAD', dirname(__FILE__) . '/pics/');
 define('CAPTCHA_CODE_PFAD', dirname(__FILE__) . '/tmp/');
 
 /** Konstante für die Standardgröße (Breite) des Bildes */
-define('CAPTCHA_STD_BREITE', 160);
+const CAPTCHA_STD_BREITE = 160;
 
 /** Konstante für die Standardgröße (Höhe) des Bildes */
-define('CAPTCHA_STD_HOEHE', 55);
+const CAPTCHA_STD_HOEHE = 55;
 
 /** Konstante für die Standardlänge des Codes */
-define('CAPTCHA_STD_LAENGE', 4);
+const CAPTCHA_STD_LAENGE = 4;
 
 /** Konstante für die Standardzeichen des Codes */
-define('CAPTCHA_STD_ZEICHEN', CAPTCHA_HEX);
+const CAPTCHA_STD_ZEICHEN = CAPTCHA_HEX;
 
 /** Konstante für die Standardschriftgröße */
-define('CAPTCHA_STD_SCHRIFT_GROESE', 22);
+const CAPTCHA_STD_SCHRIFT_GROESE = 22;
 
 /** Konstante für die Standardschriftart */
-define('CAPTCHA_STD_SCHRIFT_DATEI', 'fonts/listen_up.ttf');
+const CAPTCHA_STD_SCHRIFT_DATEI = 'fonts/listen_up.ttf';
 
 /** Wie sicher soll das Captcha sein? Größer = Besser = Langsamer */
-define('CAPTCHA_SICHERHEIT', 1000);
+const CAPTCHA_SICHERHEIT = 1000;
 
 /** Wie lange soll das Captcha gültig sein? (In Sekunden) */
-define('CAPTCHA_GUELTIGKEIT', 180);
+const CAPTCHA_GUELTIGKEIT = 180;
 
 /** Wie sicher sollen die Rechtecke auf dem Hintergrund sein? Größer = Schlechter = Schneller */
-define('CAPTCHA_GROESE_RECHTECKE', 8);
+const CAPTCHA_GROESE_RECHTECKE = 8;
 
 /** Ist der Sicherheitscode Groß- / Kleinschreibungsabhängig? */
-define('CAPTCHA_SENSITIV', false);
+const CAPTCHA_SENSITIV = false;
 
 /**
 	* Klasse zur Erstellung und Prüfen von Captchas

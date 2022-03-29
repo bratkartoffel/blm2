@@ -11,7 +11,6 @@ header('Content-type: text/html; charset="utf-8"', true);        // Das Dokument
 /*
     Einbinden aller wichtigen Datein, wie die Einstellungen, den Zeitpunkt des letzten Resets und die Funktionen
 */
-include("../include/last_reset.inc.php");
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
 

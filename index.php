@@ -24,7 +24,6 @@ $start = time() + microtime();    // Die Startzeit des Scripts für den Benchmar
 /*
     Dann werden alle wichtigen Dateien mit den Konstanten, Variablen und Funktionen eingebunden.
 */
-include("./include/last_reset.inc.php");        // holt sich die Konstante mit dem Zeitpunkt des letzten Resets
 include("./include/config.inc.php");                // bindet die Konfigurationsdatei ein
 include("./include/functions.inc.php");            // bindet die Funktionen ein
 include("./include/captcha_class/captcha.php");            // bindet die Funktionen ein

@@ -1,0 +1,4 @@
+# One day for image files
+<filesMatch ".(jpg|jpeg|png|gif|ico|webp)$">
+    Header set Cache-Control "max-age=86400, public"
+</filesMatch>

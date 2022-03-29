@@ -94,7 +94,7 @@ WHERE
                 <td>
                     <div style="text-align: center;">
                         <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>&amp;<?= time(); ?>"
-                             alt="Hier k&ouml;nnte das Gruppenbild sein..."/>
+                             style="max-width: 200px; max-height: 200px"/>
                     </div>
                     <div style="margin-top: 30px;">
                         <?php

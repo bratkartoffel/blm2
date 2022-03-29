@@ -78,7 +78,7 @@ $platz = GetPlatz($profil->ID);
     </tr>
     <tr>
         <td>Bild:</td>
-        <td><img src="pics/spieler.php?uid=<?= $profil->ID; ?>"/></td>
+        <td><img src="pics/spieler.php?uid=<?= $profil->ID; ?>" style="max-width: 200px; max-height: 200px"/></td>
     </tr>
     <tr>
         <td>Gruppe:</td>

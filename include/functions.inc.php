@@ -695,7 +695,7 @@ function ConnectDB()
 
     mysql_select_db(DB_DATENBANK);        // Wählt die Datenbank aus
     if (mysql_errno() > 0) {
-        die("<h2>Die VDatenbank konnte nicht ausgewählt werden. Wahrscheinlich handelt es sich nur um ein vorrübergehendes Problem. Bitte versuchen Sie es später nochmal.</h2>");
+        die("<h2>Die Datenbank konnte nicht ausgewählt werden. Wahrscheinlich handelt es sich nur um ein vorrübergehendes Problem. Bitte versuchen Sie es später nochmal.</h2>");
     }
 
     $sql_abfrage = "SET CHARACTER SET utf8;";            //

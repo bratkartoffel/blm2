@@ -2,3 +2,8 @@
 <filesMatch ".(jpg|jpeg|png|gif|ico|webp)$">
     Header set Cache-Control "max-age=86400, public"
 </filesMatch>
+
+# 4 hours for scripts
+<filesMatch ".(css|js)$">
+    Header set Cache-Control "max-age=14400, public"
+</filesMatch>

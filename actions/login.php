@@ -129,7 +129,7 @@ $sql_abfrage = "INSERT INTO
 VALUES
 (
     '" . $_SERVER['REMOTE_ADDR'] . "',
-    '" . $temp->ID . "',
+    '" . $_SESSION['blm_user'] . "',
     NOW(),
     '0'
 );";

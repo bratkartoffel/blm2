@@ -32,6 +32,9 @@ ALTER TABLE `gruppe_nachrichten`
 ALTER TABLE `mitglieder`
     CHANGE `EMail` `EMail` VARCHAR(96);
 
+alter table log_login
+    CHANGE `IP` `IP` VARCHAR(64);
+
 -- Verträge.An Relationen Mitglieder.ID:						ON DELETE SET NULL
 -- Mitglieder.Gruppe Relation Gruppe.ID:						ON DELETE SET NULL
 -- Nachrichten.Von Relation Mitglieder.ID:					ON DELETE SET NULL

@@ -193,56 +193,56 @@ $Titel = "Der Bioladenmanager 2 (" . $Titel . ")";        // Setzt den Titel so 
     Nachfolgend alle Basisdaten der Gebäude
 */
 $Plantage->BasisKosten = 260;
-$Plantage->BasisDauer = 1780;
+$Plantage->BasisDauer = 890;
 $Plantage->BasisPunkte = 120;
 $Plantage->KostenFaktor = 1.35;
 $Plantage->DauerFaktor = 1.25;
 $Plantage->PunkteFaktor = 1.23;
 
 $Forschungszentrum->BasisKosten = 320;
-$Forschungszentrum->BasisDauer = 1900;
+$Forschungszentrum->BasisDauer = 950;
 $Forschungszentrum->BasisPunkte = 105;
 $Forschungszentrum->KostenFaktor = 1.37;
 $Forschungszentrum->DauerFaktor = 1.28;
 $Forschungszentrum->PunkteFaktor = 1.20;
 
 $Bioladen->BasisKosten = 260;
-$Bioladen->BasisDauer = 1800;
+$Bioladen->BasisDauer = 900;
 $Bioladen->BasisPunkte = 90;
 $Bioladen->KostenFaktor = 1.35;
 $Bioladen->DauerFaktor = 1.27;
 $Bioladen->PunkteFaktor = 1.20;
 
 $Doenerstand->BasisKosten = 310;
-$Doenerstand->BasisDauer = 2150;
+$Doenerstand->BasisDauer = 1100;
 $Doenerstand->BasisPunkte = 115;
 $Doenerstand->KostenFaktor = 1.38;
 $Doenerstand->DauerFaktor = 1.27;
 $Doenerstand->PunkteFaktor = 1.21;
 
 $Bauhof->BasisKosten = 620;
-$Bauhof->BasisDauer = 2250;
+$Bauhof->BasisDauer = 1100;
 $Bauhof->BasisPunkte = 235;
 $Bauhof->KostenFaktor = 1.40;
 $Bauhof->DauerFaktor = 1.29;
 $Bauhof->PunkteFaktor = 1.22;
 
 $Schule->BasisKosten = 300;
-$Schule->BasisDauer = 2050;
+$Schule->BasisDauer = 1000;
 $Schule->BasisPunkte = 110;
 $Schule->KostenFaktor = 1.39;
 $Schule->DauerFaktor = 1.29;
 $Schule->PunkteFaktor = 1.19;
 
 $Zaun->BasisKosten = 650;
-$Zaun->BasisDauer = 2800;
+$Zaun->BasisDauer = 1400;
 $Zaun->BasisPunkte = 285;
 $Zaun->KostenFaktor = 1.45;
 $Zaun->DauerFaktor = 1.33;
 $Zaun->PunkteFaktor = 1.17;
 
 $Pizzeria->BasisKosten = 650;
-$Pizzeria->BasisDauer = 2800;
+$Pizzeria->BasisDauer = 1400;
 $Pizzeria->BasisPunkte = 285;
 $Pizzeria->KostenFaktor = 1.45;
 $Pizzeria->DauerFaktor = 1.33;

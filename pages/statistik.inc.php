@@ -22,7 +22,6 @@
 <br/>
 <?php
 $sql_abfrage = "SELECT
-(SELECT SUM(BannerViews) FROM mitglieder) AS BannerViews,
 (SELECT SUM(AusgabenGebaeude+AusgabenForschung+AusgabenZinsen+AusgabenProduktion+AusgabenMarkt+AusgabenVertraege+AusgabenMafia) FROM statistik) AS AusgabenGesamt,
 (SELECT SUM(EinnahmenGebaeude+EinnahmenVerkauf+EinnahmenZinsen+EinnahmenMarkt+EinnahmenVertraege+EinnahmenMafia) FROM statistik) AS EinnahmenGesamt,
 (SELECT SUM(";

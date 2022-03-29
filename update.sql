@@ -35,6 +35,20 @@ ALTER TABLE `mitglieder`
 alter table log_login
     CHANGE `IP` `IP` VARCHAR(64);
 
+INSERT INTO mitglieder (ID, Name, EMail, EMailAct, Passwort, RegistriertAm, Geld, Bank, Punkte, IgmGesendet,
+                             IgmEmpfangen, Admin, Betatester, LastAction, LastLogin, LastMafia, LastBannerView,
+                             Notizblock, Beschreibung, EwigePunkte, OnlineZeit, BannerViews, Gruppe, GruppeRechte,
+                             GruppeLastMessageZeit, GruppeKassenStand, Verwarnungen, Gesperrt)
+VALUES (0, 'System', 'none', null, 'none', 1648500676, 0.00, 0.00, 0.00, 0, 0, 0, 0, 0, 0, 0, 0, null, null, 0, 0, 0,
+        null, null, null, null, 0, 0);
+
+alter table mitglieder
+    drop column LastBannerView;
+
+alter table mitglieder
+    drop column BannerViews;
+
+
 -- Verträge.An Relationen Mitglieder.ID:						ON DELETE SET NULL
 -- Mitglieder.Gruppe Relation Gruppe.ID:						ON DELETE SET NULL
 -- Nachrichten.Von Relation Mitglieder.ID:					ON DELETE SET NULL

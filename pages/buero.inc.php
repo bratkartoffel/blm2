@@ -41,10 +41,10 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                 for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Rennt alle Forschungen durch
                     $temp = "Forschung" . $i;
                     if ($ich->$temp > 0) {        // Gibt nur die Kurse der Waren aus, welche wir schon erforscht haben.
-                        $produktion_menge = ($i - 1) * PRODUKTIONS_WAREN_FAKTOR_MENGE + $Produktion->BasisMenge + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE);        // Berechnet, wieviel produziert wird
-                        $produktion_kosten = $Produktion->BasisKosten + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN);                    // und berechnet, was es uns kostet
+                        $produktion_menge = round(($ich->Gebaeude1 * PRODUKTIONS_PLANTAGE_FAKTOR_MENGE) + PRODUKTIONS_WAREN_FAKTOR_MENGE * $i + $Produktion->BasisMenge + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE));        // Berechnet, wieviel produziert wird
+                        $produktion_kosten = round($Produktion->BasisKosten + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN), 2);                    // und berechnet, was es uns kostet
 
-                        $kosten_pro_kg = $produktion_kosten / $produktion_menge;        // Rechnet nun die Kosten / kg aus...
+                        $kosten_pro_kg = round($produktion_kosten / $produktion_menge, 2);        // Rechnet nun die Kosten / kg aus...
                         $erloes_pro_kg = $Preis[$i];                                                            // ... und auch gleich den Erlös / kg
 
                         echo '<tr>

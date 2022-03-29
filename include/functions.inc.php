@@ -2136,11 +2136,13 @@ function UpdateLastAction()
     $sql_abfrage = "UPDATE
 	mitglieder
 SET
-	LastAction='" . time() . "'
+	LastAction = '" . time() . "',
+    OnlineZeit = OnlineZeit + " . (time() - $_SESSION['blm_login']) . "
 WHERE
 	ID='" . $_SESSION['blm_user'] . "';";
     mysql_query($sql_abfrage);    // Zeitstempel der letzten Aktion auf jetzt setzen.
     $_SESSION['blm_queries']++;
+    $_SESSION['blm_login'] = time();
 }
 
 /**

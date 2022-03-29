@@ -37,7 +37,7 @@ switch ($suffix) {
     case "jpg":
         $bild = ImageCreateFromJPEG($pfad . "." . $suffix);
         header("content-type: image/jpeg");
-        ImageJPEG($bild;
+        ImageJPEG($bild);
         break;
     case "png":
         $bild = ImageCreateFromPNG($pfad . "." . $suffix);

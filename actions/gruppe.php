@@ -9,6 +9,7 @@
 
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 if (!IstAngemeldet()) {        // Wer nicht angemeldet ist, kann auch nichts abbrechen...
     header("location: ../?p=index&m=102");

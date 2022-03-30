@@ -18,7 +18,8 @@ class Database
 
     public function __construct()
     {
-        $this->link = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATENBANK . ";charset=utf8", DB_BENUTZER, DB_PASSWORT);
+        $this->link = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATENBANK . ";charset=utf8", DB_BENUTZER, DB_PASSWORT,
+            array(PDO::ATTR_PERSISTENT => true));
     }
 
     function __destruct()
@@ -26,7 +27,6 @@ class Database
         if ($this->link->inTransaction()) {
             $this->link->rollBack();
         }
-        $this->link = null;
         $this->queries = 0;
     }
 
@@ -120,6 +120,10 @@ class Database
             return 0;
         }
         return $result['count'];
+    }
+
+    public function getQueryCount() {
+        return $this->queries;
     }
 
     private function error($handle, $method, $text, $level = E_USER_WARNING)

@@ -491,7 +491,7 @@ DisconnectDB();        // Finally; die Verbindug mit der DB kappen :)
 
 $dauer = 1000 * (time() + microtime(true) - $start);        // Wie lange haben wir gebraucht, um die Seite zu generieren?
 
-$queries = intval($_SESSION['blm_queries']);        // Wieviele Queries haben wir gebraucht?
+$queries = intval($_SESSION['blm_queries']) + Database::getInstance()->getQueryCount();        // Wieviele Queries haben wir gebraucht?
 $_SESSION['blm_queries'] = 0;        // Die Anzahl der Queries wieder auf 0 setzen
 
 echo '<!-- 

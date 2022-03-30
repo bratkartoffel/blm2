@@ -9,10 +9,12 @@
  * @todo Link zum Hinzufügen eines Eintrags
  */
 
-if ($_GET['name'] != "") {
-    $filter = '%' . mysql_real_escape_string($_GET['name']) . '%';
+if (isset($_GET['name']) && !empty($_GET['name'])) {
+    $name = $_GET['name'];
+    $filter = mysql_real_escape_string($name);
 } else {
-    $filter = '%';
+    $name = "";
+    $filter = "%";
 }
 ?>
 <table id="SeitenUeberschrift">
@@ -27,7 +29,7 @@ if ($_GET['name'] != "") {
 <form action="./" method="get">
     <input type="hidden" name="p" value="admin_log_bank"/>
     <h3>Filtern nach Namen:</h3>
-    <input type="text" name="name" value="<?= htmlentities(stripslashes($_GET['name']), ENT_QUOTES, "UTF-8"); ?>"/>
+    <input type="text" name="name" value="<?= sichere_ausgabe($name); ?>"/>
     <input type="submit" value="Abschicken"/><br/>
 </form>
 <br/>
@@ -42,14 +44,16 @@ if ($_GET['name'] != "") {
     $sql_abfrage = "SELECT
     COUNT(*) AS anzahl
 FROM
-    log_bank_view;";
+    log_bank_view
+WHERE
+    Wer LIKE '" . $filter . "';";
     $sql_ergebnis = mysql_query($sql_abfrage);
     $_SESSION['blm_queries']++;
 
     $anzahl = mysql_fetch_object($sql_ergebnis);
     $anzahl_eintraege = $anzahl->anzahl;
 
-    $offset = intval($_GET['o']);        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
+    $offset = isset($_GET['o']) ? intval($_GET['o']) : 0;        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
     // Dabei berechnet sich der Starteintrag aus $offset*RANGLISTE_OFFSET
 
     if (ADMIN_LOG_OFFSET * $offset > $anzahl_eintraege) {        // Will er das Offset höher setzen, als es Spieler gibt?
@@ -97,7 +101,7 @@ LIMIT " . $offset * ADMIN_LOG_OFFSET . ", " . ADMIN_LOG_OFFSET . ";";
     for ($i = 0; $i < $anzahl_eintraege; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
         if ($i % ADMIN_LOG_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
             if (($i / ADMIN_LOG_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                $temp .= '<a href="./?p=' . $_GET['p'] . '&amp;o=' . ($i / ADMIN_LOG_OFFSET). '">' . (($i / ADMIN_LOG_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                $temp .= '<a href="./?p=' . (isset($_GET['p']) ? sichere_ausgabe($_GET['p']) : 0) . '&amp;o=' . ($i / ADMIN_LOG_OFFSET) . '&amp;name=' . sichere_ausgabe($name) . '">' . (($i / ADMIN_LOG_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
             } else {
                 $temp .= (($i / ADMIN_LOG_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
             }

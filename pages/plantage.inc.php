@@ -50,10 +50,12 @@ AND
     $_SESSION['blm_queries']++;
 
     $auftraege = new stdClass();
+    $has_auftrag = false;
     while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
         $temp = "a_" . intval($auftrag->Was);
 
         $auftraege->$temp = $auftrag;
+        $has_auftrag = true;
     }
     ?>
     <b>
@@ -72,7 +74,7 @@ AND
                     <input type="text" name="stunden" value="1" size="1" maxlength="2"/>
                     Stunde(n) von allem.
                     <?php
-                    if (isset($auftraege)) {
+                    if ($has_auftrag) {
                         ?>
                         <input type="submit" value="Abschicken" disabled="disabled"/>
                         <?php

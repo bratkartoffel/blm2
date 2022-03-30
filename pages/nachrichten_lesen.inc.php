@@ -166,10 +166,10 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
                         </a>
                         <?php
                     }
-                    if ($nachricht->Empfaenger == "") {
+                    if (property_exists($nachricht, "Empfaenger")) {
                         ?>
                         <a href="?p=nachrichten_schreiben&amp;an=<?= $nachricht->AbsenderID; ?>&amp;answer=<?= $nachricht_id; ?>">
-                            <img src="pics/small/answermail.png" style="border: none;" alt="Anworten"/>
+                            <img src="pics/small/answermail.png" style="border: none;" alt="Antworten"/>
                         </a>
                         <?php
                     }

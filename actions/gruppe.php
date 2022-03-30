@@ -112,7 +112,8 @@ VALUES
 
         DisconnectDB();
         header("location: ../?p=gruppe&m=223");
-    // Fertig! Zurück zum Gruppenbildschirm, wo jetzt das Gruppenboard stehen sollte :)
+        // Fertig! Zurück zum Gruppenbildschirm, wo jetzt das Gruppenboard stehen sollte :)
+        break;
     case 2:        // bestehender Gruppe beitreten
         if ($ich->Gebaeude1 < 5 || intval($ich->Gruppe) > 0) {        // Darf der USer überhaupt einer Gruppe beitreten?
             DisconnectDB();                                                                                // Wenn nicht, dann brechen wir mal wieder ab
@@ -138,7 +139,7 @@ AND
 
         $gruppe = mysql_fetch_object($sql_ergebnis);        // Hier holen wir uns die ID der Gruppe
 
-        if (intval($gruppe->ID) == 0) {            // Wenn die ID 0 ist, dann gibts die Gruppe nicht, also brechen wir ab
+        if (!property_exists($gruppe, 'ID')) {            // Wenn die ID nicht gesetzt ist, dann gibts die Gruppe nicht, also brechen wir ab
             DisconnectDB();
             header("location: ../?p=gruppe&m=127");
             die();
@@ -184,7 +185,8 @@ VALUES
 
         DisconnectDB();
         header("location: ../?p=gruppe&m=224");
-    // Fertig. Der USer ist in der Gruppe, und sollte nun zum Gruppenboard weitergeleitet werden.
+        // Fertig. Der User ist in der Gruppe, und sollte nun zum Gruppenboard weitergeleitet werden.
+        break;
     case 3:        // Gruppe verlassen
         $sql_abfrage = "UPDATE
     mitglieder
@@ -261,7 +263,8 @@ VALUES
         DisconnectDB();        // Verbindung mit der DB trennen
         header("location: ../?p=gruppe&m=225");        // Und Weiterleitung machen
 
-    // Fertig! Benutzer ist nicht mehr in der Gruppe
+        // Fertig! Benutzer ist nicht mehr in der Gruppe
+        break;
     case 4:        // Gruppennachricht schreiben
         $nachricht = mysql_real_escape_string(trim($_POST['nachricht']));    // Zuerst holen wir uns alle
         $zeit = time();                                                                                                        // relevanten Daten zusammen,
@@ -301,7 +304,8 @@ VALUES
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
         header("location: ../?p=gruppe&m=112");        // schafft, dann darf er keine
-    // Nachrichten schreiben...
+        // Nachrichten schreiben...
+        break;
     case 5:            // Gruppennachricht löschen
         $id = intval($_GET['id']);            // Zuerst holen wir uns wieder
         $gruppe = intval($ich->Gruppe);    // alle wichtigen Daten zusammen
@@ -326,7 +330,8 @@ AND
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
         header("location: ../?p=gruppe&m=112");        // schafft, dann darf er keine
-    // Nachrichten löschen...
+        // Nachrichten löschen...
+        break;
     case 6:    // Rechte ändern
         $id = intval($_GET['id']);
         $recht = intval($_GET['recht']);
@@ -391,7 +396,8 @@ VALUES
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
         header("location: ../?p=gruppe&m=112");        // schafft, dann darf er keine
-    // Rechte ändern...
+        // Rechte ändern...
+        break;
     case 7:        // Mitglied kicken
         $id = intval($_GET['id']);
 
@@ -438,7 +444,8 @@ VALUES
 
         DisconnectDB();        // Wenn er es bis hierher schafft, dann darf er keine Mitglieder kicken, also
         header("location: ../?p=gruppe&m=112");    // Verbindung mit DB trennen,
-    // Weiterleitung & Meldung ausgeben, abbrechen
+        // Weiterleitung & Meldung ausgeben, abbrechen
+        break;
     case 8:    // Gruppenbild hochladen
         DisconnectDB();        // Erst mal die Verbindung mit der Datenbank trennen, brauchen wir nicht mehr
 
@@ -492,6 +499,7 @@ VALUES
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 9:    // Beschreibung bearbeiten
         $beschreibung = mysql_real_escape_string(trim($_POST['beschreibung']));        // Holt sioch die Beschreibung erst mal aus den POST-Daten raus
 
@@ -522,6 +530,7 @@ WHERE
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 10:    // Beitrittskennwort ändern
         $pwd1 = $_POST['pwd_1'];        // Das erste Textfeld
         $pwd2 = $_POST['pwd_2'];        // Die Bestätigung des Passworts
@@ -553,6 +562,7 @@ WHERE
 
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 11:    // Gruppe löschen
         if ($ich->Rechte->GruppeLoeschen) {        // Hat der Benutzer ausreichende Rechte zum Löschen der Gruppe?
             $sql_abfrage = "UPDATE
@@ -614,6 +624,7 @@ WHERE
 
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 12:        // Diplomatische Beziehung eintragen
         $partner = intval($_POST['partner']);        // Mit wem soll der Vertrag geschlossen werden?
         $typ = intval($_POST['typ']);        // Welchen Typ von Vertrag soll es werden? (NAP, BND, Krieg)
@@ -713,6 +724,7 @@ VALUES
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 13:        // Diplomatisches Angebot zurückziehen
         $id = intval($_GET['id']);        // Welches Angebot soll zurückgezogen werden?
 
@@ -794,6 +806,7 @@ VALUES
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 14:            // Diplomatische Anfrage annehmen
         $id = intval($_GET['id']);        // Ruft die ID des Vertrag ab
 
@@ -917,6 +930,7 @@ OR
         */
         DisconnectDB();
         header("location: ../?p=gruppe&m=112");
+        break;
     case 15:            // Diplomatische Anfrage ablehnen
         $id = intval($_GET['id']);
 
@@ -996,7 +1010,8 @@ VALUES
         */
         DisconnectDB();        // Verbindung trennen
         header("location: ../?p=gruppe&m=112");        // Weiterleitung
-    // Abbrechen
+        // Abbrechen
+        break;
     case 16:    // Geld aus Kasse an Mitglied überweisen
         $betrag = mysql_real_escape_string(str_replace(",", ".", $_POST['betrag']));
         $an = intval($_POST['an']);
@@ -1132,7 +1147,8 @@ WHERE
         */
         DisconnectDB();        // Verbindung trennen
         header("location: ../?p=gruppe&m=112");        // Weiterleitung
-    // Abbrechen
+        // Abbrechen
+        break;
     case 17:            // Diplomatische Beziehung kündigen
         $id = intval($_GET['id']);
 
@@ -1229,7 +1245,8 @@ VALUES
         */
         DisconnectDB();        // Verbindung trennen
         header("location: ../?p=gruppe&m=112");        // Weiterleitung
-    // Abbrechen
+        // Abbrechen
+        break;
     case 18:
         $id = intval($_GET['id']);
 
@@ -1353,7 +1370,8 @@ VALUES
         */
         DisconnectDB();        // Verbindung trennen
         header("location: ../?p=gruppe&m=112");        // Weiterleitung
-    // Abbrechen
+        // Abbrechen
+        break;
     default:    // Was will der User überhaupt? Ham'ma nicht :D
         DisconnectDB();            // Verbindung trennen
         header("location: ../?p=gruppe&m=112");        // Weiterleitung        // Abbrechen

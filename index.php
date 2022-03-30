@@ -172,8 +172,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
         $Beschreibung = "Willkommen beim Bioladenmanager 2, ein Browsergame um Gemüse, Obst und Macht... Werden Sie der König der Biobauern!";
         break;
 }
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?><!DOCTYPE html>
 <!--
 	Site generated:   <?= date("r", time()) . "\n"; ?>
 	Client:           <?= htmlentities($_SERVER['REMOTE_ADDR']) . "\n"; ?>

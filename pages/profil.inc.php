@@ -49,7 +49,7 @@ if ($profil->LastLogin == 0) {
     $profil->LastLogin = date("d.m.Y", $profil->LastLogin);
 }
 
-$platz = GetPlatz($profil->ID);
+$platz = Database::getInstance()->getPlayerRankById($profil->ID);
 ?>
 <table id="SeitenUeberschrift">
     <tr>

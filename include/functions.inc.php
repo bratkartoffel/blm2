@@ -669,42 +669,6 @@ function GebaeudeName($gebaeude_id)
 }
 
 /**
- * Hilfsfunktion: Liefert den den Platz eines Spielers mit einer bestimmten ID zurück (fürs Profil)
- *
- * @param int $benutzer_id
- *
- * @return int
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function GetPlatz($benutzer_id)
-{
-    $sql_abfrage = "SELECT
-	ID
-FROM
-	mitglieder
-WHERE
-	ID>0
-ORDER BY
-	Punkte DESC,
-	Name ASC;";
-    $sql_ergebnis = mysql_query($sql_abfrage);        // Ruft alle Spieler ab, nach Punkten sortiert
-    $_SESSION['blm_queries']++;
-
-    $platz = 0;
-
-    while ($benutzer = mysql_fetch_object($sql_ergebnis)) {
-        $platz++;
-        if ($benutzer->ID == intval($benutzer_id)) {        // Ruft alle Spieler ab, und schaut ob die aktuelle ID die des gesuchten Spielers ist
-            break;
-        }
-    }
-
-    return ($platz);        // Gibt den Platz zurück :)
-}
-
-/**
  * Hilfsfunktion: Liefert den Namen eines Spielers anhand seiner Position in der Rangliste ab
  *
  * @param int $platz
@@ -1028,7 +992,7 @@ AND
         $benutzer->GruppeNAP[] = $nap->An;
     }
 
-    $benutzer->RanglisteOffset = intval((GetPlatz($benutzer->ID) - 1) / RANGLISTE_OFFSET);
+    $benutzer->RanglisteOffset = intval((Database::getInstance()->getPlayerRankById($benutzer->ID) - 1) / RANGLISTE_OFFSET);
 
     return $benutzer;        // Daten gefunden und vorhanden, also geben wir diese zurück
 }

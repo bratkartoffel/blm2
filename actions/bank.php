@@ -25,7 +25,7 @@ if ($_SESSION['blm_sitter']) {
 
 if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=bank&m=112&" . time());
+    header("location: ../?p=bank&m=112");
     die();
 }
 
@@ -33,7 +33,7 @@ $betrag = str_replace(",", ".", $_POST['betrag']);    //Um welchen Betrag geht e
 
 if ($betrag <= 0 || !is_numeric($betrag)) {            // Wenn der Benutzer negative Beträge angibt, dann abbrechen
     DisconnectDB();
-    header("location: ../?p=bank&m=110&" . time());
+    header("location: ../?p=bank&m=110");
     die();
 }
 
@@ -41,20 +41,20 @@ switch (intval($_POST['art'])) {        // Was will der Benutzer überhaupt mach
     case 1:                // Geld Einzahlen
         if ($betrag > $ich->Geld) {        // Will der Benutzer mehr einzahlen, als er Bar hat?
             DisconnectDB();
-            header("location: ../?p=bank&m=110&" . time());
+            header("location: ../?p=bank&m=110");
             die();
         }
 
         if ($ich->Punkte <= 100000) {
             if ($ich->Bank + $betrag >= 100000) {        // Will der Benutzer mehr einzahlen, als die Bank verwalten kann? (Hier fix 99.999,99 €)
                 DisconnectDB();
-                header("location: ../?p=bank&m=110&" . time());
+                header("location: ../?p=bank&m=110");
                 die();
             }
         } else {
             if ($ich->Bank + $betrag > $ich->Punkte) {        // Will der Benutzer mehr einzahlen, als die Bank verwalten kann? (Hier variabel nach Punkten)
                 DisconnectDB();
-                header("location: ../?p=bank&m=110&" . time());
+                header("location: ../?p=bank&m=110");
                 die();
             }
         }
@@ -88,19 +88,19 @@ VALUES
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=bank&m=207&" . time());
+        header("location: ../?p=bank&m=207");
         break;
     case 2:    // Auszahlen / Kredit aufnehmen...
         if ($ich->Punkte <= 100000) {
             if ($ich->Bank - $betrag < -25000) {        // Das Kreditlimit liegt bei -25.000 €; Wird das Limit bei dem angeforderten Betrag überschritten?
                 DisconnectDB();
-                header("location: ../?p=bank&m=109&" . time());
+                header("location: ../?p=bank&m=109");
                 die();
             }
         } else {
             if ($ich->Bank - $betrag < -(0.25 * $ich->Punkte)) {        // Das Kreditlimit liegt bei 25% der eigenen Punkte; Wird das Limit bei dem angeforderten Betrag überschritten?
                 DisconnectDB();
-                header("location: ../?p=bank&m=109&" . time());
+                header("location: ../?p=bank&m=109");
                 die();
             }
         }
@@ -134,18 +134,18 @@ VALUES
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=bank&m=207&" . time());
+        header("location: ../?p=bank&m=207");
         break;
     case 3:    // In die Gruppenkasse zahlen
         if ($betrag > $ich->Geld) {        // Will der Benutzer mehr einzahlen, als er Bar hat?
             DisconnectDB();
-            header("location: ../?p=bank&m=110&" . time());
+            header("location: ../?p=bank&m=110");
             die();
         }
 
         if (intval($ich->Gruppe) == 0) {
             DisconnectDB();
-            header("location: ../?p=bank&" . time());
+            header("location: ../?p=bank");
             die();
         }
 
@@ -169,10 +169,10 @@ WHERE
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=bank&m=235&" . time());
+        header("location: ../?p=bank&m=235");
         break;
     default:        // Was zum Teufel will er überhaupt??? Abbrechen!!!
         DisconnectDB();
-        header("location: ../?p=bank&m=112&" . time());
+        header("location: ../?p=bank&m=112");
         break;
 }

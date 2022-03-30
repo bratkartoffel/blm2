@@ -21,19 +21,19 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
 
     <?= $m; ?>
     <div style="width: 650px; text-align: center; margin-bottom: 5px;">
-        <a href="./?p=gruppe&amp;<?= time(); ?>">Board</a> |
-        <a href="./?p=gruppe_mitgliederverwaltung&amp;<?= time(); ?>">Mitgliederverwaltung</a>
+        <a href="./?p=gruppe">Board</a> |
+        <a href="./?p=gruppe_mitgliederverwaltung">Mitgliederverwaltung</a>
         <?php
         if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-            echo ' | <a href="./?p=gruppe_einstellungen&amp;' . time() . '">Einstellungen</a>';
+            echo ' | <a href="./?p=gruppe_einstellungen">Einstellungen</a>';
         }
 
         if ($ich->Rechte->Diplomatie) {
-            echo ' | <a href="./?p=gruppe_diplomatie&amp;' . time() . '">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
+            echo ' | <a href="./?p=gruppe_diplomatie">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
         }
         ?>
-        | <a href="./?p=gruppe_kasse&amp;<?= time(); ?>">Gruppenkasse</a>
-        | <a href="./?p=gruppe_logbuch&amp;<?= time(); ?>">Logbuch</a>
+        | <a href="./?p=gruppe_kasse">Gruppenkasse</a>
+        | <a href="./?p=gruppe_logbuch">Logbuch</a>
     </div>
     <br/>
     <br/>
@@ -70,7 +70,7 @@ AND
         <tr>
             <td>Krieg gegen:</td>
             <td>
-                <a href="./?p=gruppe&amp;id=<?= $krieg->GegnerID; ?>&amp;<?= time(); ?>"><?= htmlentities(stripslashes($krieg->GegnerName), ENT_QUOTES, "UTF-8"); ?></a>
+                <a href="./?p=gruppe&amp;id=<?= $krieg->GegnerID; ?>"><?= htmlentities(stripslashes($krieg->GegnerName), ENT_QUOTES, "UTF-8"); ?></a>
             </td>
         </tr>
         <tr>

@@ -26,7 +26,7 @@ echo '<pre>' . wordwrap($vorlage_admin[intval($_GET['cat'])], 100) . '</pre>';
 <br/>
 <br/>
 <p>
-    <a href="./?p=nachrichten_schreiben&amp;betreff=Verwarnung&amp;admin_vorlage=<?= intval($_GET['cat']); ?>&amp;<?= time(); ?>">Nachricht
+    <a href="./?p=nachrichten_schreiben&amp;betreff=Verwarnung&amp;admin_vorlage=<?= intval($_GET['cat']); ?>">Nachricht
         erstellen</a><br/>
     <a href="./?p=admin">Zurück...</a>
 </p>

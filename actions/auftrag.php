@@ -19,7 +19,7 @@ ConnectDB();        // Verbindung mit der Datenbank aufbauen
 
 if ($_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=index&m=112&" . time());
+    header("location: ../?p=index&m=112");
     die();
 }
 
@@ -38,7 +38,7 @@ $auftrag = mysql_fetch_object($sql_ergebnis);        // des Auftrags abrufen
 
 if (!$auftrag->ID) {        // Der Auftrag konnte nicht gefunden werden
     DisconnectDB();
-    header("location: ../?p=" . $_GET['back'] . "&m=112&" . time());
+    header("location: ../?p=" . $_GET['back'] . "&m=112");
     die();
 }
 
@@ -76,7 +76,7 @@ $affected = mysql_affected_rows();
 DisconnectDB();
 if ($affected == 0) {        // Wenn wir keinen Auftrag löschen konnten...
     // dann stimmt was nicht
-    header("location: ../?p=" . $_GET['back'] . "&m=112&" . time());
+    header("location: ../?p=" . $_GET['back'] . "&m=112");
 } else {
-    header("location: ../?p=" . $_GET['back'] . "&m=222&" . time() . "#" . substr($_GET['back'], 0, 1) . intval($_GET['was']));
+    header("location: ../?p=" . $_GET['back'] . "&m=222#" . substr($_GET['back'], 0, 1) . intval($_GET['was']));
 }

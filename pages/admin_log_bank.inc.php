@@ -97,7 +97,7 @@ LIMIT " . $offset * ADMIN_LOG_OFFSET . ", " . ADMIN_LOG_OFFSET . ";";
     for ($i = 0; $i < $anzahl_eintraege; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
         if ($i % ADMIN_LOG_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
             if (($i / ADMIN_LOG_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                $temp .= '<a href="./?p=' . $_GET['p'] . '&amp;o=' . ($i / ADMIN_LOG_OFFSET) . '&amp;' . time() . '">' . (($i / ADMIN_LOG_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                $temp .= '<a href="./?p=' . $_GET['p'] . '&amp;o=' . ($i / ADMIN_LOG_OFFSET). '">' . (($i / ADMIN_LOG_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
             } else {
                 $temp .= (($i / ADMIN_LOG_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
             }

@@ -246,7 +246,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
     </script>
     <!-- Kleiner Hack für den IE -->
     <!--[if IE]>
-			<link rel="stylesheet" type="text/css" href="styles/style_ie.css?<?= time(); ?>" />
+			<link rel="stylesheet" type="text/css" href="styles/style_ie.css" />
 		<![endif]-->
 </head>
 <body onload="MarkActiveLink();">
@@ -287,55 +287,55 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
             if (IstAngemeldet()) {        // Folgenden Block (Navigationsleiste) nur für angemeldete Benutzer anzeigen
                 ?>
                 <div class="NaviLink" onclick="Navigation(this);">
-                    <a href="./?p=index&amp;<?= time(); ?>">Startseite</a>
+                    <a href="./?p=index">Startseite</a>
                 </div>
                 <div class="NaviLinkHeader">Gebäude:</div>
                 <?php
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Gebaeude) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=gebaeude&amp;<?= time(); ?>">Gebäude</a></div>
+                                href="./?p=gebaeude">Gebäude</a></div>
                     <?php
                 }
 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Produktion) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=plantage&amp;<?= time(); ?>">Plantage</a></div>
+                                href="./?p=plantage">Plantage</a></div>
                     <?php
                 }
 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Forschung) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=forschungszentrum&amp;<?= time(); ?>">Forschungszentrum</a></div>
+                                href="./?p=forschungszentrum">Forschungszentrum</a></div>
                     <?php
                 }
 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Bioladen) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=bioladen&amp;<?= time(); ?>">Bioladen</a></div>
+                                href="./?p=bioladen">Bioladen</a></div>
                     <?php
                 }
                 ?>
 
                 <br/>
                 <div class="NaviLinkHeader">Finanzen:</div>
-                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">Büro</a>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero">Büro</a>
                 </div>
                 <?php
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Bank) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=bank&amp;<?= time(); ?>">Bank</a></div>
+                                href="./?p=bank">Bank</a></div>
                     <?php
                 }
 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Vertraege) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=vertraege_liste&amp;<?= time(); ?>">Verträge
+                                href="./?p=vertraege_liste">Verträge
                             (<?= Vertraege(); ?>)</a></div>
                     <?php
                 }
@@ -343,7 +343,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Marktplatz) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=marktplatz_liste&amp;<?= time(); ?>">Marktplatz
+                                href="./?p=marktplatz_liste">Marktplatz
                             (<?= Database::getInstance()->getMarktplatzCount(); ?>)</a></div>
                     <?php
                 }
@@ -351,7 +351,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Mafia) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=mafia&amp;<?= time(); ?>">Mafia</a></div>
+                                href="./?p=mafia">Mafia</a></div>
                     <?php
                 }
                 ?>
@@ -362,7 +362,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Gruppe) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=gruppe&amp;<?= time(); ?>">Gruppe
+                                href="./?p=gruppe">Gruppe
                             (<?= NeueGruppenNachrichten($ich); ?>)</a></div>
                     <?php
                 }
@@ -370,18 +370,18 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 if (!$_SESSION['blm_sitter'] || $ich->Sitter->Nachrichten) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=nachrichten_liste&amp;<?= time(); ?>">Nachrichten
+                                href="./?p=nachrichten_liste">Nachrichten
                             (<?= NeueNachrichten(isset($_GET['nid']) ? intval($_GET['nid']) : -1); ?>)</a></div>
                     <?php
                 }
                 ?>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./?p=notizblock&amp;<?= time(); ?>">Notizblock</a></div>
+                            href="./?p=notizblock">Notizblock</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./?p=einstellungen&amp;<?= time(); ?>">Einstellungen</a></div>
+                            href="./?p=einstellungen">Einstellungen</a></div>
                 <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);"><a
-                            href="popups/chefbox.php?<?= time(); ?>"
-                            onclick="return ChefboxZeigen(this.href);" target="_blank">Chefbox</a></div>
+                            href="popups/chefbox.php" onclick="return ChefboxZeigen(this.href);"
+                            target="_blank">Chefbox</a></div>
 
                 <br/>
                 <div class="NaviLinkHeader">Allgemein:</div>
@@ -389,26 +389,26 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 if (istAdmin()) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);" style="margin-bottom: 9px;"><a
-                                href="./?p=admin&amp;<?= time(); ?>">Admin-Bereich</a></div>
+                                href="./?p=admin">Admin-Bereich</a></div>
 
                     <?php
                 }
                 ?>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./?p=rangliste&amp;o=<?= $ich->RanglisteOffset; ?>&amp;highlight=<?= $_SESSION['blm_user']; ?>&amp;<?= time(); ?>">Rangliste</a>
+                            href="./?p=rangliste&amp;o=<?= $ich->RanglisteOffset; ?>&amp;highlight=<?= $_SESSION['blm_user']; ?>">Rangliste</a>
                 </div>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./?p=statistik&amp;<?= time(); ?>">Serverstatistik</a></div>
-                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=regeln&amp;<?= time(); ?>">Regeln</a>
+                            href="./?p=statistik">Serverstatistik</a></div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=regeln">Regeln</a>
                 </div>
-                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=hilfe&amp;<?= time(); ?>">Hilfe</a>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=hilfe">Hilfe</a>
                 </div>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./?p=changelog&amp;<?= time(); ?>">Changelog</a></div>
+                            href="./?p=changelog">Changelog</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./?p=impressum&amp;<?= time(); ?>">Impressum</a></div>
+                            href="./?p=impressum">Impressum</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./actions/logout.php?p=dummy&amp;<?= time(); ?>">Abmelden</a></div>
+                            href="./actions/logout.php?p=dummy">Abmelden</a></div>
                 <?php
             }    // Der letzte Block war die Navigationsleiste für angemeldete Benutzer
             else {        // Der Benutzer ist nicht angemeldet

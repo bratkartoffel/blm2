@@ -20,7 +20,7 @@ ConnectDB();        // Verbindung mit der Datenbank aufbauen
 
 if ($_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=nachrichten_liste&m=112&" . time());
+    header("location: ../?p=nachrichten_liste&m=112");
     die();
 }
 
@@ -44,4 +44,4 @@ $_SESSION['blm_queries']++;
 
 // Erledigt :)
 DisconnectDB();
-header("location: ../?p=notizblock&m=213&" . time());
+header("location: ../?p=notizblock&m=213");

@@ -140,7 +140,7 @@ LIMIT 0,5;";
 
 $rang = intval($_GET['rang']);
 if ($rang > sizeof($Spezial)) {
-    header("location: ../?p=rangliste&m=112&" . time());
+    header("location: ../?p=rangliste&m=112");
     die();
 }
 
@@ -180,7 +180,7 @@ if ($rang > sizeof($Spezial)) {
         <tr>
             <td style="font-weight: bold;"><?= $platz; ?></td>
             <td>
-                <a href="./?p=profil&amp;uid=<?= $s->ID; ?>&amp;<?= time(); ?>"><?= htmlentities(stripslashes($s->Name), ENT_QUOTES, "UTF-8"); ?></a>
+                <a href="./?p=profil&amp;uid=<?= $s->ID; ?>"><?= htmlentities(stripslashes($s->Name), ENT_QUOTES, "UTF-8"); ?></a>
             </td>
             <td style="text-align: right; white-space: nowrap;"><?= $s->Wert; ?></td>
         </tr>
@@ -190,7 +190,7 @@ if ($rang > sizeof($Spezial)) {
     ?>
 </table>
 <div style="margin-top: 20px; font-size: 140%;">
-    <a href="./?p=rangliste&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+    <a href="./?p=rangliste&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
         &lt;&lt; Zurück
     </a>
 </div>

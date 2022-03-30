@@ -26,7 +26,7 @@ if ($_SESSION['blm_sitter']) {
 
 if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=gruppe&m=112&" . time());
+    header("location: ../?p=gruppe&m=112");
     die();
 }
 
@@ -38,7 +38,7 @@ switch (intval($_REQUEST['a'])) {
     case 1:    // neue Gruppe gründen
         if ($ich->Gebaeude1 < 8 || intval($ich->Gruppe) > 0) {        // Darf der Benutzer überhaupt eine neue Gruppe gründen? Wenn nicht, dann...
             DisconnectDB();
-            header("location: ../?p=gruppe&m=112&" . time());
+            header("location: ../?p=gruppe&m=112");
             die();
         }
 
@@ -48,7 +48,7 @@ switch (intval($_REQUEST['a'])) {
 
         if ($name == "" || $kuerzel == "" || $passwort == sha1("")) {        // Alle Felder sind Pflichtfelder, das heisst,
             DisconnectDB();                                                                                                // wenn er eines leer gelassen hat, dann brechen wir ab
-            header("location: ../?p=gruppe&m=104&" . time());
+            header("location: ../?p=gruppe&m=104");
             die();
         }
 
@@ -74,7 +74,7 @@ VALUES
 
         if (mysql_errno() > 0) {            // Falls ein Fehler auftritt, dann existiert die Gruppe bereits
             DisconnectDB();
-            header("location: ../?p=gruppe&m=126&" . time());
+            header("location: ../?p=gruppe&m=126");
             die();
         }
 
@@ -105,18 +105,18 @@ VALUES
     '" . mysql_insert_id() . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Die Gruppe wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> gegründet.'
+    'Die Gruppe wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> gegründet.'
 );";
         mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=223&" . time());
+        header("location: ../?p=gruppe&m=223");
         // Fertig! Zurück zum Gruppenbildschirm, wo jetzt das Gruppenboard stehen sollte :)
     case 2:        // bestehender Gruppe beitreten
         if ($ich->Gebaeude1 < 5 || intval($ich->Gruppe) > 0) {        // Darf der USer überhaupt einer Gruppe beitreten?
             DisconnectDB();                                                                                // Wenn nicht, dann brechen wir mal wieder ab
-            header("location: ../?p=gruppe&m=112&" . time());
+            header("location: ../?p=gruppe&m=112");
             die();
         }
 
@@ -140,13 +140,13 @@ AND
 
         if (intval($gruppe->ID) == 0) {            // Wenn die ID 0 ist, dann gibts die Gruppe nicht, also brechen wir ab
             DisconnectDB();
-            header("location: ../?p=gruppe&m=127&" . time());
+            header("location: ../?p=gruppe&m=127");
             die();
         }
 
         if ($gruppe->anzMitglieder >= MAX_ANZAHL_GRUPPENMITGLIEDER) {    // Die Gruppe ist voll
             DisconnectDB();
-            header("location: ../?p=gruppe&m=140&" . time());
+            header("location: ../?p=gruppe&m=140");
             die();
         }
 
@@ -177,13 +177,13 @@ VALUES
     '" . $gruppe->ID . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> tritt der Gruppe bei.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> tritt der Gruppe bei.'
 );";
         mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=224&" . time());
+        header("location: ../?p=gruppe&m=224");
         // Fertig. Der USer ist in der Gruppe, und sollte nun zum Gruppenboard weitergeleitet werden.
     case 3:        // Gruppe verlassen
         $sql_abfrage = "UPDATE
@@ -253,13 +253,13 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> verlässt freiwillig die Gruppe.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> verlässt freiwillig die Gruppe.'
 );";
         mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
         $_SESSION['blm_queries']++;
 
         DisconnectDB();        // Verbindung mit der DB trennen
-        header("location: ../?p=gruppe&m=225&" . time());        // Und Weiterleitung machen
+        header("location: ../?p=gruppe&m=225");        // Und Weiterleitung machen
 
         // Fertig! Benutzer ist nicht mehr in der Gruppe
     case 4:        // Gruppennachricht schreiben
@@ -270,7 +270,7 @@ VALUES
 
         if ($gruppe == 0 || $nachricht == "") {            // Wenn der Benutzer gar keine Gruppe hat, oder die Nachricht leer ist, dann abbrechen!
             DisconnectDB();
-            header("location: ../?p=gruppe&m=128&" . time());
+            header("location: ../?p=gruppe&m=128");
             die();
         }
 
@@ -295,12 +295,12 @@ VALUES
             mysql_query($sql_abfrage);        // Wenn ja, dann schreib die Nachricht in die DB
 
             DisconnectDB();
-            header("location: ../?p=gruppe&m=204&" . time());
+            header("location: ../?p=gruppe&m=204");
             die(); // Fertig. STIRB!!! Aber erst nach der Weiterleitung :)
         }
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
-        header("location: ../?p=gruppe&m=112&" . time());        // schafft, dann darf er keine
+        header("location: ../?p=gruppe&m=112");        // schafft, dann darf er keine
         // Nachrichten schreiben...
     case 5:            // Gruppennachricht löschen
         $id = intval($_GET['id']);            // Zuerst holen wir uns wieder
@@ -317,7 +317,7 @@ AND
 
             if ($_GET['ajax'] != "1") {
                 DisconnectDB();                                                        // Verbindung trennen,
-                header("location: ../?p=gruppe&m=211&" . time());        // Weiterleitung,
+                header("location: ../?p=gruppe&m=211");        // Weiterleitung,
                 die();                                                                        // Skript stoppen
             } else {
                 die("1");
@@ -325,7 +325,7 @@ AND
         }
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
-        header("location: ../?p=gruppe&m=112&" . time());        // schafft, dann darf er keine
+        header("location: ../?p=gruppe&m=112");        // schafft, dann darf er keine
         // Nachrichten löschen...
     case 6:    // Rechte ändern
         $id = intval($_GET['id']);
@@ -375,14 +375,14 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat die Rechte für <a href=\"./?p=profil&amp;uid=" . $mitglied->ID . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($mitglied->ID)), ENT_QUOTES, "UTF-8") . "</a> auf " . $mitglied->GruppeRechte . " geändert.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat die Rechte für <a href=\"./?p=profil&amp;uid=" . $mitglied->ID . "\">" . htmlentities(stripslashes(GetUserName($mitglied->ID)), ENT_QUOTES, "UTF-8") . "</a> auf " . $mitglied->GruppeRechte . " geändert.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
 
             if ($_GET['ajax'] != "1") {
                 DisconnectDB();        // Verbindung trennen,
-                header("location: ../?p=gruppe_mitgliederverwaltung&m=226&" . time()); // und zurück zur Mitgliederverwaltung,
+                header("location: ../?p=gruppe_mitgliederverwaltung&m=226"); // und zurück zur Mitgliederverwaltung,
                 die();                            // wir sind hier fertig.
             } else {
                 die("1");
@@ -390,7 +390,7 @@ VALUES
         }
 
         DisconnectDB();                                                        // Wenn es der User bis hierher
-        header("location: ../?p=gruppe&m=112&" . time());        // schafft, dann darf er keine
+        header("location: ../?p=gruppe&m=112");        // schafft, dann darf er keine
         // Rechte ändern...
     case 7:        // Mitglied kicken
         $id = intval($_GET['id']);
@@ -426,18 +426,18 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $id . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $id . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($id)), ENT_QUOTES, "UTF-8") . "</a> wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aus der Gruppe verwiesen.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $id . "\">" . htmlentities(stripslashes(GetUserName($id)), ENT_QUOTES, "UTF-8") . "</a> wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aus der Gruppe verwiesen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen,
-            header("location: ../?p=gruppe_mitgliederverwaltung&m=227&" . time());    // und weiterleitung
+            header("location: ../?p=gruppe_mitgliederverwaltung&m=227");    // und weiterleitung
             die();        // und abbrechen
         }
 
         DisconnectDB();        // Wenn er es bis hierher schafft, dann darf er keine Mitglieder kicken, also
-        header("location: ../?p=gruppe&m=112&" . time());    // Verbindung mit DB trennen,
+        header("location: ../?p=gruppe&m=112");    // Verbindung mit DB trennen,
         // Weiterleitung & Meldung ausgeben, abbrechen
     case 8:    // Gruppenbild hochladen
         DisconnectDB();        // Erst mal die Verbindung mit der Datenbank trennen, brauchen wir nicht mehr
@@ -447,12 +447,12 @@ VALUES
                 @unlink("../pics/gruppe/" . $ich->Gruppe . ".jpg");        //...
                 @unlink("../pics/gruppe/" . $ich->Gruppe . ".png");        // lösche alle bisherigen Bilder, welche er haben könnte.
                 @unlink("../pics/gruppe/" . $ich->Gruppe . ".gif");        //
-                header("location: ../?p=gruppe_einstellungen&m=209&" . time());        // Somit wären wir fertig...
+                header("location: ../?p=gruppe_einstellungen&m=209");        // Somit wären wir fertig...
                 die();
             }
 
             if (filesize($_FILES['bild']['tmp_name']) > BILD_GROESE_MAXIMAL) {        // Wenn das Bild größer als 64K ist, dann abbrechen!
-                header("location: ../?p=gruppe_einstellungen&m=103&" . time());
+                header("location: ../?p=gruppe_einstellungen&m=103");
                 die();
             }
 
@@ -471,7 +471,7 @@ VALUES
                     $suffix = "png";
                     break;
                 default:                        // Alles andere ist verboten!
-                    header("location: ../?p=gruppe_einstellungen&m=107&" . time());
+                    header("location: ../?p=gruppe_einstellungen&m=107");
                     die();
             }
 
@@ -482,7 +482,7 @@ VALUES
             move_uploaded_file($_FILES['bild']['tmp_name'], "../pics/gruppe/" . $ich->Gruppe . "." . $suffix);    // Die hochgeladene Datei in das Profilbilderverzeichnis schieben
             chmod("../pics/gruppe/" . $ich->Gruppe . "." . $suffix, 0766);        // Die Rechte des Bildes ändern (TODO: Muss das sein?)
 
-            header("location: ../?p=gruppe_einstellungen&m=210&" . time()); // Alles erledigt :)
+            header("location: ../?p=gruppe_einstellungen&m=210"); // Alles erledigt :)
             die();
         }
 
@@ -491,7 +491,7 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . time());
+        header("location: ../?p=gruppe&m=112");
     case 9:    // Beschreibung bearbeiten
         $beschreibung = mysql_real_escape_string(trim($_POST['beschreibung']));        // Holt sioch die Beschreibung erst mal aus den POST-Daten raus
 
@@ -512,7 +512,7 @@ WHERE
 
             // Alles erfolgreich, also Standard, Verbindung trennen, Weiterleitung, Abbrechen
             DisconnectDB();
-            header("location: ../?p=gruppe_einstellungen&m=206&" . time());
+            header("location: ../?p=gruppe_einstellungen&m=206");
             die();
         }
 
@@ -528,7 +528,7 @@ WHERE
 
         if ($pwd1 == "" || $pwd1 != $pwd2) {        // Falls beide Kennwörter nicht übereinstimmen, oder leer sind
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_einstellungen&m=105&" . time());    // Weiterleitung
+            header("location: ../?p=gruppe_einstellungen&m=105");    // Weiterleitung
             die();    // Abbrechen
         }
 
@@ -542,7 +542,7 @@ WHERE
             mysql_query($sql_abfrage);        // Ändert das Passwort
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_einstellungen&m=219&" . time());    // Weiterleitung
+            header("location: ../?p=gruppe_einstellungen&m=219");    // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -552,7 +552,7 @@ WHERE
         */
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . time());
+        header("location: ../?p=gruppe&m=112");
     case 11:    // Gruppe löschen
         if ($ich->Rechte->GruppeLoeschen) {        // Hat der Benutzer ausreichende Rechte zum Löschen der Gruppe?
             $sql_abfrage = "UPDATE
@@ -602,7 +602,7 @@ WHERE
             @unlink("../pics/gruppe/" . $ich->Gruppe . ".gif");        //
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe&m=228&" . time());        // Weiterleitung
+            header("location: ../?p=gruppe&m=228");        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -613,7 +613,7 @@ WHERE
         */
 
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . time());
+        header("location: ../?p=gruppe&m=112");
     case 12:        // Diplomatische Beziehung eintragen
         $partner = intval($_POST['partner']);        // Mit wem soll der Vertrag geschlossen werden?
         $typ = intval($_POST['typ']);        // Welchen Typ von Vertrag soll es werden? (NAP, BND, Krieg)
@@ -626,7 +626,7 @@ WHERE
                 $krieg_werte = ", 0, 0, " . $betrag;
 
                 if (intval(str_replace(".", "", $_POST['betrag'])) < 100000) {
-                    header("location: ../?p=gruppe_diplomatie&m=132&" . time());
+                    header("location: ../?p=gruppe_diplomatie&m=132");
                     die();
                 }
             }
@@ -657,7 +657,7 @@ VALUES
 
             if (mysql_errno() == 1062 || mysql_errno() == 1452) {        // Gibts schon eine Beziehung mit dem Partner, wenn ja
                 DisconnectDB();        // Dann Verbindung trennen
-                header("location: ../?p=gruppe_diplomatie&m=129&" . time());    // Weiterleitung
+                header("location: ../?p=gruppe_diplomatie&m=129");    // Weiterleitung
                 // Abbrechen
             } else {            // Beziehung erfolgreich eingetragen
                 $sql_abfrage = "INSERT INTO
@@ -675,7 +675,7 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $partner . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($partner)), ENT_QUOTES, "UTF-8") . "</a> gestellt.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $partner . "\">" . htmlentities(stripslashes(GetGroupName($partner)), ENT_QUOTES, "UTF-8") . "</a> gestellt.'
 );";
                 mysql_query($sql_abfrage) or die(mysql_error());            // Dann wird ein Eintrag ins Logbuch gemacht.
                 $_SESSION['blm_queries']++;
@@ -695,13 +695,13 @@ VALUES
     '" . $partner . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Die Gruppe hat eine diplomatische Anfrage (" . $Anfrage[$typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($ich->Gruppe)), ENT_QUOTES, "UTF-8") . "</a> erhalten.'
+    'Die Gruppe hat eine diplomatische Anfrage (" . $Anfrage[$typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "\">" . htmlentities(stripslashes(GetGroupName($ich->Gruppe)), ENT_QUOTES, "UTF-8") . "</a> erhalten.'
 );";
                 mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
                 $_SESSION['blm_queries']++;
 
                 DisconnectDB();            // Verbindung trennen
-                header("location: ../?p=gruppe_diplomatie&m=229&" . time());        // Weiterleitung
+                header("location: ../?p=gruppe_diplomatie&m=229");        // Weiterleitung
                 // Abbrechen
             }
             die();
@@ -757,7 +757,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat die diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($vertrag->An)), ENT_QUOTES, "UTF-8") . "</a> zurückgezogen.'
+	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat die diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "\">" . htmlentities(stripslashes(GetGroupName($vertrag->An)), ENT_QUOTES, "UTF-8") . "</a> zurückgezogen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -777,14 +777,14 @@ VALUES
 	'" . $vertrag->ID . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das diplomatische Angebot (" . $Anfrage[$vertrag->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($ich->Gruppe)), ENT_QUOTES, "UTF-8") . "</a> wurde zurückgezogen.'
+	'Das diplomatische Angebot (" . $Anfrage[$vertrag->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "\">" . htmlentities(stripslashes(GetGroupName($ich->Gruppe)), ENT_QUOTES, "UTF-8") . "</a> wurde zurückgezogen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
 
             // Beziehung erfolgreich gelöscht
             DisconnectDB();            // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=230&" . time());        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=230");        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -868,7 +868,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$anfrage->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $anfrage->Von . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($anfrage->Von)), ENT_QUOTES, "UTF-8") . "</a> angenommen.'
+	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$anfrage->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $anfrage->Von . "\">" . htmlentities(stripslashes(GetGroupName($anfrage->Von)), ENT_QUOTES, "UTF-8") . "</a> angenommen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -888,7 +888,7 @@ VALUES
 	'" . $anfrage->Von . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Die Gruppe <a href=\"./?p=gruppe&amp;id=" . $anfrage->Von . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($anfrage->Von)), ENT_QUOTES, "UTF-8") . "</a> hat die diplomatische Anfrage (" . $Anfrage[$anfrage->Typ] . ") angenommen.'
+	'Die Gruppe <a href=\"./?p=gruppe&amp;id=" . $anfrage->Von . "\">" . htmlentities(stripslashes(GetGroupName($anfrage->Von)), ENT_QUOTES, "UTF-8") . "</a> hat die diplomatische Anfrage (" . $Anfrage[$anfrage->Typ] . ") angenommen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -907,7 +907,7 @@ OR
             }
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=231&" . time());        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=231");        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -916,7 +916,7 @@ OR
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();
-        header("location: ../?p=gruppe&m=112&" . time());
+        header("location: ../?p=gruppe&m=112");
     case 15:            // Diplomatische Anfrage ablehnen
         $id = intval($_GET['id']);
 
@@ -960,7 +960,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $vertrag->Von . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($vertrag->Von)), ENT_QUOTES, "UTF-8") . "</a> abgelehnt.'
+	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $vertrag->Von . "\">" . htmlentities(stripslashes(GetGroupName($vertrag->Von)), ENT_QUOTES, "UTF-8") . "</a> abgelehnt.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -980,13 +980,13 @@ VALUES
 	'" . $vertrag->ID . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Die diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $vertrag->ID . "&amp;" . time() . "\">" . htmlentities(stripslashes($vertrag->Name), ENT_QUOTES, "UTF-8") . "</a> wurde abgelehnt.'
+	'Die diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $vertrag->ID . "\">" . htmlentities(stripslashes($vertrag->Name), ENT_QUOTES, "UTF-8") . "</a> wurde abgelehnt.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=216&" . time());        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=216");        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -995,7 +995,7 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        header("location: ../?p=gruppe&m=112");        // Weiterleitung
         // Abbrechen
     case 16:    // Geld aus Kasse an Mitglied überweisen
         $betrag = mysql_real_escape_string(str_replace(",", ".", $_POST['betrag']));
@@ -1028,13 +1028,13 @@ WHERE
 
             if (intval($gruppe->ID) == 0) {        // Gruppe wurde nicht gefunden
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe_kasse&m=112&" . time());        // Weiterleitung
+                header("location: ../?p=gruppe_kasse&m=112");        // Weiterleitung
                 die();        // Abbrechen
             }
 
             if ($gruppe->Kasse < $betrag || $betrag <= 0) {        // Soviel haben die gar nicht in der Kasse
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe_kasse&m=110&" . time());        // Weiterleitung
+                header("location: ../?p=gruppe_kasse&m=110");        // Weiterleitung
                 die();        // Abbrechen
             }
 
@@ -1042,13 +1042,13 @@ WHERE
                 if ($mitglied->Punkte <= 100000) {
                     if ($mitglied->Bank + $betrag > 100000) {        // Die Bank des Mitglieds ist VOLL! (Hier fix 99.999,99 €)
                         DisconnectDB();        // Verbindung trennen
-                        header("location: ../?p=gruppe_kasse&m=131&" . time());        // Weiterleitung
+                        header("location: ../?p=gruppe_kasse&m=131");        // Weiterleitung
                         die();        // Abbrechen
                     }
                 } else {
                     if ($mitglied->Bank + $betrag > $mitglied->Punkte) {        // Die Bank des Mitglieds ist VOLL! (Hier variabel seine Punkte)
                         DisconnectDB();        // Verbindung trennen
-                        header("location: ../?p=gruppe_kasse&m=131&" . time());        // Weiterleitung
+                        header("location: ../?p=gruppe_kasse&m=131");        // Weiterleitung
                         die();        // Abbrechen
                     }
                 }
@@ -1122,7 +1122,7 @@ WHERE
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_kasse&m=236&" . time());        // Weiterleitung
+            header("location: ../?p=gruppe_kasse&m=236");        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -1131,7 +1131,7 @@ WHERE
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        header("location: ../?p=gruppe&m=112");        // Weiterleitung
         // Abbrechen
     case 17:            // Diplomatische Beziehung kündigen
         $id = intval($_GET['id']);
@@ -1155,7 +1155,7 @@ AND
 
             if (intval($vertrag->ID) == 0) {
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe_diplomatie&m=112&" . time());        // Weiterleitung
+                header("location: ../?p=gruppe_diplomatie&m=112");        // Weiterleitung
                 die();        // Abbrechen
             }
 
@@ -1193,7 +1193,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($vertrag->An)), ENT_QUOTES, "UTF-8") . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aufgelöst.'
+	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "\">" . htmlentities(stripslashes(GetGroupName($vertrag->An)), ENT_QUOTES, "UTF-8") . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aufgelöst.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -1213,13 +1213,13 @@ VALUES
 	'" . $vertrag->An . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetGroupName($ich->Gruppe)), ENT_QUOTES, "UTF-8") . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "&amp;" . time() . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aufgelöst.'
+	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "\">" . htmlentities(stripslashes(GetGroupName($ich->Gruppe)), ENT_QUOTES, "UTF-8") . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aufgelöst.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
 
             DisconnectDB();        // Verbindung trennen
-            header("location: ../?p=gruppe_diplomatie&m=230&" . time());        // Weiterleitung
+            header("location: ../?p=gruppe_diplomatie&m=230");        // Weiterleitung
             die();        // Abbrechen
         }
 
@@ -1228,7 +1228,7 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        header("location: ../?p=gruppe&m=112");        // Weiterleitung
         // Abbrechen
     case 18:
         $id = intval($_GET['id']);
@@ -1337,11 +1337,11 @@ VALUES
                 $_SESSION['blm_queries']++;
 
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe&m=237&" . time());        // Weiterleitung
+                header("location: ../?p=gruppe&m=237");        // Weiterleitung
                 // Abbrechen
             } else {
                 DisconnectDB();        // Verbindung trennen
-                header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+                header("location: ../?p=gruppe&m=112");        // Weiterleitung
                 // Abbrechen
             }
             die();
@@ -1352,9 +1352,9 @@ VALUES
             also Verbindung mit DB trennen, Weiterleitung und abbrechen
         */
         DisconnectDB();        // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung
+        header("location: ../?p=gruppe&m=112");        // Weiterleitung
         // Abbrechen
     default:    // Was will der User überhaupt? Ham'ma nicht :D
         DisconnectDB();            // Verbindung trennen
-        header("location: ../?p=gruppe&m=112&" . time());        // Weiterleitung        // Abbrechen
+        header("location: ../?p=gruppe&m=112");        // Weiterleitung        // Abbrechen
 }

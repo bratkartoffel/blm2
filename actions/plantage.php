@@ -22,7 +22,7 @@ $ich->Sitter = LoadSitterSettings();
 
 if (!$ich->Sitter->Produktion && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=plantage&m=112&" . time());
+    header("location: ../?p=plantage&m=112");
     die();
 }
 
@@ -32,7 +32,7 @@ if ($_POST['alles'] == "1") {
 
     if ($dauer < 1 || $dauer > 12) {        // Ungültige Dauer angegeben
         DisconnectDB();
-        header("location: ../?p=plantage&m=133&" . time());
+        header("location: ../?p=plantage&m=133");
         die();
     }
 
@@ -60,7 +60,7 @@ if ($_POST['alles'] == "1") {
 
     if ($ich->Geld < $kosten_gesamt) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann abbrechen
         DisconnectDB();
-        header("location: ../?p=plantage&m=111&" . time());
+        header("location: ../?p=plantage&m=111");
         die();
     }
 
@@ -84,7 +84,7 @@ VALUES
 
     if (mysql_errno() > 0) {        // Mindestens 1 Auftrag wurde bereits in die Datenbank übernommen
         DisconnectDB();
-        header("location: ../?p=plantage&m=113&" . time());
+        header("location: ../?p=plantage&m=113");
         die();
     }
 
@@ -100,7 +100,7 @@ WHERE
 
     // Fertig, weiter machen
     DisconnectDB();
-    header("location: ../?p=plantage&m=207&" . time());
+    header("location: ../?p=plantage&m=207");
     die();
 }
 
@@ -121,24 +121,24 @@ $produktion_kosten = $menge * $kosten_pro_kg;
 
 if ($produktion_menge > $produktion_pro_stunde * 12 || $produktion_menge <= 0) {        // Wurde eine falsche Menge eingegeben, entweder unter 0 oder wenn die Produktion länger als 12 Stunden dauern würde, dann brich ab.
     DisconnectDB();
-    header("location: ../?p=plantage&m=125&" . time());
+    header("location: ../?p=plantage&m=125");
     die();
 }
 if ($_POST['was'] <= 0 || $_POST['was'] > ANZAHL_WAREN) {        // der User will was anbauen, was es nicht gibt!
     DisconnectDB();
-    header("location: ../?p=plantage&m=112&" . time());
+    header("location: ../?p=plantage&m=112");
     die();
 }
 
 if ($ich->Geld < $produktion_kosten) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann abbrechen
     DisconnectDB();
-    header("location: ../?p=plantage&m=111&" . time());
+    header("location: ../?p=plantage&m=111");
     die();
 }
 
 if ($ich->$temp == 0 || $ich->Gebaeude1 < intval($_POST['was'] * 1.5)) {    // Hat der Benutzer die Pflanze überhaupt schon erforscht? Wenn nicht, dann Abbruch!
     DisconnectDB();
-    header("location: ../?p=plantage&m=112&" . time());
+    header("location: ../?p=plantage&m=112");
     die();
 }
 
@@ -170,7 +170,7 @@ $_SESSION['blm_queries']++;
 
 if (mysql_errno() > 0) {        // Der Auftrag war bereits vorhanden! Doppelauftrag? Ohne uns! Zurück und Meldung ausgeben!
     DisconnectDB();
-    header("location: ../?p=plantage&m=113&" . time());
+    header("location: ../?p=plantage&m=113");
     die();
 }
 
@@ -186,4 +186,4 @@ $_SESSION['blm_queries']++;
 
 // Alles erledigt :)
 DisconnectDB();
-header("location: ../?p=plantage&m=207&" . time() . "#p" . intval($_POST['was']));
+header("location: ../?p=plantage&m=207#p" . intval($_POST['was']));

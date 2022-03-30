@@ -25,7 +25,7 @@ if ($_SESSION['blm_sitter']) {
 
 if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=amrktplatz&m=112&" . time());
+    header("location: ../?p=amrktplatz&m=112");
     die();
 }
 
@@ -35,7 +35,7 @@ switch (intval($_REQUEST['a'])) {        // Was will der Benutzer auf dem Marktp
 
         if ($ich->$temp < intval($_POST['menge'])) {        // Will der Benutzer mehr verkaufen als er hat? Abbruch
             DisconnectDB();
-            header("location: ../?p=marktplatz_verkaufen&m=116&" . time());
+            header("location: ../?p=marktplatz_verkaufen&m=116");
             die();
         }
 
@@ -69,7 +69,7 @@ WHERE
 
         // Angebot drinnen, fertig
         DisconnectDB();
-        header("location: ../?p=marktplatz_liste&m=218&" . time());
+        header("location: ../?p=marktplatz_liste&m=218");
         die();
 
     case 2:        // Kaufen
@@ -92,13 +92,13 @@ AND
 
         if (intval($angebot->ID) == 0) {    // Wurde das Angebot überhaupt gefunden / War jemand schneller? Wenn ja:
             DisconnectDB();
-            header("location: ../?p=marktplatz_liste&m=119" . $url_string . "&" . time());
+            header("location: ../?p=marktplatz_liste&m=119" . $url_string . "");
             die();
         }
 
         if ($ich->Geld < ($angebot->Menge * $angebot->Preis)) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann:
             DisconnectDB();
-            header("location: ../?p=marktplatz_liste&m=111" . $url_string . "&" . time());
+            header("location: ../?p=marktplatz_liste&m=111" . $url_string . "");
             die();
         }
 
@@ -156,7 +156,7 @@ VALUES
 
         // Fertig :)
         DisconnectDB();
-        header("location: ../?p=marktplatz_liste&m=217" . $url_string . "&" . time());
+        header("location: ../?p=marktplatz_liste&m=217" . $url_string . "");
         die();
     case 3:            // Zurückziehen
         $filter = $_GET['w'];
@@ -219,5 +219,5 @@ VALUES
 
         // Fertig :)
         DisconnectDB();
-        header("location: ../?p=marktplatz_liste&m=221" . $url_string . "&" . time());
+        header("location: ../?p=marktplatz_liste&m=221" . $url_string . "");
 }

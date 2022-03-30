@@ -27,7 +27,7 @@ if ($_SESSION['blm_sitter']) {
 
 if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=vertraege&m=112&" . time());
+    header("location: ../?p=vertraege&m=112");
     die();
 }
 
@@ -41,13 +41,13 @@ switch (intval($_REQUEST['a'])) {    // Was will der überhaupt?
 
         if ($an <= 0 || $menge <= 0 || $_preis < $Preis[$ware] || $_preis > 3 * $Preis[$ware]) {        // Es wurden ungültige Werte angegeben
             DisconnectDB();
-            header("location: ../?p=vertrag_neu&m=117&an=$an&ware=$ware&menge=$menge&preis=$_preis&" . time());
+            header("location: ../?p=vertrag_neu&m=117&an=$an&ware=$ware&menge=$menge&preis=$_preis");
             die();
         }
 
         if ($ich->$temp < $menge) {        // Will der Benutzer mehr verschicken als er auf Lager hat? Abbruch!
             DisconnectDB();
-            header("location: ../?p=vertrag_neu&m=116&an=$an&ware=$ware&menge=$menge&preis=$_preis&" . time());
+            header("location: ../?p=vertrag_neu&m=116&an=$an&ware=$ware&menge=$menge&preis=$_preis");
             die();
         }
 
@@ -112,7 +112,7 @@ VALUES
 
         // Vertrag ist verschickt, Fertig!
         DisconnectDB();
-        header("location: ../?p=vertraege_liste&m=214&" . time());
+        header("location: ../?p=vertraege_liste&m=214");
         break;
     case 2:        // Vertrag annehmen
         $id = intval($_GET['vid']);        // Welchen Vertrag will er annehmen?
@@ -134,7 +134,7 @@ AND
             if ($ajax == 1) {
                 die("111");
             } else {
-                header("location: ../?p=vertraege_liste&m=111&" . time());
+                header("location: ../?p=vertraege_liste&m=111");
             }
             die();
         }
@@ -232,7 +232,7 @@ VALUES
         if ($ajax == 1) {
             die("1");
         } else {
-            header("location: ../?p=vertraege_liste&m=215&" . time());
+            header("location: ../?p=vertraege_liste&m=215");
         }
         break;
     case 3:        // Vertrag ablehnen
@@ -260,7 +260,7 @@ AND
             if ($ajax == 1) {
                 die("112");
             } else {
-                header("location: ../?p=vertraege_liste&m=112&" . time());
+                header("location: ../?p=vertraege_liste&m=112");
             }
             die();
         }
@@ -311,10 +311,10 @@ VALUES
         if ($ajax == 1) {
             die("1");
         } else {
-            header("location: ../?p=vertraege_liste&m=216&" . time());
+            header("location: ../?p=vertraege_liste&m=216");
         }
         break;
     default:
         DisconnectDB();
-        header("location: ../?p=vertraege_liste&" . time());
+        header("location: ../?p=vertraege_liste");
 }

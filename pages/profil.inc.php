@@ -108,7 +108,7 @@ $platz = GetPlatz($profil->ID);
     <tr>
         <td>Punkte:</td>
         <td><?= number_format(GetSpielerPunkte($profil->ID), 0, ",", "."); ?> (Platz: <a
-                    href="./?p=rangliste&amp;o=<?= intval(($platz - 1) / RANGLISTE_OFFSET); ?>&amp;highlight=<?= $profil->ID; ?>&amp;<?= time(); ?>"><?= $platz; ?></a>)
+                    href="./?p=rangliste&amp;o=<?= intval(($platz - 1) / RANGLISTE_OFFSET); ?>&amp;highlight=<?= $profil->ID; ?>"><?= $platz; ?></a>)
         </td>
     </tr>
     <tr>

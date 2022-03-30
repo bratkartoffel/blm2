@@ -122,7 +122,7 @@ if ($ich->LastAction + TIMEOUT_INAKTIV < time()) {
     <h1 style="margin: -8px auto 0;width: 200px; height: 35px; background-image: url('../pics/style/bg_chefbox_h1.png');">
         BLM 2</h1>
     <h3 style="margin: 5px 5px 20px;text-decoration: underline;">Chefbox
-        <a href="../?p=hilfe&amp;mod=1&amp;cat=16&amp;<?= time(); ?>"
+        <a href="../?p=hilfe&amp;mod=1&amp;cat=16"
            onclick="BLMNavigation(this.href); return false;"> <img src="../pics/help.gif" alt="Hilfe"
                                                                    style="border: none;"/></a>
     </h3>
@@ -209,41 +209,41 @@ ORDER BY
 </table>
 <table style="margin-top: 15px; width: 100%;" cellspacing="0">
     <tr>
-        <td><a style="font-weight: normal;" href="../?p=nachrichten_liste&amp;<?= time(); ?>"
+        <td><a style="font-weight: normal;" href="../?p=nachrichten_liste"
                onclick="BLMNavigation(this.href); return false;">Neue Nachrichten:</a></td>
         <td><?= NeueNachrichten(); ?></td>
     </tr>
     <tr>
-        <td><a style="font-weight: normal;" href="../?p=vertraege_liste&amp;<?= time(); ?>"
+        <td><a style="font-weight: normal;" href="../?p=vertraege_liste"
                onclick="BLMNavigation(this.href); return false;">Neue Verträge:</a></td>
         <td><?= Vertraege(); ?></td>
     </tr>
     <tr>
-        <td><a style="font-weight: normal;" href="../?p=marktplatz_liste&amp;<?= time(); ?>"
+        <td><a style="font-weight: normal;" href="../?p=marktplatz_liste"
                onclick="BLMNavigation(this.href); return false;">Marktangebote:</a></td>
         <td><?= Database::getInstance()->getMarktplatzCount(); ?></td>
     </tr>
     <tr>
-        <td><a style="font-weight: normal;" href="../?p=rangliste&amp;<?= time(); ?>"
+        <td><a style="font-weight: normal;" href="../?p=rangliste"
                onclick="BLMNavigation(this.href); return false;">Spieler online:</a></td>
         <td><?= SpielerOnline(); ?></td>
     </tr>
     <tr>
-        <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= time(); ?>"
+        <td><a style="font-weight: normal;" href="../?p=bank"
                onclick="BLMNavigation(this.href); return false;">Bargeld:</a></td>
         <td style="white-space: nowrap;"><?= number_format($ich->Geld, 2, ",", ".") . " " . $Currency; ?></td>
     </tr>
     <tr>
-        <td><a style="font-weight: normal;" href="../?p=bank&amp;<?= time(); ?>"
+        <td><a style="font-weight: normal;" href="../?p=bank"
                onclick="BLMNavigation(this.href); return false;">Bank-Guthaben:</a></td>
         <td style="white-space: nowrap;"><?= number_format($ich->Bank, 2, ",", ".") . " " . $Currency; ?></td>
     </tr>
 </table>
 <div style="text-align: center; margin-top: 20px;">
-    <a href="../?p=startseite&amp;<?= time(); ?>" onclick="BLMzeigen(this.href); return false;">
+    <a href="../?p=startseite" onclick="BLMzeigen(this.href); return false;">
         BLM anzeigen / öffnen
     </a><br/>
-    <a href="../?p=startseite&amp;<?= time(); ?>" onclick="BLMEnde(); return false;">
+    <a href="../?p=startseite" onclick="BLMEnde(); return false;">
         Fenster schliessen
     </a>
 </div>

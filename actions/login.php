@@ -82,7 +82,7 @@ VALUES
 
         // Fertisch :)
         DisconnectDB();
-        header("location: ../?p=index&m=202&" . time());
+        header("location: ../?p=index&m=202");
         die();
     }
     DisconnectDB();
@@ -141,4 +141,4 @@ $_SESSION['blm_queries']++;
 
 // Fertisch :)
 DisconnectDB();
-header("location: ../?p=index&m=202&" . time());
+header("location: ../?p=index&m=202");

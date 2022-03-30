@@ -25,39 +25,33 @@
 <br/>
 <br/>
 <ul style="margin-left: 20px;">
-    <li><a href="./?p=admin_test&amp;<?= time(); ?>">Variablen Testseite</a></li>
-    <li><a href="./?p=admin_markt&amp;<?= time(); ?>">Marktplatz</a></li>
-    <li><a href="./?p=admin_vertrag&amp;<?= time(); ?>">Verträge</a></li>
-    <li><a href="./?p=admin_gruppe&amp;<?= time(); ?>">Gruppen</a></li>
-    <li><a href="./?p=admin_benutzer&amp;<?= time(); ?>">Benutzer</a></li>
-    <li><a href="./?p=admin_auftrag&amp;<?= time(); ?>">Aufträge</a></li>
-    <li><a href="./?p=admin_changelog&amp;<?= time(); ?>">Changelog</a></li>
+    <li><a href="./?p=admin_test">Variablen Testseite</a></li>
+    <li><a href="./?p=admin_markt">Marktplatz</a></li>
+    <li><a href="./?p=admin_vertrag">Verträge</a></li>
+    <li><a href="./?p=admin_gruppe">Gruppen</a></li>
+    <li><a href="./?p=admin_benutzer">Benutzer</a></li>
+    <li><a href="./?p=admin_auftrag">Aufträge</a></li>
+    <li><a href="./?p=admin_changelog">Changelog</a></li>
     <li>
         Logbücher:
         <ul>
-            <li><a href="./?p=admin_log_bank&amp;<?= time(); ?>">Bank</a></li>
-            <li><a href="./?p=admin_log_bioladen&amp;<?= time(); ?>">Bioladen</a></li>
-            <li><a href="./?p=admin_log_gruppenkasse&amp;<?= time(); ?>">Gruppenkasse</a></li>
-            <li><a href="./?p=admin_log_login&amp;<?= time(); ?>">Login</a></li>
-            <li><a href="./?p=admin_log_mafia&amp;<?= time(); ?>">Mafia</a></li>
-            <li><a href="./?p=admin_log_vertraege&amp;<?= time(); ?>">Verträge</a></li>
+            <li><a href="./?p=admin_log_bank">Bank</a></li>
+            <li><a href="./?p=admin_log_bioladen">Bioladen</a></li>
+            <li><a href="./?p=admin_log_gruppenkasse">Gruppenkasse</a></li>
+            <li><a href="./?p=admin_log_login">Login</a></li>
+            <li><a href="./?p=admin_log_mafia">Mafia</a></li>
+            <li><a href="./?p=admin_log_vertraege">Verträge</a></li>
         </ul>
     </li>
     <li>
         Vorlagen:
         <ul>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=1&amp;<?= time(); ?>">Verwarnung
-                    Multiaccounts</a></li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=2&amp;<?= time(); ?>">Verwarnung
-                    Passwortweitergabe</a></li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=3&amp;<?= time(); ?>">Verwarnung Bugusing</a>
-            </li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=4&amp;<?= time(); ?>">Verwarnung Spamming</a>
-            </li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=5&amp;<?= time(); ?>">Verwarnung Ausnutzung</a>
-            </li>
-            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=6&amp;<?= time(); ?>">Verwarnung
-                    Accountpushing</a></li>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=1">Verwarnung Multiaccounts</a></li>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=2">Verwarnung Passwortweitergabe</a></li>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=3">Verwarnung Bugusing</a></li>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=4">Verwarnung Spamming</a></li>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=5">Verwarnung Ausnutzung</a></li>
+            <li><a href="./?p=admin_vorlage_verwarnungen&amp;cat=6">Verwarnung Accountpushing</a></li>
         </ul>
     </li>
 </ul>

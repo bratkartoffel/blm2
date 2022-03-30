@@ -24,7 +24,7 @@ if ($_SESSION['blm_sitter']) {
 
 if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=nachrichten_liste&m=112&" . time());
+    header("location: ../?p=nachrichten_liste&m=112");
     die();
 }
 
@@ -47,13 +47,13 @@ switch (intval($_REQUEST['a'])) {    // Was will der Benutzer überhaupt?
 
             // Fertig, Aufgabe erfüllt :)
             DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=204&" . time());
+            header("location: ../?p=nachrichten_liste&m=204");
             die();
         }
 
         if ($an <= 0 || $nachricht == "" || $an == $_SESSION['blm_user']) { // Ist ein Empfänger ausgewählt? Ist ne Nachricht eingegeben worden? Will er sich selbst was schreiben? Wenn eines davon wahr ist, dann abbrechen...
             DisconnectDB();
-            header("location: ../?p=nachrichten_schreiben&m=104&" . time());
+            header("location: ../?p=nachrichten_schreiben&m=104");
             die();
         }
 
@@ -131,7 +131,7 @@ WHERE
 
         // Fertig :)
         DisconnectDB();
-        header("location: ../?p=nachrichten_liste&m=204&" . time());
+        header("location: ../?p=nachrichten_liste&m=204");
         die();
     case 2:        // eine Nachricht löschen
         $sql_abfrage = "DELETE FROM
@@ -153,7 +153,7 @@ AND
 
         if (mysql_affected_rows() == 0) {        // Wenn die Nachricht nicht gelöscht werden konnte, dann wurde eine ungültige ausgewählt
             DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=124&" . time());
+            header("location: ../?p=nachrichten_liste&m=124");
             die();
         }
 
@@ -176,7 +176,7 @@ AND
 
         if ($_GET['ajax'] != "1") {
             DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=211&" . time());
+            header("location: ../?p=nachrichten_liste&m=211");
             die();
         } else {
             die("1");
@@ -202,5 +202,5 @@ WHERE
 
         // Feierabend :)
         DisconnectDB();
-        header("location: ../?p=nachrichten_liste&m=212&" . time());
+        header("location: ../?p=nachrichten_liste&m=212");
 }

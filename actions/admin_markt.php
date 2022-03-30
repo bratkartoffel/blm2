@@ -22,7 +22,7 @@ switch (intval($_REQUEST['a'])) {        // Was will der Benutzer auf dem Marktp
     case 1:        // Verkaufen
         if ($_POST['menge'] <= 0 || number_format(str_replace(",", ".", $_POST['preis']), 2) < 0) {        // Wurde keine Menge oder ein Preis kleiner als 0 € eingegeben? Darf er nicht:
             DisconnectDB();
-            header("location: ../?p=admin_markt_einstellen&m=120&" . time());
+            header("location: ../?p=admin_markt_einstellen&m=120");
             die();
         }
 
@@ -41,12 +41,12 @@ VALUES
 
         // Angebot drinnen, fertig
         DisconnectDB();
-        header("location: ../?p=admin_markt&m=218&" . time());
+        header("location: ../?p=admin_markt&m=218");
         die();
     case 2:        // Bearbeiten
         if ($_POST['menge'] <= 0 || number_format(str_replace(",", ".", $_POST['preis']), 2) < 0) {        // Wurde keine Menge oder ein Preis kleiner als 0 € eingegeben? Darf er nicht:
             DisconnectDB();
-            header("location: ../?p=admin_markt_bearbeiten&m=120&" . time() . "&id=" . intval($_POST['id']));
+            header("location: ../?p=admin_markt_bearbeiten&m=120&id=" . intval($_POST['id']));
             die();
         }
 
@@ -62,7 +62,7 @@ WHERE
         $_SESSION['blm_queries']++;
 
         DisconnectDB();
-        header("location: ../?p=admin_markt&m=234&" . time());
+        header("location: ../?p=admin_markt&m=234");
         die();
     case 3:            // Löschen
         $sql_abfrage = "DELETE FROM
@@ -74,5 +74,5 @@ WHERE
 
         // Fertig :)
         DisconnectDB();
-        header("location: ../?p=admin_markt&m=233&" . time());
+        header("location: ../?p=admin_markt&m=233");
 }

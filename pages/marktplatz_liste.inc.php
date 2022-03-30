@@ -37,7 +37,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
                 <th>Filter</th>
                 <th colspan="3" style="text-align: right;"><a href="./?p=marktplatz_liste&amp;o=0"
                                                               onclick="AllesAuswaehlen(document.forms[0], ''); return false;">Alles
-                        abwählen</a> | <a href="./?p=marktplatz_liste&amp;o=0&amp;<?= time(); ?>"
+                        abwählen</a> | <a href="./?p=marktplatz_liste&amp;o=0"
                                           onclick="AllesAuswaehlen(document.forms[0], 'checked'); return false;">Alles
                         auswählen</a></th>
             </tr>
@@ -139,7 +139,7 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
         for ($i = 0; $i < $anzahl_markt; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
             if ($i % MARKTPLATZ_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                 if (($i / MARKTPLATZ_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                    $temp .= '<a href="./?p=marktplatz_liste&amp;o=' . ($i / MARKTPLATZ_OFFSET) . $url_string . '&amp;' . time() . '">' . (($i / MARKTPLATZ_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                    $temp .= '<a href="./?p=marktplatz_liste&amp;o=' . ($i / MARKTPLATZ_OFFSET) . $url_string. '">' . (($i / MARKTPLATZ_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                 } else {
                     $temp .= (($i / MARKTPLATZ_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                 }
@@ -160,6 +160,6 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
     }
 
     if ($hat_waren) {        // Wenn der Benutzer was auf Lager hat, dann zeige den Link zum Einstellen eines neuen Angebots an.
-        echo '<a href="./?p=marktplatz_verkaufen&amp;' . time() . '">Neues Angebot einstellen</a><br />';
+        echo '<a href="./?p=marktplatz_verkaufen">Neues Angebot einstellen</a><br />';
     }
 }

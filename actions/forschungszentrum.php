@@ -25,7 +25,7 @@ if ($_SESSION['blm_sitter']) {
 
 if (!$ich->Sitter->Forschung && $_SESSION['blm_sitter']) {
     DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112&" . time());
+    header("location: ../?p=forschungszentrum&m=112");
     die();
 }
 
@@ -33,7 +33,7 @@ include("../include/kosten_dauer.inc.php");        // Dann die Forschungskosten 
 
 if ($_POST['was'] <= 0 || $_POST['was'] > ANZAHL_WAREN) {    // der user will was forschen, was es nicht gibt...
     DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112&" . time());
+    header("location: ../?p=forschungszentrum&m=112");
     die();
 }
 
@@ -44,13 +44,13 @@ $forschungs_punkte = $$temp->Punkte;            // Die Dauer des Auftrags
 
 if ($ich->Gebaeude2 < intval($_POST['was'] * 1.5) || $ich->Gebaeude1 < intval($_POST['was'] * 1.5)) {        // Darf der Benutzer das Gemüse überhaupt forschen?
     DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112&" . time());
+    header("location: ../?p=forschungszentrum&m=112");
     die();
 }
 
 if ($ich->Geld < $forschungs_kosten) {        // Hat der Benutzer überhaupt genug Geld für so was? Wenn nicht, dann abbruch
     DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112&" . time());
+    header("location: ../?p=forschungszentrum&m=112");
     die();
 }
 
@@ -82,7 +82,7 @@ $_SESSION['blm_queries']++;
 
 if (mysql_errno() > 0) {        // Der Auftrag ist schon in der DB (Spalten `Was`+`Von` sind UNIQUE!)
     DisconnectDB();
-    header("location: ../?p=gebaeude&m=113&" . time());
+    header("location: ../?p=gebaeude&m=113");
     die();
 }
 
@@ -98,4 +98,4 @@ $_SESSION['blm_queries']++;
 
 // Alles erledigt :)
 DisconnectDB();
-header("location: ../?p=forschungszentrum&m=207&" . time() . "#f" . $_POST['was']);
+header("location: ../?p=forschungszentrum&m=207#f" . $_POST['was']);

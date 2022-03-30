@@ -120,16 +120,16 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             }
 
             if ($spieler->Kuerzel != "") {
-                echo ' (<a href="./?p=gruppe&amp;id=' . $spieler->Gruppe . '&amp;' . time() . '">' . htmlentities(stripslashes($spieler->Kuerzel), ENT_QUOTES, "UTF-8") . '</a>)';
+                echo ' (<a href="./?p=gruppe&amp;id=' . $spieler->Gruppe. '">' . htmlentities(stripslashes($spieler->Kuerzel), ENT_QUOTES, "UTF-8") . '</a>)';
             }
 
             echo '</td><td style="text-align: right; padding-right: 8px;">' . number_format($spieler->Punkte, 0, ",", ".") . '</td>';
 
             if (IstAngemeldet()) {        // Nur wenn der Betrachter angemeldet ist, dann zeig auf die Aktionsfelder an
                 if ($spieler->nID != $_SESSION['blm_user']) {
-                    echo '<td>(<a href="./?p=nachrichten_schreiben&amp;an=' . $spieler->nID . '&amp;' . time() . '">IGM</a> | <a href="./?p=vertrag_neu&amp;an=' . $spieler->nID . '&amp;' . time() . '">Vertrag</a> | <a href="./?p=profil&amp;uid=' . $spieler->nID . '&amp;' . time() . '">Profil</a>)</td>';
+                    echo '<td>(<a href="./?p=nachrichten_schreiben&amp;an=' . $spieler->nID. '">IGM</a> | <a href="./?p=vertrag_neu&amp;an=' . $spieler->nID. '">Vertrag</a> | <a href="./?p=profil&amp;uid=' . $spieler->nID. '">Profil</a>)</td>';
                 } else {
-                    echo '<td>(IGM | Vertrag | <a href="./?p=profil&amp;uid=' . $spieler->nID . '&amp;' . time() . '">Profil</a>)</td>';
+                    echo '<td>(IGM | Vertrag | <a href="./?p=profil&amp;uid=' . $spieler->nID. '">Profil</a>)</td>';
                 }
             }
             echo '</tr>';
@@ -143,7 +143,7 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
         for ($i = 0; $i < $anzahl_spieler; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
             if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                 if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                    $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . $offset_gruppe . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                    $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . $offset_gruppe . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])). '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                 } else {
                     $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                 }
@@ -221,7 +221,7 @@ WHERE
                 }
 
                 echo '<td style="text-align: right;">' . $nr . '</td>
-						<td><a href="./?p=gruppe&amp;id=' . $gruppe->Gruppe . '&amp;' . time() . '">' . htmlentities(stripslashes($temp->Name), ENT_QUOTES, "UTF-8") . '</a></td>
+						<td><a href="./?p=gruppe&amp;id=' . $gruppe->Gruppe. '">' . htmlentities(stripslashes($temp->Name), ENT_QUOTES, "UTF-8") . '</a></td>
 						<td>' . htmlentities(stripslashes($temp->Kuerzel), ENT_QUOTES, "UTF-8") . '</td>
 						<td>' . $gruppe->anzMitglieder . '</td>
 						<td>' . number_format($gruppe->GruppenPunkte, 0, ",", ".") . '</td>
@@ -243,7 +243,7 @@ WHERE
                 for ($i = 0; $i < $anzahl_gruppen; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                     if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                         if (($i / RANGLISTE_OFFSET) != $offset_gruppe) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                            $temp .= '<a href="./?p=rangliste&amp;o=' . intval($_GET['o']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;o_gr=' . ($i / RANGLISTE_OFFSET) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                            $temp .= '<a href="./?p=rangliste&amp;o=' . intval($_GET['o']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;o_gr=' . ($i / RANGLISTE_OFFSET). '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                         } else {
                             $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                         }
@@ -290,7 +290,7 @@ LIMIT
                         echo '<tr class="Rangliste">';                // Ansonsten mach sie normal
                     }
                     echo '<td>' . $platz . '</td>
-						<td><a href="./?p=profil&amp;uid=' . $spieler->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($spieler->Name), ENT_QUOTES, "UTF-8") . '</a></td>
+						<td><a href="./?p=profil&amp;uid=' . $spieler->ID. '">' . htmlentities(stripslashes($spieler->Name), ENT_QUOTES, "UTF-8") . '</a></td>
 						<td>' . $spieler->EwigePunkte . '</td>
 					</tr>';
                 }
@@ -305,7 +305,7 @@ LIMIT
                 <table class="Liste" style="width: 600px;">
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=0&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=0&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Der Bioladenfreak:
                             </a>
                         </th>
@@ -327,7 +327,7 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ';
                             if (date("m", $user->Onlinezeit) > 1) {
                                 echo (date("m", $user->Onlinezeit) - 1) . " Monat(e), ";
                             }
@@ -341,7 +341,7 @@ LIMIT 0,1;";
                     </tr>
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=1&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=1&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Der Pate:
                             </a>
                         </th>
@@ -363,12 +363,12 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMafia, 0, ",", ".") . ' ' . $Currency . ' für die Mafia.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMafia, 0, ",", ".") . ' ' . $Currency . ' für die Mafia.';
                             ?></td>
                     </tr>
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=2&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=2&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Der Händlerkönig:
                             </a>
                         </th>
@@ -390,12 +390,12 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMarkt, 0, ",", ".") . ' ' . $Currency . ' auf dem freien Markt.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Ausgaben von ' . number_format($user->AusgabenMarkt, 0, ",", ".") . ' ' . $Currency . ' auf dem freien Markt.';
                             ?></td>
                     </tr>
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=3&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=3&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Der Baumeister:
                             </a>
                         </th>
@@ -422,12 +422,12 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ' . $user->GebaeudeLevel . ' Gebäudeleveln.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ' . $user->GebaeudeLevel . ' Gebäudeleveln.';
                             ?></td>
                     </tr>
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=4&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=4&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Das Genie:
                             </a>
                         </th>
@@ -459,7 +459,7 @@ LIMIT 0,1;";
                     </tr>
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=5&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=5&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Der Kapitalist:
                             </a>
                         </th>
@@ -481,12 +481,12 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Einnahmen von ' . number_format($user->EinnahmenZinsen, 0, ",", ".") . ' ' . $Currency . ' durch Zinsen.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit Einnahmen von ' . number_format($user->EinnahmenZinsen, 0, ",", ".") . ' ' . $Currency . ' durch Zinsen.';
                             ?></td>
                     </tr>
                     <tr>
                         <th style="width: 1px; padding: 2px 8px 2px 8px; border-bottom: solid 1px #666666; white-space: nowrap;">
-                            <a href="./?p=rangliste_spezial&amp;rang=6&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>&amp;<?= time(); ?>">
+                            <a href="./?p=rangliste_spezial&amp;rang=6&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
                                 Der Mitteilungsbedürftige:
                             </a>
                         </th>
@@ -508,7 +508,7 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ' . $user->IgmGesendet . ' gesendeten Nachrichten.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a> mit ' . $user->IgmGesendet . ' gesendeten Nachrichten.';
                             ?></td>
                     </tr>
                     <tr>
@@ -531,7 +531,7 @@ LIMIT 0,1;";
 
                             $user = mysql_fetch_object($sql_ergebnis);
 
-                            echo '<a href="./?p=profil&amp;uid=' . $user->ID . '&amp;' . time() . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a>. Einer muss den Zufallsgenerator ja testen.';
+                            echo '<a href="./?p=profil&amp;uid=' . $user->ID. '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</a>. Einer muss den Zufallsgenerator ja testen.';
                             ?></td>
                     </tr>
                 </table>

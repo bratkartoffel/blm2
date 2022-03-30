@@ -47,12 +47,16 @@ if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
                 $filter = $_GET['w'];
 
                 if (!is_array($filter)) {
+                    $filter = array();
                     for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
                         $filter[] = $i;
                     }
                 }
-                $url_string = implode("&amp;w[]=", $filter);
-                $url_string = "&amp;w[]=" . $filter[0] . substr($url_string, 1);
+
+                $url_string = '';
+                for ($i = 0; $i < sizeof($filter); $i++) {
+                    $url_string = $url_string . "&amp;w[]=" . urlencode($filter[$i]);
+                }
 
                 $i = 0;
 
@@ -89,7 +93,7 @@ if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
         <?php
         $offset = intval($_GET['o']);        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
         // Dabei berechnet sich der Starteintrag aus $offset*MARKTPLATZ_OFFSET
-        $anzahl_markt = AngeboteMarkt("Was IN (" . implode(",", $filter) . ")");        // Wieviele Spieler gibts überhaupt
+        $anzahl_markt = AngeboteMarkt("Was IN (" . implode(",", $filter) . ")");
 
         if ($offset < 0 || ($offset * MARKTPLATZ_OFFSET) > $anzahl_markt) {        // Ist das Offset negativ?
             $offset = 0;            // ... dann setz es auf Standard

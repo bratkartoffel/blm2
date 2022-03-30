@@ -19,7 +19,7 @@ session_start();        // Die Sitzung beim Einbinden der Datei sofort starten, 
  * @version 1.0.0
  *
  */
-function AngeboteMarkt($filter = 1)
+function AngeboteMarkt($filter = "1 = 1")
 {
     $sql_abfrage = "SELECT
 	COUNT(*) AS anzahl

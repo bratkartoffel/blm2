@@ -50,7 +50,7 @@ class Database
         $this->queries++;
         $stmt = $this->link->prepare($sql);
         if ($stmt === false) {
-            $this->error($this->link, "prepare", "Could not prepare statement");
+            $this->error($this->link, "Could not prepare statement");
             return null;
         }
         return $stmt;
@@ -62,80 +62,35 @@ class Database
         $rank--;
         $stmt = $this->prepare("SELECT Name FROM mitglieder ORDER BY Punkte DESC, Name LIMIT :rank, 1");
         $stmt->bindParam("rank", $rank, PDO::PARAM_INT);
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return null;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return null;
-        }
-        return $result['Name'];
+        return $this->executeAndExtractField($stmt, 'Name');
     }
 
     public function getPlayerNameById($id)
     {
         $stmt = $this->prepare("SELECT Name FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return null;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return null;
-        }
-        return $result['Name'];
+        return $this->executeAndExtractField($stmt, 'Name');
     }
 
     public function getPlayerRankById($id)
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM mitglieder WHERE Punkte > (SELECT Punkte FROM mitglieder WHERE ID = :id)");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return null;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return null;
-        }
-        return $result['count'] + 1;
+        return $this->executeAndExtractField($stmt, 'count') + 1;
     }
 
     public function getPlayerPointsById($id)
     {
         $stmt = $this->prepare("SELECT Punkte FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return null;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return null;
-        }
-        return round($result['Punkte']);
+        return round($this->executeAndExtractField($stmt, 'Punkte'));
     }
 
     public function getPlayerCount($nameFilter = "%")
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM mitglieder WHERE Name LIKE :name");
         $stmt->bindParam("name", $nameFilter);
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return null;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return null;
-        }
-        return $result['count'];
+        return $this->executeAndExtractField($stmt, 'count');
     }
 
     public function getMarktplatzCount($wasFilter = array())
@@ -145,47 +100,20 @@ class Database
         } else {
             $stmt = $this->prepare("SELECT count(1) AS count FROM marktplatz WHERE Was IN (" . str_repeat('?, ', count($wasFilter) - 1) . "?)");
         }
-        if (!$stmt->execute($wasFilter)) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return 0;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return 0;
-        }
-        return $result['count'];
+        return $this->executeAndExtractField($stmt, 'count', $wasFilter);
     }
 
     public function getGroupCount()
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM gruppe");
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return 0;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return 0;
-        }
-        return $result['count'];
+        return $this->executeAndExtractField($stmt, 'count');
     }
 
     public function getGroupNameById($id)
     {
         $stmt = $this->prepare("SELECT Name FROM gruppe WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
-        if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
-            return null;
-        }
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false) {
-            $this->error($stmt, __FUNCTION__, "No result found");
-            return null;
-        }
-        return $result['Name'];
+        return $this->executeAndExtractField($stmt, 'Name');
     }
 
     public function deletePlayerById($id)
@@ -193,7 +121,7 @@ class Database
         $stmt = $this->prepare("DELETE FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         if (!$stmt->execute()) {
-            $this->error($stmt, __FUNCTION__, "Could not execute statement");
+            $this->error($stmt, "Could not execute statement");
             return 0;
         }
         return $stmt->rowCount() == 1;
@@ -204,12 +132,37 @@ class Database
         return $this->queries;
     }
 
-    private function error($handle, $method, $text, $level = E_USER_WARNING)
+    private function error($handle, $text, $level = E_USER_WARNING)
     {
         $errorInfo = $handle->errorInfo();
         if (sizeof($errorInfo) > 0 && $errorInfo[0] != '00000') {
             $text .= " (" . var_export($errorInfo, true) . ")";
         }
-        trigger_error($method . ": " . $text, $level);
+        $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+        for ($i = 1; $i < count($bt); $i++) {
+            if ($bt[$i]["file"] != __FILE__) {
+                break;
+            }
+        }
+        trigger_error($bt[$i]["function"] . ": " . $text, $level);
+    }
+
+    private function executeAndExtractField($stmt, $fieldName, $executeParam = array())
+    {
+        if (count($executeParam) == 0) {
+            $executeResult = $stmt->execute();
+        } else {
+            $executeResult = $stmt->execute($executeParam);
+        }
+        if (!$executeResult) {
+            $this->error($stmt, "Could not execute statement");
+            return null;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result === false) {
+            $this->error($stmt, "No result found");
+            return null;
+        }
+        return $result[$fieldName];
     }
 }

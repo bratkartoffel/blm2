@@ -46,6 +46,13 @@ if (istAngemeldet()) {        // Ist der Benutzer angemeldet? Wenn ja, dann...
     $ich = LoadSettings();        // Alle Daten des Users laden
     CheckAllAuftraege();        // Die Auftragsliste abarbeiten
     $ich = LoadSettings();        // Meine Daten nochmal laden, denn es könnte sich ja was geändert haben ;)
+
+    if (istAdmin()) {
+        // Zeige Fehler / Warnungen nur den Admins
+        error_reporting(E_ALL);
+        ini_set('display_errors', 'true');
+    }
+
     $ich->Sitter = LoadSitterSettings();
 
     if ($ich->LastAction + TIMEOUT_INAKTIV < time() && !$_SESSION['blm_sitter']) {

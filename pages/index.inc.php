@@ -35,9 +35,6 @@
     </h4>
     <h2>Infos zur aktuellen Runde:</h2>
 <?php
-    error_reporting(E_ALL);
-    ini_set('display_errors', 'true');
-
     $db = Database::getInstance();
 
 if (CheckGameLock()) {        // Ist das Spiel gesperrt? Wenn ja, dann

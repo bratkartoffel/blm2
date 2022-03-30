@@ -11,6 +11,7 @@
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
 include("../include/captcha_class/captcha.php");            // bindet die Funktionen ein
+include("../include/database.class.php");
 
 ConnectDB();        // Verbindung mit der Datenbank aufbauen
 

@@ -11,6 +11,7 @@
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
 include("../include/preise.inc.php");
+include("../include/database.class.php");
 
 if (!IstAngemeldet()) {        // Wer nicht angemeldet ist, kann auch keine Verträge ausmachen!
     header("location: ../?p=index&m=102");

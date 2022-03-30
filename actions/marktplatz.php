@@ -10,6 +10,7 @@
 // Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 if (!IstAngemeldet()) {        // Nur wer angemeldet ist, darf auf dem Marktplatz werkeln ;=)
     header("location: ../?p=index&m=102");

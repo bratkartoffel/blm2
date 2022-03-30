@@ -10,6 +10,7 @@
 // Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 ConnectDB();        // Verbindung mit der Datenbank aufbauen
 

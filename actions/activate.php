@@ -9,6 +9,7 @@
 
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 $user = trim($_GET['user']);
 $code = trim($_GET['code']);

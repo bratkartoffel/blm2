@@ -36,6 +36,7 @@ if (WARTUNGS_ARBEITEN) {
 
 // error_reporting(0);		// Dann schalten wir das Error-Reporting-Feature aus, das stört den normalen Benutzer nur ;)
 ConnectDB();        // So, dann bauen wir mal die Verbindung mit der Datenbank auf.
+require_once(dirname(__FILE__) . '/include/database.class.php');
 
 if (CheckRundenEnde()) {        // Wenn die aktuelle Runde zu Ende ist, dann...
     ResetAll(true, $Start);            // ... wird ein Reset durchgeführt.

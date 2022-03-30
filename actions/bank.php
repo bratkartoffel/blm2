@@ -10,6 +10,7 @@
 // Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 if (!IstAngemeldet()) {        // Wenn der Client nicht angemeldet ist, darf er auch nichts mit der Bank machen :)
     header("location: ../?p=index&m=102");

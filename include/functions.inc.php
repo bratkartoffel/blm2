@@ -10,32 +10,6 @@
 session_start();        // Die Sitzung beim Einbinden der Datei sofort starten, werden immer benötigt.
 
 /**
- * Hilfsfunktion: Liefert die Anzahl der angemeldeten Spieler zurück
- *
- * @return int
- **@version 1.0.1
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function AnzahlSpieler($filter = "%")
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	mitglieder
-WHERE
-	ID>0
-AND
-	Name LIKE '" . $filter . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $spieler = mysql_fetch_object($sql_ergebnis);
-
-    return intval($spieler->anzahl);        // Zurück damit :)
-}
-
-/**
  * Hilfsfunktion: Liefert anhand der AuftragsBezeichnung (MySQL-Spalte `Was` in der Tabelle `auftraege`) einen Text zurück, was das ist
  *
  * @param int $auftrag_nummer

@@ -46,8 +46,8 @@
         else
             $filter = str_replace('*', '%', mysql_real_escape_string($find_spieler));
 
-        if (RANGLISTE_OFFSET * $offset > AnzahlSpieler($filter)) {        // Will er das Offset höher setzen, als es Spieler gibt?
-            $offset = intval(AnzahlSpieler($filter) / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
+        if (RANGLISTE_OFFSET * $offset > Database::getInstance()->getPlayerCount($filter)) {        // Will er das Offset höher setzen, als es Spieler gibt?
+            $offset = intval(Database::getInstance()->getPlayerCount($filter) / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
         }
 
         if (RANGLISTE_OFFSET * $offset > Database::getInstance()->getGroupCount()) {        // Will er das Offset höher setzen, als es Spieler gibt?
@@ -134,34 +134,24 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             }
             echo '</tr>';
         }
-
-        if (AnzahlSpieler() == 0) {
-            echo '<tr><td colspan="4" style="text-align: center;"><i>Bisher sind noch keine Spieler angemeldet. Da ist wohl was falsch gelaufen bei der Installation =)</i></td></tr>';
-        }
         echo '</table><br />';
 
-        $anzahl_spieler = AnzahlSpieler($filter);        // Wieviele Spieler gibts überhaupt
-        if ($anzahl_spieler > 0) {
-            echo '<div style="font-weight: bold; font-size: 12pt;">Seite: ';
-            $temp = "";                            // Hier wird die Ausgabe zwischengespeichert
+        $anzahl_spieler = Database::getInstance()->getPlayerCount($filter);        // Wieviele Spieler gibts überhaupt
+        echo '<div style="font-weight: bold; font-size: 12pt;">Seite: ';
+        $temp = "";                            // Hier wird die Ausgabe zwischengespeichert
 
-            for ($i = 0; $i < $anzahl_spieler; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
-                if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
-                    if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                        $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . $offset_gruppe . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
-                    } else {
-                        $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
-                    }
+        for ($i = 0; $i < $anzahl_spieler; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
+            if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
+                if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
+                    $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . $offset_gruppe . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                } else {
+                    $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                 }
             }
-
-            echo substr($temp, 0, -2);        // Zum Schluss noch die Vorbereitete Ausgabe ausgeben, ohne den letzten Trenner
-            echo '</div><br />';
-
-
-            ?>
-            <?php
         }
+
+        echo substr($temp, 0, -2);        // Zum Schluss noch die Vorbereitete Ausgabe ausgeben, ohne den letzten Trenner
+        echo '</div><br />';
         ?>
         <div style="font-weight: bold; font-size: 12pt;">
             Spielersuche:

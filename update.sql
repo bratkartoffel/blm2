@@ -48,6 +48,17 @@ alter table mitglieder
 alter table mitglieder
     drop column BannerViews;
 
+create or replace view log_bank_view as
+select `m`.`ID`                                      AS `WerId`,
+       `m`.`Name`                                    AS `Wer`,
+       `l`.`Wann`                                    AS `Wann`,
+       `l`.`Wieviel`                                 AS `Wieviel`,
+       if(`l`.`Einzahlen`, 'Einzahlen', 'Auszahlen') AS `Aktion`
+from (`log_bank` `l`
+         left join `mitglieder` `m` on (`l`.`Wer` = `m`.`ID`))
+order by `m`.`Name`, `l`.`Wann` desc;
+
+
 
 -- Verträge.An Relationen Mitglieder.ID:						ON DELETE SET NULL
 -- Mitglieder.Gruppe Relation Gruppe.ID:						ON DELETE SET NULL

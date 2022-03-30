@@ -1841,3 +1841,59 @@ WHERE
 
     return sichere_ausgabe($temp->Name);
 }
+
+function getOrDefault($array, $name, $default = null)
+{
+    if (isset($array[$name])) {
+        $value = $array[$name];
+        if ($default == null || is_string($default)) {
+            return $value;
+        } else if (is_integer($default)) {
+            return intval($value);
+        } else if (is_double($default)) {
+            return doubleval($value);
+        } else if (is_bool($default)) {
+            return boolval($value);
+        } else {
+            trigger_error("Unknown type of default '" . var_export($default, true) . "'");
+            return $value;
+        }
+    }
+    return $default;
+}
+
+function verifyOffset($offset, $entriesCount, $entriesPerPage)
+{
+    if ($offset < 0) {
+        return 0;
+    } elseif ($entriesPerPage * $offset > $entriesCount) {
+        return intval($entriesCount / $entriesPerPage);
+    } else {
+        return intval($offset);
+    }
+}
+
+function createProfileLink($id, $name)
+{
+    return sprintf('<a href="/?p=profil&amp;uid=%d">%s</a>', $id, sichere_ausgabe($name));
+}
+
+function formatCurrency($amount)
+{
+    return number_format($amount, 2, ",", ".");
+}
+
+function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesPerPage)
+{
+    $pages = array();
+    for ($i = 0; $i < $entriesCount; $i += $entriesPerPage) {
+        $page = intval($i / $entriesPerPage);
+        if ($page != $currentPage) {
+            $pages[] = sprintf('<a href="%s&amp;o=%d">%d</a>', $linkBase, $page, $page + 1);
+        } else {
+            $pages[] = $page + 1;
+        }
+    }
+
+    return sprintf('<div id="Pagination">Seite: %s</div>', implode(" | ", $pages));
+}

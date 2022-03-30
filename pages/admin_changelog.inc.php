@@ -25,7 +25,7 @@
         <th>ID</th>
         <th>Datum</th>
         <th>Kategorie</th>
-        <th>Neschreibung</th>
+        <th>Beschreibung</th>
         <th>Aktion</th>
     </tr>
     <?php

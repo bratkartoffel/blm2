@@ -49,8 +49,8 @@ class Database
     {
         $this->queries++;
         $stmt = $this->link->prepare($sql);
-        if ($stmt === false) {
-            $this->error($this->link, "Could not prepare statement");
+        if ($stmt == false) {
+            $this->error($this->link, "Could not prepare statement: " . $sql);
             return null;
         }
         return $stmt;
@@ -91,6 +91,24 @@ class Database
         $stmt = $this->prepare("SELECT count(1) AS count FROM mitglieder WHERE Name LIKE :name");
         $stmt->bindParam("name", $nameFilter);
         return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminBankLogCount($nameFilter)
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM log_bank_view WHERE Wer LIKE :name");
+        $stmt->bindParam("name", $nameFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminBankLogEntries($nameFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT Wer, WerId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Aktion FROM log_bank_view
+            WHERE Wer LIKE :name ORDER BY Wann DESC LIMIT :offset, :count");
+        $stmt->bindParam("name", $nameFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getMarktplatzCount($wasFilter = array())
@@ -164,5 +182,23 @@ class Database
             return null;
         }
         return $result[$fieldName];
+    }
+
+    private function executeAndExtractRows($stmt, $executeParam = array())
+    {
+        if (count($executeParam) == 0) {
+            $executeResult = $stmt->execute();
+        } else {
+            $executeResult = $stmt->execute($executeParam);
+        }
+        if (!$executeResult) {
+            $this->error($stmt, "Could not execute statement");
+            return null;
+        }
+        $results = array();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $results[] = $row;
+        }
+        return $results;
     }
 }

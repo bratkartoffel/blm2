@@ -66,6 +66,14 @@ div#Inhalt {
     z-index: 3;
 }
 
+div#Pagination {
+    width: 500px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 12pt;
+    text-align: center;
+}
+
 div#Navigation {
     position: relative;
     top: -8px;
@@ -172,6 +180,16 @@ table#SeitenUeberschrift {
     margin-bottom: 0;
 
     background-image: url('../pics/style/bg_ueberschrift.png');
+}
+
+table#SeitenUeberschrift td:nth-of-type(1) {
+    width: 80px;
+}
+
+table#SeitenUeberschrift td:nth-of-type(2) {
+    font-size: 16pt;
+    font-weight: bold;
+    text-decoration: underline
 }
 
 table.UserStatistik {

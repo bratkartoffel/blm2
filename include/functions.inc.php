@@ -6,19 +6,8 @@
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  * @package blm2.includes
  */
-/*
-Changelog:
 
-[1.0.3]
-    Registrieren()		Serverpfad durch Konstante ersetzt
-
-*/
 session_start();        // Die Sitzung beim Einbinden der Datei sofort starten, werden immer benötigt.
-
-/**
- * @ignore
- **/
-@include 'geshi/geshi.php';
 
 /**
  * Hilfsfunktion: Liefert die Anzahl der Angebote auf dem Markt zurück
@@ -42,7 +31,6 @@ WHERE
     $_SESSION['blm_queries']++;
 
     $markt = mysql_fetch_object($sql_ergebnis);
-
     return intval($markt->anzahl);
 }
 
@@ -1718,79 +1706,6 @@ function ReplaceBBCode($text)
     $footer['html'] = '</div>';
 
     $text = sichere_ausgabe($text, "UTF-8");        // dann escapen wir den String
-
-    for ($i = 0; $i < $anzPHP; $i++) {
-        $php_['search'] = $php[1][$i];
-
-        $geshi = new Geshi($php_['search'], 'php');
-        $php_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[php]' . sichere_ausgabe($php_['search'], $encoding) . '[/php]', $header['php'] . $php_['highlight'] . $footer['php'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzJAVA; $i++) {
-        $java_['search'] = $java[1][$i];
-
-        $geshi = new Geshi($java_['search'], 'java');
-        $java_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[java]' . sichere_ausgabe($java_['search'], $encoding) . '[/java]', $header['java'] . $java_['highlight'] . $footer['java'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzJS; $i++) {
-        $js_['search'] = $js[1][$i];
-
-        $geshi = new Geshi($js_['search'], 'javascript');
-        $js_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[js]' . sichere_ausgabe($js_['search'], $encoding) . '[/js]', $header['js'] . $js_['highlight'] . $footer['js'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzHTML; $i++) {
-        $html_['search'] = $html[1][$i];
-
-        $geshi = new Geshi($html_['search'], 'html4strict');
-        $html_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[html]' . sichere_ausgabe($html_['search'], $encoding) . '[/html]', $header['html'] . $html_['highlight'] . $footer['html'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzSQL; $i++) {
-        $sql_['search'] = $sql[1][$i];
-
-        $geshi = new Geshi($sql_['search'], 'mysql');
-        $sql_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[sql]' . sichere_ausgabe($sql_['search'], $encoding) . '[/sql]', $header['sql'] . $sql_['highlight'] . $footer['sql'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzCSS; $i++) {
-        $css_['search'] = $css[1][$i];
-
-        $geshi = new Geshi($css_['search'], 'css');
-        $css_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[css]' . sichere_ausgabe($css_['search'], $encoding) . '[/css]', $header['css'] . $css_['highlight'] . $footer['css'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzBASH; $i++) {
-        $bash_['search'] = $bash[1][$i];
-
-        $geshi = new Geshi($bash_['search'], 'bash');
-        $bash_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[bash]' . sichere_ausgabe($bash_['search'], $encoding) . '[/bash]', $header['bash'] . $bash_['highlight'] . $footer['bash'], $text);
-    }        // OK
-
-    for ($i = 0; $i < $anzCPP; $i++) {
-        $cpp_['search'] = $cpp[1][$i];
-
-        $geshi = new Geshi($cpp_['search'], 'cpp');
-        $cpp_['highlight'] = $geshi->parse_code();
-
-        $text = str_ireplace('[cpp]' . sichere_ausgabe($cpp_['search'], $encoding) . '[/cpp]', $header['cpp'] . $cpp_['highlight'] . $footer['cpp'], $text);
-    }        // OK
-
     $text = preg_replace(
         array(
             '/\[center\](.*)\[\/center\]/Uis',

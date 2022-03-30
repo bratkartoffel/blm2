@@ -10,30 +10,6 @@
 session_start();        // Die Sitzung beim Einbinden der Datei sofort starten, werden immer benötigt.
 
 /**
- * Hilfsfunktion: Liefert die Anzahl der angemeldeten Gruppen zurück
- *
- * @return int
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function AnzahlGruppen()
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	gruppe
-WHERE
-	ID>0;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $gruppen = mysql_fetch_object($sql_ergebnis);
-
-    return intval($gruppen->anzahl);        // Zurück damit :)
-}
-
-/**
  * Hilfsfunktion: Liefert die Anzahl der angemeldeten Spieler zurück
  *
  * @return int

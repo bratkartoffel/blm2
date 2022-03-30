@@ -17,7 +17,7 @@ $sql_abfrage = "SELECT
 FROM
     auftrag
 WHERE
-    Von='" . $_SESSION['blm_user'] . "'
+    Von = '" . $_SESSION['blm_user'] . "'
 AND
     Was > 100
 AND
@@ -71,7 +71,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
         <tr>
             <td colspan="2" style="text-align: left; padding-left: 170px;">
                 <?php
-                if (property_exists($auftraege, "a_101")) {
+                if (!property_exists($auftraege, "a_101")) {
                     ?>
                     <b><u>Für Stufe <?= (1 + $ich->Gebaeude1); ?>:</u></b>
                     <p style="padding-top: 10px; margin: 0;">
@@ -143,7 +143,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
         <tr>
             <td colspan="2" style="text-align: left; padding-left: 170px;">
                 <?php
-                if (property_exists($auftraege, "a_102")) {
+                if (!property_exists($auftraege, "a_102")) {
                     ?>
                     <b><u>Für Stufe <?= (1 + $ich->Gebaeude2); ?>:</u></b>
                     <p style="padding-top: 10px; margin: 0;">
@@ -215,7 +215,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
         <tr>
             <td colspan="2" style="text-align: left; padding-left: 170px;">
                 <?php
-                if (property_exists($auftraege, "a_103")) {
+                if (!property_exists($auftraege, "a_103")) {
                     ?>
                     <b><u>Für Stufe <?= (1 + $ich->Gebaeude3); ?>:</u></b>
                     <p style="padding-top: 10px; margin: 0;">
@@ -295,7 +295,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (property_exists($auftraege, "a_104")) {
+                    if (!property_exists($auftraege, "a_104")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude4); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -371,7 +371,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (property_exists($auftraege, "a_106")) {
+                    if (!property_exists($auftraege, "a_106")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude6); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -445,7 +445,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (property_exists($auftraege, "a_105")) {
+                    if (!property_exists($auftraege, "a_105")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude5); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -520,7 +520,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (property_exists($auftraege, "a_107")) {
+                    if (!property_exists($auftraege, "a_107")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude7); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -596,7 +596,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (property_exists($auftraege, "a_108")) {
+                    if (!property_exists($auftraege, "a_108")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude8); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">

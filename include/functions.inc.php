@@ -669,35 +669,6 @@ function GebaeudeName($gebaeude_id)
 }
 
 /**
- * Hilfsfunktion: Liefert den Namen einer Gruppe mit einer bestimmten ID zurück
- *
- * @param int $gruppe_id
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function GetGroupName($gruppe_id)
-{
-    $sql_abfrage = "SELECT
-	Name
-FROM
-	gruppe
-WHERE
-	ID=" . intval($gruppe_id) . ";";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $name = mysql_fetch_object($sql_ergebnis);
-
-    if ($name->Name == "")        // Wenn der Name nicht gefunden werden konnte, dann sag einfach, es war das System :)
-        $name->Name = "-System-";
-
-    return $name->Name;        // Den Namen zurückgeben.
-}
-
-/**
  * Hilfsfunktion: Liefert den den Platz eines Spielers mit einer bestimmten ID zurück (fürs Profil)
  *
  * @param int $benutzer_id

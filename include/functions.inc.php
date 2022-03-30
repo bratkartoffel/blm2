@@ -1595,38 +1595,6 @@ function ReplaceBBCode($text)
 {
     $text = stripslashes($text);    // Entfernt die Escapezeichen (Backslashes)
 
-    // Dann rufen wir die PHP Codeblöcke ab (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[php\](.*?)\[\/php\]/Suis', $text, $php);
-    $anzPHP = count($php[1]);
-
-    // Dann brauchen wir die HTML-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[html\](.*)\[\/html\]/Uuis', $text, $html);
-    $anzHTML = count($html[1]);
-
-    // Dann brauchen wir die SQL-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[sql\](.*)\[\/sql\]/Uuis', $text, $sql);
-    $anzSQL = count($sql[1]);
-
-    // Dann brauchen wir die CSS-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[css\](.*)\[\/css\]/Uuis', $text, $css);
-    $anzCSS = count($css[1]);
-
-    // Dann brauchen wir die Shell-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[bash\](.*)\[\/bash\]/Uuis', $text, $bash);
-    $anzBASH = count($bash[1]);
-
-    // Dann brauchen wir die C++-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[cpp\](.*)\[\/cpp\]/Uuis', $text, $cpp);
-    $anzCPP = count($cpp[1]);
-
-    // Dann brauchen wir die Java-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[java\](.*)\[\/java\]/Uuis', $text, $java);
-    $anzJAVA = count($java[1]);
-
-    // Dann brauchen wir die JavaScript-Codeblöcke (Keine Absicherung, da Sonderzeichen vokommen können und wichtig sind!)
-    preg_match_all('/\[js\](.*)\[\/js\]/Uuis', $text, $js);
-    $anzJS = count($js[1]);
-
     $colors[] = "aqua";                    // 
     $colors[] = "black";                // 
     $colors[] = "blue";                    // 
@@ -1656,54 +1624,6 @@ function ReplaceBBCode($text)
     */
     $header['code'] = '<div class="CODE"><span class="CODE_KOPF">Code:</span>';
     $footer['code'] = '</div>';
-
-    /*
-        Wie werden SQL-Teile eingeschlossen?
-    */
-    $header['sql'] = '<div class="SQL"><span class="SQL_KOPF">SQL-Anweisungen:</span>';
-    $footer['sql'] = '</div>';
-
-    /*
-        Wie werden CSS-Teile eingeschlossen?
-    */
-    $header['css'] = '<div class="CSS"><span class="CSS_KOPF">CSS-Style:</span>';
-    $footer['css'] = '</div>';
-
-    /*
-        Wie werden PHP-Teile eingeschlossen?
-    */
-    $header['php'] = '<div class="PHP"><span class="PHP_KOPF">PHP-Code:</span>';
-    $footer['php'] = '</div>';
-
-    /*
-        Wie werden Shellscript-Teile eingeschlossen?
-    */
-    $header['bash'] = '<div class="BASH"><span class="BASH_KOPF">Shellscript:</span>';
-    $footer['bash'] = '</div>';
-
-    /*
-        Wie werden C++-Teile eingeschlossen?
-    */
-    $header['cpp'] = '<div class="CPP"><span class="CPP_KOPF">C++ Code:</span>';
-    $footer['cpp'] = '</div>';
-
-    /*
-        Wie werden Java-Teile eingeschlossen?
-    */
-    $header['java'] = '<div class="JAVA"><span class="JAVA_KOPF">Java-Code:</span>';
-    $footer['java'] = '</div>';
-
-    /*
-        Wie werden JavaScript-Teile eingeschlossen?
-    */
-    $header['js'] = '<div class="JS"><span class="JS_KOPF">Javascript-Code:</span>';
-    $footer['js'] = '</div>';
-
-    /*
-        Wie werden HTML-Teile eingeschlossen?
-    */
-    $header['html'] = '<div class="HTML"><span class="HTML_KOPF">HTML-Code:</span>';
-    $footer['html'] = '</div>';
 
     $text = sichere_ausgabe($text, "UTF-8");        // dann escapen wir den String
     $text = preg_replace(
@@ -1764,8 +1684,7 @@ function ReplaceBBCode($text)
     $text = str_ireplace(" :(", '<img src="pics/emoticons/kopete019.png" alt=" :(" />', $text);
     $text = str_ireplace(" :)", '<img src="pics/emoticons/kopete020.png" alt=" :)" />', $text);
 
-
-    // Text zurükgeben
+    // Text zurückgeben
     return $text;
 }
 

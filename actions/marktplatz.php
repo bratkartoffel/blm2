@@ -176,10 +176,11 @@ AND
 
         $angebot = mysql_fetch_object($sql_ergebnis);        // Alle Infos zu dem angefragten Gebot holen
 
+        $reduzierte_menge = intval($angebot->Menge * MARKT_ZURUECKZIEH_FAKTOR);
         $sql_abfrage = "UPDATE
     lagerhaus
 SET
-    Lager" . $angebot->Was . "=Lager" . $angebot->Was . "+" . intval($angebot->Menge * MARKT_ZURUECKZIEH_FAKTOR) . "
+    Lager" . $angebot->Was . "=Lager" . $angebot->Was . "+" . $reduzierte_menge . "
 WHERE
     ID='" . $_SESSION['blm_user'] . "';";
         mysql_query($sql_abfrage);        // Die Waren ins Lager stecken
@@ -208,7 +209,7 @@ VALUES
     NULL,
     '0',
     '" . $angebot->Von . "',
-    'Sie haben soeben folgendes Angebot vom Markt zurückgezogen:\n" . $angebot->Menge . "kg " . WarenName($angebot->Was) . " zu insgesamt " . ($angebot->Menge * $angebot->Preis) . " " . $Currency . ".\nDa das Angebot schon eine Weile dort gelegen ist, sind Ihnen während des Rücktransports 10% vertrocknet (jedoch auch mindestens 1 kg).\nDie restlichen Waren finden Sie in Ihrem Lager.\n\n[i]- System -[/i]',
+    'Sie haben soeben folgendes Angebot vom Markt zurückgezogen:\n" . $angebot->Menge . "kg " . WarenName($angebot->Was) . " zu insgesamt " . ($angebot->Menge * $angebot->Preis) . " " . $Currency . ".\nDa das Angebot schon eine Weile dort gelegen ist, sind Ihnen während des Rücktransports 10% vertrocknet.\nDie restlichen Waren ($reduzierte_menge kg) finden Sie in Ihrem Lager.\n\n[i]- System -[/i]',
     'Freier Markt',
     '" . time() . "',
     '0'

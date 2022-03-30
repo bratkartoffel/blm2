@@ -121,9 +121,11 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
 							<td>' . number_format($angebot->Menge, 0, ",", ".") . ' kg</td>
 							<td>' . number_format($angebot->Preis, 2, ",", ".") . ' ' . $Currency . '</td>
 							<td>' . number_format($angebot->Preis * $angebot->Menge, 2, ",", ".") . ' ' . $Currency . '</td>
-							<td><a href="./actions/marktplatz.php?a=2&amp;id=' . $angebot->ID . $url_string . '">Kaufen</a>';
-            if ($angebot->Von == $_SESSION['blm_user']) {        // Wenn das Angebot vom Betrachter ist, dann zeig den Zurückziehen-Link
-                echo ' | <a href="./actions/marktplatz.php?a=3&amp;id=' . $angebot->ID . $url_string . '">Zurückziehen</a>';
+							<td>';
+            if ($angebot->Von != $_SESSION['blm_user']) {        // Wenn das Angebot nicht vom Betrachter ist, dann zeig den Kaufen-Link
+                echo '<a href="./actions/marktplatz.php?a=2&amp;id=' . $angebot->ID . $url_string . '">Kaufen</a>';
+            } else {       // Wenn das Angebot vom Betrachter ist, dann zeig den Zurückziehen-Link
+                echo '<a href="./actions/marktplatz.php?a=3&amp;id=' . $angebot->ID . $url_string . '">Zurückziehen</a>';
             }
             echo '</td></tr>';            // ...und ausgeben
             $eintrag = true;        // Jetzt haben wir mindestens einen Eintrag

@@ -17,7 +17,7 @@
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Nachrichten) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
     if ($_SESSION['blm_admin'] == "1" && $_GET['admin_vorlage'] != "") {
@@ -78,7 +78,7 @@ AND
 
                         $antwort = mysql_fetch_object($sql_ergebnis);
 
-                        if ($antwort->Nachricht != "") {
+                        if ($antwort != null) {
                             $sql_abfrage = "UPDATE
     nachrichten
 SET
@@ -132,11 +132,11 @@ ORDER BY
             <tr>
                 <th style="border:none; border-right: solid 1px darkred;">Betreff:</th>
                 <td><input type="text" name="betreff" value="<?php
-                    if ($antwort->Betreff != "") {
+                    if ($antwort != null) {
                         echo "RE: " . stripslashes(htmlentities($antwort->Betreff, ENT_QUOTES, "UTF-8"));
                     }
 
-                    if ($_GET['betreff'] != "") {
+                    if (isset($_GET['betreff'])) {
                         echo stripslashes(htmlentities($_GET['betreff'], ENT_QUOTES, "UTF-8"));
                     }
                     ?>" maxlength="30" size="30"/></td>
@@ -149,11 +149,11 @@ ORDER BY
                 </th>
                 <td><textarea name="nachricht" cols="80" rows="15" maxlength="4096"
                               onkeyup="ZeichenUebrig(this, document.form_message.getElementsByTagName('span')[0]);"><?php
-                        if ($antwort->Nachricht != "") {
+                        if ($antwort != null) {
                             echo "[quote][b][i]" . stripslashes(htmlentities($antwort->Empfaenger, ENT_QUOTES, "UTF-8")) . " hat am " . date("d.m.Y", $antwort->Zeit) . " um " . date("H:i", $antwort->Zeit) . " geschrieben:[/i][/b]\n" . stripslashes(htmlentities($antwort->Nachricht, ENT_QUOTES, "UTF-8")) . "[/quote]\n";
                         }
 
-                        if ($_GET['nachricht'] != "") {
+                        if (isset($_GET['nachricht'])) {
                             echo stripslashes(htmlentities($_GET['nachricht'], ENT_QUOTES, "UTF-8"));
                         }
 

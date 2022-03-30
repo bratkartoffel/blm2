@@ -58,6 +58,8 @@ class Database
 
     public function getPlayerNameByRank($rank)
     {
+        // rank is 1-based, but query parameter is 0-based
+        $rank--;
         $stmt = $this->prepare("SELECT Name FROM mitglieder ORDER BY Punkte DESC, Name LIMIT :rank, 1");
         $stmt->bindParam("rank", $rank, PDO::PARAM_INT);
         if (!$stmt->execute()) {
@@ -122,7 +124,8 @@ class Database
         return $result['count'];
     }
 
-    public function getQueryCount() {
+    public function getQueryCount()
+    {
         return $this->queries;
     }
 

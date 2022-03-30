@@ -93,8 +93,7 @@ WHERE
             <tr>
                 <td>
                     <div style="text-align: center;">
-                        <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>&amp;<?= time(); ?>"
-                             style="max-width: 200px; max-height: 200px"/>
+                        <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>" style="max-width: 200px; max-height: 200px"/>
                     </div>
                     <div style="margin-top: 30px;">
                         <?php

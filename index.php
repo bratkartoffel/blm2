@@ -87,7 +87,7 @@ if (istAngemeldet()) {        // Ist der Benutzer angemeldet? Wenn ja, dann...
         case "admin_log_login":
         case "admin_log_mafia":
         case "admin_log_vertraege":
-        /** @noinspection PhpMissingBreakStatementInspection */
+            /** @noinspection PhpMissingBreakStatementInspection */
         case "admin_vorlage_verwarnungen":
             if (!istAdmin()) {
                 header("location: ./?p=index&m=101");
@@ -172,300 +172,300 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
         $Beschreibung = "Willkommen beim Bioladenmanager 2, ein Browsergame um Gemüse, Obst und Macht... Werden Sie der König der Biobauern!";
         break;
 }
-?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <!--
-	Site generated: 	<?= date("r", time()); ?>
-	Client: 		<?= $_SERVER['REMOTE_ADDR'] ?>
-	Server: 		<?= $_SERVER['SERVER_ADDR']; ?>
-	Script: 		<?= $_SERVER['PHP_SELF']; ?>
-	Query-String:		<?= $_SERVER['QUERY_STRING']; ?>
-	User-Agent:		<?= $_SERVER['HTTP_USER_AGENT']; ?>
-	Referer:		<?= $_SERVER['HTTP_REFERER']; ?>
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+	Site generated:   <?= date("r", time()) . "\n"; ?>
+	Client:           <?= htmlentities($_SERVER['REMOTE_ADDR']) . "\n"; ?>
+	Server:           <?= htmlentities($_SERVER['SERVER_ADDR']) . "\n"; ?>
+	Script:           <?= htmlentities($_SERVER['PHP_SELF']) . "\n"; ?>
+	Query-String:     <?= htmlentities($_SERVER['QUERY_STRING']) . "\n"; ?>
+	User-Agent:       <?= htmlentities($_SERVER['HTTP_USER_AGENT']) . "\n"; ?>
+	Referer:          <?= htmlentities($_SERVER['HTTP_REFERER']) . "\n"; ?>
 -->
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
-    <head>
-        <?php
-        if (SPECIAL_STYLE) {
-            ?>
-            <link rel="stylesheet" type="text/css" href="styles/special.css"/>
-            <?php
-        } else {
-            ?>
-            <link rel="stylesheet" type="text/css" href="styles/style.css"/>
-            <?php
-        }
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+    <?php
+    if (SPECIAL_STYLE) {
         ?>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <meta http-equiv="creator" content="Simon Frankenberger"/>
-        <meta name="description" content="<?= $Beschreibung; ?>"/>
-        <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
-        <meta name="date" content="<?= date("c"); ?>"/>
-        <meta name="language" content="de"/>
-        <title><?= $Titel ?></title>
-        <script type="text/javascript" src="js/functions.js?<?= VERSION; ?>"></script>
-        <script type="text/javascript" src="js/ajax.js?<?= VERSION; ?>"></script>
-        <script type="text/javascript">
-            <!--
-            function MarkActiveLink() {
-                // Markiert den aktuellen Menüpunkt (Standort) des Users
-                const z_links = document.getElementById("Navigation").getElementsByTagName("a");		// Zeigt auf alle Links der NAvigation
-                const Seite = '<?=$Seite; ?>';		// Beinhaltet die aktuelle Seite
+        <link rel="stylesheet" type="text/css" href="styles/special.css"/>
+        <?php
+    } else {
+        ?>
+        <link rel="stylesheet" type="text/css" href="styles/style.css"/>
+        <?php
+    }
+    ?>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="creator" content="Simon Frankenberger"/>
+    <meta name="description" content="<?= $Beschreibung; ?>"/>
+    <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
+    <meta name="date" content="<?= date("c"); ?>"/>
+    <meta name="language" content="de"/>
+    <title><?= $Titel ?></title>
+    <script type="text/javascript" src="js/functions.js?<?= VERSION; ?>"></script>
+    <script type="text/javascript" src="js/ajax.js?<?= VERSION; ?>"></script>
+    <script type="text/javascript">
+        <!--
+        function MarkActiveLink() {
+            // Markiert den aktuellen Menüpunkt (Standort) des Users
+            const z_links = document.getElementById("Navigation").getElementsByTagName("a");		// Zeigt auf alle Links der NAvigation
+            const Seite = '<?=$Seite; ?>';		// Beinhaltet die aktuelle Seite
 
-                try {
-                    for (let i = 0; i < z_links.length; i++) {		// Läuft alle Links der Navigation durch
-                        if (z_links[i].target != "_blank") {
-                            let aktLink = z_links[i].href.split("/");		// Zerteilt den Link in seine Bestandteile
-                            aktLink = aktLink[aktLink.length - 1];				// Holt sich nur den Teil nach dem letzten "/"
+            try {
+                for (let i = 0; i < z_links.length; i++) {		// Läuft alle Links der Navigation durch
+                    if (z_links[i].target != "_blank") {
+                        let aktLink = z_links[i].href.split("/");		// Zerteilt den Link in seine Bestandteile
+                        aktLink = aktLink[aktLink.length - 1];				// Holt sich nur den Teil nach dem letzten "/"
 
-                            aktLink = aktLink.split("?p=");		// Dann holen wir uns die Seite raus
-                            aktLink = aktLink[1].split("&");	// ohne den abschließenden Trenner "&"
+                        aktLink = aktLink.split("?p=");		// Dann holen wir uns die Seite raus
+                        aktLink = aktLink[1].split("&");	// ohne den abschließenden Trenner "&"
 
-                            if (aktLink[0] == Seite) {		// Wenn der aktuelle Link der Standort des Users ist, ...
-                                z_links[i].innerHTML = '→ <i>' + z_links[i].innerHTML + "</i>";		// Dann verändere ihn
-                                z_links[i].style.color = "#555555";		// und gib ihm eine andere Farbe
-                            }
+                        if (aktLink[0] == Seite) {		// Wenn der aktuelle Link der Standort des Users ist, ...
+                            z_links[i].innerHTML = '→ <i>' + z_links[i].innerHTML + "</i>";		// Dann verändere ihn
+                            z_links[i].style.color = "#555555";		// und gib ihm eine andere Farbe
                         }
                     }
-                } catch (e) {
-                    // nothing to do
                 }
+            } catch (e) {
+                // nothing to do
             }
+        }
 
-            // -->
-        </script>
-        <!-- Kleiner Hack für den IE -->
-        <!--[if IE]>
+        // -->
+    </script>
+    <!-- Kleiner Hack für den IE -->
+    <!--[if IE]>
 			<link rel="stylesheet" type="text/css" href="styles/style_ie.css?<?= time(); ?>" />
 		<![endif]-->
-    </head>
-    <body onload="MarkActiveLink();">
-    <div id="Wrapper">
-        <div id="Inhalt">
+</head>
+<body onload="MarkActiveLink();">
+<div id="Wrapper">
+    <div id="Inhalt">
+        <?php
+        if (CheckGameLock()) {        // Ist das Spiel gesperrt?
+            $m = CheckMessage(999) . $m;    // Zeigt die Meldung an, dass das Spiel pausiert ist und wielange es noch dauert.
+        }
+
+        include("pages/" . $Seite . ".inc.php");        // Bindet die eigentliche Unterseite ein.
+        ?>
+        <div id="Footer" style="white-space: nowrap;">
             <?php
-            if (CheckGameLock()) {        // Ist das Spiel gesperrt?
-                $m = CheckMessage(999) . $m;    // Zeigt die Meldung an, dass das Spiel pausiert ist und wielange es noch dauert.
+            if (SPECIAL_STYLE) {
+                ?>
+                <div id="weihnachtsspecial" style="position: relative; display: none; float: left;">
+                </div>
+                <img src="pics/tree.png" height="100" width="100" style="float: left; margin-left: 30px;"
+                     alt="Weihnachtsbaum"/>
+                <?php
             }
-
-            include("pages/" . $Seite . ".inc.php");        // Bindet die eigentliche Unterseite ein.
             ?>
-            <div id="Footer" style="white-space: nowrap;">
-                <?php
-                if (SPECIAL_STYLE) {
-                    ?>
-                    <div id="weihnachtsspecial" style="position: relative; display: none; float: left;">
-                    </div>
-                    <img src="pics/tree.png" height="100" width="100" style="float: left; margin-left: 30px;"
-                         alt="Weihnachtsbaum"/>
-                    <?php
-                }
-                ?>
-                Bioladenmanager 2 Version <?= VERSION; ?><br/>
-                <a href="./?p=impressum">
-                    &copy; 2007-2008, Simon Frankenberger.
-                </a><br/>
-                Letzte Änderung: <a href="?p=changelog"><?= date("d.m.Y", LetzteAenderung()); ?></a>
-            </div>
-        </div>
-        <div id="Navigation">
-            <img src="./pics/logo.png" alt="BLM 2"
-                 style="padding: 0; margin: 0 0 7px 30px;"/>
-            <div class="NaviOben">&nbsp;</div>
-            <div class="NaviMitte">
-                <div class="NaviHeader">Navigation</div>
-                <?php
-                if (IstAngemeldet()) {        // Folgenden Block (Navigationsleiste) nur für angemeldete Benutzer anzeigen
-                    ?>
-                    <div class="NaviLink" onclick="Navigation(this);">
-                        <a href="./?p=index&amp;<?= time(); ?>">Startseite</a>
-                    </div>
-                    <div class="NaviLinkHeader">Gebäude:</div>
-                    <?php
-                    if ($ich->Sitter->Gebaeude || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=gebaeude&amp;<?= time(); ?>">Gebäude</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Produktion || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=plantage&amp;<?= time(); ?>">Plantage</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Forschung || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=forschungszentrum&amp;<?= time(); ?>">Forschungszentrum</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Bioladen || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=bioladen&amp;<?= time(); ?>">Bioladen</a></div>
-                        <?php
-                    }
-                    ?>
-
-                    <br/>
-                    <div class="NaviLinkHeader">Finanzen:</div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">Büro</a>
-                    </div>
-                    <?php
-                    if ($ich->Sitter->Bank || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=bank&amp;<?= time(); ?>">Bank</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Vertraege || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=vertraege_liste&amp;<?= time(); ?>">Verträge
-                                (<?= Vertraege(); ?>)</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Marktplatz || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=marktplatz_liste&amp;<?= time(); ?>">Marktplatz
-                                (<?= AngeboteMarkt(); ?>)</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Mafia || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=mafia&amp;<?= time(); ?>">Mafia</a></div>
-                        <?php
-                    }
-                    ?>
-
-                    <br/>
-                    <div class="NaviLinkHeader">Persönlich:</div>
-                    <?php
-                    if ($ich->Sitter->Gruppe || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=gruppe&amp;<?= time(); ?>">Gruppe
-                                (<?= NeueGruppenNachrichten($ich); ?>)</a></div>
-                        <?php
-                    }
-
-                    if ($ich->Sitter->Nachrichten || !$_SESSION['blm_sitter']) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);"><a
-                                    href="./?p=nachrichten_liste&amp;<?= time(); ?>">Nachrichten
-                                (<?= NeueNachrichten(); ?>)</a></div>
-                        <?php
-                    }
-                    ?>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=notizblock&amp;<?= time(); ?>">Notizblock</a></div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=einstellungen&amp;<?= time(); ?>">Einstellungen</a></div>
-                    <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);"><a
-                                href="popups/chefbox.php?<?= time(); ?>"
-                                onclick="return ChefboxZeigen(this.href);" target="_blank">Chefbox</a></div>
-
-                    <br/>
-                    <div class="NaviLinkHeader">Allgemein:</div>
-                    <?php
-                    if (istAdmin()) {
-                        ?>
-                        <div class="NaviLink" onclick="Navigation(this);" style="margin-bottom: 9px;"><a
-                                    href="./?p=admin&amp;<?= time(); ?>">Admin-Bereich</a></div>
-
-                        <?php
-                    }
-                    ?>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=rangliste&amp;o=<?= $ich->RanglisteOffset; ?>&amp;highlight=<?= $_SESSION['blm_user']; ?>&amp;<?= time(); ?>">Rangliste</a>
-                    </div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=statistik&amp;<?= time(); ?>">Serverstatistik</a></div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=regeln&amp;<?= time(); ?>">Regeln</a>
-                    </div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=hilfe&amp;<?= time(); ?>">Hilfe</a>
-                    </div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=changelog&amp;<?= time(); ?>">Changelog</a></div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./?p=impressum&amp;<?= time(); ?>">Impressum</a></div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a
-                                href="./actions/logout.php?p=dummy&amp;<?= time(); ?>">Abmelden</a></div>
-                    <?php
-                }    // Der letzte Block war die Navigationsleiste für angemeldete Benutzer
-                else {        // Der Benutzer ist nicht angemeldet
-                    ?>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=index">Startseite</a></div>
-                    <div class="NaviLink" style="margin-top: 10px;" onclick="Navigation(this);"><a href="./?p=anmelden">Anmelden</a>
-                    </div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=registrieren">Registrieren</a></div>
-                    <div class="NaviLink" style="margin-top: 10px;" onclick="Navigation(this);"><a href="./?p=regeln">Regeln</a>
-                    </div>
-                    <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=impressum">Impressum</a></div>
-                    <?php
-                }        // Der letzte Block war die Navigationsleiste für nicht angemeldete Benutzer
-                ?>
-            </div>
-            <div class="NaviUnten">&nbsp;</div>
-            <?php
-            if (IstAngemeldet()) {        // Folgenden Block nur anzeigen, wenn der Benutzer angemeldet ist (Statistiken)
-                ?>
-                <div class="NaviOben">&nbsp;</div>
-                <div class="NaviMitte">
-                    <div class="NaviHeader">Statistiken</div>
-                    <table class="UserStatistik" cellspacing="0">
-                        <tr>
-                            <td>Benutzer ID:</td>
-                            <td style="text-align: right"><?= $_SESSION['blm_user']; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Bargeld:</td>
-                            <td style="text-align: right"><?= number_format($ich->Geld, 2, ',', '.') . ' ' . $Currency; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Bankkonto:</td>
-                            <td style="text-align: right"><?= number_format($ich->Bank, 2, ',', '.') . ' ' . $Currency; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Grundeinkommen:</td>
-                            <td style="text-align: right"><?= number_format($Einkommen, 2, ',', '.') . ' ' . $Currency; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Letztes Einkommen:</td>
-                            <td style="text-align: right"><?= date("H:i:s", $LetztesEinkommen); ?></td>
-                        </tr>
-                        <tr>
-                            <td>Serverzeit:</td>
-                            <td style="text-align: right"><?= date("H:i:s", time()); ?></td>
-                        </tr>
-                        <tr>
-                            <td>Nächstes Einkommen:</td>
-                            <td style="text-align: right"><?= date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER); ?></td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="NaviUnten" <?php
-                if (SPECIAL_STYLE && istAngemeldet()) {
-                    echo 'style="height: 105px; background-image: url(\'./pics/style/navi_unten_s.gif\');"';
-                }
-                ?>>&nbsp;
-                </div>
-                <?php
-            }        // Der letzte Block wurde nur bei angemeldeten Benutzern angezeigt.
-            ?>
+            Bioladenmanager 2 Version <?= VERSION; ?><br/>
+            <a href="./?p=impressum">
+                &copy; 2007-2008, Simon Frankenberger.
+            </a><br/>
+            Letzte Änderung: <a href="?p=changelog"><?= date("d.m.Y", LetzteAenderung()); ?></a>
         </div>
     </div>
-    </body>
-    </html>
+    <div id="Navigation">
+        <img src="./pics/logo.png" alt="BLM 2"
+             style="padding: 0; margin: 0 0 7px 30px;"/>
+        <div class="NaviOben">&nbsp;</div>
+        <div class="NaviMitte">
+            <div class="NaviHeader">Navigation</div>
+            <?php
+            if (IstAngemeldet()) {        // Folgenden Block (Navigationsleiste) nur für angemeldete Benutzer anzeigen
+                ?>
+                <div class="NaviLink" onclick="Navigation(this);">
+                    <a href="./?p=index&amp;<?= time(); ?>">Startseite</a>
+                </div>
+                <div class="NaviLinkHeader">Gebäude:</div>
+                <?php
+                if ($ich->Sitter->Gebaeude || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=gebaeude&amp;<?= time(); ?>">Gebäude</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Produktion || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=plantage&amp;<?= time(); ?>">Plantage</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Forschung || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=forschungszentrum&amp;<?= time(); ?>">Forschungszentrum</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Bioladen || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=bioladen&amp;<?= time(); ?>">Bioladen</a></div>
+                    <?php
+                }
+                ?>
+
+                <br/>
+                <div class="NaviLinkHeader">Finanzen:</div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">Büro</a>
+                </div>
+                <?php
+                if ($ich->Sitter->Bank || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=bank&amp;<?= time(); ?>">Bank</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Vertraege || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=vertraege_liste&amp;<?= time(); ?>">Verträge
+                            (<?= Vertraege(); ?>)</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Marktplatz || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=marktplatz_liste&amp;<?= time(); ?>">Marktplatz
+                            (<?= AngeboteMarkt(); ?>)</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Mafia || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=mafia&amp;<?= time(); ?>">Mafia</a></div>
+                    <?php
+                }
+                ?>
+
+                <br/>
+                <div class="NaviLinkHeader">Persönlich:</div>
+                <?php
+                if ($ich->Sitter->Gruppe || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=gruppe&amp;<?= time(); ?>">Gruppe
+                            (<?= NeueGruppenNachrichten($ich); ?>)</a></div>
+                    <?php
+                }
+
+                if ($ich->Sitter->Nachrichten || !$_SESSION['blm_sitter']) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);"><a
+                                href="./?p=nachrichten_liste&amp;<?= time(); ?>">Nachrichten
+                            (<?= NeueNachrichten(); ?>)</a></div>
+                    <?php
+                }
+                ?>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./?p=notizblock&amp;<?= time(); ?>">Notizblock</a></div>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./?p=einstellungen&amp;<?= time(); ?>">Einstellungen</a></div>
+                <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);"><a
+                            href="popups/chefbox.php?<?= time(); ?>"
+                            onclick="return ChefboxZeigen(this.href);" target="_blank">Chefbox</a></div>
+
+                <br/>
+                <div class="NaviLinkHeader">Allgemein:</div>
+                <?php
+                if (istAdmin()) {
+                    ?>
+                    <div class="NaviLink" onclick="Navigation(this);" style="margin-bottom: 9px;"><a
+                                href="./?p=admin&amp;<?= time(); ?>">Admin-Bereich</a></div>
+
+                    <?php
+                }
+                ?>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./?p=rangliste&amp;o=<?= $ich->RanglisteOffset; ?>&amp;highlight=<?= $_SESSION['blm_user']; ?>&amp;<?= time(); ?>">Rangliste</a>
+                </div>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./?p=statistik&amp;<?= time(); ?>">Serverstatistik</a></div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=regeln&amp;<?= time(); ?>">Regeln</a>
+                </div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=hilfe&amp;<?= time(); ?>">Hilfe</a>
+                </div>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./?p=changelog&amp;<?= time(); ?>">Changelog</a></div>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./?p=impressum&amp;<?= time(); ?>">Impressum</a></div>
+                <div class="NaviLink" onclick="Navigation(this);"><a
+                            href="./actions/logout.php?p=dummy&amp;<?= time(); ?>">Abmelden</a></div>
+                <?php
+            }    // Der letzte Block war die Navigationsleiste für angemeldete Benutzer
+            else {        // Der Benutzer ist nicht angemeldet
+                ?>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=index">Startseite</a></div>
+                <div class="NaviLink" style="margin-top: 10px;" onclick="Navigation(this);"><a href="./?p=anmelden">Anmelden</a>
+                </div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=registrieren">Registrieren</a></div>
+                <div class="NaviLink" style="margin-top: 10px;" onclick="Navigation(this);"><a
+                            href="./?p=regeln">Regeln</a>
+                </div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=impressum">Impressum</a></div>
+                <?php
+            }        // Der letzte Block war die Navigationsleiste für nicht angemeldete Benutzer
+            ?>
+        </div>
+        <div class="NaviUnten">&nbsp;</div>
+        <?php
+        if (IstAngemeldet()) {        // Folgenden Block nur anzeigen, wenn der Benutzer angemeldet ist (Statistiken)
+            ?>
+            <div class="NaviOben">&nbsp;</div>
+            <div class="NaviMitte">
+                <div class="NaviHeader">Statistiken</div>
+                <table class="UserStatistik" cellspacing="0">
+                    <tr>
+                        <td>Benutzer ID:</td>
+                        <td style="text-align: right"><?= $_SESSION['blm_user']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Bargeld:</td>
+                        <td style="text-align: right"><?= number_format($ich->Geld, 2, ',', '.') . ' ' . $Currency; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Bankkonto:</td>
+                        <td style="text-align: right"><?= number_format($ich->Bank, 2, ',', '.') . ' ' . $Currency; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Grundeinkommen:</td>
+                        <td style="text-align: right"><?= number_format($Einkommen, 2, ',', '.') . ' ' . $Currency; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Letztes Einkommen:</td>
+                        <td style="text-align: right"><?= date("H:i:s", $LetztesEinkommen); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Serverzeit:</td>
+                        <td style="text-align: right"><?= date("H:i:s", time()); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Nächstes Einkommen:</td>
+                        <td style="text-align: right"><?= date("H:i:s", $LetztesEinkommen + EINKOMMEN_DAUER); ?></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="NaviUnten" <?php
+            if (SPECIAL_STYLE && istAngemeldet()) {
+                echo 'style="height: 105px; background-image: url(\'./pics/style/navi_unten_s.gif\');"';
+            }
+            ?>>&nbsp;
+            </div>
+            <?php
+        }        // Der letzte Block wurde nur bei angemeldeten Benutzern angezeigt.
+        ?>
+    </div>
+</div>
+</body>
+</html>
 <?php
 if (SPECIAL_RUNNING && istAngemeldet()) {
     ?>

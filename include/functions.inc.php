@@ -10,31 +10,6 @@
 session_start();        // Die Sitzung beim Einbinden der Datei sofort starten, werden immer benötigt.
 
 /**
- * Hilfsfunktion: Liefert die Anzahl der Angebote auf dem Markt zurück
- *
- * @param string $filter
- *
- * @return int
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function AngeboteMarkt($filter = "1 = 1")
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	marktplatz
-WHERE
-	" . $filter . ";";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $markt = mysql_fetch_object($sql_ergebnis);
-    return intval($markt->anzahl);
-}
-
-/**
  * Hilfsfunktion: Liefert die Anzahl der angemeldeten Gruppen zurück
  *
  * @return int

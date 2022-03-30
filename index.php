@@ -344,7 +344,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=marktplatz_liste&amp;<?= time(); ?>">Marktplatz
-                            (<?= AngeboteMarkt(); ?>)</a></div>
+                            (<?= Database::getInstance()->getMarktplatzCount(); ?>)</a></div>
                     <?php
                 }
 

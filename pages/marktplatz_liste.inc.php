@@ -30,9 +30,8 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
     </b>
     <br/>
     <br/>
-    <form action="./?<?= time(); ?>" method="get">
+    <form action="./" method="get">
         <input type="hidden" name="p" value="marktplatz_liste"/>
-        <input type="hidden" name="o" value="0"/>
         <table class="Liste" style="width: 500px;" cellspacing="0">
             <tr>
                 <th>Filter</th>
@@ -48,9 +47,6 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
 
                 if ($filter == null || !is_array($filter)) {
                     $filter = array();
-                    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-                        $filter[] = $i;
-                    }
                 }
 
                 $url_string = '';
@@ -62,7 +58,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
 
                 for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
                     echo '<td style="width: 25%;"><input type="checkbox" name="w[]" value="' . $i . '" ';
-                    if (in_array($i, $filter)) {
+                    if (sizeof($filter) == 0 || in_array($i, $filter)) {
                         echo 'checked="checked" ';
                     }
                     echo '/> ' . WarenName($i) . '</td>';
@@ -93,7 +89,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
         <?php
         $offset = isset($_GET['o']) ? intval($_GET['o']) : 0;        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
         // Dabei berechnet sich der Starteintrag aus $offset*MARKTPLATZ_OFFSET
-        $anzahl_markt = AngeboteMarkt("Was IN (" . implode(",", $filter) . ")");
+        $anzahl_markt = Database::getInstance()->getMarktplatzCount($filter);
 
         if ($offset < 0 || ($offset * MARKTPLATZ_OFFSET) > $anzahl_markt) {        // Ist das Offset negativ?
             $offset = 0;            // ... dann setz es auf Standard
@@ -103,8 +99,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
     *
 FROM
     marktplatz
-WHERE
-    Was IN (" . implode(",", $filter) . ")
+" . (sizeof($filter) > 0 ? " WHERE Was IN (" . implode(",", $filter) . ") " : "") . "
 ORDER BY
     Was,
     Preis

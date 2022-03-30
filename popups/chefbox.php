@@ -13,6 +13,7 @@ header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist U
 */
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 ConnectDB();        // Verbindung mit der Datenbank aufbauen
 
@@ -220,7 +221,7 @@ ORDER BY
     <tr>
         <td><a style="font-weight: normal;" href="../?p=marktplatz_liste&amp;<?= time(); ?>"
                onclick="BLMNavigation(this.href); return false;">Marktangebote:</a></td>
-        <td><?= AngeboteMarkt(); ?></td>
+        <td><?= Database::getInstance()->getMarktplatzCount(); ?></td>
     </tr>
     <tr>
         <td><a style="font-weight: normal;" href="../?p=rangliste&amp;<?= time(); ?>"

@@ -50,8 +50,8 @@
             $offset = intval(AnzahlSpieler($filter) / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
         }
 
-        if (RANGLISTE_OFFSET * $offset > AnzahlGruppen()) {        // Will er das Offset höher setzen, als es Spieler gibt?
-            $offset_gruppe = intval(AnzahlGruppen() / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
+        if (RANGLISTE_OFFSET * $offset > Database::getInstance()->getGroupCount()) {        // Will er das Offset höher setzen, als es Spieler gibt?
+            $offset_gruppe = intval(Database::getInstance()->getGroupCount() / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
         }
 
         if ($offset < 0) {        // Ist das Offset negativ?
@@ -239,13 +239,13 @@ WHERE
                 echo '</tr>';
             }
 
-            if (AnzahlGruppen() == 0) {
+            if (Database::getInstance()->getGroupCount() == 0) {
                 echo '<tr><td colspan="6" style="text-align: center;"><i>Bisher sind noch keine Gruppen angemeldet.</i></td></tr>';
             }
 
             echo '</table><br />';
 
-            $anzahl_gruppen = AnzahlGruppen() - 1;        // Wieviele Spieler gibts überhaupt
+            $anzahl_gruppen = Database::getInstance()->getGroupCount() - 1;        // Wieviele Spieler gibts überhaupt
             if ($anzahl_gruppen > 0) {
                 echo '<div style="font-weight: bold; font-size: 12pt;">Seite: ';
                 $temp = "";                            // Hier wird die Ausgabe zwischengespeichert

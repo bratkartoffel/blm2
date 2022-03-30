@@ -155,6 +155,7 @@ ORDER BY
                         $sql_ergebnis = mysql_query($sql_abfrage);
                         $_SESSION['blm_queries']++;
 
+                        $maximale_rechte = 0;
                         while ($mitglied = mysql_fetch_object($sql_ergebnis)) {
                             echo '<li style="font-size: 90%;">';
                             if ($ich->Gruppe == $id) {
@@ -166,7 +167,7 @@ ORDER BY
                                 echo '<img src="./pics/small/' . $status . '.png" alt="' . $status . '" title="' . $status . '" width="16" height="16" />';
                             }
 
-                            echo '<a href="./?p=profil&amp;uid=' . $mitglied->ID. '">' . htmlentities(stripslashes($mitglied->Name), ENT_QUOTES, "UTF-8") . " (" . intval($mitglied->Punkte) . ")</a></li>";
+                            echo '<a href="./?p=profil&amp;uid=' . $mitglied->ID . '">' . htmlentities(stripslashes($mitglied->Name), ENT_QUOTES, "UTF-8") . " (" . intval($mitglied->Punkte) . ")</a></li>";
 
                             if ($maximale_rechte < $mitglied->GruppeRechte) {
                                 $maximale_rechte = $mitglied->GruppeRechte;
@@ -199,7 +200,7 @@ ORDER BY
                     if (mysql_num_rows($sql_ergebnis) > 0) {
                         echo '<ul style="text-align: left; margin-left: 20px;">';
                         while ($nap = mysql_fetch_assoc($sql_ergebnis)) {
-                            echo '<li><a href="./?p=gruppe&amp;id=' . $nap["An"]. '">' . htmlentities(stripslashes($nap["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
+                            echo '<li><a href="./?p=gruppe&amp;id=' . $nap["An"] . '">' . htmlentities(stripslashes($nap["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
                         }
                         echo '</ul>';
                     } else {
@@ -230,7 +231,7 @@ ORDER BY
                     if (mysql_num_rows($sql_ergebnis) > 0) {
                         echo '<ul style="text-align: left; margin-left: 20px;">';
                         while ($bnd = mysql_fetch_assoc($sql_ergebnis)) {
-                            echo '<li><a href="./?p=gruppe&amp;id=' . $bnd["An"]. '">' . htmlentities(stripslashes($bnd["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
+                            echo '<li><a href="./?p=gruppe&amp;id=' . $bnd["An"] . '">' . htmlentities(stripslashes($bnd["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
                         }
                         echo '</ul>';
                     } else {
@@ -261,7 +262,7 @@ ORDER BY
                     if (mysql_num_rows($sql_ergebnis) > 0) {
                         echo '<ul style="text-align: left; margin-left: 20px;">';
                         while ($krieg = mysql_fetch_assoc($sql_ergebnis)) {
-                            echo '<li><a href="./?p=gruppe&amp;id=' . $krieg["An"]. '">' . htmlentities(stripslashes($krieg["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
+                            echo '<li><a href="./?p=gruppe&amp;id=' . $krieg["An"] . '">' . htmlentities(stripslashes($krieg["Name"]), ENT_QUOTES, "UTF-8") . '</a></li>';
                         }
                         echo '</ul>';
                     } else {
@@ -354,7 +355,7 @@ WHERE
             $anzahl = mysql_fetch_object($sql_ergebnis);
             $anzahl_nachrichten = $anzahl->anzahl;
 
-            $offset = intval($_GET['o']);        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
+            $offset = isset($_GET['o']) ? intval($_GET['o']) : 0;        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
             // Dabei berechnet sich der Starteintrag aus $offset*RANGLISTE_OFFSET
 
             if (GRUPPE_OFFSET * $offset > $anzahl_nachrichten) {        // Will er das Offset höher setzen, als es Spieler gibt?
@@ -392,7 +393,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
 											</a>
 										</div>';
                 }
-                echo 'Von <b><a href="./?p=profil&amp;uid=' . $nachricht->mID. '">' . htmlentities(stripslashes($nachricht->Name), ENT_QUOTES, "UTF-8") . '</a></b>
+                echo 'Von <b><a href="./?p=profil&amp;uid=' . $nachricht->mID . '">' . htmlentities(stripslashes($nachricht->Name), ENT_QUOTES, "UTF-8") . '</a></b>
 										am <b>' . date("d.m.Y", $nachricht->Zeit) . '</b>
 										um <b>' . date("H:i:s", $nachricht->Zeit) . '</b>
 									</th>
@@ -417,7 +418,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                 for ($i = 0; $i < $anzahl_nachrichten; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                     if ($i % GRUPPE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                         if (($i / GRUPPE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                            $temp .= '<a href="./?p=gruppe&amp;o=' . ($i / GRUPPE_OFFSET) . '&amp;id=' . $gruppe->ID. '">' . (($i / GRUPPE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                            $temp .= '<a href="./?p=gruppe&amp;o=' . ($i / GRUPPE_OFFSET) . '&amp;id=' . $gruppe->ID . '">' . (($i / GRUPPE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                         } else {
                             $temp .= (($i / GRUPPE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                         }

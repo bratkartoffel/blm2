@@ -18,7 +18,7 @@ include("include/kosten_dauer.inc.php");
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Forschung && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Forschung) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
 
@@ -44,6 +44,7 @@ AND
         $sql_ergebnis = mysql_query($sql_abfrage);
         $_SESSION['blm_queries']++;
 
+        $auftraege = new stdClass();
         while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
             $temp = "a_" . intval($auftrag->Was);
 
@@ -92,7 +93,7 @@ AND
                                     <?php
                                     $temp = "a_" . (300 + $i);
 
-                                    if (intval($auftraege->$temp->ID) > 0) {        // Gibt es schon einen derartigen Auftrag?
+                                    if (property_exists($auftraege, $temp)) {        // Gibt es schon einen derartigen Auftrag?
                                         echo '<input type="submit" name="anbauen" disabled="disabled" value="Forschen"/><br />';
                                         echo '<i>Es läuft bereits eine Forschung!</i><br />
 										(noch ' . (date("d", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) - 1) . " Tage " . date("H:i:s", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) . ' verbleibend.)<br />

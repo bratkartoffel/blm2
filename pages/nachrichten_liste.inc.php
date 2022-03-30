@@ -17,7 +17,7 @@
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Nachrichten) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
     ?>
@@ -49,7 +49,7 @@ ORDER BY
         $_SESSION['blm_queries']++;
 
         $eintrag = false;        // Bisher her haben wir noch keine Nachricht ausgegeben
-
+        $nr = 0;
         while ($nachricht = mysql_fetch_object($sql_ergebnis)) {        // So, jetzt werden alle Nahrichten durchlaufen
             $nr++;        // Die Nr. der Nachricht für die Ausgabe der ersten Spalte
             if ($nachricht->Gelesen == 1) {        // Wenn die Nachricht schon gelesen wurde, dann
@@ -134,7 +134,6 @@ ORDER BY
 
         $eintrag = false;
         $nr = 0;
-
         while ($nachricht = mysql_fetch_object($sql_ergebnis)) {
             $nr++;
             if ($nachricht->Gelesen) {

@@ -20,7 +20,7 @@
 <?= $m; ?>
 
     <b>
-        Hier können Sie die Änderungen am Bioladenmanager 2 innerhalb der letzten 2 Monate verfolgen.<br/>
+        Hier können Sie die Änderungen am Bioladenmanager 2 verfolgen.<br/>
         Jede größere Änderung wird hier festgehalten.
     </b>
     <br/>
@@ -31,8 +31,6 @@ $sql_abfrage1 = "SELECT
     Datum
 FROM
     changelog
-WHERE
-    Datum >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
 GROUP BY
     Datum
 ORDER BY
@@ -80,7 +78,6 @@ ORDER BY
         <td>
             <ul><?php
                 while ($aenderung = mysql_fetch_object($sql_ergebnis3)) {
-                    $nr++;
                     ?>
                     <li><u>#<?= $aenderung->ID; ?>
                         :</u> <?= htmlentities(stripslashes($aenderung->Aenderung), ENT_QUOTES, "UTF-8"); ?></li><?php

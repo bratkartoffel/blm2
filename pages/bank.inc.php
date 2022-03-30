@@ -16,7 +16,7 @@
     </tr>
 </table>
 <?php
-if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Bank) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
     ?>

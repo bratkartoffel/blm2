@@ -17,7 +17,7 @@
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Marktplatz) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
     ?>
@@ -44,9 +44,9 @@ if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
             </tr>
             <tr>
                 <?php
-                $filter = $_GET['w'];
+                $filter = isset($_GET['w']) ? $_GET['w'] : null;
 
-                if (!is_array($filter)) {
+                if ($filter == null || !is_array($filter)) {
                     $filter = array();
                     for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
                         $filter[] = $i;
@@ -91,7 +91,7 @@ if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
             <th>Aktion</th>
         </tr>
         <?php
-        $offset = intval($_GET['o']);        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
+        $offset = isset($_GET['o']) ? intval($_GET['o']) : 0;        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
         // Dabei berechnet sich der Starteintrag aus $offset*MARKTPLATZ_OFFSET
         $anzahl_markt = AngeboteMarkt("Was IN (" . implode(",", $filter) . ")");
 
@@ -157,6 +157,7 @@ LIMIT " . $offset * MARKTPLATZ_OFFSET . ", " . MARKTPLATZ_OFFSET . ";";
     ?>
     <br/>
     <?php
+    $hat_waren = false;
     for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Als wird noch überprüft, ob der Benutzer überhaupt waren hat,
         $temp = "Lager" . $i;        // damit man überprüfen kann, ob er ein neues Angebot einstellen kann
         if ($ich->$temp > 0)

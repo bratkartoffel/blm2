@@ -17,7 +17,7 @@
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gruppe) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
 
@@ -40,7 +40,7 @@ if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
         echo '<span class="MeldungR" style="font-size: 12pt;">Sie müssen Ihre Plantage mindestens auf Stufe 5 haben, um einer Gruppe beizutreten.</span><br />';
     }
 
-    if (intval($_GET['id']) > 0) {
+    if (isset($_GET['id']) && intval($_GET['id']) > 0) {
         $id = intval($_GET['id']);
     } else {
         $id = intval($ich->Gruppe);
@@ -464,6 +464,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
         }
 
         if ($ich->Gebaeude1 >= 5) {
+            $gruppe = isset($_GET['gruppe']) ? $_GET['gruppe'] : null;
             ?>
             <form action="actions/gruppe.php" method="post">
                 <input type="hidden" name="a" value="2"/>
@@ -475,8 +476,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                     </tr>
                     <tr>
                         <td>Name:</td>
-                        <td><input type="text" name="name" maxlength="32"
-                                   value="<?= htmlentities(stripslashes($_GET['gruppe']), ENT_QUOTES, "UTF-8"); ?>"/>
+                        <td><input type="text" name="name" maxlength="32" value="<?= sichere_ausgabe($gruppe); ?>"/>
                         </td>
                     </tr>
                     <tr>

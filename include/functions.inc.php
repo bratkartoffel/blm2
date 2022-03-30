@@ -1175,7 +1175,23 @@ WHERE
 	ID='" . $_SESSION['blm_user'] . "';";
     $sql_ergebnis = mysql_query($sql_abfrage);
 
-    return mysql_fetch_object($sql_ergebnis);
+    $result = mysql_fetch_object($sql_ergebnis);
+    if ($result == false) {
+        $result = new stdClass();
+        $result->ID = null;
+        $result->Passwort = null;
+        $result->Gebaeude = false;
+        $result->Forschung = false;
+        $result->Produktion = false;
+        $result->Mafia = false;
+        $result->Nachrichten = false;
+        $result->Gruppe = false;
+        $result->Vertraege = false;
+        $result->Marktplatz = false;
+        $result->Bioladen = false;
+        $result->Bank = false;
+    }
+    return $result;
 }
 
 /**
@@ -1327,18 +1343,18 @@ AND
  *
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  */
-function NeueNachrichten()
+function NeueNachrichten($nid = -1)
 {
     $sql_abfrage = "SELECT
 	COUNT(*) AS anzahl
 FROM
 	nachrichten
 WHERE
-	An='" . $_SESSION['blm_user'] . "'
+	An = '" . $_SESSION['blm_user'] . "'
 AND
-	Gelesen=0
+	Gelesen = 0
 AND
-	ID!='" . intval($_GET['nid']) . "';";
+    ID != " . $nid;
     $sql_ergebnis = mysql_query($sql_abfrage);
     $_SESSION['blm_queries']++;
 
@@ -1377,6 +1393,7 @@ WHERE
         $rechte = intval($rechte_b);
     }
 
+    $back = new stdClass();
     $back->GruppeLoeschen = false;
     $back->MitgliederRechte = false;
     $back->GruppePasswort = false;
@@ -1568,7 +1585,7 @@ MfG
     $headers =
         "From: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
         "Reply-To: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
-        "X-Mailer: " .  "PHP\n" .
+        "X-Mailer: " . "PHP\n" .
         "MIME-Version: " . "1.0\n" .
         "Content-type: " . "text/html; charset=utf-8\n" .
         "Date: " . date(DATE_RFC2822);

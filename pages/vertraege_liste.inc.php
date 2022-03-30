@@ -17,7 +17,7 @@
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Vertraege) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
     ?>
@@ -79,6 +79,7 @@ ORDER BY
 
     echo '</table>';
 
+    $hat_waren = false;
     for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Schaut alle Plätze des Lagers duch, und schaut ob wir überhaupt was auf Lager haben
         $temp = "Lager" . $i;        // Tempöräre variable mit dem MySQL-Spalten Namen
         if ($ich->$temp > 0) {            // Wenn der Lagerstand der Ware > 0 ist, dann..

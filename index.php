@@ -34,7 +34,6 @@ if (WARTUNGS_ARBEITEN) {
     die('<img src="pics/pylone.png" alt="Wartungsarbeiten..." style="float: left; margin-right: 20px;" /><h2 style="padding-top: 190px;">' . WARTUNGS_TEXT . "</h2><br /><br /><h3>Hier gehts zum <a href=\"forum/\">Forum</a></h3>");
 }
 
-// error_reporting(0);		// Dann schalten wir das Error-Reporting-Feature aus, das stört den normalen Benutzer nur ;)
 ConnectDB();        // So, dann bauen wir mal die Verbindung mit der Datenbank auf.
 require_once(dirname(__FILE__) . '/include/database.class.php');
 
@@ -161,7 +160,11 @@ if (istAngemeldet()) {        // Ist der Benutzer angemeldet? Wenn ja, dann...
     }
 }
 
-$m = CheckMessage($_GET['m']);        // Falls im Parameter der Seite ein Meldungscode steckt, schon mal den Meldungstext abrufen
+if (isset($_GET['m'])) {
+    $m = CheckMessage($_GET['m']);        // Falls im Parameter der Seite ein Meldungscode steckt, schon mal den Meldungstext abrufen
+} else {
+    $m = "";
+}
 
 switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite aus. Dies ist vorwiegend für die Beschreibung bei den Suchmaschinen gedacht.
     case "registrieren":
@@ -288,28 +291,28 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 </div>
                 <div class="NaviLinkHeader">Gebäude:</div>
                 <?php
-                if ($ich->Sitter->Gebaeude || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Gebaeude) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=gebaeude&amp;<?= time(); ?>">Gebäude</a></div>
                     <?php
                 }
 
-                if ($ich->Sitter->Produktion || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Produktion) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=plantage&amp;<?= time(); ?>">Plantage</a></div>
                     <?php
                 }
 
-                if ($ich->Sitter->Forschung || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Forschung) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=forschungszentrum&amp;<?= time(); ?>">Forschungszentrum</a></div>
                     <?php
                 }
 
-                if ($ich->Sitter->Bioladen || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Bioladen) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=bioladen&amp;<?= time(); ?>">Bioladen</a></div>
@@ -322,14 +325,14 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 <div class="NaviLink" onclick="Navigation(this);"><a href="./?p=buero&amp;<?= time(); ?>">Büro</a>
                 </div>
                 <?php
-                if ($ich->Sitter->Bank || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Bank) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=bank&amp;<?= time(); ?>">Bank</a></div>
                     <?php
                 }
 
-                if ($ich->Sitter->Vertraege || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Vertraege) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=vertraege_liste&amp;<?= time(); ?>">Verträge
@@ -337,7 +340,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     <?php
                 }
 
-                if ($ich->Sitter->Marktplatz || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Marktplatz) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=marktplatz_liste&amp;<?= time(); ?>">Marktplatz
@@ -345,7 +348,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     <?php
                 }
 
-                if ($ich->Sitter->Mafia || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Mafia) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=mafia&amp;<?= time(); ?>">Mafia</a></div>
@@ -356,7 +359,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 <br/>
                 <div class="NaviLinkHeader">Persönlich:</div>
                 <?php
-                if ($ich->Sitter->Gruppe || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Gruppe) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=gruppe&amp;<?= time(); ?>">Gruppe
@@ -364,11 +367,11 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                     <?php
                 }
 
-                if ($ich->Sitter->Nachrichten || !$_SESSION['blm_sitter']) {
+                if (!$_SESSION['blm_sitter'] || $ich->Sitter->Nachrichten) {
                     ?>
                     <div class="NaviLink" onclick="Navigation(this);"><a
                                 href="./?p=nachrichten_liste&amp;<?= time(); ?>">Nachrichten
-                            (<?= NeueNachrichten(); ?>)</a></div>
+                            (<?= NeueNachrichten(isset($_GET['nid']) ? intval($_GET['nid']) : -1); ?>)</a></div>
                     <?php
                 }
                 ?>

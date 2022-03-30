@@ -137,6 +137,7 @@ $Pizzeria->Punkte =
 
 for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
     $temp = "Forschung" . $i;
+    $$temp = new stdClass();
 
     $$temp->Kosten =
         (

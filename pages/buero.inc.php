@@ -98,7 +98,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                     <td>&nbsp;</td>
                     <td>Einnahmen Verkauf:</td>
                     <td style="text-align: right;"><?= number_format($ich->EinnahmenVerkauf, 2, ',', '.') . " " . $Currency;
-                        $EinnahmenGesamt += $ich->EinnahmenVerkauf;
+                        $EinnahmenGesamt = $ich->EinnahmenVerkauf;
                         ?></td>
                 </tr>
                 <tr>
@@ -126,7 +126,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                     <td>+</td>
                     <td>Einnahmen Verträge:</td>
                     <td style="text-align: right;"><?= number_format($ich->EinnahmenVertraege, 2, ',', '.') . " " . $Currency;
-                        $EinnahmenGesamt += $ich->EinahmenVertraege;
+                        $EinnahmenGesamt += $ich->EinnahmenVertraege;
                         ?></td>
                 </tr>
                 <tr>
@@ -146,7 +146,7 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
                     <td>-</td>
                     <td>Ausgaben Gebäude:</td>
                     <td style="text-align: right;"><?= number_format($ich->AusgabenGebaeude, 2, ',', '.') . " " . $Currency;
-                        $AusgabenGesamt += $ich->AusgabenGebaeude;
+                        $AusgabenGesamt = $ich->AusgabenGebaeude;
                         ?></td>
                 </tr>
                 <tr>

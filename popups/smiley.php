@@ -8,13 +8,15 @@
  */
 header('Content-type: text/html; charset="utf-8"');        // Das Dokument ist UTF-8 kodiert...
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/2002/REC-xhtml1-20020801/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <!--
-	Site generated: 	<?= date("r", time()); ?>
-	Client: 		<?= $_SERVER['REMOTE_ADDR'] ?>
-	Server: 		<?= $_SERVER['SERVER_ADDR']; ?>
-	Script: 		<?= $_SERVER['PHP_SELF']; ?>
+	Site generated:   <?= date("r", time()) . "\n"; ?>
+	Client:           <?= sichere_ausgabe($_SERVER['REMOTE_ADDR']) . "\n"; ?>
+	Server:           <?= sichere_ausgabe($_SERVER['SERVER_ADDR']) . "\n"; ?>
+	Script:           <?= sichere_ausgabe($_SERVER['PHP_SELF']) . "\n"; ?>
+	Query-String:     <?= sichere_ausgabe($_SERVER['QUERY_STRING']) . "\n"; ?>
+	User-Agent:       <?= sichere_ausgabe($_SERVER['HTTP_USER_AGENT']) . "\n"; ?>
+	Referer:          <?= sichere_ausgabe($_SERVER['HTTP_REFERER']) . "\n"; ?>
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 <head>

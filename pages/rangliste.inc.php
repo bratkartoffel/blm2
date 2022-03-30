@@ -36,20 +36,30 @@
 
         echo '</tr>';
 
-        $offset = intval($_GET['o']);        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
+        $offset = isset($_GET['o']) ? intval($_GET['o']) : 0;        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
+        $offset_gruppe = isset($_GET['o_gr']) ? intval($_GET['o_gr']) : 0;        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
         // Dabei berechnet sich der Starteintrag aus $offset*RANGLISTE_OFFSET
 
-        if ($_GET['find_spieler'] == "")
+        $find_spieler = isset($_GET['find_spieler']) ? $_GET['find_spieler'] : null;
+        if ($find_spieler == null)
             $filter = '%';
         else
-            $filter = '%' . htmlentities(stripslashes(str_replace('*', '%', $_GET['find_spieler']))) . '%';
+            $filter = str_replace('*', '%', mysql_real_escape_string($find_spieler));
 
         if (RANGLISTE_OFFSET * $offset > AnzahlSpieler($filter)) {        // Will er das Offset höher setzen, als es Spieler gibt?
             $offset = intval(AnzahlSpieler($filter) / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
         }
 
+        if (RANGLISTE_OFFSET * $offset > AnzahlGruppen()) {        // Will er das Offset höher setzen, als es Spieler gibt?
+            $offset_gruppe = intval(AnzahlGruppen() / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
+        }
+
         if ($offset < 0) {        // Ist das Offset negativ?
             $offset = 0;            // ... dann setz es auf Standard
+        }
+
+        if ($offset_gruppe < 0) {        // Ist das Offset negativ?
+            $offset_gruppe = 0;            // ... dann setz es auf Standard
         }
 
         $sql_abfrage = "SELECT
@@ -138,7 +148,7 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             for ($i = 0; $i < $anzahl_spieler; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                 if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
                     if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
-                        $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . intval($_GET['o_gr']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
+                        $temp .= '<a href="./?p=rangliste&amp;o=' . ($i / RANGLISTE_OFFSET) . '&amp;o_gr=' . $offset_gruppe . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                     } else {
                         $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.
                     }
@@ -150,25 +160,26 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
 
 
             ?>
-            <div style="font-weight: bold; font-size: 12pt;">
-                Spielersuche:
-                <form action="" method="get">
-                    <input type="hidden" name="p" value="rangliste"/>
-                    <input type="hidden" name="o" value="<?= intval($_GET['o']); ?>"/>
-                    <input type="hidden" name="o_gr" value="<?= intval($_GET['o_gr']); ?>"/>
-                    <input type="hidden" name="highlight" value="<?= intval($_GET['highlight']); ?>"/>
-                    <input type="text" name="find_spieler"
-                           value="<?= htmlentities(stripslashes($_GET['find_spieler'])); ?>" size="24"/> <span
-                            style="font-size: 75%; font-weight: normal;"><i>(Das Zeichen <span
-                                    style="font-size: 160%">*</span> passt auf ein beliebiges Zeichen)</i></span><br/><br/>
-                    <input type="submit" value="Suchen"/>
-                    <input type="reset" value="Reset"
-                           onclick="document.forms[0].find_spieler.value='*'; document.forms[0].submit();"/>
-                </form>
-            </div><br/>
             <?php
         }
         ?>
+        <div style="font-weight: bold; font-size: 12pt;">
+            Spielersuche:
+            <form action="" method="get">
+                <input type="hidden" name="p" value="rangliste"/>
+                <input type="hidden" name="o" value="<?= $offset; ?>"/>
+                <input type="hidden" name="o_gr" value="<?= $offset_gruppe; ?>"/>
+                <input type="hidden" name="highlight" value="<?= intval($_GET['highlight']); ?>"/>
+                <input type="text" name="find_spieler"
+                       value="<?= sichere_ausgabe($find_spieler); ?>" size="24"/> <span
+                        style="font-size: 75%; font-weight: normal;"><i>(Das Zeichen <span
+                                style="font-size: 160%">*</span> passt auf ein beliebiges Zeichen)</i></span><br/><br/>
+                <input type="submit" value="Suchen"/>
+                <input type="reset" value="Reset"
+                       onclick="document.forms[0].find_spieler.value='*'; document.forms[0].submit();"/>
+            </form>
+        </div>
+        <br/>
 
         <h2>Gruppenrangliste:</h2>
         <table class="Liste" cellspacing="0" style="width: 660px;">
@@ -181,17 +192,6 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
                 <th style="width: 110px;">Durschnitt</th>
             </tr>
             <?php
-            $offset = intval($_GET['o_gr']);        // Ruft das Offset der Rangliste ab, also den Starteintrag, ab welchen die Ausgabe erfolgen soll
-            // Dabei berechnet sich der Starteintrag aus $offset*RANGLISTE_OFFSET
-
-            if (RANGLISTE_OFFSET * $offset > AnzahlSpieler()) {        // Will er das Offset höher setzen, als es Spieler gibt?
-                $offset = intval(AnzahlSpieler() / RANGLISTE_OFFSET);        // Wenn ja, dann setz das Offset auf den letzmöglichen Wert
-            }
-
-            if ($offset < 0) {        // Ist das Offset negativ?
-                $offset = 0;            // ... dann setz es auf Standard
-            }
-
             $sql_abfrage = "SELECT 
     Gruppe, 
     SUM(Punkte) AS GruppenPunkte,
@@ -204,11 +204,11 @@ GROUP BY
     Gruppe
 ORDER BY
     GruppenPunkte DESC
-LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
+LIMIT " . $offset_gruppe * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             $sql_ergebnis = mysql_query($sql_abfrage) or die(mysql_error());        // Ruft die Liste der Spieler mit deren Punkten ab
             $_SESSION['blm_queries']++;
 
-            $nr = $offset * RANGLISTE_OFFSET;        // Setzt die Startposition des ersten Eintrags
+            $nr = $offset_gruppe * RANGLISTE_OFFSET;        // Setzt die Startposition des ersten Eintrags
 
             while ($gruppe = mysql_fetch_object($sql_ergebnis)) {    // Solange wir noch nicht alle Spieler ausgegeben haben...
                 $nr++;        // Setzt die Position des Spielers eins hoch für die Ausgabe
@@ -252,7 +252,7 @@ WHERE
 
                 for ($i = 0; $i < $anzahl_gruppen; $i++) {        // so, dann gehen wiŕ mal alle Spieler durch
                     if ($i % RANGLISTE_OFFSET == 0) {                                    // Wenn wir gerade bei einem "Offset-Punkte" angekommen sind, dann...
-                        if (($i / RANGLISTE_OFFSET) != $offset) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
+                        if (($i / RANGLISTE_OFFSET) != $offset_gruppe) {                    // Wenn der gerade bearbeitende Offset nicht der angefordete ist, dann...
                             $temp .= '<a href="./?p=rangliste&amp;o=' . intval($_GET['o']) . '&amp;highlight=' . intval($_GET['highlight']) . '&amp;find_spieler=' . htmlentities(stripslashes($_GET['find_spieler'])) . '&amp;o_gr=' . ($i / RANGLISTE_OFFSET) . '&amp;' . time() . '">' . (($i / RANGLISTE_OFFSET) + 1) . '</a> | ';    // Zeig die Nummer des Offsets als Link an
                         } else {
                             $temp .= (($i / RANGLISTE_OFFSET) + 1) . ' | ';    // Ansonsten zeig nur die Nummer an.

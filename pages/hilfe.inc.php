@@ -24,9 +24,8 @@
 <?php
 require_once("./include/hilfe.inc.php");        // Jetzt brauchen wir auch die Hilfetexte :)
 
-$mod = intval($_GET['mod']);        // Welches Modul wollen wir anschauen?
-$cat = intval($_GET['cat']);        // Welchen Teil des Moduls brauchen wir?
-
+$mod = isset($_GET['mod']) ? intval($_GET['mod']) : 0;        // Welches Modul wollen wir anschauen?
+$cat = isset($_GET['cat']) ? intval($_GET['cat']) : 0;        // Welches Modul wollen wir anschauen?
 $cmb = intval($mod . "0" . $cat);    // Kombinierung der Modul- und der Teilnummer für das Array der Hilfetexte
 
 switch ($cmb) {

@@ -144,7 +144,7 @@
             <td><input type="text" name="pw_sitter"
                        value="<?= htmlentities(stripslashes($ich->Sitter->Passwort), ENT_QUOTES, "UTF-8"); ?>"
                        size="50"/> <?php
-                if ($ich->Sitter->Passwort != "") {
+                if (isset($ich->Sitter->Passwort)) {
                     echo "<i>(Das ist das verschlüsselte Passwort, wenn nur die Rechte geändert werden sollen, dann einfach stehen lassen.)</i>";
                 }
                 ?></td>

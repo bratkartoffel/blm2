@@ -25,6 +25,7 @@ AND
 $sql_ergebnis = mysql_query($sql_abfrage);
 $_SESSION['blm_queries']++;
 
+$auftraege = new stdClass();
 while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
     $temp = "a_" . intval($auftrag->Was);
 
@@ -41,7 +42,7 @@ while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
         </tr>
     </table>
 <?php
-if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
+if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
     ?>
@@ -70,7 +71,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
         <tr>
             <td colspan="2" style="text-align: left; padding-left: 170px;">
                 <?php
-                if (intval($auftraege->a_101->ID) == 0) {
+                if (property_exists($auftraege, "a_101")) {
                     ?>
                     <b><u>Für Stufe <?= (1 + $ich->Gebaeude1); ?>:</u></b>
                     <p style="padding-top: 10px; margin: 0;">
@@ -101,7 +102,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                     <form action="actions/gebaeude.php" method="post">
                         <input type="hidden" name="was" value="1"/>
                         <?php
-                        if (intval($auftraege->a_101->ID) > 0) {        // Ist ein derartiger Auftrag schon vorhanden?
+                        if (property_exists($auftraege, "a_101")) {        // Ist ein derartiger Auftrag schon vorhanden?
                             echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                             echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_101->Start + $auftraege->a_101->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_101->Start + $auftraege->a_101->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -142,7 +143,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
         <tr>
             <td colspan="2" style="text-align: left; padding-left: 170px;">
                 <?php
-                if (intval($auftraege->a_102->ID) == 0) {
+                if (property_exists($auftraege, "a_102")) {
                     ?>
                     <b><u>Für Stufe <?= (1 + $ich->Gebaeude2); ?>:</u></b>
                     <p style="padding-top: 10px; margin: 0;">
@@ -174,7 +175,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                     <form action="actions/gebaeude.php" method="post">
                         <input type="hidden" name="was" value="2"/>
                         <?php
-                        if (intval($auftraege->a_102->ID) > 0) {
+                        if (property_exists($auftraege, "a_102")) {
                             echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                             echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_102->Start + $auftraege->a_102->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_102->Start + $auftraege->a_102->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -214,7 +215,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
         <tr>
             <td colspan="2" style="text-align: left; padding-left: 170px;">
                 <?php
-                if (intval($auftraege->a_103->ID) == 0) {
+                if (property_exists($auftraege, "a_103")) {
                     ?>
                     <b><u>Für Stufe <?= (1 + $ich->Gebaeude3); ?>:</u></b>
                     <p style="padding-top: 10px; margin: 0;">
@@ -245,7 +246,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                     <form action="actions/gebaeude.php" method="post">
                         <input type="hidden" name="was" value="3"/>
                         <?php
-                        if (intval($auftraege->a_103->ID) > 0) {
+                        if (property_exists($auftraege, "a_103")) {
                             echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                             echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_103->Start + $auftraege->a_103->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_103->Start + $auftraege->a_103->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -294,7 +295,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (intval($auftraege->a_104->ID) == 0) {
+                    if (property_exists($auftraege, "a_104")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude4); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -326,7 +327,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                         <form action="actions/gebaeude.php" method="post">
                             <input type="hidden" name="was" value="4"/>
                             <?php
-                            if (intval($auftraege->a_104->ID) > 0) {
+                            if (property_exists($auftraege, "a_104")) {
                                 echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                                 echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_104->Start + $auftraege->a_104->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_104->Start + $auftraege->a_104->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -370,7 +371,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (intval($auftraege->a_106->ID) == 0) {
+                    if (property_exists($auftraege, "a_106")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude6); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -401,7 +402,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                         <form action="actions/gebaeude.php" method="post">
                             <input type="hidden" name="was" value="6"/>
                             <?php
-                            if (intval($auftraege->a_106->ID) > 0) {
+                            if (property_exists($auftraege, "a_106")) {
                                 echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                                 echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_106->Start + $auftraege->a_106->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_106->Start + $auftraege->a_106->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -444,7 +445,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (intval($auftraege->a_105->ID) == 0) {
+                    if (property_exists($auftraege, "a_105")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude5); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -475,7 +476,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                         <form action="actions/gebaeude.php" method="post">
                             <input type="hidden" name="was" value="5"/>
                             <?php
-                            if (intval($auftraege->a_105->ID) > 0) {
+                            if (property_exists($auftraege, "a_105")) {
                                 echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                                 echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_105->Start + $auftraege->a_105->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_105->Start + $auftraege->a_105->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -519,7 +520,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (intval($auftraege->a_107->ID) == 0) {
+                    if (property_exists($auftraege, "a_107")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude7); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -550,7 +551,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                         <form action="actions/gebaeude.php" method="post">
                             <input type="hidden" name="was" value="7"/>
                             <?php
-                            if (intval($auftraege->a_107->ID) > 0) {
+                            if (property_exists($auftraege, "a_107")) {
                                 echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                                 echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_107->Start + $auftraege->a_107->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_107->Start + $auftraege->a_107->Dauer) - time() - 3600) . ' verbleibend.)<br />
@@ -585,7 +586,8 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                 </td>
                 <td colspan="2">
                     Dieses Gebäude ist das genaue Gegenstück zum Zaun.<br/>
-                    Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto höher
+                    Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto
+                    höher
                     sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um <?= BONUS_FAKTOR_PIZZERIA; ?>%.
                 </td>
             </tr>
@@ -594,7 +596,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
             <tr>
                 <td colspan="2" style="text-align: left; padding-left: 170px;">
                     <?php
-                    if (intval($auftraege->a_108->ID) == 0) {
+                    if (property_exists($auftraege, "a_108")) {
                         ?>
                         <b><u>Für Stufe <?= (1 + $ich->Gebaeude8); ?>:</u></b>
                         <p style="padding-top: 10px; margin: 0;">
@@ -625,7 +627,7 @@ if (!$ich->Sitter->Gebaeude && $_SESSION['blm_sitter']) {
                         <form action="actions/gebaeude.php" method="post">
                             <input type="hidden" name="was" value="8"/>
                             <?php
-                            if (intval($auftraege->a_108->ID) > 0) {
+                            if (property_exists($auftraege, "a_108")) {
                                 echo '<input type="submit" disabled="disabled" value="Gebäude ausbauen" /><br />';
                                 echo '<i>Es läuft bereits ein Ausbau!</i><br />
 										(noch ' . (date("d", ($auftraege->a_108->Start + $auftraege->a_108->Dauer) - time() - 3600) - 1) . " Tage " . date("H:i:s", ($auftraege->a_108->Start + $auftraege->a_108->Dauer) - time() - 3600) . ' verbleibend.)<br />

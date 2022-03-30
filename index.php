@@ -183,12 +183,12 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
 ?><!DOCTYPE html>
 <!--
 	Site generated:   <?= date("r", time()) . "\n"; ?>
-	Client:           <?= htmlentities($_SERVER['REMOTE_ADDR']) . "\n"; ?>
-	Server:           <?= htmlentities($_SERVER['SERVER_ADDR']) . "\n"; ?>
-	Script:           <?= htmlentities($_SERVER['PHP_SELF']) . "\n"; ?>
-	Query-String:     <?= htmlentities($_SERVER['QUERY_STRING']) . "\n"; ?>
-	User-Agent:       <?= htmlentities($_SERVER['HTTP_USER_AGENT']) . "\n"; ?>
-	Referer:          <?= htmlentities($_SERVER['HTTP_REFERER']) . "\n"; ?>
+	Client:           <?= sichere_ausgabe($_SERVER['REMOTE_ADDR']) . "\n"; ?>
+	Server:           <?= sichere_ausgabe($_SERVER['SERVER_ADDR']) . "\n"; ?>
+	Script:           <?= sichere_ausgabe($_SERVER['PHP_SELF']) . "\n"; ?>
+	Query-String:     <?= sichere_ausgabe($_SERVER['QUERY_STRING']) . "\n"; ?>
+	User-Agent:       <?= sichere_ausgabe($_SERVER['HTTP_USER_AGENT']) . "\n"; ?>
+	Referer:          <?= sichere_ausgabe($_SERVER['HTTP_REFERER']) . "\n"; ?>
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 <head>

@@ -19,12 +19,13 @@ class Database
     public function __construct()
     {
         $this->link = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATENBANK . ";charset=utf8", DB_BENUTZER, DB_PASSWORT);
-        $this->link->setAttribute(PDO::ATTR_AUTOCOMMIT, true);
     }
 
     function __destruct()
     {
-        $this->link->rollBack();
+        if ($this->link->inTransaction()) {
+            $this->link->rollBack();
+        }
         $this->link = null;
         $this->queries = 0;
     }
@@ -44,14 +45,39 @@ class Database
         return $this->link->rollBack();
     }
 
-    public function getPlayerNameByRank($rank)
+    public function prepare($sql)
     {
-        $stmt = $this->link->prepare("SELECT Name FROM mitglieder ORDER BY Punkte DESC, Name LIMIT :rank, 1");
-        $stmt->execute(array("rank", $rank));
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result == false) {
+        $this->queries++;
+        $stmt = $this->link->prepare($sql);
+        if ($stmt === false) {
+            $this->error($this->link, "prepare", "Could not prepare statement");
             return null;
         }
-        return $result->Name;
+        return $stmt;
+    }
+
+    public function getPlayerNameByRank($rank)
+    {
+        $stmt = $this->prepare("SELECT Name FROM mitglieder ORDER BY Punkte DESC, Name LIMIT :rank, 1");
+        $stmt->bindParam("rank", $rank, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            $this->error($stmt, "getPlayerNameByRank", "Could not execute statement");
+            return null;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result === false) {
+            $this->error($stmt, "getPlayerNameByRank", "No result found");
+            return null;
+        }
+        return $result['Name'];
+    }
+
+    private function error($handle, $method, $text, $level = E_USER_WARNING)
+    {
+        $errorInfo = $handle->errorInfo();
+        if (sizeof($errorInfo) > 0 && $errorInfo[0] != '00000') {
+            $text .= " (" . var_export($errorInfo, true) . ")";
+        }
+        trigger_error($method . ": " . $text, $level);
     }
 }

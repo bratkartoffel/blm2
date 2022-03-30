@@ -106,7 +106,7 @@ VALUES
     '" . mysql_insert_id() . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Die Gruppe wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> gegründet.'
+    'Die Gruppe wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> gegründet.'
 );";
         mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
         $_SESSION['blm_queries']++;
@@ -179,7 +179,7 @@ VALUES
     '" . $gruppe->ID . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> tritt der Gruppe bei.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> tritt der Gruppe bei.'
 );";
         mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
         $_SESSION['blm_queries']++;
@@ -256,7 +256,7 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> verlässt freiwillig die Gruppe.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> verlässt freiwillig die Gruppe.'
 );";
         mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
         $_SESSION['blm_queries']++;
@@ -381,7 +381,7 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat die Rechte für <a href=\"./?p=profil&amp;uid=" . $mitglied->ID . "\">" . htmlentities(stripslashes(GetUserName($mitglied->ID)), ENT_QUOTES, "UTF-8") . "</a> auf " . $mitglied->GruppeRechte . " geändert.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> hat die Rechte für <a href=\"./?p=profil&amp;uid=" . $mitglied->ID . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($mitglied->ID)) . "</a> auf " . $mitglied->GruppeRechte . " geändert.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -433,7 +433,7 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $id . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $id . "\">" . htmlentities(stripslashes(GetUserName($id)), ENT_QUOTES, "UTF-8") . "</a> wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aus der Gruppe verwiesen.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $id . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($id)) . "</a> wird von <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> aus der Gruppe verwiesen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -687,7 +687,7 @@ VALUES
     '" . $ich->Gruppe . "',
     '" . $_SESSION['blm_user'] . "',
     '" . time() . "',
-    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $partner . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($partner)) . "</a> gestellt.'
+    'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $partner . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($partner)) . "</a> gestellt.'
 );";
                 mysql_query($sql_abfrage) or die(mysql_error());            // Dann wird ein Eintrag ins Logbuch gemacht.
                 $_SESSION['blm_queries']++;
@@ -770,7 +770,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat die diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($vertrag->An)) . "</a> zurückgezogen.'
+	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> hat die diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") an <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($vertrag->An)) . "</a> zurückgezogen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -882,7 +882,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$anfrage->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $anfrage->Von . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($anfrage->Von)) . "</a> angenommen.'
+	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$anfrage->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $anfrage->Von . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($anfrage->Von)) . "</a> angenommen.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -975,7 +975,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $vertrag->Von . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($vertrag->Von)) . "</a> abgelehnt.'
+	'Das Mitglied <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> hat eine diplomatische Anfrage (" . $Anfrage[$vertrag->Typ] . ") von <a href=\"./?p=gruppe&amp;id=" . $vertrag->Von . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($vertrag->Von)) . "</a> abgelehnt.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -1210,7 +1210,7 @@ VALUES
 	'" . $ich->Gruppe . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($vertrag->An)) . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aufgelöst.'
+	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $vertrag->An . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($vertrag->An)) . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> aufgelöst.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;
@@ -1230,7 +1230,7 @@ VALUES
 	'" . $vertrag->An . "',
 	'" . $_SESSION['blm_user'] . "',
 	'" . time() . "',
-	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($ich->Gruppe)) . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . htmlentities(stripslashes(GetUserName($_SESSION['blm_user'])), ENT_QUOTES, "UTF-8") . "</a> aufgelöst.'
+	'Das diplomatische Verhältnis (" . $Anfrage[$vertrag->Typ] . ") mit <a href=\"./?p=gruppe&amp;id=" . $ich->Gruppe . "\">" . sichere_ausgabe(Database::getInstance()->getGroupNameById($ich->Gruppe)) . "</a> wurde von  <a href=\"./?p=profil&amp;uid=" . $_SESSION['blm_user'] . "\">" . sichere_ausgabe(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])) . "</a> aufgelöst.'
 );";
             mysql_query($sql_abfrage);            // Dann wird ein Eintrag ins Logbuch gemacht.
             $_SESSION['blm_queries']++;

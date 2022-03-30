@@ -74,6 +74,22 @@ class Database
         return $result['Name'];
     }
 
+    public function getPlayerNameById($id)
+    {
+        $stmt = $this->prepare("SELECT Name FROM mitglieder WHERE ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            $this->error($stmt, __FUNCTION__, "Could not execute statement");
+            return null;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result === false) {
+            $this->error($stmt, __FUNCTION__, "No result found");
+            return null;
+        }
+        return $result['Name'];
+    }
+
     public function getPlayerRankById($id)
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM mitglieder WHERE Punkte > (SELECT Punkte FROM mitglieder WHERE ID = :id)");
@@ -88,6 +104,22 @@ class Database
             return null;
         }
         return $result['count'] + 1;
+    }
+
+    public function getPlayerPointsById($id)
+    {
+        $stmt = $this->prepare("SELECT Punkte FROM mitglieder WHERE ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            $this->error($stmt, __FUNCTION__, "Could not execute statement");
+            return null;
+        }
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result === false) {
+            $this->error($stmt, __FUNCTION__, "No result found");
+            return null;
+        }
+        return round($result['Punkte']);
     }
 
     public function getPlayerCount($nameFilter = "%")

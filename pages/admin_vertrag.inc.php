@@ -44,8 +44,8 @@ ORDER BY
 
     while ($angebot = mysql_fetch_object($sql_ergebnis)) {        // Alle Angebote abrufen...
         echo '<tr>
-							<td>' . htmlentities(stripslashes(GetUserName($angebot->Von)), ENT_QUOTES, "UTF-8") . '</td>
-							<td>' . htmlentities(stripslashes(GetUserName($angebot->An)), ENT_QUOTES, "UTF-8") . '</td>
+							<td>' . sichere_ausgabe(Database::getInstance()->getPlayerNameById($angebot->Von)) . '</td>
+							<td>' . sichere_ausgabe(Database::getInstance()->getPlayerNameById($angebot->An)) . '</td>
 							<td>' . WarenName($angebot->Was) . '</td>
 							<td>' . number_format($angebot->Menge, 0, ",", ".") . ' kg</td>
 							<td>' . number_format($angebot->Preis, 2, ",", ".") . ' ' . $Currency . '</td>

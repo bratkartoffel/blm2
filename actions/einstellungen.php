@@ -10,6 +10,7 @@
 // Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/database.class.php");
 
 if (!IstAngemeldet()) {        // Wenn der Client nicht angemeldet ist, darf er auch nichts mit den Einstellungen machen :)
     header("location: ../?p=index&m=102");
@@ -70,7 +71,7 @@ WHERE
             die();
         }
 
-        DeleteAccount($_SESSION['blm_user']);        // Account löschen. Schade...
+        Database::getInstance()->deletePlayerById($_SESSION['blm_user']);        // Account löschen. Schade...
 
         DisconnectDB();
         header("location: ./logout.php?del=1");

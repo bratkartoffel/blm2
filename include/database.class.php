@@ -124,6 +124,17 @@ class Database
         return $result['count'];
     }
 
+    public function deletePlayerById($id)
+    {
+        $stmt = $this->prepare("DELETE FROM mitglieder WHERE ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
+        if (!$stmt->execute()) {
+            $this->error($stmt, __FUNCTION__, "Could not execute statement");
+            return 0;
+        }
+        return $stmt->rowCount() == 1;
+    }
+
     public function getQueryCount()
     {
         return $this->queries;

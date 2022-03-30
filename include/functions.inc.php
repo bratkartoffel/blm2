@@ -621,26 +621,6 @@ function ConnectDB()
 }
 
 /**
- * Hilfsfunktion: Löscht einen Account
- *
- * @param int $benutzer_id
- *
- * @return void
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.1
- *
- */
-function DeleteAccount($benutzer_id)
-{
-    $sql_abfrage = "DELETE FROM
-	mitglieder
-WHERE
-	ID='" . intval($benutzer_id) . "';";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-}
-
-/**
  * Kernfunktion: Trennt die Verbindung mit der Datenbank wieder
  *
  * @return bool
@@ -683,7 +663,7 @@ function GebaeudeName($gebaeude_id)
             return "Zaun";
         case 8:
             return "Pizzeria";
-        default:        // Unbekannte waren_id
+        default:
             return "<i>Unbekannt</i>";
     }
 }

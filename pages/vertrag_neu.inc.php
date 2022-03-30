@@ -21,9 +21,18 @@ include("include/preise.inc.php");
 if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
     echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
 } else {
+    $menge = intval($_GET['menge']);
+    $ware = intval($_GET['ware']);
+    $an = intval($_GET['an']);
+    $_preis = number_format($_GET['preis'], 2, ",", ".");
     ?>
 
     <?= $m; ?>
+
+    <p class="seite_beschreibung">
+        Hier können Sie Waren gegen Bezahlung an einen anderen Spieler verschicken. Der Preis muss mindestens der
+        Preis im Laden sein und darf den dreifachen Wert nicht übersteigen.
+    </p>
 
     <form action="./actions/vertraege.php" method="post" name="form_vertrag">
         <input type="hidden" name="a" value="1"/>
@@ -33,7 +42,8 @@ if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
             </tr>
             <tr>
                 <td style="font-weight: bold; height: 40px;">
-                    <input type="text" name="menge" size="3" maxlength="5" value="0"/> kg <select name="Ware">
+                    <input type="text" name="menge" size="3" maxlength="5" value="<?= $menge; ?>"/> kg
+                    <select name="ware">
                         <?php
                         $eintrag = false;        // Zeigt an, ob wir was auf Lager haben.
                         $last_index = -1;
@@ -41,7 +51,7 @@ if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
                         for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Läuft das gesamte Lager durch, und schaut ob wir irgendwas auf Lager haben
                             $temp = "Lager" . $i;        // Temporäre Variable mit dem MySQL-Spaltennamen der Ware im Lager
                             if ($ich->$temp > 0) {            // Wenn wir die Ware haben, dann
-                                echo '<option value="' . $i . '">' . WarenName($i) . "</option>\n";        // ...geben wir die entsprechende Option aus
+                                echo '<option value="' . $i . '"' . ($ware == $i ? ' selected="selected"' : '') . '>' . WarenName($i) . "</option>\n";        // ...geben wir die entsprechende Option aus
                                 $eintrag = true;        //... und notieren, dass wir was haben.
 
                                 if (!isset($first_ware)) {
@@ -58,7 +68,9 @@ if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
                             die();        // und brechen ab.
                         }
                         ?>
-                    </select> an <select name="an" style="min-width: 150px;">
+                    </select>
+                    an
+                    <select name="an" style="min-width: 150px;">
                         <?php
                         $sql_abfrage = "SELECT
     ID,
@@ -66,23 +78,21 @@ if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
 FROM
     mitglieder
 WHERE
-    ID<>'" . $_SESSION['blm_user'] . "'
+    ID <> '" . $_SESSION['blm_user'] . "'
 AND
-    ID>0
+    ID > 0
 ORDER BY
     Name;";
                         $sql_ergebnis = mysql_query($sql_abfrage);        // Ruft alle Spieler ab
                         $_SESSION['blm_queries']++;
 
                         while ($empfaenger = mysql_fetch_object($sql_ergebnis)) {        // Holt sich nun der Reihe nach alle Spieler (Empfänger)
-                            if ($empfaenger->ID == intval($_GET['an'])) {        // Wenn der aktuelle Spieler der ist, an den der Vertrag per Paramter gehen soll,...
-                                echo '<option selected="selected" value="' . $g->ID . '">' . htmlentities(stripslashes($empfaenger->Name), ENT_QUOTES, "UTF-8") . '</option>';    // Dann schreib ihn normal, aber selektiere ihn auch gleich
-                            } else {        // ansonsten
-                                echo '<option value="' . $empfaenger->ID . '">' . htmlentities(stripslashes($empfaenger->Name), ENT_QUOTES, "UTF-8") . '</option>'; // schreib einfach die Option hin.
-                            }
+                            echo '<option value="' . $empfaenger->ID . '"' . ($an == $empfaenger->ID ? ' selected="selected"' : '') . '>' . htmlentities(stripslashes($empfaenger->Name), ENT_QUOTES, "UTF-8") . '</option>'; // schreib einfach die Option hin.
                         }
                         ?>
-                    </select> zu <input type="text" name="preis" size="3" value="0,00"/> <?php echo $Currency; ?> pro kg
+                    </select>
+                    zu
+                    <input type="text" name="preis" size="3" value="<?= $_preis; ?>"/> <?php echo $Currency; ?> pro kg
                     <input type="submit" value="verkaufen"
                            onclick="document.forms[0].submit(); this.disabled='disabled'; this.value='Bitte warten...'; return false;"/>.
                 </td>
@@ -115,7 +125,7 @@ WHERE
             for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Hier wird die kleine Hilfstabelle ausgegeben, bei der der User sehen kann, wieviel er für das Gemüse im Laden bekommen würde
                 $temp = "Lager" . $i;
                 if ($lager->$temp > 0) {
-                    echo '<tr><td>' . WarenName($i) . '</td><td style="text-align: right;">' . number_format($lager->$temp, 0, ",", ".") . ' kg</td><td style="text-align: right;">' . number_format($Preis[$i], 2, ",", ".") . ' ' . $Currency . '</td><td style="padding: 0 5px 0 15px;"><a href="#" onclick="const z=document.form_vertrag; z.menge.value=\'' . $lager->$temp . '\'; z.Ware.selectedIndex=\'' . $Ware[$i] . '\'; return false;">Übernehmen</a></td></tr>';
+                    echo '<tr><td>' . WarenName($i) . '</td><td style="text-align: right;">' . number_format($lager->$temp, 0, ",", ".") . ' kg</td><td style="text-align: right;">' . number_format($Preis[$i], 2, ",", ".") . ' ' . $Currency . '</td><td style="padding: 0 5px 0 15px;"><a href="#" onclick="const z=document.form_vertrag; z.menge.value=\'' . $lager->$temp . '\'; z.Ware.selectedIndex=\'' . $Ware[$i] . '\'; return false;">Übernehmen</a></td></tr>' . "\n";
                 }
             }
             ?>

@@ -308,3 +308,7 @@ span.CODE_KOPF, span.HTML_KOPF, span.CSS_KOPF, span.SQL_KOPF, span.PHP_KOPF, spa
 
     border-bottom: solid 1px black;
 }
+
+p.seite_beschreibung {
+    font-weight: bold;
+}

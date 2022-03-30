@@ -10,6 +10,7 @@
 // Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
 include("../include/config.inc.php");
 include("../include/functions.inc.php");
+include("../include/preise.inc.php");
 
 if (!IstAngemeldet()) {        // Wer nicht angemeldet ist, kann auch keine Verträge ausmachen!
     header("location: ../?p=index&m=102");
@@ -33,20 +34,20 @@ if (!$ich->Sitter->Vertraege && $_SESSION['blm_sitter']) {
 switch (intval($_REQUEST['a'])) {    // Was will der überhaupt?
     case 1:        // Neuen Vertrag verschicken
         $an = intval($_POST['an']);                // Empfänger des Vertrags
-        $ware = intval($_POST['Ware']);        // Was will er verschicken?
+        $ware = intval($_POST['ware']);        // Was will er verschicken?
         $menge = intval($_POST['menge']);    // Wieviel solls sein?
-        $preis = str_replace(",", ".", $_POST['preis']);    // Was verlangt er pro Kilo?
+        $_preis = str_replace(",", ".", $_POST['preis']);    // Was verlangt er pro Kilo?
         $temp = "Lager" . $ware;    // In welchem Feld steht der Lagerstand der Ware?
 
-        if ($an <= 0 || $menge <= 0 || $preis < 3 || $preis > 15) {        // Es wurde nungültige Werte angegeben
+        if ($an <= 0 || $menge <= 0 || $_preis < $Preis[$ware] || $_preis > 3 * $Preis[$ware]) {        // Es wurden ungültige Werte angegeben
             DisconnectDB();
-            header("location: ../?p=vertrag_neu&m=117&" . time());
+            header("location: ../?p=vertrag_neu&m=117&an=$an&ware=$ware&menge=$menge&preis=$_preis&" . time());
             die();
         }
 
         if ($ich->$temp < $menge) {        // Will der Benutzer mehr verschicken als er auf Lager hat? Abbruch!
             DisconnectDB();
-            header("location: ../?p=vertrag_neu&m=116&" . time());
+            header("location: ../?p=vertrag_neu&m=116&an=$an&ware=$ware&menge=$menge&preis=$_preis&" . time());
             die();
         }
 
@@ -70,7 +71,7 @@ VALUES
     '" . $an . "',
     '" . $ware . "',
     '" . $menge . "',
-    '" . $preis . "',
+    '" . $_preis . "',
     '" . $datetime . "'
 );";
         mysql_query($sql_abfrage);        // Den Vertrag in die DB schreiben
@@ -103,7 +104,7 @@ VALUES
     '" . $datetime . "',
     '" . $ware . "',
     '" . $menge . "',
-    '" . $preis . "',
+    '" . $_preis . "',
     '0'
 );";
         mysql_query($sql_abfrage);        // Logbuch
@@ -111,7 +112,8 @@ VALUES
 
         // Vertrag ist verschickt, Fertig!
         DisconnectDB();
-        header("location: ../?p=vertrag_neu&m=214&" . time());
+        header("location: ../?p=vertraege_liste&m=214&" . time());
+        break;
     case 2:        // Vertrag annehmen
         $id = intval($_GET['vid']);        // Welchen Vertrag will er annehmen?
         $sql_abfrage = "SELECT
@@ -232,6 +234,7 @@ VALUES
         } else {
             header("location: ../?p=vertraege_liste&m=215&" . time());
         }
+        break;
     case 3:        // Vertrag ablehnen
         $id = intval($_GET['vid']);        // Welchen Vertrag will er ablehnen?
 
@@ -310,6 +313,7 @@ VALUES
         } else {
             header("location: ../?p=vertraege_liste&m=216&" . time());
         }
+        break;
     default:
         DisconnectDB();
         header("location: ../?p=vertraege_liste&" . time());

@@ -208,7 +208,7 @@ VALUES
     NULL,
     '0',
     '" . $angebot->Von . "',
-    'Sie haben soeben folgendes Angebot vom Markt zurückgezogen:\n" . $angebot->Menge . "kg " . WarenName($angebot->Was) . " zu insgesamt " . ($angebot->Menge * $angebot->Preis) . " " . $Currency . ".\nDa das Angebot schon eine Weile dort gelegen ist, sind Ihnen während des Rücktransports 10% vertrocknet. Die restlichen Waren finden Sie in Ihrem Lager.\n\n[i]- System -[/i]',
+    'Sie haben soeben folgendes Angebot vom Markt zurückgezogen:\n" . $angebot->Menge . "kg " . WarenName($angebot->Was) . " zu insgesamt " . ($angebot->Menge * $angebot->Preis) . " " . $Currency . ".\nDa das Angebot schon eine Weile dort gelegen ist, sind Ihnen während des Rücktransports 10% vertrocknet (jedoch auch mindestens 1 kg).\nDie restlichen Waren finden Sie in Ihrem Lager.\n\n[i]- System -[/i]',
     'Freier Markt',
     '" . time() . "',
     '0'

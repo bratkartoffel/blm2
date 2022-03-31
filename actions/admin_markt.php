@@ -33,7 +33,7 @@ VALUES
 (
     NULL,
     '0',
-    '" . intval($_POST['was']) . "',
+    '" . intval($_POST['ware']) . "',
     '" . intval($_POST['menge']) . "',
     '" . number_format(str_replace(",", ".", $_POST['preis']), 2) . "'
 );";

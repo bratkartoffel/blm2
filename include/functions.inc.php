@@ -1927,10 +1927,12 @@ function createGroupDropdown($selectedValue)
     return sprintf('<select name="gruppe">%s</select>', implode("\n", $entries));
 }
 
-function createWarenDropdown($selectedValue)
+function createWarenDropdown($selectedValue, $withAllEntry = true)
 {
     $entries = array();
-    $entries[] = '<option value="">- Alle -</option>';
+    if ($withAllEntry) {
+        $entries[] = '<option value="">- Alle -</option>';
+    }
     for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
         if ($i == $selectedValue) {
             $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $i, WarenName($i));

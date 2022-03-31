@@ -34,13 +34,13 @@ switch ($action) {
     // edit existing contract
     case 2:
         if ($menge <= 0 || $preis <= 0) {
-            header(sprintf('Location: /?p=admin_vertrag_bearbeiten&von=%d&an=%d&ware=%d&menge=%d&preis=%F&m=%d', $von, $an, $ware, $menge, $preis, 120));
+            header(sprintf('Location: /?p=admin_vertrag_bearbeiten&id=%d&von=%d&an=%d&ware=%d&menge=%d&preis=%F&m=%d', $id, $von, $an, $ware, $menge, $preis, 120));
             die();
         }
 
         $updated = Database::getInstance()->updateTableEntry('vertraege', $id, array('Von' => $von, 'An' => $an, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis));
 
-        if ($updated == 0) {
+        if ($updated === null) {
             header(sprintf('Location: /?p=admin_vertrag_bearbeiten&id=%d&von=%d&an=%d&ware=%d&menge=%d&preis=%F&m=%d', $id, $an, $von, $ware, $menge, $preis, 142));
             die();
         } else {

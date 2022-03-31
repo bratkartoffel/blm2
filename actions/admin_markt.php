@@ -39,7 +39,7 @@ switch ($action) {
 
         $updated = Database::getInstance()->updateTableEntry('marktplatz', $id, array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis));
 
-        if ($updated == 0) {
+        if ($updated === null) {
             header(sprintf('Location: /?p=admin_markt_bearbeiten&id=%d&von=%d&ware=%d&menge=%d&preis=%F&m=%d', $id, $von, $ware, $menge, $preis, 142));
             die();
         } else {

@@ -27,7 +27,7 @@ $entry = $entries[0];
             <tr>
                 <td>
                     <input type="text" name="menge" size="2" value="<?= $entry['Menge']; ?>"/> kg
-                    <?= createWarenDropdown($entry['Was'], false); ?>
+                    <?= createWarenDropdown($entry['Was'], 'ware', false); ?>
                     zu <input type="text" name="preis" size="3" value="<?= formatCurrency($entry['Preis'], false); ?>"/>
                     € / kg
                     <input type="submit" value="ändern"/>

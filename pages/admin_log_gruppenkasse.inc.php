@@ -21,7 +21,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         <label for="wen">Wen:</label>
         <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
         <label for="gruppe">Gruppe:</label>
-        <?= createGroupDropdown($gruppe); ?>
+        <?= createGroupDropdown($gruppe, 'gruppe'); ?>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>

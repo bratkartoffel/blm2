@@ -15,7 +15,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     <form action="./" method="get">
         <input type="hidden" name="p" value="admin_markt"/>
         <label for="ware">Ware:</label>
-        <?= createWarenDropdown($ware); ?>
+        <?= createWarenDropdown($ware, 'ware'); ?>
         <input type="submit" value="Abschicken"/><br/>
     </form>
 </div>

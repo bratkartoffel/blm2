@@ -23,7 +23,7 @@ $preis = getOrDefault($_GET, 'preis', .0);
             <tr>
                 <td>
                     <input type="text" name="menge" size="2" value="<?= $menge; ?>"/> kg
-                    <?= createWarenDropdown($ware, false); ?>
+                    <?= createWarenDropdown($ware, 'ware', false); ?>
                     zu <input type="text" name="preis" size="3" value="<?= formatCurrency($preis, false); ?>"/> € / kg
                     <input type="submit" value="verkaufen"/>
                 </td>

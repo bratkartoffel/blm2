@@ -1924,11 +1924,13 @@ function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesP
     return sprintf('<div id="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
 
-function createGroupDropdown($selectedValue)
+function createGroupDropdown($selectedValue, $name, $withAllEntry = true)
 {
     $groups = Database::getInstance()->getAllGroupIdsAndName();
     $entries = array();
-    $entries[] = '<option value="">- Alle -</option>';
+    if ($withAllEntry) {
+        $entries[] = '<option value="">- Alle -</option>';
+    }
     for ($i = 0; $i < count($groups); $i++) {
         $entry = $groups[$i];
         if ($entry["ID"] == $selectedValue) {
@@ -1937,10 +1939,28 @@ function createGroupDropdown($selectedValue)
             $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
         }
     }
-    return sprintf('<select name="gruppe">%s</select>', implode("\n", $entries));
+    return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
 }
 
-function createWarenDropdown($selectedValue, $withAllEntry = true)
+function createPlayerDropdown($selectedValue, $name, $withAllEntry = true)
+{
+    $users = Database::getInstance()->getAllPlayerIdsAndName();
+    $entries = array();
+    if ($withAllEntry) {
+        $entries[] = '<option value="">- Alle -</option>';
+    }
+    for ($i = 0; $i < count($users); $i++) {
+        $entry = $users[$i];
+        if ($entry["ID"] == $selectedValue) {
+            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $entry["ID"], $entry["Name"]);
+        } else {
+            $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
+        }
+    }
+    return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
+}
+
+function createWarenDropdown($selectedValue, $name, $withAllEntry = true)
 {
     $entries = array();
     if ($withAllEntry) {
@@ -1953,7 +1973,7 @@ function createWarenDropdown($selectedValue, $withAllEntry = true)
             $entries[] = sprintf('<option value="%d">%s</option>', $i, WarenName($i));
         }
     }
-    return sprintf('<select name="ware">%s</select>', implode("\n", $entries));
+    return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
 }
 
 function redirectBack($redirectTo, $m = null)
@@ -1973,7 +1993,7 @@ function redirectBack($redirectTo, $m = null)
 
 function requireFieldSet($array, $field, $redirectTo)
 {
-    if (!array_key_exists($array, $field) || empty($array[$field])) {
+    if (!array_key_exists($field, $array) || empty($array[$field])) {
         redirectBack($redirectTo);
     }
 }

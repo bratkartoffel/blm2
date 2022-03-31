@@ -293,6 +293,14 @@ class Database
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getVertragEntryById($id)
+    {
+        $stmt = $this->prepare("SELECT v.ID, Von AS VonId, m1.Name AS Von, An AS AnId, m2.Name AS AnName, Menge, Was, Preis
+            FROM (vertraege v JOIN mitglieder m1 on m1.ID = v.Von) JOIN mitglieder m2 on m2.ID = v.An WHERE v.ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getMarktplatzCount($warenFilter = array())
     {
         if (sizeof($warenFilter) == 0) {
@@ -345,6 +353,12 @@ class Database
     public function getAllGroupIdsAndName()
     {
         $stmt = $this->prepare("SELECT ID, Name FROM gruppe");
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getAllPlayerIdsAndName()
+    {
+        $stmt = $this->prepare("SELECT ID, Name FROM mitglieder");
         return $this->executeAndExtractRows($stmt);
     }
 

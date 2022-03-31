@@ -1880,7 +1880,12 @@ function createProfileLink($id, $name)
 
 function formatCurrency($amount)
 {
-    return number_format($amount, 2, ",", ".");
+    return number_format($amount, 2, ",", ".") . ' €';
+}
+
+function formatWeight($amount)
+{
+    return number_format($amount, 0, ",", ".") . ' kg';
 }
 
 function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesPerPage)

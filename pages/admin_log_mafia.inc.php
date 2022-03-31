@@ -1,28 +1,12 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zur Ansicht des Logbuches (Mafia)
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-
-if ($_GET['wer'] != "") {
-    $filter_wer = '%' . mysql_real_escape_string($_GET['wer']) . '%';
-} else {
-    $filter_wer = '%';
-}
-
-if ($_GET['wen'] != "") {
-    $filter_wen = '%' . mysql_real_escape_string($_GET['wen']) . '%';
-} else {
-    $filter_wen = '%';
-}
+$wer = getOrDefault($_GET, 'wer');
+$wen = getOrDefault($_GET, 'wen');
+$offset = getOrDefault($_GET, 'o', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin.png" alt="Mafialogbuch"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Admin - Logbücher - Mafia</td>
+        <td><img src="pics/big/admin.png" alt="Mafialogbuch"/></td>
+        <td>Admin - Logbücher - Mafia</td>
     </tr>
 </table>
 
@@ -31,10 +15,9 @@ if ($_GET['wen'] != "") {
 <form action="./" method="get">
     <input type="hidden" name="p" value="admin_log_mafia"/>
     <h3>Filtern nach Auftraggeber:</h3>
-    <input type="text" name="wer" value="<?= htmlentities(stripslashes($_GET['wer']), ENT_QUOTES, "UTF-8"); ?>"/>
-    <br/>
+    <input type="text" name="wer" value="<?= sichere_ausgabe($wer); ?>"/>
     <h3>Filtern nach Opfer:</h3>
-    <input type="text" name="wen" value="<?= htmlentities(stripslashes($_GET['wen']), ENT_QUOTES, "UTF-8"); ?>"/>
+    <input type="text" name="wen" value="<?= sichere_ausgabe($wen); ?>"/>
     <br/>
     <br/>
     <input type="submit" value="Abschicken"/><br/>
@@ -46,42 +29,38 @@ if ($_GET['wen'] != "") {
         <th>Wen</th>
         <th>Wann</th>
         <th>Art</th>
+        <th>Wieviel</th>
         <th>Erfolgreich?</th>
     </tr>
     <?php
-    $sql_abfrage = "SELECT
-    *,
-    UNIX_TIMESTAMP(Wann) AS Wann
-FROM
-    log_mafia_view
-WHERE
-    Wer LIKE '" . $filter_wer . "'
-AND
-    Wen LIKE '" . $filter_wen . "'
-;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
+    $filter_wer = empty($wer) ? "%" : $wer;
+    $filter_wen = empty($wen) ? "%" : $wen;
+    $entriesCount = Database::getInstance()->getAdminMafiaLogCount($filter_wer, $filter_wen);
+    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
+    $entries = Database::getInstance()->getAdminMafiaLogEntries($filter_wer, $filter_wen, $offset, ADMIN_LOG_OFFSET);
 
-    while ($l = mysql_fetch_object($sql_ergebnis)) {
+    for ($i = 0; $i < count($entries); $i++) {
+        $row = $entries[$i];
         ?>
         <tr>
-            <td><?= htmlentities(stripslashes($l->Wer), ENT_QUOTES, "UTF-8"); ?></td>
-            <td><?= htmlentities(stripslashes($l->Wen), ENT_QUOTES, "UTF-8"); ?></td>
-            <td><?= date("d.m.Y H:i:s", $l->Wann); ?></td>
-            <td><?= $l->Art; ?></td>
-            <td><?= $l->Erfolgreich; ?></td>
-        </tr>
-        <?php
-    }
-
-    if (mysql_num_rows($sql_ergebnis) == 0) {
-        ?>
-        <tr>
-            <td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td>
+            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
+            <td><?= createProfileLink($row['WenId'], $row['Wen']); ?></td>
+            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
+            <td><?= sichere_ausgabe($row['Art']); ?></td>
+            <td><?= ($row['Art'] == 'Angriff') ? formatWeight($row['Wieviel']): formatCurrency($row['Wieviel']); ?></td>
+            <td><?= sichere_ausgabe($row['Erfolgreich']); ?></td>
         </tr>
         <?php
     }
     ?>
 </table>
+<?php
+if ($entriesCount == 0) {
+    echo '<tr><td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+} else {
+    echo createPaginationTable('./?p=admin_log_mafia&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen), $offset, $entriesCount, ADMIN_LOG_OFFSET);
+}
+?>
 <p>
     <a href="./?p=admin">Zurück...</a>
 </p>

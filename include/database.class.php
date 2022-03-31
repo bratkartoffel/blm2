@@ -111,6 +111,26 @@ class Database
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getAdminMafiaLogCount($werFilter, $wenFilter)
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM log_mafia_view WHERE Wer LIKE :wer AND Wen LIKE :wen");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminMafiaLogEntries($werFilter, $wenFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, UNIX_TIMESTAMP(Wann) AS WannTs, Art, Wieviel, Erfolgreich FROM log_mafia_view
+           WHERE Wer LIKE :wer AND Wen LIKE :wen ORDER BY Wann DESC LIMIT :offset, :count");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getMarktplatzCount($wasFilter = array())
     {
         if (sizeof($wasFilter) == 0) {

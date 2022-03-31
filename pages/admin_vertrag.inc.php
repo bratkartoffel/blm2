@@ -1,24 +1,29 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zur Verwaltung der Verträge für Admins
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- *
- * @todo Eintrag löschen
- */
+$wer = getOrDefault($_GET, 'wer');
+$wen = getOrDefault($_GET, 'wen');
+$offset = getOrDefault($_GET, 'o', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin.png" alt="Verträge"/></td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
         <td>Admin - Verträge</td>
     </tr>
 </table>
 
-<?= $m; ?>
-<br/>
-<table class="Liste" style="width: 490px" cellspacing="0">
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+
+<div id="FilterForm">
+    <form action="/" method="get">
+        <input type="hidden" name="p" value="admin_vertrag"/>
+        <label for="wer">Wer:</label>
+        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <label for="wen">Wen:</label>
+        <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <input type="submit" value="Abschicken"/><br/>
+    </form>
+</div>
+
+<table class="Liste">
     <tr>
         <th>Von</th>
         <th>An</th>
@@ -29,41 +34,42 @@
         <th>Aktion</th>
     </tr>
     <?php
-    $sql_abfrage = "SELECT
-    *
-FROM
-    vertraege
-ORDER BY
-    Von,
-    Was,
-    Preis;";
-    $sql_ergebnis = mysql_query($sql_abfrage);        // Alle Angebote abrufen
-    $_SESSION['blm_queries']++;
+    $filter_wer = empty($wer) ? "%" : $wer;
+    $filter_wen = empty($wen) ? "%" : $wen;
 
-    $eintrag = false;        // Bisher haben wir noch kein Angebot ausgegeben, oder? ;)
+    $entriesCount = Database::getInstance()->getVertragCount($filter_wer, $filter_wen);
+    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
+    $entries = Database::getInstance()->getVertragEntries($filter_wer, $filter_wen, $offset, ADMIN_LOG_OFFSET);
 
-    while ($angebot = mysql_fetch_object($sql_ergebnis)) {        // Alle Angebote abrufen...
-        echo '<tr>
-							<td>' . sichere_ausgabe(Database::getInstance()->getPlayerNameById($angebot->Von)) . '</td>
-							<td>' . sichere_ausgabe(Database::getInstance()->getPlayerNameById($angebot->An)) . '</td>
-							<td>' . WarenName($angebot->Was) . '</td>
-							<td>' . number_format($angebot->Menge, 0, ",", ".") . ' kg</td>
-							<td>' . number_format($angebot->Preis, 2, ",", ".") . ' ' . $Currency . '</td>
-							<td>' . number_format($angebot->Preis * $angebot->Menge, 2, ",", ".") . ' ' . $Currency . '</td>
-							<td style="white-space: nowrap; padding-top: 3px;">
-								<a href="./?p=admin_vertrag_bearbeiten&amp;id=' . $angebot->ID . '"><img src="/pics/small/info.png" alt="Bearbeiten" style="border: none;" /></a>
-								<a href="./actions/admin_vertrag.php?a=3&amp;id=' . $angebot->ID . '"><img src="/pics/small/error.png" alt="Löschen" style="border: none;" /></a>';
-        echo '</td></tr>';            // ...und ausgeben
-        $eintrag = true;        // Jetzt haben wir mindestens einen Eintrag
+
+    for ($i = 0; $i < count($entries); $i++) {
+        $row = $entries[$i];
+    ?>
+    <tr>
+        <td><?= createProfileLink($row['VonId'], $row['VonName']); ?></td>
+        <td><?= createProfileLink($row['AnId'], $row['AnName']); ?></td>
+        <td><?= WarenName($row['Was']); ?></td>
+        <td><?= formatWeight($row['Menge']); ?></td>
+        <td><?= formatCurrency($row['Preis']); ?></td>
+        <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
+        <td>
+            <a href="/?p=admin_vertrag_bearbeiten&amp;id=<?= $row['ID']; ?>">
+                <img src="/pics/small/info.png" alt="Bearbeiten"/>
+            </a>
+            <a href="/actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>">
+                <img src="/pics/small/error.png" alt="Löschen"/>
+            </a>
+        </td>
+    </tr>
+    <?php
     }
-
-    if (!$eintrag) {        // Falls kein Angebot gefunden wurde, dann ne entsprechende Meldung ausgeben
-        echo '<tr><td colspan="7" style="text-align: center;"><i>Bisher sind noch keine Angebote vorhanden.</i></td></tr>';
+    if ($entriesCount == 0) {
+        echo '<tr><td colspan="7" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
     }
     ?>
 </table>
-<br/>
+<?= createPaginationTable('./?p=admin_vertrag&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
 <p>
-    <a href="./?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
+    <a href="/?p=admin">Zurück...</a>
 </p>

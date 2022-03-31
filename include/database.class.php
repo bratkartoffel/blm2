@@ -303,14 +303,37 @@ class Database
         return $this->executeAndExtractField($stmt, 'count', $warenFilter);
     }
 
-    public function getMarktplatzEntries($warenFilter = array())
+    public function getMarktplatzEntries($warenFilter = array(), $page, $entriesPerPage)
     {
+        $offset = $page * $entriesPerPage;
         if (sizeof($warenFilter) == 0) {
-            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von");
+            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von LIMIT ?, ?");
         } else {
-            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von WHERE m1.Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?)");
+            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von WHERE m1.Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?) LIMIT :offset, :count");
         }
+        $warenFilter[] = $offset;
+        $warenFilter[] = $entriesPerPage;
         return $this->executeAndExtractRows($stmt, $warenFilter);
+    }
+
+    public function getVertragCount($werFilter, $wenFilter)
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM vertraege WHERE Von LIKE :wer AND AN LIKE :wen");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getVertragEntries($werFilter, $wenFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT v.ID, Von AS VonId, m1.Name as VonName, An AS AnId, m2.Name AS AnName, Was, Menge, Preis, Menge * Preis AS Gesamtpreis 
+            FROM (vertraege v JOIN mitglieder m1 on m1.ID = v.Von) JOIN mitglieder m2 ON m2.Id = v.An WHERE Von LIKE :wer AND AN LIKE :wen LIMIT :offset, :count");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getGroupCount()

@@ -160,6 +160,37 @@ class Database
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getAdminLoginLogCount($werFilter, $ipFilter, $artFilter)
+    {
+        if ($artFilter == null) {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM log_login_view WHERE Wer LIKE :wer AND IP LIKE :ip");
+        } else {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM log_login_view WHERE Wer LIKE :wer AND IP LIKE :ip AND ArtId = :art");
+            $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
+        }
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("ip", $ipFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminLoginLogEntries($werFilter, $ipFilter, $artFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        if ($artFilter == null) {
+            $stmt = $this->prepare("SELECT Wer, WerId, IP, UNIX_TIMESTAMP(Wann) AS WannTs, Art FROM log_login_view
+            WHERE Wer LIKE :wer AND IP LIKE :ip ORDER BY Wann DESC LIMIT :offset, :count");
+        } else {
+            $stmt = $this->prepare("SELECT Wer, WerId, IP, UNIX_TIMESTAMP(Wann) AS WannTs, Art FROM log_login_view
+            WHERE Wer LIKE :wer AND IP LIKE :ip AND ArtId = :art ORDER BY Wann DESC LIMIT :offset, :count");
+            $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
+        }
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("ip", $ipFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getAdminMafiaLogCount($werFilter, $wenFilter)
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM log_mafia_view WHERE Wer LIKE :wer AND Wen LIKE :wen");

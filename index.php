@@ -87,7 +87,6 @@ if (istAngemeldet()) {        // Ist der Benutzer angemeldet? Wenn ja, dann...
         case "admin_vertrag_bearbeiten":
         case "admin_markt_einstellen":
         case "admin_markt_bearbeiten":
-        case "admin_changelog":
         case "admin_log_bank":
         case "admin_log_bioladen":
         case "admin_log_gruppenkasse":
@@ -246,8 +245,8 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
     </script>
     <!-- Kleiner Hack für den IE -->
     <!--[if IE]>
-			<link rel="stylesheet" type="text/css" href="styles/style_ie.css" />
-		<![endif]-->
+    <link rel="stylesheet" type="text/css" href="styles/style_ie.css"/>
+    <![endif]-->
 </head>
 <body onload="MarkActiveLink();">
 <div id="Wrapper">

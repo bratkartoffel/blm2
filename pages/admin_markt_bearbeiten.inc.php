@@ -1,61 +1,41 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zum Bearbeiten des Marktes für Admins
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+requireFieldSet($_GET, 'id', '/?p=admin_markt');
+$id = getOrDefault($_GET, 'id', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/marktplatz.png" alt="Marktplatz"/></td>
-        <td>Admin - Marktplatz - Angebot
-            bearbeiten
-        </td>
+        <td><img src="/pics/big/marktplatz.png" alt=""/></td>
+        <td>Admin - Marktplatz - Angebot bearbeiten</td>
     </tr>
 </table>
 
-<?= $m; ?>
-<?php
-$sql_abfrage = "SELECT
-									*
-								FROM
-									marktplatz
-								WHERE
-									ID='" . intval($_GET['id']) . "';";
-$sql_ergebnis = mysql_query($sql_abfrage);
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-$angebot = mysql_fetch_object($sql_ergebnis);
+<?php
+$entries = Database::getInstance()->getMarktplatzEntryById($id);
+requireEntryFound($entries, '/?p=admin_markt');
+$entry = $entries[0];
 ?>
-<br/>
-<form action="./actions/admin_markt.php" method="post">
-    <input type="hidden" name="a" value="2"/>
-    <input type="hidden" name="id" value="<?= $angebot->ID; ?>"/>
-    <table class="Liste" cellspacing="0" style="width: 400px;">
-        <tr>
-            <th>Angebot bearbeiten</th>
-        </tr>
-        <tr>
-            <td style="font-weight: bold; height: 40px;">
-                <input type="text" name="menge" size="2" value="<?= $angebot->Menge; ?>"/> kg <select name="was">
-                    <?php
-                    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-                        if ($angebot->Was == $i) {
-                            echo '					<option value="' . $i . '" selected="selected">' . WarenName($i) . "</option>\n";
-                        } else {
-                            echo '					<option value="' . $i . '">' . WarenName($i) . "</option>\n";
-                        }
-                    }
-                    ?>
-                </select> zu <input type="text" name="preis" size="3"
-                                    value="<?= number_format($angebot->Preis, 2, ",", "."); ?>"/> <?= $Currency; ?> pro
-                kg
-                <input type="submit" value="verkaufen"/>.
-            </td>
-        </tr>
-    </table>
-</form>
+<div id="FilterForm">
+    <form action="/actions/admin_markt.php" method="post">
+        <input type="hidden" name="a" value="2"/>
+        <input type="hidden" name="id" value="<?= sichere_ausgabe($entry['ID']); ?>"/>
+        <table class="Liste">
+            <tr>
+                <th>Angebot bearbeiten</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="menge" size="2" value="<?= $entry['Menge']; ?>"/> kg
+                    <?= createWarenDropdown($entry['Was'], false); ?>
+                    zu <input type="text" name="preis" size="3" value="<?= formatCurrency($entry['Preis'], false); ?>"/>
+                    € / kg
+                    <input type="submit" value="ändern"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="./?p=admin_markt">Zurück...</a>
 </p>

@@ -1942,3 +1942,27 @@ function createWarenDropdown($selectedValue, $withAllEntry = true)
     }
     return sprintf('<select name="ware">%s</select>', implode("\n", $entries));
 }
+
+function requireFieldSet($array, $field, $redirectTo)
+{
+    if (empty($array[$field])) {
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            header('Location: ' . str_replace("\n", '', $_SERVER['HTTP_REFERER']));
+        } else {
+            header('Location: ' . $redirectTo);
+        }
+        die();
+    }
+}
+
+function requireEntryFound($result, $redirectTo)
+{
+    if (count($result) == 0) {
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            header('Location: ' . str_replace("\n", '', $_SERVER['HTTP_REFERER']));
+        } else {
+            header('Location: ' . $redirectTo);
+        }
+        die();
+    }
+}

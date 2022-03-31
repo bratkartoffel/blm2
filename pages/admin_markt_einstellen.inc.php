@@ -21,7 +21,7 @@ $preis = getOrDefault($_GET, 'preis', .0);
                 <th>Angebot einstellen</th>
             </tr>
             <tr>
-                <td style="font-weight: bold; height: 40px;">
+                <td>
                     <input type="text" name="menge" size="2" value="<?= $menge; ?>"/> kg
                     <?= createWarenDropdown($ware, false); ?>
                     zu <input type="text" name="preis" size="3" value="<?= formatCurrency($preis, false); ?>"/> € / kg

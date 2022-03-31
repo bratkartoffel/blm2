@@ -54,7 +54,7 @@ VALUES
         $sql_abfrage = "UPDATE
     marktplatz
 SET
-    Was='" . intval($_POST['was']) . "',
+    Was='" . intval($_POST['ware']) . "',
     Menge='" . intval($_POST['menge']) . "',
     Preis='" . number_format(str_replace(",", ".", $_POST['preis']), 2) . "'
 WHERE

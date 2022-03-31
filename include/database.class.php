@@ -242,6 +242,13 @@ class Database
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getMarktplatzEntryById($id)
+    {
+        $stmt = $this->prepare("SELECT ID, Menge, Was, Preis FROM marktplatz WHERE ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getMarktplatzCount($warenFilter = array())
     {
         if (sizeof($warenFilter) == 0) {

@@ -176,7 +176,7 @@ $Start["lager"][15] = 0;
 $Currency = "€";                // Währung als direktes Zeichen
 
 // Hier wird der Titel der Seite anhand des Namens der Unterseite generiert
-if ($_GET['p'] != "")
+if (isset($_GET['p']))
     $Titel = explode("_", $_GET['p']);
 else
     $Titel[] = "index";

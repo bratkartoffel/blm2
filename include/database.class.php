@@ -288,7 +288,7 @@ class Database
 
     public function getMarktplatzEntryById($id)
     {
-        $stmt = $this->prepare("SELECT ID, Von AS VonId, Menge, Was, Preis FROM marktplatz WHERE ID = :id");
+        $stmt = $this->prepare("SELECT ID, Von, Menge, Was, Preis FROM marktplatz WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }

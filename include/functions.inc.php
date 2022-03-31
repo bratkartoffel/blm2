@@ -1859,14 +1859,14 @@ function getOrDefault($array, $name, $default = null)
 {
     if (isset($array[$name])) {
         $value = $array[$name];
-        if ($default == null || is_string($default)) {
+        if ($default === null) {
+            return $value;
+        } else if (is_string($default)) {
             return $value;
         } else if (is_integer($default)) {
             return intval($value);
-        } else if (is_double($default)) {
-            return doubleval(str_replace(array('.', ','), array('', '.'), $value));
-        } else if (is_bool($default)) {
-            return boolval($value);
+        } else if (is_double($default) || is_float($default)) {
+            return doubleval(str_replace(',', '.', $value));
         } else {
             trigger_error("Unknown type of default '" . var_export($default, true) . "'");
             return $value;

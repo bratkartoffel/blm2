@@ -15,6 +15,11 @@ $id = getOrDefault($_GET, 'id', 0);
 $entries = Database::getInstance()->getMarktplatzEntryById($id);
 requireEntryFound($entries, '/?p=admin_markt');
 $entry = $entries[0];
+
+if (isset($_GET['von'])) $entry['Von'] = $_GET['von'];
+if (isset($_GET['ware'])) $entry['Was'] = $_GET['ware'];
+if (isset($_GET['menge'])) $entry['Menge'] = $_GET['menge'];
+if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
 ?>
 <div id="FilterForm">
     <form action="/actions/admin_markt.php" method="post">

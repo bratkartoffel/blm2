@@ -60,6 +60,38 @@ class Database
         return $stmt;
     }
 
+    public function createTableEntry($table, $values = array())
+    {
+        $columnNames = array_keys($values);
+        $columnParameters = array();
+        foreach ($values as $field => $value) {
+            $columnParameters[] = ':' . $field;
+        }
+
+        $stmt = $this->prepare("INSERT INTO " . $table . " (" . implode(", ", $columnNames) . ") VALUES (" . implode(", ", $columnParameters) . ")");
+        return $this->executeAndGetAffectedRows($stmt, $values);
+    }
+
+    public function updateTableEntry($table, $id, $changes = array())
+    {
+        $fields = array();
+        foreach ($changes as $field => $value) {
+            $fields[] = sprintf("%s = :%s", $field, $field);
+        }
+        /** @noinspection SqlResolve */
+        $stmt = $this->prepare("UPDATE " . $table . " SET " . implode(", ", $fields) . " WHERE ID = :id");
+        $stmt->bindParam('id', $id, PDO::PARAM_INT);
+        return $this->executeAndGetAffectedRows($stmt, $changes);
+    }
+
+    public function deleteTableEntry($table, $id)
+    {
+        /** @noinspection SqlResolve */
+        $stmt = $this->prepare("DELETE FROM " . $table . " WHERE ID = :id");
+        $stmt->bindParam('id', $id, PDO::PARAM_INT);
+        return $this->executeAndGetAffectedRows($stmt);
+    }
+
     public function getPlayerNameByRank($rank)
     {
         // rank is 1-based, but query parameter is 0-based
@@ -263,38 +295,6 @@ class Database
         return $this->executeAndExtractField($stmt, 'count', $warenFilter);
     }
 
-    public function createTableEntry($table, $values = array())
-    {
-        $columnNames = array_keys($values);
-        $columnParameters = array();
-        foreach ($values as $field => $value) {
-            $columnParameters[] = ':' . $field;
-        }
-
-        $stmt = $this->prepare("INSERT INTO " . $table . " (" . implode(", ", $columnNames) . ") VALUES (" . implode(", ", $columnParameters) . ")");
-        return $this->executeAndGetAffectedRows($stmt, $values);
-    }
-
-    public function updateTableEntry($table, $id, $changes = array())
-    {
-        $fields = array();
-        foreach ($changes as $field => $value) {
-            $fields[] = sprintf("%s = :%s", $field, $field);
-        }
-        /** @noinspection SqlResolve */
-        $stmt = $this->prepare("UPDATE " . $table . " SET " . implode(", ", $fields) . " WHERE ID = :id");
-        $stmt->bindParam('id', $id, PDO::PARAM_INT);
-        return $this->executeAndGetAffectedRows($stmt, $changes);
-    }
-
-    public function deleteTableEntry($table, $id)
-    {
-        /** @noinspection SqlResolve */
-        $stmt = $this->prepare("DELETE FROM " . $table . " WHERE ID = :id");
-        $stmt->bindParam('id', $id, PDO::PARAM_INT);
-        return $this->executeAndGetAffectedRows($stmt);
-    }
-
     public function getMarktplatzEntries($warenFilter = array())
     {
         if (sizeof($warenFilter) == 0) {
@@ -322,17 +322,6 @@ class Database
         $stmt = $this->prepare("SELECT Name FROM gruppe WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractField($stmt, 'Name');
-    }
-
-    public function deletePlayerById($id)
-    {
-        $stmt = $this->prepare("DELETE FROM mitglieder WHERE ID = :id");
-        $stmt->bindParam("id", $id, PDO::PARAM_INT);
-        if (!$stmt->execute()) {
-            $this->error($stmt, "Could not execute statement");
-            return 0;
-        }
-        return $stmt->rowCount() == 1;
     }
 
     public function getQueryCount()

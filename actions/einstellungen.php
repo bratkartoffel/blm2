@@ -71,7 +71,7 @@ WHERE
             die();
         }
 
-        Database::getInstance()->deletePlayerById($_SESSION['blm_user']);        // Account löschen. Schade...
+        Database::getInstance()->deleteTableEntry('mitglieder', $_SESSION['blm_user']);        // Account löschen. Schade...
 
         DisconnectDB();
         header("location: ./logout.php?del=1");

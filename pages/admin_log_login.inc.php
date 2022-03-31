@@ -22,8 +22,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <label for="art">Art:</label>
         <select name="art" id="art">
             <option value="">- Alle -</option>
-            <option value="0"<?= ($art === 0 ? ' selected="selected"' : '') ?>>Normal</option>
-            <option value="1"<?= ($art === 1 ? ' selected="selected"' : '') ?>>Sitter</option>
+            <option value="0"<?= ($art == "0" ? ' selected="selected"' : '') ?>>Normal</option>
+            <option value="1"<?= ($art == "1" ? ' selected="selected"' : '') ?>>Sitter</option>
         </select>
         <input type="submit" value="Abschicken"/><br/>
     </form>

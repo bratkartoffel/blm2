@@ -1,88 +1,36 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zur Ansicht des Logbuches (Verträge)
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
 
-if ($_GET['wer'] != "") {
-    $filter_wer = '%' . mysql_real_escape_string($_GET['wer']) . '%';
-} else {
-    $filter_wer = '%';
-}
-
-if ($_GET['wen'] != "") {
-    $filter_wen = '%' . mysql_real_escape_string($_GET['wen']) . '%';
-} else {
-    $filter_wen = '%';
-}
-
-if ($_GET['ware'] != "") {
-    $filter_ware = intval($_GET['ware']);
-} else {
-    $filter_ware = '%';
-}
-
-if ($_GET['angenommen'] != "") {
-    if (intval($_GET['angenommen']) == 0)
-        $filter_angenommen = 'Nein';
-    else
-        $filter_angenommen = 'Ja';
-} else {
-    $filter_angenommen = '%';
-}
+$wer = getOrDefault($_GET, 'wer');
+$wen = getOrDefault($_GET, 'wen');
+$angenommen = getOrDefault($_GET, 'angenommen');
+$offset = getOrDefault($_GET, 'o', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin.png" alt="Vertgslogbuch"/></td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
         <td>Admin - Logbücher - Verträge</td>
     </tr>
 </table>
 
 <?= $m; ?>
-<br/>
-<form action="./" method="get">
-    <input type="hidden" name="p" value="admin_log_vertraege"/>
-    <h3>Filtern nach Absender:</h3>
-    <input type="text" name="wer" value="<?= htmlentities(stripslashes($_GET['wer']), ENT_QUOTES, "UTF-8"); ?>"/>
-    <br/>
-    <h3>Filtern nach Empfänger:</h3>
-    <input type="text" name="wen" value="<?= htmlentities(stripslashes($_GET['wen']), ENT_QUOTES, "UTF-8"); ?>"/>
-    <br/>
-    <h3>Filtern nach Ware:</h3>
-    <select name="ware">
-        <option value="">- Alle -</option>
-        <?php
-        for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-            if ($i == $_GET['ware'])
-                echo '<option value="' . $i . '" selected="selected">' . WarenName($i) . '</option>';
-            else
-                echo '<option value="' . $i . '">' . WarenName($i) . '</option>';
-        }
-        ?>
-    </select>
-    <br/>
-    <h3>Filtern nach Angenommen:</h3>
-    <select name="angenommen">
-        <option value="0">Nein</option>
-        <option value="1" <?php
-        if ($_GET['angenommen'] == "1")
-            echo 'selected="selected"';
-        ?>>Ja
-        </option>
-        <option value="" <?php
-        if ($_GET['angenommen'] == "")
-            echo 'selected="selected"';
-        ?>>Alle
-        </option>
-    </select><br/>
-    <br/>
-    <input type="submit" value="Abschicken"/><br/>
-</form>
-<br/>
-<table class="Liste" style="width: 720px;">
+<div id="FilterForm">
+    <form action="./" method="get">
+        <input type="hidden" name="p" value="admin_log_vertraege"/>
+        <label for="wer">Wer:</label>
+        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <label for="wen">Wen:</label>
+        <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <label for="angenommen">Angenommen:</label>
+        <select name="angenommen" id="angenommen">
+            <option value="">- Alle -</option>
+            <option value="0"<?= ($angenommen == "0" ? ' selected="selected"' : '') ?>>Nein</option>
+            <option value="1"<?= ($angenommen == "1" ? ' selected="selected"' : '') ?>>Ja</option>
+        </select>
+        <input type="submit" value="Abschicken"/><br/>
+    </form>
+</div>
+
+<table class="Liste">
     <tr>
         <th>Wer</th>
         <th>Wen</th>
@@ -94,46 +42,36 @@ if ($_GET['angenommen'] != "") {
         <th>Angenommen?</th>
     </tr>
     <?php
-    $sql_abfrage = "SELECT
-    *,
-    UNIX_TIMESTAMP(Wann) AS Wann
-FROM
-    log_vertraege_view
-WHERE
-    Wer LIKE '" . $filter_wer . "'
-AND
-    Wen LIKE '" . $filter_wen . "'
-AND
-    Ware LIKE '" . $filter_ware . "'
-AND
-    Angenommen LIKE '" . $filter_angenommen . "'
-;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
+    $filter_wer = empty($wer) ? "%" : $wer;
+    $filter_wen = empty($wen) ? "%" : $wen;
+    $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $angenommen);
+    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
+    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $angenommen, $offset, ADMIN_LOG_OFFSET);
 
-    while ($l = mysql_fetch_object($sql_ergebnis)) {
+    for ($i = 0; $i < count($entries); $i++) {
+        $row = $entries[$i];
         ?>
         <tr>
-            <td><?= htmlentities(stripslashes($l->Wer), ENT_QUOTES, "UTF-8"); ?></td>
-            <td><?= htmlentities(stripslashes($l->Wen), ENT_QUOTES, "UTF-8"); ?></td>
-            <td><?= date("d.m.Y H:i:s", $l->Wann); ?></td>
-            <td><?= WarenName($l->Ware); ?></td>
-            <td><?= number_format($l->Wieviel, 0, "", "."); ?> kg</td>
-            <td><?= number_format($l->Einzelpreis, 2, ",", ".") . " " . $Currency; ?></td>
-            <td><?= number_format($l->Gesamtpreis, 2, ",", ".") . " " . $Currency; ?></td>
-            <td><?= $l->Angenommen; ?></td>
-        </tr>
-        <?php
-    }
-
-    if (mysql_num_rows($sql_ergebnis) == 0) {
-        ?>
-        <tr>
-            <td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td>
+            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
+            <td><?= createProfileLink($row['WenId'], $row['Wen']); ?></td>
+            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
+            <td><?= WarenName($row['Ware']); ?></td>
+            <td><?= formatWeight($row['Wieviel']); ?></td>
+            <td><?= formatCurrency($row['Einzelpreis']); ?></td>
+            <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
+            <td><?= sichere_ausgabe($row['Angenommen']); ?></td>
         </tr>
         <?php
     }
     ?>
 </table>
+<?php
+if ($entriesCount == 0) {
+    echo '<tr><td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+} else {
+    echo createPaginationTable('./?p=admin_log_vertraege&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen) . '&amp;angenommen=' . sichere_ausgabe($angenommen), $offset, $entriesCount, ADMIN_LOG_OFFSET);
+}
+?>
 <p>
     <a href="./?p=admin">Zurück...</a>
 </p>

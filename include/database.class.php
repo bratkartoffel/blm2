@@ -211,6 +211,37 @@ class Database
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getAdminVertraegeLogCount($werFilter, $wenFilter, $angenommenFilter)
+    {
+        if ($angenommenFilter == null) {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM log_vertraege_view WHERE Wer LIKE :wer AND Wen LIKE :wen");
+        } else {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM log_vertraege_view WHERE Wer LIKE :wer AND Wen AND Angenommen = :angenommen LIKE :wen");
+            $stmt->bindParam("angenommen", $angenommenFilter, PDO::PARAM_INT);
+        }
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminVertraegeLogEntries($werFilter, $wenFilter, $angenommenFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        if ($angenommenFilter == null) {
+            $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, UNIX_TIMESTAMP(Wann) AS WannTs, Ware, Wieviel, Einzelpreis, Gesamtpreis, Angenommen FROM log_vertraege_view
+           WHERE Wer LIKE :wer AND Wen LIKE :wen ORDER BY Wann DESC LIMIT :offset, :count");
+        } else {
+            $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, UNIX_TIMESTAMP(Wann) AS WannTs, Ware, Wieviel, Einzelpreis, Gesamtpreis, Angenommen FROM log_vertraege_view
+           WHERE Wer LIKE :wer AND Wen LIKE :wen AND Angenommen = :angenommen ORDER BY Wann DESC LIMIT :offset, :count");
+            $stmt->bindParam("angenommen", $angenommenFilter, PDO::PARAM_INT);
+        }
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getMarktplatzCount($wasFilter = array())
     {
         if (sizeof($wasFilter) == 0) {

@@ -16,7 +16,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="hidden" name="p" value="admin_log_mafia"/>
         <label for="wer">Wer:</label>
         <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
-        <label for="wen">Wen:</label> <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <label for="wen">Wen:</label>
+        <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>

@@ -93,19 +93,37 @@ class Database
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminBankLogCount($nameFilter)
+    public function getAdminBankLogCount($werFilter)
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM log_bank_view WHERE Wer LIKE :name");
-        $stmt->bindParam("name", $nameFilter);
+        $stmt->bindParam("name", $werFilter);
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminBankLogEntries($nameFilter, $page, $entriesPerPage)
+    public function getAdminBankLogEntries($werFilter, $page, $entriesPerPage)
     {
         $offset = $page * $entriesPerPage;
         $stmt = $this->prepare("SELECT Wer, WerId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Aktion FROM log_bank_view
             WHERE Wer LIKE :name ORDER BY Wann DESC LIMIT :offset, :count");
-        $stmt->bindParam("name", $nameFilter);
+        $stmt->bindParam("name", $werFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getAdminBioladenLogCount($werFilter)
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM log_bioladen_view WHERE Wer LIKE :name");
+        $stmt->bindParam("name", $werFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminBioladenLogEntries($werFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT Wer, WerId, UNIX_TIMESTAMP(Wann) AS WannTs, Was, Wieviel, Einzelpreis, Gesamtpreis FROM log_bioladen_view
+            WHERE Wer LIKE :name ORDER BY Wann DESC LIMIT :offset, :count");
+        $stmt->bindParam("name", $werFilter);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);

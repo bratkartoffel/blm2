@@ -1,92 +1,56 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zur Hinzufügen von Verträgen für Admins
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- *
- * @todo Eintrage speichern
- */
+$von = getOrDefault($_GET, 'von', 0);
+$an = getOrDefault($_GET, 'an', 0);
+$ware = getOrDefault($_GET, 'ware');
+$menge = getOrDefault($_GET, 'menge', 0);
+$preis = getOrDefault($_GET, 'preis', .0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin.png" alt="Marktplatz"/></td>
-        <td>Admin - Verträge - Neuer Vertrag</td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
+        <td>Admin - Verträge - Vertrag erstellen</td>
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-<br/>
-<form action="actions/admin_vertrag.php" method="post">
-    <input type="hidden" name="a" value="1"/>
-    <table class="Liste" style="width: 400px;">
-        <tr>
-            <th colspan="2">Vertragsdaten festlegen</th>
-        </tr>
-        <tr>
-            <td>Absender:</td>
-            <td>
-                <select name="von">
-                    <?php
-                    $sql_abfrage = "SELECT
-    ID,
-    Name
-FROM
-    mitglieder
-ORDER BY
-    Name ASC;";
-                    $sql_ergebnis = mysql_query($sql_abfrage);
-
-                    while ($u = mysql_fetch_object($sql_ergebnis)) {
-                        echo '					<option value="' . $u->ID . '">' . htmlentities(stripslashes($u->Name), ENT_QUOTES, "UTF-8") . '</option>' . "\n";
-                    }
-                    ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Empfänger:</td>
-            <td>
-                <select name="an">
-                    <?php
-                    $sql_ergebnis = mysql_query($sql_abfrage);
-
-                    while ($u = mysql_fetch_object($sql_ergebnis)) {
-                        echo '					<option value="' . $u->ID . '">' . htmlentities(stripslashes($u->Name), ENT_QUOTES, "UTF-8") . '</option>' . "\n";
-                    }
-                    ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Was</td>
-            <td>
-                <select name="was">
-                    <?php
-                    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-                        echo '					<option value="' . $i . '">' . WarenName($i) . "</option>\n";
-                    }
-                    ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Menge</td>
-            <td><input type="menge" value="0" size="6"/></td>
-        </tr>
-        <tr>
-            <td>Preis</td>
-            <td><input type="preis" value="0,00" size="5"/> <?= $Currency; ?></td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align: center; padding-top: 5px;">
-                <input type="submit" value="Speichern"/>
-            </td>
-        </tr>
-    </table>
-</form>
+<div id="FilterForm">
+    <form action="/actions/admin_vertrag.php" method="post">
+        <input type="hidden" name="a" value="1"/>
+        <table class="Liste">
+            <tr>
+                <th colspan="2">Vertrag einstellen</th>
+            </tr>
+            <tr>
+                <td>Absender:</td>
+                <td><?= createPlayerDropdown($von, 'von', false); ?></td>
+            </tr>
+            <tr>
+                <td>Empfänger:</td>
+                <td><?= createPlayerDropdown($an, 'an', false); ?></td>
+            </tr>
+            <tr>
+                <td>Was</td>
+                <td><?= createWarenDropdown($ware, 'ware', false); ?></td>
+            </tr>
+            <tr>
+                <td>Menge</td>
+                <td><input type="text" name="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
+                </td>
+            </tr>
+            <tr>
+                <td>Preis</td>
+                <td><input type="text" name="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/> €
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Speichern"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 <p>
     <a href="./?p=admin">Zurück...</a>
 </p>

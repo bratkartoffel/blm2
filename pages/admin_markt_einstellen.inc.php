@@ -6,8 +6,7 @@ $preis = getOrDefault($_GET, 'preis', .0);
 <table id="SeitenUeberschrift">
     <tr>
         <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Marktplatz - Neues Angebot
-        </td>
+        <td>Admin - Marktplatz - Angebot erstellen</td>
     </tr>
 </table>
 

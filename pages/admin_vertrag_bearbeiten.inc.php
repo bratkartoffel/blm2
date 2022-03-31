@@ -5,8 +5,7 @@ $id = getOrDefault($_GET, 'id', 0);
 <table id="SeitenUeberschrift">
     <tr>
         <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Verträge - Vertrag bearbeiten
-        </td>
+        <td>Admin - Verträge - Vertrag bearbeiten</td>
     </tr>
 </table>
 
@@ -35,7 +34,7 @@ $entry = $entries[0];
             </tr>
             <tr>
                 <td>Was</td>
-                <td><?= createWarenDropdown($entry['Was'], 'ware'); ?></td>
+                <td><?= createWarenDropdown($entry['Was'], 'ware', false); ?></td>
             </tr>
             <tr>
                 <td>Menge</td>

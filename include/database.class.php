@@ -288,7 +288,7 @@ class Database
 
     public function getMarktplatzEntryById($id)
     {
-        $stmt = $this->prepare("SELECT ID, Menge, Was, Preis FROM marktplatz WHERE ID = :id");
+        $stmt = $this->prepare("SELECT ID, Von AS VonId, Menge, Was, Preis FROM marktplatz WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }
@@ -311,17 +311,27 @@ class Database
         return $this->executeAndExtractField($stmt, 'count', $warenFilter);
     }
 
-    public function getMarktplatzEntries($warenFilter = array(), $page, $entriesPerPage)
+    public function getMarktplatzEntries($warenFilter, $page, $entriesPerPage)
     {
         $offset = $page * $entriesPerPage;
         if (sizeof($warenFilter) == 0) {
-            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von LIMIT ?, ?");
+            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis 
+                FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von LIMIT :offset, :count");
         } else {
-            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von WHERE m1.Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?) LIMIT :offset, :count");
+            $fields = array();
+            for ($i = 0; $i < count($warenFilter); $i++) {
+                $fields[] = sprintf(':ware_%d', $i);
+            }
+            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis 
+                FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von WHERE m1.Was IN (" . implode(', ', $fields) . ") LIMIT :offset, :count");
+            for ($i = 0; $i < count($warenFilter); $i++) {
+                $stmt->bindParam($fields[$i], $warenFilter[$i], PDO::PARAM_INT);
+            }
+
         }
-        $warenFilter[] = $offset;
-        $warenFilter[] = $entriesPerPage;
-        return $this->executeAndExtractRows($stmt, $warenFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getVertragCount($werFilter, $wenFilter)
@@ -422,14 +432,9 @@ class Database
         return $stmt->rowCount();
     }
 
-    private function executeAndExtractRows($stmt, $executeParam = array())
+    private function executeAndExtractRows($stmt)
     {
-        if (count($executeParam) == 0) {
-            $executeResult = $stmt->execute();
-        } else {
-            $executeResult = $stmt->execute($executeParam);
-        }
-        if (!$executeResult) {
+        if (!$stmt->execute()) {
             $this->error($stmt, "Could not execute statement");
             return null;
         }

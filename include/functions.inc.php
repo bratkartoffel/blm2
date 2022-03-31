@@ -360,7 +360,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Sie haben gar nicht so viel Waren auf Lager!';
             break;
         case 117:
-            $zurueck[] = 'Ungültige Angaben oder Angaben nicht vollstädig.';
+            $zurueck[] = 'Ungültige Angaben oder Angaben nicht vollständig.';
             break;
         case 118:
             $zurueck[] = 'Der Benutzer konnte nicht gefunden werden.';
@@ -430,6 +430,16 @@ function CheckMessage($meldung)
             break;
         case 140:
             $zurueck[] = "Die Gruppe wurde gefunden und das Passwort ist korrekt, jedoch hat die Gruppe die maximale Mitgliederzahl schon erreicht.";
+            break;
+        case 141:
+            $zurueck[] = "Datenbankfehler, konnte neuen Eintrag nicht anlegen";
+            break;
+        case 142:
+            $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht bearbeiten";
+            break;
+            break;
+        case 143:
+            $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
             break;
 
 
@@ -1851,7 +1861,7 @@ function getOrDefault($array, $name, $default = null)
         } else if (is_integer($default)) {
             return intval($value);
         } else if (is_double($default)) {
-            return doubleval($value);
+            return doubleval(str_replace(array('.', ','), array('', '.'), $value));
         } else if (is_bool($default)) {
             return boolval($value);
         } else {
@@ -1943,26 +1953,39 @@ function createWarenDropdown($selectedValue, $withAllEntry = true)
     return sprintf('<select name="ware">%s</select>', implode("\n", $entries));
 }
 
+function redirectBack($redirectTo, $m = null)
+{
+    if (!empty($_SERVER['HTTP_REFERER'])) {
+        $location = str_replace("\n", '', $_SERVER['HTTP_REFERER']);
+    } else {
+        $location = $redirectTo;
+    }
+
+    if ($m != null) {
+        $location .= "&m=" . intval($m);
+    }
+    header('Location: ' . $location);
+    die();
+}
+
 function requireFieldSet($array, $field, $redirectTo)
 {
-    if (empty($array[$field])) {
-        if (!empty($_SERVER['HTTP_REFERER'])) {
-            header('Location: ' . str_replace("\n", '', $_SERVER['HTTP_REFERER']));
-        } else {
-            header('Location: ' . $redirectTo);
-        }
-        die();
+    if (!array_key_exists($array, $field) || empty($array[$field])) {
+        redirectBack($redirectTo);
     }
 }
 
 function requireEntryFound($result, $redirectTo)
 {
     if (count($result) == 0) {
-        if (!empty($_SERVER['HTTP_REFERER'])) {
-            header('Location: ' . str_replace("\n", '', $_SERVER['HTTP_REFERER']));
-        } else {
-            header('Location: ' . $redirectTo);
-        }
+        redirectBack($redirectTo);
+    }
+}
+
+function requireAdmin()
+{
+    if (!istAdmin()) {
+        redirectBack("/?p=index", 102);
         die();
     }
 }

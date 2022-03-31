@@ -1,79 +1,60 @@
 <?php
-/**
- * Führt die Aktionen des Admins auf dem Markt aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+requireAdmin();
 
-if (!istAdmin()) {        // Nur wer Admin ist, darf auf dem Marktplatz werkeln ;=)
-    header("location: ../?p=index&m=102");
-    die();
-}
+$action = getOrDefault($_POST, 'a', 0);
+$ware = getOrDefault($_POST, 'ware', 0);
+$menge = getOrDefault($_POST, 'menge', 0);
+$preis = getOrDefault($_POST, 'preis', .0);
+$id = getOrDefault($_POST, 'id', .0);
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-
-switch (intval($_REQUEST['a'])) {        // Was will der Benutzer auf dem Marktplatz?
-    case 1:        // Verkaufen
-        if ($_POST['menge'] <= 0 || number_format(str_replace(",", ".", $_POST['preis']), 2) < 0) {        // Wurde keine Menge oder ein Preis kleiner als 0 € eingegeben? Darf er nicht:
-            DisconnectDB();
-            header("location: ../?p=admin_markt_einstellen&m=120");
-            die();
+switch ($action) {
+    // create new offer
+    case 1:
+        if ($menge <= 0 || $preis <= 0) {
+            redirectBack('/?p=admin_markt_einstellen', 120);
         }
 
-        $sql_abfrage = "INSERT INTO
-    marktplatz
-VALUES
-(
-    NULL,
-    '0',
-    '" . intval($_POST['ware']) . "',
-    '" . intval($_POST['menge']) . "',
-    '" . number_format(str_replace(",", ".", $_POST['preis']), 2) . "'
-);";
-        mysql_query($sql_abfrage);        // Angebot auf dem Markt stellen
-        $_SESSION['blm_queries']++;
+        $inserted = Database::getInstance()->createTableEntry('marktplatz', array('Ware' => $ware, 'Menge' => $menge, 'Preis' => $preis));
 
-        // Angebot drinnen, fertig
-        DisconnectDB();
-        header("location: ../?p=admin_markt&m=218");
-        die();
-    case 2:        // Bearbeiten
-        if ($_POST['menge'] <= 0 || number_format(str_replace(",", ".", $_POST['preis']), 2) < 0) {        // Wurde keine Menge oder ein Preis kleiner als 0 € eingegeben? Darf er nicht:
-            DisconnectDB();
-            header("location: ../?p=admin_markt_bearbeiten&m=120&id=" . intval($_POST['id']));
-            die();
+        if ($inserted == 0) {
+            redirectBack('/?p=admin_markt_einstellen', 141);
+        } else {
+            header("location: /?p=admin_markt&m=218");
+        }
+        break;
+
+    // edit existing offer
+    case 2:
+        if ($menge <= 0 || $preis <= 0) {
+            redirectBack('/?p=admin_markt_bearbeiten&id=' . $id, 120);
         }
 
-        $sql_abfrage = "UPDATE
-    marktplatz
-SET
-    Was='" . intval($_POST['ware']) . "',
-    Menge='" . intval($_POST['menge']) . "',
-    Preis='" . number_format(str_replace(",", ".", $_POST['preis']), 2) . "'
-WHERE
-    ID='" . intval($_POST['id']) . "';";
-        mysql_query($sql_abfrage);        // Angebot auf dem Markt stellen
-        $_SESSION['blm_queries']++;
+        $updated = Database::getInstance()->updateTableEntry('marktplatz', $id, array('Ware' => $ware, 'Menge' => $menge, 'Preis' => $preis));
 
-        DisconnectDB();
-        header("location: ../?p=admin_markt&m=234");
-        die();
-    case 3:            // Löschen
-        $sql_abfrage = "DELETE FROM
-    marktplatz
-WHERE
-    ID='" . intval($_GET['id']) . "';";
-        mysql_query($sql_abfrage);        // Das Angebot ist schon verkauft, also vom Markt nehmen
-        $_SESSION['blm_queries']++;
+        if ($updated == 0) {
+            redirectBack('/?p=admin_markt_bearbeiten', 142);
+        } else {
+            header("location: /?p=admin_markt&m=234");
+        }
+        break;
 
-        // Fertig :)
-        DisconnectDB();
-        header("location: ../?p=admin_markt&m=233");
+    // delete existing offer
+    case 3:
+
+        $updated = Database::getInstance()->deleteTableEntry('marktplatz', $id);
+
+        if ($updated == 0) {
+            redirectBack('/?p=admin_markt', 143);
+        } else {
+            header("location: /?p=admin_markt&m=233");
+        }
+        break;
+
+    // unknown action
+    default:
+        redirectBack('/?p=admin_markt', 112);
+        break;
 }

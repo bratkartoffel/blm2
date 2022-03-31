@@ -16,10 +16,14 @@ class Database
     private $link;
     private $queries;
 
-    public function __construct()
+    function __construct()
     {
-        $this->link = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATENBANK . ";charset=utf8", DB_BENUTZER, DB_PASSWORT,
-            array(PDO::ATTR_PERSISTENT => true));
+        try {
+            $this->link = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATENBANK . ";charset=utf8", DB_BENUTZER, DB_PASSWORT,
+                array(PDO::ATTR_PERSISTENT => true));
+        } catch (PDOException $Exception) {
+            die('Database connection failed!');
+        }
     }
 
     function __destruct()
@@ -30,7 +34,7 @@ class Database
         $this->queries = 0;
     }
 
-    public function beginTransaction()
+    public function begin()
     {
         return $this->link->beginTransaction();
     }
@@ -259,6 +263,38 @@ class Database
         return $this->executeAndExtractField($stmt, 'count', $warenFilter);
     }
 
+    public function createTableEntry($table, $values = array())
+    {
+        $columnNames = array_keys($values);
+        $columnParameters = array();
+        foreach ($values as $field => $value) {
+            $columnParameters[] = ':' . $field;
+        }
+
+        $stmt = $this->prepare("INSERT INTO " . $table . " (" . implode(", ", $columnNames) . ") VALUES (" . implode(", ", $columnParameters) . ")");
+        return $this->executeAndGetAffectedRows($stmt, $values);
+    }
+
+    public function updateTableEntry($table, $id, $changes = array())
+    {
+        $fields = array();
+        foreach ($changes as $field => $value) {
+            $fields[] = sprintf("%s = :%s", $field, $field);
+        }
+        /** @noinspection SqlResolve */
+        $stmt = $this->prepare("UPDATE " . $table . " SET " . implode(", ", $fields) . " WHERE ID = :id");
+        $stmt->bindParam('id', $id, PDO::PARAM_INT);
+        return $this->executeAndGetAffectedRows($stmt, $changes);
+    }
+
+    public function deleteTableEntry($table, $id)
+    {
+        /** @noinspection SqlResolve */
+        $stmt = $this->prepare("DELETE FROM " . $table . " WHERE ID = :id");
+        $stmt->bindParam('id', $id, PDO::PARAM_INT);
+        return $this->executeAndGetAffectedRows($stmt);
+    }
+
     public function getMarktplatzEntries($warenFilter = array())
     {
         if (sizeof($warenFilter) == 0) {
@@ -336,6 +372,20 @@ class Database
             return null;
         }
         return $result[$fieldName];
+    }
+
+    private function executeAndGetAffectedRows($stmt, $executeParam = array())
+    {
+        if (count($executeParam) == 0) {
+            $executeResult = $stmt->execute();
+        } else {
+            $executeResult = $stmt->execute($executeParam);
+        }
+        if (!$executeResult) {
+            $this->error($stmt, "Could not execute statement");
+            return null;
+        }
+        return $stmt->rowCount();
     }
 
     private function executeAndExtractRows($stmt, $executeParam = array())

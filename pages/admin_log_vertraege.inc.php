@@ -1,5 +1,4 @@
 <?php
-
 $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
 $angenommen = getOrDefault($_GET, 'angenommen');
@@ -12,7 +11,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+
 <div id="FilterForm">
     <form action="./" method="get">
         <input type="hidden" name="p" value="admin_log_vertraege"/>

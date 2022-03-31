@@ -1,30 +1,13 @@
-<?php
-/**
- * Wird in die index.php eingebunden; Hauptseite des Administrations Bereichs
- *
- * @version 1.0.2
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- *
- * @todo Gruppenverwaltung
- * @todo Benutzerverwaltung
- * @todo Auftragsverwaltung
- *
- * @todo Logbuch Nachrichten
- */
-?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin.png" alt="Logo der Unterseite"/></td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
         <td>Administrations Bereich</td>
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-<br/>
-<br/>
-<ul style="margin-left: 20px;">
+<ul>
     <li><a href="./?p=admin_test">Variablen Testseite</a></li>
     <li><a href="./?p=admin_markt">Marktplatz</a></li>
     <li><a href="./?p=admin_vertrag">Verträge</a></li>

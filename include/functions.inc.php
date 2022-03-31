@@ -719,7 +719,7 @@ WHERE
  */
 function IstAngemeldet()
 {
-    return ($_SESSION['blm_user'] != "");
+    return isset($_SESSION['blm_user']);
 }
 
 /**

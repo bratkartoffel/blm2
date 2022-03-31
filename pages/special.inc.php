@@ -9,8 +9,8 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/special.png" alt="Special"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Das Weihnachtsspecial
+            <td><img src="/pics/big/special.png" alt="Special"/></td>
+            <td>Das Weihnachtsspecial
             </td>
         </tr>
     </table>

@@ -9,9 +9,9 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/rangliste.png" alt="Rangliste"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Die Rangliste
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=17"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
+        <td><img src="/pics/big/rangliste.png" alt="Rangliste"/></td>
+        <td>Die Rangliste
+            <a href="./?p=hilfe&amp;mod=1&amp;cat=17"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
 </table>
@@ -112,11 +112,11 @@ LIMIT " . $offset * RANGLISTE_OFFSET . ", " . RANGLISTE_OFFSET . ";";
             echo '<td style="text-align: right;">' . $nr . '</td>
 						<td><img src="./pics/small/' . $status . '.png" alt="' . $status . '" title="' . $status . '" />' . htmlentities(stripslashes($spieler->n), ENT_QUOTES, "UTF-8");
             if ($spieler->istAdmin) {    // Wenn der User Admin ist, zeige den gelben Stern an
-                echo '&nbsp;&nbsp;<img src="pics/small/admin.png" alt="Ingame Administrator" title="Ingame Administrator" />';
+                echo '&nbsp;&nbsp;<img src="/pics/small/admin.png" alt="Ingame Administrator" title="Ingame Administrator" />';
             }
 
             if ($spieler->istBetatester) {    // Wenn er Betatester ist, dann zeig den silbernen Stern an
-                echo '&nbsp;&nbsp;<img src="pics/small/beta.png" alt="Betatester" title="Betatester" />';
+                echo '&nbsp;&nbsp;<img src="/pics/small/beta.png" alt="Betatester" title="Betatester" />';
             }
 
             if ($spieler->Kuerzel != "") {

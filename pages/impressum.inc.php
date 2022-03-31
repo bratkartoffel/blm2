@@ -9,11 +9,11 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/impressum.png" alt="Impressum"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Impressum
+        <td><img src="/pics/big/impressum.png" alt="Impressum"/></td>
+        <td>Impressum
             <?php
             if (istAngemeldet()) {
-                echo '<a href="./?p=hilfe&amp;mod=1&amp;cat=21"><img src="pics/help.gif" alt="Hilfe" style="border: none;" /></a>';
+                echo '<a href="./?p=hilfe&amp;mod=1&amp;cat=21"><img src="/pics/help.gif" alt="Hilfe" style="border: none;" /></a>';
             }
             ?>
         </td>

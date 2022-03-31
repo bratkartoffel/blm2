@@ -9,9 +9,9 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/writemail.png" alt="Statistik"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Serverweite Statistik
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=18"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
+        <td><img src="/pics/big/writemail.png" alt="Statistik"/></td>
+        <td>Serverweite Statistik
+            <a href="./?p=hilfe&amp;mod=1&amp;cat=18"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
 </table>

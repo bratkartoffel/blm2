@@ -9,9 +9,9 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/nachrichten.png" alt="Nachrichtenliste"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihr Posteingang
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/nachrichten.png" alt="Nachrichtenliste"/></td>
+            <td>Ihr Posteingang
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -102,9 +102,9 @@ ORDER BY
     <a href="actions/nachrichten.php?a=3">Alle Nachrichten löschen</a>
     <table cellspacing="0" style="margin-top: 20px;">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/nachrichten.png" alt="Nachrichten"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihr Postausgang
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/nachrichten.png" alt="Nachrichten"/></td>
+            <td>Ihr Postausgang
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>

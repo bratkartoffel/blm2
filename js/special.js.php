@@ -63,7 +63,7 @@ z.style.display = 'block';
 z.style.left = '<?=rand(200, 800); ?>px';
 z.style.top = '<?=rand(5, 50); ?>px';
 
-z.innerHTML = '<a href="actions/special.php?hash=<?=$hash; ?>"><img src="pics/weihnachten.png" width="32" height="32" alt="Special" style="border: none;" /></a>';
+z.innerHTML = '<a href="actions/special.php?hash=<?=$hash; ?>"><img src="/pics/weihnachten.png" width="32" height="32" alt="Special" style="border: none;" /></a>';
 <?php
 }
 }

@@ -9,9 +9,9 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/gruppe.png" alt="Gruppe"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Mitgliederverwaltung
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/gruppe.png" alt="Gruppe"/></td>
+            <td>Mitgliederverwaltung
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -78,8 +78,8 @@ ORDER BY
         $sql_ergebnis = mysql_query($sql_abfrage);
 
 
-        $bild[true] = '<img src="pics/small/ok.png" alt="Ja" style="border: none;" />';
-        $bild[false] = '<img src="pics/small/error.png" alt="Nein" style="border: none;" />';
+        $bild[true] = '<img src="/pics/small/ok.png" alt="Ja" style="border: none;" />';
+        $bild[false] = '<img src="/pics/small/error.png" alt="Nein" style="border: none;" />';
 
         while ($mitglied = mysql_fetch_object($sql_ergebnis)) {
             $name = '<a href="./?p=profil&amp;uid=' . $mitglied->ID . '">' . htmlentities(stripslashes($mitglied->Name), ENT_QUOTES, "UTF-8") . '</a>';

@@ -9,8 +9,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin.png" alt="Logo der Unterseite"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Administrations Bereich - Vorlagen
+        <td><img src="/pics/big/admin.png" alt="Logo der Unterseite"/></td>
+        <td>Administrations Bereich - Vorlagen
             für Verwarnungen
         </td>
     </tr>

@@ -11,8 +11,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin.png" alt="Marktplatz"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Admin - Verträge - Vertrag
+        <td><img src="/pics/big/admin.png" alt="Marktplatz"/></td>
+        <td>Admin - Verträge - Vertrag
             bearbeiten
         </td>
     </tr>

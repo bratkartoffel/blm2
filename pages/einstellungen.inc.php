@@ -9,9 +9,9 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/einstellungen.png" alt="Einstellungen"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Die Einstellungen
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=15"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
+        <td><img src="/pics/big/einstellungen.png" alt="Einstellungen"/></td>
+        <td>Die Einstellungen
+            <a href="./?p=hilfe&amp;mod=1&amp;cat=15"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
 </table>

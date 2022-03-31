@@ -283,7 +283,7 @@ function CheckMessage($meldung)
         $zurueck[] = '<table id="m_' . $meldung . '" class="Meldung" border="0" cellspacing="0">
 					<tr>
 						<td style="width: 40px;">
-							<img src="pics/small/error.png" alt="Fehler" style="margin: 4px;" />
+							<img src="/pics/small/error.png" alt="Fehler" style="margin: 4px;" />
 						</td>
 						<td>
 							<span class="MeldungR">
@@ -293,7 +293,7 @@ function CheckMessage($meldung)
         $zurueck[] = '<table id="m_' . $meldung . '"  class="Meldung" border="0" cellspacing="0">
 					<tr>
 						<td style="width: 40px;">
-							<img src="pics/small/ok.png" alt="Hinweis" style="margin: 4px;" />
+							<img src="/pics/small/ok.png" alt="Hinweis" style="margin: 4px;" />
 						</td>
 						<td>
 							<span class="MeldungG">
@@ -303,7 +303,7 @@ function CheckMessage($meldung)
         $zurueck[] = '<table id="m_' . $meldung . '"  class="Meldung" border="0" cellspacing="0">
 					<tr>
 						<td style="width: 40px;">
-							<img src="pics/small/error.png" alt="Fehler" style="margin: 4px;" />
+							<img src="/pics/small/error.png" alt="Fehler" style="margin: 4px;" />
 						</td>
 						<td>
 							<span class="MeldungR">
@@ -1414,20 +1414,20 @@ function ReplaceBBCode($text)
     /*
         Nun die Emoticons ersetzen
     */
-    $text = str_ireplace(" ;p", '<img src="pics/emoticons/kopete006.png" alt=" ;p" />', $text);
-    $text = str_ireplace(" $)", '<img src="pics/emoticons/kopete007.png" alt=" $)" />', $text);
-    $text = str_ireplace(" 8)", '<img src="pics/emoticons/kopete008.png" alt=" 8)" />', $text);
-    $text = str_ireplace(" ^^", '<img src="pics/emoticons/kopete010.png" alt=" ^^" />', $text);
-    $text = str_ireplace(" :0", '<img src="pics/emoticons/kopete011.png" alt=" :0" />', $text);
-    $text = str_ireplace(" :((", '<img src="pics/emoticons/kopete012.png" alt=" :((" />', $text);
-    $text = str_ireplace(" ;)", '<img src="pics/emoticons/kopete013.png" alt=" ;)" />', $text);
-    $text = str_ireplace(" :~", '<img src="pics/emoticons/kopete014.png" alt=" :~" />', $text);
-    $text = str_ireplace(" :|", '<img src="pics/emoticons/kopete015.png" alt=" :|" />', $text);
-    $text = str_ireplace(" :p", '<img src="pics/emoticons/kopete016.png" alt=" :p" />', $text);
-    $text = str_ireplace(" :D", '<img src="pics/emoticons/kopete017.png" alt=" :D" />', $text);
-    $text = str_ireplace(" :ö", '<img src="pics/emoticons/kopete018.png" alt=" :ö" />', $text);
-    $text = str_ireplace(" :(", '<img src="pics/emoticons/kopete019.png" alt=" :(" />', $text);
-    $text = str_ireplace(" :)", '<img src="pics/emoticons/kopete020.png" alt=" :)" />', $text);
+    $text = str_ireplace(" ;p", '<img src="/pics/emoticons/kopete006.png" alt=" ;p" />', $text);
+    $text = str_ireplace(" $)", '<img src="/pics/emoticons/kopete007.png" alt=" $)" />', $text);
+    $text = str_ireplace(" 8)", '<img src="/pics/emoticons/kopete008.png" alt=" 8)" />', $text);
+    $text = str_ireplace(" ^^", '<img src="/pics/emoticons/kopete010.png" alt=" ^^" />', $text);
+    $text = str_ireplace(" :0", '<img src="/pics/emoticons/kopete011.png" alt=" :0" />', $text);
+    $text = str_ireplace(" :((", '<img src="/pics/emoticons/kopete012.png" alt=" :((" />', $text);
+    $text = str_ireplace(" ;)", '<img src="/pics/emoticons/kopete013.png" alt=" ;)" />', $text);
+    $text = str_ireplace(" :~", '<img src="/pics/emoticons/kopete014.png" alt=" :~" />', $text);
+    $text = str_ireplace(" :|", '<img src="/pics/emoticons/kopete015.png" alt=" :|" />', $text);
+    $text = str_ireplace(" :p", '<img src="/pics/emoticons/kopete016.png" alt=" :p" />', $text);
+    $text = str_ireplace(" :D", '<img src="/pics/emoticons/kopete017.png" alt=" :D" />', $text);
+    $text = str_ireplace(" :ö", '<img src="/pics/emoticons/kopete018.png" alt=" :ö" />', $text);
+    $text = str_ireplace(" :(", '<img src="/pics/emoticons/kopete019.png" alt=" :(" />', $text);
+    $text = str_ireplace(" :)", '<img src="/pics/emoticons/kopete020.png" alt=" :)" />', $text);
 
     // Text zurückgeben
     return $text;

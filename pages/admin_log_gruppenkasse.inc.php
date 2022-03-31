@@ -27,8 +27,8 @@ if ($_GET['gruppe'] != "") {
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin.png" alt="Gruppenkassenlogbuch"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Admin - Logbücher - Gruppenkasse</td>
+        <td><img src="/pics/big/admin.png" alt="Gruppenkassenlogbuch"/></td>
+        <td>Admin - Logbücher - Gruppenkasse</td>
     </tr>
 </table>
 

@@ -11,8 +11,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin.png" alt="Verträge"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Admin - Verträge</td>
+        <td><img src="/pics/big/admin.png" alt="Verträge"/></td>
+        <td>Admin - Verträge</td>
     </tr>
 </table>
 
@@ -51,8 +51,8 @@ ORDER BY
 							<td>' . number_format($angebot->Preis, 2, ",", ".") . ' ' . $Currency . '</td>
 							<td>' . number_format($angebot->Preis * $angebot->Menge, 2, ",", ".") . ' ' . $Currency . '</td>
 							<td style="white-space: nowrap; padding-top: 3px;">
-								<a href="./?p=admin_vertrag_bearbeiten&amp;id=' . $angebot->ID . '"><img src="pics/small/info.png" alt="Bearbeiten" style="border: none;" /></a>
-								<a href="./actions/admin_vertrag.php?a=3&amp;id=' . $angebot->ID . '"><img src="pics/small/error.png" alt="Löschen" style="border: none;" /></a>';
+								<a href="./?p=admin_vertrag_bearbeiten&amp;id=' . $angebot->ID . '"><img src="/pics/small/info.png" alt="Bearbeiten" style="border: none;" /></a>
+								<a href="./actions/admin_vertrag.php?a=3&amp;id=' . $angebot->ID . '"><img src="/pics/small/error.png" alt="Löschen" style="border: none;" /></a>';
         echo '</td></tr>';            // ...und ausgeben
         $eintrag = true;        // Jetzt haben wir mindestens einen Eintrag
     }

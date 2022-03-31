@@ -9,9 +9,9 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/vertraege.png" alt="Vertragsliste"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre vorliegenden Verträge
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/vertraege.png" alt="Vertragsliste"/></td>
+            <td>Ihre vorliegenden Verträge
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -33,7 +33,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Vertraege) {
         <th>Menge</th>
         <th>Preis / kg</th>
         <th>Gesamtpreis</th>
-        <th style="width: 80px;">Aktion</th>
+        <th>Aktion</th>
     </tr>
     <?php
     $sql_abfrage = "SELECT
@@ -98,9 +98,9 @@ ORDER BY
     <br/>
     <table cellspacing="0">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/vertraege.png" alt="Vertragsliste"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre ausgehenden Verträge
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/vertraege.png" alt="Vertragsliste"/></td>
+            <td>Ihre ausgehenden Verträge
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -114,7 +114,7 @@ ORDER BY
             <th>Menge</th>
             <th>Preis / kg</th>
             <th>Gesamtpreis</th>
-            <th style="width: 80px;">Aktion</th>
+            <th>Aktion</th>
         </tr>
         <?php
         $sql_abfrage = "SELECT

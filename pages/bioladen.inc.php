@@ -11,9 +11,9 @@ include("include/preise.inc.php");        // Hier brauchen wir noch zusätzlich 
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/bioladen.png" alt="Bioladen"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Der Bioladen
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=7"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
+        <td><img src="/pics/big/bioladen.png" alt="Bioladen"/></td>
+        <td>Der Bioladen
+            <a href="./?p=hilfe&amp;mod=1&amp;cat=7"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
 </table>

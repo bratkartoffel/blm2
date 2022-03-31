@@ -9,8 +9,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin_test.png" alt="Logo der Unterseite"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Administrations Bereich -
+        <td><img src="/pics/big/admin_test.png" alt="Logo der Unterseite"/></td>
+        <td>Administrations Bereich -
             gesetzte Variablen
         </td>
     </tr>

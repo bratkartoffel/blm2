@@ -9,9 +9,9 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/gruppe.png" alt="Gruppe"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Gruppe
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/gruppe.png" alt="Gruppe"/></td>
+            <td>Gruppe
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -93,7 +93,7 @@ WHERE
             <tr>
                 <td>
                     <div style="text-align: center;">
-                        <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>" style="max-width: 200px; max-height: 200px"/>
+                        <img src="/pics/gruppe.php?id=<?= $gruppe->ID; ?>" style="max-width: 200px; max-height: 200px"/>
                     </div>
                     <div style="margin-top: 30px;">
                         <?php
@@ -389,7 +389,7 @@ LIMIT " . ($offset * GRUPPE_OFFSET) . ", " . GRUPPE_OFFSET . ";";
                 if ($ich->Rechte->NachrichtLoeschen) {
                     echo '<div style="float: right;">
 											<a href="actions/gruppe.php?a=5&amp;id=' . $nachricht->nID . '" onclick="delGruppeNachricht(' . $nachricht->nID . ', document.getElementById(\'gn_' . $nachricht->nID . '\')); return false;">
-												<img src="pics/small/error.png" style="border: none;" />
+												<img src="/pics/small/error.png" style="border: none;" />
 											</a>
 										</div>';
                 }

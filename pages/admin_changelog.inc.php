@@ -34,10 +34,10 @@ ORDER BY
             <td><?= $c->Aenderung; ?></td>
             <td style="white-space: nowrap;">
                 <a href="./?p=admin_changelog_bearbeiten&amp;id=<?= $c->ID; ?>">
-                    <img src="pics/small/info.png" style="border: none;" alt="Bearbeiten"/>
+                    <img src="/pics/small/info.png" style="border: none;" alt="Bearbeiten"/>
                 </a>
                 <a href="actions/admin_changelog.php?a=2&amp;id=<?= $c->ID; ?>">
-                    <img src="pics/small/error.png" style="border: none;" alt="Löschen"/>
+                    <img src="/pics/small/error.png" style="border: none;" alt="Löschen"/>
                 </a>
             </td>
         </tr>

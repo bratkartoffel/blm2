@@ -9,8 +9,8 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/mafia.png" alt="Kriege"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Kriegdetails</td>
+            <td><img src="/pics/big/mafia.png" alt="Kriege"/></td>
+            <td>Kriegdetails</td>
         </tr>
     </table>
 <?php

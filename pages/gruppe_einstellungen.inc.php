@@ -9,9 +9,9 @@
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/gruppe.png" alt="Gruppe"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Gruppeneinstellungen
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/gruppe.png" alt="Gruppe"/></td>
+            <td>Gruppeneinstellungen
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -63,7 +63,7 @@ WHERE
                 <tr>
                     <td style="text-align: center;">
                         <i>
-                            <img src="pics/gruppe.php?id=<?= $gruppe->ID; ?>"
+                            <img src="/pics/gruppe.php?id=<?= $gruppe->ID; ?>"
                                  alt="Bisher wurde kein Bild hochgeladen..."/>
                         </i>
                     </td>

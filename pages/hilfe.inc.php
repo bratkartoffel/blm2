@@ -9,8 +9,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/hilfe.png" alt="Hilfe"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Die Hilfe</td>
+        <td><img src="/pics/big/hilfe.png" alt="Hilfe"/></td>
+        <td>Die Hilfe</td>
     </tr>
 </table>
 

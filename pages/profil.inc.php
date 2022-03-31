@@ -53,8 +53,8 @@ $platz = Database::getInstance()->getPlayerRankById($profil->ID);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/profil.png" alt="Profil"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Das Profil
+        <td><img src="/pics/big/profil.png" alt="Profil"/></td>
+        <td>Das Profil
             von <?= htmlentities($profil->Name, ENT_QUOTES, "UTF-8"); ?></td>
     </tr>
 </table>
@@ -78,7 +78,7 @@ $platz = Database::getInstance()->getPlayerRankById($profil->ID);
     </tr>
     <tr>
         <td>Bild:</td>
-        <td><img src="pics/spieler.php?uid=<?= $profil->ID; ?>" style="max-width: 200px; max-height: 200px"/></td>
+        <td><img src="/pics/spieler.php?uid=<?= $profil->ID; ?>" style="max-width: 200px; max-height: 200px"/></td>
     </tr>
     <tr>
         <td>Gruppe:</td>

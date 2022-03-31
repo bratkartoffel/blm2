@@ -9,8 +9,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/register.png" alt="Registrieren"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Registrieren</td>
+        <td><img src="/pics/big/register.png" alt="Registrieren"/></td>
+        <td>Registrieren</td>
     </tr>
 </table>
 

@@ -34,9 +34,9 @@ while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/gebaeude.png" alt="Gebäude"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Ihre Gebäude
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=4"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/gebaeude.png" alt="Gebäude"/></td>
+            <td>Ihre Gebäude
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=4"><img src="/pics/help.gif" alt="Hilfe"
                                                               style="border: none;"/></a>
             </td>
         </tr>
@@ -128,7 +128,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
         </tr>
         <tr>
             <td style="width: 170px;">
-                <img src="pics/gebaeude/forschungszentrum.jpg" alt="Forschungszentrum"/>
+                <img src="/pics/gebaeude/forschungszentrum.jpg" alt="Forschungszentrum"/>
             </td>
             <td colspan="2">
                 Dies ist ebenfalls ein sehr wichtiges Gebäude in Ihrem Betrieb.<br/>
@@ -201,7 +201,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
         </tr>
         <tr>
             <td style="width: 170px;">
-                <img src="pics/gebaeude/bioladen.jpg" alt="Bioladen"/>
+                <img src="/pics/gebaeude/bioladen.jpg" alt="Bioladen"/>
             </td>
             <td colspan="2">
                 Dieses Gebäude ist genau so wichtig, wie die Plantage und das Forschungszentrum,
@@ -282,7 +282,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             </tr>
             <tr>
                 <td style="width: 170px;">
-                    <img src="pics/gebaeude/doenerstand.jpg" alt="Dönerstand"/>
+                    <img src="/pics/gebaeude/doenerstand.jpg" alt="Dönerstand"/>
                 </td>
                 <td colspan="2">
                     Dieses Gebäude hat zwar nicht viel mit &quot;Biowaren&quot; zu tun, <br/>
@@ -358,7 +358,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             </tr>
             <tr>
                 <td style="width: 170px;">
-                    <img src="pics/gebaeude/schule.jpg" alt="Verkäuferschule"/>
+                    <img src="/pics/gebaeude/schule.jpg" alt="Verkäuferschule"/>
                 </td>
                 <td colspan="2">
                     Hier bilden Sie Ihre Verkäufer aus, so dass diese in Ihrem Bioshop mehr Gewinn erzielen können.<br/>
@@ -433,7 +433,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             </tr>
             <tr>
                 <td style="width: 170px;">
-                    <img src="pics/gebaeude/bauhof.jpg" alt="Bauhof"/>
+                    <img src="/pics/gebaeude/bauhof.jpg" alt="Bauhof"/>
                 </td>
                 <td colspan="2">
                     Dieses Gebäude senkt die Ausbauzeiten sämtlicher Gebäude um <?= BONUS_FAKTOR_BAUHOF * 100; ?>% pro
@@ -507,7 +507,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             </tr>
             <tr>
                 <td style="width: 170px;">
-                    <img src="pics/gebaeude/zaun.jpg" alt="Zaun"/>
+                    <img src="/pics/gebaeude/zaun.jpg" alt="Zaun"/>
                 </td>
                 <td colspan="2">
                     Dieses Gebäude bietet den einzigen Schutz gegen Angriffe der Mafia. Dabei senkt jede Stufe des Zauns
@@ -582,7 +582,7 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Gebaeude) {
             </tr>
             <tr>
                 <td style="width: 170px;">
-                    <img src="pics/gebaeude/pizzeria.jpg" alt="Pizzeria"/>
+                    <img src="/pics/gebaeude/pizzeria.jpg" alt="Pizzeria"/>
                 </td>
                 <td colspan="2">
                     Dieses Gebäude ist das genaue Gegenstück zum Zaun.<br/>

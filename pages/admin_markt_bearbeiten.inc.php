@@ -9,8 +9,8 @@
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/marktplatz.png" alt="Marktplatz"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Admin - Marktplatz - Angebot
+        <td><img src="/pics/big/marktplatz.png" alt="Marktplatz"/></td>
+        <td>Admin - Marktplatz - Angebot
             bearbeiten
         </td>
     </tr>

@@ -31,7 +31,7 @@ include("./include/captcha_class/captcha.php");            // bindet die Funktio
 if (WARTUNGS_ARBEITEN) {
     session_unset();
     session_destroy();
-    die('<img src="pics/pylone.png" alt="Wartungsarbeiten..." style="float: left; margin-right: 20px;" /><h2 style="padding-top: 190px;">' . WARTUNGS_TEXT . "</h2><br /><br /><h3>Hier gehts zum <a href=\"forum/\">Forum</a></h3>");
+    die('<img src="/pics/pylone.png" alt="Wartungsarbeiten..." style="float: left; margin-right: 20px;" /><h2 style="padding-top: 190px;">' . WARTUNGS_TEXT . "</h2><br /><br /><h3>Hier gehts zum <a href=\"forum/\">Forum</a></h3>");
 }
 
 ConnectDB();        // So, dann bauen wir mal die Verbindung mit der Datenbank auf.
@@ -265,7 +265,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 ?>
                 <div id="weihnachtsspecial" style="position: relative; display: none; float: left;">
                 </div>
-                <img src="pics/tree.png" height="100" width="100" style="float: left; margin-left: 30px;"
+                <img src="/pics/tree.png" height="100" width="100" style="float: left; margin-left: 30px;"
                      alt="Weihnachtsbaum"/>
                 <?php
             }

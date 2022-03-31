@@ -11,9 +11,9 @@ include("include/preise.inc.php");        // Hier brauchen wir noch die Verkaufs
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/buero.png" alt="Büro"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Das Büro
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=8"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
+        <td><img src="/pics/big/buero.png" alt="Büro"/></td>
+        <td>Das Büro
+            <a href="./?p=hilfe&amp;mod=1&amp;cat=8"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
 </table>

@@ -99,9 +99,9 @@ WHERE
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/readmail.png" alt="Nachricht lesen"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Nachricht lesen
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/readmail.png" alt="Nachricht lesen"/></td>
+            <td>Nachricht lesen
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="/pics/help.gif" alt="Hilfe"
                                                                style="border: none;"/></a>
             </td>
         </tr>
@@ -155,7 +155,7 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
             <td style="padding-top: 20px; border-right: solid 1px black;"><b>Aktion:</b></td>
             <td style="padding-top: 20px;">
                 <a href="./?p=nachrichten_liste">
-                    <img src="pics/small/back.png" border="0" alt="Zurück"/>
+                    <img src="/pics/small/back.png" border="0" alt="Zurück"/>
                 </a>
                 <?php
                 if ($nachricht->Absender != "-User gelöscht-") {
@@ -169,7 +169,7 @@ if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
                     if (property_exists($nachricht, "Empfaenger")) {
                         ?>
                         <a href="?p=nachrichten_schreiben&amp;an=<?= $nachricht->AbsenderID; ?>&amp;answer=<?= $nachricht_id; ?>">
-                            <img src="pics/small/answermail.png" style="border: none;" alt="Antworten"/>
+                            <img src="/pics/small/answermail.png" style="border: none;" alt="Antworten"/>
                         </a>
                         <?php
                     }

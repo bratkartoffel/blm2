@@ -147,9 +147,9 @@ if ($rang > sizeof($Spezial)) {
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/rangliste.png" alt="Rangliste"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Die (Spezial-)Rangliste
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=17"><img src="pics/help.gif" alt="Hilfe" style="border: none;"/></a>
+        <td><img src="/pics/big/rangliste.png" alt="Rangliste"/></td>
+        <td>Die (Spezial-)Rangliste
+            <a href="./?p=hilfe&amp;mod=1&amp;cat=17"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
         </td>
     </tr>
 </table>

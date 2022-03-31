@@ -16,9 +16,9 @@ Changelog:
 ?>
     <table id="SeitenUeberschrift">
         <tr>
-            <td style="width: 80px;"><img src="pics/big/plantage.png" alt="Plantage"/></td>
-            <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Die Plantage
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=5"><img src="pics/help.gif" alt="Hilfe"
+            <td><img src="/pics/big/plantage.png" alt="Plantage"/></td>
+            <td>Die Plantage
+                <a href="./?p=hilfe&amp;mod=1&amp;cat=5"><img src="/pics/help.gif" alt="Hilfe"
                                                               style="border: none;"/></a>
             </td>
         </tr>
@@ -105,7 +105,7 @@ AND
                 </tr>
                 <tr>
                     <td width="170">
-                        <img src="pics/obst/<?= BildVonWare($i); ?>" alt="<?= WarenName($i); ?>"/>
+                        <img src="/pics/obst/<?= BildVonWare($i); ?>" alt="<?= WarenName($i); ?>"/>
                     </td>
                     <td>
                         <p>

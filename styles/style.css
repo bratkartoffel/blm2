@@ -334,3 +334,8 @@ span.CODE_KOPF, span.HTML_KOPF, span.CSS_KOPF, span.SQL_KOPF, span.PHP_KOPF, spa
 p.seite_beschreibung {
     font-weight: bold;
 }
+
+fieldset legend {
+    font-weight: bold;
+    font-size: 120%;
+}

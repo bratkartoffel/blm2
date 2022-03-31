@@ -1,43 +1,26 @@
-<?php
-/**
- * Wird in die index.php eingebunden; Seite zur Ausgabe der wichtigen Variablen des Servers und des Spiels zu Debug-Zwecken
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin_test.png" alt="Logo der Unterseite"/></td>
-        <td>Administrations Bereich -
-            gesetzte Variablen
+        <td><img src="/pics/big/admin_test.png" alt=""/></td>
+        <td>Administrations Bereich - gesetzte Variablen
         </td>
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-<br/>
-<br/>
 <fieldset>
-    <legend style="font-weight: bold; font-size: 120%;">$_SERVER</legend>
-    <pre><?php
-        var_dump($_SERVER);
-        ?></pre>
+    <legend>$_SERVER</legend>
+    <pre><?= var_export($_SERVER, true); ?></pre>
 </fieldset>
 <fieldset style="margin-top: 20px;">
-    <legend style="font-weight: bold; font-size: 120%;">$_SESSION</legend>
-    <pre><?php
-        var_dump($_SESSION);
-        ?></pre>
+    <legend>$_SESSION</legend>
+    <pre><?= var_export($_SESSION, true); ?></pre>
 </fieldset>
 <fieldset style="margin-top: 20px;">
-    <legend style="font-weight: bold; font-size: 120%;">$ich</legend>
-    <pre><?php
-        var_dump($ich);
-        ?></pre>
+    <legend>$ich</legend>
+    <pre><?= var_export($ich, true); ?></pre>
 </fieldset>
+
 <p>
     <a href="./?p=admin">Zurück...</a>
 </p>

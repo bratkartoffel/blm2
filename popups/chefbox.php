@@ -49,12 +49,12 @@ if ($ich->LastAction + TIMEOUT_INAKTIV < time()) {
 ?><!DOCTYPE html>
 <!--
 	Site generated:   <?= date("r", time()) . "\n"; ?>
-	Client:           <?= sichere_ausgabe($_SERVER['REMOTE_ADDR']) . "\n"; ?>
-	Server:           <?= sichere_ausgabe($_SERVER['SERVER_ADDR']) . "\n"; ?>
-	Script:           <?= sichere_ausgabe($_SERVER['PHP_SELF']) . "\n"; ?>
-	Query-String:     <?= sichere_ausgabe($_SERVER['QUERY_STRING']) . "\n"; ?>
-	User-Agent:       <?= sichere_ausgabe($_SERVER['HTTP_USER_AGENT']) . "\n"; ?>
-	Referer:          <?= sichere_ausgabe($_SERVER['HTTP_REFERER']) . "\n"; ?>
+	Client:           <?= sichere_ausgabe(getOrDefault($_SERVER, 'REMOTE_ADDR')) . "\n"; ?>
+	Server:           <?= sichere_ausgabe(getOrDefault($_SERVER, 'SERVER_ADDR')) . "\n"; ?>
+	Script:           <?= sichere_ausgabe(getOrDefault($_SERVER, 'PHP_SELF')) . "\n"; ?>
+	Query-String:     <?= sichere_ausgabe(getOrDefault($_SERVER, 'QUERY_STRING')) . "\n"; ?>
+	User-Agent:       <?= sichere_ausgabe(getOrDefault($_SERVER, 'HTTP_USER_AGENT')) . "\n"; ?>
+	Referer:          <?= sichere_ausgabe(getOrDefault($_SERVER, 'HTTP_REFERER')) . "\n"; ?>
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 <head>

@@ -40,9 +40,9 @@ $offset = getOrDefault($_GET, 'o', 0);
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= sichere_ausgabe($row['Von']); ?></td>
+            <td><?= createProfileLink($row['VonId'], $row['VonName']); ?></td>
             <td><?= WarenName($row['Was']); ?></td>
-            <td><?= formatWeight($row['Wieviel']); ?></td>
+            <td><?= formatWeight($row['Menge']); ?></td>
             <td><?= formatCurrency($row['Preis']); ?></td>
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
             <td>

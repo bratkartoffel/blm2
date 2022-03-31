@@ -255,9 +255,9 @@ class Database
     public function getMarktplatzEntries($warenFilter = array())
     {
         if (sizeof($warenFilter) == 0) {
-            $stmt = $this->prepare("SELECT ID, Von, Was, Menge, Preis, Menge * Preis AS Gesamtpreis FROM marktplatz");
+            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von");
         } else {
-            $stmt = $this->prepare("SELECT ID, Von, Was, Menge, Preis, Menge * Preis AS Gesamtpreis FROM marktplatz WHERE Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?)");
+            $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis FROM marktplatz m1 JOIN mitglieder m2 on m2.ID = m1.Von WHERE m1.Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?)");
         }
         return $this->executeAndExtractRows($stmt, $warenFilter);
     }

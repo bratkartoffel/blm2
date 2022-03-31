@@ -1,3 +1,8 @@
+<?php
+$ware = getOrDefault($_GET, 'ware');
+$menge = getOrDefault($_GET, 'menge', 0);
+$preis = getOrDefault($_GET, 'preis', .0);
+?>
 <table id="SeitenUeberschrift">
     <tr>
         <td><img src="/pics/big/admin.png" alt=""/></td>
@@ -17,9 +22,9 @@
             </tr>
             <tr>
                 <td style="font-weight: bold; height: 40px;">
-                    <input type="text" name="menge" size="2" value="0"/> kg
-                    <?= createWarenDropdown(null, false); ?>
-                    zu <input type="text" name="preis" size="3" value="0,00"/> <?= $Currency; ?> / kg
+                    <input type="text" name="menge" size="2" value="<?= $menge; ?>"/> kg
+                    <?= createWarenDropdown($ware, false); ?>
+                    zu <input type="text" name="preis" size="3" value="<?= formatCurrency($preis, false); ?>"/> € / kg
                     <input type="submit" value="verkaufen"/>
                 </td>
             </tr>

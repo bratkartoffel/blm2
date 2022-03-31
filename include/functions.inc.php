@@ -1883,14 +1883,14 @@ function createGroupLink($id, $name)
     return sprintf('<a href="/?p=gruppe&amp;id=%d">%s</a>', $id, sichere_ausgabe($name));
 }
 
-function formatCurrency($amount)
+function formatCurrency($amount, $withSuffix = true)
 {
-    return number_format($amount, 2, ",", ".") . ' €';
+    return number_format($amount, 2, ",", ".") . ($withSuffix ? ' €' : '');
 }
 
-function formatWeight($amount)
+function formatWeight($amount, $withSuffix = true)
 {
-    return number_format($amount, 0, ",", ".") . ' kg';
+    return number_format($amount, 0, ",", ".") . ($withSuffix ? ' kg' : '');
 }
 
 function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesPerPage)

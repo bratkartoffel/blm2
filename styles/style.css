@@ -74,6 +74,11 @@ div#Pagination {
     text-align: center;
 }
 
+div#FilterForm {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
 div#Navigation {
     position: relative;
     top: -8px;

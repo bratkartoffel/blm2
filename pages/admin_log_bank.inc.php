@@ -1,24 +1,25 @@
 <?php
-$name = getOrDefault($_GET, 'name');
+$wer = getOrDefault($_GET, 'wer');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin.png" alt="Banklogbuch"/></td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
         <td>Admin - Logbücher - Bank</td>
     </tr>
 </table>
 
 <?= $m; ?>
-<br/>
-<form action="./" method="get">
-    <input type="hidden" name="p" value="admin_log_bank"/>
-    <h3>Filtern nach Namen:</h3>
-    <input type="text" name="name" value="<?= sichere_ausgabe($name); ?>"/>
-    <input type="submit" value="Abschicken"/><br/>
-</form>
-<br/>
-<table class="Liste" style="width: 450px;">
+<div id="FilterForm">
+    <form action="./" method="get">
+        <input type="hidden" name="p" value="admin_log_bank"/>
+        <label for="wer">Wer:</label>
+        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="submit" value="Abschicken"/>
+    </form>
+</div>
+
+<table class="Liste">
     <tr>
         <th>Wer</th>
         <th>Wann</th>
@@ -26,7 +27,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Aktion</th>
     </tr>
     <?php
-    $filter = empty($name) ? "%" : $name;
+    $filter = empty($wer) ? "%" : $wer;
     $entriesCount = Database::getInstance()->getAdminBankLogCount($filter);
     $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
     $entries = Database::getInstance()->getAdminBankLogEntries($filter, $offset, ADMIN_LOG_OFFSET);
@@ -48,7 +49,7 @@ $offset = getOrDefault($_GET, 'o', 0);
 if ($entriesCount == 0) {
     echo '<tr><td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
 } else {
-    echo createPaginationTable('./?p=admin_log_bank&amp;name=' . sichere_ausgabe($name), $offset, $entriesCount, ADMIN_LOG_OFFSET);
+    echo createPaginationTable('./?p=admin_log_bank&amp;wer=' . sichere_ausgabe($wer), $offset, $entriesCount, ADMIN_LOG_OFFSET);
 }
 ?>
 <p>

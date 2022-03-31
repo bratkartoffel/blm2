@@ -5,25 +5,23 @@ $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="pics/big/admin.png" alt="Mafialogbuch"/></td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
         <td>Admin - Logbücher - Mafia</td>
     </tr>
 </table>
 
 <?= $m; ?>
-<br/>
-<form action="./" method="get">
-    <input type="hidden" name="p" value="admin_log_mafia"/>
-    <h3>Filtern nach Auftraggeber:</h3>
-    <input type="text" name="wer" value="<?= sichere_ausgabe($wer); ?>"/>
-    <h3>Filtern nach Opfer:</h3>
-    <input type="text" name="wen" value="<?= sichere_ausgabe($wen); ?>"/>
-    <br/>
-    <br/>
-    <input type="submit" value="Abschicken"/><br/>
-</form>
-<br/>
-<table class="Liste" style="width: 720px;">
+<div id="FilterForm">
+    <form action="./" method="get">
+        <input type="hidden" name="p" value="admin_log_mafia"/>
+        <label for="wer">Wer:</label>
+        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <label for="wen">Wen:</label> <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <input type="submit" value="Abschicken"/>
+    </form>
+</div>
+
+<table class="Liste">
     <tr>
         <th>Wer</th>
         <th>Wen</th>
@@ -47,7 +45,7 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= createProfileLink($row['WenId'], $row['Wen']); ?></td>
             <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
             <td><?= sichere_ausgabe($row['Art']); ?></td>
-            <td><?= ($row['Art'] == 'Angriff') ? formatWeight($row['Wieviel']): formatCurrency($row['Wieviel']); ?></td>
+            <td><?= ($row['Art'] == 'Angriff') ? formatWeight($row['Wieviel']) : formatCurrency($row['Wieviel']); ?></td>
             <td><?= sichere_ausgabe($row['Erfolgreich']); ?></td>
         </tr>
         <?php

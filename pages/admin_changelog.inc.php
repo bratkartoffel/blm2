@@ -1,20 +1,7 @@
-<?php
-/**
- * Wird in die index.php eingebunden; Seite zur Verwaltung des Changelogs
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- *
- * @todo Einträge hinzufügen
- * @todo Einträge bearbeiten
- * @todo Einträge löschen
- */
-?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td style="width: 80px;"><img src="pics/big/admin.png" alt="Admin Changelog"/></td>
-        <td style="font-size: 16pt; font-weight: bold; text-decoration: underline">Admin - Changelog</td>
+        <td><img src="/pics/big/admin.png" alt="Admin Changelog"/></td>
+        <td>Admin - Changelog</td>
     </tr>
 </table>
 

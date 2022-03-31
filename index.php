@@ -215,7 +215,6 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
     <script type="text/javascript" src="js/functions.js?<?= VERSION; ?>"></script>
     <script type="text/javascript" src="js/ajax.js?<?= VERSION; ?>"></script>
     <script type="text/javascript">
-        <!--
         function MarkActiveLink() {
             // Markiert den aktuellen Menüpunkt (Standort) des Users
             const z_links = document.getElementById("Navigation").getElementsByTagName("a");		// Zeigt auf alle Links der NAvigation
@@ -230,7 +229,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                         aktLink = aktLink.split("?p=");		// Dann holen wir uns die Seite raus
                         aktLink = aktLink[1].split("&");	// ohne den abschließenden Trenner "&"
 
-                        if (aktLink[0] == Seite) {		// Wenn der aktuelle Link der Standort des Users ist, ...
+                        if (Seite.startsWith(aktLink[0])) {		// Wenn der aktuelle Link der Standort des Users ist, ...
                             z_links[i].innerHTML = '→ <i>' + z_links[i].innerHTML + "</i>";		// Dann verändere ihn
                             z_links[i].style.color = "#555555";		// und gib ihm eine andere Farbe
                         }
@@ -240,13 +239,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 // nothing to do
             }
         }
-
-        // -->
     </script>
-    <!-- Kleiner Hack für den IE -->
-    <!--[if IE]>
-    <link rel="stylesheet" type="text/css" href="styles/style_ie.css"/>
-    <![endif]-->
 </head>
 <body onload="MarkActiveLink();">
 <div id="Wrapper">

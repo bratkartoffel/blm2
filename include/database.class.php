@@ -131,21 +131,30 @@ class Database
 
     public function getAdminGroupTreasuryLogCount($werFilter, $wenFilter, $groupFilter)
     {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM log_gruppenkasse_view WHERE Wer LIKE :wer AND Wen LIKE :wen AND Gruppe like :gruppe");
+        if ($groupFilter == null) {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM log_gruppenkasse_view WHERE Wer LIKE :wer AND Wen LIKE :wen");
+        } else {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM log_gruppenkasse_view WHERE Wer LIKE :wer AND Wen LIKE :wen AND GruppeId = :gruppe");
+            $stmt->bindParam("gruppe", $groupFilter, PDO::PARAM_INT);
+        }
         $stmt->bindParam("wer", $werFilter);
         $stmt->bindParam("wen", $wenFilter);
-        $stmt->bindParam("gruppe", $groupFilter);
         return $this->executeAndExtractField($stmt, 'count');
     }
 
     public function getAdminGroupTreasuryLogEntries($werFilter, $wenFilter, $groupFilter, $page, $entriesPerPage)
     {
         $offset = $page * $entriesPerPage;
-        $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, Gruppe, GruppeId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Wohin FROM log_gruppenkasse_view
-            WHERE Wer LIKE :wer AND Wen LIKE :wen AND Gruppe like :gruppe ORDER BY Wann DESC LIMIT :offset, :count");
+        if ($groupFilter == null) {
+            $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, Gruppe, GruppeId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Wohin FROM log_gruppenkasse_view
+            WHERE Wer LIKE :wer AND Wen LIKE :wen ORDER BY Wann DESC LIMIT :offset, :count");
+        } else {
+            $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, Gruppe, GruppeId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Wohin FROM log_gruppenkasse_view
+            WHERE Wer LIKE :wer AND Wen LIKE :wen AND GruppeId = :gruppe ORDER BY Wann DESC LIMIT :offset, :count");
+            $stmt->bindParam("gruppe", $groupFilter, PDO::PARAM_INT);
+        }
         $stmt->bindParam("wer", $werFilter);
         $stmt->bindParam("wen", $wenFilter);
-        $stmt->bindParam("gruppe", $groupFilter);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
@@ -185,6 +194,12 @@ class Database
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM gruppe");
         return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAllGroupIdsAndName()
+    {
+        $stmt = $this->prepare("SELECT ID, Name FROM gruppe");
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getGroupNameById($id)

@@ -1907,3 +1907,19 @@ function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesP
 
     return sprintf('<div id="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
+
+function createGroupDropdown($selectedValue)
+{
+    $groups = Database::getInstance()->getAllGroupIdsAndName();
+    $entries = array();
+    $entries[] = '<option value="">- Alle -</option>';
+    for ($i = 0; $i < count($groups); $i++) {
+        $entry = $groups[$i];
+        if ($entry["ID"] == $selectedValue) {
+            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $entry["ID"], $entry["Name"]);
+        } else {
+            $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
+        }
+    }
+    return sprintf('<select name="gruppe">%s</select>', implode("\n", $entries));
+}

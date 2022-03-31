@@ -20,7 +20,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         <label for="wen">Wen:</label>
         <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
         <label for="gruppe">Gruppe:</label>
-        <input type="text" name="gruppe" id="gruppe" value="<?= sichere_ausgabe($gruppe); ?>"/>
+        <?= createGroupDropdown($gruppe); ?>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>
@@ -37,10 +37,9 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_wen = empty($wen) ? "%" : $wen;
-    $filter_gr = empty($gruppe) ? "%" : $gruppe;
-    $entriesCount = Database::getInstance()->getAdminGroupTreasuryLogCount($filter_wer, $filter_wen, $filter_gr);
+    $entriesCount = Database::getInstance()->getAdminGroupTreasuryLogCount($filter_wer, $filter_wen, $gruppe);
     $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getAdminGroupTreasuryLogEntries($filter_wer, $filter_wen, $filter_gr, $offset, ADMIN_LOG_OFFSET);
+    $entries = Database::getInstance()->getAdminGroupTreasuryLogEntries($filter_wer, $filter_wen, $gruppe, $offset, ADMIN_LOG_OFFSET);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];

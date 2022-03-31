@@ -15,6 +15,12 @@ $id = getOrDefault($_GET, 'id', 0);
 $entries = Database::getInstance()->getVertragEntryById($id);
 requireEntryFound($entries, '/?p=admin_vertrag');
 $entry = $entries[0];
+
+if (isset($_GET['von'])) $entry['Von'] = $_GET['von'];
+if (isset($_GET['an'])) $entry['An'] = $_GET['an'];
+if (isset($_GET['ware'])) $entry['Was'] = $_GET['ware'];
+if (isset($_GET['menge'])) $entry['Menge'] = $_GET['menge'];
+if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
 ?>
 <div id="FilterForm">
     <form action="/actions/admin_vertrag.php" method="post">

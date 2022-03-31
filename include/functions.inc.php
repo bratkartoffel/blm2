@@ -563,6 +563,9 @@ function CheckMessage($meldung)
         case 240:
             $zurueck[] = 'Der Sitterzugang wurde erfolgreich bearbeitet.';
             break;
+        case 241:
+            $zurueck[] = 'Account wurde erfolgreich aktiviert.';
+            break;
 
 
         case 999:

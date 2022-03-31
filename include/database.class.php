@@ -108,6 +108,14 @@ class Database
         return $this->executeAndExtractField($stmt, 'Name');
     }
 
+    public function getPlayerIdByNameAndActivationToken($name, $code)
+    {
+        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE Name = :name AND EMailAct = :code");
+        $stmt->bindParam("name", $name);
+        $stmt->bindParam("code", $code);
+        return $this->executeAndExtractField($stmt, 'ID');
+    }
+
     public function getPlayerRankById($id)
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM mitglieder WHERE Punkte > (SELECT Punkte FROM mitglieder WHERE ID = :id)");

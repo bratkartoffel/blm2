@@ -1,39 +1,19 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers zum Aktivieren seines Accounts aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+$user = getOrDefault($_POST, 'user');
+$code = getOrDefault($_POST, 'code');
+$id = Database::getInstance()->getPlayerIdByNameAndActivationToken($user, $code);
 
-$user = trim($_GET['user']);
-$code = trim($_GET['code']);
-
-if (strlen($user) < 2 || strlen($code) <> 40) {
-    die("");
+if ($id == null) {
+    redirectBack('/?p=index', 117);
 }
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
+$updated = Database::getInstance()->updateTableEntry('mitglieder', $id, array('EMailAct' => null));
 
-$sql_abfrage = "UPDATE
-    mitglieder
-SET
-    EMailAct = NULL
-WHERE
-    Name LIKE '" . mysql_real_escape_string($user) . "'
-AND
-    EMailAct = '" . mysql_real_escape_string($code) . "'
-;";
-$sql_ergebnis = mysql_query($sql_abfrage);
-
-DisconnectDB();
-if (mysql_affected_rows() == 0) {
-    die("Ungültiger Aktivierungscode, oder Account bereits aktiviert!");
+if ($updated == 0) {
+    redirectBack('/?p=index', 117);
 } else {
-    die('<h2>Account erfolgreich aktiviert. Sie können sich nun einloggen. Viel Spaß beim BLM2!<br /><br /><a href="../?p=anmelden" style="color: blue;">Zur Anmeldung</a></h2>');
+    header("location: /?p=login&m=241");
 }

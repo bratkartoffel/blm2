@@ -12,12 +12,12 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-<form action="./" method="get">
-    <input type="hidden" name="p" value="admin_log_bioladen"/>
-    <label for="wer">Wer:</label>
-    <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
-    <input type="submit" value="Abschicken"/>
-</form>
+    <form action="./" method="get">
+        <input type="hidden" name="p" value="admin_log_bioladen"/>
+        <label for="wer">Wer:</label>
+        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="submit" value="Abschicken"/>
+    </form>
 </div>
 
 <table class="Liste">
@@ -48,15 +48,12 @@ $offset = getOrDefault($_GET, 'o', 0);
         </tr>
         <?php
     }
+    if ($entriesCount == 0) {
+        echo '<tr><td colspan="6" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+    }
     ?>
 </table>
-<?php
-if ($entriesCount == 0) {
-    echo '<tr><td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
-} else {
-    echo createPaginationTable('./?p=admin_log_bioladen&amp;wer=' . sichere_ausgabe($wer), $offset, $entriesCount, ADMIN_LOG_OFFSET);
-}
-?>
+<?= createPaginationTable('./?p=admin_log_bioladen&amp;wer=' . sichere_ausgabe($wer), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
 <p>
     <a href="./?p=admin">Zurück...</a>
 </p>

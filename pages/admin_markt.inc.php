@@ -1,23 +1,28 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zur Verwaltung des Marktes für Admins
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+$ware = getOrDefault($_GET, 'ware');
+$offset = getOrDefault($_GET, 'o', 0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/admin.png" alt="Marktplatz"/></td>
+        <td><img src="/pics/big/admin.png" alt=""/></td>
         <td>Admin - Marktplatz</td>
     </tr>
 </table>
 
-<?= $m; ?>
-<br/>
-<table class="Liste" style="width: 490px" cellspacing="0">
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+
+<div id="FilterForm">
+    <form action="./" method="get">
+        <input type="hidden" name="p" value="admin_markt"/>
+        <label for="ware">Ware:</label>
+        <?= createWarenDropdown($ware); ?>
+        <input type="submit" value="Abschicken"/><br/>
+    </form>
+</div>
+
+<table class="Liste">
     <tr>
+        <th>Wer</th>
         <th>Ware</th>
         <th>Menge</th>
         <th>Preis / kg</th>
@@ -25,38 +30,38 @@
         <th>Aktion</th>
     </tr>
     <?php
-    $sql_abfrage = "SELECT
-    *
-FROM
-    marktplatz
-ORDER BY
-    Was,
-    Preis;";
-    $sql_ergebnis = mysql_query($sql_abfrage);        // Alle Angebote abrufen
-    $_SESSION['blm_queries']++;
+    $filter_waren = empty($ware) ? array() : array($ware);
+    $entriesCount = Database::getInstance()->getMarktplatzCount($filter_waren);
+    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
+    $entries = Database::getInstance()->getMarktplatzEntries($filter_waren, $offset, ADMIN_LOG_OFFSET);
 
-    $eintrag = false;        // Bisher haben wir noch kein Angebot ausgegeben, oder? ;)
 
-    while ($angebot = mysql_fetch_object($sql_ergebnis)) {        // Alle Angebote abrufen...
-        echo '<tr>
-							<td>' . WarenName($angebot->Was) . '</td>
-							<td>' . number_format($angebot->Menge, 0, ",", ".") . ' kg</td>
-							<td>' . number_format($angebot->Preis, 2, ",", ".") . ' ' . $Currency . '</td>
-							<td>' . number_format($angebot->Preis * $angebot->Menge, 2, ",", ".") . ' ' . $Currency . '</td>
-							<td style="padding-top: 3px; white-space: nowrap;">
-								<a href="./?p=admin_markt_bearbeiten&amp;id=' . $angebot->ID . '"><img src="/pics/small/info.png" alt="Bearbeiten" style="border: none;" /></a>
-								<a href="./actions/admin_markt.php?a=3&amp;id=' . $angebot->ID . '"><img src="/pics/small/error.png" alt="Löschen" style="border: none;" /></a>';
-        echo '</td></tr>';            // ...und ausgeben
-        $eintrag = true;        // Jetzt haben wir mindestens einen Eintrag
+    for ($i = 0; $i < count($entries); $i++) {
+        $row = $entries[$i];
+        ?>
+        <tr>
+            <td><?= sichere_ausgabe($row['Von']); ?></td>
+            <td><?= WarenName($row['Was']); ?></td>
+            <td><?= formatWeight($row['Wieviel']); ?></td>
+            <td><?= formatCurrency($row['Preis']); ?></td>
+            <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
+            <td>
+                <a href="/?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>">
+                    <img src="/pics/small/info.png" alt="Bearbeiten"/>
+                </a>
+                <a href="/actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>">
+                    <img src="/pics/small/error.png" alt="Löschen"/>
+                </a>
+            </td>
+        </tr>
+        <?php
     }
-
-    if (!$eintrag) {    // Falls kein Angebot gefunden wurde, dann ne entsprechende Meldung ausgeben
-        echo '<tr><td colspan="5" style="text-align: center;"><i>Bisher sind noch keine Angebote vorhanden.</i></td></tr>';
+    if ($entriesCount == 0) {
+        echo '<tr><td colspan="6" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
     }
     ?>
 </table>
-<br/>
+<?= createPaginationTable('./?p=admin_markt&amp;ware=' . sichere_ausgabe($ware), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
 <p>
-    <a href="./?p=admin_markt_einstellen">Neues Angebot einstellen</a><br/>
     <a href="./?p=admin">Zurück...</a>
 </p>

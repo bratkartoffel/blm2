@@ -1904,6 +1904,9 @@ function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesP
             $pages[] = $page + 1;
         }
     }
+    if (count($pages) == 0) {
+        $pages[] = "1";
+    }
 
     return sprintf('<div id="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
@@ -1922,4 +1925,18 @@ function createGroupDropdown($selectedValue)
         }
     }
     return sprintf('<select name="gruppe">%s</select>', implode("\n", $entries));
+}
+
+function createWarenDropdown($selectedValue)
+{
+    $entries = array();
+    $entries[] = '<option value="">- Alle -</option>';
+    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
+        if ($i == $selectedValue) {
+            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $i, WarenName($i));
+        } else {
+            $entries[] = sprintf('<option value="%d">%s</option>', $i, WarenName($i));
+        }
+    }
+    return sprintf('<select name="ware">%s</select>', implode("\n", $entries));
 }

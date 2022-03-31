@@ -242,14 +242,24 @@ class Database
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getMarktplatzCount($wasFilter = array())
+    public function getMarktplatzCount($warenFilter = array())
     {
-        if (sizeof($wasFilter) == 0) {
+        if (sizeof($warenFilter) == 0) {
             $stmt = $this->prepare("SELECT count(1) AS count FROM marktplatz");
         } else {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM marktplatz WHERE Was IN (" . str_repeat('?, ', count($wasFilter) - 1) . "?)");
+            $stmt = $this->prepare("SELECT count(1) AS count FROM marktplatz WHERE Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?)");
         }
-        return $this->executeAndExtractField($stmt, 'count', $wasFilter);
+        return $this->executeAndExtractField($stmt, 'count', $warenFilter);
+    }
+
+    public function getMarktplatzEntries($warenFilter = array())
+    {
+        if (sizeof($warenFilter) == 0) {
+            $stmt = $this->prepare("SELECT ID, Von, Was, Menge, Preis, Menge * Preis AS Gesamtpreis FROM marktplatz");
+        } else {
+            $stmt = $this->prepare("SELECT ID, Von, Was, Menge, Preis, Menge * Preis AS Gesamtpreis FROM marktplatz WHERE Was IN (" . str_repeat('?, ', count($warenFilter) - 1) . "?)");
+        }
+        return $this->executeAndExtractRows($stmt, $warenFilter);
     }
 
     public function getGroupCount()

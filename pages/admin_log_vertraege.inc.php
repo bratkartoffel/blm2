@@ -63,15 +63,12 @@ $offset = getOrDefault($_GET, 'o', 0);
         </tr>
         <?php
     }
+    if ($entriesCount == 0) {
+        echo '<tr><td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+    }
     ?>
 </table>
-<?php
-if ($entriesCount == 0) {
-    echo '<tr><td colspan="8" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
-} else {
-    echo createPaginationTable('./?p=admin_log_vertraege&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen) . '&amp;angenommen=' . sichere_ausgabe($angenommen), $offset, $entriesCount, ADMIN_LOG_OFFSET);
-}
-?>
+<?= createPaginationTable('./?p=admin_log_vertraege&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen) . '&amp;angenommen=' . sichere_ausgabe($angenommen), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
 <p>
     <a href="./?p=admin">Zurück...</a>
 </p>

@@ -476,7 +476,7 @@ if (SPECIAL_RUNNING && istAngemeldet()) {
 }
 ?>
 <?php
-if ($_SESSION['blm_user']) {
+if (isset($_SESSION['blm_user'])) {
     UpdateLastAction();        // Die letzte Aktion in der Datenbank eintragen (quasi jetzt beim Seitenaufruf ;)
 }
 DisconnectDB();        // Finally; die Verbindug mit der DB kappen :)

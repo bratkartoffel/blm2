@@ -95,8 +95,8 @@ class Database
 
     public function getAdminBankLogCount($werFilter)
     {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM log_bank_view WHERE Wer LIKE :name");
-        $stmt->bindParam("name", $werFilter);
+        $stmt = $this->prepare("SELECT count(1) AS count FROM log_bank_view WHERE Wer LIKE :wer");
+        $stmt->bindParam("wer", $werFilter);
         return $this->executeAndExtractField($stmt, 'count');
     }
 
@@ -104,8 +104,8 @@ class Database
     {
         $offset = $page * $entriesPerPage;
         $stmt = $this->prepare("SELECT Wer, WerId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Aktion FROM log_bank_view
-            WHERE Wer LIKE :name ORDER BY Wann DESC LIMIT :offset, :count");
-        $stmt->bindParam("name", $werFilter);
+            WHERE Wer LIKE :wer ORDER BY Wann DESC LIMIT :offset, :count");
+        $stmt->bindParam("wer", $werFilter);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
@@ -113,8 +113,8 @@ class Database
 
     public function getAdminBioladenLogCount($werFilter)
     {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM log_bioladen_view WHERE Wer LIKE :name");
-        $stmt->bindParam("name", $werFilter);
+        $stmt = $this->prepare("SELECT count(1) AS count FROM log_bioladen_view WHERE Wer LIKE :wer");
+        $stmt->bindParam("wer", $werFilter);
         return $this->executeAndExtractField($stmt, 'count');
     }
 
@@ -122,8 +122,30 @@ class Database
     {
         $offset = $page * $entriesPerPage;
         $stmt = $this->prepare("SELECT Wer, WerId, UNIX_TIMESTAMP(Wann) AS WannTs, Was, Wieviel, Einzelpreis, Gesamtpreis FROM log_bioladen_view
-            WHERE Wer LIKE :name ORDER BY Wann DESC LIMIT :offset, :count");
-        $stmt->bindParam("name", $werFilter);
+            WHERE Wer LIKE :wer ORDER BY Wann DESC LIMIT :offset, :count");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getAdminGroupTreasuryLogCount($werFilter, $wenFilter, $groupFilter)
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM log_gruppenkasse_view WHERE Wer LIKE :wer AND Wen LIKE :wen AND Gruppe like :gruppe");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        $stmt->bindParam("gruppe", $groupFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminGroupTreasuryLogEntries($werFilter, $wenFilter, $groupFilter, $page, $entriesPerPage)
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT Wer, WerId, Wen, WenId, Gruppe, GruppeId, UNIX_TIMESTAMP(Wann) AS WannTs, Wieviel, Wohin FROM log_gruppenkasse_view
+            WHERE Wer LIKE :wer AND Wen LIKE :wen AND Gruppe like :gruppe ORDER BY Wann DESC LIMIT :offset, :count");
+        $stmt->bindParam("wer", $werFilter);
+        $stmt->bindParam("wen", $wenFilter);
+        $stmt->bindParam("gruppe", $groupFilter);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);

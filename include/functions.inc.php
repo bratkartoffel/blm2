@@ -1878,6 +1878,11 @@ function createProfileLink($id, $name)
     return sprintf('<a href="/?p=profil&amp;uid=%d">%s</a>', $id, sichere_ausgabe($name));
 }
 
+function createGroupLink($id, $name)
+{
+    return sprintf('<a href="/?p=gruppe&amp;id=%d">%s</a>', $id, sichere_ausgabe($name));
+}
+
 function formatCurrency($amount)
 {
     return number_format($amount, 2, ",", ".") . ' €';

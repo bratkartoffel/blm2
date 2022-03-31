@@ -7,3 +7,6 @@
 <FilesMatch ".(css|js)$">
     Header set Cache-Control "max-age=14400, public"
 </FilesMatch>
+
+# deny access to git folder
+RedirectMatch 404 /\.git

@@ -80,7 +80,7 @@ class Database
         }
         /** @noinspection SqlResolve */
         $stmt = $this->prepare("UPDATE " . $table . " SET " . implode(", ", $fields) . " WHERE ID = :id");
-        $stmt->bindParam('id', $id, PDO::PARAM_INT);
+        $changes['id'] = $id;
         return $this->executeAndGetAffectedRows($stmt, $changes);
     }
 

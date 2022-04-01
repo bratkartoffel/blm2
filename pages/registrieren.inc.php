@@ -1,3 +1,7 @@
+<?php
+$name = getOrDefault($_GET, 'name');
+$email = getOrDefault($_GET, 'email');
+?>
 <table id="SeitenUeberschrift">
     <tr>
         <td><img src="/pics/big/register.png" alt="Registrieren"/></td>
@@ -19,12 +23,13 @@
         </tr>
         <tr>
             <td style="width: 110px; text-align: right;"><label for="name">Benutzername:</label></td>
-            <td><input name="name" id="name" type="text" size="20" required
+            <td><input name="name" id="name" type="text" size="20" required value="<?= sichere_ausgabe($name); ?>"
                        minlength="<?= USERNAME_MIN_LENGTH; ?>" maxlength="<?= USERNAME_MAX_LENGTH; ?>"/></td>
         </tr>
         <tr>
             <td style="text-align: right;"><label for="email">EMail-Adresse:</label></td>
-            <td><input name="email" id="email" type="email" size="20" required maxlength="<?= EMAIL_MAX_LENGTH; ?>"/>
+            <td><input name="email" id="email" type="email" size="20" required value="<?= sichere_ausgabe($email); ?>"
+                       maxlength="<?= EMAIL_MAX_LENGTH; ?>"/>
             </td>
         </tr>
         <tr>

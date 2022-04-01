@@ -98,7 +98,7 @@ switch ($art) {
             'Geld' => -$betrag,
             'GruppeKassenStand' => +$betrag
         ), array(
-            'Bank >= :whr0' => $betrag
+            'Geld >= :whr0' => $betrag
         ));
         if ($updated == 0) {
             Database::getInstance()->rollBack();

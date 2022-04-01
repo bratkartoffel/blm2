@@ -2,7 +2,7 @@
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
-requireAdmin();
+requireLogin();
 restrictSitter('Bank');
 
 $art = getOrDefault($_POST, 'art');
@@ -43,7 +43,7 @@ switch ($art) {
 
     // withdraw money
     case 2:
-        if ($betrag > $data['Bank'] || $data['Bank'] - $betrag > CREDIT_LIMIT) {
+        if ($betrag > $data['Bank'] || $data['Bank'] - $betrag < CREDIT_LIMIT) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 109);
         }
 
@@ -79,11 +79,13 @@ switch ($art) {
 
         Database::getInstance()->begin();
         $updated = Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
-            'Geld' => -$betrag
+            'Geld' => -$betrag,
+            'GruppeKassenStand' => +$betrag
         ), array(
             'Bank >= :whr0' => $betrag
         ));
         if ($updated == 0) {
+            Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
         }
 
@@ -91,8 +93,10 @@ switch ($art) {
             'Kasse' => +$betrag
         ));
         if ($updated == 0) {
+            Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
         }
+        Database::getInstance()->commit();
 
         redirectTo('/?p=bank', 235);
         break;

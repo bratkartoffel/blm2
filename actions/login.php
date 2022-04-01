@@ -42,7 +42,7 @@ if ($player['IstSitter'] == 1) {
 } else {
     $_SESSION['blm_sitter'] = false;
     $_SESSION['blm_admin'] = ($player['Admin'] == 1);
-    Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('LastLogin' => time()));
+    Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('LastLogin' => time(), 'LastAction' => time()));
 }
 
 $inserted = Database::getInstance()->createTableEntry('log_login',

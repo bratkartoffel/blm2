@@ -47,7 +47,7 @@ $betrag = getOrDefault($_GET, 'betrag', .0);
         </tr>
         <tr>
             <td style="text-align: right;"><label for="betrag">Betrag:</label></td>
-            <td><input type="text" name="betrag" id="betrag" size="9" value="<?= formatCurrency($betrag, false); ?>"/> €
+            <td><input type="text" name="betrag" id="betrag" size="9" value="<?= formatCurrency($betrag, false, false); ?>"/> €
             </td>
         </tr>
         <tr>
@@ -63,8 +63,8 @@ $betrag = getOrDefault($_GET, 'betrag', .0);
 <script type="text/javascript">
     function AuswahlBank(option) {
         const Leer = '<?=formatCurrency(0, false); ?>';
-        const KontostandAusgabe = '<?=formatCurrency($ich->Bank, false); ?>';
-        const BargeldAusgabe = '<?=formatCurrency($ich->Geld, false); ?>';
+        const KontostandAusgabe = '<?=formatCurrency($ich->Bank, false, false); ?>';
+        const BargeldAusgabe = '<?=formatCurrency($ich->Geld, false, false); ?>';
         const Zeiger = document.form_bank.betrag;
 
         if (Zeiger.value === Leer || Zeiger.value === KontostandAusgabe || Zeiger.value === BargeldAusgabe) {

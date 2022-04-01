@@ -17,7 +17,7 @@ $data = Database::getInstance()->getPlayerBankAndMoneyAndGroupById($_SESSION['bl
 switch ($art) {
     // deposit money
     case 1:
-        if ($betrag > $data['Geld'] || $data['Geld'] + $betrag > DEPOSIT_LIMIT) {
+        if ($betrag > $data['Geld'] || $data['Bank'] + $betrag > DEPOSIT_LIMIT) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110);
         }
 

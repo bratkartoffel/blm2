@@ -1895,9 +1895,9 @@ function createGroupLink($id, $name)
     return sprintf('<a href="/?p=gruppe&amp;id=%d">%s</a>', $id, sichere_ausgabe($name));
 }
 
-function formatCurrency($amount, $withSuffix = true)
+function formatCurrency($amount, $withSuffix = true, $withThousandsSeparator = true)
 {
-    return number_format($amount, 2, ",", ".") . ($withSuffix ? ' €' : '');
+    return number_format($amount, 2, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' €' : '');
 }
 
 function formatWeight($amount, $withSuffix = true)

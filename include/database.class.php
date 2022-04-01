@@ -49,6 +49,11 @@ class Database
         return $this->link->rollBack();
     }
 
+    public function lastInsertId()
+    {
+        return $this->link->lastInsertId();
+    }
+
     public function prepare($sql)
     {
         $this->queries++;
@@ -427,6 +432,14 @@ WHERE Name = :name AND (m.Passwort = :password OR s.Passwort = :password)");
         } else {
             return $result[0];
         }
+    }
+
+    public function existsPlayerByNameOrEmail($name, $email)
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM mitglieder WHERE Name = :name OR EMail = :email");
+        $stmt->bindParam("name", $name);
+        $stmt->bindParam("email", $email);
+        return $this->executeAndExtractField($stmt, 'count') > 0;
     }
 
     public function getQueryCount()

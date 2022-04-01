@@ -47,6 +47,11 @@ define("LAST_RESET", 1648540800);                   // Wann war der letzte Reset
 require_once(dirname(__FILE__) . "/config_live.inc.php");
 
 
+const PASSWORD_MIN_LENGTH = 6;
+const USERNAME_MIN_LENGTH = 2;
+const USERNAME_MAX_LENGTH = 20;
+const EMAIL_MAX_LENGTH = 96;
+
 /*
  * Folgende Werte können geändert werden, müssen aber nicht ;)
 */

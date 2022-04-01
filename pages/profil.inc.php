@@ -16,7 +16,7 @@ $sql_abfrage = "SELECT
     m.IGMEmpfangen,
     g.Name AS NameG,
     g.ID AS ID_G,
-    m.RegistriertAm,
+    unix_timestamp(m.RegistriertAm) as RegistriertAm,
     m.Gesperrt,
     m.Verwarnungen
 FROM

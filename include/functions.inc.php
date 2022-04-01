@@ -327,7 +327,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Bitte geben Sie Ihr gewünschtes Passwort 2x ein, um Tipfehler zu vermeiden.';
             break;
         case 106:
-            $zurueck[] = 'Der Benutzername ist bereits vergeben. Bitte wählen Sie einen anderen.';
+            $zurueck[] = 'Der Benutzername oder EMail-Adresse ist bereits vergeben.';
             break;
         case 107:
             $zurueck[] = 'Die hochgeladene Datei ist kein Bild vom Typ jpg, gif oder png!';
@@ -439,6 +439,9 @@ function CheckMessage($meldung)
             break;
         case 143:
             $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
+            break;
+        case 144:
+            $zurueck[] = 'Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:' . ADMIN_EMAIL . '">' . ADMIN_EMAIL . '</a>';
             break;
 
 
@@ -1204,141 +1207,6 @@ WHERE
 }
 
 /**
- * Hilfsfunktion: Legt einen neuen Spieler an
- *
- * @param array $Start
- * @param string $name
- * @param string $passwort
- * @param string $email
- *
- * @return boolean
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function Registrieren($Start, $name, $passwort, $email)
-{
-    $code = sha1(time() . $name . DB_PASSWORT . $email);
-
-    $sql_abfrage = "INSERT INTO
-	mitglieder
-(
-	ID,
-	Name,
-	EMail,
-	EMailAct,
-	Passwort,
-	RegistriertAm,
-	Geld,
-	LastAction,
-	LastLogin
-)
-VALUES
-(
-	NULL,
-	'" . mysql_real_escape_string(trim($name)) . "',
-	'" . mysql_real_escape_string(trim($email)) . "',
-	'" . $code . "',
-	'" . sha1($passwort) . "',
-	'" . time() . "',
-	'" . $Start["geld"] . "',
-	'0',
-	'0'
-);";
-    mysql_query($sql_abfrage);        // Legt den Benutzer in der Mitgliedertabelle an
-    $_SESSION['blm_queries']++;
-
-    if (mysql_error() > 0) {
-        return false;
-    }
-
-    $id = mysql_insert_id();        // Welche Nummer hat unser Neuling?
-
-    $sql_abfrage = "INSERT INTO
-	punkte
-(ID)
-	VALUES
-('" . $id . "');";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "INSERT INTO
-	statistik
-(ID)
-	VALUES
-('" . $id . "');";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "INSERT INTO
-	gebaeude
-VALUES 
-(
-	" . $id . ",";
-    for ($i = 1; $i <= ANZAHL_GEBAEUDE; $i++) {
-        $sql_abfrage .= $Start["gebaeude"][$i] . ",";
-    }
-    $sql_abfrage = substr($sql_abfrage, 0, -1);
-    $sql_abfrage .= ");";
-    mysql_query($sql_abfrage);        // Die Gebäude des Neuen anlegen
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "INSERT INTO
-	forschung
-VALUES 
-(
-	" . $id . ",";
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-        $sql_abfrage .= $Start["forschung"][$i] . ",";
-    }
-    $sql_abfrage = substr($sql_abfrage, 0, -1);
-    $sql_abfrage .= ");";
-    mysql_query($sql_abfrage);        // Die Gebäude des Neuen anlegen
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "INSERT INTO
-	lagerhaus
-VALUES 
-(
-	" . $id . ",";
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-        $sql_abfrage .= $Start["lager"][$i] . ",";
-    }
-    $sql_abfrage = substr($sql_abfrage, 0, -1);
-    $sql_abfrage .= ");";
-    mysql_query($sql_abfrage);        // Die Gebäude des Neuen anlegen
-    $_SESSION['blm_queries']++;
-
-    $empfaenger = $email;
-    $betreff = "Bioladenmanager 2: Aktivierung Ihres Accounts";
-    $nachricht = '<html>Willkommen beim Bioladenmanager 2,<br />
-<br />
-doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:<br />
-<br />
-<a href="' . SERVER_PFAD . '/actions/activate.php?user=' . htmlentities(stripslashes($name), ENT_QUOTES, "utf-8") . '&amp;code=' . $code . '">' . SERVER_PFAD . '/actions/activate.php?user=' . htmlentities(stripslashes($name), ENT_QUOTES, "utf-8") . '&amp;code=' . $code . '</a><br />
-<br />
-Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an:<br />
-' . ADMIN_EMAIL . '<br />
-<br />
-MfG
-' . SPIEL_BETREIBER . '</html>';
-    $headers =
-        "From: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
-        "Reply-To: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
-        "X-Mailer: " . "PHP\n" .
-        "MIME-Version: " . "1.0\n" .
-        "Content-type: " . "text/html; charset=utf-8\n" .
-        "Date: " . date(DATE_RFC2822);
-
-    if (!@mail($empfaenger, $betreff, $nachricht, $headers, '-f ' . ADMIN_EMAIL)) {
-        die('Der Aktivierungscode konnte nicht versendet werden! Wahrscheinlich gibt es ein Problem mit dem Mailserver. Bitte senden Sie folgenden Code an <a href="mailto:' . ADMIN_EMAIL . '">' . ADMIN_EMAIL . '</a>, um Ihren Account manuell aktivieren zu lassen:<br />
-			<br />
-			<pre>' . substr(base64_encode($name . "|" . $code), 0, -2) . "</pre>");
-    }
-    return true; // Alles fehlerfrei verlaufen
-}
-
-/**
  * Hilfsfunktion: Sucht und ersetzt BBCode in einem Text. Sorgt ausserdem für die sichere Ausgabe des Textes.
  *
  * @param string $text
@@ -2035,4 +1903,22 @@ function restrictSitter($requiredRight)
     if ($_SESSION['blm_sitter'] && (!property_exists($ich->Sitter, $requiredRight) || !$ich->Sitter->$requiredRight)) {
         redirectBack('/?p=index', 112);
     }
+}
+
+function createRandomCode()
+{
+    return sha1(openssl_random_pseudo_bytes(32));
+}
+
+function sendMail($empfaenger, $betreff, $nachricht)
+{
+    $headers =
+        "From: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
+        "Reply-To: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
+        "X-Mailer: " . "PHP\n" .
+        "MIME-Version: " . "1.0\n" .
+        "Content-type: " . "text/html; charset=utf-8\n" .
+        "Date: " . date(DATE_RFC2822);
+
+    return mail($empfaenger, $betreff, $nachricht, $headers, '-f ' . ADMIN_EMAIL);
 }

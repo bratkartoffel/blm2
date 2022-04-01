@@ -1,12 +1,3 @@
-<?php
-/**
- * Wird in die index.php eingebunden; Formular zum Registrieren eines neuen Accounts
- *
- * @version 1.0.1
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-?>
 <table id="SeitenUeberschrift">
     <tr>
         <td><img src="/pics/big/register.png" alt="Registrieren"/></td>
@@ -14,147 +5,61 @@
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-<b>
+<h3>
     Hier können Sie einen neuen Spieler anlegen. Bitte geben Sie hierzu einen Spielernamen ein, welcher noch nicht
     belegt ist und wählen Sie ein Passwort, welches nur Sie wissen sollten.
-</b>
-<br/>
-<br/>
-<script type="text/javascript">
-    <!--
-    function CheckAll() {
-        ajaxCheckUserName();
-        CheckPassword();
-        ajaxCheckEMail();
-    }
+</h3>
 
-    function CheckPassword() {
-        // Überprüft, ob die eingegebenen Passwörter übereinstimmen
-        const pwd1 = document.form_login.pwd1;		// Zeiger auf das erste Passwort
-        const pwd2 = document.form_login.pwd2;		// und auf das zweite Passwort
-
-        const pbild = document.getElementById("PasswordOK").getElementsByTagName("img")[0];		// Zeiger auf das Bild und dem
-        const ptext = document.getElementById("PasswordOK").getElementsByTagName("span")[0];	// Text neben den Eingabefeldern
-
-        const submit_btn = document.form_login.Submit;									// Zeiger auf den Absenden-Button
-
-        if (pwd1.value.length < 4) {		// Wenn das Passwort zu kurz ist
-            pbild.src = "./pics/small/error.png";										//
-            ptext.innerHTML = "Das Passwort ist zu kurz!";	// brauchen wir hier gar nicht weitermachen,
-            submit_btn.enabled = "";																// also abbrechen und Meldung ausgeben
-            submit_btn.disabled = "disabled";												//
-            return false;																					//
-        }
-
-        if (pwd1.value == "") {			// Wenn das erste Feld schon mal leer ist, dann...
-            pbild.src = "./pics/small/error.png";										//
-            ptext.innerHTML = "Bitte geben Sie ein Passwort ein!";	// brauchen wir hier gar nicht weitermachen,
-            submit_btn.enabled = "";																// also abbrechen und Meldung ausgeben
-            submit_btn.disabled = "disabled";												//
-            return;																					//
-        }
-
-        if (pwd1.value != pwd2.value) {		// Wenn die beiden Passwörter nicht übereinstimmen, dann
-            pbild.src = "./pics/small/error.png";															//
-            ptext.innerHTML = "Bitte geben Sie 2x das selbe Passwort ein!";		// Das selbe wie oben, abbrechen
-            submit_btn.enabled = "";																					// und Meldung anzeigen
-            submit_btn.disabled = "disabled";																	//
-            return;																										//
-        }
-
-        pbild.src = "./pics/small/ok.png";		// Wenn er es so weit geschafft hat, dann
-        ptext.innerHTML = "<b>OK</b>";								// passt die Eingabe, was wir gleich azeigen lassen
-
-        submit_btn.disabled = "";							//
-        submit_btn.enabled = "enabled";				// und schließlich wird auch noch der Abschickenbutton aktiviert.
-    }
-
-    -->
-</script>
-<form action="./actions/registrieren.php" method="post" name="form_login">
-    <table class="Liste" style="width: 550px" cellspacing="0">
+<form action="/actions/registrieren.php" method="post" name="form_login">
+    <table class="Liste" style="width: 350px">
         <tr>
-            <th colspan="3">Einen neuen Benutzer anlegen:</th>
+            <th colspan="2">Einen neuen Benutzer anlegen:</th>
         </tr>
         <tr>
-            <td style="width: 110px; text-align: right;">
-                Benutzername:
-            </td>
-            <td>
-                <input name="name" type="text" size="15" maxlength="20" onkeyup="CheckAll(); return false;"/>
-            </td>
-            <td id="UserUnique" style="width: 330px;">
-                <img src="./pics/small/error.png" alt="Benutzernamenprüfung" style="margin-right: 10px;"/>
-                <span></span>
+            <td style="width: 110px; text-align: right;"><label for="name">Benutzername:</label></td>
+            <td><input name="name" id="name" type="text" size="20" required
+                       minlength="<?= USERNAME_MIN_LENGTH; ?>" maxlength="<?= USERNAME_MAX_LENGTH; ?>"/></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><label for="email">EMail-Adresse:</label></td>
+            <td><input name="email" id="email" type="email" size="20" required maxlength="<?= EMAIL_MAX_LENGTH; ?>"/>
             </td>
         </tr>
         <tr>
-            <td style="text-align: right;">
-                (*) EMail-Adresse:
-            </td>
-            <td>
-                <input name="email" type="text" size="15" maxlength="96" onkeyup="CheckAll(); return false;"/>
-            </td>
-            <td id="EMailUnique" style="width: 330px;">
-                <img src="./pics/small/error.png" alt="EMail-Adressen-Überprüfung" style="margin-right: 10px;"/>
-                <span></span>
-            </td>
+            <td style="text-align: right;"><label for="pwd1">Passwort:</label></td>
+            <td><input name="pwd1" id="pwd1" type="password" size="20" required
+                       minlength="<?= PASSWORD_MIN_LENGTH; ?>"/></td>
         </tr>
         <tr>
-            <td style="text-align: right;">Passwort:</td>
-            <td><input name="pwd1" type="password" size="15" onkeyup="CheckAll(); return false;"/></td>
-            <td rowspan="2" id="PasswordOK"><img src="./pics/small/error.png" alt="Passwortüberprüfung"
-                                                 style="margin-right: 10px;"/> <span></span></td>
+            <td style="text-align: right;"><label for="pwd2">Bestätigung:</label></td>
+            <td><input name="pwd2" id="pwd2" type="password" size="20" required
+                       minlength="<?= PASSWORD_MIN_LENGTH; ?>"/></td>
         </tr>
         <tr>
-            <td style="text-align: right;">Bestätigung:</td>
-            <td><input name="pwd2" type="password" size="15" onkeyup="CheckAll(); return false;"/></td>
-        </tr>
-        <tr>
-            <td rowspan="2">Sicherheitscode</td>
-            <td colspan="2" style="text-align: center;">
-                <?php
+            <td rowspan="2"><label for="captcha_code">Sicherheitscode</label></td>
+            <td><?php
                 $captcha = new Captcha();
                 $captcha->erstelle();
                 ?>
-                <img src="include/captcha_class/pics/<?= basename($captcha->holeBildpfad()); ?>" alt="Sicherheitscode"
-                     id="Captcha"/>
-                <input type="hidden" name="bild" value="<?= basename($captcha->holeBildpfad()); ?>"/>
+                <img src="include/captcha_class/pics/<?= basename($captcha->holeBildpfad()); ?>" alt="" id="Captcha"/>
+                <input type="hidden" name="captcha_bild" value="<?= basename($captcha->holeBildpfad()); ?>"/>
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align: center;"><input type="text" name="captcha_code" maxlength="6" size="5"/>
-            </td>
+            <td><input type="text" id="captcha_code" name="captcha_code" required minlength="<?= CAPTCHA_STD_LAENGE; ?>"
+                       maxlength="<?= CAPTCHA_STD_LAENGE; ?>"/></td>
         </tr>
         <tr>
             <td colspan="3" style="text-align: center;">
-			  <span style="color: red;">
-					Mit Ihrer Registrierung akzeptieren Sie die <a
-                          href="./?p=regeln">Regeln</a> des Bioladenmanagers.<br/>
-					Zuwiderhandlungen kann von einer Verwarnung bishin zu einem Ausschluss vom Spielgeschehen führen.<br/>
-				</span>
-                <br/>
-                <script type="text/javascript">
-                    <!--
-                    // Falls der Browser JavaScript kann, dann lassen wir den deaktivierten Button ausgeben.
-                    document.write('<input name="Submit" type="submit" value="Registrieren" disabled="disabled" />');
-                    -->
-                </script>
-                <noscript>
-                    <!--
-                        Falls der Browser kein Javascript kann, dann zeigen wir einfach den Button sofort an.
-                    -->
-                    <input name="Submit" type="submit" value="Registrieren"/>
-                </noscript>
+                <p>
+                    Mit Ihrer Registrierung akzeptieren Sie die <a href="/?p=regeln">Regeln</a> des
+                    Bioladenmanagers.<br/>
+                    Zuwiderhandlungen kann von einer Verwarnung oder zum Ausschluss vom Spielgeschehen führen.
+                </p>
+                <input name="Submit" type="submit" value="Registrieren"/>
             </td>
         </tr>
     </table>
 </form>
-<script type="text/javascript">
-    <!--
-    CheckAll();
-    -->
-</script>
-<h3>(*): An diese Adresse wird der Aktivierungscode verschickt. Ohne diesen kann das Spiel nicht gespielt werden!</h3>

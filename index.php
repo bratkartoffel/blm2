@@ -400,7 +400,7 @@ switch ($Seite) {        // Gibt eine Beschreibung der Seite je nach Unterseite 
                 <div class="NaviLink" onclick="Navigation(this);"><a
                             href="./?p=impressum">Impressum</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a
-                            href="./actions/logout.php?p=dummy">Abmelden</a></div>
+                            href="./actions/logout.php">Abmelden</a></div>
                 <?php
             }    // Der letzte Block war die Navigationsleiste für angemeldete Benutzer
             else {        // Der Benutzer ist nicht angemeldet

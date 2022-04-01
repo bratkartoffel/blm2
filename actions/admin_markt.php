@@ -15,35 +15,32 @@ switch ($action) {
     // create new offer
     case 1:
         if ($menge <= 0 || $preis <= 0) {
-            header(sprintf('Location: /?p=admin_markt_einstellen&von=%d&ware=%d&menge=%d&preis=%F&m=%d', $von, $ware, $menge, $preis, 120));
-            die();
+            redirectTo(sprintf('/?p=admin_markt_einstellen&von=%d&ware=%d&menge=%d&preis=%f', urlencode($von), urlencode($ware), urlencode($menge), urlencode($preis)), 120);
         }
 
         $inserted = Database::getInstance()->createTableEntry('marktplatz', array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis));
 
         if ($inserted == 0) {
-            header(sprintf('Location: /?p=admin_markt_einstellen&von=%d&ware=%d&menge=%d&preis=%F&m=%d', $von, $ware, $menge, $preis, 141));
-            die();
+            redirectTo(sprintf('/?p=admin_markt_einstellen&von=%d&ware=%d&menge=%d&preis=%f', urlencode($von), urlencode($ware), urlencode($menge), urlencode($preis)), 141);
         } else {
-            header("location: /?p=admin_markt&m=218");
-            die();
+            redirectTo('/?p=admin_markt', 218);
         }
         break;
 
     // edit existing offer
     case 2:
         if ($menge <= 0 || $preis <= 0) {
-            header(sprintf('Location: /?p=admin_markt_bearbeiten&id=%d&von=%d&ware=%d&menge=%d&preis=%F&m=%d', $id, $von, $ware, $menge, $preis, 120));
+            redirectTo(sprintf('/?p=admin_markt_bearbeiten&id=%d&von=%d&ware=%d&menge=%d&preis=%f', urlencode($id), urlencode($von), urlencode($ware), urlencode($menge), urlencode($preis)), 120);
             die();
         }
 
         $updated = Database::getInstance()->updateTableEntry('marktplatz', $id, array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis));
 
         if ($updated === null) {
-            header(sprintf('Location: /?p=admin_markt_bearbeiten&id=%d&von=%d&ware=%d&menge=%d&preis=%F&m=%d', $id, $von, $ware, $menge, $preis, 142));
+            redirectTo(sprintf('/?p=admin_markt_bearbeiten&id=%d&von=%d&ware=%d&menge=%d&preis=%f', urlencode($id), urlencode($von), urlencode($ware), urlencode($menge), urlencode($preis)), 142);
             die();
         } else {
-            header("location: /?p=admin_markt&m=234");
+            redirectTo('/?p=admin_markt', 234);
             die();
         }
         break;
@@ -55,8 +52,7 @@ switch ($action) {
         if ($updated == 0) {
             redirectBack('/?p=admin_markt', 143);
         } else {
-            header("location: /?p=admin_markt&m=233");
-            die();
+            redirectTo('/?p=admin_markt', 233);
         }
         break;
 

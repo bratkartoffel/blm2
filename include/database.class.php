@@ -84,6 +84,24 @@ class Database
         return $this->executeAndGetAffectedRows($stmt, $changes);
     }
 
+    public function updateTableEntryCalculate($table, $id, $changes = array(), $additionWhere = array())
+    {
+        $fields = array();
+        foreach ($changes as $field => $value) {
+            $fields[] = sprintf("%s = %s + :%s", $field, $field, $field);
+        }
+        $wheres = array();
+        $i = 0;
+        foreach ($additionWhere as $cond => $value) {
+            $wheres[] = sprintf(" AND %s", $cond);
+            $changes['whr' . $i] = $value;
+        }
+        /** @noinspection SqlResolve */
+        $stmt = $this->prepare("UPDATE " . $table . " SET " . implode(", ", $fields) . " WHERE ID = :id" . implode(" ", $wheres));
+        $changes['id'] = $id;
+        return $this->executeAndGetAffectedRows($stmt, $changes);
+    }
+
     public function deleteTableEntry($table, $id)
     {
         /** @noinspection SqlResolve */
@@ -386,6 +404,18 @@ FROM mitglieder m LEFT OUTER JOIN sitter s ON m.ID = s.ID
 WHERE Name = :name AND (m.Passwort = :password OR s.Passwort = :password)");
         $stmt->bindParam("name", $name);
         $stmt->bindParam("password", $password);
+        $result = $this->executeAndExtractRows($stmt);
+        if (count($result) == 0) {
+            return null;
+        } else {
+            return $result[0];
+        }
+    }
+
+    public function getPlayerBankAndMoneyAndGroupById($id)
+    {
+        $stmt = $this->prepare("SELECT Bank, Geld, Gruppe FROM mitglieder WHERE ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
         $result = $this->executeAndExtractRows($stmt);
         if (count($result) == 0) {
             return null;

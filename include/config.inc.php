@@ -74,6 +74,8 @@ const ZINSEN_HABEN_MAX = 180;        // die maximalen Habenzinsen
 const ZINSEN_SOLL_MIN = 200;            // die minimalen Sollzinsen
 const ZINSEN_SOLL_MAX = 250;            // die maximalen Sollzinsen
 
+const DEPOSIT_LIMIT = 99999.99;
+const CREDIT_LIMIT = -15000;
 const DISPO_LIMIT = -35000;            // Der maximale Dispo, jeder größer oder gleich dem Betrag wird resettet!!
 
 const WAREN_KURS_MIN = 75;                                        // Der minimale Warenkurs

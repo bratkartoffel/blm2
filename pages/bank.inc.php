@@ -1,132 +1,80 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite zur Verwaltung des Bankkontos
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+restrictSitter('Bank');
+
+$art = getOrDefault($_GET, 'art', 1);
+$betrag = getOrDefault($_GET, 'betrag', .0);
 ?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/bank.png" alt="Bank"/></td>
-        <td>Die Bank
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=9"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
-        </td>
+        <td><img src="/pics/big/bank.png" alt=""/></td>
+        <td>Die Bank <a href="./?p=hilfe&amp;mod=1&amp;cat=9"><img src="/pics/help.gif" alt="Hilfe"/></a></td>
     </tr>
 </table>
-<?php
-if ($_SESSION['blm_sitter'] && !$ich->Sitter->Bank) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
-    ?>
 
-    <?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-    <b>
-        Hier können Sie Ihr verdientes Geld anlegen oder auch Kredite aufnehmen, wenns mal knapp wird. Die Zinsen
+<h3>
+    <p>
+        Hier können Sie Ihr verdientes Geld anlegen oder auch Kredite aufnehmen, wenn es mal knapp wird. Die Zinsen
         werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen alle <?php echo(ZINSEN_DAUER / 60); ?> Minuten. Die
-        maximale Summe, die Sie anlegen können, sind <span style="color: red;"><?php
-            if ($ich->Punkte < 100000) {
-                echo '99.999,99';
+        maximale Summe, die Sie anlegen können, sind <?= formatCurrency(DEPOSIT_LIMIT); ?>, Ihr Kreditlimit sind
+        <span style="color: red;"><?= formatCurrency(CREDIT_LIMIT); ?></span>.
+    </p>
+    <p>
+        <span style="color: red;">Wichtig! Falls der Kontostand unter <?= formatCurrency(DISPO_LIMIT) ?> fällt, wird Ihr Account automatisch resettet!</span>
+    </p>
+    <p>
+        Die aktuellen Anlagenzinsen: <?= formatCurrency(($ZinsenAnlage - 1) * 100, false); ?> %<br/>
+        Die aktuellen Kreditzinsen: <?= formatCurrency(($ZinsenKredit - 1) * 100, false); ?> %
+    </p>
+</h3>
+<h2>Ihr Kontostand: <?php echo formatCurrency($ich->Bank); ?></h2>
+
+<form action="/actions/bank.php" method="post" name="form_bank">
+    <table class="Liste" style="width: 250px">
+        <tr>
+            <th colspan="2">Transaktion durchführen</th>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><label for="art">Art:</label></td>
+            <td>
+                <select name="art" id="art" onchange="AuswahlBank(this.value); return true;">
+                    <option value="1"<?= ($art == 1 ? ' selected="selected"' : ''); ?>>Einzahlen</option>
+                    <option value="2"<?= ($art == 2 ? ' selected="selected"' : ''); ?>>Auszahlen</option>
+                    <?= ($ich->Gruppe != null ? '<option value="3"' . ($art == 3 ? ' selected="selected"' : '') . '>In die Gruppenkasse</option>' : ''); ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;"><label for="betrag">Betrag:</label></td>
+            <td><input type="text" name="betrag" id="betrag" size="9" value="<?= formatCurrency($betrag, false); ?>"/> €
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <input type="submit" value="Bestätigen"
+                       onclick="this.form.submit(); this.disabled = 'disabled'; this.value = 'Bitte warten...'; return false;"
+                />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    function AuswahlBank(option) {
+        const Leer = '<?=formatCurrency(0, false); ?>';
+        const KontostandAusgabe = '<?=formatCurrency($ich->Bank, false); ?>';
+        const BargeldAusgabe = '<?=formatCurrency($ich->Geld, false); ?>';
+        const Zeiger = document.form_bank.betrag;
+
+        if (Zeiger.value === Leer || Zeiger.value === KontostandAusgabe || Zeiger.value === BargeldAusgabe) {
+            if (option === "1" || option === "3") {
+                Zeiger.value = BargeldAusgabe;
             } else {
-                echo number_format($ich->Punkte, 2, ",", ".");
+                Zeiger.value = KontostandAusgabe;
             }
-            ?><?php echo $Currency; ?></span>, Ihr Kreditlimit sind <span style="color: red;"><?php
-            if ($ich->Punkte < 100000) {
-                echo '-25.000';
-            } else {
-                echo number_format((-0.25 * $ich->Punkte) - 0.01, 2, ",", ".");
-            }
-            ?><?php echo $Currency; ?></span>.<br/>
-        <br/>
-        <span style="color: red;">Wichtig! Falls der Kontostand unter <?php
-            if ($ich->Punkte < 100000) {
-                echo number_format(DISPO_LIMIT, 0, ",", ".");
-            } else {
-                echo number_format((-0.33 * $ich->Punkte), 0, ",", ".") . " " . $Currency;
-            }
-            ?> fällt, wird Ihr Account automatisch resettet!</span><br/>
-        <br/>
-        Die aktuellen Anlagenzinsen: <?php echo number_format(($ZinsenAnlage - 1) * 100, 2, ",", "."); ?> %<br/>
-        Die aktuellen Kreditzinsen: <?php echo number_format(($ZinsenKredit - 1) * 100, 2, ",", "."); ?> %<br/>
-    </b>
-    <br/>
-    <h2>Ihr Kontostand: <?php echo number_format($ich->Bank, 2, ",", ".") . " " . $Currency; ?></h2>
-    <?php
-    if ($ich->Punkte < 100000) {
-        if ($ich->Bank <= (DISPO_LIMIT * 0.90)) {
-            echo '<h3 style="color: red;">WICHTIG: Falls der Kredit unter -' . number_format(DISPO_LIMIT, 0, ",", ".") . " " . $Currency . ' fällt, wird der Account automatisch resettet!</h3>';
-        }
-    } else {
-        if ($ich->Bank <= (-0.25 * $ich->Punkte)) {
-            echo '<h3 style="color: red;">WICHTIG: Falls der Kredit unter ' . number_format((-0.33 * $ich->Punkte) - 0.01, 0, ",", ".") . " " . $Currency . ' fällt, wird der Account automatisch resettet!</h3>';
         }
     }
 
-    ?>
-    <script type="text/javascript">
-        <!--
-        let changed = false;
-
-        function AuswahlBank(option) {
-            // Funktion zum Eintragen der Werte, falls die Option Einzahlen / Auszaheln verändert wurde.
-            // Wenn Einzahlen gewählt wurde, dann schreib das aktuelle Guthaben in die Box,
-            // falls auszahlen gewählt wurde, schreibe den Kontostand rein.
-
-            const KontostandAusgabe = '<?=number_format($ich->Bank, 2, ",", ""); ?>';
-            const KontoStand = <?=$ich->Bank; ?>;
-            const BargeldAusgabe = '<?=number_format($ich->Geld, 2, ",", ""); ?>';
-            const Zeiger = document.form_bank.betrag;
-
-            if (changed) {
-                return false;
-            }
-            if (option == 1 || option == 3) {
-                Zeiger.value = BargeldAusgabe;
-            } else {
-                if (KontoStand > 0) {
-                    Zeiger.value = KontostandAusgabe;
-                } else {
-                    Zeiger.value = "0,00";
-                }
-            }
-        }
-
-        -->
-    </script>
-    <form action="./actions/bank.php" method="post" name="form_bank">
-        <table class="Liste" style="width: 350px;" cellspacing="0">
-            <tr>
-                <th>Art</th>
-                <th>Betrag</th>
-                <th>Bestätigen</th>
-            </tr>
-            <tr>
-                <td>
-                    <select name="art" onchange="AuswahlBank(this.value); return true;">
-                        <option value="1">Einzahlen</option>
-                        <option value="2">Auszahlen</option>
-                        <?php
-                        if (intval($ich->Gruppe) > 0) {
-                            ?>
-                            <option value="3">In die Gruppenkasse</option>
-                            <?php
-                        }
-                        ?>
-                    </select>
-                </td>
-                <td style="white-space: nowrap;">
-                    <input type="text" name="betrag" size="9"
-                           value="<?php echo number_format($ich->Geld, 2, ",", ""); ?>"
-                           onkeyup="changed=true;"/> <?= $Currency; ?>
-                </td>
-                <td>
-                    <input type="submit" value="Bestätigen"
-                           onclick="document.forms[0].submit(); this.disabled='disabled'; this.value='Bitte warten...'; return false;"/>
-                </td>
-            </tr>
-        </table>
-    </form>
-    <?php
-}
+    AuswahlBank("1");
+</script>

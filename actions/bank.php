@@ -1,179 +1,104 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers mit der Bank aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+requireAdmin();
+restrictSitter('Bank');
 
-if (!IstAngemeldet()) {        // Wenn der Client nicht angemeldet ist, darf er auch nichts mit der Bank machen :)
-    header("location: ../?p=index&m=102");
-    die();
+$art = getOrDefault($_POST, 'art');
+$betrag = getOrDefault($_POST, 'betrag', .0);
+
+if ($betrag <= 0) {
+    redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110);
 }
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-$ich = LoadSettings();    // Alle Daten des Users abrufen (Geld, Gebäudelevel, Forschungslevel...)
+$data = Database::getInstance()->getPlayerBankAndMoneyAndGroupById($_SESSION['blm_user']);
 
-if ($_SESSION['blm_sitter']) {
-    $ich->Sitter = LoadSitterSettings();
-}
-
-if (!$ich->Sitter->Bank && $_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=bank&m=112");
-    die();
-}
-
-$betrag = str_replace(",", ".", $_POST['betrag']);    //Um welchen Betrag geht es?
-
-if ($betrag <= 0 || !is_numeric($betrag)) {            // Wenn der Benutzer negative Beträge angibt, dann abbrechen
-    DisconnectDB();
-    header("location: ../?p=bank&m=110");
-    die();
-}
-
-switch (intval($_POST['art'])) {        // Was will der Benutzer überhaupt machen?
-    case 1:                // Geld Einzahlen
-        if ($betrag > $ich->Geld) {        // Will der Benutzer mehr einzahlen, als er Bar hat?
-            DisconnectDB();
-            header("location: ../?p=bank&m=110");
-            die();
+switch ($art) {
+    // deposit money
+    case 1:
+        if ($betrag > $data['Geld'] || $data['Geld'] + $betrag > DEPOSIT_LIMIT) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110);
         }
 
-        if ($ich->Punkte <= 100000) {
-            if ($ich->Bank + $betrag >= 100000) {        // Will der Benutzer mehr einzahlen, als die Bank verwalten kann? (Hier fix 99.999,99 €)
-                DisconnectDB();
-                header("location: ../?p=bank&m=110");
-                die();
-            }
-        } else {
-            if ($ich->Bank + $betrag > $ich->Punkte) {        // Will der Benutzer mehr einzahlen, als die Bank verwalten kann? (Hier variabel nach Punkten)
-                DisconnectDB();
-                header("location: ../?p=bank&m=110");
-                die();
-            }
+        $updated = Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
+            'Geld' => -$betrag,
+            'Bank' => +$betrag
+        ), array(
+            'Geld >= :whr0' => $betrag
+        ));
+
+        if ($updated == 0) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
         }
 
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    Geld=Geld-" . $betrag . ",
-    Bank=Bank+" . $betrag . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Update auf die Datenbank ausführen
-        $_SESSION['blm_queries']++;
+        Database::getInstance()->createTableEntry('log_bank', array(
+            'Wer' => $_SESSION['blm_user'],
+            'Wieviel' => $betrag,
+            'Einzahlen' => 1
+        ));
 
-        $sql_abfrage = "INSERT INTO
-    log_bank
-(
-    Wer,
-    Wann,
-    Wieviel,
-    Einzahlen
-)
-VALUES
-(
-    '" . $_SESSION['blm_user'] . "',
-    NOW(),
-    '" . $betrag . "',
-    '1'
-);";
-        mysql_query($sql_abfrage);        // Update auf die Datenbank ausführen (Logbuch)
-        $_SESSION['blm_queries']++;
-
-        DisconnectDB();
-        header("location: ../?p=bank&m=207");
+        redirectTo('/?p=bank', 207);
         break;
-    case 2:    // Auszahlen / Kredit aufnehmen...
-        if ($ich->Punkte <= 100000) {
-            if ($ich->Bank - $betrag < -25000) {        // Das Kreditlimit liegt bei -25.000 €; Wird das Limit bei dem angeforderten Betrag überschritten?
-                DisconnectDB();
-                header("location: ../?p=bank&m=109");
-                die();
-            }
-        } else {
-            if ($ich->Bank - $betrag < -(0.25 * $ich->Punkte)) {        // Das Kreditlimit liegt bei 25% der eigenen Punkte; Wird das Limit bei dem angeforderten Betrag überschritten?
-                DisconnectDB();
-                header("location: ../?p=bank&m=109");
-                die();
-            }
+
+    // withdraw money
+    case 2:
+        if ($betrag > $data['Bank'] || $data['Bank'] - $betrag > CREDIT_LIMIT) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 109);
         }
 
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    Geld=Geld+" . $betrag . ",
-    Bank=Bank-" . $betrag . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Update auf die Datenbank ausführen
-        $_SESSION['blm_queries']++;
+        $updated = Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
+            'Geld' => +$betrag,
+            'Bank' => -$betrag
+        ), array(
+            'Bank >= :whr0' => $betrag
+        ));
 
-        $sql_abfrage = "INSERT INTO
-    log_bank
-(
-    Wer,
-    Wann,
-    Wieviel,
-    Einzahlen
-)
-VALUES
-(
-    '" . $_SESSION['blm_user'] . "',
-    NOW(),
-    '" . $betrag . "',
-    '0'
-);";
-        mysql_query($sql_abfrage);        // Update auf die Datenbank ausführen (Logbuch)
-        $_SESSION['blm_queries']++;
+        if ($updated == 0) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
+        }
 
-        DisconnectDB();
-        header("location: ../?p=bank&m=207");
+        Database::getInstance()->createTableEntry('log_bank', array(
+            'Wer' => $_SESSION['blm_user'],
+            'Wieviel' => $betrag,
+            'Einzahlen' => 0
+        ));
+
+        redirectTo('/?p=bank', 207);
         break;
-    case 3:    // In die Gruppenkasse zahlen
-        if ($betrag > $ich->Geld) {        // Will der Benutzer mehr einzahlen, als er Bar hat?
-            DisconnectDB();
-            header("location: ../?p=bank&m=110");
-            die();
+
+    // deposit group account
+    case 3:
+        if ($betrag > $data['Geld']) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110);
         }
 
-        if (intval($ich->Gruppe) == 0) {
-            DisconnectDB();
-            header("location: ../?p=bank");
-            die();
+        if ($data['Gruppe'] == null) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 112);
         }
 
-        $sql_abfrage = "UPDATE
-    gruppe
-SET
-    Kasse=Kasse+" . $betrag . "
-WHERE
-    ID='" . $ich->Gruppe . "';";
-        mysql_query($sql_abfrage);        // Update auf die Datenbank ausführen
-        $_SESSION['blm_queries']++;
+        Database::getInstance()->begin();
+        $updated = Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
+            'Geld' => -$betrag
+        ), array(
+            'Bank >= :whr0' => $betrag
+        ));
+        if ($updated == 0) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
+        }
 
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    Geld=Geld-" . $betrag . ",
-    GruppeKassenStand=GruppeKassenStand+" . $betrag . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Update auf die Datenbank ausführen
-        $_SESSION['blm_queries']++;
+        $updated = Database::getInstance()->updateTableEntryCalculate('gruppe', $data['Gruppe'], array(
+            'Kasse' => +$betrag
+        ));
+        if ($updated == 0) {
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
+        }
 
-        DisconnectDB();
-        header("location: ../?p=bank&m=235");
+        redirectTo('/?p=bank', 235);
         break;
-    default:        // Was zum Teufel will er überhaupt??? Abbrechen!!!
-        DisconnectDB();
-        header("location: ../?p=bank&m=112");
+
+    // unknown action
+    default:
+        redirectBack('/?p=bank', 112);
         break;
 }

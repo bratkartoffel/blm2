@@ -2013,7 +2013,24 @@ function requireEntryFound($result, $redirectTo)
 function requireAdmin()
 {
     if (!istAdmin()) {
+        redirectBack("/?p=index", 112);
+        die();
+    }
+    error_reporting(E_ALL);
+    ini_set('display_errors', 'true');
+}
+
+function requireLogin()
+{
+    if (!istAngemeldet()) {
         redirectBack("/?p=index", 102);
         die();
+    }
+}
+
+function restrictSitter($requiredRight)
+{
+    if ($_SESSION['blm_sitter'] && !$ich->Sitter->$requiredRight) {
+        redirectBack('/?p=index', 112);
     }
 }

@@ -21,6 +21,7 @@ switch ($art) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110);
         }
 
+        Database::getInstance()->begin();
         $updated = Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
             'Geld' => -$betrag,
             'Bank' => +$betrag
@@ -29,15 +30,22 @@ switch ($art) {
         ));
 
         if ($updated == 0) {
+            Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
         }
 
-        Database::getInstance()->createTableEntry('log_bank', array(
+        $inserted = Database::getInstance()->createTableEntry('log_bank', array(
             'Wer' => $_SESSION['blm_user'],
             'Wieviel' => $betrag,
             'Einzahlen' => 1
         ));
 
+        if ($inserted == 0) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 141);
+        }
+
+        Database::getInstance()->commit();
         redirectTo('/?p=bank', 207);
         break;
 
@@ -47,6 +55,7 @@ switch ($art) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 109);
         }
 
+        Database::getInstance()->begin();
         $updated = Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
             'Geld' => +$betrag,
             'Bank' => -$betrag
@@ -55,15 +64,22 @@ switch ($art) {
         ));
 
         if ($updated == 0) {
+            Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142);
         }
 
-        Database::getInstance()->createTableEntry('log_bank', array(
+        $inserted = Database::getInstance()->createTableEntry('log_bank', array(
             'Wer' => $_SESSION['blm_user'],
             'Wieviel' => $betrag,
             'Einzahlen' => 0
         ));
 
+        if ($inserted == 0) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 141);
+        }
+
+        Database::getInstance()->commit();
         redirectTo('/?p=bank', 207);
         break;
 

@@ -1,48 +1,41 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Formular zum Notizblock
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+restrictSitter('Notizblock');
+
+if (isset($_GET['notizblock'])) $ich->Notizblock = $_GET['notizblock'];
 ?>
 <table id="SeitenUeberschrift">
     <tr>
         <td><img src="/pics/big/writemail.png" alt="Notizblock"/></td>
-        <td>Der Notizblock
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=14"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
-        </td>
+        <td>Der Notizblock <a href="./?p=hilfe&amp;mod=1&amp;cat=14"><img src="/pics/help.gif" alt="Hilfe"/></a></td>
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-<b>Hier können Sie verschiedene Informationen speichern.</b><br/>
-<br/>
-<form action="./actions/notizblock.php" method="post" name="form_notizblock">
-    <table class="Liste" cellspacing="0" style="width: 500px;">
+<h3>
+    Hier können Sie verschiedene Informationen speichern.
+</h3>
+
+<form action="/actions/notizblock.php" method="post" name="form_notizblock">
+    <table class="Liste" style="width: 500px;">
         <tr>
-            <th>
-                Notizblock
-            </th>
+            <th> Notizblock</th>
         </tr>
         <tr>
-            <td style="text-align: center;">
-                <textarea name="notizblock" cols="10" rows="10" style="width: 480px; height: 400px;" maxlength="4096"
-                          onkeyup="ZeichenUebrig(this, document.form_notizblock.getElementsByTagName('span')[0]);"><?= htmlentities(stripslashes($ich->Notizblock), ENT_QUOTES, "UTF-8"); ?></textarea>
+            <td>
+                <textarea name="notizblock" style="width: 480px; height: 400px;" maxlength="4096"
+                          onkeyup="ZeichenUebrig(this, document.getElementById('charsLeft'));"><?= sichere_ausgabe($ich->Notizblock, false); ?></textarea>
             </td>
         </tr>
         <tr>
             <td style="text-align: center;">
-                Noch <span>4096</span> Zeichen übrig.
+                Noch <span id="charsLeft">4096</span> Zeichen übrig.
                 <input type="submit" value="Speichern"/>
             </td>
         </tr>
     </table>
 </form>
+
 <script type="text/javascript">
-    <!--
-    ZeichenUebrig(document.form_notizblock.notizblock, document.form_notizblock.getElementsByTagName('span')[0]);
-    // -->
+    ZeichenUebrig(document.form_notizblock.notizblock, document.getElementById('charsLeft'));
 </script>

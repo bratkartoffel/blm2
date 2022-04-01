@@ -1382,7 +1382,7 @@ function ReplaceBBCode($text)
     $header['code'] = '<div class="CODE"><span class="CODE_KOPF">Code:</span>';
     $footer['code'] = '</div>';
 
-    $text = sichere_ausgabe($text, "UTF-8");        // dann escapen wir den String
+    $text = sichere_ausgabe($text);        // dann escapen wir den String
     $text = preg_replace(
         array(
             '/\[center\](.*)\[\/center\]/Uis',
@@ -1814,18 +1814,20 @@ function WarenName($waren_id)
  * Escaped einen String zur sicheren Ausgabe in einer HTML-Anwendung (verhindert XSS). Ein optionaler Parameter gibt an, welche Kodierung der String hat
  *
  * @param string $text
- * @param string $encoding
  *
  * @return string
  **@version 1.0.3
  *
  * @author Simon Frankenberger <simonfrankenberger@web.de>
  */
-function sichere_ausgabe($text, $encoding = 'UTF-8')
+function sichere_ausgabe($text, $withNl2Br = true)
 {
-    return nl2br(htmlentities(stripslashes($text), ENT_QUOTES, $encoding));
-    // Escaped alle HTML-Steuerzeichen, damit der String ohne Bedenken
-    // ausgegeben werden kann.
+    $data = htmlentities(stripslashes($text), ENT_QUOTES, 'UTF-8');
+    if ($withNl2Br) {
+        return nl2br($data);
+    } else {
+        return $data;
+    }
 }
 
 /**
@@ -2030,7 +2032,7 @@ function requireLogin()
 
 function restrictSitter($requiredRight)
 {
-    if ($_SESSION['blm_sitter'] && !$ich->Sitter->$requiredRight) {
+    if ($_SESSION['blm_sitter'] && (!property_exists($ich->Sitter, $requiredRight) || !$ich->Sitter->$requiredRight)) {
         redirectBack('/?p=index', 112);
     }
 }

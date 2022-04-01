@@ -61,7 +61,7 @@ if ($ich->LastAction + TIMEOUT_INAKTIV < time()) {
     <link rel="stylesheet" type="text/css" href="../styles/style.css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta http-equiv="creator" content="Simon Frankenberger"/>
-    <meta http-equiv="refresh" content="60; url=./chefbox.php"/>
+    <meta http-equiv="refresh" content="30; url=./chefbox.php"/>
     <title>BLM2 - Chefbox</title>
     <style type="text/css">
         table.Liste td, table.Liste th {

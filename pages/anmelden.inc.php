@@ -1,39 +1,28 @@
-<?php
-/**
- * Wird in die index.php eingebunden; Seite zum Anmelden am Spiel
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-?>
 <table id="SeitenUeberschrift">
     <tr>
-        <td><img src="/pics/big/login.png" alt="Logo der Unterseite"/></td>
-        <td>Login</td>
+        <td><img src="/pics/big/login.png" alt=""/></td>
+        <td>Anmelden</td>
     </tr>
 </table>
 
-<?= $m; ?>
+<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
 
-<b>
-    Hier können Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten, mit denen Sie sich registriert haben,
-    ein.
-</b>
-<br/>
-<br/>
-<form action="./actions/login.php" method="post">
-    <table class="Liste" style="width: 250px" cellspacing="0">
+<h3>
+    Hier können Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten ein.
+</h3>
+
+<form action="/actions/login.php" method="post">
+    <table class="Liste" style="width: 250px">
         <tr>
             <th colspan="2">Login für registrierte Benutzer</th>
         </tr>
         <tr>
-            <td style="width: 90px; text-align: right;">Benutzername:</td>
-            <td><input name="name" type="text" size="15"/></td>
+            <td style="text-align: right;"><label for="name">Benutzername:</label></td>
+            <td><input name="name" id="name" type="text" size="20" maxlength="20"/></td>
         </tr>
         <tr>
-            <td style="width: 90px; text-align: right;">Passwort:</td>
-            <td><input name="pwd" type="password" size="15"/></td>
+            <td style="text-align: right;"><label for="pwd">Passwort:</label></td>
+            <td><input name="pwd" id="pwd" type="password" size="20"/></td>
         </tr>
         <tr>
             <td style="text-align: center;" colspan="2">

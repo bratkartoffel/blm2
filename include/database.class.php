@@ -379,6 +379,21 @@ class Database
         return $this->executeAndExtractField($stmt, 'Name');
     }
 
+    public function getPlayerDataByNameAndPassword($name, $password)
+    {
+        $stmt = $this->prepare("SELECT m.ID AS ID, Admin, EMailAct, Gesperrt, if (strcmp(m.Passwort, :password), 1, 0) AS IstSitter
+FROM mitglieder m LEFT OUTER JOIN sitter s ON m.ID = s.ID
+WHERE Name = :name AND (m.Passwort = :password OR s.Passwort = :password)");
+        $stmt->bindParam("name", $name);
+        $stmt->bindParam("password", $password);
+        $result = $this->executeAndExtractRows($stmt);
+        if (count($result) == 0) {
+            return null;
+        } else {
+            return $result[0];
+        }
+    }
+
     public function getQueryCount()
     {
         return $this->queries;

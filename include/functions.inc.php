@@ -366,7 +366,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Der Benutzer konnte nicht gefunden werden.';
             break;
         case 119:
-            $zurueck[] = 'Das Angebot mit der ID konnte nicht gefunden werden. Vermutlich war einer schneller als Sie.';
+            $zurueck[] = 'Das Angebot mit der ID konnte nicht gefunden werden. Vermutlich war jemand schneller als Sie.';
             break;
         case 120:
             $zurueck[] = 'Bitte geben Sie eine Menge und einen Preis grösser 1 ein!';
@@ -387,10 +387,10 @@ function CheckMessage($meldung)
             $zurueck[] = 'Ungültige Menge eingegeben!';
             break;
         case 126:
-            $zurueck[] = 'Es exisitiert bereits eine Gruppe mit diesem Namen oder Kürzel!';
+            $zurueck[] = 'Es existiert bereits eine Gruppe mit diesem Namen oder Kürzel!';
             break;
         case 127:
-            $zurueck[] = 'Entweder existiert die eingegebene Gruppe nicht, oder das eingegebene Passwort ist falsch!';
+            $zurueck[] = 'Entweder existiert die eingegebene Gruppe nicht oder das eingegebene Passwort ist falsch!';
             break;
         case 128:
             $zurueck[] = 'Bitte geben Sie eine Nachricht ein!';
@@ -405,7 +405,7 @@ function CheckMessage($meldung)
             $zurueck[] = 'Der Kontostand des Mitglieds ist bereits auf dem Maximum, die Bank weigert sich die Überweisung anzunehmen!';
             break;
         case 132:
-            $zurueck[] = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als 100000 ' . $Currency . ' sein!';
+            $zurueck[] = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als 100.000 € sein!';
             break;
         case 133:
             $zurueck[] = "Bitte geben Sie eine Dauer zwischen 1 und 12 Stunden ein!";
@@ -436,7 +436,6 @@ function CheckMessage($meldung)
             break;
         case 142:
             $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht bearbeiten";
-            break;
             break;
         case 143:
             $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
@@ -1976,6 +1975,16 @@ function createWarenDropdown($selectedValue, $name, $withAllEntry = true)
     return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
 }
 
+function redirectTo($location, $m = null)
+{
+    $location = preg_replace('/&m=(\\d+)/', '', $location);
+    if ($m != null) {
+        $location .= "&m=" . intval($m);
+    }
+    header('Location: ' . $location);
+    die();
+}
+
 function redirectBack($redirectTo, $m = null)
 {
     if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -1984,11 +1993,7 @@ function redirectBack($redirectTo, $m = null)
         $location = $redirectTo;
     }
 
-    if ($m != null) {
-        $location .= "&m=" . intval($m);
-    }
-    header('Location: ' . $location);
-    die();
+    redirectTo($location, $m);
 }
 
 function requireFieldSet($array, $field, $redirectTo)

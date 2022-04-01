@@ -74,7 +74,7 @@ WHERE
         Database::getInstance()->deleteTableEntry('mitglieder', $_SESSION['blm_user']);        // Account löschen. Schade...
 
         DisconnectDB();
-        header("location: ./logout.php?del=1");
+        header("location: ./logout.php?deleted=1");
         die();
     case 4:        // Beschreibung ändern
         $beschreibung = $_POST['beschreibung'];        // Beschreibungstext abrufen

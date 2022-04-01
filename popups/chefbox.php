@@ -100,7 +100,7 @@ if ($ich->LastAction + TIMEOUT_INAKTIV < time()) {
                 opener.focus();
                 self.close();
             } else {
-                document.location.href = "../actions/logout.php?popup=true";
+                document.location.href = "../actions/logout.php?popup=1";
             }
         }
 

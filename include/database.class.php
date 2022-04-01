@@ -81,7 +81,7 @@ class Database
     {
         $fields = array();
         foreach ($changes as $field => $value) {
-            if ($value == null) {
+            if ($value === null) {
                 $fields[] = sprintf("%s = NULL", $field);
                 unset($changes[$field]);
             } else {

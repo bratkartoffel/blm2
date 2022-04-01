@@ -51,7 +51,7 @@ switch ($art) {
 
     // withdraw money
     case 2:
-        if ($betrag > $data['Bank'] || $data['Bank'] - $betrag < CREDIT_LIMIT) {
+        if ($data['Bank'] - $betrag < CREDIT_LIMIT) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 109);
         }
 
@@ -60,7 +60,7 @@ switch ($art) {
             'Geld' => +$betrag,
             'Bank' => -$betrag
         ), array(
-            'Bank >= :whr0' => $betrag
+            'Bank + ' . abs(CREDIT_LIMIT) . ' >= :whr0' => $betrag
         ));
 
         if ($updated == 0) {

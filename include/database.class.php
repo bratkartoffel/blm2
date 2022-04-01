@@ -76,7 +76,12 @@ class Database
     {
         $fields = array();
         foreach ($changes as $field => $value) {
-            $fields[] = sprintf("%s = :%s", $field, $field);
+            if ($value == null) {
+                $fields[] = sprintf("%s = NULL", $field);
+                unset($changes[$field]);
+            } else {
+                $fields[] = sprintf("%s = :%s", $field, $field);
+            }
         }
         /** @noinspection SqlResolve */
         $stmt = $this->prepare("UPDATE " . $table . " SET " . implode(", ", $fields) . " WHERE ID = :id");

@@ -57,8 +57,8 @@ function updGruppeRechte(id, recht, bild) {
     req.onreadystatechange = function () {
         switch (req.readyState) {
             case 4:
-                if (req.responseText == "1") {
-                    if (bild.src == '/pics/small/error.png') {
+                if (req.responseText === "1") {
+                    if (bild.src.endsWith('error.png')) {
                         bild.src = '/pics/small/ok.png';
                     } else {
                         bild.src = '/pics/small/error.png';

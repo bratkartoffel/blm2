@@ -1454,3 +1454,18 @@ EOF;
         }
     }
 }
+
+function hashPassword(string $password): string
+{
+    return password_hash($password, password_hash_algorithm, password_hash_options);
+}
+
+function verifyPassword(string $password, string $hash): string
+{
+    return password_verify($password, $hash);
+}
+
+function passwordNeedsUpgrade(string $hash): bool
+{
+    return strlen($hash) == 40 || password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
+}

@@ -71,7 +71,7 @@ create table gruppe
     Name         varchar(32)                 not null,
     Kuerzel      varchar(6)                  not null,
     Beschreibung varchar(2048)               null,
-    Passwort     char(40)                    not null,
+    Passwort     varchar(128)                not null,
     Kasse        decimal(12, 2) default 0.00 not null,
     constraint Kuerzel unique (Kuerzel),
     constraint Name unique (Name)
@@ -283,7 +283,7 @@ create table mitglieder
     Name                  varchar(20)                                not null,
     EMail                 varchar(96)                                not null,
     EMailAct              char(40)                                   null,
-    Passwort              char(40)                                   not null,
+    Passwort              varchar(128)                               not null,
     RegistriertAm         datetime       default current_timestamp() null,
     Geld                  decimal(11, 2) default 0.00                not null,
     Bank                  decimal(9, 2)  default 0.00                not null,
@@ -341,7 +341,7 @@ create table sitter
 (
     ID          int auto_increment primary key,
     user_id     int                  null,
-    Passwort    char(40)             not null,
+    Passwort    varchar(128)         not null,
     Gebaeude    tinyint(1) default 0 not null,
     Forschung   tinyint(1) default 0 not null,
     Produktion  tinyint(1) default 0 not null,
@@ -403,36 +403,57 @@ WHERE `Name` = 'System';
 -- test data
 -- ===================================
 
-alter table mitglieder auto_increment 100;
+alter table mitglieder
+    auto_increment 100;
 
 INSERT INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`, `Punkte`)
 VALUES (11, 'test1', 'test1@example.com', sha1('changeit'), 0);
-INSERT INTO `forschung` (`user_id`) VALUES (11);
-INSERT INTO `gebaeude` (`user_id`) VALUES (11);
-INSERT INTO `lagerhaus` (`user_id`) VALUES (11);
-INSERT INTO `punkte` (`user_id`) VALUES (11);
-INSERT INTO `statistik` (`user_id`) VALUES (11);
+INSERT INTO `forschung` (`user_id`)
+VALUES (11);
+INSERT INTO `gebaeude` (`user_id`)
+VALUES (11);
+INSERT INTO `lagerhaus` (`user_id`)
+VALUES (11);
+INSERT INTO `punkte` (`user_id`)
+VALUES (11);
+INSERT INTO `statistik` (`user_id`)
+VALUES (11);
 
 INSERT INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`, `Punkte`)
 VALUES (12, 'test2', 'test2@example.com', sha1('changeit'), 0);
-INSERT INTO `forschung` (`user_id`) VALUES (12);
-INSERT INTO `gebaeude` (`user_id`) VALUES (12);
-INSERT INTO `lagerhaus` (`user_id`) VALUES (12);
-INSERT INTO `punkte` (`user_id`) VALUES (12);
-INSERT INTO `statistik` (`user_id`) VALUES (12);
+INSERT INTO `forschung` (`user_id`)
+VALUES (12);
+INSERT INTO `gebaeude` (`user_id`)
+VALUES (12);
+INSERT INTO `lagerhaus` (`user_id`)
+VALUES (12);
+INSERT INTO `punkte` (`user_id`)
+VALUES (12);
+INSERT INTO `statistik` (`user_id`)
+VALUES (12);
 
 INSERT INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`, `Punkte`)
 VALUES (13, 'test3', 'test3@example.com', sha1('changeit'), 0);
-INSERT INTO `forschung` (`user_id`) VALUES (13);
-INSERT INTO `gebaeude` (`user_id`) VALUES (13);
-INSERT INTO `lagerhaus` (`user_id`) VALUES (13);
-INSERT INTO `punkte` (`user_id`) VALUES (13);
-INSERT INTO `statistik` (`user_id`) VALUES (13);
+INSERT INTO `forschung` (`user_id`)
+VALUES (13);
+INSERT INTO `gebaeude` (`user_id`)
+VALUES (13);
+INSERT INTO `lagerhaus` (`user_id`)
+VALUES (13);
+INSERT INTO `punkte` (`user_id`)
+VALUES (13);
+INSERT INTO `statistik` (`user_id`)
+VALUES (13);
 
 INSERT INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`, `Punkte`)
 VALUES (14, 'test4', 'test4@example.com', sha1('changeit'), 0);
-INSERT INTO `forschung` (`user_id`) VALUES (14);
-INSERT INTO `gebaeude` (`user_id`) VALUES (14);
-INSERT INTO `lagerhaus` (`user_id`) VALUES (14);
-INSERT INTO `punkte` (`user_id`) VALUES (14);
-INSERT INTO `statistik` (`user_id`) VALUES (14);
+INSERT INTO `forschung` (`user_id`)
+VALUES (14);
+INSERT INTO `gebaeude` (`user_id`)
+VALUES (14);
+INSERT INTO `lagerhaus` (`user_id`)
+VALUES (14);
+INSERT INTO `punkte` (`user_id`)
+VALUES (14);
+INSERT INTO `statistik` (`user_id`)
+VALUES (14);

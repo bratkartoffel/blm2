@@ -4594,6 +4594,616 @@
       "targets": [],
       "value": ""
     }]
+  }, {
+    "id": "2efaab59-2e76-48ae-8c1e-cfd60d8e37eb",
+    "name": "Plantage -> Plant 13 hours",
+    "commands": [{
+      "id": "0cbddcbc-5178-4a4c-86d5-381ca0354094",
+      "comment": "",
+      "command": "open",
+      "target": "/actions/test-reset-player.php?id=12",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "75ac624d-0c61-4d3d-afd9-2fb812d0a0c8",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "test2"
+    }, {
+      "id": "a7402f21-937d-4f28-b2b8-87eafc78a60e",
+      "comment": "",
+      "command": "type",
+      "target": "id=pwd",
+      "targets": [
+        ["id=pwd", "id"],
+        ["name=pwd", "name"],
+        ["css=#pwd", "css:finder"],
+        ["xpath=//input[@id='pwd']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "changeit"
+    }, {
+      "id": "251e017f-cd23-4f91-995a-0cf5d1e7fd4f",
+      "comment": "",
+      "command": "click",
+      "target": "id=login",
+      "targets": [
+        ["id=login", "id"],
+        ["css=#login", "css:finder"],
+        ["xpath=//input[@id='login']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "12e08879-347f-42b3-a09c-ecc446f16a59",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_202",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "28c1f317-1e6a-4000-9b63-991624d32c90",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Plantage",
+      "targets": [
+        ["linkText=Gebäude", "linkText"],
+        ["css=.NaviBlock:nth-child(3) > .NaviLink:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Gebäude')]", "xpath:link"],
+        ["xpath=//div[@id='Navigation']/div/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/?p=gebaeude')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Gebäude')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c28fcc80-a0e2-4851-9746-fd5f5e045ba5",
+      "comment": "",
+      "command": "type",
+      "target": "id=stunden",
+      "targets": [
+        ["id=stunden", "id"],
+        ["name=stunden", "name"],
+        ["css=#stunden", "css:finder"],
+        ["xpath=//input[@id='stunden']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "13"
+    }, {
+      "id": "4d645c81-2c01-40c5-be37-17e6a72b6b78",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=pr_ko_all",
+      "targets": [],
+      "value": "Kosten: 5.356,00 €"
+    }, {
+      "id": "1d4bae15-8fcc-4e40-a0be-c80e89d4cbc9",
+      "comment": "",
+      "command": "click",
+      "target": "id=plant_all",
+      "targets": [
+        ["id=build_1", "id"],
+        ["css=#build_1", "css:finder"],
+        ["xpath=//input[@id='build_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/div[2]/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "85d7348f-c32a-467e-b182-423b7e48d263",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_133",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0bbe0d0a-7faf-47bb-84df-c5a11bd1928c",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=stat_money",
+      "targets": [
+        ["id=stat_money", "id"],
+        ["css=#stat_money", "css:finder"],
+        ["xpath=//td[@id='stat_money']", "xpath:attributes"],
+        ["xpath=//table[@id='UserStatistik']/tbody/tr[2]/td[2]", "xpath:idRelative"],
+        ["xpath=//tr[2]/td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'4.526,15 €')]", "xpath:innerText"]
+      ],
+      "value": "5.000,00 €"
+    }]
+  }, {
+    "id": "9991e11f-b3c6-4f9f-9380-21ef7550b5be",
+    "name": "Plantage -> Plant single too much",
+    "commands": [{
+      "id": "8e6dcbc0-cbf6-4804-86f4-3035fb73e176",
+      "comment": "",
+      "command": "open",
+      "target": "/actions/test-reset-player.php?id=11",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "195c41f3-f8a5-4697-a4a9-2ebca1ff96e6",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "test1"
+    }, {
+      "id": "0bc980fb-26c7-4c5f-8206-f83d80ab97d0",
+      "comment": "",
+      "command": "type",
+      "target": "id=pwd",
+      "targets": [
+        ["id=pwd", "id"],
+        ["name=pwd", "name"],
+        ["css=#pwd", "css:finder"],
+        ["xpath=//input[@id='pwd']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "changeit"
+    }, {
+      "id": "fc42595f-ed58-4457-a085-1e874360b63e",
+      "comment": "",
+      "command": "click",
+      "target": "id=login",
+      "targets": [
+        ["id=login", "id"],
+        ["css=#login", "css:finder"],
+        ["xpath=//input[@id='login']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "efb915cf-5729-47f5-808d-a66ada0c1bc7",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_202",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b8c794d3-59ac-4f7f-8a64-5183378fb95e",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Plantage",
+      "targets": [
+        ["linkText=Gebäude", "linkText"],
+        ["css=.NaviBlock:nth-child(3) > .NaviLink:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Gebäude')]", "xpath:link"],
+        ["xpath=//div[@id='Navigation']/div/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/?p=gebaeude')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Gebäude')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "870c2c42-2185-494d-96db-a977bbe9dae1",
+      "comment": "",
+      "command": "type",
+      "target": "id=amount_1",
+      "targets": [
+        ["id=amount_1", "id"],
+        ["name=menge", "name"],
+        ["css=#amount_1", "css:finder"],
+        ["xpath=//input[@id='amount_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[3]/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/form/div/input", "xpath:position"]
+      ],
+      "value": "4657"
+    }, {
+      "id": "5833f173-28e4-4e3c-b251-1b5dcc1bd318",
+      "comment": "",
+      "command": "click",
+      "target": "id=plant_1",
+      "targets": [
+        ["id=build_1", "id"],
+        ["css=#build_1", "css:finder"],
+        ["xpath=//input[@id='build_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/div[2]/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e66d6e22-55d5-4305-93b3-630aaa3b0cee",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_125",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7a83521c-9398-455b-b9a8-c3d1ae08f208",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=plant_1",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "bdac9a5e-3310-4cdb-9cdb-09de9c1d4254",
+    "name": "Plantage -> Plant 12 hours manual amount",
+    "commands": [{
+      "id": "9347d9c7-e496-4350-9251-e792e5ff6122",
+      "comment": "",
+      "command": "open",
+      "target": "/actions/test-reset-player.php?id=11",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d97390f0-49c9-4b62-b04c-b6bb1eb07676",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "test1"
+    }, {
+      "id": "145a6f1e-3760-4e78-b6e8-a65deb5035af",
+      "comment": "",
+      "command": "type",
+      "target": "id=pwd",
+      "targets": [
+        ["id=pwd", "id"],
+        ["name=pwd", "name"],
+        ["css=#pwd", "css:finder"],
+        ["xpath=//input[@id='pwd']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "changeit"
+    }, {
+      "id": "fcd793ea-f2dd-444f-96c7-0c84ed3f90f2",
+      "comment": "",
+      "command": "click",
+      "target": "id=login",
+      "targets": [
+        ["id=login", "id"],
+        ["css=#login", "css:finder"],
+        ["xpath=//input[@id='login']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e915e4d3-9a23-407b-843c-db519f96c000",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_202",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5ac89dff-6246-4d46-b032-b1a167bcac41",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Plantage",
+      "targets": [
+        ["linkText=Gebäude", "linkText"],
+        ["css=.NaviBlock:nth-child(3) > .NaviLink:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Gebäude')]", "xpath:link"],
+        ["xpath=//div[@id='Navigation']/div/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/?p=gebaeude')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Gebäude')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9d010556-dc63-451e-b47b-8c6a9f0c3814",
+      "comment": "",
+      "command": "type",
+      "target": "id=amount_1",
+      "targets": [
+        ["id=amount_1", "id"],
+        ["name=menge", "name"],
+        ["css=#amount_1", "css:finder"],
+        ["xpath=//input[@id='amount_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[3]/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/form/div/input", "xpath:position"]
+      ],
+      "value": "4656"
+    }, {
+      "id": "574c60b1-bdb3-4b73-812a-2ab756135103",
+      "comment": "",
+      "command": "click",
+      "target": "id=plant_1",
+      "targets": [
+        ["id=build_1", "id"],
+        ["css=#build_1", "css:finder"],
+        ["xpath=//input[@id='build_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/div[2]/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e2c88607-45a3-4f45-8d54-86e5ec933128",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_207",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f42f5cbf-5bf7-4eae-8b4a-3fbd78b0b69d",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "id=plant_1",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ad72d000-28ca-4b7e-83b9-aa3f15e62da9",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=stat_money",
+      "targets": [
+        ["id=stat_money", "id"],
+        ["css=#stat_money", "css:finder"],
+        ["xpath=//td[@id='stat_money']", "xpath:attributes"],
+        ["xpath=//table[@id='UserStatistik']/tbody/tr[2]/td[2]", "xpath:idRelative"],
+        ["xpath=//tr[2]/td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'4.526,15 €')]", "xpath:innerText"]
+      ],
+      "value": "2.552,00 €"
+    }]
+  }, {
+    "id": "b947bf6d-14c5-4185-bdab-0105ec717c2a",
+    "name": "Plantage -> Plant negative hours",
+    "commands": [{
+      "id": "f02e7bc0-cc00-4093-a83e-cbf6d3ee0b32",
+      "comment": "",
+      "command": "open",
+      "target": "/actions/test-reset-player.php?id=12",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "09f8a865-583a-4374-9911-cf6dac898f9a",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "test2"
+    }, {
+      "id": "b1277b96-11c8-46b3-98d2-d51014930089",
+      "comment": "",
+      "command": "type",
+      "target": "id=pwd",
+      "targets": [
+        ["id=pwd", "id"],
+        ["name=pwd", "name"],
+        ["css=#pwd", "css:finder"],
+        ["xpath=//input[@id='pwd']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "changeit"
+    }, {
+      "id": "b6f02d42-7b43-43c1-bcb1-5d6ca472b8eb",
+      "comment": "",
+      "command": "click",
+      "target": "id=login",
+      "targets": [
+        ["id=login", "id"],
+        ["css=#login", "css:finder"],
+        ["xpath=//input[@id='login']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "502942ee-c87e-484e-9adf-15e09687d20f",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_202",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0dca0530-4639-4f20-8f93-88ff35c3313e",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Plantage",
+      "targets": [
+        ["linkText=Gebäude", "linkText"],
+        ["css=.NaviBlock:nth-child(3) > .NaviLink:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Gebäude')]", "xpath:link"],
+        ["xpath=//div[@id='Navigation']/div/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/?p=gebaeude')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Gebäude')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9ed08d7c-b2aa-4706-ac1a-ab5d62115b53",
+      "comment": "",
+      "command": "type",
+      "target": "id=stunden",
+      "targets": [
+        ["id=stunden", "id"],
+        ["name=stunden", "name"],
+        ["css=#stunden", "css:finder"],
+        ["xpath=//input[@id='stunden']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "-1"
+    }, {
+      "id": "416228e4-d240-45c5-9538-f308e478bb9e",
+      "comment": "",
+      "command": "click",
+      "target": "id=plant_all",
+      "targets": [
+        ["id=build_1", "id"],
+        ["css=#build_1", "css:finder"],
+        ["xpath=//input[@id='build_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/div[2]/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6f70f275-a7c1-481c-86d3-1936a003f48f",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_133",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "97bc5b72-1b69-46a1-8f6d-d5e58bd20227",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=stat_money",
+      "targets": [
+        ["id=stat_money", "id"],
+        ["css=#stat_money", "css:finder"],
+        ["xpath=//td[@id='stat_money']", "xpath:attributes"],
+        ["xpath=//table[@id='UserStatistik']/tbody/tr[2]/td[2]", "xpath:idRelative"],
+        ["xpath=//tr[2]/td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'4.526,15 €')]", "xpath:innerText"]
+      ],
+      "value": "5.000,00 €"
+    }]
+  }, {
+    "id": "25ccedeb-4b7a-4c36-b859-07f310b06225",
+    "name": "Plantage -> Plant negative amount",
+    "commands": [{
+      "id": "6617ff1c-d32c-41f6-bd6d-e8c853f1475b",
+      "comment": "",
+      "command": "open",
+      "target": "/actions/test-reset-player.php?id=11",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "640909b2-9af1-41d8-9358-cff18e6c5b73",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "test1"
+    }, {
+      "id": "3b5f0e16-bf31-4adc-8c8d-4fecb85c133a",
+      "comment": "",
+      "command": "type",
+      "target": "id=pwd",
+      "targets": [
+        ["id=pwd", "id"],
+        ["name=pwd", "name"],
+        ["css=#pwd", "css:finder"],
+        ["xpath=//input[@id='pwd']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "changeit"
+    }, {
+      "id": "8314f064-73c8-4341-aa6e-2472155bec5a",
+      "comment": "",
+      "command": "click",
+      "target": "id=login",
+      "targets": [
+        ["id=login", "id"],
+        ["css=#login", "css:finder"],
+        ["xpath=//input[@id='login']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "db2f9e3d-e35f-4252-abe5-9aa87fcf71b6",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_202",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b622d342-292c-4313-859d-1dcc24b96034",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Plantage",
+      "targets": [
+        ["linkText=Gebäude", "linkText"],
+        ["css=.NaviBlock:nth-child(3) > .NaviLink:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Gebäude')]", "xpath:link"],
+        ["xpath=//div[@id='Navigation']/div/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/?p=gebaeude')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Gebäude')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "09f6b564-f658-4df2-8723-6273d64c34b1",
+      "comment": "",
+      "command": "type",
+      "target": "id=amount_1",
+      "targets": [
+        ["id=amount_1", "id"],
+        ["name=menge", "name"],
+        ["css=#amount_1", "css:finder"],
+        ["xpath=//input[@id='amount_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[3]/div[2]/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/form/div/input", "xpath:position"]
+      ],
+      "value": "-1"
+    }, {
+      "id": "2a8dffef-898d-4818-8196-0335d7ffbfbd",
+      "comment": "",
+      "command": "click",
+      "target": "id=plant_1",
+      "targets": [
+        ["id=build_1", "id"],
+        ["css=#build_1", "css:finder"],
+        ["xpath=//input[@id='build_1']", "xpath:attributes"],
+        ["xpath=//div[@id='Inhalt']/div[2]/div[2]/div[2]/form/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "34b6f18b-faab-45a5-85d2-754e990b0a8f",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=meldung_125",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1fe24374-8169-4fe5-8376-51d53167b9a4",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "id=plant_1",
+      "targets": [],
+      "value": ""
+    }]
   }],
   "suites": [],
   "urls": ["http://localhost/"],

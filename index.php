@@ -52,8 +52,8 @@ if (isLoggedIn()) {
 	Server:           <?= escapeForOutput($_SERVER['SERVER_ADDR']) . "\n"; ?>
 	Script:           <?= escapeForOutput($_SERVER['PHP_SELF']) . "\n"; ?>
 	Query-String:     <?= escapeForOutput($_SERVER['QUERY_STRING']) . "\n"; ?>
-	User-Agent:       <?= escapeForOutput($_SERVER['HTTP_USER_AGENT']) . "\n"; ?>
-	Referer:          <?= escapeForOutput($_SERVER['HTTP_REFERER']) . "\n"; ?>
+	User-Agent:       <?= (array_key_exists('HTTP_USER_AGENT', $_SERVER) ? escapeForOutput($_SERVER['HTTP_USER_AGENT']) : 'none') . "\n"; ?>
+	Referer:          <?= (array_key_exists('HTTP_REFERER', $_SERVER) ? escapeForOutput($_SERVER['HTTP_REFERER']) : 'none') . "\n"; ?>
 -->
 <html lang="de">
 <head>

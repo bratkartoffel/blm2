@@ -55,7 +55,7 @@ foreach (starting_values as $table => $values) {
         $values['Name'] = $name;
         $values['EMail'] = $email;
         $values['EMailAct'] = $email_activation_code;
-        $values['Passwort'] = sha1($pwd1);
+        $values['Passwort'] = hashPassword($pwd1);
     }
     if (Database::getInstance()->createTableEntry($table, $values) === null) {
         Database::getInstance()->rollBack();

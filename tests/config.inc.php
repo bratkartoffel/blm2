@@ -52,6 +52,10 @@ const is_testing = true;
 // any passwords shorter than this length are not allowed
 const password_min_len = 6;
 
+// password security settings
+const password_hash_algorithm = PASSWORD_ARGON2I;
+const password_hash_options = array('memory_cost' => 16384, 'time_cost' => 8, 'threads' => 2);
+
 // minimum length of usernames
 const username_min_len = 2;
 

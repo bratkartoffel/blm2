@@ -762,12 +762,11 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getGroupIdByNameOrTagAndPwd(string $name, string $pwd): ?int
+    public function getGroupIdAndPasswordByNameOrTag(string $name): ?array
     {
-        $stmt = $this->prepare("SELECT ID FROM gruppe WHERE (Name = :name OR Kuerzel = :name) AND Passwort = :pwd");
+        $stmt = $this->prepare("SELECT ID, Passwort FROM gruppe WHERE Name = :name OR Kuerzel = :name");
         $stmt->bindParam("name", $name);
-        $stmt->bindParam("pwd", $pwd);
-        return $this->executeAndExtractField($stmt, 'ID');
+        return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getGroupIdAndNameByNameOrTag(string $name): ?array
@@ -784,13 +783,12 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getPlayerDataByNameAndPassword(string $name, string $password): ?array
+    public function getPlayerDataByName(string $name): ?array
     {
-        $stmt = $this->prepare("SELECT m.ID AS ID, Name, Admin, EMailAct, Gesperrt, if (strcmp(m.Passwort, :password), 1, 0) AS IstSitter
+        $stmt = $this->prepare("SELECT m.ID AS ID, Name, Admin, EMailAct, Gesperrt, m.Passwort AS user_password, s.Passwort AS sitter_password
             FROM mitglieder m LEFT OUTER JOIN sitter s ON m.ID = s.user_id
-            WHERE Name = :name AND (m.Passwort = :password OR s.Passwort = :password)");
+            WHERE m.Name = :name");
         $stmt->bindParam("name", $name);
-        $stmt->bindParam("password", $password);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
@@ -804,7 +802,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
     public function getPlayerNameAndGroupIdAndGroupRightsById(int $id): ?array
     {
         $stmt = $this->prepare("SELECT m.Name, m.Gruppe, r.*
-            FROM mitglieder m INNER JOIN gruppe_rechte r ON m.Gruppe = r.group_id AND m.ID = r.user_id
+            FROM mitglieder m LEFT OUTER JOIN gruppe_rechte r ON m.Gruppe = r.group_id AND m.ID = r.user_id
             WHERE m.ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);

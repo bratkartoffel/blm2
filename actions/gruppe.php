@@ -65,7 +65,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if (Database::getInstance()->createTableEntry('gruppe', array(
                 'Name' => $name,
                 'Kuerzel' => $tag,
-                'Passwort' => sha1($pwd)
+                'Passwort' => hashPassword($pwd)
             )) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 141, __LINE__);
@@ -128,21 +128,24 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 112, __LINE__);
         }
 
-        $gid = Database::getInstance()->getGroupIdByNameOrTagAndPwd($name, sha1($pwd));
-        requireEntryFound($gid, sprintf('/?p=gruppe&name=%s', urlencode($name)), 127);
+        $group = Database::getInstance()->getGroupIdAndPasswordByNameOrTag($name);
+        requireEntryFound($group, sprintf('/?p=gruppe&name=%s', urlencode($name)), 127);
 
-        if (count(Database::getInstance()->getGroupMembersById($gid)) >= group_max_members) {
+        if (!verifyPassword($pwd, $group['Passwort'])) {
+            redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 127, __LINE__);
+        }
+        if (count(Database::getInstance()->getGroupMembersById($group['ID'])) >= group_max_members) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 140, __LINE__);
         }
 
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
-                array('Gruppe' => $gid), array('Gruppe IS NULL')) !== 1) {
+                array('Gruppe' => $group['ID']), array('Gruppe IS NULL')) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 142, __LINE__);
         }
         if (Database::getInstance()->createTableEntry('gruppe_rechte', array(
-                'group_id' => $gid,
+                'group_id' => $group['ID'],
                 'user_id' => $_SESSION['blm_user'],
                 'message_write' => 1,
             )) !== 1) {
@@ -150,10 +153,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 141, __LINE__);
         }
         if (!Database::getInstance()->existsTableEntry('gruppe_kasse', array(
-            'group_id' => $gid, 'user_id' => $_SESSION['blm_user'],
+            'group_id' => $group['ID'], 'user_id' => $_SESSION['blm_user'],
         ))) {
             if (Database::getInstance()->createTableEntry('gruppe_kasse', array(
-                    'group_id' => $gid,
+                    'group_id' => $group['ID'],
                     'user_id' => $_SESSION['blm_user'],
                 )) !== 1) {
                 Database::getInstance()->rollBack();
@@ -161,7 +164,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             }
         }
         if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
-                'Gruppe' => $gid,
+                'Gruppe' => $group['ID'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $player['Name']) . ' hat die Gruppe betreten.'
             )) !== 1) {
@@ -523,7 +526,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('gruppe', $player['Gruppe'], array('Passwort' => sha1($new_pw1))) === null) {
+        if (Database::getInstance()->updateTableEntry('gruppe', $player['Gruppe'], array('Passwort' => hashPassword($new_pw1))) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_einstellungen', 141, __LINE__);
         }

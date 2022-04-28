@@ -1,3 +1,6 @@
+<?php
+$name = getOrDefault($_GET, 'name');
+?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/login.png" alt=""/>
     <span>Anmelden</span>
@@ -15,7 +18,7 @@
 
         <div>
             <label for="name">Benutzername:</label>
-            <input name="name" id="name" type="text" size="20" maxlength="20"/>
+            <input name="name" id="name" type="text" size="20" maxlength="20" value="<?=escapeForOutput($name); ?>"/>
         </div>
         <div>
             <label for="pwd">Passwort:</label>

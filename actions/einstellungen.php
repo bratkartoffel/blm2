@@ -20,20 +20,18 @@ switch (getOrDefault($_POST, 'a', 0)) {
         if (strlen($new_pw1) < password_min_len) {
             redirectTo('/?p=einstellungen', 147, __LINE__);
         }
-        if (!Database::getInstance()->existsTableEntry('mitglieder', array('ID' => $_SESSION['blm_user'], 'Passwort' => sha1($pwd_alt)))) {
+        $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+        requireEntryFound($passwords, '/?p=einstellungen', 112, __LINE__);
+        if (!verifyPassword($pwd_alt, $passwords['Benutzer'])) {
             redirectTo('/?p=einstellungen', 121, __LINE__);
         }
-        $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
-        if ($passwords === null) {
-            redirectTo('/?p=einstellungen', 112, __LINE__);
-        }
-        if ($passwords['Sitter'] == sha1($new_pw1)) {
+        if ($passwords['Sitter'] != null && verifyPassword($new_pw1, $passwords['Sitter'])) {
             redirectTo('/?p=einstellungen', 152, __LINE__);
         }
 
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
-                array('Passwort' => sha1($new_pw1))) === null) {
+                array('Passwort' => hashPassword($new_pw1))) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=einstellungen', 141, __LINE__);
         }
@@ -43,7 +41,9 @@ switch (getOrDefault($_POST, 'a', 0)) {
 
     // Reset account
     case 2:
-        if (!Database::getInstance()->existsTableEntry('mitglieder', array('ID' => $_SESSION['blm_user'], 'Passwort' => sha1($pwd_alt)))) {
+        $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+        requireEntryFound($passwords, '/?p=einstellungen', 112, __LINE__);
+        if (!verifyPassword($pwd_alt, $passwords['Benutzer'])) {
             redirectTo('/?p=einstellungen', 121, __LINE__);
         }
         Database::getInstance()->begin();
@@ -59,7 +59,9 @@ switch (getOrDefault($_POST, 'a', 0)) {
 
     // Delete account
     case 3:
-        if (!Database::getInstance()->existsTableEntry('mitglieder', array('ID' => $_SESSION['blm_user'], 'Passwort' => sha1($pwd_alt)))) {
+        $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+        requireEntryFound($passwords, '/?p=einstellungen', 112, __LINE__);
+        if (!verifyPassword($pwd_alt, $passwords['Benutzer'])) {
             redirectTo('/?p=einstellungen', 121, __LINE__);
         }
         Database::getInstance()->begin();
@@ -172,6 +174,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         Database::getInstance()->begin();
         if (!$aktiviert) {
             if (Database::getInstance()->deleteTableEntryWhere('sitter', array('user_id' => $_SESSION['blm_user'])) == 0) {
+                Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 143, __LINE__);
             }
             Database::getInstance()->commit();
@@ -191,37 +194,36 @@ switch (getOrDefault($_POST, 'a', 0)) {
         );
         if (Database::getInstance()->existsTableEntry('sitter', array('user_id' => $_SESSION['blm_user']))) {
             if (strlen($pw_sitter) > 0) {
-                $fields['Passwort'] = sha1($pw_sitter);
                 if (strlen($pw_sitter) < password_min_len) {
+                    Database::getInstance()->rollBack();
                     redirectTo('/?p=einstellungen', 147, __LINE__);
                 }
                 $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
-                if ($passwords === null) {
-                    redirectTo('/?p=einstellungen', 112, __LINE__);
-                }
-                if ($passwords['Benutzer'] == $fields['Passwort']) {
+                requireEntryFound($passwords, '/?p=einstellungen', 112, __LINE__);
+                if (verifyPassword($pw_sitter, $passwords['Benutzer'])) {
+                    Database::getInstance()->rollBack();
                     redirectTo('/?p=einstellungen', 152, __LINE__);
                 }
+                $fields['Passwort'] = hashPassword($pw_sitter);
             }
             if (Database::getInstance()->updateTableEntry('sitter', null, $fields, array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 142, __LINE__);
             }
         } else {
-            $fields['user_id'] = $_SESSION['blm_user'];
-            $fields['Passwort'] = sha1($pw_sitter);
-
             if (strlen($pw_sitter) < password_min_len) {
+                Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 147, __LINE__);
             }
 
             $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
-            if ($passwords === null) {
-                redirectTo('/?p=einstellungen', 112, __LINE__);
-            }
-            if ($passwords['Benutzer'] == $fields['Passwort']) {
+            requireEntryFound($passwords, '/?p=einstellungen', 112, __LINE__);
+            if (verifyPassword($pw_sitter, $passwords['Benutzer'])) {
+                Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 152, __LINE__);
             }
+            $fields['user_id'] = $_SESSION['blm_user'];
+            $fields['Passwort'] = hashPassword($pw_sitter);
             if (Database::getInstance()->createTableEntry('sitter', $fields) == 0) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 141, __LINE__);

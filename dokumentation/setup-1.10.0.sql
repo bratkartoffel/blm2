@@ -67,7 +67,7 @@ create table gruppe
     Name         varchar(32)                 not null,
     Kuerzel      varchar(6)                  not null,
     Beschreibung varchar(2048)               null,
-    Passwort     char(40)                    not null,
+    Passwort     varchar(128)                not null,
     Kasse        decimal(12, 2) default 0.00 not null,
     constraint Kuerzel unique (Kuerzel),
     constraint Name unique (Name)
@@ -279,7 +279,7 @@ create table mitglieder
     Name                  varchar(20)                                not null,
     EMail                 varchar(96)                                not null,
     EMailAct              char(40)                                   null,
-    Passwort              char(40)                                   not null,
+    Passwort              varchar(128)                               not null,
     RegistriertAm         datetime       default current_timestamp() null,
     Geld                  decimal(11, 2) default 0.00                not null,
     Bank                  decimal(9, 2)  default 0.00                not null,
@@ -337,7 +337,7 @@ create table sitter
 (
     ID          int auto_increment primary key,
     user_id     int                  null,
-    Passwort    char(40)             not null,
+    Passwort    varchar(128)         not null,
     Gebaeude    tinyint(1) default 0 not null,
     Forschung   tinyint(1) default 0 not null,
     Produktion  tinyint(1) default 0 not null,

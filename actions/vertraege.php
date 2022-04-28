@@ -17,10 +17,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $preis = getOrDefault($_POST, 'preis', .0);
         $empfaenger = getOrDefault($_POST, 'empfaenger');
         $empfaengerId = Database::getInstance()->getPlayerIDByName($empfaenger);
-
-        if ($empfaengerId == 0) {
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 118, __LINE__);
-        }
+        requireEntryFound($empfaengerId, sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 118, __LINE__);
 
         if ($ware < 1 || $ware > count_wares) {
             redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 117, __LINE__);

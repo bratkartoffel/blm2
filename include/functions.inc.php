@@ -827,7 +827,7 @@ function formatPercent(float $amount, bool $withSuffix = true, int $precision = 
 function createPaginationTable(string $linkBase, int $currentPage, int $entriesCount, int $entriesPerPage, string $offsetField = 'o', ?string $anchor = null): string
 {
     $pages = array();
-    for ($i = 0; $i < $entriesCount - 1; $i += $entriesPerPage) {
+    for ($i = 0; $i < $entriesCount; $i += $entriesPerPage) {
         $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
             $pages[] = sprintf('<a href="%s&amp;%s=%d%s">%d</a>',

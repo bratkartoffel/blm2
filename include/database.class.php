@@ -193,7 +193,8 @@ class Database
     {
         $stmt = $this->prepare("SELECT m.Passwort AS 'Benutzer', s.Passwort as 'Sitter'
             FROM mitglieder m LEFT OUTER JOIN sitter s ON m.ID = s.user_id
-            WHERE m.ID = :id");
+            WHERE m.ID = :id
+            AND m.ID > 0");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -208,7 +209,7 @@ class Database
 
     public function getPlayerIdByNameOrEmailAndActivationToken(?string $name, ?string $email, string $code): ?int
     {
-        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE (Name = :name OR EMail = :email) AND EMailAct = :code");
+        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE ID > 0 AND (Name = :name OR EMail = :email) AND EMailAct = :code");
         $stmt->bindParam("name", $name);
         $stmt->bindParam("email", $email);
         $stmt->bindParam("code", $code);
@@ -233,14 +234,15 @@ class Database
     {
         $stmt = $this->prepare("SELECT m.ID, m.Name, m.Punkte, m.Geld, m.Gruppe, g.Gebaeude7
             FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id
-            WHERE m.Name = :name");
+            WHERE m.Name = :name
+            AND m.ID > 0");
         $stmt->bindParam("name", $name);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getPlayerCount(): ?int
     {
-        return $this->executeAndExtractField($this->prepare("SELECT count(1) AS count FROM mitglieder"), 'count');
+        return $this->executeAndExtractField($this->prepare("SELECT count(1) AS count FROM mitglieder WHERE ID > 0"), 'count');
     }
 
     public function getAdminBankLogCount(string $werFilter): ?int
@@ -787,7 +789,8 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
     {
         $stmt = $this->prepare("SELECT m.ID AS ID, Name, Admin, EMailAct, Gesperrt, m.Passwort AS user_password, s.Passwort AS sitter_password
             FROM mitglieder m LEFT OUTER JOIN sitter s ON m.ID = s.user_id
-            WHERE m.Name = :name");
+            WHERE m.Name = :name
+            AND m.ID > 0");
         $stmt->bindParam("name", $name);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -827,7 +830,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerPlantageAndBauhofLevel(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT Gebaeude1, Gebaeude5 FROM gebaeude WHERE user_id = :id");
+        $stmt = $this->prepare("SELECT Gebaeude1, Gebaeude5 FROM gebaeude WHERE user_id = :id AND ID > 0");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -989,7 +992,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerIDByName(string $name): ?int
     {
-        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE Name = :name");
+        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE Name = :name AND ID > 0");
         $stmt->bindParam("name", $name);
         return $this->executeAndExtractField($stmt, 'ID');
     }
@@ -1150,7 +1153,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllPlayerIdBankSmallerEquals(float $amount): ?array
     {
-        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE Bank <= :amount");
+        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE Bank <= :amount AND ID > 0");
         $stmt->bindParam('amount', $amount);
         return $this->executeAndExtractRows($stmt);
     }
@@ -1159,7 +1162,8 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
     {
         $stmt = $this->prepare("SELECT m.ID, m.Name, coalesce(m.Beschreibung, '[i]Keine[/i]') AS Beschreibung, m.RegistriertAm, m.Punkte, m.Verwarnungen, m.Gesperrt, m.LastLogin, m.IgmGesendet, m.IgmEmpfangen, g.ID AS GruppeID, coalesce(g.Name, 'Keine') AS GruppeName
             FROM mitglieder m LEFT OUTER JOIN gruppe g ON m.Gruppe = g.ID
-            WHERE m.ID = :id");
+            WHERE m.ID = :id
+            AND m.ID > 0");
         $stmt->bindParam('id', $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }

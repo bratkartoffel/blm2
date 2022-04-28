@@ -4,26 +4,24 @@ $ip = getOrDefault($_GET, 'ip');
 $art = getOrDefault($_GET, 'art');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Logbücher - Login</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Login Logbuch</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="./" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="admin_log_login"/>
         <label for="wer">Wer:</label>
-        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <label for="ip">IP:</label>
-        <input type="text" name="ip" id="ip" value="<?= sichere_ausgabe($ip); ?>"/>
+        <input type="text" name="ip" id="ip" value="<?= escapeForOutput($ip); ?>"/>
         <label for="art">Art:</label>
         <select name="art" id="art">
             <option value="">- Alle -</option>
-            <option value="0"<?= ($art == "0" ? ' selected="selected"' : '') ?>>Normal</option>
+            <option value="0"<?= ($art == "0" ? ' selected="selected"' : '') ?>>Regulär</option>
             <option value="1"<?= ($art == "1" ? ' selected="selected"' : '') ?>>Sitter</option>
         </select>
         <input type="submit" value="Abschicken"/><br/>
@@ -35,23 +33,25 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Wer</th>
         <th>IP</th>
         <th>Wann</th>
+        <th>Erfolgreich</th>
         <th>Art</th>
     </tr>
     <?php
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_ip = empty($ip) ? "%" : $ip;
     $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $art);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $art, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $art, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
-            <td><?= sichere_ausgabe($row['IP']); ?></td>
-            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
-            <td><?= sichere_ausgabe($row['Art']); ?></td>
+            <td><?= createProfileLink($row['playerId'], $row['playerName']); ?></td>
+            <td><?= escapeForOutput($row['ip']); ?></td>
+            <td><?= formatDateTime(strtotime($row['created'])); ?></td>
+            <td><?= getYesOrNo($row['success']); ?></td>
+            <td><?= ($row['sitter'] == 1 ? 'Sitter' : 'Regulär'); ?></td>
         </tr>
         <?php
     }
@@ -60,7 +60,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_log_login&amp;wer=' . sichere_ausgabe($wer) . '&amp;ip=' . sichere_ausgabe($ip) . '&amp;art=' . sichere_ausgabe($art), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_log_login&amp;wer=' . escapeForOutput($wer) . '&amp;ip=' . escapeForOutput($ip) . '&amp;art=' . escapeForOutput($art), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin">Zurück...</a>
 </p>

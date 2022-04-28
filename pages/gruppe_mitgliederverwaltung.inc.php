@@ -1,139 +1,85 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Dient zur Mitgliederverwaltung
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+restrictSitter('Gruppe');
+
+$rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user']);
+requireEntryFound($rights, '/?p=gruppe');
 ?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/gruppe.png" alt="Gruppe"/></td>
-            <td>Mitgliederverwaltung
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="/pics/help.gif" alt="Hilfe"
-                                                               style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
-<?php
-if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
-    ?>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/gruppe.png" alt=""/>
+    <span>Gruppe - Mitgliederverwaltung<?= createHelpLink(1, 23); ?></span>
+</div>
 
-    <?= $m; ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+<?= createGroupNaviation(1); ?>
 
-
-    <div style="width: 650px; text-align: center; margin-bottom: 5px;">
-        <a href="./?p=gruppe">Board</a> |
-        <u><b>Mitgliederverwaltung</b></u>
-        <?php
-        if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-            echo ' | <a href="./?p=gruppe_einstellungen">Einstellungen</a>';
-        }
-
-        if ($ich->Rechte->Diplomatie) {
-            echo ' | <a href="./?p=gruppe_diplomatie">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
-        }
-        ?>
-        | <a href="./?p=gruppe_kasse">Gruppenkasse</a>
-        | <a href="./?p=gruppe_logbuch">Logbuch</a>
-    </div>
-    <table class="Liste" style="width: 600px;" cellspacing="0">
-        <tr>
-            <th rowspan="2" style="border-right: solid 1px #aa0000;">Name:</th>
-            <th colspan="10" style="text-align: center; font-size: 120%;">Rechte</th>
-            <?php
-            if ($ich->Rechte->MitgliederRechte) {
-                echo '<th rowspan="2" style="border-left: solid 1px #aa0000;">Aktion:</th>';
-            }
-            ?>
-        </tr>
-        <tr>
-            <th style="padding: 3px 8px 3px 8px;">Nachricht schreiben:</th>
-            <th style="padding: 3px 8px 3px 8px;">Nachricht löschen:</th>
-            <th style="padding: 3px 8px 3px 8px;">Bild bearbeiten</th>
-            <th style="padding: 3px 8px 3px 8px;">Beschreibung ändern:</th>
-            <th style="padding: 3px 8px 3px 8px;">Diplomatie ändern:</th>
-            <th style="padding: 3px 8px 3px 8px;">Kasse verwalten:</th>
-            <th style="padding: 3px 8px 3px 8px;">Mitglied kicken:</th>
-            <th style="padding: 3px 8px 3px 8px;">Passwort ändern:</th>
-            <th style="padding: 3px 8px 3px 8px;">Rechte bearbeiten:</th>
-            <th style="padding: 3px 8px 3px 8px;">Gruppe löschen:</th>
-        </tr>
-        <?php
-        $sql_abfrage = "SELECT
-    ID,
-    Name,
-    Punkte,
-    GruppeRechte
-FROM
-    mitglieder
-WHERE
-    Gruppe='" . $ich->Gruppe . "'
-ORDER BY
-    Name ASC,
-    Punkte DESC;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-
-
-        $bild[true] = '<img src="/pics/small/ok.png" alt="Ja" style="border: none;" />';
-        $bild[false] = '<img src="/pics/small/error.png" alt="Nein" style="border: none;" />';
-
-        while ($mitglied = mysql_fetch_object($sql_ergebnis)) {
-            $name = '<a href="./?p=profil&amp;uid=' . $mitglied->ID . '">' . htmlentities(stripslashes($mitglied->Name), ENT_QUOTES, "UTF-8") . '</a>';
-            $rechte = RechteGruppe(0, false, $mitglied->GruppeRechte);
-
-            if ($mitglied->ID != $_SESSION['blm_user'] && $ich->Rechte->MitgliederRechte && !$rechte->Chef) {
-                $r1 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=1" onclick="updGruppeRechte(' . $mitglied->ID . ', 1, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->NachrichtSchreiben] . '</a>';
-                $r2 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=2" onclick="updGruppeRechte(' . $mitglied->ID . ', 2, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->NachrichtLoeschen] . '</a>';
-                $r3 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=4" onclick="updGruppeRechte(' . $mitglied->ID . ', 4, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->GruppeBild] . '</a>';
-                $r4 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=8" onclick="updGruppeRechte(' . $mitglied->ID . ', 8, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->GruppeBeschreibung] . '</a>';
-                $r5 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=16" onclick="updGruppeRechte(' . $mitglied->ID . ', 16, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->MitgliedKicken] . '</a>';
-                $r6 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=32" onclick="updGruppeRechte(' . $mitglied->ID . ', 32, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->GruppePasswort] . '</a>';
-                $r7 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=64" onclick="updGruppeRechte(' . $mitglied->ID . ', 64, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->MitgliederRechte] . '</a>';
-                $r8 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=128" onclick="updGruppeRechte(' . $mitglied->ID . ', 128, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->GruppeLoeschen] . '</a>';
-                $r9 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=256" onclick="updGruppeRechte(' . $mitglied->ID . ', 256, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->Diplomatie] . '</a>';
-                $r10 = '<a href="actions/gruppe.php?a=6&amp;id=' . $mitglied->ID . '&amp;recht=1024" onclick="updGruppeRechte(' . $mitglied->ID . ', 1024, this.getElementsByTagName(\'img\')[0]); return false;">' . $bild[$rechte->GruppeKasse] . '</a>';
-            } else {
-                $r1 = $bild[$rechte->NachrichtSchreiben];
-                $r2 = $bild[$rechte->NachrichtLoeschen];
-                $r3 = $bild[$rechte->GruppeBild];
-                $r4 = $bild[$rechte->GruppeBeschreibung];
-                $r5 = $bild[$rechte->MitgliedKicken];
-                $r6 = $bild[$rechte->GruppePasswort];
-                $r7 = $bild[$rechte->MitgliederRechte];
-                $r8 = $bild[$rechte->GruppeLoeschen];
-                $r9 = $bild[$rechte->Diplomatie];
-                $r10 = $bild[$rechte->GruppeKasse];
-            }
-            ?>
-            <tr>
-                <td style="padding: 2px 8px 2px 8px;"><?= $name; ?></td>
-                <td style="text-align: center;"><?= $r1; ?></td>
-                <td style="text-align: center;"><?= $r2; ?></td>
-                <td style="text-align: center;"><?= $r3; ?></td>
-                <td style="text-align: center;"><?= $r4; ?></td>
-                <td style="text-align: center;"><?= $r9; ?></td>
-                <td style="text-align: center;"><?= $r10; ?></td>
-                <td style="text-align: center;"><?= $r5; ?></td>
-                <td style="text-align: center;"><?= $r6; ?></td>
-                <td style="text-align: center;"><?= $r7; ?></td>
-                <td style="text-align: center;"><?= $r8; ?></td>
-                <?php
-                if ($ich->Rechte->MitgliederRechte) {
-                    if ($mitglied->ID != $_SESSION['blm_user'] && !$rechte->Chef) {
-                        echo '<td style="text-align: center;"><a href="actions/gruppe.php?a=7&amp;id=' . $mitglied->ID . '">Kick</a></td>';
-                    } else {
-                        echo '<td style="text-align: center;">Kick</td>';
-                    }
-                }
-                ?>
-            </tr>
-            <?php
-        }
-        ?>
-    </table>
+<table class="Liste ListeMitgliederRechte">
+    <tr>
+        <th rowspan="2">Name:</th>
+        <th colspan="11">Rechte</th>
+        <th>Aktion:</th>
+    </tr>
+    <tr>
+        <th>Nachricht schreiben:</th>
+        <th>Nachricht pinnen:</th>
+        <th>Nachricht löschen:</th>
+        <th>Beschreibung ändern:</th>
+        <th>Bild bearbeiten</th>
+        <th>Passwort ändern:</th>
+        <th>Rechte bearbeiten:</th>
+        <th>Mitglied kicken:</th>
+        <th>Kasse verwalten:</th>
+        <th>Diplomatie ändern:</th>
+        <th>Gruppe löschen:</th>
+        <th></th>
+    </tr>
     <?php
-}
+    $data = Database::getInstance()->getAllGroupRightsByGroupId($rights['group_id']);
+    foreach ($data as $row) {
+        ?>
+        <form action="/actions/gruppe.php" method="post">
+            <input type="hidden" name="a" value="9"/>
+            <input type="hidden" name="user_id" value="<?= $row['UserId']; ?>"/>
+            <tr>
+                <td><?= createProfileLink($row['UserId'], $row['UserName']); ?></td>
+                <td><input type="checkbox" name="message_write"
+                           value="1" <?= ($row['message_write'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="message_pin"
+                           value="1" <?= ($row['message_pin'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="message_delete"
+                           value="1" <?= ($row['message_delete'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="edit_description"
+                           value="1" <?= ($row['edit_description'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="edit_image"
+                           value="1" <?= ($row['edit_image'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="edit_password"
+                           value="1" <?= ($row['edit_password'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="member_rights"
+                           value="1" <?= ($row['member_rights'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="member_kick"
+                           value="1" <?= ($row['member_kick'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="group_cash"
+                           value="1" <?= ($row['group_cash'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="group_diplomacy"
+                           value="1" <?= ($row['group_diplomacy'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><input type="checkbox" name="group_delete"
+                           value="1" <?= ($row['group_delete'] == 1 ? 'checked' : ''); ?>/></td>
+                <td>
+                    <?php
+                    if ($rights['member_rights'] && $row['user_id'] != $_SESSION['blm_user']) {
+                        echo '<input type="submit" value="Speichern" onclick="return submit(this);"/>';
+                    } else {
+                        echo '<input type="submit" value="Speichern" disabled />';
+                    }
+
+                    if ($rights['member_kick'] && $row['user_id'] != $_SESSION['blm_user']) {
+                        echo '<a href="/actions/gruppe.php?a=10&amp;user_id=' . $row['UserId'] . '&amp;token=' . $_SESSION['blm_xsrf_token'] . '"
+                            onclick="return confirm(\'Wollen Sie das Mitglied ' . escapeForOutput($row['UserName']) . ' wirklich aus der Gruppe entfernen?\');">Kicken</a>';
+                    }
+                    ?>
+                </td>
+            </tr>
+        </form>
+        <?php
+    }
+    ?>
+</table>

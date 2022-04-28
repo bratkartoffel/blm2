@@ -2,19 +2,16 @@
 requireFieldSet($_GET, 'id', '/?p=admin_vertrag');
 $id = getOrDefault($_GET, 'id', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Verträge - Vertrag bearbeiten</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Vertrag bearbeiten</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <?php
-$entries = Database::getInstance()->getVertragEntryById($id);
-requireEntryFound($entries, '/?p=admin_vertrag');
-$entry = $entries[0];
+$entry = Database::getInstance()->getVertragEntryById($id);
+requireEntryFound($entry, '/?p=admin_vertrag');
 
 if (isset($_GET['von'])) $entry['Von'] = $_GET['von'];
 if (isset($_GET['an'])) $entry['An'] = $_GET['an'];
@@ -25,7 +22,7 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
 <div id="FilterForm">
     <form action="/actions/admin_vertrag.php" method="post">
         <input type="hidden" name="a" value="2"/>
-        <input type="hidden" name="id" value="<?= sichere_ausgabe($entry['ID']); ?>"/>
+        <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <table class="Liste">
             <tr>
                 <th colspan="2">Vertrag bearbeiten</th>
@@ -61,5 +58,5 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
     </form>
 </div>
 <p>
-    <a href="./?p=admin_vertrag">Zurück...</a>
+    <a href="/?p=admin_vertrag">Zurück...</a>
 </p>

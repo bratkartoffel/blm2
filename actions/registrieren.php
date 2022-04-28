@@ -1,7 +1,14 @@
 <?php
-include("../include/functions.inc.php");
-include("../include/captcha_class/captcha.php");
-include("../include/database.class.php");
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
+require_once('../include/captcha_class/captcha.php');
+
+ob_start();
+
+if (registration_closed) {
+    redirectTo('/?p=anmelden', 148);
+}
 
 $name = getOrDefault($_POST, 'name');
 $email = getOrDefault($_POST, 'email');
@@ -10,94 +17,63 @@ $pwd2 = getOrDefault($_POST, 'pwd2');
 $captcha_code = getOrDefault($_POST, 'captcha_code');
 $captcha_bild = getOrDefault($_POST, 'captcha_bild');
 
-if (!Captcha::Ueberpruefen($captcha_code, $captcha_bild)) {
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 130);
+if (!is_testing && !Captcha::Ueberpruefen($captcha_code, $captcha_bild)) {
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 130, __LINE__);
 }
 
 if ($pwd1 != $pwd2) {
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 105);
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 105, __LINE__);
 }
 
 if (empty($name) || empty($pwd1)) {
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 104);
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 104, __LINE__);
+}
+
+if (strlen($name) < username_min_len || strlen($name) > username_max_len) {
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 146, __LINE__);
+}
+
+if (strlen($pwd1) < password_min_len) {
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 147, __LINE__);
+}
+
+if (strchr($name, '#') !== false) {
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 164, __LINE__);
 }
 
 if (Database::getInstance()->existsPlayerByNameOrEmail($name, $email)) {
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 106);
+    redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 106, __LINE__);
 }
 
-Database::getInstance()->begin();
 $email_activation_code = createRandomCode();
 
-$created = Database::getInstance()->createTableEntry('mitglieder', array(
-    'Name' => $name,
-    'EMail' => $email,
-    'EMailAct' => $email_activation_code,
-    'Passwort' => sha1($pwd1),
-    'Geld' => $Start["geld"]
-));
-
-if ($created == 0) {
-    Database::getInstance()->rollBack();
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 141);
+$id = null;
+Database::getInstance()->begin();
+foreach (starting_values as $table => $values) {
+    if ($id !== null) $values['user_id'] = $id;
+    if ($table == 'mitglieder') {
+        $values['Name'] = $name;
+        $values['EMail'] = $email;
+        $values['EMailAct'] = $email_activation_code;
+        $values['Passwort'] = sha1($pwd1);
+    }
+    if (Database::getInstance()->createTableEntry($table, $values) === null) {
+        Database::getInstance()->rollBack();
+        redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 141, __LINE__ . '_' . $table);
+    }
+    if ($table == 'mitglieder') $id = Database::getInstance()->lastInsertId();
 }
-
-$id = Database::getInstance()->lastInsertId();
-
-$created = Database::getInstance()->createTableEntry('punkte', array('ID' => $id));
-if ($created == 0) {
-    Database::getInstance()->rollBack();
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 141);
-}
-
-$created = Database::getInstance()->createTableEntry('statistik', array('ID' => $id));
-if ($created == 0) {
-    Database::getInstance()->rollBack();
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 141);
-}
-
-$gebaeude_values = array('ID' => $id);
-for ($i = 1; $i <= ANZAHL_GEBAEUDE; $i++) {
-    $gebaeude_values['Gebaeude' . $i] = $Start['gebaeude'][$i];
-}
-$created = Database::getInstance()->createTableEntry('gebaeude', $gebaeude_values);
-if ($created == 0) {
-    Database::getInstance()->rollBack();
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 141);
-}
-
-$forschung_values = array('ID' => $id);
-for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-    $forschung_values['Forschung' . $i] = $Start['forschung'][$i];
-}
-$created = Database::getInstance()->createTableEntry('forschung', $forschung_values);
-if ($created == 0) {
-    Database::getInstance()->rollBack();
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 141);
-}
-
-$lager_values = array('ID' => $id);
-for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-    $lager_values['Lager' . $i] = $Start['lager'][$i];
-}
-$created = Database::getInstance()->createTableEntry('lagerhaus', $lager_values);
-if ($created == 0) {
-    Database::getInstance()->rollBack();
-    redirectTo(sprintf('../?p=registrieren&name=%s&email=%s', $name, $email), 141);
-}
-
-// user created successfully, commit and try to send mail
 Database::getInstance()->commit();
 
-$email_activation_link = SERVER_PFAD . '/actions/activate.php?user=' . urlencode($name) . '&amp;code=' . $email_activation_code;
-if (!sendMail($email, 'Bioladenmanager 2: Aktivierung Ihres Accounts',
+$email_activation_link = base_url . '/actions/activate.php?user=' . urlencode($name) . '&amp;code=' . $email_activation_code;
+if (!sendMail($email, game_title . ': Aktivierung Ihres Accounts',
     '<html lang="de"><body><h3>Willkommen beim Bioladenmanager 2,</h3>
     <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
     <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
-    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . ADMIN_EMAIL . '</p>
-    Grüsse ' . SPIEL_BETREIBER . '</body></html>'
+    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . admin_email . '</p>
+    Grüsse ' . admin_name . '</body></html>'
 )) {
-    redirectTo(sprintf('../?p=anmelden&name=%s', $name), 144);
+    redirectTo(sprintf('/?p=anmelden&name=%s', $name), 144, __LINE__);
 }
 
-redirectTo(sprintf('../?p=anmelden&name=%s', $name), 201);
+redirectTo(sprintf('/?p=anmelden&name=%s', $name), 201);

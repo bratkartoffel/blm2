@@ -10,3 +10,10 @@
 
 # deny access to git folder
 RedirectMatch 404 /\.git
+
+# deny direct access
+RedirectMatch 404 /cronjobs
+RedirectMatch 404 /dokumentation
+RedirectMatch 404 /pages
+RedirectMatch 404 /tests
+

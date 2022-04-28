@@ -1,25 +1,23 @@
 <?php
 $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
-$gruppe = getOrDefault($_GET, 'gruppe');
+$gruppe = getOrDefault($_GET, 'gruppe', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Logbücher - Gruppenkasse</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Gruppenkasse Logbuch</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="./" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="admin_log_gruppenkasse"/>
         <label for="wer">Wer:</label>
-        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <label for="wen">Wen:</label>
-        <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <input type="text" name="wen" id="wen" value="<?= escapeForOutput($wen); ?>"/>
         <label for="gruppe">Gruppe:</label>
         <?= createGroupDropdown($gruppe, 'gruppe'); ?>
         <input type="submit" value="Abschicken"/>
@@ -39,19 +37,19 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_wen = empty($wen) ? "%" : $wen;
     $entriesCount = Database::getInstance()->getAdminGroupTreasuryLogCount($filter_wer, $filter_wen, $gruppe);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getAdminGroupTreasuryLogEntries($filter_wer, $filter_wen, $gruppe, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminGroupTreasuryLogEntries($filter_wer, $filter_wen, $gruppe, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
-            <td><?= createProfileLink($row['WenId'], $row['Wen']); ?></td>
-            <td><?= createGroupLink($row['GruppeId'], $row['Gruppe']); ?></td>
-            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
-            <td><?= formatCurrency($row['Wieviel']); ?></td>
-            <td><?= sichere_ausgabe($row['Wohin']); ?></td>
+            <td><?= createProfileLink($row['senderId'], $row['senderName']); ?></td>
+            <td><?= ($row['receiverId'] === null ? '-' : createProfileLink($row['receiverId'], $row['receiverName'])); ?></td>
+            <td><?= createGroupLink($row['groupId'], $row['groupName']); ?></td>
+            <td><?= formatDateTime(strtotime($row['created'])); ?></td>
+            <td><?= formatCurrency($row['amount']); ?></td>
+            <td><?= ($row['receiverId'] === null ? 'Gruppe' : 'Spieler'); ?></td>
         </tr>
         <?php
     }
@@ -60,7 +58,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_log_bank&amp;wer=' . sichere_ausgabe($wer), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_log_bank&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin">Zurück...</a>
 </p>

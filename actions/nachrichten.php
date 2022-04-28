@@ -1,207 +1,92 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers in seinem Postfach aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
+restrictSitter('Nachrichten');
 
-if (!IstAngemeldet()) {        // Nur wer angemeldet ist, darf auch Nachrichten schreiben...
-    header("location: ../?p=index&m=102");
-    die();
-}
+switch (getOrDefault($_GET, 'a', 0)) {
+    // send message
+    case 1:
+        $receiver = getOrDefault($_POST, 'receiver');
+        $subject = getOrDefault($_POST, 'subject');
+        $message = getOrDefault($_POST, 'message');
+        $broadcast = getOrDefault($_POST, 'broadcast', 0);
+        $base_link = sprintf('/?p=nachrichten_schreiben&receiver=%s&subject=%s&broadcast=1&message=%s',
+            urlencode($receiver), urlencode($subject), urlencode($message));
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-
-if ($_SESSION['blm_sitter']) {
-    $ich->Sitter = LoadSitterSettings();
-}
-
-if (!$ich->Sitter->Nachrichten && $_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=nachrichten_liste&m=112");
-    die();
-}
-
-switch (intval($_REQUEST['a'])) {    // Was will der Benutzer überhaupt?
-    case 1:        // Nachricht verschicken
-        $an = intval($_POST['an']);        // Die ID des Empfängers abrufen
-        $von = intval($_SESSION['blm_user']);    // Von wem kommt die überhaupt?
-
-        $betreff = trim($_POST['betreff']);                // Welchen Betreff soll die Nachricht haben?
-        $nachricht = trim($_POST['nachricht']);        // Was ist überhaupt der Inhalt der Nachricht?
-
-        if (intval($_POST['admin']) > 0) {
-            $an = intval($_POST['admin']);
+        if (strlen($message) < 8) {
+            redirectTo($base_link, 128, __LINE__);
+        }
+        if (strlen($subject) < 4) {
+            redirectTo($base_link, 128, __LINE__);
         }
 
-        $zeit = time();        //Wann wurde die Nachricht verschickt?
+        if ($broadcast == 1) {
+            $data = Database::getInstance()->getAllPlayerIdsAndName();
 
-        if ($an == 1337 && (IstAdmin() || IstBetatester())) {        // Das sind die Daten für ne Rundmail, welche nur der Administrator schicken darf.
-            NachrichtAnAlle($betreff, $nachricht);    // Die eingegebene Nachricht an alle schicken
-
-            // Fertig, Aufgabe erfüllt :)
-            DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=204");
-            die();
-        }
-
-        if ($an <= 0 || $nachricht == "" || $an == $_SESSION['blm_user']) { // Ist ein Empfänger ausgewählt? Ist ne Nachricht eingegeben worden? Will er sich selbst was schreiben? Wenn eines davon wahr ist, dann abbrechen...
-            DisconnectDB();
-            header("location: ../?p=nachrichten_schreiben&m=104");
-            die();
-        }
-
-        $sql_abfrage = "INSERT INTO
-    nachrichten
-(
-    ID,
-    An,
-    Von,
-    Zeit,
-    Betreff,
-    Nachricht,
-    Gelesen
-)
-VALUES
-(
-    NULL,
-    '" . $an . "',
-    '" . $von . "',
-    '" . $zeit . "',
-    '" . mysql_real_escape_string($betreff) . "',
-    '" . mysql_real_escape_string($nachricht) . "',
-    '0'
-)
-;";
-        mysql_query($sql_abfrage);        // Die Nachricht wegschicken
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "INSERT INTO
-    log_nachrichten
-(
-    Wer,
-    Wen,
-    Wann,
-    Betreff,
-    Nachricht,
-    Gelesen,
-    Geloescht,
-    Orig_ID
-)
-VALUES
-(
-    '" . $_SESSION['blm_user'] . "',
-    '" . $an . "',
-    NOW(),
-    '" . mysql_real_escape_string($betreff) . "',
-    '" . mysql_real_escape_string($nachricht) . "',
-    '0',
-    '0',
-    '" . mysql_insert_id() . "'
-)
-;";
-        mysql_query($sql_abfrage);        // Die Nachricht wegschicken
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    IGMGesendet=IGMGesendet+1
-WHERE
-    ID='" . intval($_SESSION['blm_user']) . "'
-;";
-        mysql_query($sql_abfrage);        // Ein Update für die Statistik des Absenders
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    IGMEmpfangen=IGMEmpfangen+1
-WHERE
-    ID='" . $an . "'
-;";
-        mysql_query($sql_abfrage);        // Ein Update für die Statistik des Empfängers
-        $_SESSION['blm_queries']++;
-
-        // Fertig :)
-        DisconnectDB();
-        header("location: ../?p=nachrichten_liste&m=204");
-        die();
-    case 2:        // eine Nachricht löschen
-        $sql_abfrage = "DELETE FROM
-    nachrichten
-WHERE
-    ID='" . intval($_GET['id']) . "'
-AND
-(
-    An='" . intval($_SESSION['blm_user']) . "'
-    OR
-    (
-            Von='" . intval($_SESSION['blm_user']) . "'
-        AND
-            Gelesen=0
-    )
-);";
-        mysql_query($sql_abfrage);        // Die Nachricht aus der DB löschen
-        $_SESSION['blm_queries']++;
-
-        if (mysql_affected_rows() == 0) {        // Wenn die Nachricht nicht gelöscht werden konnte, dann wurde eine ungültige ausgewählt
-            DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=124");
-            die();
-        }
-
-        $sql_abfrage = "UPDATE
-    log_nachrichten
-SET
-    Geloescht=1
-WHERE
-    Orig_ID='" . intval($_GET['id']) . "'
-AND
-(
-        Wen='" . intval($_SESSION['blm_user']) . "'
-    OR
-        Wer='" . intval($_SESSION['blm_user']) . "'
-);";
-        mysql_query($sql_abfrage);        // Die Nachricht aus der DB löschen
-        $_SESSION['blm_queries']++;
-
-        // Fertig :)
-
-        if ($_GET['ajax'] != "1") {
-            DisconnectDB();
-            header("location: ../?p=nachrichten_liste&m=211");
-            die();
+            Database::getInstance()->begin();
+            foreach ($data as $player) {
+                if (Database::getInstance()->createTableEntry('nachrichten', array(
+                        'Von' => $_SESSION['blm_user'],
+                        'An' => $player['ID'],
+                        'Nachricht' => $message,
+                        'Betreff' => $subject
+                    )) !== 1) {
+                    Database::getInstance()->rollBack();
+                    redirectTo($base_link, 141, __LINE__);
+                }
+            }
         } else {
-            die("1");
+            $receiverID = Database::getInstance()->getPlayerIDByName($receiver);
+            requireEntryFound($receiverID, $base_link, 118, __LINE__);
+
+            if ($receiverID === $_SESSION['blm_user']) {
+                redirectTo($base_link, 168, __LINE__);
+            }
+
+            Database::getInstance()->begin();
+            if (Database::getInstance()->createTableEntry('nachrichten', array(
+                    'Von' => $_SESSION['blm_user'],
+                    'An' => $receiverID,
+                    'Nachricht' => $message,
+                    'Betreff' => $subject
+                )) !== 1) {
+                Database::getInstance()->rollBack();
+                redirectTo($base_link, 141, __LINE__);
+            }
         }
-    case 3:        // alle löschen
-        $sql_abfrage = "DELETE FROM
-    nachrichten
-WHERE
-    An='" . intval($_SESSION['blm_user']) . "';";
-        mysql_query($sql_abfrage);    // Alle Nachrichten, die der Benutzer bekommen hat löschen
-        $_SESSION['blm_queries']++;
 
-        $sql_abfrage = "UPDATE
-    log_nachrichten
-SET
-    Geloescht=1
-WHERE
-    Wen='" . intval($_SESSION['blm_user']) . "'
-;";
-        mysql_query($sql_abfrage);        // Die Nachricht aus der DB löschen
-        $_SESSION['blm_queries']++;
+        Database::getInstance()->commit();
+        redirectTo('/?p=nachrichten_liste', 204);
+        break;
 
+    // delete message
+    case 2:
+        $id = getOrDefault($_GET, 'id', 0);
+        $data = Database::getInstance()->getMessageByIdAndAnOrVonEquals($id, $_SESSION['blm_user']);
+        requireEntryFound($data, '/?p=nachrichten_liste');
 
-        // Feierabend :)
-        DisconnectDB();
-        header("location: ../?p=nachrichten_liste&m=212");
+        Database::getInstance()->begin();
+        if (Database::getInstance()->deleteTableEntry('nachrichten', $id) !== 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=nachrichten_liste', 143, __LINE__);
+        }
+
+        Database::getInstance()->commit();
+        redirectTo('/?p=nachrichten_liste', 211);
+        break;
+
+    // delete all messages
+    case 3:
+        Database::getInstance()->begin();
+        if (Database::getInstance()->deleteAllMessagesForUser($_SESSION['blm_user']) === null) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=nachrichten_liste', 143, __LINE__);
+        }
+        Database::getInstance()->commit();
+        redirectTo('/?p=nachrichten_liste', 212);
+        break;
 }

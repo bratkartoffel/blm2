@@ -1,189 +1,56 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Formular zum Verfassen einer neuen Nachricht.
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/writemail.png" alt="Nachricht verfassen"/></td>
-            <td>Neue Nachricht verfassen
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=13"><img src="/pics/help.gif" alt="Hilfe"
-                                                               style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
-<?php
-if ($_SESSION['blm_sitter'] && !$ich->Sitter->Nachrichten) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
-    if ($_SESSION['blm_admin'] == "1" && $_GET['admin_vorlage'] != "") {
-        $text = $vorlage_admin[intval($_GET['admin_vorlage'])];
-    }
-    ?>
+restrictSitter('Nachrichten');
 
-    <?= $m; ?>
+$reply = getOrDefault($_GET, 'reply', 0);
 
-    <form action="./actions/nachrichten.php?a=1" method="post" name="form_message">
-        <table class="Liste" style="width: 600px; margin-top: 20px;" cellspacing="0">
-            <tr>
-                <th style="border:none; border-right: solid 1px darkred;">Empfänger:</th>
-                <td>
-                    Benutzer:
-                    <select name="an" style="min-width: 150px;">
-                        <option value="">- Bitte auswählen -</option>
-                        <option disabled="disabled">========</option>
-                        <?php
-                        $sql_abfrage = "SELECT
-    ID,
-    Name
-FROM
-    mitglieder
-WHERE
-    ID<>'" . $_SESSION['blm_user'] . "'
-AND
-    ID>0
-ORDER BY
-    Name;";
-                        $sql_ergebnis = mysql_query($sql_abfrage);
-                        $_SESSION['blm_queries']++;
+$receiver = null;
+$subject = null;
+$message = null;
+if ($reply > 0) {
+    $data = Database::getInstance()->getMessageByIdAndAnOrVonEquals($reply, $_SESSION['blm_user']);
+    requireEntryFound($data, '/?p=nachrichten_liste');
 
-                        while ($user = mysql_fetch_object($sql_ergebnis)) {
-                            if ($user->ID == intval($_GET['an'])) {
-                                echo '<option selected="selected" value="' . $user->ID . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</option>';
-                            } else {
-                                echo '<option value="' . $user->ID . '">' . htmlentities(stripslashes($user->Name), ENT_QUOTES, "UTF-8") . '</option>';
-                            }
-                        }
-
-                        if (IstAdmin() || IstBetatester()) {
-                            echo '<option disabled="disabled">========</option>';
-                            echo '<option value="1337">Rundmail</option>';
-                        }
-
-                        $sql_abfrage = "SELECT
-    n.*,
-    m.Name AS Empfaenger
-FROM
-    nachrichten n LEFT OUTER JOIN mitglieder m ON n.Von=m.ID
-WHERE
-    n.ID='" . intval($_GET['answer']) . "'
-AND
-    n.An='" . $_SESSION['blm_user'] . "';";
-                        $sql_ergebnis = mysql_query($sql_abfrage);
-                        $_SESSION['blm_queries']++;
-
-                        $antwort = mysql_fetch_object($sql_ergebnis);
-
-                        if ($antwort != null) {
-                            $sql_abfrage = "UPDATE
-    nachrichten
-SET
-    Gelesen=1
-WHERE
-    ID='" . intval($_GET['answer']) . "';";
-                            mysql_query($sql_abfrage);
-                            $_SESSION['blm_queries']++;
-
-                            $sql_abfrage = "UPDATE
-    log_nachrichten
-SET
-    Gelesen=1
-WHERE
-    Orig_ID='" . intval($_GET['answer']) . "'
-;";
-                            mysql_query($sql_abfrage);
-                            $_SESSION['blm_queries']++;
-                        }
-                        ?>
-                    </select>
-                    oder Admin:
-                    <select name="admin" style="min-width: 150px;">
-                        <option value="">- Bitte auswählen -</option>
-                        <option disabled="disabled">========</option>
-                        <?php
-                        $sql_abfrage = "SELECT
-    ID,
-    Name
-FROM
-    mitglieder
-WHERE
-    Admin = '1'
-AND
-    ID > 0
-AND
-    ID != '" . $_SESSION['blm_user'] . "'
-ORDER BY
-    Name DESC;";
-                        $sql_ergebnis = mysql_query($sql_abfrage);
-
-                        while ($admin = mysql_fetch_object($sql_ergebnis)) {
-                            ?>
-                            <option value="<?= $admin->ID; ?>"><?= sichere_ausgabe($admin->Name); ?></option>
-                            <?php
-                        }
-                        ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th style="border:none; border-right: solid 1px darkred;">Betreff:</th>
-                <td><input type="text" name="betreff" value="<?php
-                    if ($antwort != null) {
-                        echo "RE: " . stripslashes(htmlentities($antwort->Betreff, ENT_QUOTES, "UTF-8"));
-                    }
-
-                    if (isset($_GET['betreff'])) {
-                        echo stripslashes(htmlentities($_GET['betreff'], ENT_QUOTES, "UTF-8"));
-                    }
-                    ?>" maxlength="30" size="30"/></td>
-            </tr>
-            <tr>
-                <th style="border:none; border-right: solid 1px darkred;">
-                    Nachricht:<br/>
-                    <a href="popups/smiley.php" onclick="return SmileyPopupZeigen(this.href);">Emoticons</a><br/>
-                    <a href="popups/bbcode.php" onclick="return BBCodePopupZeigen(this.href);">BB-Code</a>
-                </th>
-                <td><textarea name="nachricht" cols="80" rows="15" maxlength="4096"
-                              onkeyup="ZeichenUebrig(this, document.form_message.getElementsByTagName('span')[0]);"><?php
-                        if ($antwort != null) {
-                            echo "[quote][b][i]" . stripslashes(htmlentities($antwort->Empfaenger, ENT_QUOTES, "UTF-8")) . " hat am " . date("d.m.Y", $antwort->Zeit) . " um " . date("H:i", $antwort->Zeit) . " geschrieben:[/i][/b]\n" . stripslashes(htmlentities($antwort->Nachricht, ENT_QUOTES, "UTF-8")) . "[/quote]\n";
-                        }
-
-                        if (isset($_GET['nachricht'])) {
-                            echo stripslashes(htmlentities($_GET['nachricht'], ENT_QUOTES, "UTF-8"));
-                        }
-
-                        if ($text) {
-                            $name = getSpielerName($_SESSION['blm_user']);
-                            $text = str_replace('__NAME__', $name, $text);
-
-                            if ($name == "Bratkartoffel")
-                                $text = preg_replace('/\,\ im\ Auftrag\ von.*/im', '', $text);
-                        }
-
-                        echo $text;
-
-                        ?></textarea></td>
-            </tr>
-            <tr>
-                <th style="text-align: center; padding: 3px; font-size: 80%; background-color: #b0ee7b; border-top: solid 1px #aa0000; border-right: solid 1px #aa0000;  border-bottom: none; font-weight: normal;">
-                    Noch <span>4096</span> Zeichen verbleibend.
-                </th>
-                <th style="text-align: center; padding: 3px; border-top: solid 1px #aa0000; border-bottom: none;"><input
-                            type="submit" value="Nachricht versenden"
-                            onclick="document.forms[0].submit(); this.disabled='disabled'; this.value='Bitte warten...'; smileyPopup.close(); BBCodePopup.close(); return false;"/>
-                </th>
-            </tr>
-        </table>
-    </form>
-    <script type="text/javascript">
-        <!--
-        ZeichenUebrig(document.form_message.nachricht, document.form_message.getElementsByTagName('span')[0]);
-        // -->
-    </script>
-    <?php
+    $receiver = $data['VonName'];
+    $subject = stripos($data['Betreff'], 'Re:') === false ? 'Re: ' . $data['Betreff'] : $data['Betreff'];
+    $message = "[quote]" . $data['Nachricht'] . "[/quote]\n\n";
 }
+
+$receiver = getOrDefault($_GET, 'receiver', $receiver);
+$subject = getOrDefault($_GET, 'subject', $subject);
+$message = getOrDefault($_GET, 'message', $message);
+?>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/writemail.png" alt=""/>
+    <span>Nachricht schreiben<?= createHelpLink(1, 13); ?></span>
+</div>
+
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+
+<div class="form NachrichtSchreiben">
+    <form action="/actions/nachrichten.php?a=1" method="post">
+        <input type="hidden" name="broadcast" id="broadcast" value="0"/>
+        <header>Nachricht</header>
+        <div>
+            <label for="receiver">Empfänger</label>
+            <input type="text" name="receiver" id="receiver" value="<?= escapeForOutput($receiver); ?>"/>
+            <?= (isAdmin() ? '<a href="#" onclick="return toggleRundmail();">Admin Rundmail</a>' : ''); ?>
+        </div>
+        <div>
+            <label for="subject">Betreff</label>
+            <input type="text" name="subject" id="subject" value="<?= escapeForOutput($subject); ?>"/>
+        </div>
+        <div>
+            <label for="message">Nachricht</label>
+            <textarea id="message" name="message" maxlength="4096" cols="60" rows="20"
+                      onkeyup="ZeichenUebrig(this, document.getElementById('charsLeft'));"><?= escapeForOutput($message, false); ?></textarea>
+        </div>
+        <div>
+            Noch <span id="charsLeft">4096</span> Zeichen übrig.
+            <input type="submit" value="Absenden" onclick="return submit(this);"/>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    ZeichenUebrig(document.getElementById('message'), document.getElementById('charsLeft'));
+</script>

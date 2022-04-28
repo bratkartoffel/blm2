@@ -1,224 +1,141 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers auf dem Marktplatz aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
+restrictSitter('Marktplatz');
 
-if (!IstAngemeldet()) {        // Nur wer angemeldet ist, darf auf dem Marktplatz werkeln ;=)
-    header("location: ../?p=index&m=102");
-    die();
-}
+switch (getOrDefault($_GET, 'a', 0)) {
+    // sell wares
+    case 1:
+        $ware = getOrDefault($_POST, 'ware', 0);
+        $amount = getOrDefault($_POST, 'amount', 0);
+        $price = getOrDefault($_POST, 'price', .0);
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-$ich = LoadSettings();                                // Alle Daten des Users abrufen (Geld, Gebäudelevel, Forschungslevel...)
+        $data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
+        $sellPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
 
-if ($_SESSION['blm_sitter']) {
-    $ich->Sitter = LoadSitterSettings();
-}
-
-if (!$ich->Sitter->Marktplatz && $_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=amrktplatz&m=112");
-    die();
-}
-
-switch (intval($_REQUEST['a'])) {        // Was will der Benutzer auf dem Marktplatz?
-    case 1:        // Verkaufen
-        $temp = "Lager" . intval($_POST['was']);        // Temporöre Variable mit dem MySQL-Spaltenname mit der Ware
-
-        if ($ich->$temp < intval($_POST['menge'])) {        // Will der Benutzer mehr verkaufen als er hat? Abbruch
-            DisconnectDB();
-            header("location: ../?p=marktplatz_verkaufen&m=116");
-            die();
+        if ($ware < 1 || $ware > count_wares) {
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 117, __LINE__);
         }
 
-        if ($_POST['menge'] <= 0 || number_format(str_replace(",", ".", $_POST['preis']), 2) < 1) {        // Wurde keine Menge oder ein Preis kleiner als 1 € eingegeben? Darf er nicht:
-            DisconnectDB();
-            header("location: ../?p=marktplatz_verkaufen&m=120");
-            die();
+        if ($amount > $data['Lager' . $ware]) {
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&menge=%d&preis=%f', $ware, $amount, $price), 116, __LINE__);
         }
 
-        $sql_abfrage = "INSERT INTO
-    marktplatz
-VALUES
-(
-    NULL,
-    '" . $_SESSION['blm_user'] . "',
-    '" . intval($_POST['was']) . "',
-    '" . intval($_POST['menge']) . "',
-    '" . number_format(str_replace(",", ".", $_POST['preis']), 2) . "'
-);";
-        mysql_query($sql_abfrage);        // Angebot auf dem Markt stellen
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "UPDATE
-    lagerhaus
-SET
-    " . $temp . "=" . $temp . "-" . intval($_POST['menge']) . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Die Waren aus dem Lager nehmen, da diese ja jetzt auf dem Marktplatz liegen
-        $_SESSION['blm_queries']++;
-
-        // Angebot drinnen, fertig
-        DisconnectDB();
-        header("location: ../?p=marktplatz_liste&m=218");
-        die();
-
-    case 2:        // Kaufen
-        $filter = $_GET['w'];
-        $url_string = implode("&w[]=", $filter);
-        $url_string = "&w[]=" . $filter[0] . substr($url_string, 1);
-
-        $sql_abfrage = "SELECT
-    *
-FROM
-    marktplatz
-WHERE
-    ID='" . intval($_GET['id']) . "'
-AND
-    Von!='" . $_SESSION['blm_user'] . "';";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $angebot = mysql_fetch_object($sql_ergebnis);        // Alle Infos zu dem angefragten Gebot holen
-
-        if (intval($angebot->ID) == 0) {    // Wurde das Angebot überhaupt gefunden / War jemand schneller? Wenn ja:
-            DisconnectDB();
-            header("location: ../?p=marktplatz_liste&m=119" . $url_string . "");
-            die();
+        if ($price < $sellPrice || $price > $sellPrice * 2) {
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&menge=%d&preis=%f', $ware, $amount, $price), 153, __LINE__);
         }
 
-        if ($ich->Geld < ($angebot->Menge * $angebot->Preis)) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann:
-            DisconnectDB();
-            header("location: ../?p=marktplatz_liste&m=111" . $url_string . "");
-            die();
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+                array('Lager' . $ware => -$amount),
+                array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $ware . ' >= :whr1' => $amount)) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 116, __LINE__);
+        }
+        if (Database::getInstance()->createTableEntry('marktplatz', array(
+                'Von' => $_SESSION['blm_user'],
+                'Was' => $ware,
+                'Menge' => $amount,
+                'Preis' => $price
+            )) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 141, __LINE__);
+        }
+        Database::getInstance()->commit();
+        redirectTo('/?p=marktplatz_liste', 218);
+        break;
+
+    // buy offer
+    case 2:
+        $id = getOrDefault($_GET, 'id', 0);
+
+        $entry = Database::getInstance()->getMarktplatzEntryById($id);
+        requireEntryFound($entry, '/?p=marktplatz_liste');
+
+        $amount = $entry['Menge'] * $entry['Preis'];
+
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+                array('Geld' => -$amount),
+                array('Geld >= :whr0' => $amount)) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 111, __LINE__);
         }
 
-        $sql_abfrage = "UPDATE
-    (lagerhaus l NATURAL JOIN mitglieder m) NATURAL JOIN statistik s
-SET
-    l.Lager" . $angebot->Was . "=l.Lager" . $angebot->Was . "+" . $angebot->Menge . ",
-    m.Geld=m.Geld-" . ($angebot->Menge * $angebot->Preis) . ",
-    s.AusgabenMarkt=s.AusgabenMarkt+" . ($angebot->Menge * $angebot->Preis) . "
-WHERE
-    m.ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Die Waren ins Lager stecken
-        $_SESSION['blm_queries']++;
+        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+                array('Lager' . $entry['Was'] => $entry['Menge']), array('user_id = :whr0' => $_SESSION['blm_user'])) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 142, __LINE__);
+        }
 
-        $sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN statistik s
-SET
-    m.Geld=m.Geld+" . (($angebot->Menge * $angebot->Preis) * MARKT_PROVISION_FAKTOR) . ",
-    s.EinnahmenMarkt=s.EinnahmenMarkt+" . (($angebot->Menge * $angebot->Preis) * MARKT_PROVISION_FAKTOR) . "
-WHERE
-    m.ID='" . $angebot->Von . "';";
-        mysql_query($sql_abfrage);        // Der Verkäufer kriegt nun sein Geld, jedoch abzüglich 1 % Marktprovision!
-        $_SESSION['blm_queries']++;
+        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+                array('AusgabenMarkt' => $amount), array('user_id = :whr0' => $_SESSION['blm_user'])) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 142, __LINE__);
+        }
 
-        $sql_abfrage = "DELETE FROM
-    marktplatz
-WHERE
-    ID='" . $angebot->ID . "';";
-        mysql_query($sql_abfrage);        // Das Angebot ist schon verkauft, also vom Markt nehmen
-        $_SESSION['blm_queries']++;
+        if ($entry['Von'] != 0) {
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'],
+                    array('Geld' => $amount * (1 - market_provision_rate))) != 1) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=marktplatz_liste', 142, __LINE__);
+            }
+            if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+                    array('EinnahmenMarkt' => $amount * (1 - market_provision_rate)),
+                    array('user_id = :whr0' => $entry['Von'])) != 1) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=marktplatz_liste', 142, __LINE__);
+            }
+        }
 
-        $sql_abfrage = "INSERT INTO
-    nachrichten
-(
-    ID,
-    Von,
-    An,
-    Nachricht,
-    Betreff,
-    Zeit,
-    Gelesen
-)
-VALUES
-(
-    NULL,
-    '0',
-    '" . $angebot->Von . "',
-    'Soeben wurde ein Angebot von Ihnen auf dem freien Markt gekauft:\n" . $angebot->Menge . "kg " . WarenName($angebot->Was) . " zu insgesamt " . number_format(($angebot->Menge * $angebot->Preis) * MARKT_PROVISION_FAKTOR, 2, ",", ".") . " " . $Currency . ".\n\n[i]- System -[/i]',
-    'Freier Markt',
-    '" . time() . "',
-    '0'
-);";
-        mysql_query($sql_abfrage);        // Dem Verkäufer ne Mitteilung machen, dass sein Angebot gekauft wurde.
-        $_SESSION['blm_queries']++;
+        if (Database::getInstance()->createTableEntry('nachrichten', array(
+                'Von' => 0,
+                'An' => $entry['Von'],
+                'Betreff' => 'Angebot auf freiem Markt verkauft',
+                'Nachricht' => sprintf("Soeben wurde das Angebot #%s (%s %s zu insgesamt %s) anonym gekauft.",
+                    $entry['ID'], formatWeight($entry['Menge']), getItemName($entry['Was']), formatCurrency($amount))
+            )) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+        }
+        if (Database::getInstance()->deleteTableEntry('marktplatz', $entry['ID']) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 143, __LINE__);
+        }
+        Database::getInstance()->commit();
 
-        // Fertig :)
-        DisconnectDB();
-        header("location: ../?p=marktplatz_liste&m=217" . $url_string . "");
-        die();
-    case 3:            // Zurückziehen
-        $filter = $_GET['w'];
-        $url_string = implode("&w[]=", $filter);
-        $url_string = "&w[]=" . $filter[0] . substr($url_string, 1);
+        redirectTo('/?p=marktplatz_liste', 217);
+        break;
 
-        $sql_abfrage = "SELECT
-    *
-FROM
-    marktplatz
-WHERE
-    ID='" . intval($_GET['id']) . "'
-AND
-    Von='" . $_SESSION['blm_user'] . "';";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
+    // retract offer
+    case 3:
+        $id = getOrDefault($_GET, 'id', 0);
 
-        $angebot = mysql_fetch_object($sql_ergebnis);        // Alle Infos zu dem angefragten Gebot holen
+        $entry = Database::getInstance()->getMarktplatzEntryByIdAndVon($id, $_SESSION['blm_user']);
+        requireEntryFound($entry, '/?p=marktplatz_liste');
 
-        $reduzierte_menge = intval($angebot->Menge * MARKT_ZURUECKZIEH_FAKTOR);
-        $sql_abfrage = "UPDATE
-    lagerhaus
-SET
-    Lager" . $angebot->Was . "=Lager" . $angebot->Was . "+" . $reduzierte_menge . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Die Waren ins Lager stecken
-        $_SESSION['blm_queries']++;
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+                array('Lager' . $entry['Was'] => floor($entry['Menge'] * market_retract_rate)),
+                array('user_id = :whr0' => $entry['Von'])) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 142, __LINE__);
+        }
+        if (Database::getInstance()->deleteTableEntry('marktplatz', $entry['ID']) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 143, __LINE__);
+        }
+        Database::getInstance()->commit();
 
-        $sql_abfrage = "DELETE FROM
-    marktplatz
-WHERE
-    ID='" . $angebot->ID . "';";
-        mysql_query($sql_abfrage);        // Das Angebot ist schon verkauft, also vom Markt nehmen
-        $_SESSION['blm_queries']++;
+        redirectTo('/?p=marktplatz_liste', 217);
+        break;
 
-        $sql_abfrage = "INSERT INTO
-    nachrichten
-(
-    ID,
-    Von,
-    An,
-    Nachricht,
-    Betreff,
-    Zeit,
-    Gelesen
-)
-VALUES
-(
-    NULL,
-    '0',
-    '" . $angebot->Von . "',
-    'Sie haben soeben folgendes Angebot vom Markt zurückgezogen:\n" . $angebot->Menge . "kg " . WarenName($angebot->Was) . " zu insgesamt " . ($angebot->Menge * $angebot->Preis) . " " . $Currency . ".\nDa das Angebot schon eine Weile dort gelegen ist, sind Ihnen während des Rücktransports 10% vertrocknet.\nDie restlichen Waren ($reduzierte_menge kg) finden Sie in Ihrem Lager.\n\n[i]- System -[/i]',
-    'Freier Markt',
-    '" . time() . "',
-    '0'
-);";
-        mysql_query($sql_abfrage);        // Dem Verkäufer ne Mitteilung machen, dass sein Angebot gekauft wurde.
-        $_SESSION['blm_queries']++;
-
-        // Fertig :)
-        DisconnectDB();
-        header("location: ../?p=marktplatz_liste&m=221" . $url_string . "");
+    // unknown action
+    default:
+        redirectTo('/?p=marktplatz_liste', 112, __LINE__);
+        break;
 }

@@ -4,22 +4,20 @@ $wen = getOrDefault($_GET, 'wen');
 $angenommen = getOrDefault($_GET, 'angenommen');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Logbücher - Verträge</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Vertrags Logbuch</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="./" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="admin_log_vertraege"/>
         <label for="wer">Wer:</label>
-        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <label for="wen">Wen:</label>
-        <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <input type="text" name="wen" id="wen" value="<?= escapeForOutput($wen); ?>"/>
         <label for="angenommen">Angenommen:</label>
         <select name="angenommen" id="angenommen">
             <option value="">- Alle -</option>
@@ -45,21 +43,21 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_wen = empty($wen) ? "%" : $wen;
     $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $angenommen);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $angenommen, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $angenommen, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
-            <td><?= createProfileLink($row['WenId'], $row['Wen']); ?></td>
-            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
-            <td><?= WarenName($row['Ware']); ?></td>
-            <td><?= formatWeight($row['Wieviel']); ?></td>
-            <td><?= formatCurrency($row['Einzelpreis']); ?></td>
-            <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
-            <td><?= sichere_ausgabe($row['Angenommen']); ?></td>
+            <td><?= createProfileLink($row['senderId'], $row['senderName']); ?></td>
+            <td><?= createProfileLink($row['receiverId'], $row['receiverName']); ?></td>
+            <td><?= formatDateTime(strtotime($row['created'])); ?></td>
+            <td><?= getItemName($row['item']); ?></td>
+            <td><?= formatWeight($row['amount']); ?></td>
+            <td><?= formatCurrency($row['price']); ?></td>
+            <td><?= formatCurrency($row['amount'] * $row['price']); ?></td>
+            <td><?= getYesOrNo($row['accepted']); ?></td>
         </tr>
         <?php
     }
@@ -68,7 +66,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_log_vertraege&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen) . '&amp;angenommen=' . sichere_ausgabe($angenommen), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_log_vertraege&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen) . '&amp;angenommen=' . escapeForOutput($angenommen), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin">Zurück...</a>
 </p>

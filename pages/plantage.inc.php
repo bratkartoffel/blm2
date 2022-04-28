@@ -1,150 +1,111 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Formular für die Plantage
- *
- * @version 1.0.1
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-/*
-Changelog:
+restrictSitter('Produktion');
 
-[1.0.1]
-    - Neue Berechnung für die PRoduktionskostenrechnung
+$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'], 200, 300);
+$data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevel($_SESSION['blm_user']);
 
-*/
+$auftraege = array();
+for ($i = 0; $i < count($auftraege_db); $i++) {
+    $auftraege[$auftraege_db[$i]['item'] % 100] = $auftraege_db[$i];
+}
+
+$productionData = array();
+$productionCostSum = .0;
+for ($i = 1; $i <= count_wares; $i++) {
+    if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
+    $productionData[$i] = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
+    if (!array_key_exists($i, $auftraege)) {
+        $productionCostSum += $productionData[$i]['Kosten'];
+    }
+}
 ?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/plantage.png" alt="Plantage"/></td>
-            <td>Die Plantage
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=5"><img src="/pics/help.gif" alt="Hilfe"
-                                                              style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
+    <div id="SeitenUeberschrift">
+        <img src="/pics/big/plantage.png" alt=""/>
+        <span>Plantage<?= createHelpLink(1, 5); ?></span>
+    </div>
+
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+
+    <p>
+        Hier können Sie Ihre erforschten Obst- und Warensorten anbauen.
+    </p>
+
+    <div class="form Schnellanbau">
+        <form action="/actions/plantage.php" method="post">
+            <input type="hidden" name="alles" value="1"/>
+            <header>Schnellanbau</header>
+            <div>
+                <label for="stunden">Produziere</label>
+                <input type="text" id="stunden" name="stunden" value="1" size="1" maxlength="2" min="1"
+                       max="<?= production_hours_max; ?>>"
+                       onkeyup="RechneProduktionsKosten(1, <?= $productionCostSum; ?>, this.value,
+                       <?= $data['Geld']; ?>, document.getElementById('pr_ko_all'), document.getElementById('anbauen_all'));"/>
+                Stunde(n) von Allem.
+            </div>
+            <div id="pr_ko_all">Kosten: <?= formatCurrency($productionCostSum); ?></div>
+            <input type="submit" value="Abschicken" id="plant_all"
+                   onclick="return submit(this);"<?= (count($auftraege) < count($productionData) && $data['Geld'] >= $productionCostSum ? '' : ' disabled="disabled"'); ?>/>
+        </form>
+    </div>
+
 <?php
-if ($_SESSION['blm_sitter'] && !$ich->Sitter->Produktion) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
+for ($i = 1; $i <= count_wares; $i++) {
+    $researchAttribute = 'Forschung' . $i;
+    if (!productionRequirementsMet($i, $data['Gebaeude1'], $data[$researchAttribute])) continue;
     ?>
-
-    <?= $m; ?>
-    <?php
-    $sql_abfrage = "SELECT
-    ID,
-    Was,
-    Start,
-    Dauer,
-    Kosten,
-    Menge
-FROM
-    auftrag
-WHERE
-    Von='" . $_SESSION['blm_user'] . "'
-AND
-    Was > 200
-AND
-    Was < 300;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $auftraege = new stdClass();
-    $has_auftrag = false;
-    while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
-        $temp = "a_" . intval($auftrag->Was);
-
-        $auftraege->$temp = $auftrag;
-        $has_auftrag = true;
-    }
-    ?>
-    <b>
-        Hier können Sie Ihre erforschten Obst- und Waresorten anbauen.<br/>
-    </b>
-    <br/>
-    <form action="actions/plantage.php" method="post">
-        <input type="hidden" name="alles" value="1"/>
-        <table class="Liste" style="width: 350px; margin-bottom: 20px;">
-            <tr>
-                <th>Schnellmenü</th>
-            </tr>
-            <tr>
-                <td style="font-weight: bold; padding: 5px;">
-                    Produziere
-                    <input type="text" name="stunden" value="1" size="1" maxlength="2"/>
-                    Stunde(n) von allem.
-                    <?php
-                    if ($has_auftrag) {
-                        ?>
-                        <input type="submit" value="Abschicken" disabled="disabled"/>
-                        <?php
-                    } else {
-                        ?>
-                        <input type="submit" value="Abschicken"
-                               onclick="document.forms[0].submit(); this.disabled='disabled'; this.value='Bitte warten...'; return false;"/>
-                        <?php
-                    }
+    <div class="form Produktion">
+        <header id="p<?= $i; ?>">
+            <?= getItemName($i); ?> (Stufe <?= $data[$researchAttribute]; ?>)
+        </header>
+        <img src="/pics/obst/<?= $i; ?>.jpg" alt=""/>
+        <div class="ProduktionDaten">
+            <div><?= formatWeight($productionData[$i]['Menge']); ?> / Stunde</div>
+            <div><?= formatWeight($productionData[$i]['Menge'] / 60, true, 2); ?> / Minute</div>
+            <div><?= formatCurrency($productionData[$i]['Kosten'] / $productionData[$i]['Menge'], true, true, 3); ?> /
+                kg
+            </div>
+        </div>
+        <div class="Action">
+            <form action="/actions/plantage.php" method="post">
+                <input type="hidden" name="was" value="<?= $i; ?>"/>
+                <?php
+                if (!array_key_exists($i, $auftraege)) {
                     ?>
-                </td>
-            </tr>
-        </table>
-    </form>
-    <?php
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Hier werden die Kosten, Mengen und die Dauer für jedes Ware berechnet.
-        $temp = "Forschung" . $i;        // Temporäre Variable mit dem MySQL Spaltennamen für die Forschung des aktuellen Wares
-
-        $menge = ($ich->Gebaeude1 * PRODUKTIONS_PLANTAGE_FAKTOR_MENGE) + ($i * PRODUKTIONS_WAREN_FAKTOR_MENGE) + $Produktion->BasisMenge + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE);        // Berechnet die Produktionsmenge
-        $kosten = $Produktion->BasisKosten + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN);                                                                        // Berechnet die Kosten für den Auftrag
-        $dauer = $Produktion->BasisDauer - 3600;                    // Berechnet, wie lange er dauert
-
-        if ($ich->$temp > 0 && $ich->Gebaeude1 >= intval($i * 1.5)) {
-            ?>
-            <table class="Liste" cellspacing="0" style="margin-bottom: 20px;">
-                <tr>
-                    <th colspan="3" id="p<?= $i; ?>"><?= WarenName($i); ?>, aktuell Stufe <?= $ich->$temp; ?></th>
-                </tr>
-                <tr>
-                    <td width="170">
-                        <img src="/pics/obst/<?= BildVonWare($i); ?>" alt="<?= WarenName($i); ?>"/>
-                    </td>
-                    <td>
-                        <p>
-                            <b><?= number_format($menge / date("H", $dauer), 0, ",", "."); ?> kg / Stunde</b><br/>
-                            <b><?= number_format(($menge / date("H", $dauer)) / 60, 3, ",", "."); ?> kg /
-                                Minute</b><br/>
-                            <b><?= number_format(round($kosten / $menge, 4), 4, ",", ".") . " " . $Currency; ?> / kg</b>
-                        </p>
-                    </td>
-                    <td width="200">
-                        <div align="center">
-                            <form action="actions/plantage.php" method="post" name="pr_<?= $i; ?>">
-                                <input type="hidden" name="was" value="<?= $i; ?>"/>
-                                <?php
-                                $temp = "a_" . (200 + $i);
-
-                                if (property_exists($auftraege, $temp)) {        // Wenn der Auftrag schon gegeben wurde, dann...
-                                    $ProzentFertig = 1 - (($auftraege->$temp->Start + $auftraege->$temp->Dauer) - time()) / $auftraege->$temp->Dauer;
-
-                                    echo '<input type="submit" name="anbauen" disabled="disabled" value="Ware anbauen"/><br />';
-                                    echo '<i>Es läuft bereits ein Anbau!</i><br />
-										(noch ' . date("H:i:s", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) . ' verbleibend.)<br />
-										<a onclick="return confirm(\'Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge (~ ' . intval($auftraege->$temp->Menge * $ProzentFertig) . ' kg) wird Ihnen gut geschrieben.!\');" href="actions/auftrag.php?id=' . $auftraege->$temp->ID . '&amp;back=plantage&amp;was=' . $i . '">Abbrechen</a>';
-                                } else {    // Der Auftrag wurde noch nicht erteilt:
-                                    echo '<b>Menge: <input type="text" size="3" maxlength="5" name="menge" value="' . $menge . '" onkeyup="RechneProduktionsKosten(' . $menge . ', ' . $kosten . ', document.pr_' . $i . '.menge.value, ' . $ich->Geld . ', document.getElementById(\'pr_ko_' . $i . '\'), document.getElementById(\'anbauen_' . $i . '\'));" />  kg</b><br /><span id="pr_ko_' . $i . '">Kosten: ' . number_format($kosten, 2) . ' €</span><br />';
-                                    echo '<input type="submit" name="anbauen" id="anbauen_' . $i . '" value="Ware anbauen" style="margin-top: 8px;" onclick="document.forms[' . $i . '].submit(); this.disabled=\'disabled\'; this.value=\'Bitte warten...\'; return false;" />';
-                                    ?>
-                                    <script type="text/javascript">
-                                        RechneProduktionsKosten(<?=$menge; ?>, <?=$kosten; ?>, document.pr_<?=$i; ?>.menge.value, <?=$ich->Geld; ?>, document.getElementById('pr_ko_<?=$i; ?>'), document.getElementById('anbauen_<?=$i; ?>'));
-                                    </script>
-                                    <?php
-                                }
-                                ?>
-                            </form>
+                    <div>
+                        <label for="menge<?= $i; ?>">Menge:</label>
+                        <input type="text" size="4" maxlength="6" name="menge" id="amount_<?= $i; ?>"
+                               value="<?= $productionData[$i]['Menge']; ?>"
+                               onkeyup="RechneProduktionsKosten(<?= $productionData[$i]['Menge']; ?>, <?= $productionData[$i]['Kosten']; ?>, this.value,
+                               <?= $data['Geld']; ?>, document.getElementById('pr_ko_<?= $i; ?>'), document.getElementById('anbauen_<?= $i; ?>'));"/>
+                        kg
+                        <div id="pr_ko_<?= $i; ?>">Kosten: <?= formatCurrency($productionData[$i]['Kosten']); ?></div>
+                    </div>
+                    <input type="submit" name="anbauen" id="plant_<?= $i; ?>" value="Ware anbauen"
+                           onclick="return submit(this);" <?= ($productionData[$i]['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
+                    <?php
+                } else {
+                    $auftrag = $auftraege[$i];
+                    $duration = strtotime($auftrag['finished']) - strtotime($auftrag['created']);
+                    $completed = time() - strtotime($auftrag['created']);
+                    $percent = $completed / $duration;
+                    ?>
+                    <div>
+                        <div>Es läuft bereits ein Anbau!</div>
+                        <div>
+                            (noch <span class="countdown"><?= formatDuration($duration - $completed); ?></span>
+                            verbleibend)
                         </div>
-                    </td>
-                </tr>
-            </table>
-            <?php
-        }
-    }
+                        <div>
+                            <a onclick="return confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge '
+                                    + '(~ <?= formatWeight($auftrag['amount'] * $percent); ?>) wird Ihnen gut geschrieben.!');"
+                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;back=plantage&amp;was=<?= $i; ?>">Abbrechen</a>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+            </form>
+        </div>
+    </div>
+    <?php
 }

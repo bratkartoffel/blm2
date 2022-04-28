@@ -2,20 +2,18 @@
 $wer = getOrDefault($_GET, 'wer');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Logbücher - Bioladen</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Bioladen Logbuch</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="./" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="admin_log_bioladen"/>
         <label for="wer">Wer:</label>
-        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>
@@ -32,19 +30,19 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter = empty($wer) ? "%" : $wer;
     $entriesCount = Database::getInstance()->getAdminBioladenLogCount($filter);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getAdminBioladenLogEntries($filter, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminBioladenLogEntries($filter, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
-            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
-            <td><?= Warenname($row['Was']); ?></td>
-            <td><?= formatWeight($row['Wieviel']); ?></td>
-            <td><?= formatCurrency($row['Einzelpreis']); ?></td>
-            <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
+            <td><?= createProfileLink($row['playerId'], $row['playerName']); ?></td>
+            <td><?= formatDateTime(strtotime($row['created'])); ?></td>
+            <td><?= getItemName($row['item']); ?></td>
+            <td><?= formatWeight($row['amount']); ?></td>
+            <td><?= formatCurrency($row['price']); ?></td>
+            <td><?= formatCurrency($row['amount'] * $row['price']); ?></td>
         </tr>
         <?php
     }
@@ -53,7 +51,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_log_bioladen&amp;wer=' . sichere_ausgabe($wer), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin">Zurück...</a>
 </p>

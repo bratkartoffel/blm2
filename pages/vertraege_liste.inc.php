@@ -1,33 +1,20 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Zeigt alle ein- und ausgehenden Verträge eines Benutzers an
- *
- * @version 1.0.1
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+restrictSitter('Vertraege');
 ?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/vertraege.png" alt="Vertragsliste"/></td>
-            <td>Ihre vorliegenden Verträge
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="/pics/help.gif" alt="Hilfe"
-                                                               style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
-<?php
-if ($_SESSION['blm_sitter'] && !$ich->Sitter->Vertraege) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
-    ?>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/vertraege.png" alt=""/>
+    <span>Verträge<?= createHelpLink(1, 10); ?></span>
+</div>
 
-    <?= $m; ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-    <b>Hier sehen Sie alle Ihre eingehenden Verträge, die Sie noch nicht angenommen oder abgelehnt haben.</b>
-    <table class="Liste" style="width: 600px; margin-top: 20px; margin-bottom: 10px;" cellspacing="0">
+<h2>Eingehende Verträge</h2>
+<p>Hier sehen Sie alle Ihre eingehenden Verträge, die Sie noch nicht angenommen oder abgelehnt haben.</p>
+
+<table class="Liste Vertraege">
     <tr>
         <th>Nr</th>
+        <th>Datum</th>
         <th>Von</th>
         <th>Was</th>
         <th>Menge</th>
@@ -36,128 +23,75 @@ if ($_SESSION['blm_sitter'] && !$ich->Sitter->Vertraege) {
         <th>Aktion</th>
     </tr>
     <?php
-    $sql_abfrage = "SELECT
-    *,
-    m.Name AS Absender,
-    v.ID AS vID
-FROM
-    (vertraege v LEFT OUTER JOIN mitglieder m ON m.ID=v.Von)
-WHERE
-    v.An=" . $_SESSION['blm_user'] . "
-ORDER BY
-    v.ID;";
-    $sql_ergebnis = mysql_query($sql_abfrage);        // Ruft erstmal alle Verfträge ab
-    $_SESSION['blm_queries']++;
-
-    $eintrag = false;        // Bisher haben wir noch keinen Eintrag
-
-    while ($vertrag = mysql_fetch_object($sql_ergebnis))        // Holt sich jetzt der Reihe nach alle Verträge
-    {
-        $nr++;        // Die Nummer für die erste Spalte
-        echo '<tr>
-						<td>' . $nr . '</td>
-						<td>' . htmlentities(stripslashes($vertrag->Absender), ENT_QUOTES, "UTF-8") . '</td>
-						<td>' . WarenName($vertrag->Was) . '</td>
-						<td>' . $vertrag->Menge . ' kg</td>
-						<td>' . number_format($vertrag->Preis, 2, ",", ".") . ' ' . $Currency . '</td>
-						<td>' . number_format($vertrag->Preis * $vertrag->Menge, 2, ",", ".") . " " . $Currency . '</td>
-						<td>
-							<a href="./actions/vertraege.php?a=2&amp;vid=' . $vertrag->vID . '" onclick="VertragAnnehmen(' . $vertrag->vID . ', this.parentNode.parentNode); this.removeAttribute(\'onclick\'); return false;">
-								<img src="./pics/small/ok.png" border="0" alt="Vertrag annehmen" />
-							</a>
-							<a href="./actions/vertraege.php?a=3&amp;vid=' . $vertrag->vID . '" onclick="VertragAblehnen(' . $vertrag->vID . ', this.parentNode.parentNode); this.removeAttribute(\'onclick\'); return false;">
-								<img src="./pics/small/error.png" border="0" alt="Vertrag ablehnen" />
-							</a>
-						</td>
-					</tr>';        // gibt die Infos zum Vertag als Zeile aus
-        $eintrag = true;        // Ja, wir haben mindestens einen Eintrag
-    }
-
-    if (!$eintrag) {        // falls wir keinen Eintrag haben, dann gib ne entsprechende Zeile aus
-        echo '<tr><td colspan="7" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
-    }
-
-    echo '</table>';
-
-    $hat_waren = false;
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Schaut alle Plätze des Lagers duch, und schaut ob wir überhaupt was auf Lager haben
-        $temp = "Lager" . $i;        // Tempöräre variable mit dem MySQL-Spalten Namen
-        if ($ich->$temp > 0) {            // Wenn der Lagerstand der Ware > 0 ist, dann..
-            $hat_waren = true;            // ... hat der Benutzer irgendwas auf Lager
-        }
-    }
-
-    if ($hat_waren) {        // Wenn der Benutzer Waren hat, dann...
-        echo '<a href="./?p=vertrag_neu">Neuen Vertrag aufsetzen</a><br />';        // Zeige den Link für ein neues Angebot an.
-    }
-
-    /*
-        Ab hier werde ich die Kommentierung nicht mehr weiter machen, weil der nachfolgende Teil zu 99% das selbe beschreibt wie oben.
-    */
-    ?>
-    <br/>
-    <table cellspacing="0">
+    $entries = Database::getInstance()->getAllContractsByAnEquals($_SESSION['blm_user']);
+    foreach ($entries as $entry) {
+        ?>
         <tr>
-            <td><img src="/pics/big/vertraege.png" alt="Vertragsliste"/></td>
-            <td>Ihre ausgehenden Verträge
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=10"><img src="/pics/help.gif" alt="Hilfe"
-                                                               style="border: none;"/></a>
+            <td><?= $entry['ID']; ?></td>
+            <td><?= formatDate(strtotime($entry['Wann'])); ?></td>
+            <td><?= createProfileLink($entry['VonID'], $entry['VonName']); ?></td>
+            <td><?= getItemName($entry['Was']); ?></td>
+            <td><?= formatWeight($entry['Menge']); ?></td>
+            <td><?= formatCurrency($entry['Preis']); ?></td>
+            <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
+            <td>
+                <a href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>">
+                    <img src="/pics/small/ok.png" title="Vertrag annehmen" alt=""/>
+                </a>
+                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">
+                    <img src="/pics/small/error.png" title="Vertrag ablehnen" alt=""/>
+                </a>
             </td>
         </tr>
-    </table>
-    <b>Hier sehen Sie alle ausgehenden Verträge, die Ihr Gegenüber noch nicht angenommen hat.</b>
-    <table class="Liste" style="width: 600px; margin-top: 20px; margin-bottom: 10px;" cellspacing="0">
+        <?php
+    }
+
+    if (count($entries) == 0) {
+        echo '<tr><td colspan="8" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
+    }
+    ?>
+</table>
+
+
+<h2>Ausgehende Verträge</h2>
+<p> Hier sehen Sie alle ausgehenden Verträge, die Ihr Gegenüber noch nicht angenommen hat.</p>
+
+<table class="Liste Vertraege">
+    <tr>
+        <th>Nr</th>
+        <th>Datum</th>
+        <th>An</th>
+        <th>Was</th>
+        <th>Menge</th>
+        <th>Preis / kg</th>
+        <th>Gesamtpreis</th>
+        <th>Aktion</th>
+    </tr>
+    <?php
+    $entries = Database::getInstance()->getAllContractsByVonEquals($_SESSION['blm_user']);
+    foreach ($entries as $entry) {
+        ?>
         <tr>
-            <th>Nr</th>
-            <th>An</th>
-            <th>Was</th>
-            <th>Menge</th>
-            <th>Preis / kg</th>
-            <th>Gesamtpreis</th>
-            <th>Aktion</th>
+            <td><?= $entry['ID']; ?></td>
+            <td><?= formatDate(strtotime($entry['Wann'])); ?></td>
+            <td><?= createProfileLink($entry['AnID'], $entry['AnName']); ?></td>
+            <td><?= getItemName($entry['Was']); ?></td>
+            <td><?= formatWeight($entry['Menge']); ?></td>
+            <td><?= formatCurrency($entry['Preis']); ?></td>
+            <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
+            <td>
+                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">
+                    <img src="/pics/small/error.png" title="Vertrag revidieren" alt=""/>
+                </a>
+            </td>
         </tr>
         <?php
-        $sql_abfrage = "SELECT
-    *,
-    m.Name AS Empfaenger,
-    v.ID AS vID
-FROM
-    vertraege v LEFT OUTER JOIN mitglieder m ON m.ID=v.An
-WHERE
-    v.Von=" . $_SESSION['blm_user'] . "
-ORDER BY
-    v.ID;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
+    }
 
-        $eintrag = false;
+    if (count($entries) == 0) {
+        echo '<tr><td colspan="8" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
+    }
+    ?>
+</table>
 
-        while ($vertrag = mysql_fetch_object($sql_ergebnis)) {
-            if ($vertrag->Empfaenger == "")
-                $vertrag->Empfaenger = "-System-";
-
-            $nr++;
-            echo '<tr>';
-
-            echo '<td>' . $nr . '</td>
-							<td>' . htmlentities(stripslashes($vertrag->Empfaenger), ENT_QUOTES, "UTF-8") . '</td>
-							<td>' . WarenName($vertrag->Was) . '</td>
-							<td>' . $vertrag->Menge . ' kg</td>
-							<td>' . number_format($vertrag->Preis, 2, ",", ".") . ' ' . $Currency . '</td>
-							<td>' . number_format($vertrag->Preis * $vertrag->Menge, 2, ",", ".") . " " . $Currency . '</td>
-							<td>
-								<a href="./actions/vertraege.php?a=3&amp;vid=' . $vertrag->vID . '" onclick="VertragAblehnen(' . $vertrag->vID . ', this.parentNode.parentNode); this.removeAttribute(\'onclick\'); return false;">
-									<img src="./pics/small/error.png" border="0" alt="Vertrag revidieren" />
-								</a>
-							</td>
-						</tr>';
-            $eintrag = true;
-        }
-
-        if (!$eintrag) {
-            echo '<tr><td colspan="7" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
-        }
-        ?>
-    </table>
-    <?php
-}
+<a href="/?p=vertraege_neu">Neuen Vertrag aufsetzen</a>

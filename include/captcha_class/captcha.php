@@ -366,7 +366,7 @@ class Captcha
      */
     private function zufallsgenerator_starten()
     {
-        srand(time() + (microtime() * 10000));
+        srand(mt_rand());
     }
 
     /**

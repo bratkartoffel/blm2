@@ -1,12 +1,9 @@
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin_test.png" alt=""/></td>
-        <td>Administrations Bereich - gesetzte Variablen
-        </td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Testseite</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <fieldset>
     <legend>$_SERVER</legend>
@@ -17,10 +14,10 @@
     <pre><?= var_export($_SESSION, true); ?></pre>
 </fieldset>
 <fieldset style="margin-top: 20px;">
-    <legend>$ich</legend>
-    <pre><?= var_export($ich, true); ?></pre>
+    <legend>phpInfo()</legend>
+    <pre><?php phpinfo(); ?></pre>
 </fieldset>
 
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin">Zurück...</a>
 </p>

@@ -1,196 +1,148 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Genauere Aufschlüsselung eines Spezialrangs
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+$type = getOrDefault($_GET, 'type', 0);
 
-/*
-	Hier kommt eine detailiertere Seite zu den Spezialrängen in der Rangliste.
-	Dabei wird hier mit Zweidimensionalen Arrays gearbeitet, nach dem Schema:
-	
-	$Spezial[<RANG_NUMMER>][X]
-	
-	wobei "X" 2 Werte hat:
-		X=0:		Der Text, welcher angezeigt wird
-		X=1:		Die SQL-Abfrage, welche ausgeführt wird.
-*/
-$Spezial[0][0] = '<b>Der Bioladenfreak</b><br /><br />Sobald ein Spieler dessen Namen hört, läuft ihm bereits ein kalter Schauer über den Rücken. <i>"Der, der nie schläft..."</i> wird über ihn gemunkelt. Er ist immer da und kann bei jedem Angriff sofort reagieren.';
-$Spezial[0][1] = "SELECT
-    ID,
-    Name,
-    CONCAT(
-        (DATE_FORMAT(FROM_UNIXTIME(Onlinezeit), '%m')-1),
-        ' Monate, ',
-        (DATE_FORMAT(FROM_UNIXTIME(Onlinezeit), '%d')-1),
-        ' Tage, ',
-        (DATE_FORMAT(FROM_UNIXTIME(Onlinezeit), '%H')-1),
-        ' Stunden und ',
-        (DATE_FORMAT(FROM_UNIXTIME(Onlinezeit), '%i')),
-        ' Minuten'
-    ) AS Wert
-FROM
-    mitglieder
-WHERE
-    ID>1
-ORDER BY
-    Onlinezeit DESC
-LIMIT 0,5;";
+$title = null;
+$description = null;
+$loader = function () {
+};
+$formatter = function ($row) {
+};
+switch ($type) {
+    case 0:
+        $title = 'Der Bioladenfreak';
+        $description = 'Sobald ein Spieler dessen Namen hört, läuft ihm bereits ein kalter Schauer über den Rücken. <i>"Der, der nie schläft..."</i> wird über ihn gemunkelt. Er ist immer da und kann bei jedem Angriff sofort reagieren.';
+        $loader = function () {
+            return Database::getInstance()->getLeaderOnlineTime(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatDuration($row['Onlinezeit']));
+        };
+        break;
 
+    case 1:
+        $title = 'Der Pate';
+        $description = 'Vor ihm erzittern alle Spieler. Er ist der Mann ohne Gnade, und wer sich ihm in den Weg stellt, wird einfach plattgemacht. Der Pate ist ein aggresiver Spieler, welcher jedes Vergehen gegen ihn sofort zurückzahlt.';
+        $loader = function () {
+            return Database::getInstance()->getLeaderMafia(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatCurrency($row['AusgabenMafia']));
+        };
+        break;
 
-$Spezial[1][0] = '<b>Der Pate</b><br /><br />Vor ihm erzittern alle Spieler. Er ist der Mann ohne Gnade, und wer sich ihm in den Weg stellt, wird einfach plattgemacht. Der Pate ist ein aggresiver Spieler, welcher jedes Vergehen gegen ihn sofort zurückzahlt.';
-$Spezial[1][1] = "SELECT
-    m.ID,
-    m.Name,
-    s.AusgabenMafia AS Wert
-FROM
-    mitglieder m NATURAL JOIN statistik s
-WHERE
-    m.ID>1
-ORDER BY
-    s.AusgabenMafia DESC
-LIMIT 0,5;";
+    case 2:
+        $title = 'Der Händlerkönig';
+        $description = 'Dieser Spieler ist im ganzen Lande hoch angesehen. Wenn er kommt, dann kann man sicher sein, dass seine Waren von ihm begutachtet und bei gutem Preis gleich gekauft werden. Niemand weiß, wohin er die Waren bringt, aber sein Lager muss Riesengroß sein...';
+        $loader = function () {
+            return Database::getInstance()->getLeaderMarket(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatCurrency($row['AusgabenMarkt']));
+        };
+        break;
 
+    case 3:
+        $title = 'Der Baumeister';
+        $description = 'Alle Spieler erstarren beim ersten Anblick seines Imperiums. Er ist bekannt dafür, am Bau an nichts zu sparen, und so darf er die größten Gebäude des Spiels sein Eigen nennen.';
+        $loader = function () {
+            return Database::getInstance()->getLeaderBuildings(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatCurrency($row['AusgabenGebaeude']));
+        };
+        break;
 
-$Spezial[2][0] = '<b>Der Händlerkönig</b><br /><br />Dieser Spieler ist im ganzen Lande hoch angesehen. Wenn er kommt, dann kann man sicher sein, dass seine Waren von ihm begutachtet und bei gutem Preis gleich gekauft werden. Niemand weiß, wohin er die Waren bringt, aber sein Lager muss Riesengroß sein...';
-$Spezial[2][1] = "SELECT
-    m.ID,
-    m.Name,
-    s.AusgabenMarkt AS Wert
-FROM
-    mitglieder m NATURAL JOIN statistik s
-WHERE
-    m.ID>1
-ORDER BY
-    s.AusgabenMarkt DESC
-LIMIT 0,5;";
+    case 4:
+        $title = 'Das Genie';
+        $description = 'Dieser Spieler ist bekannt für seine verrückten Ideen. Dadurch ist es ihm gelangen, seine Gemüsesorten dermaßen hoch zu forschen, dass er von allen beneided wird. Seine Pflanzen sind die größten und schönsten im ganzen Land.';
+        $loader = function () {
+            return Database::getInstance()->getLeaderResearch(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatCurrency($row['AusgabenForschung']));
+        };
+        break;
 
+    case 5:
+        $title = 'Der Top-Bauer';
+        $description = 'Der Top-Bauer ist ständig auf dem Feld anzutreffen. Er kümmert sich um die Pflanzen wie um seine eigenen Kinder. Er sorgt dafür, dass es ihnen an nichts mangelt. Er züchtet die grössten Früchte und seine produzierten Mengen können ein kleines Land ernähren.';
+        $loader = function () {
+            return Database::getInstance()->getLeaderProduction(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatCurrency($row['AusgabenProduktion']));
+        };
+        break;
 
-$Spezial[3][0] = '<b>Der Baumeister</b><br /><br />Alle Spieler erstarren beim ersten Anblick seines Imperiums. Er ist bekannt dafür, am Bau an nichts zu sparen, und so darf er die größten Gebäude des Spiels sein Eigen nennen.';
-$Spezial[3][1] = "SELECT
-										m.ID,
-										m.Name,
-										(";
-for ($i = 1; $i <= ANZAHL_GEBAEUDE; $i++) {
-    $Spezial[3][1] .= "Gebaeude" . $i . "+";
+    case 6:
+        $title = 'Der Kapitalist';
+        $description = 'Der Kapitalist ist der größte Schrecken der Banken. Durch geschicktes Anlegen seines Geldes hat er schon die eine oder andere Bank in den Ruin getrieben, so munkelt man. Er ist immer auf der Suche nach den besten Zinsen und nie lange bei einer Bank...';
+        $loader = function () {
+            return Database::getInstance()->getLeaderInterest(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatCurrency($row['EinnahmenZinsen']));
+        };
+        break;
+
+    case 7:
+        $title = 'Der Mitteilunsbedürftige';
+        $description = 'Der Spieler kommt nie zu Ruhe. Immer hat er irgendwas zu schreiben dabei. Sei es auch nur eine Kleinigkeit, so muss er es trotzdem jedem mitteilen. Sein Postfach läuft über, und der Postbote kommt nicht mehr mit der Ausstellung seiner Briefe nach.';
+        $loader = function () {
+            return Database::getInstance()->getLeaderIgmSent(5);
+        };
+        $formatter = function ($row) {
+            return sprintf('<tr><td>%%d</td><td>%s</td><td>%s</td></tr>',
+                createProfileLink($row['ID'], $row['Name']),
+                formatPoints($row['IgmGesendet']));
+        };
+        break;
+
+    default:
+        redirectTo('/?p=rangliste', 112, __LINE__);
+        break;
 }
-
-$Spezial[3][1] = substr($Spezial[3][1], 0, -1) . ") AS Wert
-FROM
-    mitglieder m NATURAL JOIN gebaeude g
-WHERE
-    ID>1
-ORDER BY
-    Wert DESC
-LIMIT 0,5;";
-
-
-$Spezial[4][0] = '<b>Das Genie</b><br /><br />Dieser Spieler ist bekannt für seine verrückten Ideen. Dadurch ist es ihm gelangen, seine Gemüssorten dermaßen hoch zu forschen, dass er von allen beneided wird. Seine Pfalnzen sind die größten und schönsten im ganzen Land.';
-$Spezial[4][1] = "SELECT
-m.ID as mID,
-m.Name,
-(";
-for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-    $Spezial[4][1] .= "Forschung" . $i . "+";
-}
-
-$Spezial[4][1] = substr($Spezial[4][1], 0, -1) . ") AS Wert
-FROM
-    mitglieder m NATURAL JOIN forschung f
-WHERE
-    ID>1
-ORDER BY
-    Wert DESC
-LIMIT 0,5;";
-
-
-$Spezial[5][0] = '<b>Der Kapitalist</b><br /><br />Der Kapitalist ist der größte Schrecken der Banken. Durch geschicktes Anlegen seines Geldes hat er schon die eine oder andere Bank in den Ruin getrieben, so munkelt man. Er ist immer auf der Suche nach den besten Zinsen und nie lange bei einer Bank...';
-$Spezial[5][1] = "SELECT
-    m.ID,
-    m.Name,
-    s.EinnahmenZinsen AS Wert
-FROM
-    mitglieder m NATURAL JOIN statistik s
-WHERE
-    m.ID>1
-ORDER BY
-    s.EinnahmenZinsen DESC
-LIMIT 0,5;";
-
-
-$Spezial[6][0] = '<b>Der Mitteilungsbedürftige</b><br /><br />Der Spieler kommt nie zu Ruhe. Immer hat er irgendwas zu schreiben dabei. Sei es auch nur eine Kleinigkeit, so muss er es trotzdem jedem mitteilen. Sein Postfach läuft über, und der Postbote kommt nicht mehr mit der Ausstellung seiner Briefe nach.';
-$Spezial[6][1] = "SELECT
-    ID,
-    Name,
-    IgmGesendet AS Wert
-FROM
-    mitglieder
-WHERE
-    ID>1
-ORDER BY
-    IgmGesendet DESC
-LIMIT 0,5;";
-
-
-/*
-    Jetzt wird der gewünschte Rang aus der URL geholt, und die Daten ausgegeben...
-*/
-
-$rang = intval($_GET['rang']);
-if ($rang > sizeof($Spezial)) {
-    header("location: ../?p=rangliste&m=112");
-    die();
-}
-
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/rangliste.png" alt="Rangliste"/></td>
-        <td>Die (Spezial-)Rangliste
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=17"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
-        </td>
-    </tr>
-</table>
 
-<?= $m; ?>
-<br/>
-<div style="border: solid 1px black; width: 350px; padding: 5px; background-color: #dddddd;">
-    <?= $Spezial[$rang][0]; ?>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/rangliste.png" alt=""/>
+    <span>Die Spezial-Rangliste<?= createHelpLink(1, 17); ?></span>
 </div>
-<br/>
-<br/>
-<table class="Liste" style="width: 500px;">
+
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+
+<h2><?= $title; ?></h2>
+<p><?= $description; ?></p>
+
+<table class="Liste Rangliste">
     <tr>
-        <th style="width: 50px;">Platz</th>
-        <th style="width: 100%;">Name</th>
-        <th>Werte</th>
+        <th>Platz</th>
+        <th>Spieler</th>
+        <th>Wert</th>
     </tr>
     <?php
-    $sql_ergebnis = mysql_query($Spezial[$rang][1]) or die("<pre>" . $Spezial[$rang][1] . "<br /><br />" . mysql_error());
-    $platz = 1;
-    while ($s = mysql_fetch_object($sql_ergebnis)) {
-        if (is_numeric($s->Wert)) {
-            if (intval($s->Wert) != $s->Wert) {
-                $s->Wert = number_format($s->Wert, 2, ",", ".") . " " . $Currency;
-            }
-        }
-        ?>
-        <tr>
-            <td style="font-weight: bold;"><?= $platz; ?></td>
-            <td>
-                <a href="./?p=profil&amp;uid=<?= $s->ID; ?>"><?= htmlentities(stripslashes($s->Name), ENT_QUOTES, "UTF-8"); ?></a>
-            </td>
-            <td style="text-align: right; white-space: nowrap;"><?= $s->Wert; ?></td>
-        </tr>
-        <?php
-        $platz++;
+    $nr = 1;
+    $entries = $loader();
+    foreach ($entries as $row) {
+        echo sprintf($formatter($row), $nr++);
     }
     ?>
 </table>
-<div style="margin-top: 20px; font-size: 140%;">
-    <a href="./?p=rangliste&amp;o=<?= intval($_GET['o']); ?>&amp;highlight=<?= intval($_GET['highlight']); ?>">
-        &lt;&lt; Zurück
-    </a>
+
+<div>
+    <a href="/?p=rangliste">&lt;&lt; Zurück</a>
 </div>

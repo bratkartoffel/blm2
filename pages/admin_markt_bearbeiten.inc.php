@@ -2,19 +2,16 @@
 requireFieldSet($_GET, 'id', '/?p=admin_markt');
 $id = getOrDefault($_GET, 'id', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Marktplatz - Angebot bearbeiten</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Angebot bearbeiten</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <?php
-$entries = Database::getInstance()->getMarktplatzEntryById($id);
-requireEntryFound($entries, '/?p=admin_markt');
-$entry = $entries[0];
+$entry = Database::getInstance()->getMarktplatzEntryById($id);
+requireEntryFound($entry, '/?p=admin_markt');
 
 if (isset($_GET['von'])) $entry['Von'] = $_GET['von'];
 if (isset($_GET['ware'])) $entry['Was'] = $_GET['ware'];
@@ -24,7 +21,7 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
 <div id="FilterForm">
     <form action="/actions/admin_markt.php" method="post">
         <input type="hidden" name="a" value="2"/>
-        <input type="hidden" name="id" value="<?= sichere_ausgabe($entry['ID']); ?>"/>
+        <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <table class="Liste">
             <tr>
                 <th colspan="2">Angebot bearbeiten</th>
@@ -56,5 +53,5 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
     </form>
 </div>
 <p>
-    <a href="./?p=admin_markt">Zurück...</a>
+    <a href="/?p=admin_markt">Zurück...</a>
 </p>

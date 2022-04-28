@@ -1,83 +1,69 @@
 <?php
-/**
- * Allgemeine Auftragsverwaltung (Abbrechen der Aufräge)
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
 
-if (!IstAngemeldet()) {        // Wer nicht angemeldet ist, kann auch nichts abbrechen...
-    header("location: ../?p=index&m=102");
-    die();
+$back = getOrDefault($_GET, 'back', 'index');
+restrictSitter('NeverAllow', $back);
+
+$id = getOrDefault($_GET, 'id', 0);
+$auftrag = Database::getInstance()->getAuftragByIdAndVon($id, $_SESSION['blm_user']);
+requireEntryFound($id, '/?p=' . urlencode($back));
+
+Database::getInstance()->begin();
+switch (floor($auftrag['item'] / 100)) {
+    // Gebäude
+    case 1:
+        $moneyBack = round($auftrag['cost'] * action_retrace_rate, 2);
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+                array('Geld' => $moneyBack)) !== 1) {
+            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+        }
+        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+                array('AusgabenGebaeude' => -$moneyBack),
+                array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+        }
+        break;
+
+    // Produktion
+    case 2:
+        $duration = strtotime($auftrag['finished']) - strtotime($auftrag['created']);
+        $completed = time() - strtotime($auftrag['created']);
+        $percent = $completed / $duration;
+        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+                array('Lager' . ($auftrag['item'] % 100) => floor($auftrag['amount'] * $percent)),
+                array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
+            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+        }
+        break;
+
+    // Forschung
+    case 3:
+        $moneyBack = round($auftrag['cost'] * action_retrace_rate, 2);
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+                array('Geld' => $moneyBack)) !== 1) {
+            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+        }
+        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+                array('AusgabenForschung' => -$moneyBack),
+                array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+        }
+        break;
+
+    // unknown action
+    default:
+        redirectTo('/?p=' . urlencode($back), 112, __LINE__);
+        break;
 }
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-
-if ($_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=index&m=112");
-    die();
+if (Database::getInstance()->deleteTableEntry('auftrag', $id) === null) {
+    redirectTo('/?p=' . urlencode($back), 143, __LINE__);
 }
 
-$sql_abfrage = "SELECT
-    *
-FROM
-    auftrag
-WHERE
-    ID='" . intval($_GET['id']) . "'
-AND
-    Von='" . $_SESSION['blm_user'] . "';";
-$sql_ergebnis = mysql_query($sql_abfrage);        // Zuerst mal alle Daten
-$_SESSION['blm_queries']++;
-
-$auftrag = mysql_fetch_object($sql_ergebnis);        // des Auftrags abrufen
-
-if (!$auftrag->ID) {        // Der Auftrag konnte nicht gefunden werden
-    DisconnectDB();
-    header("location: ../?p=" . $_GET['back'] . "&m=112");
-    die();
-}
-
-if (intval($auftrag->Menge) > 0) {        // Der Auftrag ist ein Produktionsauftrag
-    $ProzentFertig = 1 - (($auftrag->Start + $auftrag->Dauer) - time()) / $auftrag->Dauer;        // Zu wieviel % ist der Auftrag schon abgeschlossen?
-
-    $sql_abfrage = "UPDATE
-    lagerhaus
-SET
-    Lager" . ($auftrag->Was - 200) . "=Lager" . ($auftrag->Was - 200) . "+" . intval($auftrag->Menge * $ProzentFertig) . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";        // Wir müssen die Teilmenge ins Lager einbuchen
-} else {
-    $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    Geld=Geld+" . ($auftrag->Kosten * AUFTRAG_RUECKZIEH_RETURN) . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";        // Wir müssen einen Teil der Kosten zurückbuchen
-}
-mysql_query($sql_abfrage);        // Führt die oben vorbereitete Query aus
-
-$_SESSION['blm_queries']++;
-
-$sql_abfrage = "DELETE FROM
-    auftrag
-WHERE
-    ID='" . intval($_GET['id']) . "'
-AND
-    Von='" . $_SESSION['blm_user'] . "';";
-mysql_query($sql_abfrage);        // Dann löschen wir den Auftrag
-$_SESSION['blm_queries']++;
-
-$affected = mysql_affected_rows();
-DisconnectDB();
-if ($affected == 0) {        // Wenn wir keinen Auftrag löschen konnten...
-    // dann stimmt was nicht
-    header("location: ../?p=" . $_GET['back'] . "&m=112");
-} else {
-    header("location: ../?p=" . $_GET['back'] . "&m=222#" . substr($_GET['back'], 0, 1) . intval($_GET['was']));
-}
+Database::getInstance()->commit();
+redirectTo('/?p=' . urlencode($back), 222, substr($back, 0, 1) . $auftrag['Was']);

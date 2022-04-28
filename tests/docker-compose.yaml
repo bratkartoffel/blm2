@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  mariadb:
+    image: mariadb:10
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: "root"
+      MARIADB_DATABASE: "blm2_test"
+      MARIADB_USER: "blm2_test"
+      MARIADB_PASSWORD: "blm2_test"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql:ro
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile-php
+    restart: unless-stopped
+    environment:
+      SMTPHOST: "localhost"
+    ports:
+      - "80:80"
+    volumes:
+      - ../:/var/www/html
+      - ./config.inc.php:/var/www/html/include/config.inc.php:ro
+      - ./last_reset.inc.php:/var/www/html/include/last_reset.inc.php

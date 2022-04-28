@@ -1,240 +1,239 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers mit seinem Account aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
+restrictSitter('NeverAllow');
 
-if (!IstAngemeldet()) {        // Wenn der Client nicht angemeldet ist, darf er auch nichts mit den Einstellungen machen :)
-    header("location: ../?p=index&m=102");
-    die();
-}
+$pwd_alt = getOrDefault($_POST, 'pwd_alt');
+$new_pw1 = getOrDefault($_POST, 'new_pw1');
+$new_pw2 = getOrDefault($_POST, 'new_pw2');
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-$ich = LoadSettings();    // Alle Daten des Users abrufen (Geld, Gebäudelevel, Forschungslevel...)
-
-if ($_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=einstellungen&m=112");
-    die();
-}
-
-switch (intval($_REQUEST['a'])) {            // Was will der Benutzer überhaupt einstellen?
-    case 1:        // Passwort ändern
-        if ($ich->Passwort != sha1($_POST['pwd_alt'])) {        // Stimmt das alte Passwort welches er eingegeben hat? Wenn nicht, dann Abbruch
-            DisconnectDB();
-            header("location: ../?p=einstellungen&m=121");
-            die();
+switch (getOrDefault($_POST, 'a', 0)) {
+    // Change password
+    case 1:
+        if ($new_pw1 != $new_pw2) {
+            redirectTo('/?p=einstellungen', 105, __LINE__);
+        }
+        if (strlen($new_pw1) < password_min_len) {
+            redirectTo('/?p=einstellungen', 147, __LINE__);
+        }
+        if (!Database::getInstance()->existsTableEntry('mitglieder', array('ID' => $_SESSION['blm_user'], 'Passwort' => sha1($pwd_alt)))) {
+            redirectTo('/?p=einstellungen', 121, __LINE__);
+        }
+        $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+        if ($passwords === null) {
+            redirectTo('/?p=einstellungen', 112, __LINE__);
+        }
+        if ($passwords['Sitter'] == sha1($new_pw1)) {
+            redirectTo('/?p=einstellungen', 152, __LINE__);
         }
 
-        if (sha1($_POST['new_pw1']) != sha1($_POST['new_pw2']) || $_POST['new_pw1'] == "") {        // Hat der Benutzer 2x das gleiche Kennwort eingegeben? Wenn nicht, dann Abbruch
-            DisconnectDB();
-            header("location: ../?p=einstellungen&m=105");
-            die();
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+                array('Passwort' => sha1($new_pw1))) === null) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+        Database::getInstance()->commit();
+        redirectTo('/?p=einstellungen', 219);
+        break;
+
+    // Reset account
+    case 2:
+        if (!Database::getInstance()->existsTableEntry('mitglieder', array('ID' => $_SESSION['blm_user'], 'Passwort' => sha1($pwd_alt)))) {
+            redirectTo('/?p=einstellungen', 121, __LINE__);
+        }
+        Database::getInstance()->begin();
+        $resetStatus = resetAccount($_SESSION['blm_user']);
+        if ($resetStatus !== null) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=einstellungen&rs=' . $resetStatus, 151, __LINE__);
+        } else {
+            Database::getInstance()->commit();
+            redirectTo('/?p=einstellungen', 220);
+        }
+        break;
+
+    // Delete account
+    case 3:
+        if (!Database::getInstance()->existsTableEntry('mitglieder', array('ID' => $_SESSION['blm_user'], 'Passwort' => sha1($pwd_alt)))) {
+            redirectTo('/?p=einstellungen', 121, __LINE__);
+        }
+        Database::getInstance()->begin();
+        $status = deleteAccount($_SESSION['blm_user']);
+        if ($status !== null) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=einstellungen', 143, __LINE__ . '_' . $status);
+        }
+        Database::getInstance()->commit();
+        session_destroy();
+        redirectTo('/?p=index', 205);
+        break;
+
+    // Change description
+    case 4:
+        $beschreibung = getOrDefault($_POST, 'beschreibung');
+        if (strlen($beschreibung) == 0) $beschreibung = null;
+
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+                array('Beschreibung' => $beschreibung)) === null) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=einstellungen&beschreibung=' . urlencode($beschreibung), 143, __LINE__);
+        }
+        Database::getInstance()->commit();
+        redirectTo('/?p=einstellungen', 206);
+        break;
+
+    // Update profile picture
+    case 5:
+        if (filesize($_FILES['bild']['tmp_name']) > max_profile_image_size) {
+            redirectTo('/?p=einstellungen', 103, __LINE__);
         }
 
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    Passwort='" . sha1($_POST['new_pw1']) . "'
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // Das neue Kennwort in die DB schreiben.
-        $_SESSION['blm_queries']++;
-
-        DisconnectDB();
-        header("location: ../?p=einstellungen&m=219#Passwort");
-        die();
-    case 2:        // Account resetten
-        if ($ich->Passwort != sha1($_POST['pwd_reset'])) {    // Stimmt das alte Passwort welches er eingegeben hat? Wenn nicht, dann Abbruch
-            DisconnectDB();
-            header("location: ../?p=einstellungen&m=121");
-            die();
+        @unlink(sprintf('../pics/spieler/%s.jpg', $_SESSION['blm_user']));
+        @unlink(sprintf('../pics/spieler/%s.png', $_SESSION['blm_user']));
+        @unlink(sprintf('../pics/spieler/%s.gif', $_SESSION['blm_user']));
+        if ($_FILES['bild']['size'] == 0) {
+            redirectTo('/?p=einstellungen', 209);
         }
 
-        ResetAccount($_SESSION['blm_user'], $Start);        // Account resetten
-
-        DisconnectDB();
-        header("location: ../?p=einstellungen&m=220#Reset");
-        die();
-    case 3:        // Account löschen
-        if ($ich->Passwort != sha1($_POST['pwd_delete'])) {    // Stimmt das alte Passwort welches er eingegeben hat? Wenn nicht, dann Abbruch
-            DisconnectDB();
-            header("location: ../?p=einstellungen&m=121");
-            die();
-        }
-
-        Database::getInstance()->deleteTableEntry('mitglieder', $_SESSION['blm_user']);        // Account löschen. Schade...
-
-        DisconnectDB();
-        header("location: ./logout.php?deleted=1");
-        die();
-    case 4:        // Beschreibung ändern
-        $beschreibung = $_POST['beschreibung'];        // Beschreibungstext abrufen
-
-        if ($beschreibung == "")        // Hat er überhaupt eine Beschreibung eingegeben?
-            $beschreibung = "NULL";        // NEIN: Datenbankfeld auf NULL setzen
-        else
-            $beschreibung = "'" . mysql_real_escape_string($beschreibung) . "'";    // Ja: Beschreibung escapen (Schutz vor SQL-Injection)
-
-        $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    Beschreibung=" . $beschreibung . "
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);        // neue Beschreibung in die Datenbank hauen
-        $_SESSION['blm_queries']++;
-
-        DisconnectDB();
-        header("location: ../?p=einstellungen&m=206#Beschreibung");
-        die();
-    case 5:        // Profilbild hochladen
-        DisconnectDB();        // Erst mal die Verbindung mit der Datenbank trennen, brauchen wir nicht mehr
-
-        if ($_FILES['bild']['size'] == 0) {    // Hat er überhaupt was hochgeladen? Wenn nicht, dann...
-            @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".jpg");        //...
-            @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".png");        // lösche alle bisherigen Bilder, welche er haben könnte.
-            @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".gif");        //
-            header("location: ../?p=einstellungen&m=209");        // Somit wären wir fertig...
-            die();
-        }
-
-        if (filesize($_FILES['bild']['tmp_name']) > BILD_GROESE_MAXIMAL) {        // Wenn das Bild größer als 64K ist, dann abbrechen!
-            header("location: ../?p=einstellungen&m=103");
-            die();
-        }
-
-        $typ = $_FILES['bild']['type'];        // Welchen Typ hat das (vielleicht)-Bild?
-
+        $typ = $_FILES['bild']['type'];
+        $suffix = 'dat';
         switch ($typ) {
-            case "image/jpeg":    //
-            case "image/jpg":        // Das Bild ist ein JPG, ist OK
-            case "image/pjpeg":    //
-                $suffix = "jpg";
+            case 'image/jpeg':
+            case 'image/jpg':
+                $suffix = 'jpg';
                 break;
-            case "image/gif":        // Ein GIF ist auch erlaubt
-                $suffix = "gif";
+            case 'image/gif':
+                $suffix = 'gif';
                 break;
-            case "image/png":        // PNG darf er auch
-                $suffix = "png";
+            case 'image/png':
+                $suffix = 'png';
                 break;
-            default:                        // Alles andere ist verboten!
-                header("location: ../?p=einstellungen&m=107");
-                die();
+            default:
+                redirectTo('/?p=einstellungen', 107, __LINE__);
+                break;
+        }
+        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/spieler/%s.%s', $_SESSION['blm_user'], $suffix));
+        redirectTo('/?p=einstellungen', 210);
+        break;
+
+    // Change email address
+    case 6:
+        $email = getOrDefault($_POST, 'email');
+        $confirm = getOrDefault($_POST, 'confirm');
+
+        if ($email != $confirm) {
+            redirectTo('/?p=einstellungen&email=' . urlencode($email), 149, __LINE__);
         }
 
-        @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".jpg");        // Wenn er hier ankommt, dann will er wirklich ein Bild hochladen
-        @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".png");        // und da jeder Benutzer nur ein Bild haben darf,
-        @unlink("../pics/spieler/" . $_SESSION['blm_user'] . ".gif");        // braucht er das alte eh nicht mehr!
+        $email_activation_code = createRandomCode();
+        $email_activation_link = base_url . '/actions/activate.php?email=' . urlencode($email) . '&amp;code=' . $email_activation_code;
 
-        move_uploaded_file($_FILES['bild']['tmp_name'], "../pics/spieler/" . $_SESSION['blm_user'] . "." . $suffix);    // Die hochgeladene Datei in das Profilbilderverzeichnis schieben
-        chmod("../pics/spieler/" . $_SESSION['blm_user'] . "." . $suffix, 0766);        // Die Rechte des Bildes ändern (TODO: Muss das sein?)
-
-        header("location: ../?p=einstellungen&m=210#Bild"); // Alles erledigt :)
-        die();
-    case 6:        // EMail-Adresse ändern
-        $email = $_POST['email'];
-        if (!CheckEMail($email)) {
-            header("location: ../?p=einstellungen&m=134");
-            die();
+        if (!sendMail($email, game_title . ': Aktivierung Ihres Accounts',
+            '<html lang="de"><body><h3>Willkommen beim Bioladenmanager 2,</h3>
+    <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
+    <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
+    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . admin_email . '</p>
+    Grüsse ' . admin_name . '</body></html>'
+        )) {
+            redirectTo(sprintf('/?p=einstellungen&email=%s', $email), 150, __LINE__);
         }
 
-        $sql_abfrage = "UPDATE mitglieder SET EMail='" . $email . "' WHERE ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+                array('EMail' => $email, 'EMailAct' => $email_activation_code)) === null) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+        Database::getInstance()->commit();
+        session_destroy();
+        redirectTo('/?p=index', 238);
+        break;
 
-        header("location: ../?p=einstellungen&m=238#EMail");
-        die();
-    case 7:        // Sitterrechte bearbeiten
-        $aktiviert = intval($_POST['aktiviert']);
+    // Update sitter rights
+    case 7:
+        $aktiviert = getOrDefault($_POST, 'aktiviert', 0);
+        $pw_sitter = getOrDefault($_POST, 'pw_sitter');
+        $gebaeude = getOrDefault($_POST, 'gebaeude', 0);
+        $forschung = getOrDefault($_POST, 'forschung', 0);
+        $produktion = getOrDefault($_POST, 'produktion', 0);
+        $nachrichten = getOrDefault($_POST, 'nachrichten', 0);
+        $gruppe = getOrDefault($_POST, 'gruppe', 0);
+        $vertraege = getOrDefault($_POST, 'vertraege', 0);
+        $marktplatz = getOrDefault($_POST, 'marktplatz', 0);
+        $bioladen = getOrDefault($_POST, 'bioladen', 0);
+        $bank = getOrDefault($_POST, 'bank', 0);
 
-        $sql_abfrage = "SELECT
-    Passwort
-FROM
-    sitter
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-
-        $alt = mysql_fetch_object($sql_ergebnis);
-
-
-        $sql_abfrage = "DELETE FROM
-    sitter
-WHERE
-    ID='" . $_SESSION['blm_user'] . "';";
-        mysql_query($sql_abfrage);
-        if ($aktiviert == 0) {
-            $_SESSION['blm_queries']++;
-
-            DisconnectDB();
-            header("location: ../?p=einstellungen&m=239");
-            die();
+        Database::getInstance()->begin();
+        if (!$aktiviert) {
+            if (Database::getInstance()->deleteTableEntryWhere('sitter', array('user_id' => $_SESSION['blm_user'])) == 0) {
+                redirectTo('/?p=einstellungen', 143, __LINE__);
+            }
+            Database::getInstance()->commit();
+            redirectTo('/?p=einstellungen', 239);
         }
 
-        $pw = $_POST['pw_sitter'];
+        $fields = array(
+            'Gebaeude' => $gebaeude,
+            'Forschung' => $forschung,
+            'Produktion' => $produktion,
+            'Nachrichten' => $nachrichten,
+            'Gruppe' => $gruppe,
+            'Vertraege' => $vertraege,
+            'Marktplatz' => $marktplatz,
+            'Bioladen' => $bioladen,
+            'Bank' => $bank
+        );
+        if (Database::getInstance()->existsTableEntry('sitter', array('user_id' => $_SESSION['blm_user']))) {
+            if (strlen($pw_sitter) > 0) {
+                $fields['Passwort'] = sha1($pw_sitter);
+                if (strlen($pw_sitter) < password_min_len) {
+                    redirectTo('/?p=einstellungen', 147, __LINE__);
+                }
+                $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+                if ($passwords === null) {
+                    redirectTo('/?p=einstellungen', 112, __LINE__);
+                }
+                if ($passwords['Benutzer'] == $fields['Passwort']) {
+                    redirectTo('/?p=einstellungen', 152, __LINE__);
+                }
+            }
+            if (Database::getInstance()->updateTableEntry('sitter', null, $fields, array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=einstellungen', 142, __LINE__);
+            }
+        } else {
+            $fields['user_id'] = $_SESSION['blm_user'];
+            $fields['Passwort'] = sha1($pw_sitter);
 
-        if ($pw != $alt->Passwort) {
-            if ($pw != "") {
-                $pw = sha1($pw);
-            } else {
-                DisconnectDB();
-                header("location: ../?p=einstellungen&m=239");
-                die();
+            if (strlen($pw_sitter) < password_min_len) {
+                redirectTo('/?p=einstellungen', 147, __LINE__);
+            }
+
+            $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+            if ($passwords === null) {
+                redirectTo('/?p=einstellungen', 112, __LINE__);
+            }
+            if ($passwords['Benutzer'] == $fields['Passwort']) {
+                redirectTo('/?p=einstellungen', 152, __LINE__);
+            }
+            if (Database::getInstance()->createTableEntry('sitter', $fields) == 0) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=einstellungen', 141, __LINE__);
             }
         }
-        $gebaeude = intval($_POST['gebaeude']);
-        $forschung = intval($_POST['forschung']);
-        $produktion = intval($_POST['produktion']);
-        $mafia = intval($_POST['mafia']);
-        $nachrichten = intval($_POST['nachrichten']);
-        $gruppe = intval($_POST['gruppe']);
-        $vertraege = intval($_POST['vertraege']);
-        $marktplatz = intval($_POST['marktplatz']);
-        $bioladen = intval($_POST['bioladen']);
-        $bank = intval($_POST['bank']);
 
-        $sql_abfrage = "INSERT INTO
-    sitter
-(
-    ID,
-    Passwort,
-    Gebaeude,
-    Forschung,
-    Produktion,
-    Mafia,
-    Nachrichten,
-    Gruppe,
-    Vertraege,
-    Marktplatz,
-    Bioladen,
-    Bank
-)
-VALUES
-(
-    '" . $_SESSION['blm_user'] . "',
-    '" . $pw . "',
-    '" . $gebaeude . "',
-    '" . $forschung . "',
-    '" . $produktion . "',
-    '" . $mafia . "',
-    '" . $nachrichten . "',
-    '" . $gruppe . "',
-    '" . $vertraege . "',
-    '" . $marktplatz . "',
-    '" . $bioladen . "',
-    '" . $bank . "'
-);";
-        mysql_query($sql_abfrage) or die(mysql_error());
-        $_SESSION['blm_queries']++;
+        Database::getInstance()->commit();
+        redirectTo('/?p=einstellungen', 240);
+        break;
 
-        header("location: ../?p=einstellungen&m=240#Sitter");
+    // unknown action
+    default:
+        redirectTo('/?p=einstellungen', 112, __LINE__);
+        break;
 }

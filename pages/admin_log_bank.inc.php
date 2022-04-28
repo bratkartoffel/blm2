@@ -2,20 +2,18 @@
 $wer = getOrDefault($_GET, 'wer');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Logbücher - Bank</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Bank Logbuch</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="./" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="admin_log_bank"/>
         <label for="wer">Wer:</label>
-        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>
@@ -25,22 +23,22 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Wer</th>
         <th>Wann</th>
         <th>Wieviel</th>
-        <th>Aktion</th>
+        <th>Wohin</th>
     </tr>
     <?php
     $filter = empty($wer) ? "%" : $wer;
     $entriesCount = Database::getInstance()->getAdminBankLogCount($filter);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getAdminBankLogEntries($filter, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminBankLogEntries($filter, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= createProfileLink($row['WerId'], $row['Wer']); ?></td>
-            <td><?= date("d.m.Y H:i:s", $row['WannTs']); ?></td>
-            <td><?= formatCurrency($row['Wieviel']); ?></td>
-            <td><?= sichere_ausgabe($row['Aktion']); ?></td>
+            <td><?= createProfileLink($row['playerId'], $row['playerName']); ?></td>
+            <td><?= formatDateTime(strtotime($row['created'])); ?></td>
+            <td><?= formatCurrency($row['amount']); ?></td>
+            <td><?= $row['target']; ?></td>
         </tr>
         <?php
     }
@@ -49,7 +47,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_log_bank&amp;wer=' . sichere_ausgabe($wer), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_log_bank&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
-    <a href="./?p=admin">Zurück...</a>
+    <a href="/?p=admin">Zurück...</a>
 </p>

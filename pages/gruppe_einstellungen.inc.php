@@ -1,172 +1,116 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Verwaltung der Einstellungen der Gruppe
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+restrictSitter('Gruppe');
+
+$rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user']);
+requireEntryFound($rights, '/?p=gruppe');
+
+$hasOneRight = false;
 ?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/gruppe.png" alt="Gruppe"/></td>
-            <td>Gruppeneinstellungen
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="/pics/help.gif" alt="Hilfe"
-                                                               style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
-<?php
-if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
-    ?>
-
-    <?= $m; ?>
-
-    <?php
-    $sql_abfrage = "SELECT
-    *
-FROM
-    gruppe
-WHERE
-    ID='" . intval($ich->Gruppe) . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $gruppe = mysql_fetch_object($sql_ergebnis);
-    ?>
-    <div style="width: 700px; text-align: center; margin-bottom: 5px;">
-        <a href="./?p=gruppe">Board</a> |
-        <a href="./?p=gruppe_mitgliederverwaltung">Mitgliederverwaltung</a>
-        <?php
-        if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-            echo ' | <u><b>Einstellungen</b></u>';
-        }
-
-        if ($ich->Rechte->Diplomatie) {
-            echo ' | <a href="./?p=gruppe_diplomatie">Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</a>';
-        }
-        ?>
-        | <a href="./?p=gruppe_kasse">Gruppenkasse</a>
-        | <a href="./?p=gruppe_logbuch">Logbuch</a>
+    <div id="SeitenUeberschrift">
+        <img src="/pics/big/gruppe.png" alt=""/>
+        <span>Gruppe - Einstellungen<?= createHelpLink(1, 23); ?></span>
     </div>
 
-    <?php
-    if ($ich->Rechte->GruppeBild) {
-        ?>
-        <form action="actions/gruppe.php" method="post" enctype="multipart/form-data">
-            <table class="Liste" style="width: 600px;" cellspacing="0">
-                <tr>
-                    <th>Bild bearbeiten</th>
-                </tr>
-                <tr>
-                    <td style="text-align: center;">
-                        <i>
-                            <img src="/pics/gruppe.php?id=<?= $gruppe->ID; ?>"
-                                 alt="Bisher wurde kein Bild hochgeladen..."/>
-                        </i>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="hidden" name="a" value="8"/>
-                        <input type="file" name="bild"/>
-                        <input type="submit" value="Hochladen" style="margin-left: 20px;"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <?php
-    }
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+<?= createGroupNaviation(2); ?>
 
-    if ($ich->Rechte->GruppeBeschreibung) {
-        ?>
-        <form action="actions/gruppe.php" method="post">
-            <table class="Liste" style="width: 600px; margin-top: 30px;" cellspacing="0">
-                <tr>
-                    <th>Beschreibung bearbeiten</th>
-                </tr>
-                <?php
-                if ($gruppe->Beschreibung != "") {
-                    ?>
-                    <tr>
-                        <td>
-                            <u><i><b>Aktuell:</b></i></u><br/>
-                            <br/>
-                            <?php
-                            echo ReplaceBBCode($gruppe->Beschreibung);
-                            ?>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                ?>
-                <tr>
-                    <td style="text-align: center;">
-                        <input type="hidden" name="a" value="9"/>
-                        <textarea name="beschreibung" cols="60"
-                                  rows="12"><?= htmlentities(stripslashes($gruppe->Beschreibung), ENT_QUOTES, "UTF-8"); ?></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;">
-                        <input type="submit" value="Speichern"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <?php
-    }
-
-    if ($ich->Rechte->GruppePasswort) {
-        ?>
-        <form action="actions/gruppe.php" method="post">
-            <input type="hidden" name="a" value="10"/>
-            <table class="Liste" style="width: 600px; margin-top: 30px;" cellspacing="0">
-                <tr>
-                    <th colspan="2">Beitrittspasswort ändern</th>
-                </tr>
-                <tr>
-                    <td>Passwort:</td>
-                    <td><input type="password" name="pwd_1"/></td>
-                </tr>
-                <tr>
-                    <td>Bestätigung:</td>
-                    <td><input type="password" name="pwd_2"/></td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;" colspan="2">
-                        <input type="submit" value="Speichern"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <?php
-    }
-
-    if ($ich->Rechte->GruppeLoeschen) {
-        ?>
-        <form action="actions/gruppe.php" method="post">
+<?php
+if ($rights['edit_image']) {
+    $hasOneRight = true;
+    ?>
+    <div class="form GroupSetting GroupImage">
+        <form action="/actions/gruppe.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="a" value="11"/>
-            <table class="Liste" style="width: 600px; margin-top: 30px;" cellspacing="0">
-                <tr>
-                    <th>Gruppe löschen</th>
-                </tr>
-                <tr>
-                    <td>
-                        <em>ACHTUNG!</em><br/>
-                        <b>Dieser Schritt kann nicht rückgängig gemacht werden!</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;" colspan="2">
-                        <input type="submit" value="Gruppe löschen"
-                               onclick="return confirm('Wollen Sie die Gruppe wirklich löschen?');"/>
-                    </td>
-                </tr>
-            </table>
+            <header>Gruppenbild ändern</header>
+            <div>
+                Um das aktuelle Bild zu löschen, einfach den<br/>
+                Speichern-Button drücken, ohne ein Bild auszuwählen.
+            </div>
+            <div>
+                <input type="file" name="bild" accept="image/*"/>
+            </div>
+            <div>
+                <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            </div>
         </form>
-        <?php
-    }
+    </div>
+    <?php
+}
+
+if ($rights['edit_description']) {
+    $hasOneRight = true;
+    $data = Database::getInstance()->getGroupInformationById($rights['group_id']);
+    $beschreibung = getOrDefault($_GET, 'beschreibung', $data['Beschreibung']);
+    ?>
+    <div class="form GroupSetting GroupDescription">
+        <form action="/actions/gruppe.php" method="post" name="form_beschreibung">
+            <input type="hidden" name="a" value="12"/>
+            <header>Beschreibung ändern</header>
+            <div>
+            <textarea id="beschreibung" maxlength="4096" name="beschreibung" cols="50" rows="15"
+                      onkeyup="ZeichenUebrig(this, document.form_beschreibung.getElementsByTagName('span')[0]);"><?= escapeForOutput($beschreibung, false); ?></textarea>
+            </div>
+            <div>
+                Noch <span>X</span> Zeichen übrig
+            </div>
+            <div>
+                <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            </div>
+        </form>
+    </div>
+    <script>ZeichenUebrig(document.getElementById('beschreibung'), document.form_beschreibung.getElementsByTagName('span')[0]);</script>
+    <?php
+}
+
+if ($rights['edit_password']) {
+    $hasOneRight = true;
+    ?>
+    <div class="form GroupSetting GroupPassword">
+        <form action="/actions/gruppe.php" method="post">
+            <input type="hidden" name="a" value="13"/>
+            <header>Passwort ändern</header>
+            <div>
+                <label for="new_pw1">Neues Passwort:</label>
+                <input id="new_pw1" type="password" name="new_pw1" size="20" required
+                       minlength="<?= password_min_len; ?>"/>
+            </div>
+            <div>
+                <label for="new_pw2">Bestätigen:</label>
+                <input id="new_pw2" type="password" name="new_pw2" size="20" required
+                       minlength="<?= password_min_len; ?>"/>
+            </div>
+            <div>
+                <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            </div>
+        </form>
+    </div>
+    <?php
+}
+
+if ($rights['group_delete'] || Database::getInstance()->getGroupMemberCountById($rights['group_id']) == 1) {
+    $hasOneRight = true;
+    ?>
+    <div class="form GroupSetting GroupDelete">
+        <form action="/actions/gruppe.php" method="post">
+            <input type="hidden" name="a" value="14"/>
+            <input type="hidden" name="token" value="<?= $_SESSION['blm_xsrf_token']; ?>"/>
+            <header>Gruppe löschen</header>
+            <div class="Warning">
+                DIESER SCHRITT KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!<br/>
+                Bitte mit der Gruppen-Nummer (<?= $rights['group_id']; ?>) bestätigen.
+            </div>
+            <div>
+                <label for="confirm">Bestätigen:</label>
+                <input id="confirm" type="text" name="confirm"/>
+            </div>
+            <div>
+                <input type="submit" value="Ausführen" onclick="return submit(this);"/>
+            </div>
+        </form>
+    </div>
+    <?php
+}
+
+if (!$hasOneRight) {
+    echo '<h3>Sie haben keine Rechte für diese Seite</h3>';
 }

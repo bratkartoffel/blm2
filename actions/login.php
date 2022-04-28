@@ -1,6 +1,9 @@
 <?php
+require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
+
+ob_start();
 
 $name = getOrDefault($_POST, 'name');
 $pwd = sha1(getOrDefault($_POST, 'pwd'));
@@ -10,8 +13,8 @@ session_reset();
 session_regenerate_id();
 
 // check if game is locked
-if (CheckGameLock()) {
-    redirectTo('/?p=anmelden', 112);
+if (isGameLocked()) {
+    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 999, __LINE__);
 }
 
 // load player data
@@ -19,22 +22,25 @@ $player = Database::getInstance()->getPlayerDataByNameAndPassword($name, $pwd);
 
 // check if account found
 if ($player == null) {
-    redirectTo('/?p=anmelden', 108);
+    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 108, __LINE__);
 }
 
 // check if account is locked
 if ($player['Gesperrt'] == 1) {
-    redirectTo('/?p=anmelden', 139);
+    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 139, __LINE__);
 }
 
 // check if account is activated
 if ($player['EMailAct'] != null) {
-    redirectTo('/?p=anmelden', 135);
+    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 135, __LINE__);
 }
 
+Database::getInstance()->begin();
 $_SESSION['blm_user'] = intval($player['ID']);
 $_SESSION['blm_login'] = time();
+$_SESSION['blm_lastAction'] = time();
 $_SESSION['blm_queries'] = 0;
+$_SESSION['blm_xsrf_token'] = createRandomCode();
 // check if it's a sitter login
 if ($player['IstSitter'] == 1) {
     $_SESSION['blm_sitter'] = true;
@@ -42,19 +48,25 @@ if ($player['IstSitter'] == 1) {
 } else {
     $_SESSION['blm_sitter'] = false;
     $_SESSION['blm_admin'] = ($player['Admin'] == 1);
-    Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('LastLogin' => time(), 'LastAction' => time()));
+    if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+            array('LastLogin' => date('Y-m-d H:i:s'), 'LastAction' => date('Y-m-d H:i:s'))) !== 1) {
+        Database::getInstance()->rollBack();
+        session_destroy();
+        redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 142, __LINE__);
+    }
 }
 
-$inserted = Database::getInstance()->createTableEntry('log_login',
-    array(
-        'IP' => $_SERVER['REMOTE_ADDR'],
-        'Wer' => $_SESSION['blm_user'],
-        'Sitter' => $_SESSION['blm_sitter'] ? 1 : 0
-    ));
-
-if ($inserted == 0) {
+if (Database::getInstance()->createTableEntry('log_login', array(
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'playerId' => $_SESSION['blm_user'],
+        'playerName' => $player['Name'],
+        'success' => 1,
+        'sitter' => $_SESSION['blm_sitter'] ? 1 : 0
+    )) !== 1) {
+    Database::getInstance()->rollBack();
     session_destroy();
-    redirectTo('/?p=index', 141);
-} else {
-    redirectTo('/?p=index', 202);
+    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 141, __LINE__);
 }
+
+Database::getInstance()->commit();
+redirectTo('/?p=index', 202);

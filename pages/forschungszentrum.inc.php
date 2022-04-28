@@ -1,119 +1,93 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite des Forschungszentrums
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-include("include/kosten_dauer.inc.php");
+restrictSitter('Forschung');
+
+$data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel($_SESSION['blm_user']);
+if ($data['Gebaeude2'] == 0) {
+    redirectTo('/?p=index', 145, __LINE__);
+}
+
+$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'], 300, 400);
+$auftraege = array();
+for ($i = 0; $i < count($auftraege_db); $i++) {
+    $auftraege[$auftraege_db[$i]['item'] % 100] = $auftraege_db[$i];
+}
+
 ?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/forschungszentrum.png" alt="Forschungszentrum"/></td>
-            <td>Das Forschungszentrum
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=6"><img src="/pics/help.gif" alt="Hilfe"
-                                                              style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
+    <div id="SeitenUeberschrift">
+        <img src="/pics/big/forschungszentrum.png" alt=""/>
+        <span>Forschungszentrum<?= createHelpLink(1, 6); ?></span>
+    </div>
+
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+
+    <p>
+        Hier können Sie das entsprechende Gemüse erforschen bzw. verbessern.<br/>
+        Stufe 1 ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die produzierte Menge.<br/>
+    </p>
+
 <?php
-if ($_SESSION['blm_sitter'] && !$ich->Sitter->Forschung) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
+for ($i = 1; $i <= count_wares; $i++) {
+    if (!researchRequirementsMet($i, $data['Gebaeude1'], $data['Gebaeude2'])) continue;
 
-    echo $m;
-
-    if ($ich->Gebaeude2 == 0) {
-        echo '<span class="MeldungR" style="font-size: 12pt;">Sie müssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten können!</span>';
-    } else {
-        $sql_abfrage = "SELECT
-    ID,
-    Was,
-    Start,
-    Dauer,
-    Kosten
-FROM
-    auftrag
-WHERE
-    Von='" . $_SESSION['blm_user'] . "'
-AND
-    Was > 300
-AND
-    Was < 400;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $auftraege = new stdClass();
-        while ($auftrag = mysql_fetch_object($sql_ergebnis)) {
-            $temp = "a_" . intval($auftrag->Was);
-
-            $auftraege->$temp = $auftrag;
-        }
-        ?>
-        <b>
-            Hier können Sie das entsprechende Gemüse erforschen bzw. verbessern.<br/>
-            Stufe 1 ermöglicht den Anbau des Gemüses, und jede weitere Stufe
-            erhöht die Menge, die produziert wird.<br/>
-        </b>
-        <br/>
-        <?php
-        for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-            $temp = "Forschung" . $i;
-            $forschung_dauer = $$temp->Dauer;
-            $forschung_kosten = $$temp->Kosten;
-            $forschung_punkte = $$temp->Punkte;
-
-            if ($ich->Gebaeude1 >= intval($i * 1.5) && $ich->Gebaeude2 >= intval($i * 1.5)) {
+    $researchData = calculateResearchDataForPlayer($i, $data['Gebaeude2'], $data['Forschung' . $i]);
+    $researchDataNext = calculateResearchDataForPlayer($i, $data['Gebaeude2'], $data['Forschung' . $i], 2);
+    $researchAttribute = "Forschung" . $i;
+    ?>
+    <div class="form Research">
+        <header id="f<?= $i; ?>">
+            <?= getItemName($i); ?> (Stufe <?= $data[$researchAttribute]; ?>)
+        </header>
+        <img src="/pics/forschung/<?= $i; ?>.jpg" alt=""/>
+        <div class="ResearchDaten">
+            <?php
+            if (!array_key_exists($i, $auftraege)) {
                 ?>
-                <table class="Liste" cellspacing="0" style="margin-bottom: 20px;">
-                    <tr>
-                        <th colspan="3"><a id="f<?= $i; ?>"></a><?= WarenName($i); ?>, aktuell Stufe <?= $ich->$temp; ?>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td style="width: 170px;">
-                            <img src="/pics/forschung/<?= BildVonWare($i); ?>" alt="<?= WarenName($i); ?>"/>
-                        </td>
-                        <td>
-                            <b><u>Für Stufe <?= (1 + $ich->$temp); ?>:</u></b>
-                            <p>
-                                Dauer:
-                                <b><?= (date("d", $forschung_dauer - 3600) - 1) . " Tage " . date("H:i:s", $forschung_dauer - 3600); ?>
-                                    min</b><br/>
-                                Kosten:
-                                <b><?= number_format($forschung_kosten, 2, ',', '.') . " " . $Currency; ?></b><br/>
-                                Punkte: <b><?= round($forschung_punkte); ?></b>
-                            </p>
-                        </td>
-                        <td style="width: 240px;">
-                            <div align="center">
-                                <form action="actions/forschungszentrum.php" method="post">
-                                    <input type="hidden" name="was" value="<?= $i; ?>"/>
-                                    <?php
-                                    $temp = "a_" . (300 + $i);
-
-                                    if (property_exists($auftraege, $temp)) {        // Gibt es schon einen derartigen Auftrag?
-                                        echo '<input type="submit" name="anbauen" disabled="disabled" value="Forschen"/><br />';
-                                        echo '<i>Es läuft bereits eine Forschung!</i><br />
-										(noch ' . (date("d", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) - 1) . " Tage " . date("H:i:s", $auftraege->$temp->Start + $auftraege->$temp->Dauer - time() - 3600) . ' verbleibend.)<br />
-										<a onclick="return confirm(\'Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen  nur ' . (AUFTRAG_RUECKZIEH_RETURN * 100) . '% (' . number_format($forschung_kosten * AUFTRAG_RUECKZIEH_RETURN, 2, ",", ".") . ' ' . $Currency . ') der Kosten zurück erstattet!\');" href="actions/auftrag.php?a=1&amp;id=' . $auftraege->$temp->ID . '&amp;back=forschungszentrum&amp;was=' . $i . '">Abbrechen</a>';
-                                    } else {                        // Nein:
-                                        if ($ich->Geld >= $forschung_kosten) {            //Habe ich genügend Geld? Wenn ja, dann...
-                                            echo '<input type="submit" name="anbauen" value="Forschen"  onclick="document.forms[' . ($i - 1) . '].submit(); this.disabled=\'disabled\'; this.value=\'Bitte warten...\'; return false;" />';
-                                        } else {        // ... ansonsten:
-                                            echo '<input type="submit" name="anbauen" disabled="disabled" value="Forschen"/><br />';
-                                            echo '<i>Sie haben nicht genügend Geld!</i>';
-                                        }
-                                    }
-                                    ?>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <span>Für Stufe <?= $data[$researchAttribute] + 1; ?>:</span>
+                <div>Dauer: <?= formatDuration($researchData['Dauer']); ?></div>
+                <div>Kosten <?= formatCurrency($researchData['Kosten']); ?></div>
+                <div>Punkte: <?= formatPoints($researchData['Punkte']); ?></div>
+                <?php
+            } else {
+                ?>
+                <span>Für Stufe <?= $data[$researchAttribute] + 2; ?>:</span>
+                <div>Dauer: <?= formatDuration($researchDataNext['Dauer']); ?></div>
+                <div>Kosten <?= formatCurrency($researchDataNext['Kosten']); ?></div>
+                <div>Punkte: <?= formatPoints($researchDataNext['Punkte']); ?></div>
                 <?php
             }
-        }
-    }
+            ?>
+        </div>
+        <div class="Action">
+            <form action="/actions/forschungszentrum.php" method="post">
+                <input type="hidden" name="was" value="<?= $i; ?>"/>
+                <?php
+                if (!array_key_exists($i, $auftraege)) {
+                    ?>
+                    <input type="submit" name="forschen" id="research_<?= $i; ?>" value="Forschen"
+                           onclick="return submit(this);" <?= ($researchData['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
+                    <?php
+                } else {
+                    $auftrag = $auftraege[$i];
+                    $duration = strtotime($auftrag['finished']) - strtotime($auftrag['created']);
+                    $completed = time() - strtotime($auftrag['created']);
+                    $percent = $completed / $duration;
+                    ?>
+                    <div class="Running">
+                        <div>Es läuft bereits eine Forschung!</div>
+                        <div>
+                            (noch <span class="countdown"><?= formatDuration($duration - $completed); ?></span>
+                            verbleibend)
+                        </div>
+                        <div>
+                            <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * action_retrace_rate); ?>', '<?= formatPercent(action_retrace_rate); ?>');"
+                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;back=forschungszentrum&amp;was=<?= $i; ?>">Abbrechen</a>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+            </form>
+        </div>
+    </div>
+    <?php
 }

@@ -1,304 +1,205 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Verwaltung von diplomatischen Beziehungen in der Gruppe
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
-?>
-    <table id="SeitenUeberschrift">
-        <tr>
-            <td><img src="/pics/big/gruppe.png" alt="Gruppe"/></td>
-            <td>Diplomatische Beziehungen
-                <a href="./?p=hilfe&amp;mod=1&amp;cat=23"><img src="/pics/help.gif" alt="Hilfe"
-                                                               style="border: none;"/></a>
-            </td>
-        </tr>
-    </table>
-<?php
-if (!$ich->Sitter->Gruppe && $_SESSION['blm_sitter']) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
+restrictSitter('Gruppe');
+
+$gruppe = getOrDefault($_GET, 'gruppe');
+$rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user']);
+requireEntryFound($rights, '/?p=gruppe');
+
+$diplomacy_db = Database::getInstance()->getAllGroupDiplomacyById($rights['group_id']);
+$diplomacy = array(group_diplomacy_bnd => array(), group_diplomacy_nap => array(), group_diplomacy_war => array());
+foreach ($diplomacy_db as $entry) {
+    $diplomacy[intval($entry['Typ'])][] = $entry;
+}
+
+function printDiplomacyTable($diplomacy, $name, $hasRights)
+{
     ?>
+    <table class="Liste">
+        <tr>
+            <th>Partner</th>
+            <th>Gültig seit</th>
+            <th>Aktion</th>
+        </tr>
+        <?php
+        foreach ($diplomacy as $row) {
+            ?>
+            <tr>
+                <td><?= createGroupLink($row['GruppeID'], $row['GruppeName']); ?></td>
+                <?php
+                if ($row['Aktiv'] == 1) {
+                    echo sprintf('<td>%s</td>', formatDateTime(strtotime($row['Seit'])));
+                    if ($hasRights) {
+                        echo sprintf('<td><a href="/actions/gruppe.php?a=15&amp;id=%d&amp;token=%s"
+                                onclick="return confirm(\'Wollen Sie die %s Beziehung mit %s wirklich kündigen?\')">Kündigen</a></td>',
+                            $row['ID'], $_SESSION['blm_xsrf_token'], $name, escapeForOutput($row['GruppeName']));
+                    } else {
+                        echo '<td>Keine Rechte</td>';
+                    }
+                } else {
+                    echo '<td>- noch nicht aktiv -</td>';
+                    if ($hasRights) {
+                        echo sprintf('<td><a href="/actions/gruppe.php?a=16&amp;id=%d&amp;token=%s"
+                           onclick="return confirm(\'Wollen Sie die %s Anfrage an %s wirklich zurückziehen?\')">Zurückziehen</a></td>',
+                            $row['ID'], $_SESSION['blm_xsrf_token'], $name, escapeForOutput($row['GruppeName']));
+                    } else {
+                        echo '<td>Keine Rechte</td>';
+                    }
+                }
+                ?>
+            </tr>
+            <?php
+        }
 
-    <?= $m; ?>
-    <?php
-    $sql_abfrage = "SELECT
-    *
-FROM
-    gruppe
-WHERE
-    ID='" . intval($ich->Gruppe) . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $gruppe = mysql_fetch_object($sql_ergebnis);
-
-    if ($ich->Rechte->Diplomatie) {
+        if (count($diplomacy) == 0) {
+            echo '<tr><td colspan="3" style="text-align: center;"><i>Keine Einträge vorhanden</i></td></tr>';
+        }
         ?>
-        <div style="width: 650px; text-align: center; margin-bottom: 5px;">
-            <a href="./?p=gruppe">Board</a> |
-            <a href="./?p=gruppe_mitgliederverwaltung">Mitgliederverwaltung</a>
+    </table>
+    <?php
+}
+
+?>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/gruppe.png" alt=""/>
+    <span>Gruppe - Diplomatie<?= createHelpLink(1, 23); ?></span>
+</div>
+
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+<?= createGroupNaviation(3); ?>
+
+<h3>Nicht-Angriffs-Pakte (NAPs):</h3>
+<?php printDiplomacyTable($diplomacy[group_diplomacy_nap], 'NAP', $rights['group_diplomacy'] == 1); ?>
+
+<h3>Bündnisse (BNDs):</h3>
+<?php printDiplomacyTable($diplomacy[group_diplomacy_bnd], 'BND', $rights['group_diplomacy'] == 1); ?>
+
+<h3>Kriege:</h3>
+<table class="Liste GroupExistingDiplomacy">
+    <tr>
+        <th>Gegner</th>
+        <th>Kriegsbeginn</th>
+        <th>Umkämpfter Betrag</th>
+        <th>Aktion</th>
+    </tr>
+    <?php
+    foreach ($diplomacy[group_diplomacy_war] as $row) {
+        ?>
+        <tr>
+            <td><?= createGroupLink($row['GruppeID'], $row['GruppeName']); ?></td>
             <?php
-            if ($ich->Rechte->GruppeBeschreibung || $ich->Rechte->GruppeBild || $ich->Rechte->GruppePasswort || $ich->Rechte->GruppeLoeschen) {
-                echo ' | <a href="./?p=gruppe_einstellungen">Einstellungen</a>';
-            }
-
-            if ($ich->Rechte->Diplomatie) {
-                echo ' | <u><b>Diplomatie (' . NeueGruppenDiplomatie($ich) . ')</b></u>';
-            }
-            ?>
-            | <a href="./?p=gruppe_kasse">Gruppenkasse</a>
-            | <a href="./?p=gruppe_logbuch">Logbuch</a>
-        </div>
-
-        <h3>Nicht-Angriffs-Pakte (NAPs):</h3>
-        <table class="Liste" cellspacing="0" style="width: 650px;">
-            <tr>
-                <th>Partner</th>
-                <th>Gültig von</th>
-                <th>mind. Gültig bis</th>
-                <th>Aktion</th>
-            </tr>
-            <?php
-            $sql_abfrage = "SELECT
-    g.ID,
-    g.Name,
-    d.Seit,
-    d.Bis,
-    d.ID AS vID,
-    d.Seit
-FROM
-    gruppe g JOIN gruppe_diplomatie d ON g.ID=d.An
-WHERE
-    d.Von='" . $ich->Gruppe . "'
-AND
-    d.Typ='1';";
-            $sql_ergebnis = mysql_query($sql_abfrage);
-
-            if (mysql_num_rows($sql_ergebnis) > 0) {
-                while ($nap = mysql_fetch_assoc($sql_ergebnis)) {
-                    $Beziehung[] = $nap["ID"];
-                    echo '<tr>
-								<td>
-									<a href="./?p=gruppe&amp;id=' . $nap["ID"] . '">' . htmlentities(stripslashes($nap["Name"]), ENT_QUOTES, "UTF-8") . '</a>
-								</td>
-							';
-                    if (intval($nap["Seit"]) == 0) {
-                        echo '<td colspan="2" style="text-align: center;">- Noch nicht gültig -</td>';
-                        echo '<td><a href="actions/gruppe.php?a=13&amp;id=' . $nap["vID"] . '">Zurückziehen</a></td>';
-                    } else {
-                        echo '<td>' . date("d.m.Y H:i", $nap["Seit"]) . '</td>
-								<td>' . date("d.m.Y H:i", $nap["Bis"]) . '</td>';
-                        if (intval($nap["Bis"]) >= time()) {
-                            echo '<td><i>- Keine Aktion möglich -</i></td>';
-                        } else {
-                            echo '<td><a href="actions/gruppe.php?a=17&amp;id=' . $nap["vID"] . '">Kündigen</a></td>';
-                        }
-                    }
-
-                    echo '</tr>';
-                }
-            } else {
-                echo '<tr><td colspan="4" style="text-align: center;"><i>- Bisher wurden keine diplomatischen Beziehungen dieser Art eingetragen -</i></td></tr>';
-            }
-            ?>
-        </table>
-
-        <h3>Bündnisse (BNDs):</h3>
-        <table class="Liste" cellspacing="0" style="width: 650px;">
-            <tr>
-                <th>Partner</th>
-                <th>Gültig von</th>
-                <th>mind. Gültig bis</th>
-                <th>Aktion</th>
-            </tr>
-            <?php
-            $sql_abfrage = "SELECT
-    g.ID,
-    g.Name,
-    d.Seit,
-    d.Bis,
-    d.ID AS vID,
-    d.Seit
-FROM
-    gruppe g JOIN gruppe_diplomatie d ON g.ID=d.An
-WHERE
-    d.Von='" . $ich->Gruppe . "'
-AND
-    d.Typ='2';";
-            $sql_ergebnis = mysql_query($sql_abfrage);
-
-            if (mysql_num_rows($sql_ergebnis) > 0) {
-                while ($bnd = mysql_fetch_assoc($sql_ergebnis)) {
-                    $Beziehung[] = $bnd["ID"];
-                    echo '<tr>
-								<td>
-									<a href="./?p=gruppe&amp;id=' . $bnd["ID"] . '">' . htmlentities(stripslashes($bnd["Name"]), ENT_QUOTES, "UTF-8") . '</a>
-								</td>
-							';
-                    if (intval($bnd["Seit"]) == 0) {
-                        echo '<td colspan="2" style="text-align: center;">- Noch nicht gültig -</td>';
-                        echo '<td><a href="actions/gruppe.php?a=13&amp;id=' . $bnd["vID"] . '">Zurückziehen</a></td>';
-                    } else {
-                        echo '<td>' . date("d.m.Y H:i", $bnd["Seit"]) . '</td>
-								<td>' . date("d.m.Y H:i", $bnd["Bis"]) . '</td>';
-                        if (intval($bnd["Bis"]) >= time()) {
-                            echo '<td><i>- Keine Aktion möglich -</i></td>';
-                        } else {
-                            echo '<td><a href="actions/gruppe.php?a=17&amp;id=' . $bnd["vID"] . '">Kündigen</a></td>';
-                        }
-                    }
-                    echo '</tr>';
-                }
-            } else {
-                echo '<tr><td colspan="4" style="text-align: center;"><i>- Bisher wurden keine diplomatischen Beziehungen dieser Art eingetragen -</i></td></tr>';
-            }
-            ?>
-        </table>
-
-        <h3>Kriege:</h3>
-        <table class="Liste" cellspacing="0" style="width: 650px;">
-            <tr>
-                <th>Gegner</th>
-                <th>Gültig von</th>
-                <th>Aktion</th>
-            </tr>
-            <?php
-            $sql_abfrage = "SELECT
-    g.ID,
-    g.Name,
-    d.Seit,
-    d.ID AS vID,
-    d.Seit
-FROM
-    gruppe g JOIN gruppe_diplomatie d ON g.ID=d.An
-WHERE
-    d.Von='" . $ich->Gruppe . "'
-AND
-    d.Typ='3';";
-            $sql_ergebnis = mysql_query($sql_abfrage);
-
-            if (mysql_num_rows($sql_ergebnis) > 0) {
-                while ($krieg = mysql_fetch_assoc($sql_ergebnis)) {
-                    $Beziehung[] = $krieg["ID"];
-                    echo '<tr>
-								<td>
-									<a href="./?p=gruppe&amp;id=' . $krieg["ID"] . '">' . htmlentities(stripslashes($krieg["Name"]), ENT_QUOTES, "UTF-8") . '</a>
-								</td>
-							';
-                    if (intval($krieg["Seit"]) == 0) {
-                        echo '<td style="text-align: center;">- Noch nicht gültig -</td>';
-                        echo '<td><a href="actions/gruppe.php?a=13&amp;id=' . $krieg["vID"] . '">Zurückziehen</a></td>';
-                    } else {
-                        echo '<td>' . date("d.m.Y H:i", $krieg["Seit"]) . '</td>
-								<td><a href="./?p=gruppe_krieg_details&amp;id=' . $krieg["vID"]. '">Details</a></td>';
-                    }
-                    echo '</tr>';
-                }
-            } else {
-                echo '<tr><td colspan="4" style="text-align: center;"><i>- Bisher wurden keine diplomatischen Beziehungen dieser Art eingetragen -</i></td></tr>';
-            }
-            ?>
-        </table>
-
-        <table class="Liste" cellspacing="0" style="width: 650px; margin-top: 20px;">
-            <tr>
-                <th>
-                    Eine neue Beziehung eintragen
-                </th>
-            </tr>
-            <tr>
+            if ($row['Aktiv'] == 1) {
+                ?>
+                <td><?= formatDateTime(strtotime($row['Seit'])); ?></td>
+                <td><?= formatCurrency($row['Betrag']); ?></td>
                 <td>
-                    <form action="actions/gruppe.php" method="post">
-                        <input type="hidden" name="a" value="12"/>
-                        <select name="typ" onchange="CheckKrieg(this);">
-                            <option value="1">Nichtangriffspakt</option>
-                            <option value="2">Bündnis</option>
-                            <option value="3">Krieg</option>
-                        </select>
-                        mit
-                        <select name="partner">
-                            <?php
-                            $sql_abfrage = "SELECT
-    ID,
-    Name
-FROM
-    gruppe
-WHERE
-    ID NOT IN (SELECT An FROM gruppe_diplomatie WHERE Von=" . $ich->Gruppe . ")
-AND
-    ID != " . $ich->Gruppe . "
-ORDER BY
-    Name;";
-                            $sql_ergebnis = mysql_query($sql_abfrage) or die(mysql_error());
-
-                            if (mysql_num_rows($sql_ergebnis) > 0) {
-                                while ($gruppe = mysql_fetch_assoc($sql_ergebnis)) {
-                                    echo '<option value="' . $gruppe["ID"] . '">' . htmlentities(stripslashes($gruppe["Name"]), ENT_QUOTES, "UTF-8") . '</option>' . "\n";
-                                }
-                            } else {
-                                echo '<option disabled="disabled" selected="selected">Es gibt keine anderen Gruppen :)</option>';
-                            }
-                            ?>
-                        </select>
-                        <span id="krieg" style="display: none; float: left;">
-					<b>um</b>
-					<input type="text" name="betrag" value="100.000" size="7"/> €
-				</span>
-                        <input type="submit" value="Eintragen" style="margin-left: 10px;"/>
-                    </form>
-                </td>
-            </tr>
-        </table>
-        <table class="Liste" cellspacing="0" style="width: 650px; margin-top: 20px;">
-            <tr>
-                <th colspan="3">
-                    Wartende fremde Anfragen
-                </th>
-            </tr>
-            <tr>
-                <th>Typ</th>
-                <th>Gruppe</th>
-                <th>Aktion</th>
-            </tr>
-            <?php
-            $Typ[1] = "NAP";
-            $Typ[2] = "BND";
-            $Typ[3] = "Krieg";
-
-            $sql_abfrage = "SELECT
-    d.*,
-    g.Name
-FROM
-    gruppe_diplomatie d JOIN gruppe g ON d.Von=g.ID
-WHERE
-    d.An='" . $ich->Gruppe . "'
-AND
-    d.Seit IS NULL;";
-            $sql_ergebnis = mysql_query($sql_abfrage);
-
-            if (mysql_num_rows($sql_ergebnis) > 0) {
-                while ($anfrage = mysql_fetch_object($sql_ergebnis)) {
-                    echo '<tr>
-								<td>' . $Typ[$anfrage->Typ];
-                    if ($anfrage->Typ == 3) {
-                        echo " (" . number_format($anfrage->Betrag, 2, ",", ".") . " €)";
+                    <?php
+                    if ($rights['group_diplomacy'] == 1) {
+                        ?>
+                        <a href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                           onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency($row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(group_war_loose_points); ?> seiner Punkte und <?= group_war_loose_plantage; ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
+                        <?php
+                    } else {
+                        echo 'Keine Rechte';
                     }
-                    echo '</td>
-								<td><a href="./?p=gruppe&amp;id=' . $anfrage->Von . '">' . $anfrage->Name . '</a></td>
-								<td>
-									<a href="actions/gruppe.php?a=14&amp;id=' . $anfrage->ID . '">Annehmen</a> | 
-									<a href="actions/gruppe.php?a=15&amp;id=' . $anfrage->ID . '">Ablehnen</a>
-								</td>
-							</tr>';
-                }
+                    ?>
+                </td>
+                <?php
             } else {
-                echo '<tr><td colspan="3" style="text-align: center;"><i>- Keine Anfragen vorhanden -</i></td></tr>';
+                ?>
+                <td>- noch nicht aktiv-</td>
+                <td><?= formatCurrency($row['Betrag']); ?></td>
+                <td>
+                    <?php
+                    if ($rights['group_diplomacy'] == 1) {
+                        ?>
+                        <a href="/actions/gruppe.php?a=16&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                           onclick="return confirm('Wollen Sie die Kriegserklärung an <?= escapeForOutput($row['GruppeName']); ?> wirklich zurückziehen?')">Zurückziehen</a>
+                        <?php
+                    } else {
+                        echo 'Keine Rechte';
+                    }
+                    ?>
+                </td>
+                <?php
             }
             ?>
-        </table>
+        </tr>
         <?php
     }
+
+    if (count($diplomacy[group_diplomacy_war]) == 0) {
+        echo '<tr><td colspan="4" style="text-align: center;"><i>Keine Einträge vorhanden</i></td></tr>';
+    }
+    ?>
+</table>
+
+<?php
+if ($rights['group_diplomacy'] == 1) {
+    $typ = getOrDefault($_GET, 'typ', 0);
+    $amount = getOrDefault($_GET, 'amount', group_war_min_amount);
+    ?>
+    <h3>Neue diplomatische Anfrage stellen</h3>
+    <div class="form GroupNewDiplomacy">
+        <header>Anfrage</header>
+        <form action="/actions/gruppe.php" method="post">
+            <input type="hidden" name="a" value="18"/>
+            <div>
+                <label for="typ">Typ:</label>
+                <select name="typ" id="typ" onchange="CheckKrieg(this);">
+                    <option value="<?= group_diplomacy_nap; ?>"<?= ($typ === group_diplomacy_nap ? ' selected' : ''); ?>>
+                        Nichtangriffspakt
+                    </option>
+                    <option value="<?= group_diplomacy_bnd; ?>"<?= ($typ === group_diplomacy_bnd ? ' selected' : ''); ?>>
+                        Bündnis
+                    </option>
+                    <option value="<?= group_diplomacy_war; ?>"<?= ($typ === group_diplomacy_war ? ' selected' : ''); ?>>
+                        Krieg
+                    </option>
+                </select>
+            </div>
+            <div id="kriegBetrag">
+                <label for="amount">Umkämpfter Betrag:</label>
+                <input type="text" name="amount" id="amount" value="<?= formatCurrency($amount, false, false); ?>"
+                       min="<?= group_war_min_amount; ?>"/>
+            </div>
+            <div>
+                <label for="group">Gruppe:</label>
+                <input type="text" name="group" id="group" value="<?= escapeForOutput($gruppe); ?>"/>
+            </div>
+            <div>
+                <input type="submit" value="Abschicken" onclick="return submit(this);"/>
+            </div>
+        </form>
+    </div>
+    <script>CheckKrieg(document.getElementById('typ'));</script>
+
+    <h3>Offene fremde Anfragen</h3>
+    <table class="Liste GroupOpenRequests">
+        <tr>
+            <th>Typ</th>
+            <th>Gruppe</th>
+            <th>Aktion</th>
+        </tr>
+        <?php
+        $data = Database::getInstance()->getAllPendingGroupDiplomacyById($rights['group_id']);
+        foreach ($data as $row) {
+            ?>
+            <tr>
+                <td><?= getGroupDiplomacyTypeName($row['Typ']); ?></td>
+                <td><?= createGroupLink($row['VonId'], $row['VonName']); ?></td>
+                <td>
+                    <a href="/actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>">Annehmen</a>
+                    <a href="/actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>">Ablehnen</a>
+                </td>
+            </tr>
+            <?php
+        }
+        if (count($data) == 0) {
+            echo '<tr><td colspan="3" style="text-align: center;"><i>Keine Einträge vorhanden</i></td></tr>';
+        }
+        ?>
+    </table>
+    <?php
 }
+?>
+

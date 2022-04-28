@@ -1,0 +1,21 @@
+FROM php:8.0-apache
+
+# enable headers and rewrite module
+RUN a2enmod headers rewrite
+
+# update system
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# install mysql driver
+RUN docker-php-ext-install pdo_mysql
+
+# install dependencies for gd lib
+RUN apt-get update &&  \
+    apt-get install -y libfreetype-dev libgd3 libgd-dev zlib1g-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# install gd lib
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype && \
+    docker-php-ext-install gd

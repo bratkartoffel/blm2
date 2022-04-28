@@ -1,96 +1,165 @@
 function ChefboxZeigen(seite) {
-    // Öffnet ein Popupfenster
-    chefboxPopup = window.open(seite, 'chefbox', 'height=690,width=240,scrollbars=yes,resizable=yes');
-    chefboxPopup.focus();		// Setzt das Popupfenster in den Vordergrund
-    return false;
-}
-
-function SmileyPopupZeigen(seite) {
-    // Öffnet ein Popupfenster
-    smileyPopup = window.open(seite, 'smiley', 'height=350,width=250,scrollbars=yes,resizable=yes');
-    smileyPopup.focus();		// Setzt das Popupfenster in den Vordergrund
-    return false;
-}
-
-function BBCodePopupZeigen(seite) {
-    // Öffnet ein Popupfenster
-    const BBCodePopup = window.open(seite, 'BBCode', 'height=320,width=250,scrollbars=yes,resizable=yes');
-    BBCodePopup.focus();		// Setzt das Popupfenster in den Vordergrund
+    const chefboxPopup = window.open(seite, 'chefbox', 'height=690,width=240,scrollbars=yes,resizable=yes');
+    chefboxPopup.focus();
     return false;
 }
 
 function ZeichenUebrig(Feld, Text) {
-    // Schreibt die übrige Zeichenazahl in ein SPAN-Feld (z.B.: bei den Nachrichten, Beschreibung im PRofil)
-    const z_n = Feld;		// Zeiger auf das Nachrichtenfeld
-    const z_t = Text;		// Zeiger auf das Feld für die Anzeige
-
-    if (4096 - z_n.value.length < 0) {		// Wenn der Text länger als die maximale Anzahl an Zeichen ist,
-        z_t.innerHTML = "0";												// Dann schreibe als verbleibende Anzahl "0" rein
-        z_n.value = z_n.value.substr(0, 4096);				// und kürze den Text
-
-        z_n.selectionStart = z_n.value.length;		// Und dann geh noch ...
-        z_n.selectionEnd = z_n.value.length;			// ans Ende des Textfeldes
-
-        return false;		// Danach abbrechen, wir sind hier fertig.
-    }
-
-    z_t.innerHTML = 4096 - z_n.value.length;				// Wenn er hier ankommt, dann kann er die verbleibende Zeichenanzahl in das Feld schreiben
-    return true;		// Womit wir fertig wären
-}
-
-function MeldungAusblenden(id) {
-    // Funktion zum ausblenden einer Meldung mit dem roten Kreuz in der rechten oberen Ecke
-    const z = document.getElementById(id).style;		// setzt einen Zeiger auf den Style des gesuchten Elements
-
-    z.display = "none";				//
-    z.visiblity = "hidden";		// Blendet die Box aus
-
+    Text.innerText = 4096 - Feld.value.length;
     return true;
 }
 
 function Navigation(Button) {
-    if (Button.getElementsByTagName('a')[0].target == "_blank") {
+    if (Button.getElementsByTagName('a')[0].target === "_blank") {
         window.open(Button.getElementsByTagName('a')[0].href);
     } else {
         document.location.href = Button.getElementsByTagName('a')[0].href;
     }
-
     return false;
 }
 
 function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, Button) {
-    // Rechnet die Produktionskosten aus und schreibt diese in ein Feld
-    // Deaktiviert den Submit-Button, falls die Kosten gößer als das Geld des Benutzers sind
-
-    // Rechnet die Kosten für den Auftrag aus
     const kosten = Menge * (BasisPreis / BasisMenge);
 
-    // Schreibt die Produktionskosten für die angegebene Menge in das Feld
-    TextFeld.innerHTML = "Kosten: " + kosten.toFixed(2) + " €";
+    TextFeld.innerText = "Kosten: " + kosten.toLocaleString('de-DE', {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+    }) + " €";
 
-    // Kann sich der Benutzer die Produktion leisten?
     if (kosten > Geld) {
-        Button.enabled = "";					// Wenn nicht, dann Button deaktivieren
+        Button.enabled = "";
         Button.disabled = "disabled";
     } else {
-        Button.disabled = "";						// dann Button aktivieren
+        Button.disabled = "";
         Button.enabled = "enabled";
     }
 }
 
 function CheckKrieg(e) {
-    if (e.selectedIndex == 2) {
-        document.getElementById('krieg').style.display = 'block';
+    if (e.selectedIndex === 2) {
+        document.getElementById('kriegBetrag').style.display = 'block';
     } else {
-        document.getElementById('krieg').style.display = 'none';
+        document.getElementById('kriegBetrag').style.display = 'none';
     }
 }
 
-function AllesAuswaehlen(formular, status) {
-    const z = formular.getElementsByTagName('input');
-    for (let i = 0; i < z.length; i++) {
-        z[i].checked = status;
-    }
+function confirmAbort(kosten, percentReturn) {
+    return confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen nur ' + percentReturn + ' (entspricht ' + kosten + ') der Kosten zurückerstattet!');
+}
 
+function submit(button) {
+    button.form.submit();
+    button.disabled = 'disabled';
+    button.value = 'Bitte warten...';
     return false;
 }
+
+function BLMzeigen(link) {
+    if (opener) {
+        opener.focus();
+    } else {
+        const blm = window.open(link, 'blm', 'fullscreen=yes,location=yes,resizable=yes,menubar=yes,scrollbars=yes,status=yes,toolbar=yes');
+        blm.focus();
+    }
+    return false;
+}
+
+function BLMEnde() {
+    if (opener) {
+        opener.focus();
+        self.close();
+    } else {
+        document.location.href = "/actions/logout.php?popup=1";
+    }
+    return false;
+}
+
+function BLMNavigation(link) {
+    if (opener) {
+        opener.document.location.href = link;
+        opener.focus();
+    } else {
+        BLMzeigen(link);
+    }
+    return false;
+}
+
+function CountdownFields() {
+    Array.prototype.forEach.call(document.getElementsByClassName('countdown'), (field) => {
+        let value;
+        if (!field.innerText.includes('Tage')) {
+            value = Date.parse('1970-01-01T' + field.innerText + 'Z');
+        } else {
+            let days = field.innerText.split(' Tage ')[0];
+            let hours = field.innerText.split(' Tage ')[1];
+            value = Date.parse('1970-01-01T' + hours + 'Z') + (1000 * 86400 * days);
+        }
+        if (value > 0) {
+            field.innerText = "";
+            let date = new Date(value - 1000);
+            if (value > 86400000) {
+                field.innerText += Math.floor(value / 86400000) + " Tage ";
+            }
+            field.innerText += date.toLocaleTimeString("de-DE", {
+                hour12: false,
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                timeZone: 'UTC'
+            });
+        }
+    })
+}
+
+function MarkActiveLink() {
+    let params = new URLSearchParams(window.location.search);
+    let page;
+    if (params.has('p')) {
+        page = params.get('p');
+    } else {
+        page = 'index';
+    }
+    if (page.includes('_')) {
+        page = page.split('_')[0];
+    }
+    Array.prototype.forEach.call(document.getElementById("Navigation").getElementsByTagName("a"), (field) => {
+        if (field.href.includes(page)) {
+            field.innerHTML = '→ <i>' + field.innerHTML + "</i>";
+            field.style.color = "#555555";
+        }
+    });
+}
+
+function MafiaActionChange() {
+    let data = mafia_cost_data[Number.parseInt(document.getElementById('action').value)];
+    let texts = [
+        data[0]['cost'] + ' € / ' + (100 * data[0]['chance']) + '%',
+        data[1]['cost'] + ' € / ' + (100 * data[1]['chance']) + '%',
+        data[2]['cost'] + ' € / ' + (100 * data[2]['chance']) + '%',
+        data[3]['cost'] + ' € / ' + (100 * data[3]['chance']) + '%',
+    ];
+
+    let options = document.getElementById('level').getElementsByTagName('option');
+    for (let i = 0; i < options.length; i++) {
+        options[i].innerText = texts[i];
+    }
+}
+
+// used in nachrichten_schreiben.inc.php
+// noinspection JSUnusedGlobalSymbols
+function toggleRundmail() {
+    let f = document.getElementById('receiver');
+    let b = document.getElementById('broadcast');
+    if (b.value === '0') {
+        f.value = 'RUNDMAIL';
+        f.disabled = 'disabled';
+        b.value = '1';
+    } else {
+        f.value = '';
+        f.disabled = '';
+        f.enabled = 'enabled';
+        b.value = '0';
+    }
+    return false;
+}
+
+window.setInterval(CountdownFields, 1000);

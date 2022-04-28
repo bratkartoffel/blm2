@@ -1,17 +1,15 @@
 <?php
 $von = getOrDefault($_GET, 'von', 0);
-$ware = getOrDefault($_GET, 'ware');
+$ware = getOrDefault($_GET, 'ware', 0);
 $menge = getOrDefault($_GET, 'menge', 0);
 $preis = getOrDefault($_GET, 'preis', .0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Marktplatz - Angebot erstellen</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Angebot einstellen</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
     <form action="/actions/admin_markt.php" method="post">
@@ -47,5 +45,5 @@ $preis = getOrDefault($_GET, 'preis', .0);
     </form>
 </div>
 <p>
-    <a href="./?p=admin_markt">Zurück...</a>
+    <a href="/?p=admin_markt">Zurück...</a>
 </p>

@@ -1,18 +1,16 @@
 <?php
-$ware = getOrDefault($_GET, 'ware');
+$ware = getOrDefault($_GET, 'ware', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Marktplatz</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Marktplatz</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="./" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="admin_markt"/>
         <label for="ware">Ware:</label>
         <?= createWarenDropdown($ware, 'ware'); ?>
@@ -32,8 +30,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter_waren = empty($ware) ? array() : array($ware);
     $entriesCount = Database::getInstance()->getMarktplatzCount($filter_waren);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getMarktplatzEntries($filter_waren, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getMarktplatzEntries($filter_waren, $offset, admin_log_page_size);
 
 
     for ($i = 0; $i < count($entries); $i++) {
@@ -41,7 +39,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         ?>
         <tr>
             <td><?= createProfileLink($row['VonId'], $row['VonName']); ?></td>
-            <td><?= WarenName($row['Was']); ?></td>
+            <td><?= getItemName($row['Was']); ?></td>
             <td><?= formatWeight($row['Menge']); ?></td>
             <td><?= formatCurrency($row['Preis']); ?></td>
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
@@ -61,8 +59,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_markt&amp;ware=' . sichere_ausgabe($ware), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
-    <a href="./?p=admin">Zurück...</a><br/>
-    <a href="./?p=admin_markt_einstellen">Neues Angebot einstellen</a>
+    <a href="/?p=admin">Zurück...</a><br/>
+    <a href="/?p=admin_markt_einstellen">Neues Angebot einstellen</a>
 </p>

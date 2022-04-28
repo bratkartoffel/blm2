@@ -11,7 +11,7 @@ if (!$_GET['id']) {
     die();        // Falls keine User_ID angegeben wurde, dann abbrechen
 }
 
-$pfad = "./gruppe/" . intval($_GET['id']);
+$pfad = "gruppe/" . intval($_GET['id']);
 header("cache-control: max-age=86400, public");
 
 if (file_exists($pfad . ".jpg")) {        // Der Benutzer hat ein JPG-Bild hochgeladen?
@@ -23,7 +23,7 @@ if (file_exists($pfad . ".jpg")) {        // Der Benutzer hat ein JPG-Bild hochg
         if (file_exists($pfad . ".gif")) {        // Ne, aber ein GIF
             $suffix = "gif";
         } else {                                        // Hmm, der User hat gar kein Bild...
-            $bild = ImageCreateFromPNG("./spieler/nopic.png");        // Also das Standardpic einlesen
+            $bild = ImageCreateFromPNG("gruppe/nopic.png");        // Also das Standardpic einlesen
             header("content-type: image/png");            // Dem Browser sagen, dass wir ein Bild senden
             ImagePNG($bild);        // Und das Bild rüber schicken
             die();        // Zum Schluss abbrechen, denn wir sind ja fertig :)

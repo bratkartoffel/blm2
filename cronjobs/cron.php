@@ -1,98 +1,71 @@
 <?php
-/**
- * Da dieser Cronjob regelmäßig ausgeführt wird (Standard: 30 Minuten), werden hier das Einkommen, die Zinsen und die Platzierung des Spiels auf den Voteseiten abgehandelt.
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.cronjobs
- */
+error_reporting(E_ALL);
 
-require("../include/config.inc.php");
-require("../include/functions.inc.php");
+if (!file_exists(dirname(__FILE__) . '/../include/config.inc.php')) {
+    die('include/config.inc.php not found');
+}
+require_once(dirname(__FILE__) . '/../include/config.inc.php');
+require_once(dirname(__FILE__) . '/../include/functions.inc.php');
+require_once(dirname(__FILE__) . '/../include/database.class.php');
 
-ConnectDB();
-error_reporting(0);
-
-/**
- * Hilfsfunktion: Überprüft, ob der Benutzer sein Einkommen und Zinsen bekommt und verbucht diese auch direkt
- *
- * @param double $ZinsenKredit
- * @param double $ZinsenAnlage
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function EinkommenBankCheck($ZinsenKredit, $ZinsenAnlage)
-{
-    $sql_abfrage = "SELECT
-    m.ID,
-    m.Bank,
-    s.AusgabenZinsen,
-    s.EinnahmenZinsen,
-    g.Gebaeude3,
-    g.Gebaeude4,
-    m.Geld,
-    s.EinnahmenGebaeude,
-    m.Punkte
-FROM
-    (
-        (
-            mitglieder m NATURAL JOIN gebaeude g
-        ) NATURAL JOIN forschung f
-    ) NATURAL JOIN statistik s
-ORDER BY
-    ID ASC;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-
-    while ($user = mysql_fetch_object($sql_ergebnis)) {
-        /*
-            Zuerst werden die Zinsen abgearbeitet
-        */
-
-        if ($user->Bank < 0) {        // Kontostand ist < 0 also muss er Kreditzinsen zahlen
-            $Zinsen = $user->Bank * ($ZinsenKredit - 1);
-            $user->AusgabenZinsen += ($Zinsen * -1);
-            $user->Bank += $Zinsen;
-        } else {        // Er hat ein positives Guthaben auf dem Konto, also bekommt er Anlagezinsen
-            $Zinsen = $user->Bank * ($ZinsenAnlage - 1);
-            if ($user->Punkte < 100000) {
-                if ($user->Bank + $Zinsen < 100000) {
-                    $user->EinnahmenZinsen += $Zinsen;
-                    $user->Bank += $Zinsen;
-                } else {
-                    $user->EinnahmenZinsen += (100000 - $user->Bank);
-                    $user->Bank = 99999.99;
-                }
-            } else {
-                if ($user->Bank + $Zinsen < $user->Punkte) {
-                    $user->EinnahmenZinsen += $Zinsen;
-                    $user->Bank += $Zinsen;
-                } else {
-                    $user->EinnahmenZinsen += ($user->Punkte - $user->Bank);
-                    $user->Bank = $user->Punkte;
-                }
-            }
-        }
-
-        $einkommen = (EINKOMMEN_BASIS + ($user->Gebaeude3 * EINKOMMEN_BIOLADEN_BONUS) + ($user->Gebaeude4 * EINKOMMEN_DOENERSTAND_BONUS));        // Dann das Einkommen ausrechnen
-
-        $user->Geld += $einkommen;
-        $user->EinnahmenGebaeude += $einkommen;
-
-        $sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN statistik s
-SET
-    m.Bank=" . $user->Bank . ",
-    s.AusgabenZinsen=" . $user->AusgabenZinsen . ",
-    s.EinnahmenZinsen=" . $user->EinnahmenZinsen . ",
-    m.Geld=" . $user->Geld . ",
-    s.EinnahmenGebaeude=" . $user->EinnahmenGebaeude . "
-WHERE
-    m.ID=" . $user->ID . ";";
-        mysql_query($sql_abfrage);
-    }
+if (isGameLocked()) {
+    die("Game is currently locked\n");
 }
 
-EinkommenBankCheck($ZinsenKredit, $ZinsenAnlage);
+if (isRoundOver()) {
+    handleRoundEnd();
+    die("Game reset completed!\n");
+}
+
+CheckAllAuftraege();
+
+$interestRates = calculateInterestRates();
+$entries = Database::getInstance()->getAllPlayerIdAndBankAndBioladenAndDoenerstand();
+Database::getInstance()->begin();
+foreach ($entries as $entry) {
+    Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['ID'],
+        array('Geld' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])));
+    Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        array('EinnahmenGebaeude' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])),
+        array('user_id = :whr0' => $entry['ID']));
+
+    if ($entry['Bank'] > deposit_limit) continue;
+
+    if ($entry['Bank'] >= 0) {
+        $amount = $entry['Bank'] * $interestRates['Debit'];
+        $amount = min(deposit_limit, $entry['Bank'] + $amount) - $entry['Bank'];
+    } else {
+        $amount = $entry['Bank'] * $interestRates['Credit'];
+    }
+    $amount = round($amount, 2);
+    if ($amount != 0) {
+        Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['ID'],
+            array('Bank' => $amount));
+        Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            array($amount > 0 ? 'EinnahmenZinsen' : 'AusgabenZinsen' => abs($amount)),
+            array('user_id = :whr0' => $entry['ID']));
+    }
+}
+Database::getInstance()->commit();
+
+$entries = Database::getInstance()->getAllPlayerIdBankSmallerEquals(dispo_limit);
+foreach ($entries as $entry) {
+    Database::getInstance()->begin();
+    $status = resetAccount($entry['ID']);
+    if ($status !== null) {
+        Database::getInstance()->rollBack();
+        trigger_error("Could not reset player " . $entry['ID'] . ' with status ' . $status, E_USER_WARNING);
+        continue;
+    }
+    if (Database::getInstance()->createTableEntry('nachrichten', array(
+            'Von' => 0,
+            'An' => $entry['ID'],
+            'Betreff' => 'Account zurückgesetzt',
+            'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency(dispo_limit) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
+        )) != 1) {
+        Database::getInstance()->rollBack();
+        trigger_error("Could create message after resetting player " . $entry['ID'], E_USER_WARNING);
+        continue;
+    }
+    Database::getInstance()->commit();
+}

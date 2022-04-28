@@ -1,190 +1,111 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers auf seiner Plantage aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
+restrictSitter('Produktion');
 
-if (!IstAngemeldet()) {        // Wer nicht angemeldet ist, kann auch nichts anbauen...
-    header("location: ../?p=index&m=102");
-    die();
-}
+$alles = getOrDefault($_POST, 'alles', 0);
+$stunden = getOrDefault($_POST, 'stunden', 0);
+$menge = getOrDefault($_POST, 'menge', 0);
+$was = getOrDefault($_POST, 'was', 0);
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-$ich = LoadSettings();                                // Alle Daten des Users abrufen (Geld, Gebäudelevel, Forschungslevel...)
-$ich->Sitter = LoadSitterSettings();
+$data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevel($_SESSION['blm_user']);
+requireEntryFound($data, '/?p=plantage', 112, __LINE__);
 
-if (!$ich->Sitter->Produktion && $_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=plantage&m=112");
-    die();
-}
-
-if ($_POST['alles'] == "1") {
-    // Hier wird alles produziert
-    $dauer = intval($_POST['stunden']);        // Wie lange soll produziert werden? (Stunden, nur ganzzahlig)
-
-    if ($dauer < 1 || $dauer > 12) {        // Ungültige Dauer angegeben
-        DisconnectDB();
-        header("location: ../?p=plantage&m=133");
-        die();
+if ($alles == 1) {
+    if ($stunden < 1 || $stunden > production_hours_max) {
+        redirectTo('/?p=plantage', 133, __LINE__);
     }
 
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {        // Alle Waren durchgehen
-        $temp = "Forschung" . $i;
-        if ($ich->$temp == 0 || $ich->Gebaeude1 < intval($i * 1.5)) {        // Darf der Benutzer die Ware noch nciht anbauen,
-            continue;        // Dann wird weitergesprungen (i um 1 erhöht, Schleife erneut)
+    Database::getInstance()->begin();
+    $sum_costs = .0;
+    for ($i = 1; $i <= count_wares; $i++) {
+        if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
+        $productionData = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
+
+        if (Database::getInstance()->createTableEntry('auftrag', array(
+                'finished' => date('Y-m-d H:i:s', time() + ($stunden * 3600)),
+                'user_id' => $_SESSION['blm_user'],
+                'item' => 200 + $i,
+                'amount' => $stunden * $productionData['Menge'],
+                'cost' => $stunden * $productionData['Kosten']
+            )) === 1) {
+            $sum_costs += $stunden * $productionData['Kosten'];
         }
-
-        $produktion_menge = $dauer * (($ich->Gebaeude1 * PRODUKTIONS_PLANTAGE_FAKTOR_MENGE) + PRODUKTIONS_WAREN_FAKTOR_MENGE * $i + $Produktion->BasisMenge + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE));            // Wieviel wird produziert?
-        $produktion_kosten = $dauer * ($Produktion->BasisKosten + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN));        // Was kostet die Produktion?
-        $kosten_gesamt += $produktion_kosten;        // Wieviel kostet der Anbau gesamt?
-
-        $sql[] = "(
-								NULL, 
-								'" . (200 + $i) . "', 
-								'" . $_SESSION['blm_user'] . "', 
-								'" . time() . "', 
-								'" . (3600 * $dauer) . "', 
-								'" . $produktion_menge . "',
-								'" . $produktion_kosten . "',
-								NULL
-							)";        // SQL-Teil für diesen Auftrag, wird dann alles in einer Query an die Datenbank geschickt
     }
 
-    if ($ich->Geld < $kosten_gesamt) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann abbrechen
-        DisconnectDB();
-        header("location: ../?p=plantage&m=111");
-        die();
+    if ($sum_costs > $data['Geld']) {
+        Database::getInstance()->rollBack();
+        redirectTo('/?p=plantage', 111, __LINE__);
     }
 
-    $sql_abfrage = "INSERT INTO
-    auftrag
-(
-    ID,
-    Was,
-    Von,
-    Start,
-    Dauer,
-    Menge,
-    Kosten,
-    Punkte
-)
-VALUES
-" . implode(",", $sql) . ";";
-
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    if (mysql_errno() > 0) {        // Mindestens 1 Auftrag wurde bereits in die Datenbank übernommen
-        DisconnectDB();
-        header("location: ../?p=plantage&m=113");
-        die();
+    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+            array('Geld' => -$sum_costs),
+            array('Geld >= :whr0' => $sum_costs)) == 0) {
+        Database::getInstance()->rollBack();
+        redirectTo('/?p=plantage', 142, __LINE__);
     }
 
-    $sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN statistik s
-SET
-    m.Geld=m.Geld-" . $kosten_gesamt . ",
-    s.AusgabenProduktion=s.AusgabenProduktion+" . $kosten_gesamt . "
-WHERE
-    m.ID='" . $_SESSION['blm_user'] . "';";
-    mysql_query($sql_abfrage);        // Die Produktion bezahlen und die Ausgaben für Produktion anpassen
-    $_SESSION['blm_queries']++;
+    if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            array('AusgabenProduktion' => $sum_costs),
+            array('user_id = :whr0' => $_SESSION['blm_user'])
+        ) == 0) {
+        Database::getInstance()->rollBack();
+        redirectTo('/?p=plantage', 142, __LINE__);
+    }
 
-    // Fertig, weiter machen
-    DisconnectDB();
-    header("location: ../?p=plantage&m=207");
-    die();
+    Database::getInstance()->commit();
+    redirectTo('/?p=plantage', 207);
 }
 
-$temp = "Forschung" . intval($_POST['was']);
+$productionData = calculateProductionDataForPlayer($was, $data['Gebaeude1'], $data['Forschung' . $was]);
+$stunden = $menge / $productionData['Menge'];
 
-$produktion_dauer = $Produktion->BasisDauer;        // Wielange dauert die Produktion?
-$produktion_menge = ($ich->Gebaeude1 * PRODUKTIONS_PLANTAGE_FAKTOR_MENGE) + PRODUKTIONS_WAREN_FAKTOR_MENGE * intval($_POST['was']) + $Produktion->BasisMenge + ($ich->$temp * PRODUKTIONS_FORSCHUNGS_FAKTOR_MENGE);            // Wieviel wird produziert?
-$produktion_kosten = $Produktion->BasisKosten + ($ich->Forschung1 * PRODUKTIONS_FORSCHUNGS_FAKTOR_KOSTEN);        // Was kostet die Produktion?
-
-$produktion_pro_stunde = intval($produktion_menge / date("H", $produktion_dauer - 3600));
-$kosten_pro_kg = round($produktion_kosten / $produktion_menge, 4);
-
-$menge = intval($_POST['menge']);
-
-$produktion_dauer = ($menge / $produktion_pro_stunde * 3600);
-$produktion_menge = $menge;
-$produktion_kosten = $menge * $kosten_pro_kg;
-
-if ($produktion_menge > $produktion_pro_stunde * 12 || $produktion_menge <= 0) {        // Wurde eine falsche Menge eingegeben, entweder unter 0 oder wenn die Produktion länger als 12 Stunden dauern würde, dann brich ab.
-    DisconnectDB();
-    header("location: ../?p=plantage&m=125");
-    die();
-}
-if ($_POST['was'] <= 0 || $_POST['was'] > ANZAHL_WAREN) {        // der User will was anbauen, was es nicht gibt!
-    DisconnectDB();
-    header("location: ../?p=plantage&m=112");
-    die();
+if ($menge > $productionData['Menge'] * production_hours_max || $menge <= 0) {
+    redirectTo('/?p=plantage', 125);
 }
 
-if ($ich->Geld < $produktion_kosten) {        // Kann sich der Benutzer das überhaupt leisten? Wenn nicht, dann abbrechen
-    DisconnectDB();
-    header("location: ../?p=plantage&m=111");
-    die();
+if ($was <= 0 || $was > count_wares) {
+    redirectTo('/?p=plantage', 112);
 }
 
-if ($ich->$temp == 0 || $ich->Gebaeude1 < intval($_POST['was'] * 1.5)) {    // Hat der Benutzer die Pflanze überhaupt schon erforscht? Wenn nicht, dann Abbruch!
-    DisconnectDB();
-    header("location: ../?p=plantage&m=112");
-    die();
+if ($data['Geld'] < $productionData['Kosten'] * $stunden) {
+    redirectTo('/?p=plantage', 111);
 }
 
-$sql_abfrage = "INSERT INTO
-    auftrag
-(
-    ID,
-    Was,
-    Von,
-    Kosten,
-    Dauer,
-    Start,
-    Menge,
-    Punkte
-)
-VALUES
-(
-    NULL,
-    '" . (200 + intval($_POST['was'])) . "',
-    '" . $_SESSION['blm_user'] . "',
-    '" . $produktion_kosten . "',
-    '" . $produktion_dauer . "',
-    '" . time() . "',
-    '" . $produktion_menge . "',
-    NULL
-);";
-mysql_query($sql_abfrage);        // Den Auftrag in die Datenbank schreiben
-$_SESSION['blm_queries']++;
-
-if (mysql_errno() > 0) {        // Der Auftrag war bereits vorhanden! Doppelauftrag? Ohne uns! Zurück und Meldung ausgeben!
-    DisconnectDB();
-    header("location: ../?p=plantage&m=113");
-    die();
+if (!productionRequirementsMet($was, $data['Gebaeude1'], $data['Forschung' . $was])) {
+    redirectTo('/?p=plantage', 112);
 }
 
-$sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN statistik s
-SET
-    m.Geld=m.Geld-" . $produktion_kosten . ",
-    s.AusgabenProduktion=s.AusgabenProduktion+" . $produktion_kosten . "
-WHERE
-    m.ID='" . $_SESSION['blm_user'] . "';";
-mysql_query($sql_abfrage);        // Die Produktion bezahlen und die Ausgaben für Produktion anpassen
-$_SESSION['blm_queries']++;
+Database::getInstance()->begin();
 
-// Alles erledigt :)
-DisconnectDB();
-header("location: ../?p=plantage&m=207#p" . intval($_POST['was']));
+if (Database::getInstance()->createTableEntry('auftrag', array(
+        'finished' => date("Y-m-d H:i:s", time() + $stunden * 3600),
+        'user_id' => $_SESSION['blm_user'],
+        'item' => 200 + $was,
+        'amount' => $menge,
+        'cost' => $stunden * $productionData['Kosten']
+    )) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo(sprintf('/?p=plantage&was=%d', $was), 141, __LINE__);
+}
+
+if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        array('Geld' => -$stunden * $productionData['Kosten']),
+        array('Geld >= :whr0' => $stunden * $productionData['Kosten'])) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo(sprintf('/?p=plantage&was=%d', $was), 142, __LINE__);
+}
+
+if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        array('AusgabenProduktion' => $stunden * $productionData['Kosten']),
+        array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo(sprintf('/?p=plantage&was=%d', $was), 142, __LINE__);
+}
+
+Database::getInstance()->commit();
+redirectTo('/?p=plantage', 207, "p" . $was);

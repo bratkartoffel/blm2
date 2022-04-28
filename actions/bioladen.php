@@ -1,119 +1,110 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers mit dem Bioladen aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
+restrictSitter('Bioladen');
 
-if (!IstAngemeldet()) {        // Wenn der Client nicht angemeldet ist, darf er auch nichts mit der Bank machen :)
-    header("location: ../?p=index&m=102");
-    die();
+$alles = getOrDefault($_POST, 'alles', 0);
+$was = getOrDefault($_POST, 'was', 0);
+$menge = getOrDefault($_POST, 'menge', 0);
+
+$data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
+if ($data === null) {
+    redirectTo('/?p=bank', 112);
 }
+$playerName = Database::getInstance()->getPlayerNameById($_SESSION['blm_user']);
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-$ich = LoadSettings();    // Alle Daten des Users abrufen (Geld, Gebäudelevel, Forschungslevel...)
+if ($alles == 1) {
+    $sumMoney = 0;
+    $updateStorageValues = array();
+    $updateStorageWhere = array('user_id = :whr0' => $_SESSION['blm_user']);
+    Database::getInstance()->begin();
+    for ($i = 1; $i <= count_wares; $i++) {
+        $amount = $data['Lager' . $i];
+        if ($amount == 0) continue;
+        $price = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
 
-if ($_SESSION['blm_sitter']) {
-    $ich->Sitter = LoadSitterSettings();
-}
+        $sumMoney += $amount * $price;
+        $updateStorageValues['Lager' . $i] = -$amount;
+        $updateStorageWhere['Lager' . $i . ' >= :whr' . $i] = $amount;
 
-if (!$ich->Sitter->Bioladen && $_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=bioladen&m=112");
-    die();
-}
-
-include("../include/preise.inc.php");        // Wir müssen wissen, was sein Zeug wert ist...
-
-if (intval($_POST['was']) == 1337) {        // Er will alles auf einen Schlag verkaufen
-    $erloese = 0;
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-        $Lager = "Lager" . $i;
-
-        $erloese += $ich->$Lager * $Preis[$i];
+        if (Database::getInstance()->createTableEntry('log_bioladen', array(
+                'playerId' => $_SESSION['blm_user'],
+                'playerName' => $playerName,
+                'amount' => $amount,
+                'item' => $i,
+                'price' => $price
+            )) !== 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=bioladen', 141, __LINE__);
+        }
     }
 
-    $sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN statistik s
-SET
-    m.Geld=m.Geld+" . $erloese . ",
-    s.EinnahmenVerkauf=s.EinnahmenVerkauf+" . $erloese . "
-WHERE
-    m.ID='" . $_SESSION['blm_user'] . "';";
-    mysql_query($sql_abfrage);        // das Geld in die Geldbörse...
-
-    $sql_abfrage = "UPDATE lagerhaus SET ";
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-        $sql_abfrage .= "Lager" . $i . "=0, ";
+    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+            array('Geld' => $sumMoney)) == 0) {
+        Database::getInstance()->rollBack();
+        redirectTo('/?p=bioladen', 142, __LINE__);
     }
-    $sql_abfrage = substr($sql_abfrage, 0, -2);
-    $sql_abfrage .= " WHERE ID='" . $_SESSION['blm_user'] . "';";
 
-    mysql_query($sql_abfrage);        // und die Waren aus dem Lager raus.
+    if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            array('EinnahmenVerkauf' => $sumMoney), array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
+        Database::getInstance()->rollBack();
+        redirectTo('/?p=bioladen', 142, __LINE__);
+    }
 
-    DisconnectDB();
-    header("location: ../?p=bioladen&m=208");
-    die();
+    if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+            $updateStorageValues, $updateStorageWhere) == 0) {
+        Database::getInstance()->rollBack();
+        redirectTo('/?p=bioladen', 142, __LINE__);
+    }
+
+    Database::getInstance()->commit();
+    redirectTo('/?p=bioladen', 208);
 }
 
-$verkaufs_preis = $Preis[intval($_POST['was'])];        // Der Verkaufspreis kommt aus dem Include der "preise.inc.php"
-$verkaufs_menge = intval($_POST['menge']);                    // Die Menge, die er verkaufen will
-$temp = "Lager" . intval($_POST['was']);        // Termporäre Variable mit dem MySQL-Spalten-Namen für die Ware bilden
-
-if ($verkaufs_menge <= 0) {        // Er will ne negative Menge verkaufen? Geht nicht, einfach aus dem Minus ein Plus machen :)
-    $verkaufs_menge *= -1;
+if ($was <= 0 || $was > count_wares) {
+    redirectTo('/?p=bioladen', 112, __LINE__);
 }
 
-if (intval($_POST['was']) <= 0 || intval($_POST['was']) > ANZAHL_WAREN) {        // Er will was verkaufen, was es nicht gibt ;)
-    DisconnectDB();        // Verbindung trennen und abbrechen
-    header("location: ../?p=bioladen&m=112");
-    die();
+if ($menge <= 0 || $menge > $data['Lager' . $was]) {
+    redirectTo('/?p=bioladen', 125, __LINE__);
 }
 
-if (intval($ich->$temp) < $verkaufs_menge) {        // Will der Spieler mehr verkaufen, als er auf Lager hat? - Abbruch
-    DisconnectDB();
-    header("location: ../?p=bioladen&m=116");
-    die();
+$price = calculateSellPrice($was, $data['Forschung' . $was], $data['Gebaeude3'], $data['Gebaeude6']);
+
+Database::getInstance()->begin();
+if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        array('Geld' => $price * $menge)) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=bioladen', 142, __LINE__);
 }
 
-$sql_abfrage = "UPDATE
-    (mitglieder m NATURAL JOIN lagerhaus l) NATURAL JOIN statistik s
-SET
-    m.Geld=m.Geld+" . ($verkaufs_menge * $verkaufs_preis) . ",
-    s.EinnahmenVerkauf=s.EinnahmenVerkauf+" . ($verkaufs_menge * $verkaufs_preis) . ",
-    l." . $temp . "=l." . $temp . "-" . $verkaufs_menge . "
-WHERE
-    m.ID='" . $_SESSION['blm_user'] . "';";
-mysql_query($sql_abfrage);        // Die Waren aus dem Lager raus, das Geld in die Geldbörse...
-$_SESSION['blm_queries']++;
+if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        array('EinnahmenVerkauf' => $price * $menge), array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=bioladen', 142, __LINE__);
+}
 
-$sql_abfrage = "INSERT INTO
-    log_bioladen
-(
-    Wer,
-    Was,
-    Wann,
-    Wieviel,
-    Preis
-)
-VALUES
-(
-    '" . $_SESSION['blm_user'] . "',
-    '" . intval($_POST['was']) . "',
-    NOW(),
-    '" . $verkaufs_menge . "',
-    '" . $verkaufs_preis . "'
-);";
-mysql_query($sql_abfrage);        // Logbuch
-$_SESSION['blm_queries']++;
+if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+        array('Lager' . $was => -$menge),
+        array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $was . ' >= :whr1' => $menge)) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=bioladen', 142, __LINE__);
+}
 
-// Verbindung mit DB trennen, zurück zum Laden...
-DisconnectDB();
-header("location: ../?p=bioladen&m=208");
+if (Database::getInstance()->createTableEntry('log_bioladen', array(
+        'playerId' => $_SESSION['blm_user'],
+        'playerName' => $playerName,
+        'amount' => $menge,
+        'item' => $was,
+        'price' => $price
+    )) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=bioladen', 141, __LINE__);
+}
+
+Database::getInstance()->commit();
+redirectTo('/?p=bioladen', 208);

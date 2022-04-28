@@ -1,102 +1,56 @@
 <?php
-/**
- * Führt die Aktionen des Benutzers mit dem Forschungszentrum aus
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.actions
- */
+require_once('../include/config.inc.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
 
-// Zuerst mal die Konfigurationsdateien und die Funktionen einbinden
-include("../include/config.inc.php");
-include("../include/functions.inc.php");
-include("../include/database.class.php");
+ob_start();
+requireLogin();
+restrictSitter('Forschung');
 
-if (!IstAngemeldet()) {        // Wenn der Client nicht angemeldet ist, darf er auch nichts mit dem Forschungszentrum machen :)
-    header("location: ../?p=index&m=102");
-    die();
+$was = getOrDefault($_POST, 'was', 0);
+
+if ($was <= 0 || $was > count_wares) {
+    redirectTo('/?p=forschungszentrum', 112, __LINE__);
 }
 
-ConnectDB();        // Verbindung mit der Datenbank aufbauen
-$ich = LoadSettings();    // Alle Daten des Users abrufen (Geld, Gebäudelevel, Forschungslevel...)
+$data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel($_SESSION['blm_user']);
+requireEntryFound($data, '/?p=forschungszentrum', 112, __LINE__);
 
-if ($_SESSION['blm_sitter']) {
-    $ich->Sitter = LoadSitterSettings();
+$researchData = calculateResearchDataForPlayer($was, $data['Gebaeude2'], $data['Forschung' . $was]);
+
+if (!researchRequirementsMet($was, $data['Gebaeude1'], $data['Gebaeude2'])) {
+    redirectTo('/?p=forschungszentrum', 112, __LINE__);
 }
 
-if (!$ich->Sitter->Forschung && $_SESSION['blm_sitter']) {
-    DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112");
-    die();
+if ($data['Geld'] < $researchData['Kosten']) {
+    redirectTo('/?p=forschungszentrum', 111, __LINE__);
 }
 
-include("../include/kosten_dauer.inc.php");        // Dann die Forschungskosten und -dauern abrufen...
-
-if ($_POST['was'] <= 0 || $_POST['was'] > ANZAHL_WAREN) {    // der user will was forschen, was es nicht gibt...
-    DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112");
-    die();
+Database::getInstance()->begin();
+if (Database::getInstance()->createTableEntry('auftrag', array(
+        'finished' => date("Y-m-d H:i:s", time() + $researchData['Dauer']),
+        'user_id' => $_SESSION['blm_user'],
+        'item' => 300 + $was,
+        'cost' => $researchData['Kosten'],
+        'points' => $researchData['Punkte']
+    )) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=forschungszentrum', 141, __LINE__);
 }
 
-$temp = "Forschung" . $_POST['was'];            // Temporäre Variable mit dem MySQL-Spaltennamen der Forschung
-$forschungs_kosten = $$temp->Kosten;            // Die Forschungskosten des Auftrags
-$forschungs_dauer = $$temp->Dauer;                // Die Dauer des Auftrags
-$forschungs_punkte = $$temp->Punkte;            // Die Dauer des Auftrags
-
-if ($ich->Gebaeude2 < intval($_POST['was'] * 1.5) || $ich->Gebaeude1 < intval($_POST['was'] * 1.5)) {        // Darf der Benutzer das Gemüse überhaupt forschen?
-    DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112");
-    die();
+if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        array('Geld' => -$researchData['Kosten']),
+        array('Geld >= :whr0' => $researchData['Kosten'])) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=forschungszentrum', 142, __LINE__);
 }
 
-if ($ich->Geld < $forschungs_kosten) {        // Hat der Benutzer überhaupt genug Geld für so was? Wenn nicht, dann abbruch
-    DisconnectDB();
-    header("location: ../?p=forschungszentrum&m=112");
-    die();
+if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        array('AusgabenForschung' => $researchData['Kosten']),
+        array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
+    Database::getInstance()->rollBack();
+    redirectTo('/?p=forschungszentrum', 142, __LINE__);
 }
 
-$sql_abfrage = "INSERT INTO
-    auftrag
-(
-    ID,
-    Was,
-    Von,
-    Kosten,
-    Dauer,
-    Start,
-    Menge,
-    Punkte
-)
-VALUES
-(
-    NULL,
-    '" . (300 + intval($_POST['was'])) . "',
-    '" . $_SESSION['blm_user'] . "',
-    '" . $forschungs_kosten . "',
-    '" . $forschungs_dauer . "',
-    '" . time() . "',
-    NULL,
-    '" . $forschungs_punkte . "'
-);";
-mysql_query($sql_abfrage);        // Auftrag in die DB einfügen,
-$_SESSION['blm_queries']++;
-
-if (mysql_errno() > 0) {        // Der Auftrag ist schon in der DB (Spalten `Was`+`Von` sind UNIQUE!)
-    DisconnectDB();
-    header("location: ../?p=gebaeude&m=113");
-    die();
-}
-
-$sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN statistik s
-SET
-    m.Geld=m.Geld-" . $forschungs_kosten . ",
-    s.AusgabenForschung=s.AusgabenForschung+" . $forschungs_kosten . "
-WHERE
-    m.ID='" . $_SESSION['blm_user'] . "';";
-mysql_query($sql_abfrage);    // Falls der Auftrag noch nicht erteilt wurde, das Geld abziehen, und die Ausgaben für Forschung anpassen
-$_SESSION['blm_queries']++;
-
-// Alles erledigt :)
-DisconnectDB();
-header("location: ../?p=forschungszentrum&m=207#f" . $_POST['was']);
+Database::getInstance()->commit();
+redirectTo('/?p=forschungszentrum', 207, "f" . $was);

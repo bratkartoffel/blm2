@@ -1,72 +1,75 @@
 <?php
-/**
- * Wird in die index.php eingebunden; Seite mit Lageransicht und Möglichkeit, die Waren gleich zu verkaufen.
- *
- * @version 1.0.0
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.pages
- */
+restrictSitter('Bioladen');
 
-include("include/preise.inc.php");        // Hier brauchen wir noch zusätzlich die Verkaufspreise der Waren
+$data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
+
+$sumWeight = 0;
+$sumMoney = 0;
+$prices = array();
+for ($i = 1; $i <= count_wares; $i++) {
+    if ($data['Lager' . $i] == 0) continue;
+    $prices[$i] = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
+
+    $sumWeight += $data['Lager' . $i];
+    $sumMoney += $data['Lager' . $i] * $prices[$i];
+}
 ?>
-<table id="SeitenUeberschrift">
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/bioladen.png" alt=""/>
+    <span>Bioladen<?= createHelpLink(1, 7); ?></span>
+</div>
+
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
+
+<p>
+    Hier können Sie Ihr produziertes Obst und Gemüse zum Festpreis verkaufen.<br/>
+    Dieser richtet sich nach der Stufe der Schule und nach der Ausbaustufe des Bioladens.
+</p>
+
+<table class="Liste">
     <tr>
-        <td><img src="/pics/big/bioladen.png" alt="Bioladen"/></td>
-        <td>Der Bioladen
-            <a href="./?p=hilfe&amp;mod=1&amp;cat=7"><img src="/pics/help.gif" alt="Hilfe" style="border: none;"/></a>
-        </td>
+        <th>Lager</th>
+        <th>Ware</th>
+        <th>Preis / kg</th>
+        <th>Menge / Aktion</th>
     </tr>
-</table>
-<?php
-if ($_SESSION['blm_sitter'] && !$ich->Sitter->Bioladen) {
-    echo '<h2 style="color: red; font-weight: bold;">Ihre Rechte reichen nicht aus, um diesen Bereich sitten zu dürfen!</h2>';
-} else {
-    ?>
-
-    <?= $m; ?>
-
-    <b>
-        Hier können Sie Ihr produziertes Obst und Gemüse zum Festpreis verkaufen.<br/>
-        Dieser richtet sich nach der Stufe der Schule und nach der Ausbaustufe des Bioladens.<br/>
-    </b>
-    <br/>
-    <table class="Liste" style="width: 450px" cellspacing="0">
+    <?php
+    for ($i = 1; $i <= count_wares; $i++) {
+        if ($data['Lager' . $i] == 0) continue;
+        ?>
         <tr>
-            <th width="60">Lager</th>
-            <th width="100">Ware</th>
-            <th width="80">Preis / kg</th>
-            <th width="230">Menge / Aktion</th>
+            <td id="cur_amount_<?= $i; ?>"><?= formatWeight($data['Lager' . $i]); ?></td>
+            <td><?= getItemName($i); ?></td>
+            <td><?= formatCurrency($prices[$i]); ?></td>
+            <td>
+                <form action="/actions/bioladen.php" method="post">
+                    <input type="hidden" name="was" value="<?= $i; ?>"/>
+                    <input type="text" maxlength="6" name="menge" id="amount_<?= $i; ?>" size="4"
+                           value="<?= formatWeight($data['Lager' . $i], false); ?>"/>
+                    <input type="submit" value="Verkaufen" id="sell_<?= $i; ?>" onclick="return submit(this);"/>
+                </form>
+            </td>
         </tr>
         <?php
-        $eintrag = 0;
-        $menge = 0;
-        $erloese = 0;
+    }
 
-        for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-            $Lager = "Lager" . $i;        // Git das gesamte Lager zeilenweise aus.
-            if ($ich->$Lager > 0) {
-                echo '<tr>';
-                echo '<td>' . $ich->$Lager . ' kg</td>';
-                echo '<td>' . Warenname($i) . '</td>';
-                echo '<td>' . number_format($Preis[$i], 2, ',', '.') . ' ' . $Currency . '</td>';
-                echo '<td align="right" style="padding-right: 5px;"><form action="actions/bioladen.php" method="post"><input type="text" maxlength="5" name="menge" size="3" style="margin-right: 8px;" value="' . $ich->$Lager . '" />';
-                echo '<input type="hidden" name="was" value="' . $i . '" /><input type="submit" value="Verkaufen" onclick="this.disabled=\'disabled\'; this.value=\'Bitte warten...\'; this.parentNode.submit(); return false;" /></form></td>';
-                echo '</tr>';
-
-                $eintrag++;
-                $menge += $ich->$Lager;
-                $erloese += $ich->$Lager * $Preis[$i];
-            }
-        }
-
-        if ($eintrag == 0) {
-            echo '<tr><td colspan="4" style="text-align: center;"><i>Sie haben kein Obst/Gemüse auf Lager.</i></td></tr>';
-        }
-
-        if ($eintrag > 1) {
-            echo '<tr><td colspan="4" style="text-align: center; border-top: darkred solid 1px;"><i>Alles (' . number_format($menge, 0, ",", ".") . ' kg) für ' . number_format($erloese, 2, ",", ".") . ' ' . $Currency . ') verkaufen:</i><form action="actions/bioladen.php" method="post"><input type="hidden" name="was" value="1337" /><input type="submit" value="Verkaufen" /></form></td></tr>';
-        }
+    if ($sumWeight == 0) {
         ?>
-    </table>
-    <?php
-}
+        <tr class="StorageEmpty">
+            <td colspan="4">Ihr Lager ist leer.</td>
+        </tr>
+        <?php
+    } else {
+        ?>
+        <tr class="StorageSellAll">
+            <td colspan="4">Alles (<?= formatWeight($sumWeight); ?>) für <?= formatCurrency($sumMoney); ?> verkaufen:
+                <form action="/actions/bioladen.php" method="post">
+                    <input type="hidden" name="alles" value="1"/>
+                    <input type="submit" value="Verkaufen" id="sell_all"/>
+                </form>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
+</table>

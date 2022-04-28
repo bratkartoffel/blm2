@@ -1,1695 +1,726 @@
 <?php
-/**
- * Das "Herz" des Programms, hier stehen alle wichtigen Funktionen des Programms.
- *
- * @version 1.0.3
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- * @package blm2.includes
- */
-
-session_start();        // Die Sitzung beim Einbinden der Datei sofort starten, werden immer benötigt.
-
-/**
- * Hilfsfunktion: Liefert anhand der AuftragsBezeichnung (MySQL-Spalte `Was` in der Tabelle `auftraege`) einen Text zurück, was das ist
- *
- * @param int $auftrag_nummer
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function AuftragText($auftrag_nummer)
+function getOrderChefboxDescription(int $order_type): string
 {
-    if (intval($auftrag_nummer) > 100 && intval($auftrag_nummer) < 200) {        // Aufträge zwischen 100 und 200 sind Gebäude
-        $zurueck = "G: " . GebaeudeName($auftrag_nummer - 100);
-    }
-
-    if (intval($auftrag_nummer) > 200 && intval($auftrag_nummer) < 300) {        // Aufträge zwischen 200 und 300 sind Produktionen
-        $zurueck = "A: " . WarenName($auftrag_nummer - 200);
-    }
-
-    if (intval($auftrag_nummer) > 300 && intval($auftrag_nummer) < 400) {        // Aufträge zwischen 300 und 400 sind Forschungen
-        $zurueck = "F: " . WarenName($auftrag_nummer - 300);
-    }
-
-    if (strlen($zurueck) > 14) {                // Wenn der Text zu lange ist
-        $zurueck = substr($zurueck, 0, 14) . "...";    // Dann wird er gekürzt und mit 3 Punkten versehen
-    }
-
-    return $zurueck;
-}
-
-/**
- * Hilfsfunktion: Gibt den Bildnamen einer Ware zurück (im Ordner pics/obst)
- *
- * @param int $waren_id
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function BildVonWare($waren_id)
-{
-    switch ($waren_id) {
+    switch (floor($order_type / 100)) {
         case 1:
-            return "kartoffeln.jpg";
+            $result = sprintf('G: %s', getBuildingName($order_type % 100));
+            break;
         case 2:
-            return "karotten.jpg";
+            $result = sprintf('A: %s', getItemName($order_type % 100));
+            break;
         case 3:
-            return "tomaten.jpg";
-        case 4:
-            return "salat.jpg";
-        case 5:
-            return "apfel.jpg";
-        case 6:
-            return "birnen.jpg";
-        case 7:
-            return "kirschen.jpg";
-        case 8:
-            return "bananen.jpg";
-        case 9:
-            return "gurken.jpg";
-        case 10:
-            return "trauben.jpg";
-        case 11:
-            return "tabak.jpg";
-        case 12:
-            return "ananas.jpg";
-        case 13:
-            return "erdbeeren.jpg";
-        case 14:
-            return "orangen.jpg";
-        case 15:
-            return "kiwi.jpg";
+            $result = sprintf('F: %s', getItemName($order_type % 100));
+            break;
         default:
-            return "notfound.jpg";
+            $result = sprintf('Unbekannt (%d)', $order_type);
+            break;
+    }
+    if (strlen($result) > 14) {
+        $result = substr($result, 0, 14) . '...';
+    }
+    return $result;
+}
+
+function CheckAllAuftraege(): void
+{
+    $players = Database::getInstance()->getAllPlayerIdsAndName();
+    foreach ($players as $player) {
+        CheckAuftraege($player['ID']);
     }
 }
 
-/**
- * Kernfunktion. Überprüft ob für einen Benutzer fertige Aufträge da sind, und bearbeitet diese auch gleich
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function CheckAllAuftraege()
+function CheckAuftraege(int $blm_user): bool
 {
-    $sql_abfrage = "SELECT 
-	* 
-FROM 
-	(
-		(mitglieder NATURAL JOIN gebaeude) 
-		NATURAL JOIN 
-			(forschung NATURAL JOIN lagerhaus)
-	)
-	NATURAL JOIN
-		punkte p;";
-    $sql_ergebnis = mysql_query($sql_abfrage);        // Holt sich alle Spieler aus der Datenbank, mit allen wichtigen Daten
-    $_SESSION['blm_queries']++;
+    Database::getInstance()->begin();
+    $auftraege = Database::getInstance()->getAllExpiredAuftraegeByVon($blm_user);
 
-    while ($benutzer = mysql_fetch_object($sql_ergebnis)) {        // Läuft alle Spieler durch
-        CheckAuftraege($benutzer);        // Überprüft, ob fertige Aufträge vorliegen, bearbeitet diese
-    }
-}
-
-/**
- * Kernfunktion. Bearbeitet alle Aufträge, welche beendet sind und reagiert dementsprechend.
- *
- * @param object $benutzer
- *
- * @return void
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function CheckAuftraege($benutzer)
-{
-    $sql_abfrage = "SELECT
-	*
-FROM
-	auftrag
-WHERE
-	Von='" . $benutzer->ID . "'
-AND
-	(Start+Dauer)<=" . time() . ";";
-    $sql_ergebnis2 = mysql_query($sql_abfrage);        // Zuerst werden alle Aufträge, welche beendet sind, abgefragt
-    $_SESSION['blm_queries']++;
-
-    $aenderung = false;        // Zeigt an, ob Änderungen vorgenommen wurden und die Tabellen aktualisiert werden müssen
-
-    while ($auftrag = mysql_fetch_object($sql_ergebnis2))    // Solange Aufträge vorliegen, wird gearbeitet...
-    {
-        switch (intval($auftrag->Was / 100))        // Handle je nach der Auftragsnummer
-            /*
-                Ergänzung:
-                    1:		Gebäude
-                    2:		Produktion
-                    3:		Forschung
-            */ {
+    foreach ($auftraege as $auftrag) {
+        switch (floor($auftrag['item'] / 100)) {
+            // Gebäude
             case 1:
-                $temp = "Gebaeude" . ($auftrag->Was - 100);        // Welche Spalte in der DB ist betroffen?
-                $benutzer->$temp++;        // Das entsprechende Gebäude um ein Level hochsetzen
-                $benutzer->Punkte += $auftrag->Punkte;
-                $benutzer->GebaeudePlus += $auftrag->Punkte;
-
-                $aenderung = true;
+                if (Database::getInstance()->updateTableEntryCalculate('gebaeude', null,
+                        array('Gebaeude' . ($auftrag['item'] % 100) => 1), array('user_id = :whr0' => $blm_user)) != 1) {
+                    return false;
+                }
+                if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
+                        array('GebaeudePlus' => $auftrag['points']),
+                        array('user_id = :whr0' => $blm_user)) != 1) {
+                    return false;
+                }
                 break;
+
+            // Produktion
             case 2:
-                $temp = "Lager" . ($auftrag->Was - 200);        // Welche Spalte in der DB ist betroffen?
-                $benutzer->$temp += $auftrag->Menge;        // Die im Auftrag festgelegte Menge in das Lager schreiben
-                $benutzer->Punkte += $auftrag->Punkte;
-                $benutzer->ProduktionPlus += $auftrag->Punkte;
-
-                $aenderung = true;
+                if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+                        array('Lager' . ($auftrag['item'] % 100) => $auftrag['amount']),
+                        array('user_id = :whr0' => $blm_user)) != 1) {
+                    return false;
+                }
                 break;
+
+            // Forschung
             case 3:
-                $temp = "Forschung" . ($auftrag->Was - 300);        // Welche Spalte in der DB ist betroffen?
-                $benutzer->$temp++;        // Die entsprechende Forschung um 1 hochsetzen
-                $benutzer->Punkte += $auftrag->Punkte;
-                $benutzer->ForschungPlus += $auftrag->Punkte;
+                if (Database::getInstance()->updateTableEntryCalculate('forschung', null,
+                        array('Forschung' . ($auftrag['item'] % 100) => 1),
+                        array('user_id = :whr0' => $blm_user)) != 1) {
+                    return false;
+                }
+                if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
+                        array('ForschungPlus' => $auftrag['points']),
+                        array('user_id = :whr0' => $blm_user)) != 1) {
+                    return false;
+                }
+                break;
 
-                $aenderung = true;
+            // Unknown
+            default:
+
                 break;
         }
+        if ($auftrag['points'] > 0) {
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                    array('Punkte' => $auftrag['points'])) != 1) {
+                return false;
+            }
+        }
+        if (Database::getInstance()->deleteTableEntry('auftrag', $auftrag['ID']) != 1) {
+            return false;
+        }
     }
-
-    if ($aenderung)        // Nur wenn eine Änderung vorgenommen wurde, dann soll das ganze zurückgeschrieben werden.
-    {
-        $sql_abfrage = "UPDATE lagerhaus SET ";        // Das ist der Anfangstext der SQL-Abfrage
-
-        for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-            $temp = "Lager" . $i;
-            $sql_abfrage .= $temp . "='" . $benutzer->$temp . "', ";        // Setzt die SQL-Abfrage Stück für Stück zusammen
-        }
-
-        $sql_abfrage = substr($sql_abfrage, 0, -2) . " WHERE ID='" . $benutzer->ID . "';";            // zum Schluss muss noch das letzte Komma der Abfrage gelöscht werden und die WHERE-Klausel hinzugefügt werden.
-        mysql_query($sql_abfrage);        // Dann die Query abschicken
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "UPDATE forschung SET ";        // Das ist der Anfangstext der SQL-Abfrage
-
-        for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-            $temp = "Forschung" . $i;
-            $sql_abfrage .= $temp . "='" . $benutzer->$temp . "', ";        // Setzt die SQL-Abfrage Stück für Stück zusammen
-        }
-
-        $sql_abfrage = substr($sql_abfrage, 0, -2) . " WHERE ID='" . $benutzer->ID . "';";            // zum Schluss muss noch das letzte Komma der Abfrage gelöscht werden und die WHERE-Klausel hinzugefügt werden.
-        mysql_query($sql_abfrage);        // Dann die Query abschicken
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "UPDATE gebaeude SET ";        // Das ist der Anfangstext der SQL-Abfrage
-
-        for ($i = 1; $i <= ANZAHL_GEBAEUDE; $i++) {
-            $temp = "Gebaeude" . $i;
-            $sql_abfrage .= $temp . "='" . $benutzer->$temp . "', ";        // Setzt die SQL-Abfrage Stück für Stück zusammen
-        }
-
-        $sql_abfrage = substr($sql_abfrage, 0, -2) . " WHERE ID='" . $benutzer->ID . "';";            // zum Schluss muss noch das letzte Komma der Abfrage gelöscht werden und die WHERE-Klausel hinzugefügt werden.
-        mysql_query($sql_abfrage);        // Dann die Query abschicken
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "UPDATE
-    mitglieder m NATURAL JOIN punkte p
-SET
-    m.Punkte=" . $benutzer->Punkte . ",
-    p.GebaeudePlus=" . $benutzer->GebaeudePlus . ",
-    p.ForschungPlus=" . $benutzer->ForschungPlus . ",
-    p.ProduktionPlus=" . $benutzer->ProduktionPlus . "
-WHERE
-    m.ID='" . $benutzer->ID . "';";
-        mysql_query($sql_abfrage);        // Dann die Query abschicken
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "DELETE FROM
-    auftrag
-WHERE
-    Von='" . $benutzer->ID . "'
-AND
-    (Start+Dauer)<=" . time() . ";";
-        mysql_query($sql_abfrage);        // Dann die Query abschicken
-        $_SESSION['blm_queries']++;
-    }
+    Database::getInstance()->commit();
+    return true;
 }
 
-/**
- * Hilfsfunktion: Prüft, ob eine angegebene Mailadresse von der Syntax her gültig ist
- *
- * @param string $email
- *
- * @return int
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.1
- *
- */
-function CheckEMail($email)
+function isRoundOver(): bool
 {
-    return eregi("^([a-z0-9_]|\-|\.)+@(([a-z0-9_]|\-)+\.)+[a-z]{2,4}\$", $email);
+    return (last_reset + game_round_duration <= time());
 }
 
-/**
- * Hilfsfunktion: Schaut, ob das Spiel gesperrt ist
- *
- * @return boolean
- **@version 1.0.1
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function CheckGameLock()
+function isGameLocked(): bool
 {
-    return (LAST_RESET >= time());
+    return (last_reset >= time());
 }
 
-/**
- * Hilfsfunktion: Liefert den Fehlertext zu einer Fehlernummer zurück
- *
- * @param int $meldung
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.1
- *
- */
-function CheckMessage($meldung)
+function getMessageBox(int $msg_id): ?string
 {
-    if (intval($meldung) == 0) {            // Naja, Meldung 0 ist keine Meldung, also abbrechen
-        return "";
+    if ($msg_id == 0) {
+        return null;
+    }
+    if ($msg_id >= 200 && $msg_id < 300) {
+        $image = 'ok';
+    } else {
+        $image = 'error';
     }
 
-    if ($meldung > 100 && $meldung < 200)        // Fehlermeldung
-        $zurueck[] = '<table id="m_' . $meldung . '" class="Meldung" border="0" cellspacing="0">
-					<tr>
-						<td style="width: 40px;">
-							<img src="/pics/small/error.png" alt="Fehler" style="margin: 4px;" />
-						</td>
-						<td>
-							<span class="MeldungR">
-								';        // HEADER für die Fehlermeldung
-
-    if ($meldung > 200 && $meldung < 300)        // Hinweis
-        $zurueck[] = '<table id="m_' . $meldung . '"  class="Meldung" border="0" cellspacing="0">
-					<tr>
-						<td style="width: 40px;">
-							<img src="/pics/small/ok.png" alt="Hinweis" style="margin: 4px;" />
-						</td>
-						<td>
-							<span class="MeldungG">
-								';        // HEADER für die Fehlermeldung
-
-    if ($meldung <= 100 || $meldung == 200 || $meldung >= 300)        // Fehlermeldung
-        $zurueck[] = '<table id="m_' . $meldung . '"  class="Meldung" border="0" cellspacing="0">
-					<tr>
-						<td style="width: 40px;">
-							<img src="/pics/small/error.png" alt="Fehler" style="margin: 4px;" />
-						</td>
-						<td>
-							<span class="MeldungR">
-								';        // HEADER für die Fehlermeldung
-
-    switch ($meldung)        // Überprüft die Fehlernummer
+    switch ($msg_id)        // Überprüft die Fehlernummer
     {
         case 101:
-            $zurueck[] = 'Seite konnte nicht gefunden werden!';
+            $text = 'Seite konnte nicht gefunden werden!';
             break;
         case 102:
-            $zurueck[] = 'Sie sind nicht angemeldet. Bitte melden Sie sich erst an.';
+            $text = 'Sie sind nicht angemeldet. Bitte melden Sie sich erst an.';
             break;
         case 103:
-            $zurueck[] = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist 64 KB.';
+            $text = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist 64 KB.';
             break;
         case 104:
-            $zurueck[] = 'Bitte füllen Sie alle Felder aus.';
+            $text = 'Bitte füllen Sie alle Felder aus.';
             break;
         case 105:
-            $zurueck[] = 'Bitte geben Sie Ihr gewünschtes Passwort 2x ein, um Tipfehler zu vermeiden.';
+            $text = 'Bitte geben Sie Ihr gewünschtes Passwort 2x ein, um Tipfehler zu vermeiden.';
             break;
         case 106:
-            $zurueck[] = 'Der Benutzername oder EMail-Adresse ist bereits vergeben.';
+            $text = 'Der Benutzername oder EMail-Adresse ist bereits vergeben.';
             break;
         case 107:
-            $zurueck[] = 'Die hochgeladene Datei ist kein Bild vom Typ jpg, gif oder png!';
+            $text = 'Die hochgeladene Datei ist kein Bild vom Typ jpg, gif oder png!';
             break;
         case 108:
-            $zurueck[] = 'Unbekannter Benutzername und / oder falsches Passwort!';
+            $text = 'Unbekannter Benutzername und / oder falsches Passwort!';
             break;
         case 109:
-            $zurueck[] = 'Sie haben Ihr Kreditlimit schon erreicht oder ein zu grosser Betrag wurde ausgewählt!';
+            $text = 'Sie haben Ihr Kreditlimit schon erreicht oder ein zu grosser Betrag wurde ausgewählt!';
             break;
         case 110:
-            $zurueck[] = 'Ungültiger Betrag!';
+            $text = 'Ungültiger Betrag!';
             break;
         case 111:
-            $zurueck[] = 'Sie haben nicht genügend Geld!';
+            $text = 'Sie haben nicht genügend Geld!';
             break;
         case 112:
-            $zurueck[] = 'Das darfst du nicht!';
+            $text = 'Das darfst du nicht!';
             break;
         case 113:
-            $zurueck[] = 'Der Auftrag wurde bereits erteilt!';
+            $text = 'Der Auftrag wurde bereits erteilt!';
             break;
         case 114:
-            $zurueck[] = 'Ihr Account wurde soeben resettet, da Sie Ihren Kredit bei der Bank nicht decken konnten und die Bank alles gepfändet hat.';
+            $text = 'Ihr Account wurde soeben resettet, da Sie Ihren Kredit bei der Bank nicht decken konnten und die Bank alles gepfändet hat.';
             break;
         case 115:
-            $zurueck[] = 'Bitte geben Sie eine gültige Menge ein.';
+            $text = 'Bitte geben Sie eine gültige Menge ein.';
             break;
         case 116:
-            $zurueck[] = 'Sie haben gar nicht so viel Waren auf Lager!';
+            $text = 'Sie haben gar nicht so viel Waren auf Lager!';
             break;
         case 117:
-            $zurueck[] = 'Ungültige Angaben oder Angaben nicht vollständig.';
+            $text = 'Ungültige Angaben oder Angaben nicht vollständig.';
             break;
         case 118:
-            $zurueck[] = 'Der Benutzer konnte nicht gefunden werden.';
+            $text = 'Der Benutzer konnte nicht gefunden werden.';
             break;
         case 119:
-            $zurueck[] = 'Das Angebot mit der ID konnte nicht gefunden werden. Vermutlich war jemand schneller als Sie.';
+            $text = 'Das Angebot mit der ID konnte nicht gefunden werden. Vermutlich war jemand schneller als Sie.';
             break;
         case 120:
-            $zurueck[] = 'Bitte geben Sie eine Menge und einen Preis grösser 1 ein!';
+            $text = 'Bitte geben Sie eine Menge und einen Preis grösser 1 ein!';
             break;
         case 121:
-            $zurueck[] = 'Das alte Kennwort ist nicht korrekt!';
+            $text = 'Das alte Kennwort ist nicht korrekt!';
             break;
         case 122:
-            $zurueck[] = 'Sie haben keine Waren auf Lager, was wollen Sie da verkaufen?';
-            break;
-        case 123:
-            $zurueck[] = 'Das Spiel ist zur Zeit pausiert. Die neue Runde startet am ' . date("d.m.Y \u\m H:i", LAST_RESET);
+            $text = 'Sie haben keine Waren auf Lager, was wollen Sie da verkaufen?';
             break;
         case 124:
-            $zurueck[] = 'Die angegebene Nachricht konnte nicht gefunden werden!';
+            $text = 'Die angegebene Nachricht konnte nicht gefunden werden!';
             break;
         case 125:
-            $zurueck[] = 'Ungültige Menge eingegeben!';
+            $text = 'Ungültige Menge eingegeben!';
             break;
         case 126:
-            $zurueck[] = 'Es existiert bereits eine Gruppe mit diesem Namen oder Kürzel!';
+            $text = 'Es existiert bereits eine Gruppe mit diesem Namen oder Kürzel!';
             break;
         case 127:
-            $zurueck[] = 'Entweder existiert die eingegebene Gruppe nicht oder das eingegebene Passwort ist falsch!';
+            $text = 'Entweder existiert die eingegebene Gruppe nicht oder das eingegebene Passwort ist falsch!';
             break;
         case 128:
-            $zurueck[] = 'Bitte geben Sie eine Nachricht ein!';
+            $text = 'Bitte geben Sie eine Nachricht mit mindestens 4 Zeichen im Betreff und 8 Zeichen als Text ein!';
             break;
         case 129:
-            $zurueck[] = 'Es besteht bereits eine Beziehung mit dieser Gruppe!';
+            $text = 'Es besteht bereits eine Beziehung mit dieser Gruppe!';
             break;
         case 130:
-            $zurueck[] = 'Der eingegebene Sicherheitscode ist nicht korrekt!';
+            $text = 'Der eingegebene Sicherheitscode ist nicht korrekt!';
             break;
         case 131:
-            $zurueck[] = 'Der Kontostand des Mitglieds ist bereits auf dem Maximum, die Bank weigert sich die Überweisung anzunehmen!';
+            $text = 'Der Kontostand des Mitglieds ist bereits auf dem Maximum, die Bank weigert sich die Überweisung anzunehmen!';
             break;
         case 132:
-            $zurueck[] = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als 100.000 € sein!';
+            $text = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als ' . formatCurrency(group_war_min_amount) . ' sein!';
             break;
         case 133:
-            $zurueck[] = "Bitte geben Sie eine Dauer zwischen 1 und 12 Stunden ein!";
+            $text = "Bitte geben Sie eine Dauer zwischen 1 und " . production_hours_max . " Stunden ein!";
             break;
         case 134:
-            $zurueck[] = "Bitte geben Sie eine gültige EMail-Adresse ein!";
+            $text = "Bitte geben Sie eine gültige EMail-Adresse ein!";
             break;
         case 135:
-            $zurueck[] = "Ihr Account ist noch nicht aktiviert.<br />Bitte klicken Sie auf den Link, den Sie per EMail erhalten haben.<br />Falls Sie keinen Link erhalten haben, so wenden Sie sich bitte mit Ihrem Benutzernamen und <br />der registrierten EMailadresse als Absender an die im Impressum angegebene Adresse.";
+            $text = "Ihr Account ist noch nicht aktiviert.<br />Bitte klicken Sie auf den Link, den Sie per EMail erhalten haben.<br />Falls Sie keinen Link erhalten haben, so wenden Sie sich bitte mit Ihrem Benutzernamen und <br />der registrierten EMailadresse als Absender an die im Impressum angegebene Adresse.";
             break;
         case 136:
-            $zurueck[] = "Bitte geben Sie ein Sitterpasswort ein!";
+            $text = "Bitte geben Sie ein Sitterpasswort ein!";
             break;
         case 137:
-            $zurueck[] = "Es ist Weihnachten. Die Mafiabosse haben untereinander bis zum Ende der Feiertage einen Waffenstillstand geschlossen.";
+            $text = "Es ist Weihnachten. Die Mafiabosse haben untereinander bis zum Ende der Feiertage einen Waffenstillstand geschlossen.";
             break;
         case 138:
-            $zurueck[] = "Sitter dürfen beim Spiel nicht teilnehmen, tut mir Leid...";
+            $text = "Sitter dürfen beim Spiel nicht teilnehmen, tut mir Leid...";
             break;
         case 139:
-            $zurueck[] = "Ihr Account wurde von einem Administrator gesperrt. Bitte kontaktieren Sie einen Administrator im Forum für weitere Informationen. Falls diese Sperre dauerhaft ist, dann wird Ihr Account zwei Wochen nach Beginn der Sperre gelöscht.";
+            $text = "Ihr Account wurde von einem Administrator gesperrt. Bitte kontaktieren Sie einen Administrator im Forum für weitere Informationen. Falls diese Sperre dauerhaft ist, dann wird Ihr Account zwei Wochen nach Beginn der Sperre gelöscht.";
             break;
         case 140:
-            $zurueck[] = "Die Gruppe wurde gefunden und das Passwort ist korrekt, jedoch hat die Gruppe die maximale Mitgliederzahl schon erreicht.";
+            $text = "Die Gruppe wurde gefunden und das Passwort ist korrekt, jedoch hat die Gruppe die maximale Mitgliederzahl schon erreicht.";
             break;
         case 141:
-            $zurueck[] = "Datenbankfehler, konnte neuen Eintrag nicht anlegen";
+            $text = "Datenbankfehler, konnte neuen Eintrag nicht anlegen";
             break;
         case 142:
-            $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht bearbeiten";
+            $text = "Datenbankfehler, konnte bestehenden Eintrag nicht bearbeiten";
             break;
         case 143:
-            $zurueck[] = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
+            $text = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
             break;
         case 144:
-            $zurueck[] = 'Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:' . ADMIN_EMAIL . '">' . ADMIN_EMAIL . '</a>';
+            $text = sprintf('Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:%s">%s</a>', admin_email, admin_email);
+            break;
+        case 145:
+            $text = 'Sie müssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten können!';
+            break;
+        case 146:
+            $text = 'Der Benutzername darf nur zwischen ' . username_min_len . ' und ' . username_max_len . ' Zeichen enthalten';
+            break;
+        case 147:
+            $text = 'Das gewählte Passwort ist zu kurz, es muss mindestens aus ' . password_min_len . ' Zeichen bestehen.';
+            break;
+        case 148:
+            $text = 'Die Registrierung ist aktuell geschlossen';
+            break;
+        case 149:
+            $text = 'Bitte geben Sie die neue EMail-Adresse 2x ein, um Schreibfehler zu vermeiden.';
+            break;
+        case 150:
+            $text = 'Die EMail-Adresse konnte nicht geändert werden, weil die Bestätigungsmail nicht gesendet werden konnte.';
+            break;
+        case 151:
+            $text = 'Der Account konnte auf Grund von Fehlern mit der Datenbank nicht zurückgesetzt werden.';
+            break;
+        case 152:
+            $text = 'Die Passwörter für den Sitter und den Hauptzugang müssen unterschiedlich sein.';
+            break;
+        case 153:
+            $text = 'Ungültiger Preis angegeben.';
+            break;
+        case 154:
+            $text = 'Eintrag konnte nicht gefunden werden';
+            break;
+        case 155:
+            $text = 'Der andere Spieler kann nicht angegriffen werden, da er ausserhalb des Punktebereichs liegt.';
+            break;
+        case 156:
+            $text = 'Ihre Gruppe hat ein NAP oder BND mit der Gruppe des anderen Spielers.';
+            break;
+        case 157:
+            $text = 'Sie befinden sich bereits in einer Gruppe';
+            break;
+        case 158:
+            $text = 'Ungültiger Gruppenname (Darf nur maximal ' . group_max_name_length . ' Zeichen lang sein)';
+            break;
+        case 159:
+            $text = 'Ungültiges Gruppenkürzel  (Darf nur maximal ' . group_max_tag_length . ' Zeichen lang sein)';
+            break;
+        case 160:
+            $text = 'Token in Anfrage nicht gefunden, Aktion verweigert';
+            break;
+        case 161:
+            $text = 'Mit Ihrem Austritt gäbe es kein Mitglied mehr, welches Rechte vergeben könnte';
+            break;
+        case 162:
+            $text = 'Sie sind das letzte Mitglied dieser Gruppe, ein Austritt ist nicht möglich';
+            break;
+        case 163:
+            $text = 'Die Gruppe kann erst gelöscht werden, wenn alle diplomatischen Beziehungen entfernt wurden';
+            break;
+        case 164:
+            $text = 'Der Name darf kein &quot;#&quot; enthalten';
+            break;
+        case 165:
+            $text = 'Sie können keine diplomatische Beziehung mit Ihnen selbst eingehen';
+            break;
+        case 166:
+            $text = 'In der Gruppenkasse befindet sich genügend Geld für den Krieg';
+            break;
+        case 167:
+            $text = 'Eine diplomatische Beziehung kann erst nach frühestens ' . group_diplomacy_min_duration . ' Tagen aufgekündigt werden';
+            break;
+        case 168:
+            $text = 'Sie können sich selbst keine Nachrichten schicken!';
+            break;
+        case 169:
+            $text = 'Die Mafia ist erst ab ' . formatPoints(min_points_mafia) . ' Punkten verfügbar';
             break;
 
 
         case 201:
-            $zurueck[] = 'Der neue Benutzer wurde erfolgreich erstellt. Sobald Sie Ihre EMail-Adresse bestätigt haben, können Sie sich einloggen.';
+            $text = 'Der neue Benutzer wurde erfolgreich erstellt. Sobald Sie Ihre EMail-Adresse bestätigt haben, können Sie sich einloggen.';
             break;
         case 202:
-            $zurueck[] = 'Sie haben sich erfolgreich angemeldet.';
-            if ($_SESSION['blm_sitter']) {
-                $zurueck[] = ' (Sitterzugang)';
+            $text = 'Sie haben sich erfolgreich angemeldet.';
+            if (array_key_exists('blm_sitter', $_SESSION) && $_SESSION['blm_sitter']) {
+                $text .= ' (Sitterzugang)';
             }
             break;
         case 203:
-            $zurueck[] = 'Sie haben sich erfolgreich abgemeldet.';
+            $text = 'Sie haben sich erfolgreich abgemeldet.';
             break;
         case 204:
-            $zurueck[] = 'Nachricht wurde gesendet.';
+            $text = 'Nachricht wurde gesendet.';
             break;
         case 205:
-            $zurueck[] = 'Ihr Account wurde gelöscht. Ich hoffe, das Spiel hat Ihnen gefallen!';
+            $text = 'Ihr Account wurde gelöscht. Ich hoffe, das Spiel hat Ihnen gefallen!';
             break;
         case 206:
-            $zurueck[] = 'Die Beschreibung wurde gespeichert.';
+            $text = 'Die Beschreibung wurde gespeichert.';
             break;
         case 207:
-            $zurueck[] = 'Der Auftrag wurde erteilt.';
+            $text = 'Der Auftrag wurde erteilt.';
             break;
         case 208:
-            $zurueck[] = 'Die Waren wurden verkauft.';
+            $text = 'Die Waren wurden verkauft.';
             break;
         case 209:
-            $zurueck[] = 'Das Bild wurde gelöscht.';
+            $text = 'Das Bild wurde gelöscht.';
             break;
         case 210:
-            $zurueck[] = 'Das Bild wurde erfolgreich hochgeladen.';
+            $text = 'Das Bild wurde erfolgreich hochgeladen.';
             break;
         case 211:
-            $zurueck[] = 'Die Nachricht wurde gelöscht.';
+            $text = 'Die Nachricht wurde gelöscht.';
             break;
         case 212:
-            $zurueck[] = 'Alle Nachrichten wurden gelöscht.';
+            $text = 'Alle Nachrichten wurden gelöscht.';
             break;
         case 213:
-            $zurueck[] = 'Der Notizblock wurde gespeichert.';
+            $text = 'Der Notizblock wurde gespeichert.';
             break;
         case 214:
-            $zurueck[] = 'Der Vertrag wurde versandt.';
+            $text = 'Der Vertrag wurde versandt.';
             break;
         case 215:
-            $zurueck[] = 'Der Vertrag wurde angenommen. Sie finden die Waren in Ihrem Lager.';
+            $text = 'Der Vertrag wurde angenommen. Sie finden die Waren in Ihrem Lager.';
             break;
         case 216:
-            $zurueck[] = 'Der Vertrag wurde abgelehnt.';
+            $text = 'Der Vertrag wurde abgelehnt.';
             break;
         case 217:
-            $zurueck[] = 'Das Angebot wurde gekauft.';
+            $text = 'Das Angebot wurde gekauft.';
             break;
         case 218:
-            $zurueck[] = 'Das Angebot wurde eingestellt.';
+            $text = 'Das Angebot wurde eingestellt.';
             break;
         case 219:
-            $zurueck[] = 'Das Passwort wurde erfolgreich geändert.';
+            $text = 'Das Passwort wurde erfolgreich geändert.';
             break;
         case 220:
-            $zurueck[] = 'Der Account wurde wieder auf Standardeinstellungen zurückgesetzt.';
+            $text = 'Der Account wurde wieder auf Standardeinstellungen zurückgesetzt.';
             break;
         case 221:
-            $zurueck[] = 'Das Angebot wurde zurückgezogen.';
+            $text = 'Das Angebot wurde zurückgezogen.';
             break;
         case 222:
-            $zurueck[] = 'Der Auftrag wurde gelöscht.';
+            $text = 'Der Auftrag wurde gelöscht.';
             break;
         case 223:
-            $zurueck[] = 'Die Gruppe wurde erstellt!';
+            $text = 'Die Gruppe wurde erstellt!';
             break;
         case 224:
-            $zurueck[] = 'Sie sind der Gruppe erfolgreich beigetreten!';
+            $text = 'Sie sind der Gruppe erfolgreich beigetreten!';
             break;
         case 225:
-            $zurueck[] = 'Sie haben die Gruppe nun verlassen.';
+            $text = 'Sie haben die Gruppe nun verlassen.';
             break;
         case 226:
-            $zurueck[] = 'Die Rechte wurden gespeichert.';
+            $text = 'Die Rechte wurden gespeichert.';
             break;
         case 227:
-            $zurueck[] = 'Das Mitglied wurde aus der Gruppe verwiesen.';
+            $text = 'Das Mitglied wurde aus der Gruppe verwiesen.';
             break;
         case 228:
-            $zurueck[] = 'Die Gruppe wurde gelöscht!';
+            $text = 'Die Gruppe wurde gelöscht!';
             break;
         case 229:
-            $zurueck[] = 'Die Beziehung wurde eingetragen!';
+            $text = 'Die Beziehung wurde eingetragen!';
             break;
         case 230:
-            $zurueck[] = 'Der Vertrag wurde aufgelöst.';
+            $text = 'Der Vertrag wurde aufgelöst.';
             break;
         case 231:
-            $zurueck[] = 'Der Vertrag wurde angenommen.';
+            $text = 'Der Vertrag wurde angenommen.';
             break;
         case 233:
-            $zurueck[] = 'Das Angebot wurde gelöscht.';
+            $text = 'Das Angebot wurde gelöscht.';
             break;
         case 234:
-            $zurueck[] = 'Das Angebot wurde bearbeitet.';
+            $text = 'Das Angebot wurde bearbeitet.';
             break;
         case 235:
-            $zurueck[] = 'Das Geld wurde in die Gruppenkasse überwiesen.';
+            $text = 'Das Geld wurde in die Gruppenkasse überwiesen.';
             break;
         case 236:
-            $zurueck[] = 'Das Geld wurde an das Mitglied überwiesen.';
+            $text = 'Das Geld wurde an das Mitglied überwiesen.';
             break;
         case 237:
-            $zurueck[] = 'Der Krieg wurde beendet. Leider war kein Sieg mehr in Aussicht.';
+            $text = 'Der Krieg wurde beendet. Leider war kein Sieg mehr in Aussicht.';
             break;
         case 238:
-            $zurueck[] = 'Die EMail-Adresse wurde geändert.';
+            $text = 'Die EMail-Adresse wurde geändert.';
             break;
         case 239:
-            $zurueck[] = 'Der Sitterzugang wurde gelöscht.';
+            $text = 'Der Sitterzugang wurde gelöscht.';
             break;
         case 240:
-            $zurueck[] = 'Der Sitterzugang wurde erfolgreich bearbeitet.';
+            $text = 'Der Sitterzugang wurde erfolgreich bearbeitet.';
             break;
         case 241:
-            $zurueck[] = 'Account wurde erfolgreich aktiviert.';
+            $text = 'Account wurde erfolgreich aktiviert.';
+            break;
+        case 242:
+            $text = 'Die Aktion wurde erfolgreich ausgeführt.';
+            break;
+        case 243:
+            $text = 'Die aktuelle Runde ist nun beendet und das Spiel pausiert. Aktuell laufen die Auswertungen, schau später nochmal vorbei.';
             break;
 
 
         case 999:
-            $zurueck[] = 'Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am ' . date("d.m.Y \u\m H:i", LAST_RESET);
+            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s', date("d.m.Y \u\m H:i", last_reset));
             break;
         default:
-            $zurueck[] = 'Meldungsnummer konnte nicht gefunden werden: &quot;' . $meldung . '&quot;';
+            $text = sprintf('Meldungsnummer konnte nicht gefunden werden: %d', $msg_id);
             break;
     }
 
-    $zurueck[] = '
-							</span>
-						</td>
-						<td style="vertical-align: top; text-align :right;">
-							<a href="#">
-								<img src="./pics/small/error.png" style="margin: 0; padding: 0; border: none;" alt="Fenster schliessen" onclick="MeldungAusblenden(\'m_' . $meldung . '\'); return false;" />
-							</a>
-						</td>
-					</tr>
-				</table>
-				';        // FOOTER für die Fehlermeldung
-
-    return implode($zurueck);        // Den String mit der Fehlermeldung zurückgeben...
+    return sprintf('<div class="Meldung" id="meldung_%d">
+            <img src="/pics/small/%s.png" alt=""/>
+            <a id="close" onclick="document.getElementById(\'meldung_%d\').remove();">X</a>
+            <span>%s</span>
+        </div>', $msg_id, $image, $msg_id, $text);
 }
 
-/**
- * Hilfsfunktion: Schaut, ob die Runde schon zu Ende ist
- *
- * @return boolean
- **@version 1.0.1
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function CheckRundenEnde()
+function getBuildingName(int $building_id): string
 {
-    return (LAST_RESET + RUNDEN_DAUER <= time());
-}
-
-/**
- * Kernfunktion: Baut die Verbindung mit der Datenbank auf
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function ConnectDB()
-{
-    $_SESSION['blm_link'] = mysql_connect(DB_SERVER, DB_BENUTZER, DB_PASSWORT);        // Stellt die Verbindung her
-    if (mysql_errno() > 0) {
-        die("<h2>Die Verbindung mit dem Datenbankserver konnte nicht hergestellt werden. Wahrscheinlich handelt es sich nur um ein vorrübergehendes Problem. Bitte versuchen Sie es später nochmal.</h2>");
-    }
-
-    mysql_select_db(DB_DATENBANK);        // Wählt die Datenbank aus
-    if (mysql_errno() > 0) {
-        die("<h2>Die Datenbank konnte nicht ausgewählt werden. Wahrscheinlich handelt es sich nur um ein vorrübergehendes Problem. Bitte versuchen Sie es später nochmal.</h2>");
-    }
-
-    $sql_abfrage = "SET CHARACTER SET utf8;";            //
-    mysql_query($sql_abfrage);        // Wählt als Übertragungskodierung UTF-8
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "SET NAMES utf8;";                            // Alle Daten von und in die Datenbank haben diese.
-    mysql_query($sql_abfrage);        //
-    $_SESSION['blm_queries']++;
-}
-
-/**
- * Kernfunktion: Trennt die Verbindung mit der Datenbank wieder
- *
- * @return bool
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function DisconnectDB()
-{
-    mysql_close($_SESSION['blm_link']);        // Verbindung trennen
-    unset($_SESSION['blm_link']);                    // SESSION-Variable löschen, ist jetzt ungültig
-}
-
-/**
- * Hilfsfunktion: Liefert die Bezeichnung eines Gebäudes anhand einer ID zurück
- *
- * @param int $gebaeude_id
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function GebaeudeName($gebaeude_id)
-{
-    switch (intval($gebaeude_id)) {
+    switch ($building_id) {
         case 1:
-            return "Plantage";
+            return 'Plantage';
         case 2:
-            return "Forschungszentrum";
+            return 'Forschungszentrum';
         case 3:
-            return "Bioladen";
+            return 'Bioladen';
         case 4:
-            return "Dönerstand";
+            return 'Dönerstand';
         case 5:
-            return "Bauhof";
+            return 'Bauhof';
         case 6:
-            return "Verkäuferschule";
+            return 'Verkäuferschule';
         case 7:
-            return "Zaun";
+            return 'Zaun';
         case 8:
-            return "Pizzeria";
+            return 'Pizzeria';
         default:
-            return "<i>Unbekannt</i>";
+            return 'Unbekannt (' . intval($building_id) . ')';
     }
 }
 
-/**
- * Hilfsfunktion: Überprüft, ob der Spieler ein Administrator ist
- *
- * @param boolean $aus_db
- * @param string $db_username
- *
- * @return boolean
- **@version 1.0.1
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function IstAdmin($aus_db = false, $db_username = "")
+function getItemName(int $item_id): string
 {
-    if ($aus_db) {
-        $sql_abfrage = "SELECT
-    Admin
-FROM
-    mitglieder
-WHERE
-    Name LIKE '" . mysql_real_escape_string($db_username) . "';";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $temp = mysql_fetch_assoc($sql_ergebnis);
-
-        return (intval($temp["Admin"]) > 0);
-    } else {
-        return (intval($_SESSION['blm_admin']) > 0);
+    switch ($item_id) {
+        case 1:
+            return 'Kartoffeln';
+        case 2:
+            return 'Karotten';
+        case 3:
+            return 'Tomaten';
+        case 4:
+            return 'Salat';
+        case 5:
+            return 'Äpfel';
+        case 6:
+            return 'Birnen';
+        case 7:
+            return 'Kirschen';
+        case 8:
+            return 'Bananen';
+        case 9:
+            return 'Gurken';
+        case 10:
+            return 'Weintrauben';
+        case 11:
+            return 'Tabak';
+        case 12:
+            return 'Ananas';
+        case 13:
+            return 'Erdbeeren';
+        case 14:
+            return 'Orangen';
+        case 15:
+            return 'Kiwi';
+        default:
+            return 'Unbekannt (' . intval($item_id) . ')';
     }
 }
 
-/**
- * Hilfsfunktion: Überprüft, ob der Spieler angemeldet ist
- *
- * @return boolean
- **@version 1.0.1
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function IstAngemeldet()
+function isAdmin(): bool
 {
-    return isset($_SESSION['blm_user']);
+    return getOrDefault($_SESSION, 'blm_admin', 0) == 1;
 }
 
-/**
- * Hilfsfunktion: Überprüft, ob der Spieler ein Betatester ist
- *
- * @param boolean $aus_db
- * @param string $db_username
- *
- * @return boolean
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function IstBetatester($aus_db = false, $db_username = "")
+function isLoggedIn(): bool
 {
-    if ($aus_db) {
-        $sql_abfrage = "SELECT
-    Betatester
-FROM
-    mitglieder
-WHERE
-    Name LIKE '" . mysql_real_escape_string($db_username) . "';";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $temp = mysql_fetch_assoc($sql_ergebnis);
-
-        return ($temp["Betatester"] > 0);
-    } else {
-        return (intval($_SESSION['blm_betatester']) > 0);
-    }
+    return getOrDefault($_SESSION, 'blm_user', -1) != -1;
 }
 
-/**
- * Hilfsfunktion: Macht aus TRUE ein "Ja", aus FALSE ein "Nein"
- *
- * @param boolean $zustand
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function JaNein($zustand)
+function getYesOrNo(int $bool): string
 {
-    if (intval($zustand) == 0)
+    if ($bool == 0)
         return "Nein";
     else
         return "Ja";
 }
 
-/**
- * Hilfsfunktion: Gibt das Datum des letzten Eintrags im Changelog zurück
- *
- * @return int
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function LetzteAenderung()
+function replaceBBCode(string $text, bool $emoticons = true): string
 {
-    $sql_abfrage = "SELECT
-	UNIX_TIMESTAMP(Datum) AS Datum
-FROM
-	changelog
-ORDER BY
-	Datum DESC
-LIMIT 0,1;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
+    $colors[] = "aqua";
+    $colors[] = "black";
+    $colors[] = "blue";
+    $colors[] = "fuchsia";
+    $colors[] = "gray";
+    $colors[] = "green";
+    $colors[] = "lime";
+    $colors[] = "maroon";
+    $colors[] = "navy";
+    $colors[] = "olive";
+    $colors[] = "orange";
+    $colors[] = "purple";
+    $colors[] = "red";
+    $colors[] = "silver";
+    $colors[] = "teal";
+    $colors[] = "white";
+    $colors[] = "yellow";
 
-    $datum = mysql_fetch_object($sql_ergebnis);
-
-    return $datum->Datum;
-}
-
-/**
- * Kernfunktion: Lädt alle relevanten Daten des Benutzers
- *
- * @return object
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function LoadSettings()
-{
-    $sql_abfrage = "SELECT 
-	m.*,
-	g.*,
-	f.*,
-	l.*,
-	p.*,
-	s.*,
-	m.ID AS mID
-FROM
-	(
-			mitglieder m 
-		NATURAL JOIN 
-			gebaeude g
-	) 
-	NATURAL JOIN 
-	(
-			forschung f 
-		NATURAL JOIN 
-			lagerhaus l
-	)
-	NATURAL JOIN
-	(
-			punkte p 
-		NATURAL JOIN 
-			statistik s
-	)
-WHERE
-	m.ID='" . $_SESSION['blm_user'] . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $benutzer = mysql_fetch_object($sql_ergebnis);        // holt sich die Daten
-
-    $sql_abfrage = "SELECT 
-	An
-FROM
-	gruppe_diplomatie
-WHERE
-	Von='" . $benutzer->Gruppe . "'
-AND
-	Seit IS NOT NULL
-AND
-	Typ='3';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    while ($kriege = mysql_fetch_object($sql_ergebnis)) {
-        $benutzer->GruppeKriege[] = $kriege->An;
-    }
-
-    $sql_abfrage = "SELECT 
-	An
-FROM
-	gruppe_diplomatie
-WHERE
-	Von='" . $benutzer->Gruppe . "'
-AND
-	Seit IS NOT NULL
-AND
-	Typ=2;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    while ($bnd = mysql_fetch_object($sql_ergebnis)) {
-        $benutzer->GruppeBND[] = $bnd->An;
-    }
-
-    $sql_abfrage = "SELECT 
-	An
-FROM
-	gruppe_diplomatie
-WHERE
-	Von='" . $benutzer->Gruppe . "'
-AND
-	Seit IS NOT NULL
-AND
-	Typ=1;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    while ($nap = mysql_fetch_object($sql_ergebnis)) {
-        $benutzer->GruppeNAP[] = $nap->An;
-    }
-
-    $benutzer->RanglisteOffset = intval((Database::getInstance()->getPlayerRankById($benutzer->ID) - 1) / RANGLISTE_OFFSET);
-
-    return $benutzer;        // Daten gefunden und vorhanden, also geben wir diese zurück
-}
-
-/**
- * Kernfunktion: Lädt die individuellen Einstellungen eines Users, was der Sitter darf und was nicht
- *
- * @return object
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function LoadSitterSettings()
-{
-    $sql_abfrage = "SELECT
-	*
-FROM
-	sitter
-WHERE
-	ID='" . $_SESSION['blm_user'] . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-
-    $result = mysql_fetch_object($sql_ergebnis);
-    if ($result == false) {
-        $result = new stdClass();
-        $result->ID = null;
-        $result->Passwort = null;
-        $result->Gebaeude = false;
-        $result->Forschung = false;
-        $result->Produktion = false;
-        $result->Mafia = false;
-        $result->Nachrichten = false;
-        $result->Gruppe = false;
-        $result->Vertraege = false;
-        $result->Marktplatz = false;
-        $result->Bioladen = false;
-        $result->Bank = false;
-    }
-    return $result;
-}
-
-/**
- * Hilfsfunktion: Liefert einen passenden Auftragstext für die IGM an das Opfer eines Mafia Angriffs
- *
- * @param int $aktion
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function MafiaAuftragsText($aktion)
-{
-    switch ($aktion) {
-        case 1:
-            return 'Wir sollten Sie ausspionieren und unseren Auftragsgeber alles über Sie erzählen...';
-        case 2:
-            return 'Wir sollten Ihr Lager ausräumen...';
-        case 3:
-            return 'Ihr Konkurrent machte sich richtig Sorgen um Sie, deshalb sollten wir Ihre Plantage ein bisschen modernisieren...';
-        case 4:
-            return 'Sie haben doch so viel Geld, da wollten wir Ihre Geldbörse ein bisschen leichter machen...';
-        default:
-            return 'Wir sollten Ihnen das Leben zur Hölle machen!';
-    }
-}
-
-/**
- * Hilfsfunktion: Sendet eine Nachricht an alle Spieler
- *
- * @param string $betreff
- * @param string $nachricht
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function NachrichtAnAlle($betreff, $nachricht)
-{
-    $sql_abfrage = "SELECT
-	ID
-FROM
-	mitglieder
-WHERE
-	ID>0;";
-    $sql_ergebnis = mysql_query($sql_abfrage);    // Zuerst mal alle Benutzer abrufen
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "INSERT INTO
-    nachrichten
-(
-    ID,
-    An,
-    Von,
-    Zeit,
-    Betreff,
-    Nachricht,
-    Gelesen
-)
-VALUES
-";
-
-    while ($benutzer = mysql_fetch_object($sql_ergebnis)) {        // Durch die WHILE-Schleife werden alle Benutzer der Reihe nach durchlaufen
-        $sql_abfrage .= "
-(
-	NULL,
-	'" . $benutzer->ID . "',
-	'0',
-	'" . time() . "',
-	'RUNDMAIL: " . mysql_real_escape_string($betreff) . "',
-	'" . mysql_real_escape_string($nachricht) . "',
-	'0'
-),";
-    }
-    $sql_abfrage = substr($sql_abfrage, 0, -1) . ";";
-    mysql_query($sql_abfrage);        // Nachricht einfügen
-    $_SESSION['blm_queries']++;
-}
-
-/**
- * Hilfsfunktion: Gibt die Anzahl der austehenden diplomatischen Anträge zurück
- *
- * @param object $ich
- *
- * @return int
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function NeueGruppenDiplomatie($ich)
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	gruppe_diplomatie
-WHERE
-	Seit IS NULL
-AND
-	An=" . $ich->Gruppe . ";";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $anfragen = mysql_fetch_object($sql_ergebnis);        // holt sich das Ergebnis ab
-
-    return intval($anfragen->anzahl);        // Gibt die Anzahl zurück
-}
-
-/**
- * Hilfsfunktion: Gibt die Anzahl der neuen Gruppennachrichten für den User zurück
- *
- * @param object $ich
- *
- * @return int
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function NeueGruppenNachrichten($ich)
-{
-    if ($ich->Gruppe) {
-        $sql_abfrage = "SELECT
-    COUNT(*) AS anzahl
-FROM
-    gruppe_nachrichten
-WHERE
-    Zeit>" . $ich->GruppeLastMessageZeit . "
-AND
-    Gruppe=" . $ich->Gruppe . "
-AND
-    Gruppe IS NOT NULL;";
-        $sql_ergebnis = mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $nachrichten = mysql_fetch_object($sql_ergebnis);        // holt sich das Ergebnis ab
-
-        return intval($nachrichten->anzahl);        // Gibt die Anzahl zurück
-    } else {
-        return 0;
-    }
-}
-
-/**
- * Hilfsfunktion: Gibt die Anzahl der neuen Nachrichten für den User zurück
- *
- * @return int
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function NeueNachrichten($nid = -1)
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	nachrichten
-WHERE
-	An = '" . $_SESSION['blm_user'] . "'
-AND
-	Gelesen = 0
-AND
-    ID != " . $nid;
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $nachrichten = mysql_fetch_object($sql_ergebnis);        // holt sich das Ergebnis ab
-
-    return intval($nachrichten->anzahl);        // Gibt die Anzahl zurück
-}
-
-/**
- * Hilfsfunktion: Schlüsselt die Rechte eines Users in einer Gruppe auf
- *
- * @param int $benutzer
- * @param boolean $rechte_aus_db
- * @param int $rechte_b
- *
- * @return object
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.0
- *
- */
-function RechteGruppe($benutzer, $rechte_aus_db = true, $rechte_b = 0)
-{
-    if ($rechte_aus_db) {
-        $sql_abfrage = "SELECT
-    GruppeRechte
-FROM
-    mitglieder
-WHERE
-    ID='" . intval($benutzer) . "';";
-        $sql_ergebnis = mysql_query($sql_abfrage);        // Legt den Benutzer in der Mitgliedertabelle an
-        $_SESSION['blm_queries']++;
-
-        $rechte = mysql_fetch_assoc($sql_ergebnis);
-        $rechte = intval($rechte["GruppeRechte"]);
-    } else {
-        $rechte = intval($rechte_b);
-    }
-
-    $back = new stdClass();
-    $back->GruppeLoeschen = false;
-    $back->MitgliederRechte = false;
-    $back->GruppePasswort = false;
-    $back->MitgliedKicken = false;
-    $back->GruppeBeschreibung = false;
-    $back->GruppeBild = false;
-    $back->NachrichtLoeschen = false;
-    $back->NachrichtSchreiben = false;
-    $back->Diplomatie = false;
-    $back->Chef = false;
-    $back->GruppeKasse = false;
-
-    if ($rechte - 1024 >= 0) { // Gruppenkasse verwalten
-        $back->GruppeKasse = true;
-        $rechte -= 1024;
-    }
-
-    if ($rechte - 512 >= 0) { // Chef :)
-        $back->Chef = true;
-        $rechte -= 512;
-    }
-
-    if ($rechte - 256 >= 0) { // Gruppe löschen
-        $back->Diplomatie = true;
-        $rechte -= 256;
-    }
-
-    if ($rechte - 128 >= 0) { // Gruppe löschen
-        $back->GruppeLoeschen = true;
-        $rechte -= 128;
-    }
-
-    if ($rechte - 64 >= 0) { // Mitgliederrechte ändern
-        $back->MitgliederRechte = true;
-        $rechte -= 64;
-    }
-
-    if ($rechte - 32 >= 0) { // Beitrittspasswort ändern
-        $back->GruppePasswort = true;
-        $rechte -= 32;
-    }
-
-    if ($rechte - 16 >= 0) { // Mitglied kicken
-        $back->MitgliedKicken = true;
-        $rechte -= 16;
-    }
-
-    if ($rechte - 8 >= 0) { // Beschreibung ändern
-        $back->GruppeBeschreibung = true;
-        $rechte -= 8;
-    }
-
-    if ($rechte - 4 >= 0) { // Gruppenbild ändern
-        $back->GruppeBild = true;
-        $rechte -= 4;
-    }
-
-    if ($rechte - 2 >= 0) { // Gruppennachricht löschen
-        $back->NachrichtLoeschen = true;
-        $rechte -= 2;
-    }
-
-    if ($rechte - 1 >= 0) { // Gruppennachricht schreiben
-        $back->NachrichtSchreiben = true;
-    }
-
-    return $back;
-}
-
-/**
- * Hilfsfunktion: Sucht und ersetzt BBCode in einem Text. Sorgt ausserdem für die sichere Ausgabe des Textes.
- *
- * @param string $text
- *
- * @return string
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function ReplaceBBCode($text)
-{
-    $text = stripslashes($text);    // Entfernt die Escapezeichen (Backslashes)
-
-    $colors[] = "aqua";                    // 
-    $colors[] = "black";                // 
-    $colors[] = "blue";                    // 
-    $colors[] = "fuchsia";            // 
-    $colors[] = "gray";                    // 
-    $colors[] = "green";                // 
-    $colors[] = "lime";                    // CSS-Farbwerte
-    $colors[] = "maroon";                // können bei [color=XXX]
-    $colors[] = "navy";                    // direkt eingegeben werden
-    $colors[] = "olive";                // 
-    $colors[] = "orange";                // 
-    $colors[] = "purple";                // 
-    $colors[] = "red";                    // 
-    $colors[] = "silver";                // 
-    $colors[] = "teal";                    // 
-    $colors[] = "white";                // 
-    $colors[] = "yellow";                // 
-
-    /*
-        Wie werden Zitate eingeschlossen?
-    */
-    $header['quote'] = '<div class="ZITAT">';
-    $footer['quote'] = '</div>';
-
-    /*
-        Wie werden Codeteile eingeschlossen?
-    */
-    $header['code'] = '<div class="CODE"><span class="CODE_KOPF">Code:</span>';
-    $footer['code'] = '</div>';
-
-    $text = sichere_ausgabe($text);        // dann escapen wir den String
-    $text = preg_replace(
+    $result = escapeForOutput($text);
+    $result = preg_replace(
         array(
-            '/\[center\](.*)\[\/center\]/Uis',
-            "/\[size=(1|2?)([0-9])\](.*)\[\/size\]/Uis",
-            "/\[url=&quot;(http\:\/\/|www.|http\:\/\/www.)([a-z0-9\-\_\.]{3,32}\.[a-z]{2,4})&quot;\](.*)\[\/url\]/SiU",
-            "/\[img=&quot;(http\:\/\/[a-z0-9\-\_\.\/]{3,32}\.[a-z]{3,4})&quot;\](.*)\[\/img\]/SiU",
-            "/\[email=&quot;([a-z0-9\-\_\.]{3,32}@[a-z0-9\-\_\.]{3,32}\.[a-z]{2,4})&quot;\](.*)\[\/email\]/SiU",
-            "/\[emoticon=&quot;([a-z0-9\-\_\.\/]{3,64})&quot; \/\]/Si",
-            "/\[code\](.*)\[\/code\]/Uism"
+            '/\[center](.*)\[\/center]/Uis',
+            "/\[size=([12]\d)](.*)\[\/size]/Uis",
+            "/\[url=&quot;(http:\/\/|www.|http:\/\/www.)([a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/url]/SiU",
+            "/\[img=&quot;(http:\/\/[a-z\d\-_.\/]{3,32}\.[a-z]{3,4})&quot;](.*)\[\/img]/SiU",
+            "/\[email=&quot;([a-z\d\-_.]{3,32}@[a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/email]/SiU",
+            "/\[emoticon=&quot;([a-z\d\-_.\/]{3,64})&quot; \/]/Si",
+            "@\[player=(.+)#(\d{1,8})/]@SUi",
+            "@\[group=(.+)#(\d{1,8})/]@SUi",
         ),
         array(
             '<div style="text-align: center;">\1</div>',
-            '<span style="font-size: \1\2px;">\3</span>',
+            '<span style="font-size: \1px;">\2</span>',
             '<a href="http://\2">\3</a>',
             '<a href="\1" target="_blank"><img src="\1" alt="\2" style="border: none;"/></a>',
             '<a href="mailto:\1">\2</a>',
             '<img src="\1" alt="\2" style="border: none;"/>',
-            $header['code'] . '\1' . $footer['code']
+            '<a href="/?p=profil&amp;id=\2">\1</a>',
+            '<a href="/?p=gruppe&amp;id=\2">\1</a>',
         ),
-        $text
-    );        // Textformatierungen
+        $result
+    );
 
-    $last_text = "";
-    while ($last_text != $text) {    // Diese Tags können geschachtelt werden, deshalb eine Schleife
-        $last_text = $text;
+    // the following tags may be nested, so run in a loop until everything is replaced
+    $last_text = null;
+    while ($last_text != $result) {
+        $last_text = $result;
 
-        $text = preg_replace(
+        $result = preg_replace(
             array(
-                "/\[color=(\#[0-9a-f]{6}|" . implode("|", $colors) . ")\](.*)\[\/color\]/is",
-                "/\[(b|u|i)\](.*)\[\/\\1\]/Uis",
-                '/\[quote](.*)\[\/quote\]/Uism'
+                "/\[color=(#[\da-f]{6}|" . implode("|", $colors) . ")](.*)\[\/color]/is",
+                "/\[([bui])](.*)\[\/\\1]/Uis",
+                '/\[quote](.*)\[\/quote]/Uism'
             ),
             array(
                 '<span style="color: \1;">\2</span>',
                 '<\1>\2</\1>',
-                $header['quote'] . '\1' . $footer['quote']
+                '<blockquote>\1</blockquote>'
             ),
-            $text);        // Farbige Schrift (Hexwerte / Namen), Tags welche geschachtelt werden können
+            $result);
     }
 
-    /*
-        Nun die Emoticons ersetzen
-    */
-    $text = str_ireplace(" ;p", '<img src="/pics/emoticons/kopete006.png" alt=" ;p" />', $text);
-    $text = str_ireplace(" $)", '<img src="/pics/emoticons/kopete007.png" alt=" $)" />', $text);
-    $text = str_ireplace(" 8)", '<img src="/pics/emoticons/kopete008.png" alt=" 8)" />', $text);
-    $text = str_ireplace(" ^^", '<img src="/pics/emoticons/kopete010.png" alt=" ^^" />', $text);
-    $text = str_ireplace(" :0", '<img src="/pics/emoticons/kopete011.png" alt=" :0" />', $text);
-    $text = str_ireplace(" :((", '<img src="/pics/emoticons/kopete012.png" alt=" :((" />', $text);
-    $text = str_ireplace(" ;)", '<img src="/pics/emoticons/kopete013.png" alt=" ;)" />', $text);
-    $text = str_ireplace(" :~", '<img src="/pics/emoticons/kopete014.png" alt=" :~" />', $text);
-    $text = str_ireplace(" :|", '<img src="/pics/emoticons/kopete015.png" alt=" :|" />', $text);
-    $text = str_ireplace(" :p", '<img src="/pics/emoticons/kopete016.png" alt=" :p" />', $text);
-    $text = str_ireplace(" :D", '<img src="/pics/emoticons/kopete017.png" alt=" :D" />', $text);
-    $text = str_ireplace(" :ö", '<img src="/pics/emoticons/kopete018.png" alt=" :ö" />', $text);
-    $text = str_ireplace(" :(", '<img src="/pics/emoticons/kopete019.png" alt=" :(" />', $text);
-    $text = str_ireplace(" :)", '<img src="/pics/emoticons/kopete020.png" alt=" :)" />', $text);
+    if ($emoticons) {
+        $result = str_ireplace(" ;p", '<img src="/pics/emoticons/kopete006.png" alt=" ;p" />', $result);
+        $result = str_ireplace(" $)", '<img src="/pics/emoticons/kopete007.png" alt=" $)" />', $result);
+        $result = str_ireplace(" 8)", '<img src="/pics/emoticons/kopete008.png" alt=" 8)" />', $result);
+        $result = str_ireplace(" ^^", '<img src="/pics/emoticons/kopete010.png" alt=" ^^" />', $result);
+        $result = str_ireplace(" :0", '<img src="/pics/emoticons/kopete011.png" alt=" :0" />', $result);
+        $result = str_ireplace(" :((", '<img src="/pics/emoticons/kopete012.png" alt=" :((" />', $result);
+        $result = str_ireplace(" ;)", '<img src="/pics/emoticons/kopete013.png" alt=" ;)" />', $result);
+        $result = str_ireplace(" :~", '<img src="/pics/emoticons/kopete014.png" alt=" :~" />', $result);
+        $result = str_ireplace(" :|", '<img src="/pics/emoticons/kopete015.png" alt=" :|" />', $result);
+        $result = str_ireplace(" :p", '<img src="/pics/emoticons/kopete016.png" alt=" :p" />', $result);
+        $result = str_ireplace(" :D", '<img src="/pics/emoticons/kopete017.png" alt=" :D" />', $result);
+        $result = str_ireplace(" :ö", '<img src="/pics/emoticons/kopete018.png" alt=" :ö" />', $result);
+        $result = str_ireplace(" :(", '<img src="/pics/emoticons/kopete019.png" alt=" :(" />', $result);
+        $result = str_ireplace(" :)", '<img src="/pics/emoticons/kopete020.png" alt=" :)" />', $result);
+    }
 
-    // Text zurückgeben
-    return $text;
+    return $result;
 }
 
-/**
- * Hilfsfunktion: Resettet einen bestimmten Account, meist vom User selbst beauftragt.
- *
- * @param int $benutzer_id
- * @param array $start_werte
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function ResetAccount($benutzer_id, $start_werte)
+function deleteAccount(int $blm_user): ?string
 {
-    $sql_abfrage = "UPDATE forschung SET ";
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-        $sql_abfrage .= "Forschung" . $i . "='" . $start_werte["forschung"][$i] . "', ";
+    // delete everything associated with this user
+    $status = resetAccount($blm_user);
+    if ($status !== null) {
+        return 'reset_' . $status;
     }
-    $sql_abfrage = substr($sql_abfrage, 0, -2) . " WHERE ID='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);    // Zuerst die Forschung resetten
-    $_SESSION['blm_queries']++;
 
-    $sql_abfrage = "UPDATE gebaeude SET ";
-    for ($i = 1; $i <= ANZAHL_GEBAEUDE; $i++) {
-        $sql_abfrage .= "Gebaeude" . $i . "='" . $start_werte["gebaeude"][$i] . "', ";
-    }
-    $sql_abfrage = substr($sql_abfrage, 0, -2) . " WHERE ID='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);    // Dann die Gebäude resetten
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "UPDATE lagerhaus SET ";
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
-        $sql_abfrage .= "Lager" . $i . "='" . $start_werte["lager"][$i] . "', ";
-    }
-    $sql_abfrage = substr($sql_abfrage, 0, -2) . " WHERE ID='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);    // Und zum Schluss das Lagerhaus
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "UPDATE
-    mitglieder m 
-NATURAL JOIN 
-    (
-    punkte p 
-        NATURAL JOIN 
-    statistik s
-    )
-SET
-	m.Bank=0,
-	m.Geld=" . $start_werte["geld"] . ",
-	m.Punkte=0,
-	m.LastAction=0,
-	m.LastLogin=0,
-	m.LastMafia=" . time() . ",
-	m.OnlineZeit=0,
-	m.Gruppe=NULL,
-	m.GruppeRechte=NULL,
-	m.GruppeLastMessageZeit=NULL,
-	p.GebaeudePlus=0,
-	p.ForschungPlus=0,
-	p.ProduktionPlus=0,
-	p.MafiaPlus=0,
-	p.MafiaMinus=0,
-	s.AusgabenGebaeude=0,
-	s.AusgabenForschung=0,
-	s.AusgabenZinsen=0,
-	s.AusgabenProduktion=0,
-	s.AusgabenMarkt=0,
-	s.AusgabenVertraege=0,
-	s.AusgabenMafia=0,
-	s.AusgabenSonstiges=0,
-	s.EinnahmenGebaeude=0,
-	s.EinnahmenVerkauf=0,
-	s.EinnahmenZinsen=0,
-	s.EinnahmenMarkt=0,
-	s.EinnahmenVertraege=0,
-	s.EinnahmenMafia=0
-WHERE
-	m.ID='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    /*
-        Alle Aufträge, ausstehende Marktangebote und Verträge löschen
-    */
-    $sql_abfrage = "DELETE FROM
-	auftrag
-WHERE
-	Von='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "DELETE FROM
-	vertraege
-WHERE
-	Von='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $sql_abfrage = "DELETE FROM
-	marktplatz
-WHERE
-	Von='" . $benutzer_id . "';";
-    mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-    /*
-        Alles ist gelöscht, Fertig.
-    */
-}
-
-/**
- * Kernfunktion: Resettet alle Accounts (z.B beim Rundenende)
- *
- * @param boolean $RundeZuEnde
- * @param array $start_werte
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function ResetAll($RundeZuEnde, $start_werte)
-{
-    if (!$RundeZuEnde) {        // Die Runde ist nicht zuende, das ist also ein Reset direkt vom Admin. Keine Ahnung warum, also muss der Admin
-        // manuell eine Rundmail mit einer Begründung verfassen
-        /*
-            Wenn ja, dann leere gleich mal die Tabellen, die nur für eine Runde wichtig sind
-        */
-        $sql_abfrage = "TRUNCATE TABLE auftrag;";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "TRUNCATE TABLE marktplatz;";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "TRUNCATE TABLE vertraege;";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "TRUNCATE TABLE gruppe;";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "TRUNCATE TABLE gruppe_nachrichten;";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "TRUNCATE TABLE gruppe_diplomatie;";
-        mysql_query($sql_abfrage);
-        $_SESSION['blm_queries']++;
-
-        $sql_abfrage = "SELECT
-    ID
-FROM
-    mitglieder
-ORDER BY
-    ID;";
-        $sql_ergebnis = mysql_query($sql_abfrage);    // Dann hole dir der Reihe nach alle Benutzer
-        $_SESSION['blm_queries']++;
-
-        while ($benutzer = mysql_fetch_object($sql_ergebnis)) {        // Solange es Benutzer gibt,
-            ResetAccount($benutzer->ID, $start_werte);                        // werden diese resettet
+    // delete the user itself
+    foreach (starting_values as $table => $ignored) {
+        if ($table == 'mitglieder') {
+            $wheres = array('ID' => $blm_user);
+        } else {
+            $wheres = array('user_id' => $blm_user);
         }
-    } else {        // Die Runde ist zu Ende, automatischer Reset
-        $sql_abfrage = "SELECT
-    ID,
-    Name AS n,
-    Punkte AS p
-FROM
-    mitglieder
-WHERE
-    ID>1
-ORDER BY
-    Punkte DESC
-LIMIT
-    0, 5";
-        $sql_ergebnis = mysql_query($sql_abfrage);        // Ruft alle Spieler mit deren Punkten ab
-        $_SESSION['blm_queries']++;
-
-        $platz = 0;        // Platzhalter für die Platzierung
-
-        while ($benutzer = mysql_fetch_object($sql_ergebnis)) {
-            // Erzeugt ein Assoziatives Array für die ganzen Platzierungen, jedoch sind nur die ersten 3 interessant
-            $platz++;
-            $Platz[$platz]["Name"] = $benutzer->n;
-            $Platz[$platz]["Punkte"] = number_format($benutzer->p, 0, ",", ".");
-
-            $sql_abfrage = "UPDATE
-    mitglieder
-SET
-    EwigePunkte=EwigePunkte+" . (6 - $platz) . "
-WHERE
-    ID='" . $benutzer->ID . "';";
-            mysql_query($sql_abfrage);                        // Gibt dem Spieler Punkte in der ewigen Highscoreliste
-            $_SESSION['blm_queries']++;
+        if (Database::getInstance()->deleteTableEntryWhere($table, $wheres) === null) {
+            return 'delete_' . $table;
         }
+    }
+    return null;
+}
 
-        $tag = date("d");            // Der aktuelle Tag
-        $monat = date("m");        // ... Monat
-        $jahr = date("Y");        // Das aktuelle Jahr
-
-        $std = 20;                // Wann soll die neue Runde starten (Stunde)
-        $min = 0;                    // '' (Minute)
-        $sek = 0;                    // '' (Sekunde)
-
-        $rundenstart = (mktime($std, $min, $sek, $monat, $tag, $jahr) + RUNDEN_PAUSE);        // Rechnet den Start der neuen Runde aus. (604800:	Startzeitpunkt ist 7 Tage in der Zukunft (in Sekunden))
-
-        $betreff = "Rundenende!";        // Betreff der Rundmail
-        $nachricht = "Hallo,
-
-Die Runde ist vorbei, und wir haben den König der Biobauern gefunden! Herzlichen Glückwunsch an die Gewinner, nachfolgend die Top 5 mit ihren Punktzahlen:
-[b]
-1. " . $Platz[1]["Name"] . " mit " . $Platz[1]["Punkte"] . " Punkten,
-2. " . $Platz[2]["Name"] . " mit " . $Platz[2]["Punkte"] . " Punkten,
-3. " . $Platz[3]["Name"] . " mit " . $Platz[3]["Punkte"] . " Punkten,
-4. " . $Platz[4]["Name"] . " mit " . $Platz[4]["Punkte"] . " Punkten und
-5. " . $Platz[5]["Name"] . " mit " . $Platz[5]["Punkte"] . " Punkten
-[/b]
-Das Spiel wurde schon resettet, die neue Runde startet am " . date("d.m.Y \u\m H:i", $rundenstart) . ". Viel Spaß weiterhin :)
-
-[i]-System-[/i]";        // die Nachricht mit den 5 Erstplatzierten an alle Spieler
-
-        /*
-            Dann muss noch irgendwie der Startzeitpunkt der Runde festgehalten werden.
-            Ich habe mich da für ne einfache Datei entschieden, die ne Konstante definiert.
-            
-            Schreibt den Zeitpunkt des letzten Resets in eine Datei
-        */
-        $datei = fopen("include/config_prod.inc.php", "a");
-
-        fwrite($datei, 'define("LAST_RESET", ' . $rundenstart . '";' . "\n");
-        fclose($datei);
-        if (!$datei) {
-            die("möp");
+function resetAccount(int $blm_user): ?string
+{
+    // delete group if the user is the only member
+    $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($blm_user);
+    if ($player === null) {
+        return "loading player";
+    }
+    if ($player['Gruppe'] !== null && Database::getInstance()->getGroupMemberCountById($player['Gruppe']) == 1) {
+        $status = Database::getInstance()->deleteGroup($player['Gruppe']);
+        if ($status !== null) {
+            return $status;
         }
-
-        // Erst wenn alles erledigt ist, werden die Accounts resettet
-        ResetAll(false, $start_werte);
-
-        // Und abschließend geht die Rundmail raus.
-        NachrichtAnAlle($betreff, $nachricht);
     }
-}
 
-/**
- * Hilfsfunktion: Liefert die Anzahl der gerade aktiven Spieler zurück
- *
- * @return int
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function SpielerOnline()
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	mitglieder
-WHERE
-	LastAction>" . (time() - 300) . "
-AND
-	ID>0;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $spieler = mysql_fetch_object($sql_ergebnis);
-
-    return intval($spieler->anzahl);        // Anzahl zurückgeben
-}
-
-/**
- * Hilfsfunktion: Aktualisiert die letzte Aktion in der DB
- *
- * @return void
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function UpdateLastAction()
-{
-    $sql_abfrage = "UPDATE
-	mitglieder
-SET
-	LastAction = '" . time() . "',
-    OnlineZeit = OnlineZeit + " . (time() - $_SESSION['blm_login']) . "
-WHERE
-	ID='" . $_SESSION['blm_user'] . "';";
-    mysql_query($sql_abfrage);    // Zeitstempel der letzten Aktion auf jetzt setzen.
-    $_SESSION['blm_queries']++;
-    $_SESSION['blm_login'] = time();
-}
-
-/**
- * Hilfsfunktion: Liefert die Anzahl der sich im Posteingang befindenden Verträge zurück
- *
- * @return int
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function Vertraege()
-{
-    $sql_abfrage = "SELECT
-	COUNT(*) AS anzahl
-FROM
-	vertraege
-WHERE
-	An='" . $_SESSION['blm_user'] . "';";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-    $_SESSION['blm_queries']++;
-
-    $vertraege = mysql_fetch_object($sql_ergebnis);
-
-    return intval($vertraege->anzahl);
-}
-
-/**
- * Hilfsfunktion: Liefert den Warenname einer WarenID zurück
- *
- * @param int $waren_id
- *
- * @return string
- **@version 1.0.0
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function WarenName($waren_id)
-{
-    switch (intval($waren_id)) {
-        case 0:
-            return "Geld";
-        case 1:
-            return "Kartoffeln";
-        case 2:
-            return "Karotten";
-        case 3:
-            return "Tomaten";
-        case 4:
-            return "Salat";
-        case 5:
-            return "Äpfel";
-        case 6:
-            return "Birnen";
-        case 7:
-            return "Kirschen";
-        case 8:
-            return "Bananen";
-        case 9:
-            return "Gurken";
-        case 10:
-            return "Weintrauben";
-        case 11:
-            return "Tabak";
-        case 12:
-            return "Ananas";
-        case 13:
-            return "Erdbeeren";
-        case 14:
-            return "Orangen";
-        case 15:
-            return "Kiwi";
-        default:        // Unbekannte waren_id
-            return "<i>Unknown</i>";
+    // reset all values to the starting defaults
+    foreach (starting_values as $table => $values) {
+        if ($table == 'mitglieder') {
+            $idField = $blm_user;
+            $wheres = array();
+        } else {
+            $idField = null;
+            $wheres = array('user_id = :whr0' => $blm_user);
+        }
+        if (Database::getInstance()->updateTableEntry($table, $idField, $values, $wheres) === null) {
+            return $table;
+        }
     }
+
+    // delete all other data associated with this user
+    $deleteTables = array(
+        'auftrag' => 'user_id',
+        'marktplatz' => 'Von',
+        'sitter' => 'ID',
+        'gruppe_rechte' => 'user_id',
+        'gruppe_kasse' => 'user_id',
+        'vertraege' => 'Von',
+    );
+    foreach ($deleteTables as $table => $field) {
+        if (Database::getInstance()->deleteTableEntryWhere($table, array($field => $blm_user)) === null) {
+            return $table;
+        }
+    }
+
+    // handle all contracts which where sent to this user
+    $data = Database::getInstance()->getAllContractsByAnEquals($blm_user);
+    foreach ($data as $entry) {
+        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', $entry['Von'], array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
+            return 'lagerhaus';
+        }
+    }
+    if (Database::getInstance()->deleteTableEntryWhere('vertraege', array('An' => $blm_user)) === null) {
+        return $table;
+    }
+
+    return null;
 }
 
-/**
- * Escaped einen String zur sicheren Ausgabe in einer HTML-Anwendung (verhindert XSS). Ein optionaler Parameter gibt an, welche Kodierung der String hat
- *
- * @param string $text
- *
- * @return string
- **@version 1.0.3
- *
- * @author Simon Frankenberger <simonfrankenberger@web.de>
- */
-function sichere_ausgabe($text, $withNl2Br = true)
+function updateLastAction(): void
 {
+    Database::getInstance()->begin();
+    Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('OnlineZeit' => time() - $_SESSION['blm_lastAction']));
+    Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('LastAction' => date('Y-m-d H:i:s')));
+    Database::getInstance()->commit();
+    $_SESSION['blm_lastAction'] = time();
+}
+
+function escapeForOutput(?string $text, bool $withNl2Br = true): string
+{
+    if ($text === null) return "";
     $data = htmlentities(stripslashes($text), ENT_QUOTES, 'UTF-8');
     if ($withNl2Br) {
         return nl2br($data);
@@ -1698,33 +729,7 @@ function sichere_ausgabe($text, $withNl2Br = true)
     }
 }
 
-/**
- * Hilfsfunktion: Ruft den Namen eines Spielers ab
- *
- * @param int $id
- *
- * @return string
- **@author Simon Frankenberger <simonfrankenberger@web.de>
- * @version 1.0.3
- *
- */
-function getSpielerName($id)
-{
-    $sql_abfrage = "SELECT
-	Name
-FROM
-	mitglieder
-WHERE
-	ID='" . intval($id) . "'
-;";
-    $sql_ergebnis = mysql_query($sql_abfrage);
-
-    $temp = mysql_fetch_object($sql_ergebnis);
-
-    return sichere_ausgabe($temp->Name);
-}
-
-function getOrDefault($array, $name, $default = null)
+function getOrDefault(array $array, string $name, $default = null)
 {
     if (isset($array[$name])) {
         $value = $array[$name];
@@ -1744,44 +749,89 @@ function getOrDefault($array, $name, $default = null)
     return $default;
 }
 
-function verifyOffset($offset, $entriesCount, $entriesPerPage)
+function verifyOffset(int $offset, int $entriesCount, int $entriesPerPage): int
 {
     if ($offset < 0) {
         return 0;
     } elseif ($entriesPerPage * $offset > $entriesCount) {
-        return intval($entriesCount / $entriesPerPage);
+        return floor($entriesCount / $entriesPerPage);
     } else {
-        return intval($offset);
+        return $offset;
     }
 }
 
-function createProfileLink($id, $name)
+function createProfileLink(?int $blm_user, string $name): string
 {
-    return sprintf('<a href="/?p=profil&amp;uid=%d">%s</a>', $id, sichere_ausgabe($name));
+    if ($blm_user == 0) return $name;
+    return sprintf('<a href="/?p=profil&amp;id=%d">%s</a>', $blm_user, escapeForOutput($name));
 }
 
-function createGroupLink($id, $name)
+function createGroupLink(?int $group_id, string $name): string
 {
-    return sprintf('<a href="/?p=gruppe&amp;id=%d">%s</a>', $id, sichere_ausgabe($name));
+    if ($group_id == 0) return $name;
+    return sprintf('<a href="/?p=gruppe&amp;id=%d">%s</a>', $group_id, escapeForOutput($name));
 }
 
-function formatCurrency($amount, $withSuffix = true, $withThousandsSeparator = true)
+function formatCurrency(float $amount, bool $withSuffix = true, bool $withThousandsSeparator = true, int $decimals = 2): string
 {
-    return number_format($amount, 2, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' €' : '');
+    return number_format($amount, $decimals, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' €' : '');
 }
 
-function formatWeight($amount, $withSuffix = true)
+function formatWeight(float $amount, bool $withSuffix = true, int $decimals = 0): string
 {
-    return number_format($amount, 0, ",", ".") . ($withSuffix ? ' kg' : '');
+    return number_format($amount, $decimals, ",", ".") . ($withSuffix ? ' kg' : '');
 }
 
-function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesPerPage)
+function formatPoints(float $amount): string
+{
+    return number_format($amount, 0, "", ".");
+}
+
+function formatDate(int $date): string
+{
+    return date("d.m.Y", $date);
+}
+
+function formatDateTime(?int $date): string
+{
+    if ($date === null)
+        return 'Jetzt';
+    else
+        return date("d.m.Y H:i:s", $date);
+}
+
+function formatTime(int $date): string
+{
+    return date("H:i:s", $date);
+}
+
+function formatDuration(int $amount, bool $withHours = true): string
+{
+    $days = floor($amount / 86400);
+    if ($days > 0) {
+        if ($withHours) {
+            return sprintf('%d Tage %s', $days, gmdate('H:i:s', $amount % 86400));
+        } else {
+            return sprintf('%d Tage', $days);
+        }
+    } else {
+        return gmdate('H:i:s', $amount % 86400);
+    }
+}
+
+function formatPercent(float $amount, bool $withSuffix = true, int $precision = 2): string
+{
+    return number_format($amount * 100, $precision, ',', '') . ($withSuffix ? ' %' : '');
+}
+
+function createPaginationTable(string $linkBase, int $currentPage, int $entriesCount, int $entriesPerPage, string $offsetField = 'o', ?string $anchor = null): string
 {
     $pages = array();
-    for ($i = 0; $i < $entriesCount; $i += $entriesPerPage) {
-        $page = intval($i / $entriesPerPage);
+    for ($i = 0; $i < $entriesCount - 1; $i += $entriesPerPage) {
+        $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
-            $pages[] = sprintf('<a href="%s&amp;o=%d">%d</a>', $linkBase, $page, $page + 1);
+            $pages[] = sprintf('<a href="%s&amp;%s=%d%s">%d</a>',
+                $linkBase, $offsetField, $page, $anchor == null ? '' : "#$anchor", $page + 1);
         } else {
             $pages[] = $page + 1;
         }
@@ -1790,10 +840,10 @@ function createPaginationTable($linkBase, $currentPage, $entriesCount, $entriesP
         $pages[] = "1";
     }
 
-    return sprintf('<div id="Pagination">Seite: %s</div>', implode(" | ", $pages));
+    return sprintf('<div class="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
 
-function createGroupDropdown($selectedValue, $name, $withAllEntry = true)
+function createGroupDropdown(int $selectedValue, string $name, bool $withAllEntry = true): string
 {
     $groups = Database::getInstance()->getAllGroupIdsAndName();
     $entries = array();
@@ -1811,7 +861,7 @@ function createGroupDropdown($selectedValue, $name, $withAllEntry = true)
     return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
 }
 
-function createPlayerDropdown($selectedValue, $name, $withAllEntry = true)
+function createPlayerDropdown(int $selectedValue, string $name, bool $withAllEntry = true): string
 {
     $users = Database::getInstance()->getAllPlayerIdsAndName();
     $entries = array();
@@ -1826,36 +876,40 @@ function createPlayerDropdown($selectedValue, $name, $withAllEntry = true)
             $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
         }
     }
-    return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
+    return sprintf('<select name="%s" id="%s">%s</select>', $name, $name, implode("\n", $entries));
 }
 
-function createWarenDropdown($selectedValue, $name, $withAllEntry = true)
+function createWarenDropdown(int $selectedValue, string $name, bool $withAllEntry = true, array $onlyStock = array()): string
 {
     $entries = array();
     if ($withAllEntry) {
         $entries[] = '<option value="">- Alle -</option>';
     }
-    for ($i = 1; $i <= ANZAHL_WAREN; $i++) {
+    for ($i = 1; $i <= count_wares; $i++) {
+        if (array_key_exists('Lager' . $i, $onlyStock) && $onlyStock['Lager' . $i] == 0) continue;
         if ($i == $selectedValue) {
-            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $i, WarenName($i));
+            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $i, getItemName($i));
         } else {
-            $entries[] = sprintf('<option value="%d">%s</option>', $i, WarenName($i));
+            $entries[] = sprintf('<option value="%d">%s</option>', $i, getItemName($i));
         }
     }
-    return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
+    return sprintf('<select name="%s" id="%s">%s</select>', $name, $name, implode("\n", $entries));
 }
 
-function redirectTo($location, $m = null)
+function redirectTo(string $location, ?int $m = null, ?string $anchor = null): void
 {
     $location = preg_replace('/&m=(\\d+)/', '', $location);
     if ($m != null) {
-        $location .= "&m=" . intval($m);
+        $location .= "&m=" . $m;
+    }
+    if ($anchor != null) {
+        $location .= "#" . urlencode($anchor);
     }
     header('Location: ' . $location);
     die();
 }
 
-function redirectBack($redirectTo, $m = null)
+function redirectBack(string $redirectTo, ?int $m = null): void
 {
     if (!empty($_SERVER['HTTP_REFERER'])) {
         $location = str_replace("\n", '', $_SERVER['HTTP_REFERER']);
@@ -1866,59 +920,537 @@ function redirectBack($redirectTo, $m = null)
     redirectTo($location, $m);
 }
 
-function requireFieldSet($array, $field, $redirectTo)
+function requireFieldSet(?array $array, string $field, string $redirectTo, ?string $anchor = null): void
 {
-    if (!array_key_exists($field, $array) || empty($array[$field])) {
-        redirectBack($redirectTo);
+    if ($array === null || !array_key_exists($field, $array) || empty($array[$field])) {
+        redirectTo($redirectTo, $anchor);
     }
 }
 
-function requireEntryFound($result, $redirectTo)
+function requireEntryFound($result, string $redirectTo, int $m = 154, ?string $anchor = null): void
 {
-    if (count($result) == 0) {
-        redirectBack($redirectTo);
+    if ($result === null || (is_array($result) && count($result) == 0)) {
+        redirectTo($redirectTo, $m, $anchor);
     }
 }
 
-function requireAdmin()
+function requireAdmin(): void
 {
-    if (!istAdmin()) {
-        redirectBack("/?p=index", 112);
-        die();
-    }
-    error_reporting(E_ALL);
-    ini_set('display_errors', 'true');
-}
-
-function requireLogin()
-{
-    if (!istAngemeldet()) {
-        redirectBack("/?p=index", 102);
-        die();
+    if (!isAdmin()) {
+        redirectTo("/?p=index", 112, __LINE__);
     }
 }
 
-function restrictSitter($requiredRight)
+function requireLogin(): void
 {
-    if ($_SESSION['blm_sitter'] && (!property_exists($ich->Sitter, $requiredRight) || !$ich->Sitter->$requiredRight)) {
-        redirectBack('/?p=index', 112);
+    if (!isLoggedIn()) {
+        redirectTo("/?p=index", 102, __LINE__);
     }
 }
 
-function createRandomCode()
+function isAccessAllowedIfSitter(string $requiredRight): bool
 {
+    return !$_SESSION['blm_sitter'] || Database::getInstance()->getSitterPermissions($_SESSION['blm_user'], $requiredRight) === "1";
+}
+
+function restrictSitter(string $requiredRight, string $backPage = "index"): void
+{
+    if (!isAccessAllowedIfSitter($requiredRight)) {
+        redirectTo('/?p=' . $backPage, 112, __LINE__);
+    }
+}
+
+function createRandomCode(): string
+{
+    if (is_testing) {
+        // "changeit"
+        return '07313f0e320f22cbfa35cfc220508eb3ff457c7e';
+    }
     return sha1(openssl_random_pseudo_bytes(32));
 }
 
-function sendMail($empfaenger, $betreff, $nachricht)
+function sendMail(string $recipient, string $subject, string $message): bool
 {
-    $headers =
-        "From: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
-        "Reply-To: " . SPIEL_BETREIBER . " <" . ADMIN_EMAIL . ">\n" .
-        "X-Mailer: " . "PHP\n" .
-        "MIME-Version: " . "1.0\n" .
-        "Content-type: " . "text/html; charset=utf-8\n" .
-        "Date: " . date(DATE_RFC2822);
+    if (redirect_all_mails_to_admin) {
+        $subject .= ' (original recipient ' . $recipient . ')';
+        $recipient = admin_email;
+    }
 
-    return mail($empfaenger, $betreff, $nachricht, $headers, '-f ' . ADMIN_EMAIL);
+    $headers = sprintf('From: %s <%s>
+Reply-To: %s <%s>
+X-Mailer: PHP
+MIME-Version: 1.0
+Content-type: text/html; charset=utf-8
+Date: %s', admin_name, admin_email, admin_name, admin_email, date(DATE_RFC2822));
+
+    return mail($recipient, $subject, $message, $headers, '-f ' . admin_email);
+}
+
+function createNavigationLink(string $target, string $text, string $sitterRightsRequired): ?string
+{
+    if (isAccessAllowedIfSitter($sitterRightsRequired)) {
+        return sprintf('<div class="NaviLink" onclick="Navigation(this);"><a href="/?p=%s">%s</a></div>', $target, $text);
+    }
+    return null;
+}
+
+function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): ?string
+{
+    if (isLoggedIn()) {
+        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/help.gif" alt="" /></a>', $module, $category, $linkExtraAttributes);
+    }
+    return null;
+}
+
+function getCurrentPage(): string
+{
+    $p = array_key_exists('p', $_GET) ? $_GET['p'] : 'index';
+    if (isLoggedIn()) {
+        switch ($p) {
+            case "admin":
+            case "admin_test":
+            case "admin_markt":
+            case "admin_vertrag":
+            case "admin_vertrag_einstellen":
+            case "admin_vertrag_bearbeiten":
+            case "admin_markt_einstellen":
+            case "admin_markt_bearbeiten":
+            case "admin_log_bank":
+            case "admin_log_bioladen":
+            case "admin_log_gruppenkasse":
+            case "admin_log_login":
+            case "admin_log_mafia":
+            case "admin_log_vertraege":
+                if (!isAdmin()) {
+                    redirectTo('/?p=index', 101, __LINE__);
+                }
+                $page = $p;
+                break;
+            case "bank":
+            case "bioladen":
+            case "buero":
+            case "forschungszentrum":
+            case "gebaeude":
+            case "marktplatz_liste":
+            case "marktplatz_verkaufen":
+            case "plantage":
+            case "vertraege_liste":
+            case "vertraege_neu":
+            case "mafia":
+            case "statistik":
+            case "gruppe":
+            case "gruppe_einstellungen":
+            case "gruppe_mitgliederverwaltung":
+            case "gruppe_diplomatie":
+            case "gruppe_kasse":
+            case "gruppe_logbuch":
+            case "gruppe_krieg_details":
+            case "rangliste":
+            case "rangliste_spezial":
+            case "index":
+            case "impressum":
+            case "regeln":
+            case "changelog":
+            case "einstellungen":
+            case "nachrichten_lesen":
+            case "nachrichten_liste":
+            case "nachrichten_schreiben":
+            case "notizblock":
+            case "hilfe":
+            case "profil":
+            case "special":
+                $page = $p;
+                break;
+            default:
+                $page = "index";
+                break;
+        }
+    } else {
+        switch ($p) {
+            case "anmelden":
+            case "registrieren":
+            case "index":
+            case "regeln":
+            case "impressum":
+                $page = $p;
+                break;
+            default:
+                $page = "index";
+                break;
+        }
+    }
+    return $page;
+}
+
+function buildingRequirementsMet(int $building_id, array $player): bool
+{
+    $attribute = 'Gebaeude' . $building_id;
+    switch ($building_id) {
+        case 1:
+        case 2:
+        case 3:
+            return true;
+        case 4:
+        case 6:
+            return $player[$attribute] > 0 || $player['Gebaeude3'] >= 5;
+        case 5:
+            return $player[$attribute] > 0 || ($player['Gebaeude1'] >= 8 && $player['Gebaeude2'] >= 9);
+        case 7:
+            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 10000 && $player['Gebaeude1'] > 9);
+        case 8:
+            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 25000 && $player['Gebaeude1'] > 11);
+        default:
+            return false;
+    }
+}
+
+function productionRequirementsMet(int $item_id, int $plantage_level, int $research_level): bool
+{
+    return $item_id == 1 || $research_level > 0 && $plantage_level >= $item_id * 1.5;
+}
+
+function researchRequirementsMet(int $item_id, int $plantage_level, int $research_lab_level): bool
+{
+    return $item_id == 1 || $plantage_level >= $item_id * 1.5 && $research_lab_level >= $item_id * 1.5;
+}
+
+function mafiaRequirementsMet(float $points): bool
+{
+    return $points >= min_points_mafia;
+}
+
+function calculateProductionDataForPlayer(int $item_id, int $plantage_level, int $research_level): array
+{
+    return array(
+        'Menge' => ($plantage_level * production_plantage_item_id_factor) + ($item_id * production_weight_item_id_factor) + production_base_amount + ($research_level * research_production_weight_factor),
+        'Kosten' => production_base_cost + ($research_level * research_production_cost_factor)
+    );
+}
+
+function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, int $research_level, int $level_increment = 1): array
+{
+    return array(
+        'Kosten' => (100 * $item_id) + (research_base_cost * pow(research_factor_cost, $research_level + $level_increment)),
+        'Dauer' => max(research_min_duration, (research_base_duration * pow(research_factor_duration, $research_level + $level_increment)) * (1 - research_lab_bonus_factor * $research_lab_level)),
+        'Punkte' => (research_base_points * pow(research_factor_points, $research_level + $level_increment))
+    );
+}
+
+function calculateBuildingDataForPlayer(int $building_id, array $player, int $level_increment = 1): array
+{
+    switch ($building_id) {
+        case 1:
+            $result = array(
+                'Kosten' => plantage_base_cost * pow(plantage_factor_cost, $player['Gebaeude1'] + $level_increment),
+                'Dauer' => plantage_base_duration * pow(plantage_factor_duration, $player['Gebaeude1'] + $level_increment),
+                'Punkte' => plantage_base_points * pow(plantage_factor_points, $player['Gebaeude1'] + $level_increment)
+            );
+            break;
+
+        case 2:
+            $result = array(
+                'Kosten' => research_lab_base_cost * pow(research_lab_factor_cost, $player['Gebaeude2'] + $level_increment),
+                'Dauer' => research_lab_base_duration * pow(research_lab_factor_duration, $player['Gebaeude2'] + $level_increment),
+                'Punkte' => research_lab_base_points * pow(research_lab_factor_points, $player['Gebaeude2'] + $level_increment)
+            );
+            break;
+
+        case 3:
+            $result = array(
+                'Kosten' => shop_base_cost * pow(shop_factor_cost, $player['Gebaeude3'] + $level_increment),
+                'Dauer' => shop_base_duration * pow(shop_factor_duration, $player['Gebaeude3'] + $level_increment),
+                'Punkte' => shop_base_points * pow(shop_factor_points, $player['Gebaeude3'] + $level_increment)
+            );
+            break;
+
+        case 4:
+            $result = array(
+                'Kosten' => kebab_stand_base_cost * pow(kebab_stand_factor_cost, $player['Gebaeude4'] + $level_increment),
+                'Dauer' => kebab_stand_base_duration * pow(kebab_stand_factor_duration, $player['Gebaeude4'] + $level_increment),
+                'Punkte' => kebab_stand_base_points * pow(kebab_stand_factor_points, $player['Gebaeude4'] + $level_increment)
+            );
+            break;
+
+        case 5:
+            $result = array(
+                'Kosten' => building_yard_base_cost * pow(building_yard_factor_cost, $player['Gebaeude5'] + $level_increment),
+                'Dauer' => building_yard_base_duration * pow(building_yard_factor_duration, $player['Gebaeude5'] + $level_increment),
+                'Punkte' => building_yard_base_points * pow(building_yard_factor_points, $player['Gebaeude5'] + $level_increment)
+            );
+            break;
+
+        case 6:
+            $result = array(
+                'Kosten' => school_base_cost * pow(school_factor_cost, $player['Gebaeude6'] + $level_increment),
+                'Dauer' => school_base_duration * pow(school_factor_duration, $player['Gebaeude6'] + $level_increment),
+                'Punkte' => school_base_points * pow(school_factor_points, $player['Gebaeude6'] + $level_increment)
+            );
+            break;
+
+        case 7:
+            $result = array(
+                'Kosten' => fence_base_cost * pow(fence_factor_cost, $player['Gebaeude7'] + $level_increment),
+                'Dauer' => fence_base_duration * pow(fence_factor_duration, $player['Gebaeude7'] + $level_increment),
+                'Punkte' => fence_base_points * pow(fence_factor_points, $player['Gebaeude7'] + $level_increment)
+            );
+            break;
+
+        case 8:
+            $result = array(
+                'Kosten' => pizzeria_base_cost * pow(pizzeria_factor_cost, $player['Gebaeude8'] + $level_increment),
+                'Dauer' => pizzeria_base_duration * pow(pizzeria_factor_duration, $player['Gebaeude8'] + $level_increment),
+                'Punkte' => pizzeria_base_points * pow(pizzeria_factor_points, $player['Gebaeude8'] + $level_increment)
+            );
+            break;
+
+        default:
+            $result = array(
+                'Kosten' => null,
+                'Dauer' => null,
+                'Punkte' => null
+            );
+            break;
+    }
+
+    $result['Dauer'] *= (1 - (building_yard_bonus_factor * $player['Gebaeude5']));
+    return $result;
+}
+
+function calculateSellPrice(int $item_id, int $resarch_level, int $shop_level, int $school_level, ?float $rate = null): float
+{
+    if ($rate === null) {
+        $rate = calculateSellRates()[$item_id];
+    }
+    return round(
+        (item_price_base
+            + $resarch_level * item_price_research_bonus
+            + $shop_level * item_price_shop_bonus
+            + $school_level * item_price_school_bonus
+            + $item_id * item_price_item_id_factor
+        ) * $rate
+        , 2);
+}
+
+function calculateSellRates(): array
+{
+    if (is_testing) {
+        srand(1337);
+    } else {
+        srand(intval(date("ymdH", time())) + crc32(random_secret));
+    }
+    $result = array();
+    $factor = 100;
+    for ($i = 1; $i <= count_wares; $i++) {
+        $result[$i] = rand(wares_rate_min * $factor, wares_rate_max * $factor) / $factor;
+    }
+    srand(mt_rand());
+    return $result;
+}
+
+function calculateInterestRates(): array
+{
+    if (is_testing) {
+        srand(1337);
+    } else {
+        srand(intval(date("ymd", time())) + crc32(random_secret));
+    }
+    $factor = 10000;
+    $result = array(
+        'Debit' => rand(interest_debit_rate_min * $factor, interest_debit_rate_max * $factor) / $factor,
+        'Credit' => rand(interest_credit_rate_min * $factor, interest_credit_rate_max * $factor) / $factor
+    );
+    srand(mt_rand());
+    return $result;
+}
+
+function getLastIncomeTimestamp(): int
+{
+    $now = time();
+    return $now - ($now % (cron_interval * 60));
+}
+
+function getIncome(int $shop_level, int $kebab_stand_level): int
+{
+    return (income_base + ($shop_level * income_bonus_shop) + ($kebab_stand_level * income_bonus_kebab_stand));
+}
+
+function createBBProfileLink(int $user_id, string $user_name): string
+{
+    return sprintf("[player=%s#%d/]", $user_name, $user_id);
+}
+
+function createBBGroupLink(int $group_id, string $group_name): string
+{
+    return sprintf("[group=%s#%d/]", $group_name, $group_id);
+}
+
+function createGroupNaviation(int $activePage): string
+{
+    $items = array('<div id="GroupNavigation">');
+
+    if ($activePage == 0) $items[] = '<span>Board</span>';
+    else $items[] = '<span><a href="/?p=gruppe">Board</a></span>';
+
+    if ($activePage == 1) $items[] = '<span>Mitgliederverwaltung</span>';
+    else $items[] = '<span><a href="/?p=gruppe_mitgliederverwaltung">Mitgliederverwaltung</a></span>';
+
+    if ($activePage == 2) $items[] = '<span>Einstellungen</span>';
+    else $items[] = '<span><a href="/?p=gruppe_einstellungen">Einstellungen</a></span>';
+
+    if ($activePage == 3) $items[] = '<span>Diplomatie</span>';
+    else $items[] = '<span><a href="/?p=gruppe_diplomatie">Diplomatie</a></span>';
+
+    if ($activePage == 4) $items[] = '<span>Gruppenkasse</span>';
+    else $items[] = '<span><a href="/?p=gruppe_kasse">Gruppenkasse</a></span>';
+
+    if ($activePage == 5) $items[] = '<span>Logbuch</span>';
+    else $items[] = '<span><a href="/?p=gruppe_logbuch">Logbuch</a></span>';
+
+    $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');">Gruppe verlassen</a></span>';
+    $items[] = '</div>';
+    return implode("\n", $items);
+}
+
+function getGroupDiplomacyTypeName(int $id): string
+{
+    switch ($id) {
+        case group_diplomacy_nap:
+            return 'Nichtangriffspakt';
+        case group_diplomacy_bnd:
+            return 'Bündnis';
+        case group_diplomacy_war:
+            return 'Krieg';
+        default:
+            return 'Unbekannt';
+    }
+}
+
+function requireXsrfToken(string $link): void
+{
+    if (getOrDefault($_REQUEST, 'token') !== $_SESSION['blm_xsrf_token']) {
+        redirectTo($link, 160, __LINE__);
+    }
+}
+
+function handleRoundEnd(): void
+{
+    Database::getInstance()->begin();
+    $nextStart = strtotime(date('Y-m-d H:00:00', time() + game_pause_duration)) - 5;
+
+    // determine information for mail
+    $expenseBuildings = '';
+    foreach (Database::getInstance()->getLeaderBuildings(3) as $entry) {
+        $expenseBuildings .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
+            base_url, $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenGebaeude']));
+    }
+    $expenseResearch = '';
+    foreach (Database::getInstance()->getLeaderResearch(3) as $entry) {
+        $expenseResearch .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
+            base_url, $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenForschung']));
+    }
+    $expenseMafia = '';
+    foreach (Database::getInstance()->getLeaderMafia(3) as $entry) {
+        $expenseMafia .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
+            base_url, $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenMafia']));
+    }
+    $rankingPoints = '';
+    $eternalPoints = 5;
+    foreach (Database::getInstance()->getRanglisteUserEntries(0, 5) as $entry) {
+        $rankingPoints .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
+            base_url, $entry['BenutzerID'], escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
+            Database::getInstance()->rollBack();
+            die('Could not update eternal points for player ' . $entry['ID']);
+        }
+    }
+
+    $mail = <<<EOF
+<html lang="de">
+<body>
+<p>
+Hallo __NAME__,
+</p>
+
+<p>
+die aktuelle Runde des Spiels &quot;<a href="__URL__">__TITLE__</a>&quot; geht zu Ende.<br/>
+Die Auswertung ist abgeschlossen und folgende Spieler stachen besonders heraus:
+</p>
+
+<h3>Höchste Ausgaben für Gebäude</h3>
+<ol>
+    $expenseBuildings
+</ol>
+<h3>Höchste Ausgaben für Forschung</h3>
+<ol>
+    $expenseResearch
+</ol>
+<h3>Höchste Ausgaben für die Mafia</h3>
+<ol>
+    $expenseMafia
+</ol>
+
+<h3>Die höchsten Punkstände</h3>
+<ol>
+    $rankingPoints
+</ol>
+
+<p>
+Die nächste Runde startet am __NEXT_START__, halte dich bereit.
+</p>
+
+Grüsse,<br/>
+__BETREIBER__
+</body>
+EOF;
+
+    $mail = str_replace(
+        array('__TITLE__', '__NEXT_START__', '__BETREIBER__', '__URL__'),
+        array(game_title, formatDateTime($nextStart), admin_name, base_url),
+        $mail);
+
+    // reset all accounts
+    $players = Database::getInstance()->getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin();
+    foreach ($players as $player) {
+        if ($player['LastLogin'] === null) {
+            $status = deleteAccount($player['ID']);
+            if ($status !== null) {
+                Database::getInstance()->rollBack();
+                die('Could not delete player ' . $player['ID'] . ' with status ' . $status);
+            }
+        } else {
+            $status = resetAccount($player['ID']);
+            if ($status !== null) {
+                Database::getInstance()->rollBack();
+                die('Could not reset player ' . $player['ID'] . ' with status ' . $status);
+            }
+        }
+    }
+    Database::getInstance()->commit();
+
+    $tables = array('auftrag', 'log_bank', 'log_bioladen', 'log_gruppenkasse', 'log_login', 'log_mafia', 'log_vertraege');
+    $status = Database::getInstance()->truncateTables($tables);
+    if ($status !== null) {
+        Database::getInstance()->rollBack();
+        die('Could not reset tables with status ' . $status);
+    }
+
+    // write the last reset file
+    $startDatetime = date('Y-m-d H:i:s', $nextStart);
+    $lastResetFile = dirname(__FILE__) . '/../include/last_reset.inc.php';
+    $fp = fopen($lastResetFile, 'w');
+    if ($fp === false) {
+        die('Could not create ' . $lastResetFile . ', please check for write permissions!');
+    }
+    fwrite($fp, "<?php
+ define('last_reset', strtotime('$startDatetime'));
+");
+    fclose($fp);
+
+    // send the mails to all active players
+    foreach ($players as $player) {
+        if ($player['EMailAct'] !== null || $player['LastLogin'] === null) continue;
+        if (!sendMail($player['EMail'], game_title . ': Rundenende', str_replace('__NAME__', escapeForOutput($player['Name']), $mail))) {
+            trigger_error('Could not send mail to ' . $player['EMail'], E_USER_WARNING);
+        }
+    }
 }

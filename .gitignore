@@ -1,6 +1,9 @@
 .idea
-include/config_live.inc.php
+include/config.inc.php
+include/last_reset.inc.php
 include/captcha_class/pics/*.jpg
 include/captcha_class/tmp/*
 pics/spieler/*
+!pics/spieler/nopic.png
 pics/gruppe/*
+!pics/gruppe/nopic.png

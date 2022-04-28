@@ -3,22 +3,20 @@ $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
-<table id="SeitenUeberschrift">
-    <tr>
-        <td><img src="/pics/big/admin.png" alt=""/></td>
-        <td>Admin - Verträge</td>
-    </tr>
-</table>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/admin.png" alt=""/>
+    <span>Administrationsbereich - Verträge</span>
+</div>
 
-<?= CheckMessage(getOrDefault($_GET, 'm', 0)); ?>
+<?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
     <form action="/" method="get">
         <input type="hidden" name="p" value="admin_vertrag"/>
         <label for="wer">Wer:</label>
-        <input type="text" name="wer" id="wer" value="<?= sichere_ausgabe($wer); ?>"/>
+        <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <label for="wen">Wen:</label>
-        <input type="text" name="wen" id="wen" value="<?= sichere_ausgabe($wen); ?>"/>
+        <input type="text" name="wen" id="wen" value="<?= escapeForOutput($wen); ?>"/>
         <input type="submit" value="Abschicken"/><br/>
     </form>
 </div>
@@ -38,8 +36,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wen = empty($wen) ? "%" : $wen;
 
     $entriesCount = Database::getInstance()->getVertragCount($filter_wer, $filter_wen);
-    $offset = verifyOffset($offset, $entriesCount, ADMIN_LOG_OFFSET);
-    $entries = Database::getInstance()->getVertragEntries($filter_wer, $filter_wen, $offset, ADMIN_LOG_OFFSET);
+    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
+    $entries = Database::getInstance()->getVertragEntries($filter_wer, $filter_wen, $offset, admin_log_page_size);
 
 
     for ($i = 0; $i < count($entries); $i++) {
@@ -48,7 +46,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     <tr>
         <td><?= createProfileLink($row['VonId'], $row['VonName']); ?></td>
         <td><?= createProfileLink($row['AnId'], $row['AnName']); ?></td>
-        <td><?= WarenName($row['Was']); ?></td>
+        <td><?= getItemName($row['Was']); ?></td>
         <td><?= formatWeight($row['Menge']); ?></td>
         <td><?= formatCurrency($row['Preis']); ?></td>
         <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
@@ -68,7 +66,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('./?p=admin_vertrag&amp;wer=' . sichere_ausgabe($wer) . '&amp;wen=' . sichere_ausgabe($wen), $offset, $entriesCount, ADMIN_LOG_OFFSET); ?>
+<?= createPaginationTable('/?p=admin_vertrag&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, admin_log_page_size); ?>
 <p>
     <a href="/?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
     <a href="/?p=admin">Zurück...</a>

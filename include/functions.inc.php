@@ -93,12 +93,12 @@ function CheckAuftraege(int $blm_user): bool
 
 function isRoundOver(): bool
 {
-    return (last_reset + game_round_duration <= time());
+    return (last_reset + game_round_duration <= time() + 5);
 }
 
 function isGameLocked(): bool
 {
-    return (last_reset >= time());
+    return (last_reset >= time() + 5);
 }
 
 function getMessageBox(int $msg_id): ?string
@@ -1335,7 +1335,7 @@ function requireXsrfToken(string $link): void
 function handleRoundEnd(): void
 {
     Database::getInstance()->begin();
-    $nextStart = strtotime(date('Y-m-d H:00:00', time() + game_pause_duration)) - 5;
+    $nextStart = strtotime(date('Y-m-d H:00:00', time() + game_pause_duration));
 
     // determine information for mail
     $expenseBuildings = '';

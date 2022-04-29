@@ -33,6 +33,8 @@ const maintenance_active = false;
 const maintenance_message = 'Das Spiel befindet sich gerade im Wartungsmodus (Einspielen von Updates und Bugfixes).
 Bitte versuchen Sie es in ein paar Minuten erneut.';
 
+// set the timezone for this game
+date_default_timezone_set('Europe/Berlin');
 
 /*
  * ------------------------------------------------------------------------------------------------------

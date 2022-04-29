@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '/../include/functions.inc.php');
 require_once(dirname(__FILE__) . '/../include/database.class.php');
 
 if (isGameLocked()) {
-    die("Game is currently locked\n");
+    die(sprintf("Game is currently locked (%d < %d)\n", time(), last_reset));
 }
 
 if (isRoundOver()) {

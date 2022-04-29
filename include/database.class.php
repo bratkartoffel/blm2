@@ -999,7 +999,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller(int $blm_user, int $minWas = 0, int $maxWas = 999): ?array
     {
-        $stmt = $this->prepare("SELECT * FROM auftrag WHERE user_id = :id AND item >= :min AND item < :max");
+        $stmt = $this->prepare("SELECT * FROM auftrag WHERE user_id = :id AND item >= :min AND item < :max ORDER BY finished ASC");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         $stmt->bindParam("min", $minWas, PDO::PARAM_INT);
         $stmt->bindParam("max", $maxWas, PDO::PARAM_INT);

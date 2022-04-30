@@ -60,7 +60,7 @@ $interestRates = calculateInterestRates();
         if (Zeiger.value === Leer || Zeiger.value === KontostandAusgabe || Zeiger.value === BargeldAusgabe) {
             if (option === "1" || option === "3") {
                 Zeiger.value = BargeldAusgabe;
-            } else {
+            } else if (!KontostandAusgabe.startsWith("-")) {
                 Zeiger.value = KontostandAusgabe;
             }
         }

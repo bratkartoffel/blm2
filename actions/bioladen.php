@@ -22,6 +22,7 @@ if ($alles == 1) {
     $updateStorageValues = array();
     $updateStorageWhere = array('user_id = :whr0' => $_SESSION['blm_user']);
     Database::getInstance()->begin();
+    $idx = 1;
     for ($i = 1; $i <= count_wares; $i++) {
         $amount = $data['Lager' . $i];
         if ($amount == 0) continue;
@@ -29,7 +30,7 @@ if ($alles == 1) {
 
         $sumMoney += $amount * $price;
         $updateStorageValues['Lager' . $i] = -$amount;
-        $updateStorageWhere['Lager' . $i . ' >= :whr' . $i] = $amount;
+        $updateStorageWhere['Lager' . $i . ' >= :whr' . $idx++] = $amount;
 
         if (Database::getInstance()->createTableEntry('log_bioladen', array(
                 'playerId' => $_SESSION['blm_user'],

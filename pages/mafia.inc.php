@@ -5,7 +5,7 @@ $opponent = getOrDefault($_GET, 'opponent');
 $action = getOrDefault($_GET, 'action');
 $level = getOrDefault($_GET, 'level');
 
-$data = Database::getInstance()->getPlayerPointsAndMoneyAndNextMafiaById($_SESSION['blm_user']);
+$data = Database::getInstance()->getPlayerPointsAndMoneyAndNextMafiaAndGroupById($_SESSION['blm_user']);
 if ($data['Punkte'] < min_points_mafia) {
     redirectTo('/?p=index', 169, __LINE__);
 }
@@ -64,14 +64,13 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
     </tr>
     <tr>
         <td>Diebstahl</td>
-        <td>Stiehlt dem Gegner alle Waren aus dem LAger</td>
+        <td>Stiehlt dem Gegner alle Waren aus dem Lager</td>
         <td><?= (mafia_sperrzeit_diebstahl / 60); ?> Minuten</td>
         <td><?= formatPoints(mafia_base_data[2]['points']); ?></td>
     </tr>
     <tr>
         <td>Anschlag</td>
-        <td>Zerstört die Plantage des Gegners, senkt das Gebäudelevel um eine Stufe
-        </td>
+        <td>Zerstört die Plantage des Gegners, senkt das Gebäudelevel um eine Stufe</td>
         <td><?= (mafia_sperrzeit_bomben / 60); ?> Minuten</td>
         <td><?= formatPoints(mafia_base_data[3]['points']); ?></td>
     </tr>

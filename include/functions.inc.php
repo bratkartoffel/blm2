@@ -1469,3 +1469,16 @@ function passwordNeedsUpgrade(string $hash): bool
 {
     return strlen($hash) == 40 || password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
 }
+
+function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, int $groupDiplomacy)
+{
+    if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
+        return false;
+    } else if ($groupDiplomacy === group_diplomacy_war) {
+        return true;
+    } else {
+        $a = min($pointsLeft, $pointsRight);
+        $b = max($pointsLeft, $pointsRight);
+        return $a > $b / mafia_faktor_punkte && $a < $b * mafia_faktor_punkte;
+    }
+}

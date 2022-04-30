@@ -835,9 +835,9 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getPlayerPointsAndMoneyAndNextMafiaById(int $blm_user): ?array
+    public function getPlayerPointsAndMoneyAndNextMafiaAndGroupById(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT Punkte, Geld, NextMafia from mitglieder WHERE ID = :id");
+        $stmt = $this->prepare("SELECT Punkte, Geld, NextMafia, Gruppe from mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }

@@ -38,12 +38,11 @@ if ($player['Gruppe'] !== null && $otherPlayer['Gruppe'] !== null) {
 if (!mafiaRequirementsMet($otherPlayer['Punkte'])) {
     redirectTo($backLink, 155, __LINE__);
 }
-if ($groupDiplomacy !== group_diplomacy_war && ($otherPlayer['Punkte'] < $player['Punkte'] / mafia_faktor_punkte || $otherPlayer['Punkte'] > $player['Punkte'] * mafia_faktor_punkte)) {
-    redirectTo($backLink, 155, __LINE__);
-}
-
 if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
     redirectTo($backLink, 156, __LINE__);
+}
+if (maybeMafiaOpponents($otherPlayer['Punkte'], $player['Punkte'], $groupDiplomacy)) {
+    redirectTo($backLink, 155, __LINE__);
 }
 
 $chance = mafia_base_data[$action][$level]['chance'];

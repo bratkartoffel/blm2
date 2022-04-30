@@ -777,9 +777,9 @@ function formatCurrency(float $amount, bool $withSuffix = true, bool $withThousa
     return number_format($amount, $decimals, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' €' : '');
 }
 
-function formatWeight(float $amount, bool $withSuffix = true, int $decimals = 0): string
+function formatWeight(float $amount, bool $withSuffix = true, int $decimals = 0, bool $withThousandsSeparator = true): string
 {
-    return number_format($amount, $decimals, ",", ".") . ($withSuffix ? ' kg' : '');
+    return number_format($amount, $decimals, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' kg' : '');
 }
 
 function formatPoints(float $amount): string

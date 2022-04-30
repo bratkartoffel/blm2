@@ -29,12 +29,19 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
         <th>Platz</th>
         <th>Name</th>
         <th>Punkte</th>
-        <?= (isLoggedIn() ? '<th>Aktion</th>' : ''); ?>
+        <th>Aktion</th>
     </tr>
     <?php
+    $myself = Database::getInstance()->getPlayerPointsAndMoneyAndNextMafiaAndGroupById($_SESSION['blm_user']);
     $entries = Database::getInstance()->getRanglisteUserEntries($offset, ranking_page_size);
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
+        if ($myself['Gruppe'] !== null && $row['GruppeID'] !== null) {
+            $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($myself['Gruppe'], $row['GruppeID']);
+        } else {
+            $groupDiplomacy = -1;
+        }
+
         if ($row['BenutzerID'] == $_SESSION['blm_user'] || strtolower($row['BenutzerName']) == strtolower($q)) {
             $rowExtra = ' class="highlight"';
         } else {
@@ -70,8 +77,12 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
             <td><?= formatPoints($row['Punkte']); ?></td>
             <td><?php
                 if ($row['BenutzerID'] != $_SESSION['blm_user']) {
-                    echo sprintf('(<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>)',
+                    echo sprintf('(<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
                         escapeForOutput($row['BenutzerName']), escapeForOutput($row['BenutzerName']));
+                    if (mafiaRequirementsMet($row['Punkte']) && mafiaRequirementsMet($myself['Punkte']) && maybeMafiaOpponents($row['Punkte'], $myself['Punkte'], $groupDiplomacy)) {
+                        echo sprintf(' | <a href="/?p=mafia&amp;opponent=%s">Mafia</a>', escapeForOutput(escapeForOutput($row['BenutzerName'])));
+                    }
+                    echo ')';
                 }
                 ?></td>
         </tr>

@@ -29,7 +29,11 @@ if (mafia_base_data[$action][$level]['cost'] > $player['Geld']) {
 
 $otherPlayer = Database::getInstance()->getPlayerPointsAndNameAndMoneyAndGruppeAndZaunByName($opponent);
 requireEntryFound($otherPlayer, $backLink);
-$groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($player['Gruppe'], $otherPlayer['Gruppe']);
+if ($player['Gruppe'] !== null && $otherPlayer['Gruppe'] !== null) {
+    $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($player['Gruppe'], $otherPlayer['Gruppe']);
+} else {
+    $groupDiplomacy = -1;
+}
 
 if (!mafiaRequirementsMet($otherPlayer['Punkte'])) {
     redirectTo($backLink, 155, __LINE__);

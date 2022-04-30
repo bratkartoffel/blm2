@@ -66,4 +66,4 @@ if (Database::getInstance()->deleteTableEntry('auftrag', $id) === null) {
 }
 
 Database::getInstance()->commit();
-redirectTo('/?p=' . urlencode($back), 222, substr($back, 0, 1) . $auftrag['Was']);
+redirectTo('/?p=' . urlencode($back), 222, substr($back, 0, 1) . $auftrag['item']);

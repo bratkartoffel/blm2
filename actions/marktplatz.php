@@ -22,11 +22,11 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         if ($amount > $data['Lager' . $ware]) {
-            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&menge=%d&preis=%f', $ware, $amount, $price), 116, __LINE__);
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f', $ware, $amount, $price), 116, __LINE__);
         }
 
         if ($price < $sellPrice || $price > $sellPrice * 2) {
-            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&menge=%d&preis=%f', $ware, $amount, $price), 153, __LINE__);
+            redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f', $ware, $amount, $price), 153, __LINE__);
         }
 
         Database::getInstance()->begin();
@@ -96,7 +96,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
                 'Von' => 0,
                 'An' => $entry['Von'],
                 'Betreff' => 'Angebot auf freiem Markt verkauft',
-                'Nachricht' => sprintf("Soeben wurde das Angebot #%s (%s %s zu insgesamt %s) anonym gekauft.",
+                'Nachricht' => sprintf("Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) anonym gekauft.",
                     $entry['ID'], formatWeight($entry['Menge']), getItemName($entry['Was']), formatCurrency($amount))
             )) != 1) {
             Database::getInstance()->rollBack();

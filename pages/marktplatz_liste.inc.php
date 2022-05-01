@@ -44,7 +44,7 @@ $offset = verifyOffset($offset, $offerCount, market_page_size);
                 if ($row['VonId'] != $_SESSION['blm_user']) {
                     echo '<a href="./actions/marktplatz.php?a=2&amp;id=' . $row['ID'] . '" onclick="return confirm(\'Wollen Sie das Angebot Nr ' . $row['ID'] . ' wirklich kaufen?\')">Kaufen</a>';
                 } else {
-                    echo '<a href="./actions/marktplatz.php?a=3&amp;id=' . $row['ID'] . '" onclick="return confirm(\'Wollen Sie das Angebot Nr ' . $row['ID'] . ' zurückziehen?\nSie erhalten lediglich ' . formatWeight($row['Menge'] * market_retract_rate) . ' der Waren zurück.\')">Zurückziehen</a>';
+                    echo '<a href="./actions/marktplatz.php?a=3&amp;id=' . $row['ID'] . '" onclick="return confirm(\'Wollen Sie das Angebot Nr ' . $row['ID'] . ' zurückziehen?\nSie erhalten lediglich ' . formatWeight(floor($row['Menge'] * market_retract_rate)) . ' der Waren zurück.\')">Zurückziehen</a>';
                 }
                 ?>
             </td>

@@ -40,16 +40,16 @@ requireEntryFound($data, '/?p=rangliste');
         <span><?= formatDate(strtotime($data['RegistriertAm'])); ?></span>
     </div>
     <div>
+        <label for="lastLogin">Letzter Login:</label>
+        <span><?= formatDate(strtotime($data['LastLogin'])); ?></span>
+    </div>
+    <div>
         <label for="warnings">Verwarnungen:</label>
         <span><?= $data['Verwarnungen']; ?></span>
     </div>
     <div>
         <label for="locked">Gesperrt:</label>
         <span><?= getYesOrNo($data['Gesperrt']); ?></span>
-    </div>
-    <div>
-        <label for="lastLogin">Letzter Login:</label>
-        <span><?= formatDate(strtotime($data['LastLogin'])); ?></span>
     </div>
     <div>
         <label for="points">Punkte:</label>

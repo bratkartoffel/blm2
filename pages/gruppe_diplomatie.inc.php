@@ -159,7 +159,7 @@ if ($rights['group_diplomacy'] == 1) {
             </div>
             <div id="kriegBetrag">
                 <label for="amount">Umkämpfter Betrag:</label>
-                <input type="text" name="amount" id="amount" value="<?= formatCurrency($amount, false, false); ?>"
+                <input type="number" name="amount" id="amount" value="<?= formatCurrency($amount, false, false); ?>"
                        min="<?= group_war_min_amount; ?>"/>
             </div>
             <div>

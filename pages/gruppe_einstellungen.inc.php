@@ -101,7 +101,7 @@ if ($rights['group_delete'] || Database::getInstance()->getGroupMemberCountById(
             </div>
             <div>
                 <label for="confirm">Bestätigen:</label>
-                <input id="confirm" type="text" name="confirm"/>
+                <input id="confirm" type="number" name="confirm"/>
             </div>
             <div>
                 <input type="submit" value="Ausführen" onclick="return submit(this);"/>

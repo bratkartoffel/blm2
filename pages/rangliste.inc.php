@@ -93,7 +93,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
 <?= createPaginationTable(sprintf('/?p=rangliste&o_gr=%d&o_ep=%d', $offset_gr, $offset_ep), $offset, $playerCount, ranking_page_size, 'o', 'User'); ?>
 
 <div>
-    <form action="" method="get">
+    <form action="/" method="get">
         <input type="hidden" name="p" value="rangliste"/>
         <label for="q">Spielersuche:</label>
         <input type="text" name="q" id="q" value="<?= escapeForOutput($q); ?>" size="24"/>

@@ -25,7 +25,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f', $ware, $amount, $price), 116, __LINE__);
         }
 
-        if ($price < $sellPrice || $price > $sellPrice * 2) {
+        if ($price < $sellPrice * market_min_sell_price || $price > $sellPrice * market_max_sell_price) {
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f', $ware, $amount, $price), 153, __LINE__);
         }
 

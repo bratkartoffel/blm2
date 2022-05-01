@@ -17,7 +17,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
         <header id="g<?= $buildingId; ?>">
             <?= getBuildingName($buildingId); ?> (Stufe <?= $playerData[$buildingAttribute]; ?>)
         </header>
-        <img src="/pics/gebaeude/<?= $buildingId; ?>.jpg" alt=""/>
+        <img src="<?= getBuildingImage($buildingId); ?>" alt=""/>
         <div class="Beschreibung">
             <?= $buildingDescription; ?>
         </div>
@@ -57,7 +57,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                             (noch <span class="countdown"><?= formatDuration($currentDuration); ?></span> verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * action_retrace_rate); ?>', '<?= formatPercent(action_retrace_rate); ?>');"
+                            <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
                                href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;back=gebaeude">Abbrechen</a>
                         </div>
                         <?php

@@ -19,7 +19,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         <label for="wen">Wen:</label>
         <input type="text" name="wen" id="wen" value="<?= escapeForOutput($wen); ?>"/>
         <label for="gruppe">Gruppe:</label>
-        <?= createGroupDropdown($gruppe, 'gruppe'); ?>
+        <?= createDropdown(Database::getInstance()->getAllGroupIdsAndName(), $gruppe, 'gruppe'); ?>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>

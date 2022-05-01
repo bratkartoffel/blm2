@@ -37,7 +37,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         <header id="f<?= $i; ?>">
             <?= getItemName($i); ?> (Stufe <?= $data[$researchAttribute]; ?>)
         </header>
-        <img src="/pics/forschung/<?= $i; ?>.jpg" alt=""/>
+        <img src="<?= getResearchImage($i); ?>" alt=""/>
         <div class="ResearchDaten">
             <?php
             if (!array_key_exists($i, $auftraege)) {
@@ -79,7 +79,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                             verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * action_retrace_rate); ?>', '<?= formatPercent(action_retrace_rate); ?>');"
+                            <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
                                href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;back=forschungszentrum&amp;was=<?= $i; ?>">Abbrechen</a>
                         </div>
                     </div>

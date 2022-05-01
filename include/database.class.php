@@ -658,7 +658,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         $offset = $page * $entriesPerPage;
         if (sizeof($warenFilter) == 0) {
             $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis 
-                FROM marktplatz m1 JOIN mitglieder m2 ON m2.ID = m1.Von LIMIT :offset, :count");
+                FROM marktplatz m1 JOIN mitglieder m2 ON m2.ID = m1.Von ORDER BY ID DESC LIMIT :offset, :count");
         } else {
             $fields = array();
             for ($i = 0; $i < count($warenFilter); $i++) {
@@ -666,7 +666,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             }
             $stmt = $this->prepare("SELECT m1.ID, m1.Von AS VonId, m2.Name AS VonName, m1.Was, m1.Menge, m1.Preis, m1.Menge * m1.Preis AS Gesamtpreis 
                 FROM marktplatz m1 JOIN mitglieder m2 ON m2.ID = m1.Von
-                WHERE m1.Was IN (" . implode(', ', $fields) . ") LIMIT :offset, :count");
+                WHERE m1.Was IN (" . implode(', ', $fields) . ") ORDER BY ID DESC LIMIT :offset, :count");
             for ($i = 0; $i < count($warenFilter); $i++) {
                 $stmt->bindParam($fields[$i], $warenFilter[$i], PDO::PARAM_INT);
             }

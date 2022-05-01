@@ -466,6 +466,21 @@ function getMessageBox(int $msg_id): ?string
         </div>', $msg_id, $image, $msg_id, $text);
 }
 
+function getBuildingImage(int $building_id): string
+{
+    switch ($building_id) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            return sprintf('/pics/gebaeude/%d.png', $building_id);
+        default:
+            return sprintf('/pics/gebaeude/%d.jpg', $building_id);
+    }
+}
+
 function getBuildingName(int $building_id): string
 {
     switch ($building_id) {
@@ -486,7 +501,41 @@ function getBuildingName(int $building_id): string
         case 8:
             return 'Pizzeria';
         default:
-            return 'Unbekannt (' . intval($building_id) . ')';
+            return 'Unbekannt (' . $building_id . ')';
+    }
+}
+
+function getItemImage(int $item_id): string
+{
+    switch ($item_id) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            return sprintf('/pics/obst/%d.png', $item_id);
+        default:
+            return sprintf('/pics/obst/%d.jpg', $item_id);
+    }
+}
+
+function getResearchImage(int $item_id): string
+{
+    switch ($item_id) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            return sprintf('/pics/forschung/%d.png', $item_id);
+        default:
+            return sprintf('/pics/forschung/%d.jpg', $item_id);
     }
 }
 
@@ -524,7 +573,7 @@ function getItemName(int $item_id): string
         case 15:
             return 'Kiwi';
         default:
-            return 'Unbekannt (' . intval($item_id) . ')';
+            return 'Unbekannt (' . $item_id . ')';
     }
 }
 
@@ -843,40 +892,21 @@ function createPaginationTable(string $linkBase, int $currentPage, int $entriesC
     return sprintf('<div class="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
 
-function createGroupDropdown(int $selectedValue, string $name, bool $withAllEntry = true): string
+function createDropdown(array $elementsWithIDAndName, int $selectedID, string $elementName, bool $withAllEntry = true): string
 {
-    $groups = Database::getInstance()->getAllGroupIdsAndName();
     $entries = array();
     if ($withAllEntry) {
         $entries[] = '<option value="">- Alle -</option>';
     }
-    for ($i = 0; $i < count($groups); $i++) {
-        $entry = $groups[$i];
-        if ($entry["ID"] == $selectedValue) {
+    for ($i = 0; $i < count($elementsWithIDAndName); $i++) {
+        $entry = $elementsWithIDAndName[$i];
+        if ($entry["ID"] == $selectedID) {
             $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $entry["ID"], $entry["Name"]);
         } else {
             $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
         }
     }
-    return sprintf('<select name="%s">%s</select>', $name, implode("\n", $entries));
-}
-
-function createPlayerDropdown(int $selectedValue, string $name, bool $withAllEntry = true): string
-{
-    $users = Database::getInstance()->getAllPlayerIdsAndName();
-    $entries = array();
-    if ($withAllEntry) {
-        $entries[] = '<option value="">- Alle -</option>';
-    }
-    for ($i = 0; $i < count($users); $i++) {
-        $entry = $users[$i];
-        if ($entry["ID"] == $selectedValue) {
-            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $entry["ID"], $entry["Name"]);
-        } else {
-            $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
-        }
-    }
-    return sprintf('<select name="%s" id="%s">%s</select>', $name, $name, implode("\n", $entries));
+    return sprintf('<select name="%s">%s</select>', $elementName, implode("\n", $entries));
 }
 
 function createWarenDropdown(int $selectedValue, string $name, bool $withAllEntry = true, array $onlyStock = array()): string
@@ -1470,7 +1500,7 @@ function passwordNeedsUpgrade(string $hash): bool
     return strlen($hash) == 40 || password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
 }
 
-function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, int $groupDiplomacy)
+function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, int $groupDiplomacy): bool
 {
     if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
         return false;

@@ -28,7 +28,7 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
             </tr>
             <tr>
                 <td>Von:</td>
-                <td><?= createPlayerDropdown($entry['Von'], 'von', false); ?></td>
+                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $entry['Von'], 'von', false); ?></td>
             </tr>
             <tr>
                 <td>Was</td>
@@ -36,12 +36,14 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
             </tr>
             <tr>
                 <td>Menge</td>
-                <td><input type="text" name="menge" value="<?= formatWeight($entry['Menge'], false); ?>" size="6"/> kg
+                <td><input type="number" min="1" name="menge"
+                           value="<?= formatWeight($entry['Menge'], false, 0, false); ?>" size="6"/> kg
                 </td>
             </tr>
             <tr>
                 <td>Preis</td>
-                <td><input type="text" name="preis" value="<?= formatCurrency($entry['Preis'], false); ?>" size="6"/> €
+                <td><input type="number" min="0.01" step="0.01" name="preis"
+                           value="<?= formatCurrency($entry['Preis'], false, false); ?>" size="6"/> €
                 </td>
             </tr>
             <tr>

@@ -36,9 +36,9 @@ for ($i = 1; $i <= count_wares; $i++) {
             <header>Schnellanbau</header>
             <div>
                 <label for="stunden">Produziere</label>
-                <input type="text" id="stunden" name="stunden" value="1" size="1" maxlength="2" min="1"
-                       max="<?= production_hours_max; ?>>"
-                       onkeyup="RechneProduktionsKosten(1, <?= $productionCostSum; ?>, this.value,
+                <input type="number" id="stunden" name="stunden" value="1" size="2" maxlength="2" min="1"
+                       max="<?= production_hours_max; ?>"
+                       onchange="RechneProduktionsKosten(1, <?= $productionCostSum; ?>, this.value,
                        <?= $data['Geld']; ?>, document.getElementById('pr_ko_all'), document.getElementById('anbauen_all'));"/>
                 Stunde(n) von Allem.
             </div>
@@ -57,7 +57,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         <header id="p<?= $i; ?>">
             <?= getItemName($i); ?> (Stufe <?= $data[$researchAttribute]; ?>)
         </header>
-        <img src="/pics/obst/<?= $i; ?>.jpg" alt=""/>
+        <img src="<?= getItemImage($i); ?>" alt=""/>
         <div class="ProduktionDaten">
             <div><?= formatWeight($productionData[$i]['Menge']); ?> / Stunde</div>
             <div><?= formatWeight($productionData[$i]['Menge'] / 60, true, 2); ?> / Minute</div>

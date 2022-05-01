@@ -17,7 +17,7 @@ Database::getInstance()->begin();
 switch (floor($auftrag['item'] / 100)) {
     // Gebäude
     case 1:
-        $moneyBack = round($auftrag['cost'] * action_retrace_rate, 2);
+        $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
         if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
@@ -43,7 +43,7 @@ switch (floor($auftrag['item'] / 100)) {
 
     // Forschung
     case 3:
-        $moneyBack = round($auftrag['cost'] * action_retrace_rate, 2);
+        $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
         if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);

@@ -24,19 +24,19 @@ if ($data['An'] == $_SESSION['blm_user']) {
 <div class="form NachrichtLesen">
     <header>Nachricht lesen</header>
     <div>
-        <label for="sender">Absender:</label>
+        <label>Absender:</label>
         <span><?= createProfileLink($data['VonID'], $data['VonName']); ?></span>
     </div>
     <div>
-        <label for="receiver">Empfänger:</label>
+        <label>Empfänger:</label>
         <span><?= createProfileLink($data['AnID'], $data['AnName']); ?></span>
     </div>
     <div>
-        <label for="time">Zeit:</label>
+        <label>Zeit:</label>
         <span><?= formatDateTime(strtotime($data['Zeit'])); ?></span>
     </div>
     <div>
-        <label for="subject">Betreff:</label>
+        <label>Betreff:</label>
         <span><?= escapeForOutput($data['Betreff']); ?></span>
     </div>
     <div><?= replaceBBCode($data['Nachricht']); ?></div>

@@ -28,6 +28,6 @@ if (isset($_GET['notizblock'])) $data = $_GET['notizblock'];
     </form>
 </div>
 
-<script type="text/javascript">
+<script>
     ZeichenUebrig(document.getElementById('notizblock'), document.getElementById('charsLeft'));
 </script>

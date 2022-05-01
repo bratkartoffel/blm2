@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection DuplicatedCode */
 /*
  * Copy this file to 'config.inc.php' and adjust as needed
  */
@@ -223,7 +223,11 @@ const market_retract_rate = 0.90;
 const market_provision_rate = 0.02;
 
 // when retracting an active offer from the market., then just this amount of items is returned (in percent)
-const action_retrace_rate = 0.75;
+const action_retract_rate = 0.75;
+
+// minimum and maximum sell price of an item in percent of the current shop price
+const market_min_sell_price = 0.75;
+const market_max_sell_price = 2;
 
 // starting values for each new player or resettet account
 // key is the database table name, value is an associative array with column => value pairs

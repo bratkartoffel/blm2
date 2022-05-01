@@ -2800,7 +2800,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "50000,00"
+      "value": "50000"
     }, {
       "id": "e4b12a87-f0b6-4ea0-94b1-132bd780bc2b",
       "comment": "",
@@ -2984,7 +2984,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "105000,00"
+      "value": "105000"
     }, {
       "id": "0111982c-12f4-4302-9a6a-5ff9c446767c",
       "comment": "",
@@ -3168,7 +3168,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "165000,00"
+      "value": "165000"
     }, {
       "id": "b63cead1-a70c-4b07-bbe7-6d052e18f3c1",
       "comment": "",
@@ -3352,7 +3352,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "65001,00"
+      "value": "65001"
     }, {
       "id": "3443b9fc-53ee-461a-9d3b-461397ef8529",
       "comment": "",
@@ -3529,7 +3529,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "95000,00"
+      "value": "95000"
     }, {
       "id": "02ef2126-972d-4a59-a036-cb8370db85ef",
       "comment": "",
@@ -3706,7 +3706,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "50000,01"
+      "value": "50000.01"
     }, {
       "id": "683c878e-62a7-463f-9d37-90a9b632f83e",
       "comment": "",
@@ -3850,10 +3850,10 @@
       ],
       "value": ""
     }, {
-      "id": "5f8cec86-2e30-4642-884a-55063055bcfa",
+      "id": "c7a21e74-a4cb-474a-89a0-d1d6a55a61fe",
       "comment": "",
-      "command": "assertElementPresent",
-      "target": "id=meldung_110",
+      "command": "assertElementNotPresent",
+      "target": "id=meldung_207",
       "targets": [],
       "value": ""
     }, {
@@ -3883,7 +3883,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "-100,00"
+      "value": "-100"
     }, {
       "id": "1519e644-24df-4321-9953-c6175d79fc40",
       "comment": "",
@@ -4060,7 +4060,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "100000,00"
+      "value": "100000"
     }, {
       "id": "10181468-a45c-46af-8541-fe6b72ec925a",
       "comment": "",
@@ -4213,8 +4213,8 @@
     }, {
       "id": "c4d7d742-cc4a-4013-8585-fb3a06a84b49",
       "comment": "",
-      "command": "assertElementPresent",
-      "target": "id=meldung_110",
+      "command": "assertElementNotPresent",
+      "target": "id=meldung_207",
       "targets": [],
       "value": ""
     }, {
@@ -4244,7 +4244,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "-100,00"
+      "value": "-100"
     }, {
       "id": "f3de5a7d-dac3-41a7-8b52-ae55c50ad57e",
       "comment": "",
@@ -4395,10 +4395,10 @@
       ],
       "value": ""
     }, {
-      "id": "c688154a-abc7-4f13-ad01-8cd60af67748",
+      "id": "fbf8428e-1271-4f06-b346-8c075e7b67fc",
       "comment": "",
-      "command": "assertElementPresent",
-      "target": "id=meldung_110",
+      "command": "assertElementNotPresent",
+      "target": "id=meldung_207",
       "targets": [],
       "value": ""
     }, {
@@ -4428,7 +4428,7 @@
         ["xpath=//div[@id='Inhalt']/div[3]/form/div[2]/input", "xpath:idRelative"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "50000,00"
+      "value": "50000"
     }, {
       "id": "e4932729-866a-45f3-bc2e-20f8b82e84c2",
       "comment": "",
@@ -4704,8 +4704,8 @@
     }, {
       "id": "85d7348f-c32a-467e-b182-423b7e48d263",
       "comment": "",
-      "command": "assertElementPresent",
-      "target": "id=meldung_133",
+      "command": "assertElementNotPresent",
+      "target": "id=meldung_207",
       "targets": [],
       "value": ""
     }, {
@@ -5068,10 +5068,10 @@
       ],
       "value": ""
     }, {
-      "id": "6f70f275-a7c1-481c-86d3-1936a003f48f",
+      "id": "63bcc48b-1afc-4450-890e-7953a058d3c8",
       "comment": "",
-      "command": "assertElementPresent",
-      "target": "id=meldung_133",
+      "command": "assertElementNotPresent",
+      "target": "id=meldung_207",
       "targets": [],
       "value": ""
     }, {

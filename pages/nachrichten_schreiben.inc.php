@@ -51,6 +51,6 @@ $message = getOrDefault($_GET, 'message', $message);
     </form>
 </div>
 
-<script type="text/javascript">
+<script>
     ZeichenUebrig(document.getElementById('message'), document.getElementById('charsLeft'));
 </script>

@@ -24,7 +24,7 @@ $data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
         <header>Angebotsdaten</header>
         <div>
             <label for="amount">Menge:</label>
-            <input type="text" name="amount" id="amount" value="<?= $amount; ?>"/>
+            <input type="number" min="1" name="amount" id="amount" value="<?= $amount; ?>"/>
         </div>
         <div>
             <label for="ware">Ware:</label>
@@ -32,7 +32,8 @@ $data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
         </div>
         <div>
             <label for="price">Preis:</label>
-            <input type="text" name="price" id="price" value="<?= formatCurrency($price, false, false); ?>"/>
+            <input type="number" min="1.0" step="0.01" name="price" id="price"
+                   value="<?= formatCurrency($price, false, false); ?>"/>
         </div>
         <div>
             <input type="submit" value="Inserat erstellen" onclick="return submit(this);"/>
@@ -46,6 +47,7 @@ $data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
         <th>Ware</th>
         <th>Menge</th>
         <th>Preis (Laden)</th>
+        <th>Erlaubter Bereich</th>
         <th>Aktion</th>
     </tr>
     <?php
@@ -60,7 +62,11 @@ $data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
             <td><?= formatWeight($data['Lager' . $i]); ?></td>
             <td><?= formatCurrency($sellPrice); ?></td>
             <td>
-                <a href="/?p=marktplatz_verkaufen&amp;ware=<?= $i; ?>&amp;amount=<?= $data['Lager' . $i]; ?>&amp;price=<?= $sellPrice * 2; ?>">Übernehmen</a>
+                <?= formatCurrency($sellPrice * market_min_sell_price); ?>
+                - <?= formatCurrency($sellPrice * market_max_sell_price); ?>
+            </td>
+            <td>
+                <a href="/?p=marktplatz_verkaufen&amp;ware=<?= $i; ?>&amp;amount=<?= $data['Lager' . $i]; ?>&amp;price=<?= $sellPrice * market_max_sell_price; ?>">Übernehmen</a>
             </td>
         </tr>
         <?php

@@ -41,7 +41,7 @@ $interestRates = calculateInterestRates();
         </div>
         <div>
             <label for="betrag">Betrag:</label>
-            <input type="text" name="betrag" id="betrag" size="9"
+            <input type="number" name="betrag" id="betrag" size="12" min="0" step="0.01"
                    value="<?= formatCurrency($betrag, false, false); ?>"/> €
         </div>
         <div>
@@ -50,17 +50,16 @@ $interestRates = calculateInterestRates();
     </form>
 </div>
 
-<script type="text/javascript">
+<script>
     function AuswahlBank(option) {
-        const Leer = '<?=formatCurrency(0, false); ?>';
-        const KontostandAusgabe = '<?=formatCurrency($data['Bank'], false, false); ?>';
-        const BargeldAusgabe = '<?=formatCurrency($data['Geld'], false, false); ?>';
         const Zeiger = document.form_bank.betrag;
-
-        if (Zeiger.value === Leer || Zeiger.value === KontostandAusgabe || Zeiger.value === BargeldAusgabe) {
+        const KontostandAusgabe = <?=$data['Bank'];?>;
+        const BargeldAusgabe = <?=$data['Geld'];?>;
+        const currentValue = Number.parseFloat(Zeiger.value);
+        if (currentValue === 0.0 || currentValue === KontostandAusgabe || currentValue === BargeldAusgabe) {
             if (option === "1" || option === "3") {
                 Zeiger.value = BargeldAusgabe;
-            } else if (!KontostandAusgabe.startsWith("-")) {
+            } else if (KontostandAusgabe >= 0) {
                 Zeiger.value = KontostandAusgabe;
             }
         }

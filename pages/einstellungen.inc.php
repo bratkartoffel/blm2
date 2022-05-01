@@ -44,8 +44,8 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         <input type="hidden" name="a" value="1"/>
         <header>Passwort ändern</header>
         <div>
-            <label for="pwd_alt">Altes Passwort:</label>
-            <input id="pwd_alt" type="password" name="pwd_alt" size="20" required/>
+            <label for="pwd_chg_alt">Altes Passwort:</label>
+            <input id="pwd_chg_alt" type="password" name="pwd_alt" size="20" required/>
         </div>
         <div>
             <label for="new_pw1">Neues Passwort:</label>
@@ -187,8 +187,8 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         <input type="hidden" name="a" value="2"/>
         <header>Account zurücksetzen</header>
         <div>
-            <label for="pwd_alt">Passwort:</label>
-            <input id="pwd_alt" type="password" name="pwd_alt" size="20" required/>
+            <label for="pwd_rst_alt">Passwort:</label>
+            <input id="pwd_rst_alt" type="password" name="pwd_alt" size="20" required/>
         </div>
         <div>
             <input type="submit" value="Speichern" onclick="return submit(this);"/>
@@ -201,8 +201,8 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         <input type="hidden" name="a" value="3"/>
         <header>Account löschen</header>
         <div>
-            <label for="pwd_alt">Passwort:</label>
-            <input id="pwd_alt" type="password" name="pwd_alt" size="20" required/>
+            <label for="pwd_del_alt">Passwort:</label>
+            <input id="pwd_del_alt" type="password" name="pwd_alt" size="20" required/>
         </div>
         <div>
             <input type="submit" value="Speichern" onclick="return submit(this);"/>

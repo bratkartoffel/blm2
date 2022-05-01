@@ -28,10 +28,14 @@ foreach ($data as $entry) {
     foreach ($groupedEntries as $date => $entries) {
         ?>
         <tr>
-            <td rowspan="<?= count($entries) + 1; ?>"><?= formatDate(strtotime($date)); ?></td>
+            <td rowspan="<?= count($entries); ?>"><?= formatDate(strtotime($date)); ?></td>
+            <td>
+                <u><?= escapeForOutput($entries[0]['category']); ?></u>: <?= escapeForOutput($entries[0]['description']); ?>
+            </td>
         </tr>
         <?php
-        foreach ($entries as $entry) {
+        for ($i = 1; $i < count($entries); $i++) {
+            $entry = $entries[$i];
             ?>
             <tr>
                 <td><u><?= escapeForOutput($entry['category']); ?></u>: <?= escapeForOutput($entry['description']); ?>

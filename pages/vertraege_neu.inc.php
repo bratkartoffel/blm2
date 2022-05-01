@@ -35,11 +35,11 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
         </div>
         <div>
             <label for="menge">Menge</label>
-            <input type="text" min="0" maxlength="5" name="menge" id="menge" value="<?= $menge; ?>"/>
+            <input type="number" min="1" maxlength="5" name="menge" id="menge" value="<?= $menge; ?>"/>
         </div>
         <div>
             <label for="preis">Preis</label>
-            <input type="text" min="1.0" maxlength="5" name="preis" id="preis"
+            <input type="number" min="1" step="0.01" maxlength="5" name="preis" id="preis"
                    value="<?= formatCurrency($preis, false, false); ?>"/>
         </div>
         <div>

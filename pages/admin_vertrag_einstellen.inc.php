@@ -21,11 +21,11 @@ $preis = getOrDefault($_GET, 'preis', .0);
             </tr>
             <tr>
                 <td>Absender:</td>
-                <td><?= createPlayerDropdown($von, 'von', false); ?></td>
+                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false); ?></td>
             </tr>
             <tr>
                 <td>Empfänger:</td>
-                <td><?= createPlayerDropdown($an, 'an', false); ?></td>
+                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $an, 'an', false); ?></td>
             </tr>
             <tr>
                 <td>Was</td>
@@ -33,12 +33,14 @@ $preis = getOrDefault($_GET, 'preis', .0);
             </tr>
             <tr>
                 <td>Menge</td>
-                <td><input type="text" name="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
+                <td><input type="number" min="1" name="menge" value="<?= formatWeight($menge, false, 0, false); ?>"
+                           size="6"/> kg
                 </td>
             </tr>
             <tr>
                 <td>Preis</td>
-                <td><input type="text" name="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/> €
+                <td><input type="number" min="0.01" step="0.01" name="preis"
+                           value="<?= formatCurrency($preis, false, false); ?>" size="6"/> €
                 </td>
             </tr>
             <tr>

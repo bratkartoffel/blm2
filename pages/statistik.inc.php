@@ -24,7 +24,7 @@ $data = Database::getInstance()->getServerStatistics();
         <td><?= formatCurrency($data['AusgabenGesamt']); ?></td>
     </tr>
     <tr>
-        <td>=&gt;Ergebnis:</td>
+        <td>=&gt; Ergebnis:</td>
         <td><?= formatCurrency($data['EinnahmenGesamt'] - $data['AusgabenGesamt']); ?></td>
     </tr>
     <tr>

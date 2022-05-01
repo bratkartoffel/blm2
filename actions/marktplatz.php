@@ -129,6 +129,17 @@ switch (getOrDefault($_GET, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 143, __LINE__);
         }
+        if (Database::getInstance()->createTableEntry('nachrichten', array(
+                'Von' => 0,
+                'An' => $entry['Von'],
+                'Betreff' => 'Angebot vom freien Markt zurückgezogen',
+                'Nachricht' => sprintf("Das Angebot #%d wurde vom Markt zurückgezogen. Leider sind auf dem Transport und während der Lagerung dort ein Teil der Waren verdorben.
+                Von den ursprünglichen %s konnten %s wieder in ihr Lager übernommen werden.",
+                    $entry['ID'], formatWeight($entry['Menge']), formatWeight(floor($entry['Menge'] * market_retract_rate)))
+            )) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+        }
         Database::getInstance()->commit();
 
         redirectTo('/?p=marktplatz_liste', 217);

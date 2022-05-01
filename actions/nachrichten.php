@@ -38,6 +38,14 @@ switch (getOrDefault($_GET, 'a', 0)) {
                     Database::getInstance()->rollBack();
                     redirectTo($base_link, 141, __LINE__);
                 }
+                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $player['ID'], array('IgmEmpfangen' => 1)) !== 1) {
+                    Database::getInstance()->rollBack();
+                    redirectTo($base_link, 142, __LINE__);
+                }
+            }
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('IgmGesendet' => count($data))) !== 1) {
+                Database::getInstance()->rollBack();
+                redirectTo($base_link, 142, __LINE__);
             }
         } else {
             $receiverID = Database::getInstance()->getPlayerIDByName($receiver);
@@ -56,6 +64,14 @@ switch (getOrDefault($_GET, 'a', 0)) {
                 )) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 141, __LINE__);
+            }
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $receiverID, array('IgmEmpfangen' => 1)) !== 1) {
+                Database::getInstance()->rollBack();
+                redirectTo($base_link, 142, __LINE__);
+            }
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('IgmGesendet' => 1)) !== 1) {
+                Database::getInstance()->rollBack();
+                redirectTo($base_link, 142, __LINE__);
             }
         }
 

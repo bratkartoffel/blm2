@@ -966,10 +966,11 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getInformationForBuero(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT f.*, s.*, p.*, g.Gebaeude1, g.Gebaeude3, g.Gebaeude6
-            FROM ((punkte p INNER JOIN statistik s ON p.user_id = s.user_id)
+        $stmt = $this->prepare("SELECT f.*, s.*, p.*, g.Gebaeude1, g.Gebaeude3, g.Gebaeude6, m.Bank, m.Geld
+            FROM (((punkte p INNER JOIN statistik s ON p.user_id = s.user_id)
                 INNER JOIN gebaeude g ON p.user_id = g.user_id)
-                INNER JOIN forschung f ON p.user_id = f.user_id
+                INNER JOIN forschung f ON p.user_id = f.user_id)
+                INNER JOIN mitglieder m ON p.user_id = m.ID
             WHERE p.user_id = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);

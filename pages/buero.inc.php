@@ -54,8 +54,18 @@ $rates = calculateSellRates();
             ?>
         </table>
         <?php
-        $EinnahmenGesamt = 0;
-        $AusgabenGesamt = 0;
+        $EinnahmenGesamt = $data['EinnahmenVerkauf'] + $data['EinnahmenGebaeude'] + $data['EinnahmenZinsen']
+            + $data['EinnahmenMarkt'] + $data['EinnahmenVertraege'] + $data['EinnahmenMafia'];
+        $AusgabenGesamt = $data['AusgabenGebaeude'] + $data['AusgabenForschung'] + $data['AusgabenProduktion']
+            + $data['AusgabenZinsen'] + $data['AusgabenMarkt'] + $data['AusgabenVertraege'] + $data['AusgabenMafia'];
+        $difference = starting_values['mitglieder']['Geld'] + starting_values['mitglieder']['Bank'] + $EinnahmenGesamt - $AusgabenGesamt - $data['Geld'] - $data['Bank'];
+        if ($difference < 0) {
+            $EinnahmenSonstige = abs($difference);
+            $AusgabenSonstige = 0;
+        } else {
+            $EinnahmenSonstige = 0;
+            $AusgabenSonstige = abs($difference);
+        }
         ?>
         <table class="Liste EinnahmenAusgaben">
             <tr>
@@ -64,99 +74,82 @@ $rates = calculateSellRates();
             <tr>
                 <td></td>
                 <td>Einnahmen Verkauf:</td>
-                <td id="b_i_1"><?= formatCurrency($data['EinnahmenVerkauf']);
-                    $EinnahmenGesamt += $data['EinnahmenVerkauf']; ?></td>
+                <td id="b_i_1"><?= formatCurrency($data['EinnahmenVerkauf']); ?></td>
             </tr>
             <tr>
                 <td>+</td>
                 <td>Einnahmen Gebäude:</td>
-                <td id="b_i_2"><?= formatCurrency($data['EinnahmenGebaeude']);
-                    $EinnahmenGesamt += $data['EinnahmenGebaeude']; ?></td>
+                <td id="b_i_2"><?= formatCurrency($data['EinnahmenGebaeude']); ?></td>
             </tr>
             <tr>
                 <td>+</td>
                 <td>Einnahmen Zinsen:</td>
-                <td id="b_i_3"><?= formatCurrency($data['EinnahmenZinsen']);
-                    $EinnahmenGesamt += $data['EinnahmenZinsen']; ?></td>
+                <td id="b_i_3"><?= formatCurrency($data['EinnahmenZinsen']); ?></td>
             </tr>
             <tr>
                 <td>+</td>
                 <td>Einnahmen Marktplatz:</td>
-                <td id="b_i_4"><?= formatCurrency($data['EinnahmenMarkt']);
-                    $EinnahmenGesamt += $data['EinnahmenMarkt']; ?></td>
+                <td id="b_i_4"><?= formatCurrency($data['EinnahmenMarkt']); ?></td>
             </tr>
             <tr>
                 <td>+</td>
                 <td>Einnahmen Verträge:</td>
-                <td id="b_i_5"><?= formatCurrency($data['EinnahmenVertraege']);
-                    $EinnahmenGesamt += $data['EinnahmenVertraege']; ?></td>
+                <td id="b_i_5"><?= formatCurrency($data['EinnahmenVertraege']); ?></td>
             </tr>
             <tr>
                 <td>+</td>
                 <td>Einnahmen Mafia:</td>
-                <td id="b_i_6"><?= formatCurrency($data['EinnahmenMafia']);
-                    $EinnahmenGesamt += $data['EinnahmenMafia']; ?></td>
+                <td id="b_i_6"><?= formatCurrency($data['EinnahmenMafia']); ?></td>
+            </tr>
+            <tr>
+                <td>+</td>
+                <td>Einnahmen Sonstige:</td>
+                <td id="b_i_7"><?= formatCurrency($EinnahmenSonstige); ?></td>
             </tr>
             <tr class="Separator">
                 <td>=</td>
                 <td>Gesamteinnahmen:</td>
-                <td id="b_i_7"><?= formatCurrency($EinnahmenGesamt); ?></td>
+                <td id="b_i_8"><?= formatCurrency($EinnahmenGesamt); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Gebäude:</td>
-                <td id="b_s_1"><?= formatCurrency($data['AusgabenGebaeude']);
-                    $AusgabenGesamt += $data['AusgabenGebaeude'];
-                    ?></td>
+                <td id="b_s_1"><?= formatCurrency($data['AusgabenGebaeude']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Forschung:</td>
-                <td id="b_s_2"><?= formatCurrency($data['AusgabenForschung']);
-                    $AusgabenGesamt += $data['AusgabenForschung'];
-                    ?></td>
+                <td id="b_s_2"><?= formatCurrency($data['AusgabenForschung']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Produktion:</td>
-                <td id="b_s_3"><?= formatCurrency($data['AusgabenProduktion']);
-                    $AusgabenGesamt += $data['AusgabenProduktion'];
-                    ?></td>
+                <td id="b_s_3"><?= formatCurrency($data['AusgabenProduktion']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Zinsen:</td>
-                <td id="b_s_4"><?= formatCurrency($data['AusgabenZinsen']);
-                    $AusgabenGesamt += $data['AusgabenZinsen'];
-                    ?></td>
+                <td id="b_s_4"><?= formatCurrency($data['AusgabenZinsen']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Marktplatz:</td>
-                <td id="b_s_5"><?= formatCurrency($data['AusgabenMarkt']);
-                    $AusgabenGesamt += $data['AusgabenMarkt'];
-                    ?></td>
+                <td id="b_s_5"><?= formatCurrency($data['AusgabenMarkt']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Verträge:</td>
-                <td id="b_s_6"><?= formatCurrency($data['AusgabenVertraege']);
-                    $AusgabenGesamt += $data['AusgabenVertraege'];
-                    ?></td>
+                <td id="b_s_6"><?= formatCurrency($data['AusgabenVertraege']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Mafia:</td>
-                <td id="b_s_7"><?= formatCurrency($data['AusgabenMafia']);
-                    $AusgabenGesamt += $data['AusgabenMafia'];
-                    ?></td>
+                <td id="b_s_7"><?= formatCurrency($data['AusgabenMafia']); ?></td>
             </tr>
             <tr>
                 <td>-</td>
                 <td>Ausgaben Sonstiges:</td>
-                <td id="b_s_8"><?= formatCurrency($data['AusgabenSonstiges']);
-                    $AusgabenGesamt += $data['AusgabenSonstiges'];
-                    ?></td>
+                <td id="b_s_8"><?= formatCurrency($AusgabenSonstige); ?></td>
             </tr>
             <tr class="Separator">
                 <td>=</td>

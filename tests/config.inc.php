@@ -302,7 +302,6 @@ const starting_values = array(
         'AusgabenMarkt' => 0,
         'AusgabenVertraege' => 0,
         'AusgabenMafia' => 0,
-        'AusgabenSonstiges' => 0,
         'EinnahmenGebaeude' => 0,
         'EinnahmenVerkauf' => 0,
         'EinnahmenZinsen' => 0,

@@ -367,7 +367,6 @@ create table statistik
     AusgabenMarkt      decimal(12, 2) default 0.00 not null,
     AusgabenVertraege  decimal(12, 2) default 0.00 not null,
     AusgabenMafia      decimal(12, 2) default 0.00 not null,
-    AusgabenSonstiges  decimal(12, 2) default 0.00 not null,
     EinnahmenGebaeude  decimal(12, 2) default 0.00 not null,
     EinnahmenVerkauf   decimal(12, 2) default 0.00 not null,
     EinnahmenZinsen    decimal(12, 2) default 0.00 not null,

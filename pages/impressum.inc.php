@@ -29,7 +29,7 @@
 
 <h2>Bilder und Grafiken</h2>
 <p>
-    Alle Bilder der Gebäude und der Gemüsesorten sind von mir aufgenommen und sind somit frei verfügbar und dürfen
-    gemäss der Lizenz des Spiels verwendet werden.<br/>
-    Die Icons und Smileys sind dem &quot;CrystalPack&quot; entnommen und waren frei verfügbar unter der GPL.
+    Alle Fotos wurden von <a href="https://unsplash.com/license">unsplash.com</a> genommen, die Icons stammen von
+    <a href="https://publicdomainvectors.org/">publicdomainvectors.com</a>. Somit sind alle Bilder frei
+    verfügbar entsprechend der Lizenzen der jeweiligen Seiten.
 </p>

@@ -24,7 +24,7 @@ if (!array_key_exists($cmb, hilfe_texte)) {
 ?>
 <div id="Hilfe">
     <header><?= $cat ?>. <?= hilfe_texte[$cmb][0]; ?></header>
-    <div><?= replaceBBCode(hilfe_texte[$cmb][1], false); ?></div>
+    <div><?= replaceBBCode(hilfe_texte[$cmb][1]); ?></div>
 </div>
 <h2>Unterseiten / Module:</h2>
 <ol>

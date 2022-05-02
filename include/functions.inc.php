@@ -595,7 +595,7 @@ function getYesOrNo(int $bool): string
         return "Ja";
 }
 
-function replaceBBCode(string $text, bool $emoticons = true): string
+function replaceBBCode(string $text): string
 {
     $colors[] = "aqua";
     $colors[] = "black";
@@ -657,23 +657,6 @@ function replaceBBCode(string $text, bool $emoticons = true): string
                 '<blockquote>\1</blockquote>'
             ),
             $result);
-    }
-
-    if ($emoticons) {
-        $result = str_ireplace(" ;p", '<img src="/pics/emoticons/kopete006.png" alt=" ;p" />', $result);
-        $result = str_ireplace(" $)", '<img src="/pics/emoticons/kopete007.png" alt=" $)" />', $result);
-        $result = str_ireplace(" 8)", '<img src="/pics/emoticons/kopete008.png" alt=" 8)" />', $result);
-        $result = str_ireplace(" ^^", '<img src="/pics/emoticons/kopete010.png" alt=" ^^" />', $result);
-        $result = str_ireplace(" :0", '<img src="/pics/emoticons/kopete011.png" alt=" :0" />', $result);
-        $result = str_ireplace(" :((", '<img src="/pics/emoticons/kopete012.png" alt=" :((" />', $result);
-        $result = str_ireplace(" ;)", '<img src="/pics/emoticons/kopete013.png" alt=" ;)" />', $result);
-        $result = str_ireplace(" :~", '<img src="/pics/emoticons/kopete014.png" alt=" :~" />', $result);
-        $result = str_ireplace(" :|", '<img src="/pics/emoticons/kopete015.png" alt=" :|" />', $result);
-        $result = str_ireplace(" :p", '<img src="/pics/emoticons/kopete016.png" alt=" :p" />', $result);
-        $result = str_ireplace(" :D", '<img src="/pics/emoticons/kopete017.png" alt=" :D" />', $result);
-        $result = str_ireplace(" :ö", '<img src="/pics/emoticons/kopete018.png" alt=" :ö" />', $result);
-        $result = str_ireplace(" :(", '<img src="/pics/emoticons/kopete019.png" alt=" :(" />', $result);
-        $result = str_ireplace(" :)", '<img src="/pics/emoticons/kopete020.png" alt=" :)" />', $result);
     }
 
     return $result;

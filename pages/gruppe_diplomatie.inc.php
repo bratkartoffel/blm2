@@ -60,7 +60,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/gruppe.png" alt=""/>
+    <img src="/pics/big/Community_Help.png" alt=""/>
     <span>Gruppe - Diplomatie<?= createHelpLink(1, 23); ?></span>
 </div>
 

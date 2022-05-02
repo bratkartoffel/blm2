@@ -30,23 +30,18 @@ if ($alles == 1) {
                 'finished' => date('Y-m-d H:i:s', time() + ($stunden * 3600)),
                 'user_id' => $_SESSION['blm_user'],
                 'item' => 200 + $i,
-                'amount' => $stunden * $productionData['Menge'],
+                'amount' => ceil($stunden * $productionData['Menge']),
                 'cost' => $stunden * $productionData['Kosten']
             )) === 1) {
             $sum_costs += $stunden * $productionData['Kosten'];
         }
     }
 
-    if ($sum_costs > $data['Geld']) {
-        Database::getInstance()->rollBack();
-        redirectTo('/?p=plantage', 111, __LINE__);
-    }
-
     if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
             array('Geld' => -$sum_costs),
             array('Geld >= :whr0' => $sum_costs)) == 0) {
         Database::getInstance()->rollBack();
-        redirectTo('/?p=plantage', 142, __LINE__);
+        redirectTo('/?p=plantage', 111, __LINE__);
     }
 
     if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
@@ -70,10 +65,6 @@ if ($menge > $productionData['Menge'] * production_hours_max || $menge <= 0) {
 
 if ($was <= 0 || $was > count_wares) {
     redirectTo('/?p=plantage', 112);
-}
-
-if ($data['Geld'] < $productionData['Kosten'] * $stunden) {
-    redirectTo('/?p=plantage', 111);
 }
 
 if (!productionRequirementsMet($was, $data['Gebaeude1'], $data['Forschung' . $was])) {

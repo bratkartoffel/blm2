@@ -4,7 +4,7 @@ restrictSitter('NeverAllow');
 $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsById($_SESSION['blm_user']);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/einstellungen.png" alt=""/>
+    <img src="/pics/big/package_settings.png" alt=""/>
     <span>Büro<?= createHelpLink(1, 15); ?></span>
 </div>
 

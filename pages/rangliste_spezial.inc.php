@@ -119,7 +119,7 @@ switch ($type) {
 ?>
 
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/rangliste.png" alt=""/>
+    <img src="/pics/big/Login_Manager.png" alt=""/>
     <span>Die Spezial-Rangliste<?= createHelpLink(1, 17); ?></span>
 </div>
 

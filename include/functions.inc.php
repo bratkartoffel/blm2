@@ -107,9 +107,9 @@ function getMessageBox(int $msg_id): ?string
         return null;
     }
     if ($msg_id >= 200 && $msg_id < 300) {
-        $image = 'ok';
+        $image = '/pics/small/apply.png';
     } else {
-        $image = 'error';
+        $image = '/pics/small/button_cancel.png';
     }
 
     switch ($msg_id)        // Überprüft die Fehlernummer
@@ -460,7 +460,7 @@ function getMessageBox(int $msg_id): ?string
     }
 
     return sprintf('<div class="Meldung" id="meldung_%d">
-            <img src="/pics/small/%s.png" alt=""/>
+            <img src="%s" alt=""/>
             <a id="close" onclick="document.getElementById(\'meldung_%d\').remove();">X</a>
             <span>%s</span>
         </div>', $msg_id, $image, $msg_id, $text);

@@ -3,7 +3,7 @@ requireFieldSet($_GET, 'id', '/?p=admin_vertrag');
 $id = getOrDefault($_GET, 'id', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/admin.png" alt=""/>
+    <img src="/pics/big/kservices.png" alt=""/>
     <span>Administrationsbereich - Vertrag bearbeiten</span>
 </div>
 

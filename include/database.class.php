@@ -1206,7 +1206,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function deleteAllMessagesForUser(int $blm_user): ?int
     {
-        $stmt = $this->prepare("DELETE FROM nachrichten WHERE An = :id");
+        $stmt = $this->prepare("DELETE FROM nachrichten WHERE An = :id AND Gelesen = 1");
         $stmt->bindParam('id', $blm_user, PDO::PARAM_INT);
         return $this->executeAndGetAffectedRows($stmt);
     }

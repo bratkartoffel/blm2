@@ -4,7 +4,7 @@ $wen = getOrDefault($_GET, 'wen');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/admin.png" alt=""/>
+    <img src="/pics/big/kservices.png" alt=""/>
     <span>Administrationsbereich - Verträge</span>
 </div>
 
@@ -42,24 +42,20 @@ $offset = getOrDefault($_GET, 'o', 0);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
-    ?>
-    <tr>
-        <td><?= createProfileLink($row['VonId'], $row['VonName']); ?></td>
-        <td><?= createProfileLink($row['AnId'], $row['AnName']); ?></td>
-        <td><?= getItemName($row['Was']); ?></td>
-        <td><?= formatWeight($row['Menge']); ?></td>
-        <td><?= formatCurrency($row['Preis']); ?></td>
-        <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
-        <td>
-            <a href="/?p=admin_vertrag_bearbeiten&amp;id=<?= $row['ID']; ?>">
-                <img src="/pics/small/info.png" alt="Bearbeiten"/>
-            </a>
-            <a href="/actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>">
-                <img src="/pics/small/error.png" alt="Löschen"/>
-            </a>
-        </td>
-    </tr>
-    <?php
+        ?>
+        <tr>
+            <td><?= createProfileLink($row['VonId'], $row['VonName']); ?></td>
+            <td><?= createProfileLink($row['AnId'], $row['AnName']); ?></td>
+            <td><?= getItemName($row['Was']); ?></td>
+            <td><?= formatWeight($row['Menge']); ?></td>
+            <td><?= formatCurrency($row['Preis']); ?></td>
+            <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
+            <td>
+                <a href="/?p=admin_vertrag_bearbeiten&amp;id=<?= $row['ID']; ?>">Bearbeiten</a> |
+                <a href="/actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>">Löschen</a>
+            </td>
+        </tr>
+        <?php
     }
     if ($entriesCount == 0) {
         echo '<tr><td colspan="7" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';

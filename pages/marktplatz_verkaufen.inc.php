@@ -6,7 +6,7 @@ $ware = getOrDefault($_GET, 'ware', 0);
 $price = getOrDefault($_GET, 'price', .0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/marktplatz.png" alt=""/>
+    <img src="/pics/big/package_network.png" alt=""/>
     <span>Marktplatz inserieren<?= createHelpLink(1, 11); ?></span>
 </div>
 

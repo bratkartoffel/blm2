@@ -5,7 +5,7 @@ $angenommen = getOrDefault($_GET, 'angenommen');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/admin.png" alt=""/>
+    <img src="/pics/big/kservices.png" alt=""/>
     <span>Administrationsbereich - Vertrags Logbuch</span>
 </div>
 

@@ -41,6 +41,9 @@ if (!mafiaRequirementsMet($otherPlayer['Punkte'])) {
 if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
     redirectTo($backLink, 156, __LINE__);
 }
+if ($player['Gruppe'] !== null && $player['Gruppe'] == $otherPlayer['Gruppe']) {
+    redirectTo($backLink, 112, __LINE__);
+}
 if (maybeMafiaOpponents($otherPlayer['Punkte'], $player['Punkte'], $groupDiplomacy)) {
     redirectTo($backLink, 155, __LINE__);
 }
@@ -61,6 +64,12 @@ if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['
     Database::getInstance()->rollback();
     redirectTo($backLink, 111, __LINE__);
 }
+if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        array('AusgabenMafia' => mafia_base_data[$action][$level]['cost']),
+        array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+    Database::getInstance()->rollback();
+    redirectTo($backLink, 111, __LINE__);
+}
 if ($success) {
     if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
             array('Punkte' => mafia_base_data[$action]['points'])) !== 1) {
@@ -69,7 +78,7 @@ if ($success) {
     }
     if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
             array('MafiaPlus' => mafia_base_data[$action]['points']),
-            array('useR_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+            array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
         Database::getInstance()->rollback();
         redirectTo($backLink, 142, __LINE__);
     }

@@ -6,7 +6,7 @@ $rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user'])
 requireEntryFound($rights, '/?p=gruppe');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/gruppe.png" alt=""/>
+    <img src="/pics/big/Community_Help.png" alt=""/>
     <span>Gruppe - Logbuch<?= createHelpLink(1, 23); ?></span>
 </div>
 

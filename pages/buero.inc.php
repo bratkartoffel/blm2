@@ -3,7 +3,7 @@ $data = Database::getInstance()->getInformationForBuero($_SESSION['blm_user']);
 $rates = calculateSellRates();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/buero.png" alt=""/>
+    <img src="/pics/big/kspread.png" alt=""/>
     <span>Büro<?= createHelpLink(1, 8); ?></span>
 </div>
 

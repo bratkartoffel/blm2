@@ -3,7 +3,7 @@ $ware = getOrDefault($_GET, 'ware', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/admin.png" alt=""/>
+    <img src="/pics/big/kservices.png" alt=""/>
     <span>Administrationsbereich - Marktplatz</span>
 </div>
 
@@ -44,12 +44,8 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= formatCurrency($row['Preis']); ?></td>
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
             <td>
-                <a href="/?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>">
-                    <img src="/pics/small/info.png" alt="Bearbeiten"/>
-                </a>
-                <a href="/actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>">
-                    <img src="/pics/small/error.png" alt="Löschen"/>
-                </a>
+                <a href="/?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>"> Bearbeiten </a> |
+                <a href="/actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>"> Löschen </a>
             </td>
         </tr>
         <?php

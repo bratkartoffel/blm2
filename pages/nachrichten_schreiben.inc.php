@@ -20,7 +20,7 @@ $subject = getOrDefault($_GET, 'subject', $subject);
 $message = getOrDefault($_GET, 'message', $message);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/writemail.png" alt=""/>
+    <img src="/pics/big/messenger.png" alt=""/>
     <span>Nachricht schreiben<?= createHelpLink(1, 13); ?></span>
 </div>
 

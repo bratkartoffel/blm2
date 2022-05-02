@@ -2,7 +2,7 @@
 $name = getOrDefault($_GET, 'name');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/login.png" alt=""/>
+    <img src="/pics/big/Password.png" alt=""/>
     <span>Anmelden</span>
 </div>
 

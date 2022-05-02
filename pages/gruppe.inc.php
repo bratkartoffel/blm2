@@ -9,7 +9,7 @@ $player = Database::getInstance()->getPlayerNameAndPointsAndGruppeAndPlantageLev
 $rights = array();
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/gruppe.png" alt=""/>
+        <img src="/pics/big/Community_Help.png" alt=""/>
         <span>Gruppe<?= createHelpLink(1, 23); ?></span>
     </div>
 
@@ -123,8 +123,8 @@ if ($id != 0) {
             <ul>
                 <?php
                 foreach ($members as $member) {
-                    echo sprintf('<li><img src="/pics/small/%s.png" alt=""/> %s (%s)</li>',
-                        strtotime($member['LastAction']) + 1800 >= time() ? 'Online' : 'Offline',
+                    echo sprintf('<li><img src="%s" alt=""/> %s (%s)</li>',
+                        strtotime($member['LastAction']) + 1800 >= time() ? '/pics/small/gadu.png' : '/pics/small/home.png',
                         createProfileLink($member['ID'], $member['Name']),
                         formatPoints($member['Punkte']));
                 }

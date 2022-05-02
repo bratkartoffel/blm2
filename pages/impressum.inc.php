@@ -1,5 +1,5 @@
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/impressum.png" alt=""/>
+    <img src="/pics/big/games.png" alt=""/>
     <span>Impressum<?= createHelpLink(1, 21); ?></span>
 </div>
 
@@ -29,7 +29,7 @@
 
 <h2>Bilder und Grafiken</h2>
 <p>
-    Alle Fotos wurden von <a href="https://unsplash.com/license">unsplash.com</a> genommen, die Icons stammen von
-    <a href="https://publicdomainvectors.org/">publicdomainvectors.com</a>. Somit sind alle Bilder frei
-    verfügbar entsprechend der Lizenzen der jeweiligen Seiten.
+    Alle Fotos wurden von <a href="https://unsplash.com/license">unsplash.com</a> genommen.
+    Die Icons stammen entstammen dem &quot;Crystal Clear Icons By Everaldo&quot; und stehen unter der LGPL 3.0.
+    Somit sind alle Bilder frei verfügbar entsprechend der Lizenzen der jeweiligen Seiten.
 </p>

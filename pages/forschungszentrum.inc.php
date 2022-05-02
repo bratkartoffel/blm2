@@ -14,7 +14,7 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
 
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/forschungszentrum.png" alt=""/>
+        <img src="/pics/big/katomic.png" alt=""/>
         <span>Forschungszentrum<?= createHelpLink(1, 6); ?></span>
     </div>
 

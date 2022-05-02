@@ -5,7 +5,7 @@ $menge = getOrDefault($_GET, 'menge', 0);
 $preis = getOrDefault($_GET, 'preis', .0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/admin.png" alt=""/>
+    <img src="/pics/big/kservices.png" alt=""/>
     <span>Administrationsbereich - Angebot einstellen</span>
 </div>
 

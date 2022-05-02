@@ -2,7 +2,7 @@
 restrictSitter('Vertraege');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/vertraege.png" alt=""/>
+    <img src="/pics/big/mydocuments.png" alt=""/>
     <span>Verträge<?= createHelpLink(1, 10); ?></span>
 </div>
 
@@ -35,12 +35,9 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis']); ?></td>
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
-                <a href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>">
-                    <img src="/pics/small/ok.png" title="Vertrag annehmen" alt=""/>
-                </a>
-                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">
-                    <img src="/pics/small/error.png" title="Vertrag ablehnen" alt=""/>
-                </a>
+                <a href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>">Annehmen</a>
+                |
+                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">Ablehnen</a>
             </td>
         </tr>
         <?php
@@ -80,9 +77,7 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis']); ?></td>
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
-                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">
-                    <img src="/pics/small/error.png" title="Vertrag revidieren" alt=""/>
-                </a>
+                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">Zurückziehen</a>
             </td>
         </tr>
         <?php

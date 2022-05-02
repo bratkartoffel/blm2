@@ -6,7 +6,7 @@ $data = Database::getInstance()->getNotizblock($_SESSION['blm_user']);
 if (isset($_GET['notizblock'])) $data = $_GET['notizblock'];
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/writemail.png" alt=""/>
+    <img src="/pics/big/knotes.png" alt=""/>
     <span>Büro<?= createHelpLink(1, 14); ?></span>
 </div>
 

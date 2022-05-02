@@ -85,10 +85,14 @@ div#SeitenUeberschrift {
 div#SeitenUeberschrift img {
     float: left;
     margin-right: 20px;
+    width: 64px;
+    height: 64px;
 }
 
 div#SeitenUeberschrift img.help {
     float: inherit;
+    width: initial;
+    height: initial;
 }
 
 div#SeitenUeberschrift span {

@@ -2,7 +2,7 @@
 $data = Database::getInstance()->getAllChangelog();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/changelog.png" alt=""/>
+    <img src="/pics/big/klipper.png" alt=""/>
     <span>Changelog<?= createHelpLink(1, 20); ?></span>
 </div>
 

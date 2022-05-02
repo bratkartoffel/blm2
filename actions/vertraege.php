@@ -25,16 +25,18 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 
-        if ($menge > $data['Lager' . $ware]) {
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 116, __LINE__);
-        }
-
         $minPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
         if ($preis < $minPrice || $preis > $minPrice * 2) {
             redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 153, __LINE__);
         }
 
         Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+                array('Lager' . $ware => -$menge),
+                array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 142, __LINE__);
+        }
         if (Database::getInstance()->createTableEntry('vertraege', array(
                 'Von' => $_SESSION['blm_user'],
                 'An' => $empfaengerId,
@@ -44,11 +46,6 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             )) != 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 141, __LINE__);
-        }
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
-                array('Lager' . $ware => -$menge), array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
-            Database::getInstance()->rollBack();
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 142, __LINE__);
         }
 
         Database::getInstance()->commit();

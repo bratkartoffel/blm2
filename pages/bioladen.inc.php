@@ -15,7 +15,7 @@ for ($i = 1; $i <= count_wares; $i++) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/bioladen.png" alt=""/>
+    <img src="/pics/big/warehause.png" alt=""/>
     <span>Bioladen<?= createHelpLink(1, 7); ?></span>
 </div>
 

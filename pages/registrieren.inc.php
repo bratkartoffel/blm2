@@ -7,7 +7,7 @@ $name = getOrDefault($_GET, 'name');
 $email = getOrDefault($_GET, 'email');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/register.png" alt=""/>
+    <img src="/pics/big/babelfish.png" alt=""/>
     <span>Registrieren</span>
 </div>
 

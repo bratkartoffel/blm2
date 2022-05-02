@@ -7,7 +7,7 @@ $betrag = getOrDefault($_GET, 'betrag', .0);
 $interestRates = calculateInterestRates();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/bank.png" alt=""/>
+    <img src="/pics/big/kwallet.png" alt=""/>
     <span>Bank<?= createHelpLink(1, 9); ?></span>
 </div>
 

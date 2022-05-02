@@ -5,7 +5,7 @@ $offset_in = getOrDefault($_GET, 'o_in', 0);
 $offset_out = getOrDefault($_GET, 'o_out', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/nachrichten.png" alt=""/>
+    <img src="/pics/big/korn.png" alt=""/>
     <span>Nachrichten<?= createHelpLink(1, 13); ?></span>
 </div>
 
@@ -35,16 +35,11 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
             <td><?= $row['ID']; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['VonID'], $row['VonName']); ?></td>
-            <td><?= escapeForOutput($row['Betreff']); ?></td>
-            <td><?= getYesOrNo($row['Gelesen']); ?></td>
             <td>
-                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>">
-                    <img src="/pics/small/readmail.png" alt="" title="Nachricht lesen"/>
-                </a>
-                <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>">
-                    <img src="/pics/small/error.png" alt="" title="Nachricht löschen"/>
-                </a>
+                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
+            <td><?= getYesOrNo($row['Gelesen']); ?></td>
+            <td><a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>">Löschen</a></td>
         </tr>
         <?php
     }
@@ -87,19 +82,18 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
             <td><?= $row['ID']; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['AnID'], $row['AnName']); ?></td>
-            <td><?= escapeForOutput($row['Betreff']); ?></td>
+            <td>
+                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
+            </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
             <td>
-                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>">
-                    <img src="/pics/small/readmail.png" alt="" title="Nachricht lesen"/>
-                </a>
                 <?php
                 if ($row['Gelesen'] == 0 || $row['AnID'] === null) {
                     ?>
-                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>">
-                        <img src="/pics/small/error.png" alt="" title="Nachricht löschen"/>
-                    </a>
+                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>">Löschen</a>
                     <?php
+                } else {
+                    echo 'Löschen';
                 }
                 ?>
             </td>

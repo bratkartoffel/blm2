@@ -5,7 +5,7 @@ $offset_ep = getOrDefault($_GET, 'o_ep', 0);
 $q = getOrDefault($_GET, 'q');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/rangliste.png" alt=""/>
+    <img src="/pics/big/Login_Manager.png" alt=""/>
     <span>Serverstatistik<?= createHelpLink(1, 17); ?></span>
 </div>
 
@@ -53,19 +53,19 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
             <td>
                 <?php
                 if (strtotime($row['LastAction']) + 1800 >= time()) {
-                    $status = 'Online';
+                    $status_image = '/pics/small/gadu.png';
                 } else {
-                    $status = 'Offline';
+                    $status_image = '/pics/small/home.png';
                 }
                 ?>
-                <img src="/pics/small/<?= $status; ?>.png" alt=""/>
+                <img src="<?= $status_image; ?>" alt=""/>
                 <?php
                 echo createProfileLink($row['BenutzerID'], $row['BenutzerName']);
                 if ($row['IstAdmin']) {
-                    echo '<img src="/pics/small/admin.png" alt="" title="Admin"/>';
+                    echo '<img src="/pics/small/bookmark.png" alt="" title="Admin"/>';
                 }
                 if ($row['IstBetatester']) {
-                    echo '<img src="/pics/small/beta.png" alt="" title="Betatester"/>';
+                    echo '<img src="/pics/small/bookmark_Silver.png" alt="" title="Betatester"/>';
                 }
                 if ($row['GruppeID'] !== null) {
                     echo sprintf(' (<a href="/?p=gruppe&id=%d">%s</a>)',

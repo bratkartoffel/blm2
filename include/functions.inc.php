@@ -316,7 +316,13 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Sie können sich selbst keine Nachrichten schicken!';
             break;
         case 169:
-            $text = 'Die Mafia ist erst ab ' . formatPoints(min_points_mafia) . ' Punkten verfügbar';
+            $text = 'Die Mafia ist erst ab ' . formatPoints(mafia_min_ponts) . ' Punkten verfügbar';
+            break;
+        case 170:
+            $text = 'Die Mafia erholt sich noch vom letzten Auftrag.';
+            break;
+        case 171:
+            $text = 'Sind sie verwirrt? Sie können sich nicht selbst angreifen';
             break;
 
 
@@ -1129,7 +1135,7 @@ function researchRequirementsMet(int $item_id, int $plantage_level, int $researc
 
 function mafiaRequirementsMet(float $points): bool
 {
-    return $points >= min_points_mafia;
+    return $points >= mafia_min_ponts;
 }
 
 function calculateProductionDataForPlayer(int $item_id, int $plantage_level, int $research_level): array

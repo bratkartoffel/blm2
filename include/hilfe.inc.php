@@ -168,10 +168,9 @@ Bei allen Angriffsarten wird nur bei einem Fehlschlag dem Opfer eine Nachricht m
 Einzige Ausnahme ist der Anschlag, hier erfährt der Angegriffene immer, wer ihn angegriffen hat.
 
 [b]Wichtig:[/b]
-Man kann nur Spieler angreifen, die
-a) Mindestens 7.000 Punkte haben
-b) Mindestens so viele Punkte haben, wie Ihre Punktzahl durch " . mafia_faktor_punkte . "
-c) Maximal so viele Punkte haben, wie Ihre Punktzahl mal " . mafia_faktor_punkte . "
+Man kann nur Spieler angreifen,
+a) die mindestens ' . formatPoints(mafia_min_ponts) . ' Punkte haben
+b) deren Punkte maximal um ' . formatPercent(mafia_faktor_punkte - 1) . ' auseinander liegen.
 
 [b]Hinweis:[/b]
 Im Krieg zählen die oben genannten Angriffsbeschränkungen nicht!'

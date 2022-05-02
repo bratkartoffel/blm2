@@ -930,7 +930,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerPointsAndGruppeAndMoneyAndNextMafiaAndPizzeriaById(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.Name, m.Punkte, m.Gruppe, m.Geld, m.NextMafia, g.Gebaeude8
+        $stmt = $this->prepare("SELECT m.ID, m.Name, m.Punkte, m.Gruppe, m.Geld, m.NextMafia, g.Gebaeude8
             FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id
             WHERE m.ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);

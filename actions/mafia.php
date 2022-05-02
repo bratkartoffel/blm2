@@ -23,6 +23,9 @@ $player = Database::getInstance()->getPlayerPointsAndGruppeAndMoneyAndNextMafiaA
 if (!mafiaRequirementsMet($player['Punkte'])) {
     redirectTo($backLink, 112, __LINE__);
 }
+if (strtotime($player['NextMafia']) > time()) {
+    redirectTo($backLink, 170, __LINE__);
+}
 if (mafia_base_data[$action][$level]['cost'] > $player['Geld']) {
     redirectTo($backLink, 111, __LINE__);
 }
@@ -34,7 +37,9 @@ if ($player['Gruppe'] !== null && $otherPlayer['Gruppe'] !== null) {
 } else {
     $groupDiplomacy = -1;
 }
-
+if($player['ID'] == $otherPlayer['ID']) {
+    redirectTo($backLink, 171, __LINE__);
+}
 if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
     redirectTo($backLink, 156, __LINE__);
 }
@@ -95,10 +100,12 @@ switch ($action) {
         if ($success) {
             $stock = array();
             for ($i = 1; $i <= count_wares; $i++) {
+                if ($data['Lager' . $i] == 0) continue;
                 $stock[] = sprintf('* %s: %s', getItemName($i), formatWeight($data['Lager' . $i]));
             }
             $buildings = array();
             for ($i = 1; $i <= count_buildings; $i++) {
+                if ($data['Gebaeude' . $i] == 0) continue;
                 $buildings[] = sprintf('* %s: %d', getBuildingName($i), $data['Gebaeude' . $i]);
             }
 
@@ -109,6 +116,7 @@ switch ($action) {
                     'Nachricht' => sprintf('Die Spionage gegen %s war erfolgreich, hier die von uns in Erfahrung gebrachten Daten:
 
 [b]Bargeld[/b]: %s
+
 [b]Lagerstände[/b]:
 %s
 

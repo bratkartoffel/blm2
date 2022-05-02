@@ -6,7 +6,7 @@ $action = getOrDefault($_GET, 'action');
 $level = getOrDefault($_GET, 'level');
 
 $data = Database::getInstance()->getPlayerPointsAndMoneyAndNextMafiaAndGroupById($_SESSION['blm_user']);
-if ($data['Punkte'] < min_points_mafia) {
+if ($data['Punkte'] < mafia_min_ponts) {
     redirectTo('/?p=index', 169, __LINE__);
 }
 
@@ -35,7 +35,7 @@ if ($nextMafiaTs <= time()) {
 if (!mafiaRequirementsMet($data['Punkte'])) {
     ?>
     <p>
-        Die Mafia kann erst ab <?= formatPoints(min_points_mafia); ?> verwendet werden.
+        Die Mafia kann erst ab <?= formatPoints(mafia_min_ponts); ?> verwendet werden.
     </p>
     <?php
 }
@@ -106,7 +106,15 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             </select>
         </div>
         <div>
-            <input type="submit" value="Angriff!" onclick="return submit(this);"/>
+            <?php
+            if ($nextMafiaTs <= time()) {
+                ?>
+                <input type="submit" value="Angriff!" id="attack" onclick="return submit(this);"/>
+                <?php
+            } else {
+                echo 'Die Mafia ist noch nicht bereit';
+            }
+            ?>
         </div>
     </form>
 </div>

@@ -124,7 +124,7 @@ if ($id != 0) {
                 <?php
                 foreach ($members as $member) {
                     echo sprintf('<li><img src="%s" alt=""/> %s (%s)</li>',
-                        strtotime($member['LastAction']) + 1800 >= time() ? '/pics/small/gadu.png' : '/pics/small/home.png',
+                        strtotime($member['LastAction']) + 1800 >= time() ? '/pics/style/online.png' : '/pics/style/offline.png',
                         createProfileLink($member['ID'], $member['Name']),
                         formatPoints($member['Punkte']));
                 }

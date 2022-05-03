@@ -53,9 +53,9 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
             <td>
                 <?php
                 if (strtotime($row['LastAction']) + 1800 >= time()) {
-                    $status_image = '/pics/small/gadu.png';
+                    $status_image = '/pics/style/online.png';
                 } else {
-                    $status_image = '/pics/small/home.png';
+                    $status_image = '/pics/style/offline.png';
                 }
                 ?>
                 <img src="<?= $status_image; ?>" alt=""/>

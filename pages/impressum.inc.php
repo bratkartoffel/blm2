@@ -31,5 +31,6 @@
 <p>
     Alle Fotos wurden von <a href="https://unsplash.com/license">unsplash.com</a> genommen.
     Die Icons stammen entstammen dem &quot;Crystal Clear Icons By Everaldo&quot; und stehen unter der LGPL 3.0.
-    Somit sind alle Bilder frei verfügbar entsprechend der Lizenzen der jeweiligen Seiten.
+    Die Bilder und Grafiken unterhalb von pics/style wurden von mir gezeichnet und stehen wie der Rest des Programs
+    unter der MIT Licence. Somit sind alle Bilder frei verfügbar entsprechend der Lizenzen der jeweiligen Seiten.
 </p>

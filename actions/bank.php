@@ -111,6 +111,16 @@ switch ($art) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);
         }
+        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+                'Gruppe' => $data['Gruppe'],
+                'Spieler' => $_SESSION['blm_user'],
+                'Text' => createBBProfileLink($_SESSION['blm_user'], $data['Name'])
+                    . ' hat ' . formatCurrency($betrag)
+                    . ' in die Gruppenkasse eingezahlt.'
+            )) !== 1) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 141, __LINE__);
+        }
 
         if (Database::getInstance()->createTableEntry('log_gruppenkasse', array(
                 'senderId' => $_SESSION['blm_user'],

@@ -462,9 +462,9 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo('/?p=gruppe_einstellungen', 103, __LINE__);
         }
 
-        @unlink(sprintf('../pics/gruppe/%s.jpg', $player['Gruppe']));
-        @unlink(sprintf('../pics/gruppe/%s.png', $player['Gruppe']));
-        @unlink(sprintf('../pics/gruppe/%s.gif', $player['Gruppe']));
+        @unlink(sprintf('../pics/uploads/g_%s.jpg', $player['Gruppe']));
+        @unlink(sprintf('../pics/uploads/g_%s.png', $player['Gruppe']));
+        @unlink(sprintf('../pics/uploads/g_%s.gif', $player['Gruppe']));
         if ($_FILES['bild']['size'] == 0) {
             redirectTo('/?p=gruppe_einstellungen', 209, __LINE__);
         }
@@ -486,7 +486,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 redirectTo('/?p=gruppe_einstellungen', 107, __LINE__);
                 break;
         }
-        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/gruppe/%s.%s', $player['Gruppe'], $suffix));
+        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/uploads/g_%s.%s', $player['Gruppe'], $suffix));
         redirectTo('/?p=gruppe_einstellungen', 210, __LINE__);
         break;
 
@@ -562,9 +562,9 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        @unlink(sprintf("../pics/gruppe/%d.jpg", $player['Gruppe']));
-        @unlink(sprintf("../pics/gruppe/%d.png", $player['Gruppe']));
-        @unlink(sprintf("../pics/gruppe/%d.gif", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.jpg", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.png", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.gif", $player['Gruppe']));
         redirectTo('/?p=gruppe', 228, __LINE__);
         break;
 

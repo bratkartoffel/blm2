@@ -96,9 +96,9 @@ switch (getOrDefault($_POST, 'a', 0)) {
             redirectTo('/?p=einstellungen', 103, __LINE__);
         }
 
-        @unlink(sprintf('../pics/spieler/%s.jpg', $_SESSION['blm_user']));
-        @unlink(sprintf('../pics/spieler/%s.png', $_SESSION['blm_user']));
-        @unlink(sprintf('../pics/spieler/%s.gif', $_SESSION['blm_user']));
+        @unlink(sprintf('../pics/uploads/u_%s.jpg', $_SESSION['blm_user']));
+        @unlink(sprintf('../pics/uploads/u_%s.png', $_SESSION['blm_user']));
+        @unlink(sprintf('../pics/uploads/u_%s.gif', $_SESSION['blm_user']));
         if ($_FILES['bild']['size'] == 0) {
             redirectTo('/?p=einstellungen', 209);
         }
@@ -120,7 +120,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
                 redirectTo('/?p=einstellungen', 107, __LINE__);
                 break;
         }
-        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/spieler/%s.%s', $_SESSION['blm_user'], $suffix));
+        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/uploads/u_%s.%s', $_SESSION['blm_user'], $suffix));
         redirectTo('/?p=einstellungen', 210);
         break;
 

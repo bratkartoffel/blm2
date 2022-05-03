@@ -474,17 +474,7 @@ function getMessageBox(int $msg_id): ?string
 
 function getBuildingImage(int $building_id): string
 {
-    switch ($building_id) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-            return sprintf('/pics/gebaeude/%d.png', $building_id);
-        default:
-            return sprintf('/pics/gebaeude/%d.jpg', $building_id);
-    }
+    return sprintf('/pics/gebaeude/%d.png', $building_id);
 }
 
 function getBuildingName(int $building_id): string
@@ -513,36 +503,12 @@ function getBuildingName(int $building_id): string
 
 function getItemImage(int $item_id): string
 {
-    switch ($item_id) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-            return sprintf('/pics/obst/%d.png', $item_id);
-        default:
-            return sprintf('/pics/obst/%d.jpg', $item_id);
-    }
+    return sprintf('/pics/obst/%d.png', $item_id);
 }
 
 function getResearchImage(int $item_id): string
 {
-    switch ($item_id) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-            return sprintf('/pics/forschung/%d.png', $item_id);
-        default:
-            return sprintf('/pics/forschung/%d.jpg', $item_id);
-    }
+    return sprintf('/pics/forschung/%d.png', $item_id);
 }
 
 function getItemName(int $item_id): string
@@ -687,6 +653,11 @@ function deleteAccount(int $blm_user): ?string
             return 'delete_' . $table;
         }
     }
+
+    // delete his profile picture
+    @unlink(sprintf("../pics/uploads/u_%d.jpg", $blm_user));
+    @unlink(sprintf("../pics/uploads/u_%d.png", $blm_user));
+    @unlink(sprintf("../pics/uploads/u_%d.gif", $blm_user));
     return null;
 }
 
@@ -702,6 +673,9 @@ function resetAccount(int $blm_user): ?string
         if ($status !== null) {
             return $status;
         }
+        @unlink(sprintf("../pics/uploads/g_%d.jpg", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.png", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.gif", $player['Gruppe']));
     }
 
     // reset all values to the starting defaults

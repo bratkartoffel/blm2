@@ -111,7 +111,7 @@ if ($id != 0) {
     <div class="form Gruppe">
         <header>Gruppe: <?= escapeForOutput($group['Name']); ?></header>
         <div class="left">
-            <div class="GroupImage"><img src="/pics/gruppe.php?id=<?= $id; ?>" alt=""/></div>
+            <div class="GroupImage"><img src="/pics/profile.php?gid=<?= $id; ?>" alt=""/></div>
             <div><?= replaceBBCode(strlen($group['Beschreibung']) == 0 ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
         </div>
         <div class="right">

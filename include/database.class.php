@@ -908,11 +908,11 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllGroupDiplomacyById(int $group_id): ?array
     {
-        $stmt = $this->prepare("SELECT gd.ID, gd.Von, gr.ID AS GruppeID, gr.Name AS GruppeName, gd.Typ, gd.Aktiv, gd.Seit, gd.Betrag
+        $stmt = $this->prepare("SELECT gd.ID, gd.Von, gd.An, gr.ID AS GruppeID, gr.Name AS GruppeName, gd.Typ, gd.Aktiv, gd.Seit, gd.Betrag
             FROM gruppe_diplomatie gd INNER JOIN gruppe gr ON gd.An = gr.ID
             WHERE gd.Von = :id
             UNION
-            SELECT gd.ID, gd.An, gr.ID AS GruppeID, gr.Name AS GruppeName, gd.Typ, gd.Aktiv, gd.Seit, gd.Betrag
+            SELECT gd.ID, gd.Von, gd.An, gr.ID AS GruppeID, gr.Name AS GruppeName, gd.Typ, gd.Aktiv, gd.Seit, gd.Betrag
             FROM gruppe_diplomatie gd INNER JOIN gruppe gr ON gd.Von = gr.ID
             WHERE gd.An = :id");
         $stmt->bindParam("id", $group_id, PDO::PARAM_INT);

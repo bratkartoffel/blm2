@@ -8,6 +8,7 @@ requireEntryFound($rights, '/?p=gruppe');
 $diplomacy_db = Database::getInstance()->getAllGroupDiplomacyById($rights['group_id']);
 $diplomacy = array(group_diplomacy_bnd => array(), group_diplomacy_nap => array(), group_diplomacy_war => array());
 foreach ($diplomacy_db as $entry) {
+    if ($entry['Aktiv'] == 0 && $entry['An'] == $rights['group_id']) continue;
     $diplomacy[intval($entry['Typ'])][] = $entry;
 }
 

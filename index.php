@@ -92,7 +92,7 @@ if (isLoggedIn()) {
 
             <div class="NaviBlock">
                 <span>Persönlich:</span>
-                <?= createNavigationLink('gruppe', 'Gruppe (' . ($data['Gruppe'] === null ? 0 : Database::getInstance()->getUnreadGroupMessageCount($data['Gruppe'], $_SESSION['blm_user'])) . ')', 'Gruppe'); ?>
+                <?= createNavigationLink('gruppe', sprintf("Gruppe (%s)", $data['Gruppe'] === null ? '0' : Database::getInstance()->getUnreadGroupMessageCount($data['Gruppe'], $_SESSION['blm_user']) . ' / ' . Database::getInstance()->countPendingGroupDiplomacy($data['Gruppe'])), 'Gruppe'); ?>
                 <?= createNavigationLink('nachrichten_liste', 'Nachrichten (' . Database::getInstance()->getUnreadMessageCount($_SESSION['blm_user']) . ')', 'Nachrichten'); ?>
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=notizblock">Notizblock</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=einstellungen">Einstellungen</a></div>

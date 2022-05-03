@@ -1277,7 +1277,7 @@ function createBBGroupLink(int $group_id, string $group_name): string
     return sprintf("[group=%s#%d/]", $group_name, $group_id);
 }
 
-function createGroupNaviation(int $activePage): string
+function createGroupNaviation(int $activePage, int $group_id): string
 {
     $items = array('<div id="GroupNavigation">');
 
@@ -1290,8 +1290,9 @@ function createGroupNaviation(int $activePage): string
     if ($activePage == 2) $items[] = '<span>Einstellungen</span>';
     else $items[] = '<span><a href="/?p=gruppe_einstellungen">Einstellungen</a></span>';
 
-    if ($activePage == 3) $items[] = '<span>Diplomatie</span>';
-    else $items[] = '<span><a href="/?p=gruppe_diplomatie">Diplomatie</a></span>';
+    $count = Database::getInstance()->countPendingGroupDiplomacy($group_id);
+    if ($activePage == 3) $items[] = sprintf('<span>Diplomatie (%d)</span>', $count);
+    else $items[] = sprintf('<span><a href="/?p=gruppe_diplomatie">Diplomatie (%d)</a></span>', $count);
 
     if ($activePage == 4) $items[] = '<span>Gruppenkasse</span>';
     else $items[] = '<span><a href="/?p=gruppe_kasse">Gruppenkasse</a></span>';

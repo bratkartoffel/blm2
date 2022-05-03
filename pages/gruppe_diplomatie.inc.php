@@ -65,7 +65,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
 </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
-<?= createGroupNaviation(3); ?>
+<?= createGroupNaviation(3, $rights['group_id']); ?>
 
 <h3>Nicht-Angriffs-Pakte (NAPs):</h3>
 <?php printDiplomacyTable($diplomacy[group_diplomacy_nap], 'NAP', $rights['group_diplomacy'] == 1); ?>

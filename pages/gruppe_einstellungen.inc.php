@@ -12,7 +12,7 @@ $hasOneRight = false;
     </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
-<?= createGroupNaviation(2); ?>
+<?= createGroupNaviation(2, $rights['group_id']); ?>
 
 <?php
 if ($rights['edit_image']) {

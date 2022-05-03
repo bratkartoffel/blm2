@@ -11,7 +11,7 @@ requireEntryFound($rights, '/?p=gruppe');
 </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
-<?= createGroupNaviation(5); ?>
+<?= createGroupNaviation(5, $rights['group_id']); ?>
 
 <div class="form GroupLog">
     <header>Einträge</header>

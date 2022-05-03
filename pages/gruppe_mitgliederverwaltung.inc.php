@@ -10,7 +10,7 @@ requireEntryFound($rights, '/?p=gruppe');
 </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
-<?= createGroupNaviation(1); ?>
+<?= createGroupNaviation(1, $rights['group_id']); ?>
 
 <table class="Liste ListeMitgliederRechte">
     <tr>

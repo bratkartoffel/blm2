@@ -1205,6 +1205,13 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
+    public function countPendingGroupDiplomacy(int $group_id): ?int
+    {
+        $stmt = $this->prepare("SELECT count(1) AS Count FROM gruppe_diplomatie WHERE An = :id AND Aktiv = 0");
+        $stmt->bindParam('id', $group_id, PDO::PARAM_INT);
+        return $this->executeAndExtractField($stmt, 'Count');
+    }
+
     public function deleteAllMessagesForUser(int $blm_user): ?int
     {
         $stmt = $this->prepare("DELETE FROM nachrichten WHERE An = :id AND Gelesen = 1");

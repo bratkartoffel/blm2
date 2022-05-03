@@ -93,7 +93,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
         // player has a group, show links for group interactions
         $id = $player['GruppeID'];
         $rights = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);
-        echo createGroupNaviation(0);
+        echo createGroupNaviation(0, $id);
     } // player has a group
 } // no id parameter given
 

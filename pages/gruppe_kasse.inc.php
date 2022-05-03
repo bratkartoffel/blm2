@@ -12,7 +12,7 @@ requireEntryFound($rights, '/?p=gruppe');
     </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
-<?= createGroupNaviation(4); ?>
+<?= createGroupNaviation(4, $rights['group_id']); ?>
 
 <?php
 $data = Database::getInstance()->getAllGroupCashById($rights['group_id']);

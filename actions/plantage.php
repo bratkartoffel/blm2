@@ -88,7 +88,7 @@ if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['
         array('Geld' => -$stunden * $productionData['Kosten']),
         array('Geld >= :whr0' => $stunden * $productionData['Kosten'])) == 0) {
     Database::getInstance()->rollBack();
-    redirectTo(sprintf('/?p=plantage&was=%d', $was), 142, __LINE__);
+    redirectTo(sprintf('/?p=plantage&was=%d', $was), 111, __LINE__);
 }
 
 if (Database::getInstance()->updateTableEntryCalculate('statistik', null,

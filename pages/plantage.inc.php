@@ -81,7 +81,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                         <div id="pr_ko_<?= $i; ?>">Kosten: <?= formatCurrency($productionData[$i]['Kosten']); ?></div>
                     </div>
                     <input type="submit" name="anbauen" id="plant_<?= $i; ?>" value="Ware anbauen"
-                           onclick="return submit(this);" <?= ($productionData[$i]['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
+                           onclick="return submit(this);"/>
                     <?php
                 } else {
                     $auftrag = $auftraege[$i];

@@ -77,7 +77,7 @@ if (isLoggedIn()) {
     <?php
     if (isLoggedIn()) {
         ?>
-        <div class="NaviBox">
+        <div class="NaviBox" id="Navi">
             <header>Navigation</header>
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=index">Startseite</a></div>
             <div class="NaviBlock">

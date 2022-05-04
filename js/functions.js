@@ -165,7 +165,7 @@ function toggleRundmail() {
 function toogleHamburger(e) {
     let elem = document.getElementById('Navigation');
     if (elem.style.display === 'inline-block') {
-        elem.style.display = 'none';
+        elem.style.display = '';
     } else {
         elem.style.display = 'inline-block';
     }

@@ -30,6 +30,10 @@
         margin-bottom: 10px;
     }
 
+    div.NaviBlock {
+        display: table-cell;
+    }
+
     div.NaviBox {
         margin: 10px 20px;
         float: left;

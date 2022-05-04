@@ -7,13 +7,9 @@ require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
-if (!isLoggedIn() || isRoundOver() || isGameLocked()) {
-    die('<!DOCTYPE html><html lang="de"><head><title>' . game_title . ' - Chefbox</title><script>self.close();</script></head></html>');
-}
-
-if ($_SESSION['blm_lastAction'] + session_timeout < time()) {
+if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + session_timeout < time()) {
     session_destroy();
-    die('<!DOCTYPE html><html lang="de"><head><title>' . game_title . ' - Chefbox</title><script>self.close();</script></head></html>');
+    die('<!DOCTYPE html><html lang="de"><head><title>' . game_title . ' - Chefbox</title><script>self.close(); window.location.href = "' . base_url . '";</script></head></html>');
 }
 
 CheckAuftraege($_SESSION['blm_user']);

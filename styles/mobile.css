@@ -1,0 +1,62 @@
+@media only screen and (max-width: 850px) {
+    body {
+        margin: 10px;
+    }
+
+    div#hamburger {
+        display: block;
+        cursor: pointer;
+    }
+
+    div#hamburger .bar1,
+    div#hamburger .bar2,
+    div#hamburger .bar3 {
+        display: block;
+        width: 35px;
+        height: 3px;
+        margin: 5px auto;
+        background-color: #101010;
+        transition: 0.4s;
+    }
+
+    div#Navigation {
+        background-image: initial;
+        width: initial;
+        display: none;
+    }
+
+    div.NaviLink, div.NaviBlock span {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    div.NaviBox {
+        margin: 10px 20px;
+        float: left;
+    }
+
+    img#Logo {
+        display: none;
+    }
+
+    div#SeitenUeberschrift {
+        background-position: right;
+    }
+
+    div#Inhalt {
+        display: initial;
+        width: initial;
+    }
+
+    div.form {
+        display: flow-root;
+    }
+
+    div.Buero {
+        white-space: initial;
+    }
+
+    div#Footer {
+        width: initial;
+    }
+}

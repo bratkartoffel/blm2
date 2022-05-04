@@ -12,6 +12,10 @@ a {
     font-weight: bold;
 }
 
+div#hamburger {
+    display: none;
+}
+
 div#Navigation {
     background-image: url('/pics/style/bg_navi.jpg');
     background-repeat: no-repeat;
@@ -128,7 +132,7 @@ div.Meldung span {
 
 div#Footer {
     display: block;
-    width: 800px;
+    width: 600px;
     text-align: center;
     margin: 10px auto;
     padding: 5px;

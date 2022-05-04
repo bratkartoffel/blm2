@@ -6,7 +6,7 @@ $q = getOrDefault($_GET, 'q');
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/Login_Manager.png" alt=""/>
-    <span>Serverstatistik<?= createHelpLink(1, 17); ?></span>
+    <span>Rangliste<?= createHelpLink(1, 17); ?></span>
 </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
@@ -52,20 +52,18 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
             <td><?= ($offset * ranking_page_size) + $i + 1; ?></td>
             <td>
                 <?php
-                if (strtotime($row['LastAction']) + 1800 >= time()) {
-                    $status_image = '/pics/style/online.png';
-                } else {
-                    $status_image = '/pics/style/offline.png';
-                }
+                $online = strtotime($row['LastAction']) + 1800 >= time();
                 ?>
-                <img src="<?= $status_image; ?>" alt=""/>
+                <img src="<?= ($online ? '/pics/style/online.png' : '/pics/style/offline.png'); ?>"
+                     alt="<?= ($online ? 'Online' : 'Offline'); ?>"
+                     title="<?= ($online ? 'Online' : 'Offline'); ?>"/>
                 <?php
                 echo createProfileLink($row['BenutzerID'], $row['BenutzerName']);
                 if ($row['IstAdmin']) {
-                    echo '<img src="/pics/small/bookmark.png" alt="" title="Admin"/>';
+                    echo '<img src="/pics/small/bookmark.png" alt="Admin" title="Admin"/>';
                 }
                 if ($row['IstBetatester']) {
-                    echo '<img src="/pics/small/bookmark_Silver.png" alt="" title="Betatester"/>';
+                    echo '<img src="/pics/small/bookmark_Silver.png" alt="Betatester" title="Betatester"/>';
                 }
                 if ($row['GruppeID'] !== null) {
                     echo sprintf(' (<a href="/?p=gruppe&id=%d">%s</a>)',

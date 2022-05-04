@@ -162,4 +162,14 @@ function toggleRundmail() {
     return false;
 }
 
+function toogleHamburger(e) {
+    let elem = document.getElementById('Navigation');
+    if (elem.style.display === 'inline-block') {
+        elem.style.display = 'none';
+    } else {
+        elem.style.display = 'inline-block';
+    }
+    return false;
+}
+
 window.setInterval(CountdownFields, 1000);

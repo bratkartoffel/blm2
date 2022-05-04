@@ -37,7 +37,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         <header id="f<?= $i; ?>">
             <?= getItemName($i); ?> (Stufe <?= $data[$researchAttribute]; ?>)
         </header>
-        <img src="<?= getResearchImage($i); ?>" alt=""/>
+        <img src="<?= getResearchImage($i); ?>" alt="<?= getItemName($i); ?>"/>
         <div class="ResearchDaten">
             <?php
             if (!array_key_exists($i, $auftraege)) {

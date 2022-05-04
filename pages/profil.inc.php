@@ -25,7 +25,7 @@ requireEntryFound($data, '/?p=rangliste');
     </div>
     <div>
         <label for="image">Bild:</label>
-        <span><img class="profilePicture" src="/pics/profile.php?uid=<?= $data['ID']; ?>" alt=""/></span>
+        <span><img class="profilePicture" src="/pics/profile.php?uid=<?= $data['ID']; ?>" alt="Profilbild"/></span>
     </div>
     <div>
         <label for="description">Beschreibung:</label>

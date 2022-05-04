@@ -466,10 +466,10 @@ function getMessageBox(int $msg_id): ?string
     }
 
     return sprintf('<div class="Meldung" id="meldung_%d">
-            <img src="%s" alt=""/>
+            <img src="%s" alt="Meldung #%d"/>
             <a id="close" onclick="document.getElementById(\'meldung_%d\').remove();">X</a>
             <span>%s</span>
-        </div>', $msg_id, $image, $msg_id, $text);
+        </div>', $msg_id, $image, $msg_id, $msg_id, $text);
 }
 
 function getBuildingImage(int $building_id): string
@@ -990,7 +990,7 @@ function createNavigationLink(string $target, string $text, string $sitterRights
 function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): ?string
 {
     if (isLoggedIn()) {
-        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/help.gif" alt="" /></a>', $module, $category, $linkExtraAttributes);
+        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/help.gif" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
     }
     return null;
 }

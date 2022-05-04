@@ -48,7 +48,8 @@ $email = getOrDefault($_GET, 'email');
             $captcha = new Captcha();
             $captcha->erstelle();
             ?>
-            <img src="include/captcha_class/pics/<?= basename($captcha->holeBildpfad()); ?>" alt="" id="captcha"/>
+            <img src="include/captcha_class/pics/<?= basename($captcha->holeBildpfad()); ?>" alt="Captcha"
+                 id="captcha"/>
         </div>
         <div>
             <label for="captcha_code">Sicherheitscode:</label>

@@ -86,7 +86,7 @@ const count_wares = 15;
 const count_buildings = 8;
 
 // minimum number of points required to use mafia
-const min_points_mafia = 8000;
+const mafia_min_ponts = 18000;
 
 // minimum percentage of money stolen from opponent
 const mafia_raub_min_rate = 0.4;

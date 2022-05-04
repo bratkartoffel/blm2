@@ -111,7 +111,7 @@ if ($id != 0) {
     <div class="form Gruppe">
         <header>Gruppe: <?= escapeForOutput($group['Name']); ?></header>
         <div class="left">
-            <div class="GroupImage"><img src="/pics/profile.php?gid=<?= $id; ?>" alt=""/></div>
+            <div class="GroupImage"><img src="/pics/profile.php?gid=<?= $id; ?>" alt="Gruppenbild"/></div>
             <div><?= replaceBBCode(strlen($group['Beschreibung']) == 0 ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
         </div>
         <div class="right">
@@ -123,8 +123,11 @@ if ($id != 0) {
             <ul>
                 <?php
                 foreach ($members as $member) {
-                    echo sprintf('<li><img src="%s" alt=""/> %s (%s)</li>',
-                        strtotime($member['LastAction']) + 1800 >= time() ? '/pics/style/online.png' : '/pics/style/offline.png',
+                    $online = strtotime($member['LastAction']) + 1800 >= time();
+                    echo sprintf('<li><img src="%s" alt="%s" title="%s"/> %s (%s)</li>',
+                        $online ? '/pics/style/online.png' : '/pics/style/offline.png',
+                        $online ? 'Online' : 'Offline',
+                        $online ? 'Online' : 'Offline',
                         createProfileLink($member['ID'], $member['Name']),
                         formatPoints($member['Punkte']));
                 }

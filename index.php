@@ -8,7 +8,7 @@ if (maintenance_active) {
 session_destroy();
 ?><!DOCTYPE html>
 <html lang="de">
-<body><img src="/pics/pylone.png" alt=""/>
+<body><img src="/pics/pylone.png" alt="maintenance"/>
 <h2><?= maintenance_message; ?></h2></body>
 </html>
 <?php
@@ -57,16 +57,23 @@ if (isLoggedIn()) {
 -->
 <html lang="de">
 <head>
-    <link rel="stylesheet" type="text/css" href="styles/style.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/style.css?<?= game_version; ?>"/>
+    <link rel="stylesheet" type="text/css" href="styles/mobile.css?<?= game_version; ?>"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= game_title; ?> - <?= ucfirst(getCurrentPage()); ?></title>
     <script src="/js/functions.js?<?= game_version; ?>"></script>
 </head>
 <body onload="MarkActiveLink();">
+<div id="hamburger" onclick="return toogleHamburger();">
+    <span class="bar1"></span>
+    <span class="bar2"></span>
+    <span class="bar3"></span>
+</div>
 <div id="Navigation">
-    <img id="Logo" src="/pics/logo.png" alt=""/>
+    <img id="Logo" src="/pics/logo.png" alt="Logo"/>
     <?php
     if (isLoggedIn()) {
         ?>
@@ -95,9 +102,11 @@ if (isLoggedIn()) {
                 <?= createNavigationLink('gruppe', sprintf("Gruppe (%s)", $data['Gruppe'] === null ? '0' : Database::getInstance()->getUnreadGroupMessageCount($data['Gruppe'], $_SESSION['blm_user']) . ' / ' . Database::getInstance()->countPendingGroupDiplomacy($data['Gruppe'])), 'Gruppe'); ?>
                 <?= createNavigationLink('nachrichten_liste', 'Nachrichten (' . Database::getInstance()->getUnreadMessageCount($_SESSION['blm_user']) . ')', 'Nachrichten'); ?>
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=notizblock">Notizblock</a></div>
-                <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=einstellungen">Einstellungen</a></div>
+                <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=einstellungen">Einstellungen</a>
+                </div>
                 <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);">
-                    <a href="popups/chefbox.php" onclick="return ChefboxZeigen(this.href);" target="_blank">Chefbox</a>
+                    <a href="popups/chefbox.php" onclick="return ChefboxZeigen(this.href);"
+                       target="_blank">Chefbox</a>
                 </div>
                 <?= (isAdmin() ? '<div class="NaviLink" onclick="Navigation(this);"><a href="/?p=admin">Admin-Bereich</a></div>' : ''); ?>
             </div>

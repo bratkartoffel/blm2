@@ -84,7 +84,7 @@ function BLMNavigation(link) {
 }
 
 function CountdownFields() {
-    Array.prototype.forEach.call(document.getElementsByClassName('countdown'), (field) => {
+    let countdown = (field, direction) => {
         let value;
         if (!field.innerText.includes('Tage')) {
             value = Date.parse('1970-01-01T' + field.innerText + 'Z');
@@ -95,8 +95,8 @@ function CountdownFields() {
         }
         if (value > 0) {
             field.innerText = "";
-            let date = new Date(value - 1000);
-            if (value > 86400000) {
+            let date = new Date(value + direction * 1000);
+            if (value > 86400000 && direction < 0) {
                 field.innerText += Math.floor(value / 86400000) + " Tage ";
             }
             field.innerText += date.toLocaleTimeString("de-DE", {
@@ -107,7 +107,9 @@ function CountdownFields() {
                 timeZone: 'UTC'
             });
         }
-    })
+    };
+    Array.prototype.forEach.call(document.getElementsByClassName('countdown'), field => countdown(field, -1))
+    Array.prototype.forEach.call(document.getElementsByClassName('countup'), field => countdown(field, 1))
 }
 
 function MarkActiveLink() {
@@ -158,16 +160,6 @@ function toggleRundmail() {
         f.disabled = '';
         f.enabled = 'enabled';
         b.value = '0';
-    }
-    return false;
-}
-
-function toogleHamburger(e) {
-    let elem = document.getElementById('Navigation');
-    if (elem.style.display === 'inline-block') {
-        elem.style.display = '';
-    } else {
-        elem.style.display = 'inline-block';
     }
     return false;
 }

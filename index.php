@@ -62,16 +62,11 @@ if (isLoggedIn()) {
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=5.0, minimum-scale=0.60">
     <title><?= game_title; ?> - <?= ucfirst(getCurrentPage()); ?></title>
     <script src="/js/functions.js?<?= game_version; ?>"></script>
 </head>
 <body onload="MarkActiveLink();">
-<div id="hamburger" onclick="return toogleHamburger();">
-    <span class="bar1"></span>
-    <span class="bar2"></span>
-    <span class="bar3"></span>
-</div>
 <div id="Navigation">
     <img id="Logo" src="/pics/logo.png" alt="Logo"/>
     <?php
@@ -156,7 +151,7 @@ if (isLoggedIn()) {
                 </tr>
                 <tr>
                     <td>Serverzeit:</td>
-                    <td><?= formatTime(time()); ?></td>
+                    <td class="countup"><?= formatTime(time()); ?></td>
                 </tr>
                 <tr>
                     <td>Nächstes Einkommen:</td>
@@ -175,6 +170,20 @@ if (isLoggedIn()) {
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=regeln">Regeln</a></div>
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=impressum">Impressum</a></div>
         </div>
+        <style>
+            div#Navigation {
+                display: flow-root;
+            }
+
+            div.NaviBox header {
+                display: none;
+            }
+
+            div.NaviBox div {
+                display: inline-block;
+                margin: 6px;
+            }
+        </style>
         <?php
     }
     ?>

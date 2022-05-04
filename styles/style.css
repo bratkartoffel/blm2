@@ -12,10 +12,6 @@ a {
     font-weight: bold;
 }
 
-div#hamburger {
-    display: none;
-}
-
 div#Navigation {
     background-image: url('/pics/style/bg_navi.jpg');
     background-repeat: no-repeat;
@@ -84,6 +80,7 @@ div#SeitenUeberschrift {
     height: 82px;
     margin-top: 8px;
     padding-top: 20px;
+    padding-right: 20px;
     display: inline-block;
     background-position: right;
 }
@@ -134,7 +131,7 @@ div.Meldung span {
 
 div#Footer {
     display: block;
-    width: 600px;
+    width: 800px;
     text-align: center;
     margin: 10px auto;
     padding: 5px;
@@ -184,6 +181,7 @@ div.Produktion div.Action,
 div.Research div.Action {
     display: inline-block;
     width: 300px;
+    float: right;
 }
 
 div.Research div.Action input {

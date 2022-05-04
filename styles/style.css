@@ -72,7 +72,7 @@ table#UserStatistik tr td:last-of-type {
 
 div#Inhalt {
     display: inline-block;
-    width: 900px;
+    width: min-content;
     margin-left: -5px;
     white-space: initial;
     padding-right: 10px;
@@ -84,10 +84,11 @@ div#SeitenUeberschrift {
     height: 82px;
     margin-top: 8px;
     padding-top: 20px;
+    display: inline-block;
+    background-position: right;
 }
 
 div#SeitenUeberschrift img {
-    float: left;
     margin-right: 20px;
     width: 64px;
     height: 64px;
@@ -100,10 +101,11 @@ div#SeitenUeberschrift img.help {
 }
 
 div#SeitenUeberschrift span {
-    display: block;
-    padding: 25px 0;
+    display: inline;
     font-weight: bold;
     font-size: 120%;
+    position: relative;
+    top: -20px;
 }
 
 div.Meldung {
@@ -157,10 +159,11 @@ div.Gebaeude div.Information,
 div.Gebaeude div.Action,
 div.Gebaeude div.Upgrade {
     border-bottom: none !important;
+    white-space: nowrap;
 }
 
 div.Gebaeude div.Upgrade {
-    float: left;
+    display: inline-block;
     width: 300px;
     padding-left: 10px;
 }
@@ -179,7 +182,7 @@ div.Gebaeude div.Upgrade header {
 div.Gebaeude div.Action,
 div.Produktion div.Action,
 div.Research div.Action {
-    float: right;
+    display: inline-block;
     width: 300px;
 }
 
@@ -225,6 +228,7 @@ div.Research div.ResearchDaten {
 
 div.Produktion div.Action {
     padding: 13px 0 !important;
+    text-align: center;
 }
 
 div.Produktion div.Action label {

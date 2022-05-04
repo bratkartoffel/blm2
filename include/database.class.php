@@ -853,7 +853,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getGroupInformationById(int $group): ?array
     {
-        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Beschreibung, SUM(Punkte) AS Punkte
+        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Beschreibung, (SELECT SUM(Punkte) FROM mitglieder m WHERE m.Gruppe = g.ID) AS Punkte
             FROM gruppe g INNER JOIN mitglieder m ON g.ID = m.Gruppe
             WHERE g.ID = :id");
         $stmt->bindParam("id", $group, PDO::PARAM_INT);
@@ -1000,7 +1000,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller(int $blm_user, int $minWas = 0, int $maxWas = 999): ?array
     {
-        $stmt = $this->prepare("SELECT * FROM auftrag WHERE user_id = :id AND item >= :min AND item < :max ORDER BY finished ASC");
+        $stmt = $this->prepare("SELECT * FROM auftrag WHERE user_id = :id AND item >= :min AND item < :max ORDER BY finished");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         $stmt->bindParam("min", $minWas, PDO::PARAM_INT);
         $stmt->bindParam("max", $maxWas, PDO::PARAM_INT);
@@ -1299,7 +1299,6 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         }
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result === false) {
-            $this->error($stmt, "No result found");
             return null;
         }
         return $result[$fieldName];

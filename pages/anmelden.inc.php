@@ -8,9 +8,9 @@ $name = getOrDefault($_GET, 'name');
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-<h3>
+<p>
     Hier können Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten ein.
-</h3>
+</p>
 
 <div class="form">
     <form action="/actions/login.php" method="post">
@@ -18,7 +18,7 @@ $name = getOrDefault($_GET, 'name');
 
         <div>
             <label for="name">Benutzername:</label>
-            <input name="name" id="name" type="text" size="20" maxlength="20" value="<?=escapeForOutput($name); ?>"/>
+            <input name="name" id="name" type="text" size="20" maxlength="20" value="<?= escapeForOutput($name); ?>"/>
         </div>
         <div>
             <label for="pwd">Passwort:</label>
@@ -29,4 +29,8 @@ $name = getOrDefault($_GET, 'name');
             <input type="submit" id="login" value="Anmelden"/>
         </div>
     </form>
+</div>
+
+<div>
+    <a hreF="/?p=passwort_vergessen">Passwort vergessen?</a>
 </div>

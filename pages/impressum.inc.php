@@ -6,11 +6,12 @@
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <p>
-    Das gesamte Spiel ist komplett kostenlos und OpenSource, und kann <a href="https://github.com/bratkartoffel/blm2">hier</a>
+    Das gesamte Spiel ist komplett kostenlos und OpenSource, und kann
+    <a href="https://github.com/bratkartoffel/blm2" target="_blank">hier</a>
     heruntergeladen werden.
 </p>
 <p>
-    Die Lizenz (MIT Licence) kann <a href="/LICENCE.md">hier</a> eingesehen werden.
+    Die Lizenz (MIT Licence) kann <a href="/LICENCE.md" target="_blank">hier</a> eingesehen werden.
 </p>
 
 <h2>Programmiert wurde das Original von:</h2>
@@ -29,8 +30,11 @@
 
 <h2>Bilder und Grafiken</h2>
 <p>
-    Alle Fotos wurden von <a href="https://unsplash.com/license">unsplash.com</a> genommen.
-    Die Icons stammen entstammen dem &quot;Crystal Clear Icons By Everaldo&quot; und stehen unter der LGPL 3.0.
-    Die Bilder und Grafiken unterhalb von pics/style wurden von mir gezeichnet und stehen wie der Rest des Programs
-    unter der MIT Licence. Somit sind alle Bilder frei verfügbar entsprechend der Lizenzen der jeweiligen Seiten.
+    Alle Fotos wurden von <a href="https://unsplash.com/license" target="_blank">unsplash.com</a> genommen.
+    Die Icons stammen entstammen dem "Crystal Clear Icons By Everaldo" und stehen unter der LGPL 3.0.
+    Die Bilder und Grafiken unterhalb von "pics/style" wurden von mir gezeichnet und stehen wie der Rest des
+    Programs unter der MIT Licence. Somit sind alle Bilder frei verfügbar entsprechend der Lizenzen der jeweiligen
+    Seiten.<br>
+    Der Font für das Captcha wurde als "Public Domain" released und ist frei verfügbar auf
+    <a href="https://www.fontspace.com/sportsball-font-f30615" target="_blank">fontspace.com</a>.
 </p>

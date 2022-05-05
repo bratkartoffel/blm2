@@ -43,8 +43,10 @@ for ($i = 1; $i <= count_wares; $i++) {
                 Stunde(n) von Allem.
             </div>
             <div id="pr_ko_all">Kosten: <?= formatCurrency($productionCostSum); ?></div>
-            <input type="submit" value="Abschicken" id="plant_all"
-                   onclick="return submit(this);"<?= (count($auftraege) < count($productionData) && $data['Geld'] >= $productionCostSum ? '' : ' disabled="disabled"'); ?>/>
+            <div>
+                <input type="submit" value="Abschicken" id="plant_all"
+                       onclick="return submit(this);"<?= (count($auftraege) < count($productionData) && $data['Geld'] >= $productionCostSum ? '' : ' disabled="disabled"'); ?>/>
+            </div>
         </form>
     </div>
 

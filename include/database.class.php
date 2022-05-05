@@ -216,6 +216,27 @@ class Database
         return $this->executeAndExtractField($stmt, 'ID');
     }
 
+    public function getPasswordRequestByUserId(int $id): ?array
+    {
+        $stmt = $this->prepare("SELECT * FROM passwort_reset WHERE ID = :id");
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
+        return $this->executeAndExtractFirstRow($stmt);
+    }
+
+    public function getPlayerIdAndNameByEmail(string $email): ?array
+    {
+        $stmt = $this->prepare("SELECT ID, Name FROM mitglieder WHERE ID > 0 AND EMail = :email");
+        $stmt->bindParam("email", $email);
+        return $this->executeAndExtractFirstRow($stmt);
+    }
+
+    public function getPlayerNameAndEmailById(int $id): ?array
+    {
+        $stmt = $this->prepare("SELECT Name, EMail FROM mitglieder WHERE ID > 0 AND ID = :id");
+        $stmt->bindParam("id", $id);
+        return $this->executeAndExtractFirstRow($stmt);
+    }
+
     public function getPlayerRankById(int $id): ?int
     {
         $stmt = $this->prepare("SELECT `row_number` FROM (SELECT (@row_number := @row_number + 1) AS `row_number`, t.ID FROM mitglieder t, (SELECT @row_number := 0) r WHERE ID > 0 ORDER BY t.Punkte DESC, t.ID) as rnN WHERE ID = :id");

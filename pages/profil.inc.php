@@ -13,7 +13,7 @@ requireEntryFound($data, '/?p=rangliste');
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <p>
-    Hier sehen Sie das Profil des Benutzers &quot;<?= escapeForOutput($data['Name']); ?>&quot;. Jeder Spieler ist für
+    Hier sehen Sie das Profil des Benutzers "<?= escapeForOutput($data['Name']); ?>". Jeder Spieler ist für
     sein Profil selbst verantwortlich!
 </p>
 

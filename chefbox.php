@@ -19,12 +19,14 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
 ?><!DOCTYPE html>
 <html lang="de">
 <head>
-    <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css?<?= game_version; ?>"/>
+    <link rel="stylesheet" type="text/css" href="/styles/chefbox.css?<?= game_version; ?>"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta http-equiv="refresh" content="30"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title><?= game_title; ?> - Chefbox</title>
     <script src="/js/functions.js?<?= game_version; ?>"></script>
+    <script src="/js/chefbox.js?<?= game_version; ?>"></script>
 </head>
 <body id="Chefbox">
 <div id="ChefboxHead">
@@ -101,7 +103,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
         <td><?= formatCurrency($data['Bank']); ?></td>
     </tr>
 </table>
-<div>
+<div id="ChefboxFooter">
     <a href="/?p=startseite" onclick="return BLMzeigen(this.href);">BLM anzeigen / öffnen</a>
     <a href="/?p=startseite" onclick="return BLMEnde();">Fenster schliessen</a>
 </div>

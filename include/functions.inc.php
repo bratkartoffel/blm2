@@ -301,7 +301,7 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Die Gruppe kann erst gelöscht werden, wenn alle diplomatischen Beziehungen entfernt wurden';
             break;
         case 164:
-            $text = 'Der Name darf kein &quot;#&quot; enthalten';
+            $text = 'Der Name darf kein "#" enthalten';
             break;
         case 165:
             $text = 'Sie können keine diplomatische Beziehung mit Ihnen selbst eingehen';
@@ -323,6 +323,9 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 171:
             $text = 'Sind sie verwirrt? Sie können sich nicht selbst angreifen';
+            break;
+        case 172:
+            $text = 'Die EMail konnte nicht gesendet werden, bitte wende dich an einen Administrator.';
             break;
 
 
@@ -454,6 +457,12 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 243:
             $text = 'Die aktuelle Runde ist nun beendet und das Spiel pausiert. Aktuell laufen die Auswertungen, schau später nochmal vorbei.';
+            break;
+        case 244:
+            $text = 'Falls die angegebene Adresse registriert ist, so wurde eine EMail mit den weiteren Schritten an diese gesendet.';
+            break;
+        case 245:
+            $text = 'Das Passwort wurde erfolgreich zurückgesetzt und Ihnen in einer neuen EMail zugeschickt';
             break;
 
 
@@ -958,8 +967,20 @@ function createRandomCode(): string
     return sha1(openssl_random_pseudo_bytes(32));
 }
 
+function createRandomPassword(): string
+{
+    if (is_testing) {
+        return 'changeit';
+    }
+    return str_replace('+', '_', base64_encode(openssl_random_pseudo_bytes(12)));
+}
+
 function sendMail(string $recipient, string $subject, string $message): bool
 {
+    if (is_testing) {
+        return true;
+    }
+
     if (redirect_all_mails_to_admin) {
         $subject .= ' (original recipient ' . $recipient . ')';
         $recipient = admin_email;
@@ -1059,6 +1080,7 @@ function getCurrentPage(): string
             case "anmelden":
             case "registrieren":
             case "index":
+            case "passwort_vergessen":
             case "regeln":
             case "impressum":
                 $page = $p;
@@ -1275,7 +1297,7 @@ function createBBGroupLink(int $group_id, string $group_name): string
 
 function createGroupNaviation(int $activePage, int $group_id): string
 {
-    $items = array('<div id="GroupNavigation">');
+    $items = array();
 
     if ($activePage == 0) $items[] = '<span>Board</span>';
     else $items[] = '<span><a href="/?p=gruppe">Board</a></span>';
@@ -1297,8 +1319,7 @@ function createGroupNaviation(int $activePage, int $group_id): string
     else $items[] = '<span><a href="/?p=gruppe_logbuch">Logbuch</a></span>';
 
     $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');">Gruppe verlassen</a></span>';
-    $items[] = '</div>';
-    return implode("\n", $items);
+    return '<div id="GroupNavigation">' . implode(" | ", $items) . '</div>';
 }
 
 function getGroupDiplomacyTypeName(int $id): string
@@ -1362,7 +1383,7 @@ Hallo __NAME__,
 </p>
 
 <p>
-die aktuelle Runde des Spiels &quot;<a href="__URL__">__TITLE__</a>&quot; geht zu Ende.<br/>
+die aktuelle Runde des Spiels "<a href="__URL__">__TITLE__</a>" geht zu Ende.<br/>
 Die Auswertung ist abgeschlossen und folgende Spieler stachen besonders heraus:
 </p>
 

@@ -115,7 +115,7 @@ Stufe.');
 
 if (buildingRequirementsMet(4, $data)) {
     printBuildingInformation($data, $auftraege, 4,
-        'Dieses Gebäude hat zwar nicht viel mit &quot;Biowaren&quot; zu tun, <br/>
+        'Dieses Gebäude hat zwar nicht viel mit "Biowaren" zu tun, <br/>
 aber Sie haben erkannt, dass alleine mit Biolebensmitteln kein Geld zu verdienen ist.<br/>
 Deshalb kann man sich hier einen Dönerstand mieten, der das Grundeinkommen des Spielers erhöht.');
 }

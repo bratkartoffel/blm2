@@ -323,6 +323,16 @@ create index An on nachrichten (An);
 create index Von on nachrichten (Von);
 
 
+create table passwort_reset
+(
+    ID      int auto_increment primary key,
+    user_id int                                  not null,
+    created datetime default current_timestamp() not null,
+    token   char(40)                             not null,
+    constraint user_id unique (user_id)
+);
+
+
 create table punkte
 (
     ID             int auto_increment primary key,

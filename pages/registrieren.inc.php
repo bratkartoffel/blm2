@@ -5,6 +5,10 @@ if (registration_closed) {
 
 $name = getOrDefault($_GET, 'name');
 $email = getOrDefault($_GET, 'email');
+
+require_once('include/captcha.class.php');
+$captcha = new Captcha();
+$captcha->createCaptcha();
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/babelfish.png" alt=""/>
@@ -13,10 +17,10 @@ $email = getOrDefault($_GET, 'email');
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-<h3>
+<p>
     Hier können Sie einen neuen Spieler anlegen. Bitte geben Sie hierzu einen Spielernamen ein, welcher noch nicht
     belegt ist und wählen Sie ein Passwort, welches nur Sie wissen sollten.
-</h3>
+</p>
 
 <div class="form">
     <form action="/actions/registrieren.php" method="post">
@@ -43,22 +47,16 @@ $email = getOrDefault($_GET, 'email');
                    minlength="<?= password_min_len; ?>"/>
         </div>
         <div>
-            <?php
-            require_once('include/captcha_class/captcha.php');
-            $captcha = new Captcha();
-            $captcha->erstelle();
-            ?>
-            <img src="include/captcha_class/pics/<?= basename($captcha->holeBildpfad()); ?>" alt="Captcha"
-                 id="captcha"/>
+            <img src="<?= $captcha->getImageUrl(); ?>" alt="Captcha" id="captcha"/>
         </div>
         <div>
             <label for="captcha_code">Sicherheitscode:</label>
             <input name="captcha_code" id="captcha_code" type="text" size="6" required
-                   minlength="<?= CAPTCHA_STD_LAENGE; ?>" maxlength="<?= CAPTCHA_STD_LAENGE; ?>"/>
+                   minlength="<?= captcha_length; ?>" maxlength="<?= captcha_length; ?>"/>
         </div>
 
         <div>
-            <input type="hidden" name="captcha_bild" value="<?= basename($captcha->holeBildpfad()); ?>"/>
+            <input type="hidden" name="captcha_id" value="<?= $captcha->getId(); ?>"/>
             <input type="submit" id="register" value="Registrieren"/>
         </div>
     </form>

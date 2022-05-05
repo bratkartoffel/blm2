@@ -17,6 +17,10 @@
         display: table-cell;
     }
 
+    div.NaviBlock a {
+        white-space: nowrap;
+    }
+
     div.NaviBox {
         margin: 10px 20px;
         float: left;
@@ -48,10 +52,23 @@
         width: initial;
     }
 
+    div.Gebaeude div.Action,
+    div.Produktion div.Action,
+    div.Research div.Action {
+        display: inline-block;
+        float: initial;
+        width: 300px
+    }
+
 
     /* when user is not logged in */
     div#Navigation.offline {
         display: flow-root;
+    }
+
+    div#Navigation.offline div.NaviBox {
+        text-align: center;
+        white-space: nowrap;
     }
 
     div#Navigation.offline div.NaviBox header {

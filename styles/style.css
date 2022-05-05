@@ -1,628 +1,537 @@
 body {
     background-color: #afd087;
-    background-image: url('/pics/style/bg_inhalt.png');
-    margin: 0 10px 10px 0;
+    background-image: url(/pics/style/bg_inhalt.png);
     font-family: 'DejaVu Sans', 'Arial', serif;
-    white-space: nowrap;
+    margin: 0 10px 10px 0;
 }
 
 a {
-    text-decoration: none;
     color: #be2a00;
     font-weight: bold;
+    text-decoration: none
 }
 
 div#Navigation {
-    background-image: url('/pics/style/bg_navi.jpg');
+    background-image: url(/pics/style/bg_navi.jpg);
     background-repeat: no-repeat;
     display: inline-block;
-    width: 280px;
-    vertical-align: top;
     padding: 4px 30px 10px 5px;
+    vertical-align: top;
+    width: 280px
 }
 
 div#Navigation img#Logo {
-    margin-left: 30px;
+    margin-left: 30px
 }
 
 div.NaviBox {
-    border: solid 3px green;
-    padding: 3px;
     background-color: #98d057;
+    border: solid 3px green;
     margin: 10px 0;
+    padding: 3px
 }
 
 div.NaviBox header {
+    border-bottom: solid 2px #006800;
     font-size: 130%;
     font-weight: bold;
     margin-bottom: 5px;
-    border-bottom: solid 2px #006800;
-
-    text-align: center;
+    text-align: center
 }
 
 div.NaviBlock {
-    margin: 10px 4px;
+    margin: 10px 4px
 }
 
 div.NaviLink {
-    padding-left: 12px;
     cursor: pointer;
+    padding-left: 12px
 }
 
 div.NaviLink:hover {
-    background-color: #bddbbd;
-}
-
-table#UserStatistik {
-    width: 100%;
-}
-
-table#UserStatistik td {
-    font-size: 90%;
-}
-
-table#UserStatistik tr td:last-of-type {
-    text-align: right;
+    background-color: #bddbbd
 }
 
 div#Inhalt {
     display: inline-block;
-    width: min-content;
     margin-left: -5px;
-    white-space: initial;
     padding-right: 10px;
+    width: min-content
 }
 
 div#SeitenUeberschrift {
-    background-image: url('/pics/style/bg_ueberschrift.png');
+    background-image: url(/pics/style/bg_ueberschrift.png);
+    background-position: top right;
     background-repeat: no-repeat;
+    display: block;
     height: 82px;
     margin-top: 8px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    display: block;
-    width: fit-content;
-    background-position: top right;
+    padding: 20px;
+    width: fit-content
 }
 
 div#SeitenUeberschrift img {
-    margin-right: 20px;
-    width: 64px;
     height: 64px;
+    margin-right: 20px;
+    width: 64px
 }
 
 div#SeitenUeberschrift img.help {
     float: inherit;
-    width: initial;
     height: initial;
+    width: initial
 }
 
 div#SeitenUeberschrift span {
     display: inline;
-    font-weight: bold;
     font-size: 120%;
+    font-weight: bold;
     position: relative;
-    top: -20px;
+    top: -20px
 }
 
 div.Meldung {
-    border: solid 1px #777777;
-    background-color: #ddddaa;
-    margin-top: 10px;
-    padding: 6px;
+    background-color: #dda;
+    border: solid 1px #777;
+    margin-bottom: 10px;
     min-height: 30px;
+    padding: 6px
 }
 
 div.Meldung img {
     float: left;
-    margin-right: 20px;
+    margin-right: 20px
 }
 
 div.Meldung a#close {
+    cursor: pointer;
     float: right;
     margin-left: 20px;
-    cursor: pointer;
 }
 
 div.Meldung span {
     display: block;
-    margin-top: 6px;
+    margin-top: 6px
+}
+
+div.form {
+    background-color: #bece6b;
+    border: dotted 1px #444;
+    display: inherit
+}
+
+div.form header {
+    background-color: #9fcf68;
+    border-bottom: solid 1px #c00;
+    font-weight: bold;
+    padding: 4px 8px
+}
+
+div.form div {
+    border-bottom: solid 1px #999;
+    padding: 5px
+}
+
+div.form label {
+    display: inline-block;
+    text-align: right;
+    width: 150px
+}
+
+div.form input {
+    margin-right: 8px
+}
+
+div.form img#captcha {
+    margin: 0 60px
+}
+
+div.form input[type="submit"] {
+    margin: 5px
 }
 
 div#Footer {
+    border: dotted 2px #ffdc55;
     display: block;
-    width: 800px;
-    text-align: center;
     margin: 10px auto;
     padding: 5px;
-    border: dotted 2px #ffdc55;
+    text-align: center;
+    width: 800px
+}
+
+table#UserStatistik {
+    width: 100%
+}
+
+table#UserStatistik td {
+    font-size: 90%
 }
 
 div.Gebaeude,
 div.Produktion,
 div.Research {
     margin-bottom: 20px;
-    width: 100%;
+    width: 100%
 }
 
 div.Gebaeude img,
 div.Produktion img,
 div.Research img {
     float: left;
-    margin: 4px 30px 4px 4px;
+    margin: 4px 30px 4px 4px
 }
 
 div.Gebaeude div.Information,
 div.Gebaeude div.Action,
 div.Gebaeude div.Upgrade {
-    border-bottom: none !important;
-    white-space: nowrap;
+    border-bottom: initial;
+    white-space: nowrap
 }
 
 div.Gebaeude div.Upgrade {
     display: inline-block;
-    width: 300px;
     padding-left: 10px;
+    width: 300px
 }
 
 div.Gebaeude div.Upgrade div,
 div.Gebaeude div.Action div {
     border: none;
-    padding: 0;
+    padding: 0
 }
 
 div.Gebaeude div.Upgrade header {
     background: none;
-    border: none;
+    border: none
 }
 
 div.Gebaeude div.Action,
 div.Produktion div.Action,
 div.Research div.Action {
     display: inline-block;
-    width: 300px;
     float: right;
+    width: 300px
 }
 
 div.Research div.Action input {
-    margin: 40px 80px;
-}
-
-div.Research div.Running {
-    padding: 20px 0 !important;
+    margin: 40px 80px
 }
 
 div.Gebaeude div.Beschreibung {
-    min-height: 90px;
+    min-height: 90px
 }
 
 div.Schnellanbau {
     display: block;
-    width: 400px;
     margin-bottom: 20px;
+    width: 400px
 }
 
 div.Schnellanbau label {
-    width: auto !important;
-    text-align: inherit;
+    text-align: right;
+    width: fit-content
 }
 
 div.Schnellanbau div {
-    margin: 0 10px;
-    border: none !important;
+    border: none;
+    margin: 0 10px
 }
 
 div.Produktion div,
 div.Research div {
-    padding: 0 !important;
-    border: none !important;
+    border: none;
+    padding: 0
+}
+
+div.Research div.Running {
+    padding: 20px 0
 }
 
 div.Produktion div.ProduktionDaten,
 div.Research div.ResearchDaten {
     display: inline-block;
-    margin: 15px 0;
+    margin: 15px 0
 }
 
 div.Produktion div.Action {
-    padding: 13px 0 !important;
-    text-align: center;
+    padding: 13px 0;
+    text-align: center
 }
 
 div.Produktion div.Action label {
-    width: auto;
     text-align: inherit;
+    width: auto
 }
-
-div.form {
-    display: inherit;
-    border: dotted 1px #444444;
-    background-color: #bece6b;
-}
-
-div.form header {
-    background-color: #9fcf68;
-    border-bottom: solid 1px #cc0000;
-    font-weight: bold;
-    padding: 4px 8px;
-}
-
-div.form div {
-    padding: 5px;
-    border-bottom: solid 1px #999999;
-}
-
-div.form label {
-    display: inline-block;
-    width: 150px;
-    text-align: right;
-}
-
-div.form form div:last-of-type {
-    text-align: center;
-}
-
-div.form input {
-    margin-right: 8px;
-}
-
-div.form img#captcha {
-    margin: 0 60px;
-}
-
-div.form input[type="submit"] {
-    margin: 5px;
-}
-
 
 div.Buero table {
     display: inline-table;
-    margin: 10px auto;
-}
-
-div.Buero table.EinnahmenAusgaben td:last-of-type,
-div.Buero table.PunktePlusMinus td:last-of-type {
-    text-align: right;
+    margin: 10px auto
 }
 
 div.Buero table.EinnahmenAusgaben tr.Separator td,
 div.Buero table.PunktePlusMinus tr.Separator td {
-    border-top: solid 1px darkred;
-    border-bottom: solid 1px darkred;
-    font-weight: bold;
-}
-
-div.Buero table.EinnahmenAusgaben tr:last-of-type td,
-div.Buero table.PunktePlusMinus tr:last-of-type td {
-    font-weight: bold;
+    border-bottom: solid 1px #8b0000;
+    border-top: solid 1px #8b0000;
+    font-weight: bold
 }
 
 div.Buero table td {
-    padding: 0 !important;
+    padding: 2px
 }
 
 div.Regel {
-    margin-bottom: 10px;
+    margin-bottom: 10px
 }
 
 div.Regel p:first-of-type {
-    font-weight: bold;
     font-size: 120%;
+    font-weight: bold
 }
 
 tr.StorageEmpty td,
 tr.StorageSellAll td {
+    border-top: solid 1px #8b0000;
     font-style: italic;
-    text-align: center;
-    border-top: solid 1px darkred;
+    text-align: center
 }
 
 table.Liste {
-    min-width: 500px;
     background-color: #bece6b;
-    border: dotted 1px #444444;
+    border: dotted 1px #444;
     border-spacing: 0;
+    min-width: 500px
 }
 
 table.Liste th {
     background-color: #9fcf68;
-    border-bottom: solid 1px #cc0000;
-    text-align: left;
+    border-bottom: solid 1px #c00;
+    text-align: left
 }
 
 table.Liste td,
 table.Liste th {
-    padding: 3px 8px;
+    padding: 3px 8px
 }
 
 table.Liste tr:hover td {
-    background-color: #d5dea7;
-}
-
-table.Changelog tr:hover td {
-    background-color: initial;
+    background-color: #d5dea7
 }
 
 tr.RateRed td {
-    color: #dd0000;
+    color: #d00
 }
 
 tr.RateYellow td {
-    color: #e67400;
+    color: #e67400
 }
 
 tr.RateGreen td {
     color: #008200;
-    font-weight: bold;
-}
-
-div#ChefboxHead {
-    text-align: center;
-    margin: 0 !important;
-}
-
-div#ChefboxHead h1 {
-    margin: -8px auto 0;
-    width: 200px;
-    height: 35px;
-    background-image: url('/pics/style/bg_chefbox_h1.png');
-    background-position: bottom;
-    background-repeat: no-repeat;
-    padding: 4px 2px;
-}
-
-div#ChefboxHead h3 {
-    margin: 5px 5px 20px;
-    text-decoration: underline;
-}
-
-body#Chefbox table,
-body#Chefbox div {
-    min-width: 400px;
-    margin: 10px;
+    font-weight: bold
 }
 
 body#BBCode,
 body#Emoticons {
-    padding: 15px;
+    padding: 15px
 }
 
 body#BBCode table.Liste,
 body#Emoticons table.Liste {
-    min-width: 400px;
+    min-width: 400px
 }
 
 body#BBCode div,
 body#Emoticons div {
-    text-align: center;
     margin: 20px 5px;
-}
-
-body#Chefbox tr.Kategorie1 td {
-    font-weight: bold;
-    color: #cc0000;
-}
-
-body#Chefbox tr.Kategorie2 td {
-    font-weight: bold;
-}
-
-body#Chefbox tr.Kategorie3 td {
-    font-weight: bold;
-    color: #0000ee;
-}
-
-body#Chefbox a {
-    display: block;
+    text-align: center
 }
 
 .countdown {
-    white-space: pre;
-}
-
-div.Bank label {
-    width: 100px !important;
+    white-space: pre
 }
 
 div.Einstellungen {
     display: block;
-    width: 500px;
     margin: 20px 0;
+    width: 500px
 }
 
 table.Changelog td {
-    vertical-align: top;
-}
-
-table.Changelog td:hover {
-    background-color: initial !important;
-}
-
-table.Changelog tr td:last-of-type {
-    border-bottom: solid 1px #999999;
+    border-bottom: solid 1px #999;
+    vertical-align: top
 }
 
 table.ServerStatistik,
 table.Vertraege,
 table.Nachrichten,
-table.Mafia {
-    margin: 20px 0;
-    min-width: initial;
-}
-
-table.ServerStatistik tr td {
-    border-bottom: solid 1px #999999;
-}
-
-table.ServerStatistik tr td:last-of-type {
-    text-align: right;
-}
-
+table.Mafia,
 table.Rangliste {
     margin: 20px 0;
+    min-width: initial
+}
+
+table.ServerStatistik td {
+    border-bottom: solid 1px #999
 }
 
 table.Rangliste tr.highlight td {
-    background-color: #ffff77;
-}
-
-div.Pagination {
-    margin-bottom: 20px;
+    background-color: #ff7
 }
 
 table.Vertraege td:last-of-type a,
 table.Nachrichten td:last-of-type a {
-    margin: 0 10px;
+    margin: 0 10px
 }
 
 table.Nachrichten td:last-of-type {
-    white-space: nowrap;
-}
-
-table.Nachrichten tr.Ungelesen td {
-    font-weight: bold;
+    white-space: nowrap
 }
 
 div.NachrichtLesen {
     display: block;
-    width: 800px;
     margin: 20px 0;
+    width: 800px
 }
 
 div.NachrichtLesen blockquote {
     border-left: solid 3px green;
-    padding-left: 8px;
     margin: 16px;
+    padding-left: 8px
 }
 
 img.profilePicture {
-    max-width: 300px;
     max-height: 300px;
+    max-width: 300px
 }
 
 div.Profil label {
-    width: 200px;
-}
-
-div.MarktplatzNeu {
-    margin-bottom: 20px;
+    width: 200px
 }
 
 div#Hilfe header {
-    font-weight: bold;
     font-size: 120%;
-    margin-bottom: 20px;
+    font-weight: bold;
+    margin-bottom: 20px
 }
 
 div#GroupNavigation {
     margin-bottom: 20px;
+    text-align: center
 }
 
 div#GroupNavigation span {
-    border-left: solid 1px black;
-    padding: 2px 10px;
-}
-
-
-div#GroupNavigation span:first-of-type {
-    border-left: none !important;
-}
-
-div.Gruppe {
-    margin-bottom: 20px;
+    display: inline-block;
+    padding: 4px 10px
 }
 
 div.Gruppe div.left {
-    float: left;
     border-bottom: none;
-    min-width: 300px;
+    float: left;
     max-width: 600px;
-    word-break: break-word;
+    min-width: 300px;
+    word-break: break-word
 }
 
 div.Gruppe div.left div {
-    border-bottom: none;
+    border-bottom: none
 }
 
 div.Gruppe div.right {
-    float: right;
     border-bottom: none;
+    float: right;
     max-width: 300px;
-    min-width: 200px;
+    min-width: 200px
 }
 
 div.Gruppe div.GroupImage {
-    text-align: center;
     margin-bottom: 20px;
+    text-align: center
 }
 
 div.Gruppe div.GroupImage img {
-    max-width: 600px;
     max-height: 600px;
+    max-width: 600px
 }
 
 div.GroupMessage {
     display: block;
-    width: max-content;
     margin-bottom: 20px;
+    width: max-content
 }
 
 div.GroupMessage textarea {
-    margin: 8px;
-}
-
-div.GroupMessage div:last-of-type a {
-    display: inline-block;
-    margin: 2px 8px;
+    margin: 8px
 }
 
 div.GroupLog {
-    width: 600px;
     margin-bottom: 20px;
+    width: 600px
 }
 
 div.GroupLog div span {
-    display: block;
-}
-
-div.GroupLog div span:first-of-type {
-    font-weight: bold;
+    display: block
 }
 
 div.GruppeKasse div:last-of-type {
-    border-top: double 1px black;
+    border-top: double 1px #000
 }
 
 div.GruppeKasse label {
-    width: max-content;
     margin-right: 10px;
+    width: max-content
 }
 
 div.GruppeKasse span {
-    float: right;
+    float: right
 }
 
 div.GroupSetting {
-    margin-bottom: 20px;
     display: block;
-    width: fit-content;
-}
-
-div.GroupSetting div.Warning {
-    font-weight: bold;
+    margin-bottom: 20px;
+    width: fit-content
 }
 
 table.ListeMitgliederRechte td:last-of-type a {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 8px
 }
 
 table.ListeMitgliederRechte td:last-of-type input[type="submit"] {
-    margin: 8px 2px;
+    margin: 8px 2px
 }
 
+table#UserStatistik tr td:last-of-type,
+div.Buero table.EinnahmenAusgaben td:last-of-type,
+div.Buero table.PunktePlusMinus td:last-of-type,
+table.ServerStatistik tr td:last-of-type {
+    text-align: right
+}
+
+div.form form div:last-of-type {
+    text-align: center
+}
+
+div.Buero table.EinnahmenAusgaben tr:last-of-type td,
+div.Buero table.PunktePlusMinus tr:last-of-type td,
+table.Nachrichten tr.Ungelesen td,
+div.GroupLog div span:first-of-type,
+div.GroupSetting div.Warning {
+    font-weight: bold
+}
+
+table.Changelog tr:hover td,
+table.Changelog td:hover {
+    background-color: initial
+}
+
+div.Pagination,
+div.MarktplatzNeu,
+div.Gruppe {
+    margin-bottom: 20px
+}
+
+div.GroupMessage div:last-of-type a,
 table.GroupOpenRequests td:last-of-type a {
     display: inline-block;
-    margin: 2px 8px;
+    margin: 2px 8px
 }

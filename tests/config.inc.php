@@ -45,7 +45,7 @@ Bitte versuchen Sie es in ein paar Minuten erneut.';
 const game_version = "1.10.0+test";
 
 // should only be set when running tests
-// disables the captcha validation
+// disables the captcha validation, email sending and seeds the random number generator with a deterministic value
 const is_testing = true;
 
 // minimum length of passwords

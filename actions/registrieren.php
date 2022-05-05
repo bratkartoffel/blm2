@@ -2,7 +2,7 @@
 require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
-require_once('../include/captcha_class/captcha.php');
+require_once('../include/captcha.class.php');
 
 ob_start();
 
@@ -15,9 +15,9 @@ $email = getOrDefault($_POST, 'email');
 $pwd1 = getOrDefault($_POST, 'pwd1');
 $pwd2 = getOrDefault($_POST, 'pwd2');
 $captcha_code = getOrDefault($_POST, 'captcha_code');
-$captcha_bild = getOrDefault($_POST, 'captcha_bild');
+$captcha_id = getOrDefault($_POST, 'captcha_id', 0);
 
-if (!is_testing && !Captcha::Ueberpruefen($captcha_code, $captcha_bild)) {
+if (!is_testing && !Captcha::verifyCode($captcha_code, $captcha_id)) {
     redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 130, __LINE__);
 }
 

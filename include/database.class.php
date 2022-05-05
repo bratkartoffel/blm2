@@ -1201,7 +1201,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getGroupDiplomacyTypeById(int $left, int $right): ?int
     {
-        $stmt = $this->prepare("SELECT `Typ` FROM gruppe_diplomatie WHERE (Von = :left OR Von = :right) AND (An = :left OR An = :right)");
+        $stmt = $this->prepare("SELECT `Typ` FROM gruppe_diplomatie WHERE (Von = :left OR Von = :right) AND (An = :left OR An = :right) AND Aktiv = 1");
         $stmt->bindParam('left', $left, PDO::PARAM_INT);
         $stmt->bindParam('right', $right, PDO::PARAM_INT);
         return $this->executeAndExtractField($stmt, 'Typ');

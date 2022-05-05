@@ -80,9 +80,10 @@ div#SeitenUeberschrift {
     height: 82px;
     margin-top: 8px;
     padding-top: 20px;
-    padding-right: 20px;
-    display: inline-block;
-    background-position: right;
+    padding-bottom: 20px;
+    display: block;
+    width: fit-content;
+    background-position: top right;
 }
 
 div#SeitenUeberschrift img {
@@ -274,9 +275,6 @@ div.form input[type="submit"] {
     margin: 5px;
 }
 
-div.Buero {
-    white-space: nowrap;
-}
 
 div.Buero table {
     display: inline-table;

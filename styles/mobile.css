@@ -47,4 +47,19 @@
     div#Footer {
         width: initial;
     }
+
+
+    /* when user is not logged in */
+    div#Navigation.offline {
+        display: flow-root;
+    }
+
+    div#Navigation.offline div.NaviBox header {
+        display: none;
+    }
+
+    div#Navigation.offline div.NaviBox div {
+        display: inline-block;
+        margin: 6px;
+    }
 }

@@ -67,7 +67,7 @@ if (isLoggedIn()) {
     <script src="/js/functions.js?<?= game_version; ?>"></script>
 </head>
 <body onload="MarkActiveLink();">
-<div id="Navigation">
+<div id="Navigation" class="<?= (isLoggedIn() ? 'online' : 'offline'); ?>">
     <img id="Logo" src="/pics/logo.png" alt="Logo"/>
     <?php
     if (isLoggedIn()) {
@@ -170,20 +170,6 @@ if (isLoggedIn()) {
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=regeln">Regeln</a></div>
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=impressum">Impressum</a></div>
         </div>
-        <style>
-            div#Navigation {
-                display: flow-root;
-            }
-
-            div.NaviBox header {
-                display: none;
-            }
-
-            div.NaviBox div {
-                display: inline-block;
-                margin: 6px;
-            }
-        </style>
         <?php
     }
     ?>

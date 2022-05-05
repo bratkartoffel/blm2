@@ -340,6 +340,10 @@ table.Liste tr:hover td {
     background-color: #d5dea7;
 }
 
+table.Changelog tr:hover td {
+    background-color: initial;
+}
+
 tr.RateRed td {
     color: #dd0000;
 }

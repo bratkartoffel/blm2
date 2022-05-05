@@ -1,11 +1,11 @@
 <?php
 $start = microtime(true);
-if (!file_exists('../include/config.inc.php')) {
+if (!file_exists('include/config.inc.php')) {
     die('include/config.inc.php not found');
 }
-require_once('../include/config.inc.php');
-require_once('../include/functions.inc.php');
-require_once('../include/database.class.php');
+require_once('include/config.inc.php');
+require_once('include/functions.inc.php');
+require_once('include/database.class.php');
 
 if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + session_timeout < time()) {
     session_destroy();
@@ -22,12 +22,13 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     <link rel="stylesheet" type="text/css" href="/styles/style.css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta http-equiv="refresh" content="30"/>
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title><?= game_title; ?> - Chefbox</title>
     <script src="/js/functions.js?<?= game_version; ?>"></script>
 </head>
 <body id="Chefbox">
 <div id="ChefboxHead">
-    <h1> BLM 2</h1>
+    <h1>BLM 2</h1>
     <h3>Chefbox<?= createHelpLink(1, 16, 'onclick="return BLMNavigation(this.href);"'); ?></h3>
 </div>
 

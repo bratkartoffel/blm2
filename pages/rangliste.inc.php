@@ -36,12 +36,10 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
     $entries = Database::getInstance()->getRanglisteUserEntries($offset, ranking_page_size);
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
+        $groupDiplomacy = null;
         if ($row['BenutzerID'] != $_SESSION['blm_user'] && $myself['Gruppe'] !== null && $row['GruppeID'] !== null) {
             $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($myself['Gruppe'], $row['GruppeID']);
-        } else {
-            $groupDiplomacy = -1;
         }
-
         if ($row['BenutzerID'] == $_SESSION['blm_user'] || strtolower($row['BenutzerName']) == strtolower($q)) {
             $rowExtra = ' class="highlight"';
         } else {

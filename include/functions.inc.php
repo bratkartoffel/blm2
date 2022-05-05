@@ -1481,7 +1481,7 @@ function passwordNeedsUpgrade(string $hash): bool
     return strlen($hash) == 40 || password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
 }
 
-function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, int $groupDiplomacy): bool
+function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, ?int $groupDiplomacy): bool
 {
     if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
         return false;

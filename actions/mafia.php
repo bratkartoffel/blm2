@@ -322,6 +322,19 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
+            if (Database::getInstance()->createTableEntry('nachrichten', array(
+                    'Von' => 0,
+                    'An' => $otherPlayer['ID'],
+                    'Betreff' => 'Mafia: Diebstahl von Unbekannt erfolgreich',
+                    'Nachricht' => sprintf('Wir wurden von einem unbekannten Angreifer ausgeraubt, nach der Inventur fehlten folgende Waren:
+                    
+%s
+
+[i]- Ihre Wachen -[/i]
+', implode("\n", $wares)))) !== 1) {
+                Database::getInstance()->rollback();
+                redirectTo($backLink, 141, __LINE__);
+            }
         } else {
             if (Database::getInstance()->createTableEntry('nachrichten', array(
                     'Von' => 0,

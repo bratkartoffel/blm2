@@ -1173,9 +1173,9 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id"));
     }
 
-    public function getAllPlayerIdBankSmallerEquals(float $amount): ?array
+    public function getAllPlayerIdAndNameBankSmallerEquals(float $amount): ?array
     {
-        $stmt = $this->prepare("SELECT ID FROM mitglieder WHERE Bank <= :amount AND ID > 0");
+        $stmt = $this->prepare("SELECT ID, Name FROM mitglieder WHERE Bank <= :amount AND ID > 0");
         $stmt->bindParam('amount', $amount);
         return $this->executeAndExtractRows($stmt);
     }

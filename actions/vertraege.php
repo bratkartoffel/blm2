@@ -150,16 +150,6 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             }
         } else {
             // reject contract
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
-                    'Von' => 0,
-                    'An' => $hisId,
-                    'Betreff' => 'Vertrag ' . $vid . ' wurde abgelehnt',
-                    'Nachricht' => 'Der Vertrag mit der Nummer ' . $vid . ' wurde abgelehnt, die Waren befinden sich wieder in Ihrem Lager.'
-                )) != 1) {
-                Database::getInstance()->rollBack();
-                redirectTo('/?p=vertraege_liste', 141, __LINE__);
-            }
-
             if ($data['Von'] > 0 && Database::getInstance()->createTableEntry('nachrichten', array(
                     'Von' => 0,
                     'An' => $hisId,

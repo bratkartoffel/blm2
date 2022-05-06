@@ -33,8 +33,7 @@
     Alle Fotos wurden von <a href="https://unsplash.com/license" target="_blank">unsplash.com</a> genommen.
     Die Icons stammen entstammen dem "Crystal Clear Icons By Everaldo" und stehen unter der LGPL 3.0.
     Die Bilder und Grafiken unterhalb von "pics/style" wurden von mir gezeichnet und stehen wie der Rest des
-    Programs unter der MIT Licence. Somit sind alle Bilder frei verfügbar entsprechend der Lizenzen der jeweiligen
-    Seiten.<br>
+    Programs unter der MIT Licence.<br>
     Der Font für das Captcha wurde als "Public Domain" released und ist frei verfügbar auf
     <a href="https://www.fontspace.com/sportsball-font-f30615" target="_blank">fontspace.com</a>.
 </p>

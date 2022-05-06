@@ -79,13 +79,14 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         if ($entry['Von'] != 0) {
+            $reducedAmount = round($amount * (1 - market_provision_rate), 2);
             if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'],
-                    array('Geld' => $amount * (1 - market_provision_rate))) != 1) {
+                    array('Geld' => $reducedAmount)) != 1) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=marktplatz_liste', 142, __LINE__);
             }
             if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
-                    array('EinnahmenMarkt' => $amount * (1 - market_provision_rate)),
+                    array('EinnahmenMarkt' => $reducedAmount),
                     array('user_id = :whr0' => $entry['Von'])) != 1) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=marktplatz_liste', 142, __LINE__);

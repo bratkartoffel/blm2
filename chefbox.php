@@ -12,7 +12,9 @@ if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastActio
     die('<!DOCTYPE html><html lang="de"><head><title>' . game_title . ' - Chefbox</title><script>self.close(); window.location.href = "' . base_url . '";</script></head></html>');
 }
 
+Database::getInstance()->begin();
 CheckAuftraege($_SESSION['blm_user']);
+Database::getInstance()->commit();
 
 $auftraege = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user']);
 $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['blm_user']);

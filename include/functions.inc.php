@@ -31,7 +31,6 @@ function CheckAllAuftraege(): void
 
 function CheckAuftraege(int $blm_user): bool
 {
-    Database::getInstance()->begin();
     $auftraege = Database::getInstance()->getAllExpiredAuftraegeByVon($blm_user);
 
     foreach ($auftraege as $auftrag) {
@@ -87,7 +86,6 @@ function CheckAuftraege(int $blm_user): bool
             return false;
         }
     }
-    Database::getInstance()->commit();
     return true;
 }
 
@@ -107,9 +105,9 @@ function getMessageBox(int $msg_id): ?string
         return null;
     }
     if ($msg_id >= 200 && $msg_id < 300) {
-        $image = '/pics/small/apply.png';
+        $image = 'MessageOk';
     } else {
-        $image = '/pics/small/button_cancel.png';
+        $image = 'MessageError';
     }
 
     switch ($msg_id)        // Überprüft die Fehlernummer
@@ -474,16 +472,11 @@ function getMessageBox(int $msg_id): ?string
             break;
     }
 
-    return sprintf('<div class="Meldung" id="meldung_%d">
-            <img src="%s" alt="Meldung #%d"/>
+    return sprintf('<div class="MessageBox" id="meldung_%d">
+            <div class="MessageImage" id="%s"></div>
             <a id="close" onclick="document.getElementById(\'meldung_%d\').remove();">X</a>
             <span>%s</span>
-        </div>', $msg_id, $image, $msg_id, $msg_id, $text);
-}
-
-function getBuildingImage(int $building_id): string
-{
-    return sprintf('/pics/gebaeude/%d.png', $building_id);
+        </div>', $msg_id, $image, $msg_id, $text);
 }
 
 function getBuildingName(int $building_id): string
@@ -508,16 +501,6 @@ function getBuildingName(int $building_id): string
         default:
             return 'Unbekannt (' . $building_id . ')';
     }
-}
-
-function getItemImage(int $item_id): string
-{
-    return sprintf('/pics/obst/%d.png', $item_id);
-}
-
-function getResearchImage(int $item_id): string
-{
-    return sprintf('/pics/forschung/%d.png', $item_id);
 }
 
 function getItemName(int $item_id): string
@@ -728,10 +711,8 @@ function resetAccount(int $blm_user): ?string
 
 function updateLastAction(): void
 {
-    Database::getInstance()->begin();
     Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('OnlineZeit' => time() - $_SESSION['blm_lastAction']));
     Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('LastAction' => date('Y-m-d H:i:s')));
-    Database::getInstance()->commit();
     $_SESSION['blm_lastAction'] = time();
 }
 
@@ -1007,7 +988,7 @@ function createNavigationLink(string $target, string $text, string $sitterRights
 function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): ?string
 {
     if (isLoggedIn()) {
-        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/help.gif" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
+        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/style/help.png" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
     }
     return null;
 }
@@ -1134,14 +1115,14 @@ function calculateProductionDataForPlayer(int $item_id, int $plantage_level, int
 {
     return array(
         'Menge' => ($plantage_level * production_plantage_item_id_factor) + ($item_id * production_weight_item_id_factor) + production_base_amount + ($research_level * research_production_weight_factor),
-        'Kosten' => production_base_cost + ($research_level * research_production_cost_factor)
+        'Kosten' => round(production_base_cost + ($research_level * research_production_cost_factor), 2)
     );
 }
 
 function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, int $research_level, int $level_increment = 1): array
 {
     return array(
-        'Kosten' => (100 * $item_id) + (research_base_cost * pow(research_factor_cost, $research_level + $level_increment)),
+        'Kosten' => round((100 * $item_id) + (research_base_cost * pow(research_factor_cost, $research_level + $level_increment)), 2),
         'Dauer' => max(research_min_duration, (research_base_duration * pow(research_factor_duration, $research_level + $level_increment)) * (1 - research_lab_bonus_factor * $research_lab_level)),
         'Punkte' => (research_base_points * pow(research_factor_points, $research_level + $level_increment))
     );
@@ -1152,7 +1133,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
     switch ($building_id) {
         case 1:
             $result = array(
-                'Kosten' => plantage_base_cost * pow(plantage_factor_cost, $player['Gebaeude1'] + $level_increment),
+                'Kosten' => round(plantage_base_cost * pow(plantage_factor_cost, $player['Gebaeude1'] + $level_increment), 2),
                 'Dauer' => plantage_base_duration * pow(plantage_factor_duration, $player['Gebaeude1'] + $level_increment),
                 'Punkte' => plantage_base_points * pow(plantage_factor_points, $player['Gebaeude1'] + $level_increment)
             );
@@ -1160,7 +1141,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 2:
             $result = array(
-                'Kosten' => research_lab_base_cost * pow(research_lab_factor_cost, $player['Gebaeude2'] + $level_increment),
+                'Kosten' => round(research_lab_base_cost * pow(research_lab_factor_cost, $player['Gebaeude2'] + $level_increment), 2),
                 'Dauer' => research_lab_base_duration * pow(research_lab_factor_duration, $player['Gebaeude2'] + $level_increment),
                 'Punkte' => research_lab_base_points * pow(research_lab_factor_points, $player['Gebaeude2'] + $level_increment)
             );
@@ -1168,7 +1149,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 3:
             $result = array(
-                'Kosten' => shop_base_cost * pow(shop_factor_cost, $player['Gebaeude3'] + $level_increment),
+                'Kosten' => round(shop_base_cost * pow(shop_factor_cost, $player['Gebaeude3'] + $level_increment), 2),
                 'Dauer' => shop_base_duration * pow(shop_factor_duration, $player['Gebaeude3'] + $level_increment),
                 'Punkte' => shop_base_points * pow(shop_factor_points, $player['Gebaeude3'] + $level_increment)
             );
@@ -1176,7 +1157,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 4:
             $result = array(
-                'Kosten' => kebab_stand_base_cost * pow(kebab_stand_factor_cost, $player['Gebaeude4'] + $level_increment),
+                'Kosten' => round(kebab_stand_base_cost * pow(kebab_stand_factor_cost, $player['Gebaeude4'] + $level_increment), 2),
                 'Dauer' => kebab_stand_base_duration * pow(kebab_stand_factor_duration, $player['Gebaeude4'] + $level_increment),
                 'Punkte' => kebab_stand_base_points * pow(kebab_stand_factor_points, $player['Gebaeude4'] + $level_increment)
             );
@@ -1184,7 +1165,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 5:
             $result = array(
-                'Kosten' => building_yard_base_cost * pow(building_yard_factor_cost, $player['Gebaeude5'] + $level_increment),
+                'Kosten' => round(building_yard_base_cost * pow(building_yard_factor_cost, $player['Gebaeude5'] + $level_increment), 2),
                 'Dauer' => building_yard_base_duration * pow(building_yard_factor_duration, $player['Gebaeude5'] + $level_increment),
                 'Punkte' => building_yard_base_points * pow(building_yard_factor_points, $player['Gebaeude5'] + $level_increment)
             );
@@ -1192,7 +1173,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 6:
             $result = array(
-                'Kosten' => school_base_cost * pow(school_factor_cost, $player['Gebaeude6'] + $level_increment),
+                'Kosten' => round(school_base_cost * pow(school_factor_cost, $player['Gebaeude6'] + $level_increment), 2),
                 'Dauer' => school_base_duration * pow(school_factor_duration, $player['Gebaeude6'] + $level_increment),
                 'Punkte' => school_base_points * pow(school_factor_points, $player['Gebaeude6'] + $level_increment)
             );
@@ -1200,7 +1181,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 7:
             $result = array(
-                'Kosten' => fence_base_cost * pow(fence_factor_cost, $player['Gebaeude7'] + $level_increment),
+                'Kosten' => round(fence_base_cost * pow(fence_factor_cost, $player['Gebaeude7'] + $level_increment), 2),
                 'Dauer' => fence_base_duration * pow(fence_factor_duration, $player['Gebaeude7'] + $level_increment),
                 'Punkte' => fence_base_points * pow(fence_factor_points, $player['Gebaeude7'] + $level_increment)
             );
@@ -1208,7 +1189,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 
         case 8:
             $result = array(
-                'Kosten' => pizzeria_base_cost * pow(pizzeria_factor_cost, $player['Gebaeude8'] + $level_increment),
+                'Kosten' => round(pizzeria_base_cost * pow(pizzeria_factor_cost, $player['Gebaeude8'] + $level_increment), 2),
                 'Dauer' => pizzeria_base_duration * pow(pizzeria_factor_duration, $player['Gebaeude8'] + $level_increment),
                 'Punkte' => pizzeria_base_points * pow(pizzeria_factor_points, $player['Gebaeude8'] + $level_increment)
             );

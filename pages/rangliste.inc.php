@@ -58,10 +58,10 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
                 <?php
                 echo createProfileLink($row['BenutzerID'], $row['BenutzerName']);
                 if ($row['IstAdmin']) {
-                    echo '<img src="/pics/small/bookmark.png" alt="Admin" title="Admin"/>';
+                    echo '<div class="UserRank Administrator"></div>';
                 }
                 if ($row['IstBetatester']) {
-                    echo '<img src="/pics/small/bookmark_Silver.png" alt="Betatester" title="Betatester"/>';
+                    echo '<div class="UserRank BetaTester"></div>';
                 }
                 if ($row['GruppeID'] !== null) {
                     echo sprintf(' (<a href="/?p=gruppe&id=%d">%s</a>)',

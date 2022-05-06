@@ -85,6 +85,10 @@ const count_wares = 15;
 // number of implemented buildings
 const count_buildings = 8;
 
+// base income per item and level each cronjob interval
+// x kg per research level, each half hour
+const item_base_production = 4;
+
 // minimum number of points required to use mafia
 const mafia_min_ponts = 18000;
 

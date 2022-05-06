@@ -2,7 +2,7 @@ body {
     background-color: #afd087;
     background-image: url(/pics/style/bg_inhalt.png);
     font-family: 'DejaVu Sans', 'Arial', serif;
-    margin: 0 10px 10px 0;
+    margin: 0 10px 10px 0
 }
 
 a {
@@ -11,6 +11,83 @@ a {
     text-decoration: none
 }
 
+.countdown {
+    white-space: nowrap
+}
+
+div.Pagination {
+    margin: 20px 0
+}
+
+/*region Forms*/
+div.form {
+    background-color: #bece6b;
+    border: dotted 1px #444;
+    display: inherit
+}
+
+div.form header {
+    background-color: #9fcf68;
+    border-bottom: solid 1px #c00;
+    font-weight: bold;
+    padding: 4px 8px
+}
+
+div.form div {
+    border-bottom: solid 1px #999;
+    padding: 5px
+}
+
+div.form div:last-of-type {
+    text-align: center
+}
+
+div.form label {
+    display: inline-block;
+    text-align: right;
+    width: 150px
+}
+
+div.form input {
+    margin-right: 8px
+}
+
+div.form img#captcha {
+    margin: 0 60px
+}
+
+div.form input[type="submit"] {
+    margin: 5px
+}
+
+/*endregion*/
+
+/*region Listen*/
+table.Liste {
+    background-color: #bece6b;
+    border: dotted 1px #444;
+    border-spacing: 0;
+    min-width: 500px
+}
+
+table.Liste th {
+    background-color: #9fcf68;
+    border-bottom: solid 1px #c00;
+    text-align: left
+}
+
+table.Liste td,
+table.Liste th {
+    padding: 3px 8px
+}
+
+table.Liste tr:hover td {
+    background-color: #d5dea7
+}
+
+/*endregion*/
+
+/*region Navigation und Statistik links*/
 div#Navigation {
     background-image: url(/pics/style/bg_navi.jpg);
     background-repeat: no-repeat;
@@ -52,6 +129,20 @@ div.NaviLink:hover {
     background-color: #bddbbd
 }
 
+table#UserStatistik {
+    width: 100%
+}
+
+table#UserStatistik td {
+    font-size: 90%
+}
+
+table#UserStatistik td:last-of-type {
+    text-align: right
+}
+
+/*endregion*/
+
 div#Inhalt {
     display: inline-block;
     margin-left: -5px;
@@ -59,6 +150,7 @@ div#Inhalt {
     width: min-content
 }
 
+/*region Seitenüberschrift*/
 div#SeitenUeberschrift {
     background-image: url(/pics/style/bg_ueberschrift.png);
     background-position: top right;
@@ -90,7 +182,10 @@ div#SeitenUeberschrift span {
     top: -20px
 }
 
-div.Meldung {
+/*endregion*/
+
+/*region MessageBox*/
+div.MessageBox {
     background-color: #dda;
     border: solid 1px #777;
     margin-bottom: 10px;
@@ -98,58 +193,35 @@ div.Meldung {
     padding: 6px
 }
 
-div.Meldung img {
-    float: left;
-    margin-right: 20px
-}
-
-div.Meldung a#close {
+div.MessageBox a#close {
     cursor: pointer;
     float: right;
-    margin-left: 20px;
+    margin-left: 20px
 }
 
-div.Meldung span {
+div.MessageBox span {
     display: block;
     margin-top: 6px
 }
 
-div.form {
-    background-color: #bece6b;
-    border: dotted 1px #444;
-    display: inherit
+div.MessageImage {
+    float: left;
+    margin-right: 20px;
+    width: 32px;
+    height: 32px
 }
 
-div.form header {
-    background-color: #9fcf68;
-    border-bottom: solid 1px #c00;
-    font-weight: bold;
-    padding: 4px 8px
+div#MessageOk {
+    background-image: url(/pics/small/apply.png)
 }
 
-div.form div {
-    border-bottom: solid 1px #999;
-    padding: 5px
+div#MessageError {
+    background-image: url(/pics/small/button_cancel.png)
 }
 
-div.form label {
-    display: inline-block;
-    text-align: right;
-    width: 150px
-}
+/*endregion*/
 
-div.form input {
-    margin-right: 8px
-}
-
-div.form img#captcha {
-    margin: 0 60px
-}
-
-div.form input[type="submit"] {
-    margin: 5px
-}
-
+/*region Footer unten*/
 div#Footer {
     border: dotted 2px #ffdc55;
     display: block;
@@ -159,31 +231,15 @@ div#Footer {
     width: 800px
 }
 
-table#UserStatistik {
-    width: 100%
-}
+/*endregion*/
 
-table#UserStatistik td {
-    font-size: 90%
-}
-
-div.Gebaeude,
-div.Produktion,
-div.Research {
+/*region Gebäude*/
+div.Gebaeude {
     margin-bottom: 20px;
     width: 100%
 }
 
-div.Gebaeude img,
-div.Produktion img,
-div.Research img {
-    float: left;
-    margin: 4px 30px 4px 4px
-}
-
-div.Gebaeude div.Information,
-div.Gebaeude div.Action,
-div.Gebaeude div.Upgrade {
+div.Gebaeude div.Information {
     border-bottom: initial;
     white-space: nowrap
 }
@@ -192,6 +248,18 @@ div.Gebaeude div.Upgrade {
     display: inline-block;
     padding-left: 10px;
     width: 300px
+}
+
+div.Gebaeude div.Action {
+    display: inline-block;
+    float: right;
+    width: 300px
+}
+
+div.Gebaeude div.Action,
+div.Gebaeude div.Upgrade {
+    border-bottom: initial;
+    white-space: nowrap
 }
 
 div.Gebaeude div.Upgrade div,
@@ -205,22 +273,13 @@ div.Gebaeude div.Upgrade header {
     border: none
 }
 
-div.Gebaeude div.Action,
-div.Produktion div.Action,
-div.Research div.Action {
-    display: inline-block;
-    float: right;
-    width: 300px
-}
-
-div.Research div.Action input {
-    margin: 40px 80px
-}
-
 div.Gebaeude div.Beschreibung {
     min-height: 90px
 }
 
+/*endregion*/
+
+/*region Plantage*/
 div.Schnellanbau {
     display: block;
     margin-bottom: 20px;
@@ -237,23 +296,20 @@ div.Schnellanbau div {
     margin: 0 10px
 }
 
-div.Produktion div,
-div.Research div {
+div.Produktion {
+    margin-bottom: 20px;
+    width: 100%
+}
+
+div.Produktion div {
     border: none;
     padding: 0
 }
 
-div.Research div.Running {
-    padding: 20px 0
-}
-
-div.Produktion div.ProduktionDaten,
-div.Research div.ResearchDaten {
-    display: inline-block;
-    margin: 15px 0
-}
-
 div.Produktion div.Action {
+    display: inline-block;
+    float: right;
+    width: 300px;
     padding: 13px 0;
     text-align: center
 }
@@ -263,9 +319,68 @@ div.Produktion div.Action label {
     width: auto
 }
 
+div.Produktion div.ProduktionDaten {
+    display: inline-block;
+    margin: 15px 0
+}
+
+/*endregion*/
+
+/*region Forschungszentrum*/
+div.Research {
+    margin-bottom: 20px;
+    width: 100%
+}
+
+div.Research div {
+    border: none;
+    padding: 0
+}
+
+div.ResearchOverlay {
+    width: 100%;
+    height: 100%;
+    background-image: url(/pics/research_overlay.png);
+}
+
+div.Research div.Action {
+    display: inline-block;
+    float: right;
+    width: 300px
+}
+
+div.Research div.Action input {
+    margin: 40px 80px
+}
+
+div.Research div.Running {
+    padding: 20px 0
+}
+
+div.Research div.ResearchDaten {
+    display: inline-block;
+    margin: 15px 0
+}
+
+/*endregion*/
+
+/*region Bioladen*/
+tr.StorageSellAll td {
+    border-top: solid 1px #8b0000;
+    font-style: italic;
+    text-align: center
+}
+
+/*endregion*/
+
+/*region Büro*/
 div.Buero table {
     display: inline-table;
     margin: 10px auto
+}
+
+div.Buero table td {
+    padding: 2px
 }
 
 div.Buero table.EinnahmenAusgaben tr.Separator td,
@@ -275,145 +390,47 @@ div.Buero table.PunktePlusMinus tr.Separator td {
     font-weight: bold
 }
 
-div.Buero table td {
-    padding: 2px
+div.Buero table.EinnahmenAusgaben td:last-of-type,
+div.Buero table.PunktePlusMinus td:last-of-type {
+    text-align: right
 }
 
-div.Regel {
-    margin-bottom: 10px
-}
-
-div.Regel p:first-of-type {
-    font-size: 120%;
+div.Buero table.EinnahmenAusgaben tr:last-of-type td,
+div.Buero table.PunktePlusMinus tr:last-of-type td {
     font-weight: bold
 }
 
-tr.StorageEmpty td,
-tr.StorageSellAll td {
-    border-top: solid 1px #8b0000;
-    font-style: italic;
-    text-align: center
-}
-
-table.Liste {
-    background-color: #bece6b;
-    border: dotted 1px #444;
-    border-spacing: 0;
-    min-width: 500px
-}
-
-table.Liste th {
-    background-color: #9fcf68;
-    border-bottom: solid 1px #c00;
-    text-align: left
-}
-
-table.Liste td,
-table.Liste th {
-    padding: 3px 8px
-}
-
-table.Liste tr:hover td {
-    background-color: #d5dea7
-}
-
-tr.RateRed td {
+div.Buero tr.RateRed td {
     color: #d00
 }
 
-tr.RateYellow td {
+div.Buero tr.RateYellow td {
     color: #e67400
 }
 
-tr.RateGreen td {
+div.Buero tr.RateGreen td {
     color: #008200;
     font-weight: bold
 }
 
-body#BBCode,
-body#Emoticons {
-    padding: 15px
-}
+/*endregion*/
 
-body#BBCode table.Liste,
-body#Emoticons table.Liste {
-    min-width: 400px
-}
-
-body#BBCode div,
-body#Emoticons div {
-    margin: 20px 5px;
-    text-align: center
-}
-
-.countdown {
-    white-space: pre
-}
-
-div.Einstellungen {
-    display: block;
-    margin: 20px 0;
-    width: 500px
-}
-
-table.Changelog td {
-    border-bottom: solid 1px #999;
-    vertical-align: top
-}
-
-table.ServerStatistik,
-table.Vertraege,
-table.Nachrichten,
-table.Mafia,
-table.Rangliste {
-    margin: 20px 0;
-    min-width: initial
-}
-
-table.ServerStatistik td {
-    border-bottom: solid 1px #999
-}
-
-table.Rangliste tr.highlight td {
-    background-color: #ff7
-}
-
-table.Vertraege td:last-of-type a,
-table.Nachrichten td:last-of-type a {
+/*region Verträge*/
+table.Vertraege td:last-of-type a {
     margin: 0 10px
 }
 
-table.Nachrichten td:last-of-type {
-    white-space: nowrap
-}
+/*endregion*/
 
-div.NachrichtLesen {
-    display: block;
+/*region Mafia*/
+table.Mafia {
     margin: 20px 0;
-    width: 800px
 }
 
-div.NachrichtLesen blockquote {
-    border-left: solid 3px green;
-    margin: 16px;
-    padding-left: 8px
-}
+/*endregion*/
 
-img.profilePicture {
-    max-height: 300px;
-    max-width: 300px
-}
-
-div.Profil label {
-    width: 200px
-}
-
-div#Hilfe header {
-    font-size: 120%;
-    font-weight: bold;
-    margin-bottom: 20px
-}
-
+/*region Gruppe*/
+/*region Gruppe Board*/
 div#GroupNavigation {
     margin-bottom: 20px;
     text-align: center
@@ -422,6 +439,10 @@ div#GroupNavigation {
 div#GroupNavigation span {
     display: inline-block;
     padding: 4px 10px
+}
+
+div.Gruppe {
+    margin-bottom: 20px
 }
 
 div.Gruppe div.left {
@@ -459,19 +480,51 @@ div.GroupMessage {
     width: max-content
 }
 
+div.GroupMessage div:last-of-type a {
+    display: inline-block;
+    margin: 2px 8px
+}
+
 div.GroupMessage textarea {
     margin: 8px
 }
 
-div.GroupLog {
+/*endregion*/
+
+/*region Gruppe Mitgliederverwaltung*/
+table.ListeMitgliederRechte td:last-of-type a {
+    display: block;
+    margin-bottom: 8px
+}
+
+table.ListeMitgliederRechte td:last-of-type input[type="submit"] {
+    margin: 8px 2px
+}
+
+/*endregion*/
+
+/*region Gruppe Einstellungen*/
+div.GroupSetting {
+    display: block;
     margin-bottom: 20px;
-    width: 600px
+    width: fit-content
 }
 
-div.GroupLog div span {
-    display: block
+div.GroupSetting div.Warning {
+    font-weight: bold
 }
 
+/*endregion*/
+
+/*region Gruppe Diplomatie*/
+table.GroupOpenRequests td:last-of-type a {
+    display: inline-block;
+    margin: 2px 8px
+}
+
+/*endregion*/
+
+/*region Gruppe Gruppenkasse*/
 div.GruppeKasse div:last-of-type {
     border-top: double 1px #000
 }
@@ -485,38 +538,135 @@ div.GruppeKasse span {
     float: right
 }
 
-div.GroupSetting {
-    display: block;
+/*endregion*/
+
+/*region Gruppe Logbuch*/
+div.GroupLog {
     margin-bottom: 20px;
-    width: fit-content
+    width: 600px
 }
 
-table.ListeMitgliederRechte td:last-of-type a {
+div.GroupLog div span {
+    display: block
+}
+
+div.GroupLog div span:first-of-type {
+    font-weight: bold
+}
+
+/*endregion*/
+/*endregion*/
+
+/*region Nachrichten*/
+table.Nachrichten td:last-of-type {
+    white-space: nowrap
+}
+
+table.Nachrichten td:last-of-type a {
+    margin: 0 10px
+}
+
+div.NachrichtLesen {
     display: block;
-    margin-bottom: 8px
+    margin: 20px 0;
+    width: 800px
 }
 
-table.ListeMitgliederRechte td:last-of-type input[type="submit"] {
-    margin: 8px 2px
+div.NachrichtLesen blockquote {
+    border-left: solid 3px green;
+    margin: 16px;
+    padding-left: 8px
 }
 
-table#UserStatistik tr td:last-of-type,
-div.Buero table.EinnahmenAusgaben td:last-of-type,
-div.Buero table.PunktePlusMinus td:last-of-type,
+table.Nachrichten tr.Ungelesen td {
+    font-weight: bold
+}
+
+/*endregion*/
+
+/*region Einstellungen*/
+div.Einstellungen {
+    display: block;
+    margin: 20px 0;
+    width: 500px
+}
+
+/*endregion*/
+
+/*region Rangliste*/
+table.Rangliste tr.highlight td {
+    background-color: #ff7
+}
+
+div.UserRank {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+}
+
+div.Administrator {
+    background-image: url(/pics/small/bookmark.png);
+}
+
+div.BetaTester {
+    background-image: url(/pics/small/bookmark_Silver.png);
+}
+
+/*endregion*/
+
+/*region Profil*/
+img.profilePicture {
+    max-height: 300px;
+    max-width: 300px
+}
+
+div.Profil label {
+    width: 200px
+}
+
+/*endregion*/
+
+/*region Serverstatistik*/
+table.ServerStatistik {
+    margin: 20px 0;
+}
+
+table.ServerStatistik td {
+    border-bottom: solid 1px #999
+}
+
 table.ServerStatistik tr td:last-of-type {
     text-align: right
 }
 
-div.form form div:last-of-type {
-    text-align: center
+/*endregion*/
+
+/*region Regeln*/
+div.Regel {
+    margin-bottom: 10px
 }
 
-div.Buero table.EinnahmenAusgaben tr:last-of-type td,
-div.Buero table.PunktePlusMinus tr:last-of-type td,
-table.Nachrichten tr.Ungelesen td,
-div.GroupLog div span:first-of-type,
-div.GroupSetting div.Warning {
+div.Regel p:first-of-type {
+    font-size: 120%;
     font-weight: bold
+}
+
+/*endregion*/
+
+/*region Hilfe*/
+div#Hilfe header {
+    font-size: 120%;
+    font-weight: bold;
+    margin-bottom: 20px
+}
+
+/*endregion*/
+
+/*region Changelog*/
+table.Changelog td {
+    border-bottom: solid 1px #999;
+    vertical-align: top
 }
 
 table.Changelog tr:hover td,
@@ -524,14 +674,120 @@ table.Changelog td:hover {
     background-color: initial
 }
 
-div.Pagination,
-div.MarktplatzNeu,
-div.Gruppe {
-    margin-bottom: 20px
+/*endregion*/
+
+/*region Obstbilder*/
+div.ItemImage {
+    width: 135px;
+    height: 90px;
+    float: left;
+    margin: 4px 30px 4px 4px;
+    padding: initial;
+    background-image: url(/pics/items.png);
 }
 
-div.GroupMessage div:last-of-type a,
-table.GroupOpenRequests td:last-of-type a {
-    display: inline-block;
-    margin: 2px 8px
+div#Item_1 {
+    background-position: 0 0;
 }
+
+div#Item_2 {
+    background-position: -135px 0;
+}
+
+div#Item_3 {
+    background-position: -270px 0;
+}
+
+div#Item_4 {
+    background-position: 0 -90px;
+}
+
+div#Item_5 {
+    background-position: -135px -90px;
+}
+
+div#Item_6 {
+    background-position: -270px -90px;
+}
+
+div#Item_7 {
+    background-position: 0 -180px;
+}
+
+div#Item_8 {
+    background-position: -135px -180px;
+}
+
+div#Item_9 {
+    background-position: -270px -180px;
+}
+
+div#Item_10 {
+    background-position: 0 -270px;
+}
+
+div#Item_11 {
+    background-position: -135px -270px;
+}
+
+div#Item_12 {
+    background-position: -270px -270px;
+}
+
+div#Item_13 {
+    background-position: 0 -360px;
+}
+
+div#Item_14 {
+    background-position: -135px -360px;
+}
+
+div#Item_15 {
+    background-position: -270px -360px;
+}
+
+/*endregion*/
+
+/*region Gebäudebilder*/
+div.BuildingImage {
+    width: 135px;
+    height: 90px;
+    float: left;
+    margin: 4px 30px 4px 4px;
+    padding: initial !important;
+    background-image: url(/pics/buildings.png);
+}
+
+div#Building_1 {
+    background-position: 0 0;
+}
+
+div#Building_2 {
+    background-position: -135px 0;
+}
+
+div#Building_3 {
+    background-position: -270px 0;
+}
+
+div#Building_4 {
+    background-position: -405px 0;
+}
+
+div#Building_5 {
+    background-position: 0 -90px;
+}
+
+div#Building_6 {
+    background-position: -135px -90px;
+}
+
+div#Building_7 {
+    background-position: -270px -90px;
+}
+
+div#Building_8 {
+    background-position: -405px -90px;
+}
+
+/*endregion*/

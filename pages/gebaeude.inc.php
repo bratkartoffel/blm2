@@ -17,7 +17,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
         <header id="g<?= $buildingId; ?>">
             <?= getBuildingName($buildingId); ?> (Stufe <?= $playerData[$buildingAttribute]; ?>)
         </header>
-        <img src="<?= getBuildingImage($buildingId); ?>" alt="<?= getBuildingName($buildingId); ?>"/>
+        <div class="BuildingImage" id="Building_<?= $buildingId; ?>"></div>
         <div class="Beschreibung">
             <?= $buildingDescription; ?>
         </div>

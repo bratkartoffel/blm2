@@ -8,7 +8,7 @@ if (maintenance_active) {
 session_destroy();
 ?><!DOCTYPE html>
 <html lang="de">
-<body><img src="/pics/pylone.png" alt="maintenance"/>
+<body><img src="/pics/big/clock.png" alt="maintenance"/>
 <h2><?= maintenance_message; ?></h2></body>
 </html>
 <?php
@@ -33,9 +33,11 @@ if (isLoggedIn()) {
         session_destroy();
         redirectTo('/?p=anmelden', 102);
     }
+    Database::getInstance()->begin();
     updateLastAction();
-
     CheckAuftraege($_SESSION['blm_user']);
+    Database::getInstance()->commit();
+
     $data = Database::getInstance()->getPlayerBankAndMoneyGroupIdAndBioladenLevelAndDoenerstandLevel($_SESSION['blm_user']);
     if ($data === null) {
         session_destroy();
@@ -68,7 +70,7 @@ if (isLoggedIn()) {
 </head>
 <body onload="MarkActiveLink();">
 <div id="Navigation" class="<?= (isLoggedIn() ? 'online' : 'offline'); ?>">
-    <img id="Logo" src="/pics/logo.png" alt="Logo"/>
+    <img id="Logo" src="/pics/style/logo.png" alt="Logo"/>
     <?php
     if (isLoggedIn()) {
         ?>

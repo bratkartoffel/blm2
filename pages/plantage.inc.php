@@ -59,7 +59,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         <header id="p<?= $i; ?>">
             <?= getItemName($i); ?> (Stufe <?= $data[$researchAttribute]; ?>)
         </header>
-        <img src="<?= getItemImage($i); ?>" alt="<?= getItemName($i); ?>"/>
+        <div class="ItemImage" id="Item_<?= $i; ?>"></div>
         <div class="ProduktionDaten">
             <div><?= formatWeight($productionData[$i]['Menge']); ?> / Stunde</div>
             <div><?= formatWeight($productionData[$i]['Menge'] / 60, true, 2); ?> / Minute</div>

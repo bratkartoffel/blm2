@@ -37,7 +37,7 @@ if ($player['Gruppe'] !== null && $otherPlayer['Gruppe'] !== null) {
 } else {
     $groupDiplomacy = -1;
 }
-if($player['ID'] == $otherPlayer['ID']) {
+if ($player['ID'] == $otherPlayer['ID']) {
     redirectTo($backLink, 171, __LINE__);
 }
 if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
@@ -204,6 +204,17 @@ switch ($action) {
 
 [i]- Ihre Mafia -[/i]
 ', createBBProfileLink($otherPlayer['ID'], $otherPlayer['Name']), formatCurrency($amount)))) !== 1) {
+                Database::getInstance()->rollback();
+                redirectTo($backLink, 141, __LINE__);
+            }
+            if (Database::getInstance()->createTableEntry('nachrichten', array(
+                    'Von' => 0,
+                    'An' => $otherPlayer['ID'],
+                    'Betreff' => 'Mafia: Raub von ' . $player['Name'] . ' erfolgreich',
+                    'Nachricht' => sprintf('Wir wurden von %s ausgeraubt, Ihnen wurden %s gestohlen.
+
+[i]- Ihre Wachen -[/i]
+', createBBProfileLink($_SESSION['blm_user'], $player['Name']), formatCurrency($amount)))) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }

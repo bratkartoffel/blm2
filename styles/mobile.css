@@ -36,7 +36,6 @@
 
     div#Inhalt {
         display: initial;
-        width: initial;
     }
 
     div.form {
@@ -62,13 +61,8 @@
 
 
     /* when user is not logged in */
-    div#Navigation.offline {
-        display: flow-root;
-    }
-
     div#Navigation.offline div.NaviBox {
         text-align: center;
-        white-space: nowrap;
     }
 
     div#Navigation.offline div.NaviBox header {

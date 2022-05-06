@@ -11,7 +11,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql:ro
+      - ../setup-1.10.0.sql:/docker-entrypoint-initdb.d/0_setup.sql:ro
+      - ./testdata.sql:/docker-entrypoint-initdb.d/1_testdata.sql:ro
 
   application:
     build:
@@ -23,6 +24,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ../:/var/www/html
+      - ../../:/var/www/html
       - ./config.inc.php:/var/www/html/include/config.inc.php
       - ./last_reset.inc.php:/var/www/html/include/last_reset.inc.php

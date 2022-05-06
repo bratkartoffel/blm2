@@ -73,9 +73,23 @@ function handleResetDueToDispo(): void
     }
 }
 
+function handleItemBaseProduction(): void
+{
+    $entries = Database::getInstance()->getAllPlayerIdAndResearchLevels();
+    foreach ($entries as $entry) {
+        $updates = array();
+        for ($i = 1; $i < count_wares; $i++) {
+            $researchLevel = $entry['Forschung' . $i];
+            $updates['Lager' . $i] = $researchLevel * item_base_production;
+        }
+        Database::getInstance()->updateTableEntryCalculate('lagerhaus', null, $updates, array('user_id = :whr0' => $entry['UserID']));
+    }
+}
+
 Database::getInstance()->begin();
 CheckAllAuftraege();
 handleInterestRates();
+handleItemBaseProduction();
 Database::getInstance()->commit();
 
 // separate transaction for each player to reset

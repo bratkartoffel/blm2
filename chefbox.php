@@ -21,14 +21,12 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
 ?><!DOCTYPE html>
 <html lang="de">
 <head>
-    <link rel="stylesheet" type="text/css" href="/styles/style.css?<?= game_version; ?>"/>
-    <link rel="stylesheet" type="text/css" href="/styles/chefbox.css?<?= game_version; ?>"/>
+    <link rel="stylesheet" type="text/css" href="/styles/style.min.css?<?= game_version; ?>"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta http-equiv="refresh" content="30"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title><?= game_title; ?> - Chefbox</title>
-    <script src="/js/functions.js?<?= game_version; ?>"></script>
-    <script src="/js/chefbox.js?<?= game_version; ?>"></script>
+    <script src="/js/functions.min.js?<?= game_version; ?>"></script>
 </head>
 <body id="Chefbox">
 <div id="ChefboxHead">

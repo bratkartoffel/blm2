@@ -340,7 +340,7 @@ div.Research div {
 div.ResearchOverlay {
     width: 100%;
     height: 100%;
-    background-image: url(/pics/research_overlay.png);
+    background-image: url(/pics/research_overlay.png)
 }
 
 div.Research div.Action {
@@ -424,7 +424,7 @@ table.Vertraege td:last-of-type a {
 
 /*region Mafia*/
 table.Mafia {
-    margin: 20px 0;
+    margin: 20px 0
 }
 
 /*endregion*/
@@ -462,11 +462,11 @@ div.Gruppe div.right {
     float: right;
     max-width: 300px;
     min-width: 200px;
-    text-align: left;
+    text-align: left
 }
 
 div.Gruppe div.right div {
-    text-align: inherit;
+    text-align: inherit
 }
 
 div.Gruppe div.GroupImage {
@@ -598,6 +598,52 @@ div.Einstellungen {
 
 /*endregion*/
 
+/*region Chefbox*/
+div#ChefboxHead {
+    text-align: center
+}
+
+div#ChefboxHead h1 {
+    background-image: url(/pics/style/bg_chefbox_h1.png);
+    background-position: bottom;
+    background-repeat: no-repeat;
+    height: 35px;
+    margin: -8px auto 0;
+    padding: 4px 2px;
+    width: 200px
+}
+
+div#ChefboxHead h3 {
+    margin: 5px 5px 20px;
+    text-decoration: underline
+}
+
+body#Chefbox table {
+    margin: 10px;
+    min-width: 400px
+}
+
+body#Chefbox tr.Kategorie1 td {
+    color: #c00;
+    font-weight: bold
+}
+
+body#Chefbox tr.Kategorie3 td {
+    color: #00e;
+    font-weight: bold
+}
+
+div#ChefboxFooter a {
+    display: block;
+    margin: 10px 15px
+}
+
+body#Chefbox tr.Kategorie2 td {
+    font-weight: bold
+}
+
+/*endregion*/
+
 /*region Rangliste*/
 table.Rangliste tr.highlight td {
     background-color: #ff7
@@ -607,15 +653,15 @@ div.UserRank {
     display: inline-block;
     width: 24px;
     height: 24px;
-    margin: 0 5px;
+    margin: 0 5px
 }
 
 div.Administrator {
-    background-image: url(/pics/small/bookmark.png);
+    background-image: url(/pics/small/bookmark.png)
 }
 
 div.BetaTester {
-    background-image: url(/pics/small/bookmark_Silver.png);
+    background-image: url(/pics/small/bookmark_Silver.png)
 }
 
 /*endregion*/
@@ -634,7 +680,7 @@ div.Profil label {
 
 /*region Serverstatistik*/
 table.ServerStatistik {
-    margin: 20px 0;
+    margin: 20px 0
 }
 
 table.ServerStatistik td {
@@ -688,67 +734,67 @@ div.ItemImage {
     float: left;
     margin: 4px 30px 4px 4px;
     padding: initial;
-    background-image: url(/pics/items.png);
+    background-image: url(/pics/items.png)
 }
 
 div#Item_1 {
-    background-position: 0 0;
+    background-position: 0 0
 }
 
 div#Item_2 {
-    background-position: -135px 0;
+    background-position: -135px 0
 }
 
 div#Item_3 {
-    background-position: -270px 0;
+    background-position: -270px 0
 }
 
 div#Item_4 {
-    background-position: 0 -90px;
+    background-position: 0 -90px
 }
 
 div#Item_5 {
-    background-position: -135px -90px;
+    background-position: -135px -90px
 }
 
 div#Item_6 {
-    background-position: -270px -90px;
+    background-position: -270px -90px
 }
 
 div#Item_7 {
-    background-position: 0 -180px;
+    background-position: 0 -180px
 }
 
 div#Item_8 {
-    background-position: -135px -180px;
+    background-position: -135px -180px
 }
 
 div#Item_9 {
-    background-position: -270px -180px;
+    background-position: -270px -180px
 }
 
 div#Item_10 {
-    background-position: 0 -270px;
+    background-position: 0 -270px
 }
 
 div#Item_11 {
-    background-position: -135px -270px;
+    background-position: -135px -270px
 }
 
 div#Item_12 {
-    background-position: -270px -270px;
+    background-position: -270px -270px
 }
 
 div#Item_13 {
-    background-position: 0 -360px;
+    background-position: 0 -360px
 }
 
 div#Item_14 {
-    background-position: -135px -360px;
+    background-position: -135px -360px
 }
 
 div#Item_15 {
-    background-position: -270px -360px;
+    background-position: -270px -360px
 }
 
 /*endregion*/
@@ -760,39 +806,39 @@ div.BuildingImage {
     float: left;
     margin: 4px 30px 4px 4px;
     padding: initial !important;
-    background-image: url(/pics/buildings.png);
+    background-image: url(/pics/buildings.png)
 }
 
 div#Building_1 {
-    background-position: 0 0;
+    background-position: 0 0
 }
 
 div#Building_2 {
-    background-position: -135px 0;
+    background-position: -135px 0
 }
 
 div#Building_3 {
-    background-position: -270px 0;
+    background-position: -270px 0
 }
 
 div#Building_4 {
-    background-position: -405px 0;
+    background-position: -405px 0
 }
 
 div#Building_5 {
-    background-position: 0 -90px;
+    background-position: 0 -90px
 }
 
 div#Building_6 {
-    background-position: -135px -90px;
+    background-position: -135px -90px
 }
 
 div#Building_7 {
-    background-position: -270px -90px;
+    background-position: -270px -90px
 }
 
 div#Building_8 {
-    background-position: -405px -90px;
+    background-position: -405px -90px
 }
 
 /*endregion*/

@@ -461,7 +461,12 @@ div.Gruppe div.right {
     border-bottom: none;
     float: right;
     max-width: 300px;
-    min-width: 200px
+    min-width: 200px;
+    text-align: left;
+}
+
+div.Gruppe div.right div {
+    text-align: inherit;
 }
 
 div.Gruppe div.GroupImage {

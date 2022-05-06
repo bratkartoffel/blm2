@@ -116,6 +116,8 @@ if (isLoggedIn()) {
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=hilfe">Hilfe</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=changelog">Changelog</a></div>
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=impressum">Impressum</a></div>
+                <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" target="_blank">Spenden</a>
+                </div>
                 <div class="NaviLink" onclick="Navigation(this);"><a href="/actions/logout.php">Abmelden</a></div>
             </div>
         </div>
@@ -169,6 +171,8 @@ if (isLoggedIn()) {
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=registrieren">Registrieren</a></div>
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=regeln">Regeln</a></div>
             <div class="NaviLink" onclick="Navigation(this);"><a href="/?p=impressum">Impressum</a></div>
+            <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" target="_blank">Spenden</a>
+            </div>
         </div>
         <?php
     }

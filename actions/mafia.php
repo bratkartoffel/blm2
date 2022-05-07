@@ -222,7 +222,7 @@ switch ($action) {
             if (Database::getInstance()->createTableEntry('nachrichten', array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
-                    'Betreff' => 'Mafia: Spionage gegen ' . $otherPlayer['Name'] . ' fehlgeschlagen',
+                    'Betreff' => 'Mafia: Raub gegen ' . $otherPlayer['Name'] . ' fehlgeschlagen',
                     'Nachricht' => 'Der Raub war leider [b]nicht[/b] erfolgreich, die gegnerischen Wachen haben unseren Agenten geschnappt bevor dieser das Bargeld einstecken konnte..
 
 [i]- Ihre Mafia -[/i]

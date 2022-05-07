@@ -91,7 +91,7 @@ switch ($action) {
     // espionage
     case mafia_action_espionage:
         $sperrZeit = mafia_sperrzeit_spionage;
-        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit /= 2;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
@@ -177,7 +177,7 @@ switch ($action) {
     // robbery
     case mafia_action_robbery:
         $sperrZeit = mafia_sperrzeit_raub;
-        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit /= 2;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
@@ -264,7 +264,7 @@ switch ($action) {
     // heist
     case mafia_action_heist:
         $sperrZeit = mafia_sperrzeit_diebstahl;
-        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit /= 2;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();

@@ -99,6 +99,7 @@ const mafia_raub_min_rate = 0.4;
 const mafia_raub_max_rate = 0.75;
 
 // blocking times for the various mafia actions
+const mafia_sperrzeit_factor_war = 0.5;
 const mafia_sperrzeit_spionage = 300;
 const mafia_sperrzeit_raub = 900;
 const mafia_sperrzeit_diebstahl = 1800;

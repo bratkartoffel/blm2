@@ -1,7 +1,7 @@
 <?php
 $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
-$angenommen = getOrDefault($_GET, 'angenommen');
+$angenommen = getOrDefault($_GET, 'angenommen', -1);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
@@ -42,9 +42,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_wen = empty($wen) ? "%" : $wen;
-    $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $angenommen);
+    $filter_angenommen = $angenommen === -1 ? null : intval($angenommen);
+    $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $filter_angenommen);
     $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $angenommen, $offset, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $filter_angenommen, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];

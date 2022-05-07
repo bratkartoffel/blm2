@@ -183,7 +183,7 @@ switch ($action) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
         }
-        $amount = 0;
+        $amount = null;
         if ($success) {
             $rate = mt_rand(0, $factor) / $factor;
             $amount = $otherPlayer['Geld'] * $rate;

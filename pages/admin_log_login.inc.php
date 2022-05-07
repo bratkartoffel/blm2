@@ -21,8 +21,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <label for="art">Art:</label>
         <select name="art" id="art">
             <option value="">- Alle -</option>
-            <option value="0"<?= ($art == "0" ? ' selected="selected"' : '') ?>>Regulär</option>
-            <option value="1"<?= ($art == "1" ? ' selected="selected"' : '') ?>>Sitter</option>
+            <option value="0"<?= ($art === "0" ? ' selected="selected"' : '') ?>>Regulär</option>
+            <option value="1"<?= ($art === "1" ? ' selected="selected"' : '') ?>>Sitter</option>
         </select>
         <input type="submit" value="Abschicken"/><br/>
     </form>
@@ -39,9 +39,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_ip = empty($ip) ? "%" : $ip;
-    $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $art);
+    $filter_art = $art === -1 ? null : intval($art);
+    $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $filter_art);
     $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $art, $offset, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $filter_art, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];

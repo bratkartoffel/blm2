@@ -540,7 +540,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAdminLoginLogCount(string $werFilter, string $ipFilter, ?int $artFilter): ?int
     {
-        if ($artFilter == null) {
+        if ($artFilter === null) {
             $stmt = $this->prepare("SELECT count(1) AS count FROM log_login WHERE playerName LIKE :wer AND IP LIKE :ip");
         } else {
             $stmt = $this->prepare("SELECT count(1) AS count FROM log_login WHERE playerName LIKE :wer AND IP LIKE :ip AND sitter = :art");
@@ -592,7 +592,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAdminVertraegeLogCount(string $werFilter, string $wenFilter, ?int $angenommenFilter): ?int
     {
-        if ($angenommenFilter == null) {
+        if ($angenommenFilter === null) {
             $stmt = $this->prepare("SELECT count(1) AS count FROM log_vertraege
                 WHERE senderName LIKE :wer AND receiverName LIKE :wen");
         } else {
@@ -608,7 +608,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
     public function getAdminVertraegeLogEntries(string $werFilter, string $wenFilter, ?int $angenommenFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        if ($angenommenFilter == null) {
+        if ($angenommenFilter === null) {
             $stmt = $this->prepare("SELECT * FROM log_vertraege
                 WHERE senderName LIKE :wer AND receiverName LIKE :wen ORDER BY created DESC LIMIT :offset, :count");
         } else {

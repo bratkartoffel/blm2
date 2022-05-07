@@ -90,12 +90,13 @@ if ($success) {
 switch ($action) {
     // espionage
     case mafia_action_espionage:
+        $sperrZeit = mafia_sperrzeit_spionage;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit /= 2;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
-                array('NextMafia' => date('Y-m-d H:i:s', time() + mafia_sperrzeit_spionage))) !== 1) {
+                array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
         }
-
         $data = Database::getInstance()->getPlayerEspionageDataByID($otherPlayer['ID']);
         if ($success) {
             $stock = array();
@@ -175,12 +176,13 @@ switch ($action) {
 
     // robbery
     case mafia_action_robbery:
+        $sperrZeit = mafia_sperrzeit_raub;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit /= 2;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
-                array('NextMafia' => date('Y-m-d H:i:s', time() + mafia_sperrzeit_raub))) !== 1) {
+                array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
         }
-
         $amount = 0;
         if ($success) {
             $rate = mt_rand(0, $factor) / $factor;
@@ -261,12 +263,13 @@ switch ($action) {
 
     // heist
     case mafia_action_heist:
+        $sperrZeit = mafia_sperrzeit_diebstahl;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit /= 2;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
-                array('NextMafia' => date('Y-m-d H:i:s', time() + mafia_sperrzeit_diebstahl))) !== 1) {
+                array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
         }
-
         $data = Database::getInstance()->getPlayerStock($otherPlayer['ID']);
         if ($success) {
             $valuesSub = array();
@@ -376,12 +379,12 @@ switch ($action) {
 
     // attack
     case mafia_action_attack:
+        $sperrZeit = mafia_sperrzeit_bomben;
         if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
-                array('NextMafia' => date('Y-m-d H:i:s', time() + mafia_sperrzeit_bomben))) !== 1) {
+                array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
         }
-
         if ($success) {
             $data = Database::getInstance()->getPlayerPlantageAndBauhofLevel($otherPlayer['ID']);
             $plantage = calculateBuildingDataForPlayer(1, $data, 0);

@@ -46,8 +46,8 @@ if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diploma
 if ($player['Gruppe'] !== null && $player['Gruppe'] == $otherPlayer['Gruppe']) {
     redirectTo($backLink, 112, __LINE__);
 }
-if (!mafiaRequirementsMet($otherPlayer['Punkte'])
-    || !maybeMafiaOpponents($otherPlayer['Punkte'], $player['Punkte'], $groupDiplomacy)) {
+if ($groupDiplomacy !== group_diplomacy_war &&
+    (!mafiaRequirementsMet($otherPlayer['Punkte']) || !maybeMafiaOpponents($otherPlayer['Punkte'], $player['Punkte'], $groupDiplomacy))) {
     redirectTo($backLink, 155, __LINE__);
 }
 

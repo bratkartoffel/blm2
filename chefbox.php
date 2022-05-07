@@ -23,7 +23,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
 <head>
     <link rel="stylesheet" type="text/css" href="/styles/style.min.css?<?= game_version; ?>"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="refresh" content="30"/>
+    <meta http-equiv="refresh" content="300"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title><?= game_title; ?> - Chefbox</title>
     <script src="/js/functions.min.js?<?= game_version; ?>"></script>
@@ -107,6 +107,9 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     <a href="/?p=startseite" onclick="return BLMzeigen(this.href);">BLM anzeigen / öffnen</a>
     <a href="/?p=startseite" onclick="return BLMEnde();">Fenster schliessen</a>
 </div>
+<script>
+    reloadOnCountdown = true;
+</script>
 </body>
 </html>
 <?php

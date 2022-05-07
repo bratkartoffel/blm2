@@ -106,6 +106,8 @@ function CountdownFields() {
                 second: "2-digit",
                 timeZone: 'UTC'
             });
+        } else if (reloadOnCountdown) {
+            document.location.reload();
         }
     };
     Array.prototype.forEach.call(document.getElementsByClassName('countdown'), field => countdown(field, -1))
@@ -164,4 +166,5 @@ function toggleRundmail() {
     return false;
 }
 
+let reloadOnCountdown = false;
 window.setInterval(CountdownFields, 1000);

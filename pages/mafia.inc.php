@@ -120,4 +120,5 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
 </div>
 <script>
     MafiaActionChange();
+    reloadOnCountdown = true;
 </script>

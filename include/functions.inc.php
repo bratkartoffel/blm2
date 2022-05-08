@@ -1123,7 +1123,7 @@ function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, i
 {
     return array(
         'Kosten' => round((100 * $item_id) + (research_base_cost * pow(research_factor_cost, $research_level + $level_increment)), 2),
-        'Dauer' => max(research_min_duration, (research_base_duration * pow(research_factor_duration, $research_level + $level_increment)) * (1 - research_lab_bonus_factor * $research_lab_level)),
+        'Dauer' => max(research_min_duration, (research_base_duration * pow(research_factor_duration, $research_level + $level_increment)) * pow(1 - research_lab_bonus_factor, $research_lab_level)),
         'Punkte' => (research_base_points * pow(research_factor_points, $research_level + $level_increment))
     );
 }
@@ -1204,7 +1204,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
             break;
     }
 
-    $result['Dauer'] *= (1 - (building_yard_bonus_factor * $player['Gebaeude5']));
+    $result['Dauer'] *= pow(1 - building_yard_bonus_factor, $player['Gebaeude5']);
     return $result;
 }
 

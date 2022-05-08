@@ -25,7 +25,7 @@ if ($ware <= 0 || $ware > count_wares) {
 <?php
 $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 ?>
-<div class="form">
+<div class="form VertragNeu">
     <form action="/actions/vertraege.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <header>Vertragswerte</header>

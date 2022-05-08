@@ -26,7 +26,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
             Zum Beitreten benötigen Sie die Plantage auf mindestens Stufe <?= min_plantage_level_join_group; ?>,
             zum Gründen müssen Sie Ihre Plantage mindestens auf Stufe 8 haben.
         </p>
-        <div class="form">
+        <div class="form GroupCreate">
             <form action="/actions/gruppe.php" method="post">
                 <input type="hidden" name="a" value="1"/>
                 <header>Neue Gruppe gründen</header>
@@ -59,7 +59,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 </div>
             </form>
         </div>
-        <div class="form">
+        <div class="form GroupJoin">
             <form action="/actions/gruppe.php" method="post">
                 <input type="hidden" name="a" value="2"/>
                 <header>Gruppe beitreten</header>

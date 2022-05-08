@@ -79,7 +79,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
 <script>
     let mafia_cost_data = <?=json_encode(mafia_base_data); ?>;
 </script>
-<div class="form">
+<div class="form MafiaNewAction">
     <form action="/actions/mafia.php" method="post">
         <header>Angriff ausführen</header>
         <div>

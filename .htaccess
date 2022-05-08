@@ -16,3 +16,16 @@ RedirectMatch 404 /cronjobs
 RedirectMatch 404 /development
 RedirectMatch 404 /include
 RedirectMatch 404 /pages
+
+# prefer compressing output with brotli
+<IfModule mod_brotli.c>
+	SetOutputFilter BROTLI_COMPRESS
+	SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-brotli
+</IfModule>
+
+# if brotli is not available, then use gzip
+<IfModule mod_deflate.c>
+	SetOutputFilter DEFLATE
+	SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip
+</IfModule>
+

@@ -169,10 +169,10 @@ const game_round_duration = 5184000;
 const game_pause_duration = 604800;
 
 // search level of research lab reduces research duration by that percentage
-const research_lab_bonus_factor = 0.037;
+const research_lab_bonus_factor = 0.055;
 
 // search level of building yard reduces building duration by that percentage
-const building_yard_bonus_factor = 0.036;
+const building_yard_bonus_factor = 0.061;
 
 // base price for each item
 const item_price_base = 1.35;
@@ -429,8 +429,8 @@ const research_base_cost = 230;
 const research_base_duration = 1800;
 const research_base_points = 80;
 const research_factor_cost = 1.29;
-const research_factor_duration = 1.26;
-const research_factor_points = 1.13;
+const research_factor_duration = 1.24;
+const research_factor_points = 1.16;
 
 // minimum rate for selling prices (in percent)
 const wares_rate_min = 0.7;

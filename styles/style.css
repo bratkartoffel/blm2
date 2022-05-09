@@ -551,6 +551,10 @@ div.GroupLog {
     width: 600px;
 }
 
+div.GroupLog div:last-of-type {
+    text-align: initial;
+}
+
 div.GroupLog div span {
     display: block;
 }

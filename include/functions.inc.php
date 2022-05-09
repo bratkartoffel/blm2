@@ -1475,10 +1475,10 @@ function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, ?int $groupDiplo
     }
 }
 
-function createPlayerDropdownForMafia(int $opponent, float $myPoints): ?string
+function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId, ?int $myGroup): ?string
 {
     if ($myPoints < mafia_min_ponts) return null;
-    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $_SESSION['blm_user'], mafia_faktor_punkte);
+    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup, mafia_faktor_punkte);
     $entries = array();
     foreach ($data as $entry) {
         $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);

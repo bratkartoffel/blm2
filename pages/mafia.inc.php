@@ -84,7 +84,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         <header>Angriff ausführen</header>
         <div>
             <label for="opponent">Gegner</label>
-            <?=createPlayerDropdownForMafia($opponent, $data['Punkte']); ?>
+            <?=createPlayerDropdownForMafia($opponent, $data['Punkte'], $_SESSION['blm_user'], $data['Gruppe']); ?>
         </div>
         <div>
             <label for="action">Aktion</label>

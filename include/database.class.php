@@ -1232,46 +1232,51 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, float $pointsRange): ?array
+    public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, ?int $myGroup, float $pointsRange): ?array
     {
         $lowPoints = $myPoints / $pointsRange;
         $highPoints = $myPoints * $pointsRange;
-        $stmt = $this->prepare("SELECT ID, Name
+        $stmt = $this->prepare("SELECT ID, Name, Gruppe, Punkte
 FROM mitglieder m
-WHERE ID != :myId
-  AND
-  -- my BNDs and NAPs
-        Gruppe NOT IN
-        (SELECT d.An
-         FROM gruppe_diplomatie d
-         WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
-           AND d.Aktiv = 1
-           AND d.typ != 3
-         UNION
-         SELECT d.Von
-         FROM gruppe_diplomatie d
-         WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
-           AND d.Aktiv = 1
-           AND d.typ != 3)
-  AND (
-    -- active war with the opponent group
-            Gruppe IN
-            (SELECT d.An
+WHERE (
+            m.Gruppe != :myGroup -- exclude my own group
+        AND m.ID != :myId -- exclude myself (if user isn't in a group)
+        AND (m.Punkte >= :lowPoints AND m.Punkte <= :highPoints -- include by points range
+        AND m.Gruppe NOT IN -- exclude NAP and BND
+            (SELECT d.Von
              FROM gruppe_diplomatie d
-             WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
+             WHERE d.Von = m.Gruppe
+               AND d.An = :myGroup
                AND d.Aktiv = 1
-               AND d.typ = 3
+               AND d.typ != " . group_diplomacy_war . "
              UNION
-             SELECT d.Von
+             SELECT d.An
              FROM gruppe_diplomatie d
-             WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
+             WHERE d.An = m.Gruppe
+               AND d.Von = :myGroup
                AND d.Aktiv = 1
-               AND d.typ = 3)
-        -- or in points range
-        OR (Punkte >= :lowPoints AND Punkte <= :highPoints)
+               AND d.typ != " . group_diplomacy_war . ")
+                )
     )
-ORDER BY Name");
+   OR
+   -- include all WAR opponents, regardless of points
+        m.Gruppe IN
+        (SELECT d.Von
+         FROM gruppe_diplomatie d
+         WHERE d.Von = m.Gruppe
+           AND d.An = :myGroup
+           AND d.Aktiv = 1
+           AND d.typ = " . group_diplomacy_war . "
+         UNION
+         SELECT d.An
+         FROM gruppe_diplomatie d
+         WHERE d.An = m.Gruppe
+           AND d.Von = :myGroup
+           AND d.Aktiv = 1
+           AND d.typ = " . group_diplomacy_war . ")
+ORDER BY m.Name");
         $stmt->bindParam('myId', $myId, PDO::PARAM_INT);
+        $stmt->bindParam('myGroup', $myGroup, PDO::PARAM_INT);
         $stmt->bindParam('lowPoints', $lowPoints);
         $stmt->bindParam('highPoints', $highPoints);
         return $this->executeAndExtractRows($stmt);

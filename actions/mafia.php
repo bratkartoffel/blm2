@@ -7,11 +7,11 @@ ob_start();
 requireLogin();
 restrictSitter('Mafia');
 
-$opponent = getOrDefault($_POST, 'opponent');
+$opponent = getOrDefault($_POST, 'opponent', 0);
 $action = getOrDefault($_POST, 'action', -1);
 $level = getOrDefault($_POST, 'level', -1);
 
-$backLink = sprintf('/?p=mafia&opponent=%s&action=%d&level=%d', urlencode($opponent), $action, $level);
+$backLink = sprintf('/?p=mafia&opponent=%d&action=%d&level=%d', urlencode($opponent), $action, $level);
 if ($action < 0 || $action > count(mafia_base_data)) {
     redirectTo($backLink, 112, __LINE__);
 }
@@ -30,7 +30,7 @@ if (mafia_base_data[$action][$level]['cost'] > $player['Geld']) {
     redirectTo($backLink, 111, __LINE__);
 }
 
-$otherPlayer = Database::getInstance()->getPlayerPointsAndNameAndMoneyAndGruppeAndZaunByName($opponent);
+$otherPlayer = Database::getInstance()->getPlayerPointsAndNameAndMoneyAndGruppeAndZaunById($opponent);
 requireEntryFound($otherPlayer, $backLink);
 if ($player['Gruppe'] !== null && $otherPlayer['Gruppe'] !== null) {
     $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($player['Gruppe'], $otherPlayer['Gruppe']);

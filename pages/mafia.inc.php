@@ -1,7 +1,7 @@
 <?php
 restrictSitter('Mafia');
 
-$opponent = getOrDefault($_GET, 'opponent');
+$opponent = getOrDefault($_GET, 'opponent', 0);
 $action = getOrDefault($_GET, 'action');
 $level = getOrDefault($_GET, 'level');
 
@@ -84,7 +84,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         <header>Angriff ausführen</header>
         <div>
             <label for="opponent">Gegner</label>
-            <input type="text" name="opponent" id="opponent" value="<?= escapeForOutput($opponent); ?>"/>
+            <?=createPlayerDropdownForMafia($opponent, $data['Punkte']); ?>
         </div>
         <div>
             <label for="action">Aktion</label>
@@ -106,19 +106,10 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             </select>
         </div>
         <div>
-            <?php
-            if ($nextMafiaTs <= time()) {
-                ?>
-                <input type="submit" value="Angriff!" id="attack" onclick="return submit(this);"/>
-                <?php
-            } else {
-                echo 'Die Mafia ist noch nicht bereit';
-            }
-            ?>
+            <input type="submit" value="Angriff!" id="attack" onclick="return submit(this);"/>
         </div>
     </form>
 </div>
 <script>
     MafiaActionChange();
-    reloadOnCountdown = true;
 </script>

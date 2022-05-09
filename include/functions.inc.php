@@ -1474,3 +1474,18 @@ function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, ?int $groupDiplo
         return $a > $b / mafia_faktor_punkte && $a < $b * mafia_faktor_punkte;
     }
 }
+
+function createPlayerDropdownForMafia(int $opponent, float $myPoints): ?string
+{
+    if ($myPoints < mafia_min_ponts) return null;
+    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $_SESSION['blm_user'], mafia_faktor_punkte);
+    $entries = array();
+    foreach ($data as $entry) {
+        $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);
+    }
+    if (count($entries) == 0) {
+        return '<select name="opponent" disabled><option>Keine verfügbaren Gegner</option></select>';
+    } else {
+        return '<select name="opponent">' . implode("\n", $entries) . '</select>';
+    }
+}

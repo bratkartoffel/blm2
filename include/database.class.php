@@ -251,13 +251,13 @@ class Database
         return $this->executeAndExtractField($stmt, 'row_number');
     }
 
-    public function getPlayerPointsAndNameAndMoneyAndGruppeAndZaunByName(string $name): ?array
+    public function getPlayerPointsAndNameAndMoneyAndGruppeAndZaunById(int $id): ?array
     {
         $stmt = $this->prepare("SELECT m.ID, m.Name, m.Punkte, m.Geld, m.Gruppe, g.Gebaeude7
             FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id
-            WHERE m.Name = :name
+            WHERE m.ID = :id
             AND m.ID > 0");
-        $stmt->bindParam("name", $name);
+        $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
@@ -1230,6 +1230,51 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         $stmt->bindParam('id', $id, PDO::PARAM_INT);
         $stmt->bindParam('an', $an, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
+    }
+
+    public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, float $pointsRange): ?array
+    {
+        $lowPoints = $myPoints / $pointsRange;
+        $highPoints = $myPoints * $pointsRange;
+        $stmt = $this->prepare("SELECT ID, Name
+FROM mitglieder m
+WHERE ID != :myId
+  AND
+  -- my BNDs and NAPs
+        Gruppe NOT IN
+        (SELECT d.An
+         FROM gruppe_diplomatie d
+         WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
+           AND d.Aktiv = 1
+           AND d.typ != 3
+         UNION
+         SELECT d.Von
+         FROM gruppe_diplomatie d
+         WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
+           AND d.Aktiv = 1
+           AND d.typ != 3)
+  AND (
+    -- active war with the opponent group
+            Gruppe IN
+            (SELECT d.An
+             FROM gruppe_diplomatie d
+             WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
+               AND d.Aktiv = 1
+               AND d.typ = 3
+             UNION
+             SELECT d.Von
+             FROM gruppe_diplomatie d
+             WHERE (d.Von = m.Gruppe OR d.An = m.Gruppe)
+               AND d.Aktiv = 1
+               AND d.typ = 3)
+        -- or in points range
+        OR (Punkte >= :lowPoints AND Punkte <= :highPoints)
+    )
+ORDER BY Name");
+        $stmt->bindParam('myId', $myId, PDO::PARAM_INT);
+        $stmt->bindParam('lowPoints', $lowPoints);
+        $stmt->bindParam('highPoints', $highPoints);
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function countPendingGroupDiplomacy(int $group_id): ?int

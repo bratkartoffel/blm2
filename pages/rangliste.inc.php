@@ -76,7 +76,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
                     echo sprintf('(<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
                         escapeForOutput($row['BenutzerName']), escapeForOutput($row['BenutzerName']));
                     if (mafiaRequirementsMet($row['Punkte']) && mafiaRequirementsMet($myself['Punkte']) && maybeMafiaOpponents($row['Punkte'], $myself['Punkte'], $groupDiplomacy)) {
-                        echo sprintf(' | <a href="/?p=mafia&amp;opponent=%s">Mafia</a>', escapeForOutput(escapeForOutput($row['BenutzerName'])));
+                        echo sprintf(' | <a href="/?p=mafia&amp;opponent=%d">Mafia</a>', $row['BenutzerID']);
                     }
                     echo ')';
                 }

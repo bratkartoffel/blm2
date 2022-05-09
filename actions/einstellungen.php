@@ -99,6 +99,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         @unlink(sprintf('../pics/uploads/u_%s.jpg', $_SESSION['blm_user']));
         @unlink(sprintf('../pics/uploads/u_%s.png', $_SESSION['blm_user']));
         @unlink(sprintf('../pics/uploads/u_%s.gif', $_SESSION['blm_user']));
+        @unlink(sprintf('../pics/uploads/u_%s.webp', $_SESSION['blm_user']));
         if ($_FILES['bild']['size'] == 0) {
             redirectTo('/?p=einstellungen', 209);
         }
@@ -115,6 +116,9 @@ switch (getOrDefault($_POST, 'a', 0)) {
                 break;
             case 'image/png':
                 $suffix = 'png';
+                break;
+            case 'image/webp':
+                $suffix = 'webp';
                 break;
             default:
                 redirectTo('/?p=einstellungen', 107, __LINE__);

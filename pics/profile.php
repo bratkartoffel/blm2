@@ -15,7 +15,7 @@ if ($uid != 0) {
 }
 
 header("Cache-Control: max-age=86400, public");
-$suffixes = array('png' => 'image/png', 'jpg' => 'image/jpeg', 'gif' => 'image/gif');
+$suffixes = array('png' => 'image/png', 'jpg' => 'image/jpeg', 'gif' => 'image/gif', 'webp' => 'image/webp');
 foreach ($suffixes as $suffix => $mimetype) {
     $filename = sprintf('uploads/%s_%d.%s', $prefix, $id, $suffix);
     if (file_exists($filename)) {

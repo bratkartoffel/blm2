@@ -649,6 +649,7 @@ function deleteAccount(int $blm_user): ?string
     @unlink(sprintf("../pics/uploads/u_%d.jpg", $blm_user));
     @unlink(sprintf("../pics/uploads/u_%d.png", $blm_user));
     @unlink(sprintf("../pics/uploads/u_%d.gif", $blm_user));
+    @unlink(sprintf("../pics/uploads/u_%d.webp", $blm_user));
     return null;
 }
 

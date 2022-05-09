@@ -465,6 +465,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         @unlink(sprintf('../pics/uploads/g_%s.jpg', $player['Gruppe']));
         @unlink(sprintf('../pics/uploads/g_%s.png', $player['Gruppe']));
         @unlink(sprintf('../pics/uploads/g_%s.gif', $player['Gruppe']));
+        @unlink(sprintf('../pics/uploads/g_%s.webp', $player['Gruppe']));
         if ($_FILES['bild']['size'] == 0) {
             redirectTo('/?p=gruppe_einstellungen', 209, __LINE__);
         }
@@ -481,6 +482,9 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 break;
             case 'image/png':
                 $suffix = 'png';
+                break;
+            case 'image/webp':
+                $suffix = 'webp';
                 break;
             default:
                 redirectTo('/?p=gruppe_einstellungen', 107, __LINE__);

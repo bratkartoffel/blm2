@@ -25,7 +25,7 @@ requireEntryFound($data, '/?p=rangliste');
     </div>
     <div>
         <label for="image">Bild:</label>
-        <span><img class="profilePicture" src="/pics/profile.php?uid=<?= $data['ID']; ?>" alt="Profilbild"/></span>
+        <span><img src="/pics/profile.php?uid=<?= $data['ID']; ?>" alt="Profilbild"/></span>
     </div>
     <div>
         <label for="description">Beschreibung:</label>
@@ -58,11 +58,17 @@ requireEntryFound($data, '/?p=rangliste');
             echo sprintf('<a href="/?p=rangliste&amp;o=%d&amp;q=%s">%d</a>', floor($rank / ranking_page_size), urlencode($data['Name']), $rank);
             ?>)</span>
     </div>
-    <div>
-        <label for="contact">Kontakt:</label>
-        <span><?= sprintf('<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
-                urlencode($data['Name']), urlencode($data['Name'])); ?></span>
-    </div>
+    <?php
+    if ($data['ID'] != $_SESSION['blm_user']) {
+        ?>
+        <div>
+            <label for="contact">Kontakt:</label>
+            <span><?= sprintf('<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
+                    urlencode($data['Name']), urlencode($data['Name'])); ?></span>
+        </div>
+        <?php
+    }
+    ?>
     <div>
         <label for="igmSent">Gesendete Nachrichten:</label>
         <span><?= formatPoints($data['IgmGesendet']); ?></span>

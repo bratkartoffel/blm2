@@ -678,13 +678,17 @@ div.BetaTester {
 /*endregion*/
 
 /*region Profil*/
-img.profilePicture {
+div.Profil label {
+    width: 200px;
+}
+
+div.Profil img {
     max-height: 300px;
     max-width: 300px;
 }
 
-div.Profil label {
-    width: 200px;
+div.Profil div:last-of-type {
+    text-align: initial;
 }
 
 /*endregion*/

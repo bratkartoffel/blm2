@@ -97,6 +97,7 @@ if ($rights['group_delete'] || Database::getInstance()->getGroupMemberCountById(
             <header>Gruppe löschen</header>
             <div class="Warning">
                 DIESER SCHRITT KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN!<br/>
+                Bitte denken Sie daran, die Gruppenkasse zu leeren, bevor Sie die Gruppe löschen!<br/>
                 Bitte mit der Gruppen-Nummer (<?= $rights['group_id']; ?>) bestätigen.
             </div>
             <div>

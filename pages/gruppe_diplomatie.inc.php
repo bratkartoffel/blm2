@@ -91,13 +91,13 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
             if ($row['Aktiv'] == 1) {
                 ?>
                 <td><?= formatDateTime(strtotime($row['Seit'])); ?></td>
-                <td><?= formatCurrency($row['Betrag']); ?></td>
+                <td><?= formatCurrency(2 * $row['Betrag']); ?></td>
                 <td>
                     <?php
                     if ($rights['group_diplomacy'] == 1) {
                         ?>
                         <a href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                           onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency($row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(group_war_loose_points); ?> seiner Punkte und <?= group_war_loose_plantage; ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
+                           onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency(2 * $row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(group_war_loose_points); ?> seiner Punkte und <?= group_war_loose_plantage; ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
                         <?php
                     } else {
                         echo 'Keine Rechte';

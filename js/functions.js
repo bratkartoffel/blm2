@@ -39,15 +39,6 @@ function ZeichenUebrig(Feld, Text) {
     return true;
 }
 
-function Navigation(Button) {
-    if (Button.getElementsByTagName('a')[0].target === "_blank") {
-        window.open(Button.getElementsByTagName('a')[0].href);
-    } else {
-        document.location.href = Button.getElementsByTagName('a')[0].href;
-    }
-    return false;
-}
-
 function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, Button) {
     const kosten = Menge * (BasisPreis / BasisMenge);
 

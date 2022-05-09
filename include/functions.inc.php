@@ -977,20 +977,20 @@ Date: %s', admin_name, admin_email, admin_name, admin_email, date(DATE_RFC2822))
     return mail($recipient, $subject, $message, $headers, '-f ' . admin_email);
 }
 
-function createNavigationLink(string $target, string $text, string $sitterRightsRequired): ?string
+function createNavigationLink(string $target, string $text, string $sitterRightsRequired): string
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
-        return sprintf('<div class="NaviLink" onclick="Navigation(this);"><a href="/?p=%s">%s</a></div>', $target, $text);
+        return sprintf('<div class="NaviLink"><a href="/?p=%s">%s</a></div>', $target, $text);
     }
-    return null;
+    return "";
 }
 
-function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): ?string
+function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): string
 {
     if (isLoggedIn()) {
         return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/style/help.png" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
     }
-    return null;
+    return "";
 }
 
 function getCurrentPage(): string

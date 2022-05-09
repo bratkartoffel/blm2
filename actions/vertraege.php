@@ -17,17 +17,22 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $preis = getOrDefault($_POST, 'preis', .0);
         $empfaenger = getOrDefault($_POST, 'empfaenger');
         $empfaengerId = Database::getInstance()->getPlayerIDByName($empfaenger);
-        requireEntryFound($empfaengerId, sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 118, __LINE__);
+        $backLink = sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger));
+        requireEntryFound($empfaengerId, $backLink, 118, __LINE__);
+
+        if ($empfaengerId == $_SESSION['blm_user']) {
+            redirectTo($backLink, 173, __LINE__);
+        }
 
         if ($ware < 1 || $ware > count_wares) {
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 117, __LINE__);
+            redirectTo($backLink, 117, __LINE__);
         }
 
         $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 
         $minPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
         if ($preis < $minPrice || $preis > $minPrice * 2) {
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 153, __LINE__);
+            redirectTo($backLink, 153, __LINE__);
         }
 
         Database::getInstance()->begin();
@@ -35,7 +40,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 array('Lager' . $ware => -$menge),
                 array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
             Database::getInstance()->rollBack();
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 142, __LINE__);
+            redirectTo($backLink, 142, __LINE__);
         }
         if (Database::getInstance()->createTableEntry('vertraege', array(
                 'Von' => $_SESSION['blm_user'],
@@ -45,7 +50,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 'Preis' => $preis
             )) != 1) {
             Database::getInstance()->rollBack();
-            redirectTo(sprintf('/?p=vertraege_neu&ware=%d&menge=%d&preis=%f&empfaenger=%s', $ware, $menge, $preis, urlencode($empfaenger)), 141, __LINE__);
+            redirectTo($backLink, 141, __LINE__);
         }
 
         Database::getInstance()->commit();

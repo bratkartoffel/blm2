@@ -325,6 +325,9 @@ function getMessageBox(int $msg_id): ?string
         case 172:
             $text = 'Die EMail konnte nicht gesendet werden, bitte wende dich an einen Administrator.';
             break;
+        case 173:
+            $text = 'Sie können sich selbst keine Verträge schicken.';
+            break;
 
 
         case 201:

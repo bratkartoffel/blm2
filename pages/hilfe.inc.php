@@ -2,7 +2,7 @@
 require_once('./include/hilfe.inc.php');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/khelpcenter.png" alt=""/>
+    <img src="/pics/big/khelpcenter.webp" alt=""/>
     <span>Hilfe</span>
 </div>
 

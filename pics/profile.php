@@ -26,5 +26,5 @@ foreach ($suffixes as $suffix => $mimetype) {
 }
 
 // no image found, show fallback image
-header("Content-Type: image/png");
-readfile('style/nopic.png');
+header("Content-Type: image/webp");
+readfile('style/nopic.webp');

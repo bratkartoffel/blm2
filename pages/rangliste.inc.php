@@ -5,7 +5,7 @@ $offset_ep = getOrDefault($_GET, 'o_ep', 0);
 $q = getOrDefault($_GET, 'q');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.png" alt=""/>
+    <img src="/pics/big/Login_Manager.webp" alt=""/>
     <span>Rangliste<?= createHelpLink(1, 17); ?></span>
 </div>
 
@@ -52,7 +52,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
                 <?php
                 $online = strtotime($row['LastAction']) + 1800 >= time();
                 ?>
-                <img src="<?= ($online ? '/pics/style/online.png' : '/pics/style/offline.png'); ?>"
+                <img src="<?= ($online ? '/pics/style/online.webp' : '/pics/style/offline.webp'); ?>"
                      alt="<?= ($online ? 'Online' : 'Offline'); ?>"
                      title="<?= ($online ? 'Online' : 'Offline'); ?>"/>
                 <?php

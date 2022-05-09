@@ -1,5 +1,5 @@
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/games.png" alt=""/>
+    <img src="/pics/big/games.webp" alt=""/>
     <span>Impressum<?= createHelpLink(1, 21); ?></span>
 </div>
 

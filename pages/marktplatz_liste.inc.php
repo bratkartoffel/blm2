@@ -5,7 +5,7 @@ $filter = getOrDefault($_GET, 'filter', 0);
 $offset = getOrDefault($_GET, 'offset', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/package_network.png" alt=""/>
+    <img src="/pics/big/package_network.webp" alt=""/>
     <span>Marktplatz<?= createHelpLink(1, 11); ?></span>
 </div>
 

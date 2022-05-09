@@ -8,7 +8,7 @@ if (maintenance_active) {
 session_destroy();
 ?><!DOCTYPE html>
 <html lang="de">
-<body><img src="/pics/big/clock.png" alt="maintenance"/>
+<body><img src="/pics/big/clock.webp" alt="maintenance"/>
 <h2><?= maintenance_message; ?></h2></body>
 </html>
 <?php
@@ -70,7 +70,7 @@ if (isLoggedIn()) {
 </head>
 <body onload="MarkActiveLink();">
 <div id="Navigation" class="<?= (isLoggedIn() ? 'online' : 'offline'); ?>">
-    <img id="Logo" src="/pics/style/logo.png" alt="Logo"/>
+    <img id="Logo" src="/pics/style/logo.webp" alt="Logo"/>
     <?php
     if (isLoggedIn()) {
         ?>

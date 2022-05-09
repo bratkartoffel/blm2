@@ -77,7 +77,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
 
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/kfm_home.png" alt=""/>
+        <img src="/pics/big/kfm_home.webp" alt=""/>
         <span>Gebäude<?= createHelpLink(1, 4); ?></span>
     </div>
 

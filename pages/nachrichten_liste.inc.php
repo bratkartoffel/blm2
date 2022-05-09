@@ -5,7 +5,7 @@ $offset_in = getOrDefault($_GET, 'o_in', 0);
 $offset_out = getOrDefault($_GET, 'o_out', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/korn.png" alt=""/>
+    <img src="/pics/big/korn.webp" alt=""/>
     <span>Nachrichten<?= createHelpLink(1, 13); ?></span>
 </div>
 

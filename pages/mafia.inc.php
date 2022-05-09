@@ -19,7 +19,7 @@ if ($nextMafiaTs <= time()) {
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/core.png" alt=""/>
+    <img src="/pics/big/core.webp" alt=""/>
     <span>Mafia<?= createHelpLink(1, 12); ?></span>
 </div>
 

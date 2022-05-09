@@ -6,7 +6,7 @@ $captcha = new Captcha();
 $captcha->createCaptcha();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Password.png" alt=""/>
+    <img src="/pics/big/Password.webp" alt=""/>
     <span>Passwort vergessen</span>
 </div>
 

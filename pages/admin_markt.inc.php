@@ -3,7 +3,7 @@ $ware = getOrDefault($_GET, 'ware', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.png" alt=""/>
+    <img src="/pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Marktplatz</span>
 </div>
 

@@ -20,7 +20,7 @@ for ($i = 1; $i <= count_wares; $i++) {
 }
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/Staroffice.png" alt=""/>
+        <img src="/pics/big/Staroffice.webp" alt=""/>
         <span>Plantage<?= createHelpLink(1, 5); ?></span>
     </div>
 

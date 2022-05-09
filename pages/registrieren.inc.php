@@ -11,7 +11,7 @@ $captcha = new Captcha();
 $captcha->createCaptcha();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/babelfish.png" alt=""/>
+    <img src="/pics/big/babelfish.webp" alt=""/>
     <span>Registrieren</span>
 </div>
 

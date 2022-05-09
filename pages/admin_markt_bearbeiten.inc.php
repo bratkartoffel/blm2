@@ -3,7 +3,7 @@ requireFieldSet($_GET, 'id', '/?p=admin_markt');
 $id = getOrDefault($_GET, 'id', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.png" alt=""/>
+    <img src="/pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Angebot bearbeiten</span>
 </div>
 

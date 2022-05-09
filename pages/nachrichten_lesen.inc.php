@@ -15,7 +15,7 @@ if ($data['An'] == $_SESSION['blm_user']) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/xfmail.png" alt=""/>
+    <img src="/pics/big/xfmail.webp" alt=""/>
     <span>Nachricht lesen<?= createHelpLink(1, 13); ?></span>
 </div>
 

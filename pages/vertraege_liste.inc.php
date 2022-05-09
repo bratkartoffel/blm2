@@ -2,7 +2,7 @@
 restrictSitter('Vertraege');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/mydocuments.png" alt=""/>
+    <img src="/pics/big/mydocuments.webp" alt=""/>
     <span>Verträge<?= createHelpLink(1, 10); ?></span>
 </div>
 

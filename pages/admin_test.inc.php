@@ -1,5 +1,5 @@
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.png" alt=""/>
+    <img src="/pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Testseite</span>
 </div>
 

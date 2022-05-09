@@ -7,7 +7,7 @@ requireEntryFound($rights, '/?p=gruppe');
 $hasOneRight = false;
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/Community_Help.png" alt=""/>
+        <img src="/pics/big/Community_Help.webp" alt=""/>
         <span>Gruppe - Einstellungen<?= createHelpLink(1, 23); ?></span>
     </div>
 

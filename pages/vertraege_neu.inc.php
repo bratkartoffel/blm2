@@ -11,7 +11,7 @@ if ($ware <= 0 || $ware > count_wares) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kfax.png" alt=""/>
+    <img src="/pics/big/kfax.webp" alt=""/>
     <span>Neuen Vertrag verfassen<?= createHelpLink(1, 10); ?></span>
 </div>
 

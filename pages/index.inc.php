@@ -1,5 +1,5 @@
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kontact.png" alt=""/>
+    <img src="/pics/big/kontact.webp" alt=""/>
     <span>Startseite<?= createHelpLink(1, 3); ?></span>
 </div>
 

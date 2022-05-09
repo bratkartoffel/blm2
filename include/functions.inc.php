@@ -131,7 +131,7 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Der Benutzername oder EMail-Adresse ist bereits vergeben.';
             break;
         case 107:
-            $text = 'Die hochgeladene Datei ist kein Bild vom Typ jpg, gif oder png!';
+            $text = 'Die hochgeladene Datei ist kein Bild vom Typ jpg, gif, png oder webp!';
             break;
         case 108:
             $text = 'Unbekannter Benutzername und / oder falsches Passwort!';
@@ -992,7 +992,7 @@ function createNavigationLink(string $target, string $text, string $sitterRights
 function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): string
 {
     if (isLoggedIn()) {
-        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/style/help.png" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
+        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
     }
     return "";
 }

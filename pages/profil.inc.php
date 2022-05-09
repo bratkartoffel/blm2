@@ -6,7 +6,7 @@ requireEntryFound($data, '/?p=rangliste');
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kuser.png" alt=""/>
+    <img src="/pics/big/kuser.webp" alt=""/>
     <span>Profil von <?= escapeForOutput($data['Name']); ?></span>
 </div>
 

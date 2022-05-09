@@ -1,5 +1,5 @@
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kedit.png" alt=""/>
+    <img src="/pics/big/kedit.webp" alt=""/>
     <span>Serverstatistik<?= createHelpLink(1, 18); ?></span>
 </div>
 

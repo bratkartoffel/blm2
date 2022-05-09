@@ -749,7 +749,7 @@ div.ItemImage {
     float: left;
     margin: 4px 30px 4px 4px;
     padding: initial;
-    background-image: url(/pics/items.png);
+    background-image: url(/pics/items.webp);
 }
 
 div#Item_1 {
@@ -821,7 +821,7 @@ div.BuildingImage {
     float: left;
     margin: 4px 30px 4px 4px;
     padding: initial !important;
-    background-image: url(/pics/buildings.png);
+    background-image: url(/pics/buildings.webp);
 }
 
 div#Building_1 {

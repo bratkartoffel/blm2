@@ -1291,7 +1291,7 @@ ORDER BY m.Name");
 
     public function deleteAllMessagesForUser(int $blm_user): ?int
     {
-        $stmt = $this->prepare("DELETE FROM nachrichten WHERE An = :id AND Gelesen = 1");
+        $stmt = $this->prepare("DELETE FROM nachrichten WHERE An = :id");
         $stmt->bindParam('id', $blm_user, PDO::PARAM_INT);
         return $this->executeAndGetAffectedRows($stmt);
     }

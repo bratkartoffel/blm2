@@ -713,18 +713,14 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         // update the loser stuff
         $allMembers = Database::getInstance()->getGroupMembersById($usId);
         foreach ($allMembers as $member) {
-            if (Database::getInstance()->updateTableEntryCalculate('gebaeude', null,
-                    array('Gebaeude1' => -group_war_loose_plantage),
-                    array('user_id = :whr0' => $member['ID'], 'Gebaeude1 >= :whr1' => group_war_loose_plantage)) === null) {
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $member['ID'],
+                    array('Gebaeude1' => -group_war_loose_plantage,
+                        'Punkte' => -(group_war_loose_points * $member['Punkte'])),
+                    array('Gebaeude1 >= :whr0' => group_war_loose_plantage)) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=gruppe_diplomatie', 142, __LINE__ . '_g' . $member['ID']);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $member['ID'],
-                    array('Punkte' => -(group_war_loose_points * $member['Punkte']))) === null) {
-                Database::getInstance()->rollBack();
-                redirectTo('/?p=gruppe_diplomatie', 142, __LINE__ . '_m' . $member['ID']);
-            }
-            if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
+            if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
                     array('KriegMinus' => (group_war_loose_points * $member['Punkte'])),
                     array('user_id = :whr0' => $member['ID'])) === null) {
                 Database::getInstance()->rollBack();

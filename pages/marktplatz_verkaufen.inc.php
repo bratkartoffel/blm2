@@ -17,7 +17,7 @@ $price = getOrDefault($_GET, 'price', .0);
 </p>
 
 <?php
-$data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
+$data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 ?>
 <div class="form MarktplatzNeu">
     <form action="/actions/marktplatz.php?a=1" method="post">

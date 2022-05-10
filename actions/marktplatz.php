@@ -14,7 +14,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
         $amount = getOrDefault($_POST, 'amount', 0);
         $price = getOrDefault($_POST, 'price', .0);
 
-        $data = Database::getInstance()->getPlayerStockForMarket($_SESSION['blm_user']);
+        $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
         $sellPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
 
         if ($ware < 1 || $ware > count_wares) {
@@ -30,9 +30,9 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
                 array('Lager' . $ware => -$amount),
-                array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $ware . ' >= :whr1' => $amount)) != 1) {
+                array('Lager' . $ware . ' >= :whr0' => $amount)) != 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 116, __LINE__);
         }
@@ -66,8 +66,8 @@ switch (getOrDefault($_GET, 'a', 0)) {
             redirectTo('/?p=marktplatz_liste', 111, __LINE__);
         }
 
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
-                array('Lager' . $entry['Was'] => $entry['Menge']), array('user_id = :whr0' => $_SESSION['blm_user'])) != 1) {
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+                array('Lager' . $entry['Was'] => $entry['Menge'])) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 142, __LINE__);
         }
@@ -120,9 +120,8 @@ switch (getOrDefault($_GET, 'a', 0)) {
         requireEntryFound($entry, '/?p=marktplatz_liste');
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
-                array('Lager' . $entry['Was'] => floor($entry['Menge'] * market_retract_rate)),
-                array('user_id = :whr0' => $entry['Von'])) != 1) {
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'],
+                array('Lager' . $entry['Was'] => floor($entry['Menge'] * market_retract_rate))) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 142, __LINE__);
         }

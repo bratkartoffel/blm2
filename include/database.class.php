@@ -253,10 +253,7 @@ class Database
 
     public function getPlayerPointsAndNameAndMoneyAndGruppeAndZaunById(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT m.ID, m.Name, m.Punkte, m.Geld, m.Gruppe, g.Gebaeude7
-            FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id
-            WHERE m.ID = :id
-            AND m.ID > 0");
+        $stmt = $this->prepare("SELECT ID, Name, Punkte, Geld, Gruppe, Gebaeude7 FROM mitglieder WHERE ID = :id AND ID > 0");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -832,26 +829,17 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getPlayerStockForMarket(int $blm_user): ?array
-    {
-        $stmt = $this->prepare("SELECT l.*, f.*, g.Gebaeude3, g.Gebaeude6
-            FROM (lagerhaus l INNER JOIN forschung f ON l.user_id = f.user_id)
-                INNER JOIN gebaeude g ON l.user_id = g.user_id
-            WHERE l.user_id = :id");
-        $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
-        return $this->executeAndExtractFirstRow($stmt);
-    }
-
     public function getPlayerStock(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT * FROM lagerhaus WHERE user_id = :id");
+        $stmt = $this->prepare("SELECT Lager1, Lager2, Lager3, Lager4, Lager5, Lager6, Lager7, Lager8,
+       Lager9, Lager10, Lager11, Lager12, Lager13, Lager14, Lager15 FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getPlayerPlantageAndBauhofLevel(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT Gebaeude1, Gebaeude5 FROM gebaeude WHERE user_id = :id AND ID > 0");
+        $stmt = $this->prepare("SELECT Gebaeude1, Gebaeude5 FROM mitglieder WHERE ID = :id AND ID > 0");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -865,8 +853,8 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerNameAndPointsAndGruppeAndPlantageLevelById(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.Name, m.Punkte, g.Gebaeude1, gr.ID AS GruppeID, gr.Name AS GruppeName
-            FROM (mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id) LEFT OUTER JOIN gruppe gr ON m.Gruppe = gr.ID
+        $stmt = $this->prepare("SELECT m.Name, m.Punkte, m.Gebaeude1, gr.ID AS GruppeID, gr.Name AS GruppeName
+            FROM mitglieder m LEFT OUTER JOIN gruppe gr ON m.Gruppe = gr.ID
             WHERE m.ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
@@ -951,17 +939,17 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerPointsAndGruppeAndMoneyAndNextMafiaAndPizzeriaById(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.ID, m.Name, m.Punkte, m.Gruppe, m.Geld, m.NextMafia, g.Gebaeude8
-            FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id
-            WHERE m.ID = :id");
+        $stmt = $this->prepare("SELECT ID, Name, Punkte, Gruppe, Geld, NextMafia, Gebaeude8
+            FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getPlayerMoneyAndBuildingLevelsAndExpenseMafia(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT m.Geld AS Geld, g.*, s.AusgabenMafia
-            FROM (mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id) INNER JOIN statistik s ON m.ID = s.user_id
+        $stmt = $this->prepare("SELECT m.Geld, m.Gebaeude1, m.Gebaeude2, m.Gebaeude3, m.Gebaeude4,
+                m.Gebaeude5, m.Gebaeude6, m.Gebaeude7, m.Gebaeude8, s.AusgabenMafia
+            FROM mitglieder m INNER JOIN statistik s ON m.ID = s.user_id
             WHERE m.ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
@@ -969,30 +957,29 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerMoneyAndResearchLevelsAndPlantageLevel(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT m.Geld AS Geld, f.*, g.Gebaeude1
-            FROM (mitglieder m INNER JOIN forschung f ON m.ID = f.user_id) INNER JOIN gebaeude g ON m.ID = g.user_id
-            WHERE m.ID = :id");
+        $stmt = $this->prepare("SELECT Geld, Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, Forschung7,
+       Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, Forschung13, Forschung14, Forschung15, Gebaeude1
+            FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT l.*, f.*, g.Gebaeude3, g.Gebaeude6
-            FROM (gebaeude g INNER JOIN lagerhaus l ON g.user_id = l.user_id) INNER JOIN forschung f ON l.user_id = f.user_id
-            WHERE g.user_id = :id");
+        $stmt = $this->prepare("SELECT Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, Forschung7,
+       Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, Forschung13, Forschung14, Forschung15,
+       Lager1, Lager2, Lager3, Lager4, Lager5, Lager6, Lager7, Lager8, Lager9, Lager10, Lager11, Lager12, Lager13, Lager14, Lager15,
+       Gebaeude3,  Gebaeude6
+            FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getInformationForBuero(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT f.*, s.*, p.*, g.Gebaeude1, g.Gebaeude3, g.Gebaeude6, m.Bank, m.Geld
-            FROM (((punkte p INNER JOIN statistik s ON p.user_id = s.user_id)
-                INNER JOIN gebaeude g ON p.user_id = g.user_id)
-                INNER JOIN forschung f ON p.user_id = f.user_id)
-                INNER JOIN mitglieder m ON p.user_id = m.ID
-            WHERE p.user_id = :id");
+        $stmt = $this->prepare("SELECT *
+            FROM mitglieder m INNER JOIN statistik s ON s.user_id = m.ID
+            WHERE m.ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -1037,18 +1024,18 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.Geld, f.*, g.Gebaeude1, g.Gebaeude2
-            FROM (mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id) INNER JOIN forschung f ON m.ID = f.user_id
-            WHERE m.ID = :id");
+        $stmt = $this->prepare("SELECT Geld, Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, 
+            Forschung7, Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, 
+            Forschung13, Forschung14, Forschung15, Gebaeude1, Gebaeude2
+            FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getPlayerBankAndMoneyGroupIdAndBioladenLevelAndDoenerstandLevel(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.Bank, m.Geld, m.Gruppe ,g.Gebaeude3, g.Gebaeude4
-            FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id
-            WHERE m.ID = :id");
+        $stmt = $this->prepare("SELECT Bank, Geld, Gruppe, Gebaeude3, Gebaeude4
+            FROM mitglieder WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -1101,13 +1088,13 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
        (SELECT SUM(Forschung1 + Forschung2 + Forschung3 + Forschung4 + Forschung5 + Forschung6 + Forschung7 +
                    Forschung8 + Forschung9 + Forschung10 + Forschung11 + Forschung12 + Forschung13 + Forschung14 +
                    Forschung15)
-        FROM forschung)                                           AS GesamtForschung,
+        FROM mitglieder)                                          AS GesamtForschung,
        (SELECT SUM(AusgabenForschung) FROM statistik)             AS AusgabenForschung,
        (SELECT COUNT(*) FROM mitglieder WHERE ID > 0)             AS AnzahlSpieler,
        (SELECT SUM(IGMGesendet) FROM mitglieder)                  AS AnzahlIGMs,
        (SELECT SUM(AusgabenGebaeude) FROM statistik)              AS AusgabenGebaeude,
        (SELECT SUM(Gebaeude1 + Gebaeude2 + Gebaeude3 + Gebaeude4 + Gebaeude5 + Gebaeude6 + Gebaeude7 + Gebaeude8)
-        FROM gebaeude)                                            AS GesamtGebaeude,
+        FROM mitglieder)                                          AS GesamtGebaeude,
        (SELECT COUNT(*) FROM gruppe)                              AS AnzahlGruppen,
        (SELECT COUNT(*) FROM mitglieder WHERE Gruppe IS NOT NULL) AS AnzahlSpielerInGruppe;
 ");
@@ -1169,14 +1156,15 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllPlayerIdAndBankAndBioladenAndDoenerstand(): ?array
     {
-        return $this->executeAndExtractRows($this->prepare("SELECT m.ID, m.Bank, g.Gebaeude3, g.Gebaeude4
-            FROM mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id"));
+        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude3, Gebaeude4 FROM mitglieder"));
     }
 
     public function getAllPlayerIdAndResearchLevels(): ?array
     {
-        return $this->executeAndExtractRows($this->prepare("SELECT m.ID AS UserID, f.*
-            FROM mitglieder m INNER JOIN forschung f ON m.ID = f.user_id"));
+        return $this->executeAndExtractRows($this->prepare("SELECT ID,
+        Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, 
+        Forschung7, Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, 
+        Forschung13, Forschung14, Forschung15 FROM mitglieder"));
     }
 
     public function getAllPlayerIdAndNameBankSmallerEquals(float $amount): ?array
@@ -1198,9 +1186,12 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerEspionageDataByID(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.ID, m.Name, m.Geld, g.*, l.*
-            FROM (mitglieder m INNER JOIN gebaeude g ON m.ID = g.user_id) INNER JOIN lagerhaus l ON m.ID = l.user_id
-            WHERE m.ID = :id");
+        $stmt = $this->prepare("SELECT ID, Name, Geld, Gebaeude1, Gebaeude2, Gebaeude3, Gebaeude4,
+            Gebaeude5, Gebaeude6, Gebaeude7, Gebaeude8,
+            Lager1, Lager2, Lager3, Lager4, Lager5, Lager6, 
+            Lager7, Lager8, Lager9, Lager10, Lager11, Lager12, 
+            Lager13, Lager14, Lager15
+            FROM mitglieder WHERE ID = :id");
         $stmt->bindParam('id', $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }

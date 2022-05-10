@@ -22,45 +22,6 @@ create table changelog
 ) collate = utf8_unicode_ci;
 
 
-create table forschung
-(
-    ID          int auto_increment primary key,
-    user_id     int                   null,
-    Forschung1  smallint(2) default 0 not null,
-    Forschung2  smallint(2) default 0 not null,
-    Forschung3  smallint(2) default 0 not null,
-    Forschung4  smallint(2) default 0 not null,
-    Forschung5  smallint(2) default 0 not null,
-    Forschung6  smallint(2) default 0 not null,
-    Forschung7  smallint(2) default 0 not null,
-    Forschung8  smallint(2) default 0 not null,
-    Forschung9  smallint(2) default 0 not null,
-    Forschung10 smallint(2) default 0 not null,
-    Forschung11 smallint(2) default 0 not null,
-    Forschung12 smallint(2) default 0 not null,
-    Forschung13 smallint(2) default 0 null,
-    Forschung14 smallint(2) default 0 null,
-    Forschung15 smallint(2) default 0 not null,
-    constraint user_id unique (user_id)
-) collate = utf8_unicode_ci;
-
-
-create table gebaeude
-(
-    ID        int auto_increment primary key,
-    user_id   int                   null,
-    Gebaeude1 smallint(2) default 1 not null,
-    Gebaeude2 smallint(2) default 0 not null,
-    Gebaeude3 smallint(2) default 1 not null,
-    Gebaeude4 smallint(2) default 0 not null,
-    Gebaeude5 smallint(2) default 0 not null,
-    Gebaeude6 smallint(2) default 0 not null,
-    Gebaeude7 smallint(2) default 0 not null,
-    Gebaeude8 smallint(2) default 0 not null,
-    constraint user_id unique (user_id)
-) collate = utf8_unicode_ci;
-
-
 create table gruppe
 (
     ID           int auto_increment primary key,
@@ -146,28 +107,6 @@ create table gruppe_rechte
 ) collate = utf8_unicode_ci;
 create index group_id on gruppe_rechte (group_id);
 create index user_id on gruppe_rechte (user_id);
-
-create table lagerhaus
-(
-    ID      int auto_increment primary key,
-    user_id int              null,
-    Lager1  int(5) default 0 not null,
-    Lager2  int(5) default 0 not null,
-    Lager3  int(5) default 0 not null,
-    Lager4  int(5) default 0 not null,
-    Lager5  int(5) default 0 not null,
-    Lager6  int(5) default 0 not null,
-    Lager7  int(5) default 0 not null,
-    Lager8  int(5) default 0 not null,
-    Lager9  int(5) default 0 not null,
-    Lager10 int(5) default 0 not null,
-    Lager11 int(5) default 0 not null,
-    Lager12 int(5) default 0 not null,
-    Lager13 int(5) default 0 not null,
-    Lager14 int(5) default 0 not null,
-    Lager15 int(5) default 0 not null,
-    constraint user_id unique (user_id)
-) collate = utf8_unicode_ci;
 
 
 create table log_bank
@@ -300,6 +239,44 @@ create table mitglieder
     GruppeLastMessageZeit   datetime                                   null,
     Verwarnungen            int            default 0                   not null,
     Gesperrt                tinyint(1)     default 0                   not null,
+    Gebaeude1               smallint(2)    default 1                   not null,
+    Gebaeude2               smallint(2)    default 0                   not null,
+    Gebaeude3               smallint(2)    default 1                   not null,
+    Gebaeude4               smallint(2)    default 0                   not null,
+    Gebaeude5               smallint(2)    default 0                   not null,
+    Gebaeude6               smallint(2)    default 0                   not null,
+    Gebaeude7               smallint(2)    default 0                   not null,
+    Gebaeude8               smallint(2)    default 0                   not null,
+    Forschung1              smallint(2)    default 0                   not null,
+    Forschung2              smallint(2)    default 0                   not null,
+    Forschung3              smallint(2)    default 0                   not null,
+    Forschung4              smallint(2)    default 0                   not null,
+    Forschung5              smallint(2)    default 0                   not null,
+    Forschung6              smallint(2)    default 0                   not null,
+    Forschung7              smallint(2)    default 0                   not null,
+    Forschung8              smallint(2)    default 0                   not null,
+    Forschung9              smallint(2)    default 0                   not null,
+    Forschung10             smallint(2)    default 0                   not null,
+    Forschung11             smallint(2)    default 0                   not null,
+    Forschung12             smallint(2)    default 0                   not null,
+    Forschung13             smallint(2)    default 0                   null,
+    Forschung14             smallint(2)    default 0                   null,
+    Forschung15             smallint(2)    default 0                   not null,
+    Lager1                  int(5)         default 0                   not null,
+    Lager2                  int(5)         default 0                   not null,
+    Lager3                  int(5)         default 0                   not null,
+    Lager4                  int(5)         default 0                   not null,
+    Lager5                  int(5)         default 0                   not null,
+    Lager6                  int(5)         default 0                   not null,
+    Lager7                  int(5)         default 0                   not null,
+    Lager8                  int(5)         default 0                   not null,
+    Lager9                  int(5)         default 0                   not null,
+    Lager10                 int(5)         default 0                   not null,
+    Lager11                 int(5)         default 0                   not null,
+    Lager12                 int(5)         default 0                   not null,
+    Lager13                 int(5)         default 0                   not null,
+    Lager14                 int(5)         default 0                   not null,
+    Lager15                 int(5)         default 0                   not null,
     constraint EMail unique (EMail),
     constraint Name unique (Name)
 ) collate = utf8_unicode_ci;
@@ -328,21 +305,6 @@ create table passwort_reset
     token   char(40)                             not null,
     constraint user_id unique (user_id)
 );
-
-
-create table punkte
-(
-    ID             int auto_increment primary key,
-    user_id        int                         null,
-    GebaeudePlus   decimal(11, 2) default 0.00 not null,
-    ForschungPlus  decimal(11, 2) default 0.00 not null,
-    ProduktionPlus decimal(11, 2) default 0.00 not null,
-    MafiaPlus      decimal(11, 2) default 0.00 not null,
-    MafiaMinus     decimal(11, 2) default 0.00 not null,
-    KriegMinus     decimal(11, 2) default 0.00 not null,
-    constraint user_id unique (user_id)
-) collate = utf8_unicode_ci;
-
 
 create table sitter
 (
@@ -380,6 +342,12 @@ create table statistik
     EinnahmenMarkt     decimal(12, 2) default 0.00 not null,
     EinnahmenVertraege decimal(12, 2) default 0.00 not null,
     EinnahmenMafia     decimal(12, 2) default 0.00 not null,
+    GebaeudePlus       int(9)         default 0    not null,
+    ForschungPlus      int(9)         default 0    not null,
+    ProduktionPlus     int(9)         default 0    not null,
+    MafiaPlus          int(9)         default 0    not null,
+    MafiaMinus         int(9)         default 0    not null,
+    KriegMinus         int(9)         default 0    not null,
     constraint user_id unique (user_id)
 ) collate = utf8_unicode_ci;
 

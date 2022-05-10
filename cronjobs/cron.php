@@ -82,7 +82,7 @@ function handleItemBaseProduction(): void
             $researchLevel = $entry['Forschung' . $i];
             $updates['Lager' . $i] = $researchLevel * item_base_production;
         }
-        Database::getInstance()->updateTableEntryCalculate('lagerhaus', null, $updates, array('user_id = :whr0' => $entry['UserID']));
+        Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['ID'], $updates);
     }
 }
 

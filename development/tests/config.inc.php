@@ -251,8 +251,6 @@ const starting_values = array(
         'Gruppe' => null,
         'GruppeLastMessageZeit' => null,
         'LastLogin' => null,
-    ),
-    'gebaeude' => array(
         'Gebaeude1' => 1,
         'Gebaeude2' => 0,
         'Gebaeude3' => 0,
@@ -261,8 +259,6 @@ const starting_values = array(
         'Gebaeude6' => 0,
         'Gebaeude7' => 0,
         'Gebaeude8' => 0,
-    ),
-    'forschung' => array(
         'Forschung1' => 1,
         'Forschung2' => 0,
         'Forschung3' => 0,
@@ -278,8 +274,6 @@ const starting_values = array(
         'Forschung13' => 0,
         'Forschung14' => 0,
         'Forschung15' => 0,
-    ),
-    'lagerhaus' => array(
         'Lager1' => 100,
         'Lager2' => 0,
         'Lager3' => 0,
@@ -296,14 +290,6 @@ const starting_values = array(
         'Lager14' => 0,
         'Lager15' => 0,
     ),
-    'punkte' => array(
-        'GebaeudePlus' => 0,
-        'ForschungPlus' => 0,
-        'ProduktionPlus' => 0,
-        'MafiaPlus' => 0,
-        'MafiaMinus' => 0,
-        'KriegMinus' => 0,
-    ),
     'statistik' => array(
         'AusgabenGebaeude' => 0,
         'AusgabenForschung' => 0,
@@ -318,6 +304,12 @@ const starting_values = array(
         'EinnahmenMarkt' => 0,
         'EinnahmenVertraege' => 0,
         'EinnahmenMafia' => 0,
+        'GebaeudePlus' => 0,
+        'ForschungPlus' => 0,
+        'ProduktionPlus' => 0,
+        'MafiaPlus' => 0,
+        'MafiaMinus' => 0,
+        'KriegMinus' => 0,
     ),
 );
 

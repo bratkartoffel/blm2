@@ -20,9 +20,9 @@ $playerName = Database::getInstance()->getPlayerNameById($_SESSION['blm_user']);
 if ($alles == 1) {
     $sumMoney = 0;
     $updateStorageValues = array();
-    $updateStorageWhere = array('user_id = :whr0' => $_SESSION['blm_user']);
+    $updateStorageWhere = array();
     Database::getInstance()->begin();
-    $idx = 1;
+    $idx = 0;
     for ($i = 1; $i <= count_wares; $i++) {
         $amount = $data['Lager' . $i];
         if ($amount == 0) continue;
@@ -56,7 +56,7 @@ if ($alles == 1) {
         redirectTo('/?p=bioladen', 142, __LINE__);
     }
 
-    if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
             $updateStorageValues, $updateStorageWhere) == 0) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=bioladen', 142, __LINE__);
@@ -89,9 +89,9 @@ if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
     redirectTo('/?p=bioladen', 142, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
         array('Lager' . $was => -$menge),
-        array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $was . ' >= :whr1' => $menge)) == 0) {
+        array('Lager' . $was . ' >= :whr0' => $menge)) == 0) {
     Database::getInstance()->rollBack();
     redirectTo('/?p=bioladen', 142, __LINE__);
 }

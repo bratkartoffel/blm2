@@ -34,9 +34,9 @@ switch (floor($auftrag['item'] / 100)) {
         $duration = strtotime($auftrag['finished']) - strtotime($auftrag['created']);
         $completed = time() - strtotime($auftrag['created']);
         $percent = $completed / $duration;
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', null,
                 array('Lager' . ($auftrag['item'] % 100) => floor($auftrag['amount'] * $percent)),
-                array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
+                array('ID = :whr0' => $_SESSION['blm_user'])) === null) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
         }
         break;

@@ -37,36 +37,32 @@ function CheckAuftraege(int $blm_user): bool
         switch (floor($auftrag['item'] / 100)) {
             // Gebäude
             case 1:
-                if (Database::getInstance()->updateTableEntryCalculate('gebaeude', null,
-                        array('Gebaeude' . ($auftrag['item'] % 100) => 1), array('user_id = :whr0' => $blm_user)) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                        array('Gebaeude' . ($auftrag['item'] % 100) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
-                        array('GebaeudePlus' => $auftrag['points']),
-                        array('user_id = :whr0' => $blm_user)) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate('statistik', $blm_user,
+                        array('GebaeudePlus' => $auftrag['points'])) != 1) {
                     return false;
                 }
                 break;
 
             // Produktion
             case 2:
-                if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
-                        array('Lager' . ($auftrag['item'] % 100) => $auftrag['amount']),
-                        array('user_id = :whr0' => $blm_user)) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                        array('Lager' . ($auftrag['item'] % 100) => $auftrag['amount'])) != 1) {
                     return false;
                 }
                 break;
 
             // Forschung
             case 3:
-                if (Database::getInstance()->updateTableEntryCalculate('forschung', null,
-                        array('Forschung' . ($auftrag['item'] % 100) => 1),
-                        array('user_id = :whr0' => $blm_user)) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                        array('Forschung' . ($auftrag['item'] % 100) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
-                        array('ForschungPlus' => $auftrag['points']),
-                        array('user_id = :whr0' => $blm_user)) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate('statistik', $blm_user,
+                        array('ForschungPlus' => $auftrag['points'])) != 1) {
                     return false;
                 }
                 break;
@@ -702,7 +698,7 @@ function resetAccount(int $blm_user): ?string
     // handle all contracts which where sent to this user
     $data = Database::getInstance()->getAllContractsByAnEquals($blm_user);
     foreach ($data as $entry) {
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', $entry['Von'], array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'], array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
             return 'lagerhaus';
         }
     }

@@ -75,13 +75,7 @@ if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
 }
 if ($success) {
     if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
-            array('Punkte' => mafia_base_data[$action]['points'])) !== 1) {
-        Database::getInstance()->rollback();
-        redirectTo($backLink, 142, __LINE__);
-    }
-    if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
-            array('MafiaPlus' => mafia_base_data[$action]['points']),
-            array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+            array('Punkte' => mafia_base_data[$action]['points'], 'MafiaPlus' => mafia_base_data[$action]['points'])) !== 1) {
         Database::getInstance()->rollback();
         redirectTo($backLink, 142, __LINE__);
     }
@@ -274,20 +268,19 @@ switch ($action) {
         if ($success) {
             $valuesSub = array();
             $valuesAdd = array();
-            $wheresSub = array('user_id = :whr0' => $otherPlayer['ID']);
+            $wheresSub = array();
             for ($i = 1; $i <= count_wares; $i++) {
                 $valuesSub['Lager' . $i] = -$data['Lager' . $i];
-                $wheresSub['Lager' . $i . ' >= :whr' . $i] = $data['Lager' . $i];
+                $wheresSub['Lager' . $i . ' >= :whr' . ($i - 1)] = $data['Lager' . $i];
                 $valuesAdd['Lager' . $i] = $data['Lager' . $i];
             }
 
-            if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null, $valuesAdd,
-                    array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], $valuesAdd) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
 
-            if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null, $valuesSub, $wheresSub) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $otherPlayer['ID'], $valuesSub, $wheresSub) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
@@ -389,19 +382,14 @@ switch ($action) {
             $data = Database::getInstance()->getPlayerPlantageAndBauhofLevel($otherPlayer['ID']);
             $plantage = calculateBuildingDataForPlayer(1, $data, 0);
 
-            if (Database::getInstance()->updateTableEntryCalculate('gebaeude', null,
-                    array('Gebaeude1' => -1), array('user_id = :whr0' => $otherPlayer['ID'])) !== 1) {
-                Database::getInstance()->rollback();
-                redirectTo($backLink, 142, __LINE__);
-            }
             if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $otherPlayer['ID'],
-                    array('Punkte' => -$plantage['Punkte'])) !== 1) {
+                    array('Gebaeude1' => -1, 'Punkte' => -$plantage['Punkte'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('punkte', null,
+            if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
                     array('MafiaMinus' => $plantage['Punkte']),
-                    array('useR_id = :whr0' => $otherPlayer['ID'])) !== 1) {
+                    array('user_id = :whr0' => $otherPlayer['ID'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }

@@ -22,9 +22,9 @@ switch ($id) {
         break;
 
     case 12:
-        Database::getInstance()->updateTableEntry('gebaeude', null, array('Gebaeude1' => 3, 'Gebaeude2' => 3), array('user_id = :whr0' => $id));
-        Database::getInstance()->updateTableEntry('forschung', null, array('Forschung1' => 2, 'Forschung2' => 1), array('user_id = :whr0' => $id));
-        Database::getInstance()->updateTableEntry('lagerhaus', null, array('Lager1' => 100, 'Lager2' => 50), array('user_id = :whr0' => $id));
+        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Gebaeude1' => 3, 'Gebaeude2' => 3));
+        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Forschung1' => 2, 'Forschung2' => 1));
+        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Lager1' => 100, 'Lager2' => 50));
         break;
 
     case 13:
@@ -32,7 +32,7 @@ switch ($id) {
         break;
 
     case 14:
-        Database::getInstance()->updateTableEntry('gebaeude', null, array('Gebaeude1' => 8), array('user_id = :whr0' => $id));
+        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Gebaeude1' => 8));
         break;
 
     default:

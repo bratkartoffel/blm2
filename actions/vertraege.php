@@ -36,9 +36,9 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
                 array('Lager' . $ware => -$menge),
-                array('user_id = :whr0' => $_SESSION['blm_user'], 'Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
+                array('Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
             Database::getInstance()->rollBack();
             redirectTo($backLink, 142, __LINE__);
         }
@@ -64,16 +64,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
-                array('Geld' => -$data['Menge'] * $data['Preis']),
+                array('Geld' => -$data['Menge'] * $data['Preis'], 'Lager' . $data['Was'] => $data['Menge']),
                 array('Geld >= :whr0' => $data['Menge'] * $data['Preis'])) == 0) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 111, __LINE__);
-        }
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
-                array('Lager' . $data['Was'] => $data['Menge']),
-                array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
-            Database::getInstance()->rollBack();
-            redirectTo('/?p=vertraege_liste', 142, __LINE__);
         }
         if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
                 array('AusgabenVertraege' => $data['Menge'] * $data['Preis']),
@@ -132,9 +126,8 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $hisName = ($data['An'] === $_SESSION['blm_user'] ? Database::getInstance()->getPlayerNameById($data['Von']) : Database::getInstance()->getPlayerNameById($data['An']));
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('lagerhaus', null,
-                array('Lager' . $data['Was'] => $data['Menge']),
-                array('user_id = :whr0' => $data['Von'])) == 0) {
+        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $data['Von'],
+                array('Lager' . $data['Was'] => $data['Menge'])) == 0) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 142, __LINE__);
         }

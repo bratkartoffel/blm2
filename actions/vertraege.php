@@ -31,7 +31,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 
         $minPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
-        if ($preis < $minPrice || $preis > $minPrice * 2) {
+        if ($preis < round($minPrice * contract_min_sell_price, 2) || $preis > round($minPrice * contract_max_sell_price, 2)) {
             redirectTo($backLink, 153, __LINE__);
         }
 

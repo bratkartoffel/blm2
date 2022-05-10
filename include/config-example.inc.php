@@ -234,6 +234,10 @@ const action_retract_rate = 0.75;
 const market_min_sell_price = 0.75;
 const market_max_sell_price = 2;
 
+// minimum and maximum sell price of an item in percent of the current shop price
+const contract_min_sell_price = 0.5;
+const contract_max_sell_price = 2;
+
 // starting values for each new player or resettet account
 // key is the database table name, value is an associative array with column => value pairs
 const starting_values = array(
@@ -245,6 +249,7 @@ const starting_values = array(
         'IgmEmpfangen' => 0,
         'NextMafia' => null,
         'OnlineZeit' => 0,
+        'OnlineZeitSinceLastCron' => 0,
         'Gruppe' => null,
         'GruppeLastMessageZeit' => null,
         'LastLogin' => null,

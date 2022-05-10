@@ -86,10 +86,19 @@ function handleItemBaseProduction(): void
     }
 }
 
+function handleOnlinezeitUpdate(): void
+{
+    $interval = cron_interval * 60;
+    $stmt = Database::getInstance()->prepare("UPDATE mitglieder SET OnlineZeit = OnlineZeit + IF(OnlineZeitSinceLastCron > :cronInterval, :cronInterval, OnlineZeitSinceLastCron), OnlineZeitSinceLastCron = 0");
+    $stmt->bindParam('cronInterval', $interval, PDO::PARAM_INT);
+    Database::getInstance()->executeAndGetAffectedRows($stmt);
+}
+
 Database::getInstance()->begin();
 CheckAllAuftraege();
 handleInterestRates();
 handleItemBaseProduction();
+handleOnlinezeitUpdate();
 Database::getInstance()->commit();
 
 // separate transaction for each player to reset

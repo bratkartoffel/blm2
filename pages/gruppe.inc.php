@@ -123,13 +123,19 @@ if ($id != 0) {
             <ul>
                 <?php
                 foreach ($members as $member) {
-                    $online = strtotime($member['LastAction']) + 1800 >= time();
-                    echo sprintf('<li><img src="%s" alt="%s" title="%s"/> %s (%s)</li>',
-                        $online ? '/pics/style/online.webp' : '/pics/style/offline.webp',
-                        $online ? 'Online' : 'Offline',
-                        $online ? 'Online' : 'Offline',
-                        createProfileLink($member['ID'], $member['Name']),
-                        formatPoints($member['Punkte']));
+                    if ($id == $player['GruppeID']) {
+                        $online = strtotime($member['LastAction']) + 1800 >= time();
+                        echo sprintf('<li><img src="%s" alt="%s" title="%s"/> %s (%s)</li>',
+                            $online ? '/pics/style/online.webp' : '/pics/style/offline.webp',
+                            $online ? 'Online' : 'Offline',
+                            $online ? 'Online' : 'Offline',
+                            createProfileLink($member['ID'], $member['Name']),
+                            formatPoints($member['Punkte']));
+                    } else {
+                        echo sprintf('<li>%s (%s)</li>',
+                            createProfileLink($member['ID'], $member['Name']),
+                            formatPoints($member['Punkte']));
+                    }
                 }
                 ?>
             </ul>

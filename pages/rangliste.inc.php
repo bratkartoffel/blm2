@@ -50,12 +50,6 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
             <td><?= ($offset * ranking_page_size) + $i + 1; ?></td>
             <td>
                 <?php
-                $online = strtotime($row['LastAction']) + 1800 >= time();
-                ?>
-                <img src="<?= ($online ? '/pics/style/online.webp' : '/pics/style/offline.webp'); ?>"
-                     alt="<?= ($online ? 'Online' : 'Offline'); ?>"
-                     title="<?= ($online ? 'Online' : 'Offline'); ?>"/>
-                <?php
                 echo createProfileLink($row['BenutzerID'], $row['BenutzerName']);
                 if ($row['IstAdmin']) {
                     echo '<div class="UserRank Administrator"></div>';

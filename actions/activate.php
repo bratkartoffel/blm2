@@ -14,7 +14,7 @@ if ($id === null) {
     redirectTo('/?p=index', 117, __LINE__);
 }
 Database::getInstance()->begin();
-if (Database::getInstance()->updateTableEntry('mitglieder', $id, array('EMailAct' => null)) !== 1) {
+if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('EMailAct' => null)) !== 1) {
     Database::getInstance()->rollBack();
     redirectTo('/?p=index', 117, __LINE__);
 }

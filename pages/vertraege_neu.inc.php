@@ -83,3 +83,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
     }
     ?>
 </table>
+
+<div>
+    <a href="/?p=vertraege_liste">&lt;&lt; Zurück</a>
+</div>

@@ -87,6 +87,10 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
         Hier können Sie alle Ihre Gebäude ausbauen und ihre aktuelle Stufe sehen.
     </p>
 
+    <script>
+        reloadOnCountdown = true;
+    </script>
+
 <?php
 if (buildingRequirementsMet(1, $data)) {
     printBuildingInformation($data, $auftraege, 1,

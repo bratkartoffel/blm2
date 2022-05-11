@@ -32,7 +32,7 @@ if ($alles == 1) {
         $updateStorageValues['Lager' . $i] = -$amount;
         $updateStorageWhere['Lager' . $i . ' >= :whr' . $idx++] = $amount;
 
-        if (Database::getInstance()->createTableEntry('log_bioladen', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_SHOP, array(
                 'playerId' => $_SESSION['blm_user'],
                 'playerName' => $playerName,
                 'amount' => $amount,
@@ -44,19 +44,19 @@ if ($alles == 1) {
         }
     }
 
-    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
             array('Geld' => $sumMoney)) == 0) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=bioladen', 142, __LINE__);
     }
 
-    if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
             array('EinnahmenVerkauf' => $sumMoney), array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=bioladen', 142, __LINE__);
     }
 
-    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
             $updateStorageValues, $updateStorageWhere) == 0) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=bioladen', 142, __LINE__);
@@ -77,26 +77,26 @@ if ($menge <= 0 || $menge > $data['Lager' . $was]) {
 $price = calculateSellPrice($was, $data['Forschung' . $was], $data['Gebaeude3'], $data['Gebaeude6']);
 
 Database::getInstance()->begin();
-if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
         array('Geld' => $price * $menge)) == 0) {
     Database::getInstance()->rollBack();
     redirectTo('/?p=bioladen', 142, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
         array('EinnahmenVerkauf' => $price * $menge), array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
     Database::getInstance()->rollBack();
     redirectTo('/?p=bioladen', 142, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
         array('Lager' . $was => -$menge),
         array('Lager' . $was . ' >= :whr0' => $menge)) == 0) {
     Database::getInstance()->rollBack();
     redirectTo('/?p=bioladen', 142, __LINE__);
 }
 
-if (Database::getInstance()->createTableEntry('log_bioladen', array(
+if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_SHOP, array(
         'playerId' => $_SESSION['blm_user'],
         'playerName' => $playerName,
         'amount' => $menge,

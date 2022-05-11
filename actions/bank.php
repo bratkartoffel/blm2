@@ -27,7 +27,7 @@ switch ($art) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array(
                 'Geld' => -$betrag,
                 'Bank' => +$betrag
             ), array(
@@ -37,7 +37,7 @@ switch ($art) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('log_bank', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_BANK, array(
                 'playerId' => $_SESSION['blm_user'],
                 'playerName' => $data['Name'],
                 'amount' => $betrag,
@@ -58,7 +58,7 @@ switch ($art) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array(
                 'Geld' => +$betrag,
                 'Bank' => -$betrag
             ), array(
@@ -68,7 +68,7 @@ switch ($art) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('log_bank', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_BANK, array(
                 'playerId' => $_SESSION['blm_user'],
                 'playerName' => $data['Name'],
                 'amount' => $betrag,
@@ -96,22 +96,22 @@ switch ($art) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => -$betrag,), array('Geld >= :whr0' => $betrag)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntryCalculate('gruppe_kasse', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP_CASH, null,
                 array('amount' => +$betrag), array('user_id = :whr0' => $_SESSION['blm_user'], 'group_id = :whr1' => $data['Gruppe'])) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);
         }
 
-        if (Database::getInstance()->updateTableEntryCalculate('gruppe', $data['Gruppe'], array('Kasse' => +$betrag)) !== 1) {
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $data['Gruppe'], array('Kasse' => +$betrag)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $data['Gruppe'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $data['Name'])
@@ -122,7 +122,7 @@ switch ($art) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 141, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('log_gruppenkasse', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_GROUP_CASH, array(
                 'senderId' => $_SESSION['blm_user'],
                 'senderName' => $data['Name'],
                 'groupId' => $group['ID'],

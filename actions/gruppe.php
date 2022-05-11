@@ -16,7 +16,7 @@ function pinMessage($id, $pinned)
     }
 
     Database::getInstance()->begin();
-    if (Database::getInstance()->updateTableEntry('gruppe_nachrichten', $id, array('Festgepinnt' => $pinned)) !== 1) {
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP_MESSAGES, $id, array('Festgepinnt' => $pinned)) !== 1) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=gruppe', 142, __LINE__);
     }
@@ -62,7 +62,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->createTableEntry('gruppe', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP, array(
                 'Name' => $name,
                 'Kuerzel' => $tag,
                 'Passwort' => hashPassword($pwd)
@@ -71,7 +71,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 141, __LINE__);
         }
         $gid = Database::getInstance()->lastInsertId();
-        if (Database::getInstance()->createTableEntry('gruppe_rechte', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_RIGHTS, array(
                 'group_id' => $gid,
                 'user_id' => $_SESSION['blm_user'],
                 'message_write' => 1,
@@ -89,18 +89,18 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_kasse', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_CASH, array(
                 'group_id' => $gid, 'user_id' => $_SESSION['blm_user'],
             )) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 141, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Gruppe' => $gid), array('Gruppe IS NULL')) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $gid,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => 'Die Gruppe wurde von ' . createBBProfileLink($_SESSION['blm_user'], $player['Name']) . ' gegründet.'
@@ -139,12 +139,12 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Gruppe' => $group['ID']), array('Gruppe IS NULL')) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_rechte', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_RIGHTS, array(
                 'group_id' => $group['ID'],
                 'user_id' => $_SESSION['blm_user'],
                 'message_write' => 1,
@@ -152,10 +152,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 141, __LINE__);
         }
-        if (!Database::getInstance()->existsTableEntry('gruppe_kasse', array(
+        if (!Database::getInstance()->existsTableEntry(Database::TABLE_GROUP_CASH, array(
             'group_id' => $group['ID'], 'user_id' => $_SESSION['blm_user'],
         ))) {
-            if (Database::getInstance()->createTableEntry('gruppe_kasse', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_CASH, array(
                     'group_id' => $group['ID'],
                     'user_id' => $_SESSION['blm_user'],
                 )) !== 1) {
@@ -163,7 +163,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 141, __LINE__);
             }
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $group['ID'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $player['Name']) . ' hat die Gruppe betreten.'
@@ -183,7 +183,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         Database::getInstance()->begin();
         $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $player['Gruppe'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $player['Name']) . ' hat die Gruppe verlassen.'
@@ -191,17 +191,17 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe', 141, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Gruppe' => null, 'GruppeLastMessageZeit' => null)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe', 142, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntryWhere('gruppe_rechte',
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_RIGHTS,
                 array('group_id' => $player['Gruppe'], 'user_id' => $_SESSION['blm_user'])) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe', 142, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntryWhere('gruppe_kasse',
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_CASH,
                 array('group_id' => $player['Gruppe'], 'user_id' => $_SESSION['blm_user'], 'amount' => 0)) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe', 142, __LINE__);
@@ -211,7 +211,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             // player is the last member
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_einstellungen', 162, __LINE__);
-        } else if (!Database::getInstance()->existsTableEntry('gruppe_rechte', array('group_id' => $player['Gruppe'], 'member_rights' => 1))) {
+        } else if (!Database::getInstance()->existsTableEntry(Database::TABLE_GROUP_RIGHTS, array('group_id' => $player['Gruppe'], 'member_rights' => 1))) {
             // player was the last one with the right to edit the permissions
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe', 161, __LINE__);
@@ -234,7 +234,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->createTableEntry('gruppe_nachrichten', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_MESSAGES, array(
                 'Gruppe' => $player['Gruppe'],
                 'Von' => $_SESSION['blm_user'],
                 'Nachricht' => $message
@@ -266,7 +266,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->deleteTableEntry('gruppe_nachrichten', $id) !== 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_GROUP_MESSAGES, $id) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe', 143, __LINE__);
         }
@@ -299,27 +299,27 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         requireEntryFound($group, sprintf('/?p=gruppe_kasse&receiver=%d&amount=%f', $receiver, $amount), __LINE__);
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $receiver,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $receiver,
                 array('Geld' => $amount)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe_kasse&receiver=%d&amount=%f',
                 $receiver, $amount), 142, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntryCalculate('gruppe_kasse', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP_CASH, null,
                 array('amount' => -$amount),
                 array('group_id = :whr0' => $player['Gruppe'], 'user_id = :whr1' => $receiver)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe_kasse&receiver=%d&amount=%f',
                 $receiver, $amount), 142, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntryCalculate('gruppe', $player['Gruppe'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $player['Gruppe'],
                 array('Kasse' => -$amount),
                 array('Kasse >= :whr0' => $amount)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe_kasse&receiver=%d&amount=%f',
                 $receiver, $amount), 110, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $player['Gruppe'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $player['Name'])
@@ -330,7 +330,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo(sprintf('/?p=gruppe_kasse&receiver=%d&amount=%f',
                 $receiver, $amount), 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('log_gruppenkasse', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_GROUP_CASH, array(
                 'senderId' => $_SESSION['blm_user'],
                 'senderName' => $player['Name'],
                 'receiverId' => $receiver,
@@ -379,12 +379,12 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('gruppe_rechte', null,
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP_RIGHTS, null,
                 $changes, array('group_id = :whr0' => $player['Gruppe'], 'user_id = :whr1' => $user_id)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_mitgliederverwaltung', 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $player['Gruppe'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $player['Name']) . ' hat die Rechte von '
@@ -414,27 +414,27 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $other_player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($user_id);
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('mitglieder', $user_id,
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $user_id,
                 array('Gruppe' => null), array('Gruppe = :whr0' => $player['Gruppe'])) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_mitgliederverwaltung', 142, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntryWhere('gruppe_rechte',
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_RIGHTS,
                 array('user_id' => $user_id, 'group_id' => $player['Gruppe'])) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_mitgliederverwaltung', 143, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntryWhere('gruppe_kasse',
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_CASH,
                 array('user_id' => $user_id, 'group_id' => $player['Gruppe'], 'amount' => 0)) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_mitgliederverwaltung', 143, __LINE__);
         }
-        if (!Database::getInstance()->existsTableEntry('gruppe_rechte', array('group_id' => $player['Gruppe'], 'member_rights' => 1))) {
+        if (!Database::getInstance()->existsTableEntry(Database::TABLE_GROUP_RIGHTS, array('group_id' => $player['Gruppe'], 'member_rights' => 1))) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_mitgliederverwaltung', 161, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $player['Gruppe'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => createBBProfileLink($_SESSION['blm_user'], $player['Name']) . ' hat '
@@ -504,7 +504,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('gruppe', $player['Gruppe'], array('Beschreibung' => $beschreibung)) === null) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP, $player['Gruppe'], array('Beschreibung' => $beschreibung)) === null) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=gruppe_einstellungen&beschreibung=%s', urlencode($beschreibung)), 143, __LINE__);
         }
@@ -530,7 +530,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('gruppe', $player['Gruppe'], array('Passwort' => hashPassword($new_pw1))) === null) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP, $player['Gruppe'], array('Passwort' => hashPassword($new_pw1))) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_einstellungen', 141, __LINE__);
         }
@@ -554,8 +554,8 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->existsTableEntry('gruppe_diplomatie', array('Von' => $player['Gruppe']))
-            || Database::getInstance()->existsTableEntry('gruppe_diplomatie', array('An' => $player['Gruppe']))) {
+        if (Database::getInstance()->existsTableEntry(Database::TABLE_GROUP_DIPLOMACY, array('Von' => $player['Gruppe']))
+            || Database::getInstance()->existsTableEntry(Database::TABLE_GROUP_DIPLOMACY, array('An' => $player['Gruppe']))) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_einstellungen', 163, __LINE__);
         }
@@ -600,11 +600,11 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->deleteTableEntryWhere('gruppe_diplomatie', array('ID' => $id, 'Aktiv' => 1)) !== 1) {
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_DIPLOMACY, array('ID' => $id, 'Aktiv' => 1)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 143, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $usId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('%s hat die diplomatische Beziehung (%s) mit %s aufgekündigt',
@@ -615,7 +615,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $themId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('Unsere diplomatische Beziehung (%s) mit %s wurde von %s aufgekündigt',
@@ -648,17 +648,17 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $themName = ($diplomacy['GruppeAnId'] != $player['Gruppe'] ? $diplomacy['GruppeAnName'] : $diplomacy['GruppeVonName']);
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->deleteTableEntryWhere('gruppe_diplomatie', array('ID' => $id, 'Aktiv' => 0)) !== 1) {
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_DIPLOMACY, array('ID' => $id, 'Aktiv' => 0)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 143, __LINE__);
         }
         if ($diplomacy['Betrag'] !== null) {
-            if (Database::getInstance()->updateTableEntryCalculate('gruppe', $player['Gruppe'], array('Kasse' => $diplomacy['Betrag'])) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $player['Gruppe'], array('Kasse' => $diplomacy['Betrag'])) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=gruppe_diplomatie', 142, __LINE__);
             }
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $player['Gruppe'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('%s hat die diplomatische Anfrage (%s) an %s zurückgezogen',
@@ -669,7 +669,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $themId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('Die diplomatische Anfrage (%s) von %s wurde durch %s zurückgezogen',
@@ -705,7 +705,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $themName = ($diplomacy['GruppeAnId'] != $player['Gruppe'] ? $diplomacy['GruppeAnName'] : $diplomacy['GruppeVonName']);
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->deleteTableEntry('gruppe_diplomatie', $id) !== 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_GROUP_DIPLOMACY, $id) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 143, __LINE__);
         }
@@ -713,14 +713,14 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         // update the loser stuff
         $allMembers = Database::getInstance()->getGroupMembersById($usId);
         foreach ($allMembers as $member) {
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $member['ID'],
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $member['ID'],
                     array('Gebaeude1' => -group_war_loose_plantage,
                         'Punkte' => -(group_war_loose_points * $member['Punkte'])),
                     array('Gebaeude1 >= :whr0' => group_war_loose_plantage)) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=gruppe_diplomatie', 142, __LINE__ . '_g' . $member['ID']);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                     array('KriegMinus' => (group_war_loose_points * $member['Punkte'])),
                     array('user_id = :whr0' => $member['ID'])) === null) {
                 Database::getInstance()->rollBack();
@@ -729,14 +729,14 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         // update winner cash
-        if (Database::getInstance()->updateTableEntryCalculate('gruppe', $themId,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $themId,
                 array('Kasse' => 2 * $diplomacy['Betrag'])) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 142, __LINE__);
         }
 
         // create NAP
-        if (Database::getInstance()->createTableEntry('gruppe_diplomatie', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_DIPLOMACY, array(
                 'Von' => $usId,
                 'An' => $themId,
                 'Typ' => group_diplomacy_nap,
@@ -746,7 +746,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo('/?p=gruppe_diplomatie', 141, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $usId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('%s hat im Krieg mit %s die Kapitulation verkündet. Alle Mitglieder der Gruppe verlieren %d Level ihrer Plantage und %s ihrer Punkte. Der umkämpfte Betrag von %s geht komplett an den Gegner.',
@@ -759,7 +759,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $themId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('Wir waren siegreich! %s hat im Namen unser Gegner %s im Krieg gegen uns kapituliert! Wir haben %s als Beute gewonnen.',
@@ -807,12 +807,12 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 132, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('gruppe', $us['ID'],
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $us['ID'],
                     array('Kasse' => -$amount), array('Kasse >= :whr0' => $amount)) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 166, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('gruppe_diplomatie', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_DIPLOMACY, array(
                     'Von' => $us['ID'],
                     'An' => $them['ID'],
                     'Typ' => $typ,
@@ -822,7 +822,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 redirectTo($backLink, 141, __LINE__);
             }
         } else {
-            if (Database::getInstance()->createTableEntry('gruppe_diplomatie', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_DIPLOMACY, array(
                     'Von' => $us['ID'],
                     'An' => $them['ID'],
                     'Typ' => $typ
@@ -831,7 +831,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 redirectTo($backLink, 141, __LINE__);
             }
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $us['ID'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('%s hat eine neue diplomatische Anfrage (%s) an %s gesendet',
@@ -842,7 +842,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo($backLink, 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $them['ID'],
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('Eine neue diplomatische Anfrage (%s) mit %s wurde von %s empfangen',
@@ -875,18 +875,18 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         Database::getInstance()->begin();
         if ($diplomacy['Typ'] === group_diplomacy_war) {
-            if (Database::getInstance()->updateTableEntryCalculate('gruppe', $usId,
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $usId,
                     array('Kasse' => -$diplomacy['Betrag']), array('Kasse >= :whr0' => $diplomacy['Betrag'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo('/?p=gruppe_diplomatie', 166, __LINE__);
             }
         }
 
-        if (Database::getInstance()->updateTableEntry('gruppe_diplomatie', $id, array('Aktiv' => 1)) !== 1) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP_DIPLOMACY, $id, array('Aktiv' => 1)) !== 1) {
             Database::getInstance()->rollback();
             redirectTo('/?p=gruppe_diplomatie', 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $usId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('%s hat die diplomatische Anfrage (%s) von %s angenommen',
@@ -897,7 +897,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $themId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('Die diplomatische Anfrage (%s) an %s wurde von %s angenommen',
@@ -930,17 +930,17 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         Database::getInstance()->begin();
         if ($diplomacy['Typ'] == group_diplomacy_war) {
-            if (Database::getInstance()->updateTableEntryCalculate('gruppe', $themId, array('Kasse' => $diplomacy['Betrag'])) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_GROUP, $themId, array('Kasse' => $diplomacy['Betrag'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo('/?p=gruppe_diplomatie', 111, __LINE__);
             }
         }
 
-        if (Database::getInstance()->updateTableEntry('gruppe_diplomatie', $id, array('Aktiv' => 1)) !== 1) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP_DIPLOMACY, $id, array('Aktiv' => 1)) !== 1) {
             Database::getInstance()->rollback();
             redirectTo('/?p=gruppe_diplomatie', 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $usId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('%s hat die diplomatische Anfrage (%s) von %s abgelehnt',
@@ -951,7 +951,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=gruppe_diplomatie', 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('gruppe_logbuch', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_LOG, array(
                 'Gruppe' => $themId,
                 'Spieler' => $_SESSION['blm_user'],
                 'Text' => sprintf('Die diplomatische Anfrage (%s) an %s wurde von %s abgelehnt',

@@ -37,11 +37,11 @@ function CheckAuftraege(int $blm_user): bool
         switch (floor($auftrag['item'] / 100)) {
             // Gebäude
             case 1:
-                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
                         array('Gebaeude' . ($auftrag['item'] % 100) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate('statistik', $blm_user,
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, $blm_user,
                         array('GebaeudePlus' => $auftrag['points'])) != 1) {
                     return false;
                 }
@@ -49,7 +49,7 @@ function CheckAuftraege(int $blm_user): bool
 
             // Produktion
             case 2:
-                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
                         array('Lager' . ($auftrag['item'] % 100) => $auftrag['amount'])) != 1) {
                     return false;
                 }
@@ -57,11 +57,11 @@ function CheckAuftraege(int $blm_user): bool
 
             // Forschung
             case 3:
-                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
                         array('Forschung' . ($auftrag['item'] % 100) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate('statistik', $blm_user,
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, $blm_user,
                         array('ForschungPlus' => $auftrag['points'])) != 1) {
                     return false;
                 }
@@ -73,12 +73,12 @@ function CheckAuftraege(int $blm_user): bool
                 break;
         }
         if ($auftrag['points'] > 0) {
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $blm_user,
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
                     array('Punkte' => $auftrag['points'])) != 1) {
                 return false;
             }
         }
-        if (Database::getInstance()->deleteTableEntry('auftrag', $auftrag['ID']) != 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_JOBS, $auftrag['ID']) != 1) {
             return false;
         }
     }
@@ -631,7 +631,7 @@ function deleteAccount(int $blm_user): ?string
 
     // delete the user itself
     foreach (starting_values as $table => $ignored) {
-        if ($table == 'mitglieder') {
+        if ($table == Database::TABLE_USERS) {
             $wheres = array('ID' => $blm_user);
         } else {
             $wheres = array('user_id' => $blm_user);
@@ -668,7 +668,7 @@ function resetAccount(int $blm_user): ?string
 
     // reset all values to the starting defaults
     foreach (starting_values as $table => $values) {
-        if ($table == 'mitglieder') {
+        if ($table == Database::TABLE_USERS) {
             $idField = $blm_user;
             $wheres = array();
         } else {
@@ -682,12 +682,12 @@ function resetAccount(int $blm_user): ?string
 
     // delete all other data associated with this user
     $deleteTables = array(
-        'auftrag' => 'user_id',
-        'marktplatz' => 'Von',
-        'sitter' => 'ID',
-        'gruppe_rechte' => 'user_id',
-        'gruppe_kasse' => 'user_id',
-        'vertraege' => 'Von',
+        Database::TABLE_JOBS => 'user_id',
+        Database::TABLE_MARKET => 'Von',
+        Database::TABLE_SITTER => 'ID',
+        Database::TABLE_GROUP_RIGHTS => 'user_id',
+        Database::TABLE_GROUP_CASH => 'user_id',
+        Database::TABLE_CONTRACTS => 'Von',
     );
     foreach ($deleteTables as $table => $field) {
         if (Database::getInstance()->deleteTableEntryWhere($table, array($field => $blm_user)) === null) {
@@ -698,11 +698,12 @@ function resetAccount(int $blm_user): ?string
     // handle all contracts which where sent to this user
     $data = Database::getInstance()->getAllContractsByAnEquals($blm_user);
     foreach ($data as $entry) {
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'], array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
+                array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
             return 'lagerhaus';
         }
     }
-    if (Database::getInstance()->deleteTableEntryWhere('vertraege', array('An' => $blm_user)) === null) {
+    if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_CONTRACTS, array('An' => $blm_user)) === null) {
         return $table;
     }
 
@@ -711,8 +712,8 @@ function resetAccount(int $blm_user): ?string
 
 function updateLastAction(): void
 {
-    Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('OnlineZeitSinceLastCron' => time() - $_SESSION['blm_lastAction']));
-    Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('LastAction' => date('Y-m-d H:i:s')));
+    Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('OnlineZeitSinceLastCron' => time() - $_SESSION['blm_lastAction']));
+    Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('LastAction' => date('Y-m-d H:i:s')));
     $_SESSION['blm_lastAction'] = time();
 }
 
@@ -1350,7 +1351,7 @@ function handleRoundEnd(): void
     foreach (Database::getInstance()->getRanglisteUserEntries(0, 5) as $entry) {
         $rankingPoints .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
             base_url, $entry['BenutzerID'], escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
             Database::getInstance()->rollBack();
             die('Could not update eternal points for player ' . $entry['ID']);
         }
@@ -1419,7 +1420,9 @@ EOF;
     }
     Database::getInstance()->commit();
 
-    $tables = array('auftrag', 'log_bank', 'log_bioladen', 'log_gruppenkasse', 'log_login', 'log_mafia', 'log_vertraege');
+    $tables = array(Database::TABLE_JOBS, Database::TABLE_LOG_BANK, Database::TABLE_LOG_SHOP,
+        Database::TABLE_LOG_GROUP_CASH, Database::TABLE_LOG_LOGIN, Database::TABLE_LOG_MAFIA,
+        Database::TABLE_LOG_CONTRACTS);
     $status = Database::getInstance()->truncateTables($tables);
     if ($status !== null) {
         Database::getInstance()->rollBack();

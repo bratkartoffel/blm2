@@ -52,6 +52,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     ?>
 </table>
 <?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, admin_log_page_size); ?>
-<p>
-    <a href="/?p=admin">Zurück...</a>
-</p>
+
+<div>
+    <a href="/?p=admin">&lt;&lt; Zurück</a>
+</div>

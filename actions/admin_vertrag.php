@@ -21,7 +21,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 $von, $an, $ware, $menge, $preis), 120, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('vertraege',
+        if (Database::getInstance()->createTableEntry(Database::TABLE_CONTRACTS,
                 array('Von' => $von, 'An' => $an, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) == 0) {
             redirectTo(sprintf('Location: /?p=admin_vertrag_einstellen&von=%d&an=%d&ware=%d&menge=%d&preis=%F',
                 $von, $an, $ware, $menge, $preis), 141, __LINE__);
@@ -38,7 +38,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 $id, $von, $an, $ware, $menge, $preis), 120, __LINE__);
         }
 
-        if (Database::getInstance()->updateTableEntry('vertraege', $id, array('Von' => $von, 'An' => $an, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) === null) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_CONTRACTS, $id, array('Von' => $von, 'An' => $an, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) === null) {
             redirectTo(sprintf('Location: /?p=admin_vertrag_bearbeiten&id=%d&von=%d&an=%d&ware=%d&menge=%d&preis=%F',
                 $id, $an, $von, $ware, $menge, $preis), 142, __LINE__);
         } else {
@@ -48,7 +48,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // delete existing contract
     case 3:
-        if (Database::getInstance()->deleteTableEntry('vertraege', $id) == 0) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_CONTRACTS, $id) == 0) {
             redirectBack('/?p=admin_vertrag', 143, __LINE__);
         } else {
             redirectTo("/?p=admin_vertrag", 233);

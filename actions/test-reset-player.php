@@ -22,17 +22,17 @@ switch ($id) {
         break;
 
     case 12:
-        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Gebaeude1' => 3, 'Gebaeude2' => 3));
-        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Forschung1' => 2, 'Forschung2' => 1));
-        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Lager1' => 100, 'Lager2' => 50));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 3, 'Gebaeude2' => 3));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Forschung1' => 2, 'Forschung2' => 1));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Lager1' => 100, 'Lager2' => 50));
         break;
 
     case 13:
-        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Geld' => 100000, 'Bank' => 50000));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 100000, 'Bank' => 50000));
         break;
 
     case 14:
-        Database::getInstance()->updateTableEntry('mitglieder', $id, array('Gebaeude1' => 8));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 8));
         break;
 
     default:

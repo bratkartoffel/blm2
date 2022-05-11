@@ -30,7 +30,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Passwort' => hashPassword($new_pw1))) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=einstellungen', 141, __LINE__);
@@ -81,7 +81,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         if (strlen($beschreibung) == 0) $beschreibung = null;
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Beschreibung' => $beschreibung)) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=einstellungen&beschreibung=' . urlencode($beschreibung), 143, __LINE__);
@@ -151,7 +151,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('EMail' => $email, 'EMailAct' => $email_activation_code)) === null) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=einstellungen', 141, __LINE__);
@@ -177,7 +177,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
 
         Database::getInstance()->begin();
         if (!$aktiviert) {
-            if (Database::getInstance()->deleteTableEntryWhere('sitter', array('user_id' => $_SESSION['blm_user'])) == 0) {
+            if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_SITTER, array('user_id' => $_SESSION['blm_user'])) == 0) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 143, __LINE__);
             }
@@ -196,7 +196,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
             'Bioladen' => $bioladen,
             'Bank' => $bank
         );
-        if (Database::getInstance()->existsTableEntry('sitter', array('user_id' => $_SESSION['blm_user']))) {
+        if (Database::getInstance()->existsTableEntry(Database::TABLE_SITTER, array('user_id' => $_SESSION['blm_user']))) {
             if (strlen($pw_sitter) > 0) {
                 if (strlen($pw_sitter) < password_min_len) {
                     Database::getInstance()->rollBack();
@@ -210,7 +210,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
                 }
                 $fields['Passwort'] = hashPassword($pw_sitter);
             }
-            if (Database::getInstance()->updateTableEntry('sitter', null, $fields, array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
+            if (Database::getInstance()->updateTableEntry(Database::TABLE_SITTER, null, $fields, array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 142, __LINE__);
             }
@@ -228,7 +228,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
             }
             $fields['user_id'] = $_SESSION['blm_user'];
             $fields['Passwort'] = hashPassword($pw_sitter);
-            if (Database::getInstance()->createTableEntry('sitter', $fields) == 0) {
+            if (Database::getInstance()->createTableEntry(Database::TABLE_SITTER, $fields) == 0) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 141, __LINE__);
             }

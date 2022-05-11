@@ -84,7 +84,7 @@ function CountdownFields() {
             let hours = field.innerText.split(' Tage ')[1];
             value = Date.parse('1970-01-01T' + hours + 'Z') + (1000 * 86400 * days);
         }
-        if (value > 0) {
+        if (value > 0 || direction > 0) {
             field.innerText = "";
             let date = new Date(value + direction * 1000);
             if (value > 86400000 && direction < 0) {
@@ -97,8 +97,13 @@ function CountdownFields() {
                 second: "2-digit",
                 timeZone: 'UTC'
             });
-        } else if (reloadOnCountdown) {
-            document.location.reload();
+            if (field.innerText === '00:00:00' && reloadOnCountdown) {
+                if (document.location.href.includes('?')) {
+                    document.location.href = document.location.href + '&rld=1';
+                } else {
+                    document.location.href = document.location.href + '?rld=1';
+                }
+            }
         }
     };
     Array.prototype.forEach.call(document.getElementsByClassName('countdown'), field => countdown(field, -1))

@@ -51,6 +51,7 @@ $preis = getOrDefault($_GET, 'preis', .0);
         </table>
     </form>
 </div>
-<p>
-    <a href="/?p=admin">Zurück...</a>
-</p>
+
+<div>
+    <a href="/?p=admin_vertrag">&lt;&lt; Zurück</a>
+</div>

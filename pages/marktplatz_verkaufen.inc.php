@@ -77,3 +77,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
     }
     ?>
 </table>
+
+<div>
+    <a href="/?p=marktplatz_liste">&lt;&lt; Zurück</a>
+</div>

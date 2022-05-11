@@ -60,6 +60,7 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
         </table>
     </form>
 </div>
-<p>
-    <a href="/?p=admin_vertrag">Zurück...</a>
-</p>
+
+<div>
+    <a href="/?p=admin_vertrag">&lt;&lt; Zurück</a>
+</div>

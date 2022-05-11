@@ -63,7 +63,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     ?>
 </table>
 <?= createPaginationTable('/?p=admin_vertrag&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, admin_log_page_size); ?>
-<p>
+
+<div>
     <a href="/?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
-    <a href="/?p=admin">Zurück...</a>
-</p>
+    <a href="/?p=admin">&lt;&lt; Zurück</a>
+</div>

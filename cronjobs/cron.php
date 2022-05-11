@@ -22,9 +22,9 @@ function handleInterestRates(): void
     $interestRates = calculateInterestRates();
     $entries = Database::getInstance()->getAllPlayerIdAndBankAndBioladenAndDoenerstand();
     foreach ($entries as $entry) {
-        Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['ID'],
+        Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
             array('Geld' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])));
-        Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
             array('EinnahmenGebaeude' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])),
             array('user_id = :whr0' => $entry['ID']));
 
@@ -38,9 +38,9 @@ function handleInterestRates(): void
         }
         $amount = round($amount, 2);
         if ($amount != 0) {
-            Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['ID'],
+            Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
                 array('Bank' => $amount));
-            Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array($amount > 0 ? 'EinnahmenZinsen' : 'AusgabenZinsen' => abs($amount)),
                 array('user_id = :whr0' => $entry['ID']));
         }
@@ -59,7 +59,7 @@ function handleResetDueToDispo(): void
             trigger_error("Could not reset player " . $entry['ID'] . ' with status ' . $status, E_USER_WARNING);
             continue;
         }
-        if (Database::getInstance()->createTableEntry('nachrichten', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                 'Von' => 0,
                 'An' => $entry['ID'],
                 'Betreff' => 'Account zurückgesetzt',
@@ -82,23 +82,15 @@ function handleItemBaseProduction(): void
             $researchLevel = $entry['Forschung' . $i];
             $updates['Lager' . $i] = $researchLevel * item_base_production;
         }
-        Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['ID'], $updates);
+        Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'], $updates);
     }
-}
-
-function handleOnlinezeitUpdate(): void
-{
-    $interval = cron_interval * 60;
-    $stmt = Database::getInstance()->prepare("UPDATE mitglieder SET OnlineZeit = OnlineZeit + IF(OnlineZeitSinceLastCron > :cronInterval, :cronInterval, OnlineZeitSinceLastCron), OnlineZeitSinceLastCron = 0");
-    $stmt->bindParam('cronInterval', $interval, PDO::PARAM_INT);
-    Database::getInstance()->executeAndGetAffectedRows($stmt);
 }
 
 Database::getInstance()->begin();
 CheckAllAuftraege();
 handleInterestRates();
 handleItemBaseProduction();
-handleOnlinezeitUpdate();
+Database::getInstance()->updatePlayerOnlineTimes(cron_interval * 60);
 Database::getInstance()->commit();
 
 // separate transaction for each player to reset

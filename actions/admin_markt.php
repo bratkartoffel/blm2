@@ -20,7 +20,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 $von, $ware, $menge, $preis), 120, __LINE__);
         }
 
-        if (Database::getInstance()->createTableEntry('marktplatz', array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) !== 1) {
+        if (Database::getInstance()->createTableEntry(Database::TABLE_MARKET, array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) !== 1) {
             redirectTo(sprintf('/?p=admin_markt_einstellen&von=%d&ware=%d&menge=%d&preis=%f',
                 $von, $ware, $menge, $preis), 141, __LINE__);
         } else {
@@ -35,7 +35,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 $id, $von, $ware, $menge, $preis), 120, __LINE__);
         }
 
-        if (Database::getInstance()->updateTableEntry('marktplatz', $id, array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) === null) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_MARKET, $id, array('Von' => $von, 'Was' => $ware, 'Menge' => $menge, 'Preis' => $preis)) === null) {
             redirectTo(sprintf('/?p=admin_markt_bearbeiten&id=%d&von=%d&ware=%d&menge=%d&preis=%f',
                 $id, $von, $ware, $menge, $preis), 142, __LINE__);
         } else {
@@ -45,7 +45,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // delete existing offer
     case 3:
-        if (Database::getInstance()->deleteTableEntry('marktplatz', $id) !== 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_MARKET, $id) !== 1) {
             redirectBack('/?p=admin_markt', 143, __LINE__);
         } else {
             redirectTo('/?p=admin_markt', 233);

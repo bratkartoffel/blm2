@@ -233,6 +233,13 @@ div#Footer {
 
 /*endregion*/
 
+/*region Anmelden*/
+div.LoginForm {
+    margin-bottom: 20px;
+}
+
+/*endregion*/
+
 /*region Gebäude*/
 div.Gebaeude {
     margin-bottom: 20px;
@@ -595,6 +602,10 @@ table.Nachrichten tr.Ungelesen td {
     font-weight: bold;
 }
 
+div.NachrichtSchreiben {
+    margin-bottom: 20px;
+}
+
 /*endregion*/
 
 /*region Einstellungen*/
@@ -652,13 +663,6 @@ body#Chefbox tr.Kategorie2 td {
 
 /*endregion*/
 
-/*region Admin-Bereich*/
-div#FilterForm {
-    margin-bottom: 20px;
-}
-
-/*endregion*/
-
 /*region Rangliste*/
 table.Rangliste tr.highlight td {
     background-color: #ff7;
@@ -677,6 +681,10 @@ div.Administrator {
 
 div.BetaTester {
     background-image: url(/pics/small/bookmark_Silver.webp);
+}
+
+table.RanglisteSpezial {
+    margin-bottom: 20px;
 }
 
 /*endregion*/

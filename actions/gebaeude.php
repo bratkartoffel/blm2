@@ -17,7 +17,7 @@ if ($data['Geld'] < $buildingData['Kosten'] || !buildingRequirementsMet($was, $d
 }
 
 Database::getInstance()->begin();
-if (Database::getInstance()->createTableEntry('auftrag', array(
+if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $buildingData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
         'item' => $was + 100,
@@ -28,7 +28,7 @@ if (Database::getInstance()->createTableEntry('auftrag', array(
     redirectTo(sprintf('/?p=gebaeude&was=%d', $was), 141, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array(
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array(
         'Geld' => -$buildingData['Kosten']
     ), array(
         'Geld >= :whr0' => $buildingData['Kosten']
@@ -37,7 +37,7 @@ if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['
     redirectTo(sprintf('/?p=gebaeude&was=%d', $was), 142, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
         array('AusgabenGebaeude' => $buildingData['Kosten']),
         array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
     Database::getInstance()->rollBack();

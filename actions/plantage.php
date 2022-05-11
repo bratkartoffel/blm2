@@ -26,7 +26,7 @@ if ($alles == 1) {
         if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
         $productionData = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
 
-        if (Database::getInstance()->createTableEntry('auftrag', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
                 'finished' => date('Y-m-d H:i:s', time() + ($stunden * 3600)),
                 'user_id' => $_SESSION['blm_user'],
                 'item' => 200 + $i,
@@ -37,14 +37,14 @@ if ($alles == 1) {
         }
     }
 
-    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
             array('Geld' => -$sum_costs),
             array('Geld >= :whr0' => $sum_costs)) == 0) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=plantage', 111, __LINE__);
     }
 
-    if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
             array('AusgabenProduktion' => $sum_costs),
             array('user_id = :whr0' => $_SESSION['blm_user'])
         ) == 0) {
@@ -73,7 +73,7 @@ if (!productionRequirementsMet($was, $data['Gebaeude1'], $data['Forschung' . $wa
 
 Database::getInstance()->begin();
 
-if (Database::getInstance()->createTableEntry('auftrag', array(
+if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $stunden * 3600),
         'user_id' => $_SESSION['blm_user'],
         'item' => 200 + $was,
@@ -84,14 +84,14 @@ if (Database::getInstance()->createTableEntry('auftrag', array(
     redirectTo(sprintf('/?p=plantage&was=%d', $was), 141, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
         array('Geld' => -$stunden * $productionData['Kosten']),
         array('Geld >= :whr0' => $stunden * $productionData['Kosten'])) == 0) {
     Database::getInstance()->rollBack();
     redirectTo(sprintf('/?p=plantage&was=%d', $was), 111, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
         array('AusgabenProduktion' => $stunden * $productionData['Kosten']),
         array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
     Database::getInstance()->rollBack();

@@ -43,19 +43,19 @@ if (verifyPassword($pwd, $player['user_password'])) {
 
 Database::getInstance()->begin();
 if (!$_SESSION['blm_sitter']) {
-    if (passwordNeedsUpgrade($player['user_password']) && Database::getInstance()->updateTableEntry('mitglieder', $player['ID'],
+    if (passwordNeedsUpgrade($player['user_password']) && Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $player['ID'],
             array('Passwort' => hashPassword($pwd))) !== 1) {
         Database::getInstance()->rollBack();
         redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 142, __LINE__);
     }
-    if (Database::getInstance()->updateTableEntry('mitglieder', $player['ID'],
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $player['ID'],
             array('LastLogin' => date('Y-m-d H:i:s'), 'LastAction' => date('Y-m-d H:i:s'))) !== 1) {
         Database::getInstance()->rollBack();
         redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 142, __LINE__);
     }
 }
 
-if (Database::getInstance()->createTableEntry('log_login', array(
+if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_LOGIN, array(
         'ip' => $_SERVER['REMOTE_ADDR'],
         'playerId' => $player['ID'],
         'playerName' => $player['Name'],

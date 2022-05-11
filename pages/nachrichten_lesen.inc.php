@@ -7,7 +7,7 @@ requireEntryFound($data, '/?p=nachrichten_liste');
 
 if ($data['An'] == $_SESSION['blm_user']) {
     Database::getInstance()->begin();
-    if (Database::getInstance()->updateTableEntry('nachrichten', $data['ID'], array('Gelesen' => 1)) === null) {
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_MESSAGES, $data['ID'], array('Gelesen' => 1)) === null) {
         Database::getInstance()->rollBack();
         redirectTo('/?p=nachrichten_liste', 142, __LINE__);
     }
@@ -40,14 +40,15 @@ if ($data['An'] == $_SESSION['blm_user']) {
         <span><?= escapeForOutput($data['Betreff']); ?></span>
     </div>
     <div><?= replaceBBCode($data['Nachricht']); ?></div>
-    <div>
-        <a href="/?p=nachrichten_liste">Zurück</a>
-        <?php
-        if ($data['An'] == $_SESSION['blm_user'] && $data['Von'] != 0 && $data['VonID'] !== null) {
-            ?>
-            | <a href="/?p=nachrichten_schreiben&amp;reply=<?= $data['ID']; ?>">Antworten</a>
-            <?php
-        }
+</div>
+
+<div>
+    <a href="/?p=nachrichten_liste">&lt;&lt; Zurück</a>
+    <?php
+    if ($data['An'] == $_SESSION['blm_user'] && $data['Von'] != 0 && $data['VonID'] !== null) {
         ?>
-    </div>
+        | <a href="/?p=nachrichten_schreiben&amp;reply=<?= $data['ID']; ?>">Antworten</a>
+        <?php
+    }
+    ?>
 </div>

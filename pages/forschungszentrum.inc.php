@@ -3,7 +3,7 @@ restrictSitter('Forschung');
 
 $data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel($_SESSION['blm_user']);
 if ($data['Gebaeude2'] == 0) {
-    redirectTo('/?p=index', 145, __LINE__);
+    redirectTo('/?p=gebaeude', 145, "g2");
 }
 
 $auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'], 300, 400);
@@ -24,6 +24,10 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
         Hier können Sie das entsprechende Gemüse erforschen bzw. verbessern.<br/>
         Stufe 1 ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die produzierte Menge.<br/>
     </p>
+
+    <script>
+        reloadOnCountdown = true;
+    </script>
 
 <?php
 for ($i = 1; $i <= count_wares; $i++) {

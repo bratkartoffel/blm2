@@ -29,7 +29,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
             Database::getInstance()->begin();
             foreach ($data as $player) {
-                if (Database::getInstance()->createTableEntry('nachrichten', array(
+                if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                         'Von' => $_SESSION['blm_user'],
                         'An' => $player['ID'],
                         'Nachricht' => $message,
@@ -38,12 +38,12 @@ switch (getOrDefault($_GET, 'a', 0)) {
                     Database::getInstance()->rollBack();
                     redirectTo($base_link, 141, __LINE__);
                 }
-                if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $player['ID'], array('IgmEmpfangen' => 1)) !== 1) {
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $player['ID'], array('IgmEmpfangen' => 1)) !== 1) {
                     Database::getInstance()->rollBack();
                     redirectTo($base_link, 142, __LINE__);
                 }
             }
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('IgmGesendet' => count($data))) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('IgmGesendet' => count($data))) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 142, __LINE__);
             }
@@ -56,7 +56,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
             }
 
             Database::getInstance()->begin();
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => $_SESSION['blm_user'],
                     'An' => $receiverID,
                     'Nachricht' => $message,
@@ -65,11 +65,11 @@ switch (getOrDefault($_GET, 'a', 0)) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 141, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $receiverID, array('IgmEmpfangen' => 1)) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $receiverID, array('IgmEmpfangen' => 1)) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 142, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], array('IgmGesendet' => 1)) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('IgmGesendet' => 1)) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 142, __LINE__);
             }
@@ -86,7 +86,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
         requireEntryFound($data, '/?p=nachrichten_liste');
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->deleteTableEntry('nachrichten', $id) !== 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_MESSAGES, $id) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=nachrichten_liste', 143, __LINE__);
         }

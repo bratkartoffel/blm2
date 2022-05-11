@@ -34,7 +34,9 @@ if (isLoggedIn()) {
         redirectTo('/?p=anmelden', 102);
     }
     Database::getInstance()->begin();
-    updateLastAction();
+    if (getOrDefault($_GET, 'rld', 0) == 1) {
+        updateLastAction();
+    }
     CheckAuftraege($_SESSION['blm_user']);
     Database::getInstance()->commit();
 
@@ -61,6 +63,7 @@ if (isLoggedIn()) {
 <head>
     <link rel="stylesheet" type="text/css" href="styles/style.min.css?<?= game_version; ?>"/>
     <link rel="stylesheet" type="text/css" href="styles/mobile.min.css?<?= game_version; ?>"/>
+    <?= (isAdmin() ? '<link rel="stylesheet" type="text/css" href="styles/admin.min.css?<?= game_version; ?>"/>' : ''); ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>

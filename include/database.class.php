@@ -2,6 +2,28 @@
 
 class Database
 {
+    public const TABLE_JOBS = 'auftrag';
+    public const TABLE_CHANGELOG = 'changelog';
+    public const TABLE_GROUP = 'gruppe';
+    public const TABLE_GROUP_DIPLOMACY = 'gruppe_diplomatie';
+    public const TABLE_GROUP_CASH = 'gruppe_kasse';
+    public const TABLE_GROUP_LOG = 'gruppe_logbuch';
+    public const TABLE_GROUP_MESSAGES = 'gruppe_nachrichten';
+    public const TABLE_GROUP_RIGHTS = 'gruppe_rechte';
+    public const TABLE_MARKET = 'marktplatz';
+    public const TABLE_USERS = 'mitglieder';
+    public const TABLE_MESSAGES = 'nachrichten';
+    public const TABLE_PASSWORD_RESET = 'passwort_reset';
+    public const TABLE_SITTER = 'sitter';
+    public const TABLE_STATISTICS = 'statistik';
+    public const TABLE_CONTRACTS = 'vertraege';
+    public const TABLE_LOG_BANK = 'log_bank';
+    public const TABLE_LOG_SHOP = 'log_bioladen';
+    public const TABLE_LOG_GROUP_CASH = 'log_gruppenkasse';
+    public const TABLE_LOG_LOGIN = 'log_login';
+    public const TABLE_LOG_MAFIA = 'log_mafia';
+    public const TABLE_LOG_CONTRACTS = 'log_vertraege';
+
     private static ?Database $INSTANCE = null;
 
     public static function getInstance(): Database
@@ -55,17 +77,6 @@ class Database
     public function lastInsertId(): int
     {
         return $this->link->lastInsertId();
-    }
-
-    public function prepare(string $sql): ?PDOStatement
-    {
-        $this->queries++;
-        $stmt = $this->link->prepare($sql);
-        if ($stmt === false) {
-            $this->error($this->link, "Could not prepare statement: " . $sql);
-            return null;
-        }
-        return $stmt;
     }
 
     public function createTableEntry(string $table, array $values = array()): ?int
@@ -1273,6 +1284,13 @@ ORDER BY m.Name");
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function updatePlayerOnlineTimes(int $interval): ?int
+    {
+        $stmt = $this->prepare("UPDATE mitglieder SET OnlineZeit = OnlineZeit + IF(OnlineZeitSinceLastCron > :cronInterval, :cronInterval, OnlineZeitSinceLastCron), OnlineZeitSinceLastCron = 0");
+        $stmt->bindParam('cronInterval', $interval, PDO::PARAM_INT);
+        return $this->executeAndGetAffectedRows($stmt);
+    }
+
     public function countPendingGroupDiplomacy(int $group_id): ?int
     {
         $stmt = $this->prepare("SELECT count(1) AS Count FROM gruppe_diplomatie WHERE An = :id AND Aktiv = 0");
@@ -1337,6 +1355,17 @@ ORDER BY m.Name");
     public function getQueryCount(): int
     {
         return $this->queries;
+    }
+
+    private function prepare(string $sql): ?PDOStatement
+    {
+        $this->queries++;
+        $stmt = $this->link->prepare($sql);
+        if ($stmt === false) {
+            $this->error($this->link, "Could not prepare statement: " . $sql);
+            return null;
+        }
+        return $stmt;
     }
 
     private function error($handle, string $text): void

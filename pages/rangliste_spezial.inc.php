@@ -128,7 +128,7 @@ switch ($type) {
 <h2><?= $title; ?></h2>
 <p><?= $description; ?></p>
 
-<table class="Liste Rangliste">
+<table class="Liste Rangliste RanglisteSpezial">
     <tr>
         <th>Platz</th>
         <th>Spieler</th>

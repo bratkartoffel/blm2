@@ -30,13 +30,13 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Lager' . $ware => -$amount),
                 array('Lager' . $ware . ' >= :whr0' => $amount)) != 1) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 116, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('marktplatz', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_MARKET, array(
                 'Von' => $_SESSION['blm_user'],
                 'Was' => $ware,
                 'Menge' => $amount,
@@ -59,20 +59,20 @@ switch (getOrDefault($_GET, 'a', 0)) {
         $amount = $entry['Menge'] * $entry['Preis'];
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => -$amount),
                 array('Geld >= :whr0' => $amount)) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 111, __LINE__);
         }
 
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Lager' . $entry['Was'] => $entry['Menge'])) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 142, __LINE__);
         }
 
-        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array('AusgabenMarkt' => $amount), array('user_id = :whr0' => $_SESSION['blm_user'])) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 142, __LINE__);
@@ -80,12 +80,12 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
         if ($entry['Von'] != 0) {
             $reducedAmount = round($amount * (1 - market_provision_rate), 2);
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'],
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
                     array('Geld' => $reducedAmount)) != 1) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=marktplatz_liste', 142, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                     array('EinnahmenMarkt' => $reducedAmount),
                     array('user_id = :whr0' => $entry['Von'])) != 1) {
                 Database::getInstance()->rollBack();
@@ -93,7 +93,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
             }
         }
 
-        if (Database::getInstance()->createTableEntry('nachrichten', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                 'Von' => 0,
                 'An' => $entry['Von'],
                 'Betreff' => 'Angebot auf freiem Markt verkauft',
@@ -103,7 +103,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 141, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntry('marktplatz', $entry['ID']) != 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_MARKET, $entry['ID']) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 143, __LINE__);
         }
@@ -120,16 +120,16 @@ switch (getOrDefault($_GET, 'a', 0)) {
         requireEntryFound($entry, '/?p=marktplatz_liste');
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $entry['Von'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
                 array('Lager' . $entry['Was'] => floor($entry['Menge'] * market_retract_rate))) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 142, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntry('marktplatz', $entry['ID']) != 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_MARKET, $entry['ID']) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 143, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('nachrichten', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                 'Von' => 0,
                 'An' => $entry['Von'],
                 'Betreff' => 'Angebot vom freien Markt zurückgezogen',

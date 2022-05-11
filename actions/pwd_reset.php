@@ -63,7 +63,7 @@ switch (getOrDefault($_REQUEST, 'a')) {
             // existing request found, resend mail if older than 4h
             if (strtotime($request['created']) < time() - (3600 * 4)) {
                 Database::getInstance()->begin();
-                if (Database::getInstance()->updateTableEntry('passwort_reset', $request['ID'],
+                if (Database::getInstance()->updateTableEntry(Database::TABLE_PASSWORD_RESET, $request['ID'],
                         array('created' => date("Y-m-d H:i:s"))) !== 1) {
                     Database::getInstance()->rollBack();
                     redirectTo($back_link, 142, __LINE__);
@@ -83,7 +83,7 @@ switch (getOrDefault($_REQUEST, 'a')) {
 
         $token = createRandomCode();
         Database::getInstance()->begin();
-        if (Database::getInstance()->createTableEntry('passwort_reset', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_PASSWORD_RESET, array(
                 'user_id' => $data['ID'],
                 'token' => $token
             )) !== 1) {
@@ -102,14 +102,14 @@ switch (getOrDefault($_REQUEST, 'a')) {
         $id = getOrDefault($_GET, 'id', 0);
         $token = getOrDefault($_GET, 'token');
         Database::getInstance()->begin();
-        if (Database::getInstance()->deleteTableEntryWhere('passwort_reset', array('user_id' => $id, 'token' => $token)) !== 1) {
+        if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_PASSWORD_RESET, array('user_id' => $id, 'token' => $token)) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=passwort_vergessen', 154);
         }
 
         $data = Database::getInstance()->getPlayerNameAndEmailById($id);
         $pwd = createRandomPassword();
-        if (Database::getInstance()->updateTableEntry('mitglieder', $id, array('Passwort' => hashPassword($pwd))) !== 1) {
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Passwort' => hashPassword($pwd))) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=passwort_vergessen', 142, __LINE__);
         }

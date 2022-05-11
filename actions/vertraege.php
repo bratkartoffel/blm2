@@ -36,13 +36,13 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Lager' . $ware => -$menge),
                 array('Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
             Database::getInstance()->rollBack();
             redirectTo($backLink, 142, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('vertraege', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_CONTRACTS, array(
                 'Von' => $_SESSION['blm_user'],
                 'An' => $empfaengerId,
                 'Was' => $ware,
@@ -63,23 +63,23 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         requireEntryFound($data, '/?p=vertraege_liste');
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => -$data['Menge'] * $data['Preis'], 'Lager' . $data['Was'] => $data['Menge']),
                 array('Geld >= :whr0' => $data['Menge'] * $data['Preis'])) == 0) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 111, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array('AusgabenVertraege' => $data['Menge'] * $data['Preis']),
                 array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 142, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntry('vertraege', $vid) != 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_CONTRACTS, $vid) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 143, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('nachrichten', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                 'Von' => 0,
                 'An' => $_SESSION['blm_user'],
                 'Betreff' => 'Vertrag ' . $vid . ' angenommen',
@@ -88,7 +88,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 141, __LINE__);
         }
-        if ($data['Von'] > 0 && Database::getInstance()->createTableEntry('nachrichten', array(
+        if ($data['Von'] > 0 && Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                 'Von' => 0,
                 'An' => $data['Von'],
                 'Betreff' => 'Vertrag ' . $vid . ' angenommen',
@@ -97,7 +97,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 141, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry('log_vertraege', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_CONTRACTS, array(
                 'senderId' => $data['Von'],
                 'senderName' => Database::getInstance()->getPlayerNameById($data['Von']),
                 'receiverId' => $_SESSION['blm_user'],
@@ -126,18 +126,18 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $hisName = ($data['An'] === $_SESSION['blm_user'] ? Database::getInstance()->getPlayerNameById($data['Von']) : Database::getInstance()->getPlayerNameById($data['An']));
 
         Database::getInstance()->begin();
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $data['Von'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $data['Von'],
                 array('Lager' . $data['Was'] => $data['Menge'])) == 0) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 142, __LINE__);
         }
-        if (Database::getInstance()->deleteTableEntry('vertraege', $vid) != 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_CONTRACTS, $vid) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=vertraege_liste', 143, __LINE__);
         }
         // retract contract
         if ($data['Von'] == $_SESSION['blm_user']) {
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $myId,
                     'Betreff' => 'Vertrag ' . $vid . ' wurde zurückgezogen',
@@ -148,7 +148,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             }
         } else {
             // reject contract
-            if ($data['Von'] > 0 && Database::getInstance()->createTableEntry('nachrichten', array(
+            if ($data['Von'] > 0 && Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $hisId,
                     'Betreff' => 'Vertrag ' . $vid . ' wurde abgelehnt',
@@ -159,7 +159,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             }
         }
 
-        if (Database::getInstance()->createTableEntry('log_vertraege', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_CONTRACTS, array(
                 'senderId' => $data['Von'],
                 'senderName' => Database::getInstance()->getPlayerNameById($data['Von']),
                 'receiverId' => $data['An'],

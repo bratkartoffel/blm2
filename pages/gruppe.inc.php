@@ -201,7 +201,7 @@ if ($id != 0) {
             <?php
         }
 
-        Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('GruppeLastMessageZeit' => date('Y-m-d H:i:s')));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('GruppeLastMessageZeit' => date('Y-m-d H:i:s')));
 
         $entries = Database::getInstance()->getGroupMessageEntries($id, $offset, group_page_size);
         foreach ($entries as $row) {

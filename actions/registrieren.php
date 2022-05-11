@@ -51,7 +51,7 @@ $id = null;
 Database::getInstance()->begin();
 foreach (starting_values as $table => $values) {
     if ($id !== null) $values['user_id'] = $id;
-    if ($table == 'mitglieder') {
+    if ($table == Database::TABLE_USERS) {
         $values['Name'] = $name;
         $values['EMail'] = $email;
         $values['EMailAct'] = $email_activation_code;
@@ -61,7 +61,7 @@ foreach (starting_values as $table => $values) {
         Database::getInstance()->rollBack();
         redirectTo(sprintf('/?p=registrieren&name=%s&email=%s', $name, $email), 141, __LINE__ . '_' . $table);
     }
-    if ($table == 'mitglieder') $id = Database::getInstance()->lastInsertId();
+    if ($table == Database::TABLE_USERS) $id = Database::getInstance()->lastInsertId();
 }
 Database::getInstance()->commit();
 

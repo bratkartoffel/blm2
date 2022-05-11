@@ -18,11 +18,11 @@ switch (floor($auftrag['item'] / 100)) {
     // Gebäude
     case 1:
         $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array('AusgabenGebaeude' => -$moneyBack),
                 array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
@@ -34,7 +34,7 @@ switch (floor($auftrag['item'] / 100)) {
         $duration = strtotime($auftrag['finished']) - strtotime($auftrag['created']);
         $completed = time() - strtotime($auftrag['created']);
         $percent = $completed / $duration;
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, null,
                 array('Lager' . ($auftrag['item'] % 100) => floor($auftrag['amount'] * $percent)),
                 array('ID = :whr0' => $_SESSION['blm_user'])) === null) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
@@ -44,11 +44,11 @@ switch (floor($auftrag['item'] / 100)) {
     // Forschung
     case 3:
         $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
-        if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
         }
-        if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array('AusgabenForschung' => -$moneyBack),
                 array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
             redirectTo('/?p=' . urlencode($back), 142, __LINE__);
@@ -61,7 +61,7 @@ switch (floor($auftrag['item'] / 100)) {
         break;
 }
 
-if (Database::getInstance()->deleteTableEntry('auftrag', $id) === null) {
+if (Database::getInstance()->deleteTableEntry(Database::TABLE_JOBS, $id) === null) {
     redirectTo('/?p=' . urlencode($back), 143, __LINE__);
 }
 

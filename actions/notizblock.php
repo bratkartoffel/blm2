@@ -10,7 +10,7 @@ restrictSitter('Notizblock');
 $notizblock = getOrDefault($_POST, 'notizblock');
 
 Database::getInstance()->begin();
-if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'], array('Notizblock' => $notizblock)) === null) {
+if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('Notizblock' => $notizblock)) === null) {
     Database::getInstance()->rollBack();
     redirectTo(sprintf('/?p=notizblock&notizblock=%s', urlencode($notizblock)), 142, __LINE__);
 }

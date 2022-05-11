@@ -56,7 +56,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     ?>
 </table>
 <?= createPaginationTable('/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, admin_log_page_size); ?>
-<p>
-    <a href="/?p=admin">Zurück...</a><br/>
-    <a href="/?p=admin_markt_einstellen">Neues Angebot einstellen</a>
-</p>
+
+<div>
+    <a href="/?p=admin_markt_einstellen">Neues Angebot erstellen</a><br/>
+    <a href="/?p=admin">&lt;&lt; Zurück</a>
+</div>

@@ -12,7 +12,7 @@ $name = getOrDefault($_GET, 'name');
     Hier können Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten ein.
 </p>
 
-<div class="form">
+<div class="form LoginForm">
     <form action="/actions/login.php" method="post">
         <header>Login für registrierte Benutzer</header>
 

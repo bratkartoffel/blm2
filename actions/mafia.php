@@ -61,20 +61,20 @@ $random = mt_rand(0, $factor) / $factor;
 $success = $random <= $chance;
 
 Database::getInstance()->begin();
-if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
         array('Geld' => -mafia_base_data[$action][$level]['cost']),
         array('Geld >= :whr0' => mafia_base_data[$action][$level]['cost'])) !== 1) {
     Database::getInstance()->rollback();
     redirectTo($backLink, 111, __LINE__);
 }
-if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
         array('AusgabenMafia' => mafia_base_data[$action][$level]['cost']),
         array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
     Database::getInstance()->rollback();
     redirectTo($backLink, 111, __LINE__);
 }
 if ($success) {
-    if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
             array('Punkte' => mafia_base_data[$action]['points'], 'MafiaPlus' => mafia_base_data[$action]['points'])) !== 1) {
         Database::getInstance()->rollback();
         redirectTo($backLink, 142, __LINE__);
@@ -86,7 +86,7 @@ switch ($action) {
     case mafia_action_espionage:
         $sperrZeit = mafia_sperrzeit_spionage;
         if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
@@ -104,7 +104,7 @@ switch ($action) {
                 $buildings[] = sprintf('* %s: %d', getBuildingName($i), $data['Gebaeude' . $i]);
             }
 
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Spionage gegen ' . $data['Name'] . ' erfolgreich',
@@ -129,7 +129,7 @@ switch ($action) {
                 redirectTo($backLink, 141, __LINE__);
             }
         } else {
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Spionage gegen ' . $data['Name'] . ' fehlgeschlagen',
@@ -140,7 +140,7 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Spionageversuch von ' . $player['Name'] . ' vereitelt',
@@ -153,7 +153,7 @@ switch ($action) {
             }
         }
 
-        if (Database::getInstance()->createTableEntry('log_mafia', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                 'senderId' => $_SESSION['blm_user'],
                 'senderName' => $player['Name'],
                 'receiverId' => $otherPlayer['ID'],
@@ -172,7 +172,7 @@ switch ($action) {
     case mafia_action_robbery:
         $sperrZeit = mafia_sperrzeit_raub;
         if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
@@ -182,17 +182,17 @@ switch ($action) {
             $rate = mt_rand(0, $factor) / $factor;
             $amount = $otherPlayer['Geld'] * $rate;
 
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                     array('Geld' => $amount)) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $otherPlayer['ID'],
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'],
                     array('Geld' => -$amount), array('Geld >= :whr0' => $amount)) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Raub gegen ' . $otherPlayer['Name'] . ' erfolgreich',
@@ -203,7 +203,7 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Raub von ' . $player['Name'] . ' erfolgreich',
@@ -215,7 +215,7 @@ switch ($action) {
                 redirectTo($backLink, 141, __LINE__);
             }
         } else {
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Raub gegen ' . $otherPlayer['Name'] . ' fehlgeschlagen',
@@ -226,7 +226,7 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Raub von ' . $player['Name'] . ' vereitelt',
@@ -239,7 +239,7 @@ switch ($action) {
             }
         }
 
-        if (Database::getInstance()->createTableEntry('log_mafia', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                 'senderId' => $_SESSION['blm_user'],
                 'senderName' => $player['Name'],
                 'receiverId' => $otherPlayer['ID'],
@@ -259,7 +259,7 @@ switch ($action) {
     case mafia_action_heist:
         $sperrZeit = mafia_sperrzeit_diebstahl;
         if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
@@ -275,12 +275,12 @@ switch ($action) {
                 $valuesAdd['Lager' . $i] = $data['Lager' . $i];
             }
 
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'], $valuesAdd) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], $valuesAdd) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
 
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $otherPlayer['ID'], $valuesSub, $wheresSub) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'], $valuesSub, $wheresSub) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
@@ -288,7 +288,7 @@ switch ($action) {
             $wares = array();
             for ($i = 1; $i <= count_wares; $i++) {
                 if ($data['Lager' . $i] == 0) continue;
-                if (Database::getInstance()->createTableEntry('log_mafia', array(
+                if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                         'senderId' => $_SESSION['blm_user'],
                         'senderName' => $player['Name'],
                         'receiverId' => $otherPlayer['ID'],
@@ -305,7 +305,7 @@ switch ($action) {
                 $wares[] = sprintf("* %s: %s", getItemName($i), formatWeight($data['Lager' . $i]));
             }
 
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Diebstahl gegen ' . $otherPlayer['Name'] . ' erfolgreich',
@@ -318,7 +318,7 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Diebstahl von Unbekannt erfolgreich',
@@ -332,7 +332,7 @@ switch ($action) {
                 redirectTo($backLink, 141, __LINE__);
             }
         } else {
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Diebstahl gegen ' . $otherPlayer['Name'] . ' fehlgeschlagen',
@@ -343,7 +343,7 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Diebstahl von ' . $player['Name'] . ' vereitelt',
@@ -354,7 +354,7 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('log_mafia', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                     'senderId' => $_SESSION['blm_user'],
                     'senderName' => $player['Name'],
                     'receiverId' => $otherPlayer['ID'],
@@ -373,7 +373,7 @@ switch ($action) {
     // attack
     case mafia_action_attack:
         $sperrZeit = mafia_sperrzeit_bomben;
-        if (Database::getInstance()->updateTableEntry('mitglieder', $_SESSION['blm_user'],
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
             redirectTo($backLink, 142, __LINE__);
@@ -382,19 +382,19 @@ switch ($action) {
             $data = Database::getInstance()->getPlayerPlantageAndBauhofLevel($otherPlayer['ID']);
             $plantage = calculateBuildingDataForPlayer(1, $data, 0);
 
-            if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $otherPlayer['ID'],
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'],
                     array('Gebaeude1' => -1, 'Punkte' => -$plantage['Punkte'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
-            if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                     array('MafiaMinus' => $plantage['Punkte']),
                     array('user_id = :whr0' => $otherPlayer['ID'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
 
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Angriff gegen ' . $otherPlayer['Name'] . ' erfolgreich',
@@ -406,7 +406,7 @@ Ihr Konkurrent hat dadurch %s Punkte verloren.
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Angriff von ' . $player['Name'] . ' konnte nicht abgewandt werden',
@@ -420,7 +420,7 @@ Durch den Angriff haben wir leider zudem %s Punkte verloren.
                 redirectTo($backLink, 141, __LINE__);
             }
         } else {
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],
                     'Betreff' => 'Mafia: Angriff gegen ' . $otherPlayer['Name'] . ' fehlgeschlagen',
@@ -431,7 +431,7 @@ Durch den Angriff haben wir leider zudem %s Punkte verloren.
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }
-            if (Database::getInstance()->createTableEntry('nachrichten', array(
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $otherPlayer['ID'],
                     'Betreff' => 'Mafia: Angriff von ' . $player['Name'] . ' vereitelt',
@@ -444,7 +444,7 @@ Durch den Angriff haben wir leider zudem %s Punkte verloren.
             }
         }
 
-        if (Database::getInstance()->createTableEntry('log_mafia', array(
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                 'senderId' => $_SESSION['blm_user'],
                 'senderName' => $player['Name'],
                 'receiverId' => $otherPlayer['ID'],

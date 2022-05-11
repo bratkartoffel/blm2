@@ -51,6 +51,17 @@ $message = getOrDefault($_GET, 'message', $message);
     </form>
 </div>
 
+<div>
+    <?php
+    if ($reply !== 0) {
+        echo sprintf('<a href="/?p=nachrichten_lesen&amp;id=%d">&lt;&lt; Zurück</a>', $reply);
+    } else {
+        echo '<a href="/?p=nachrichten_liste">&lt;&lt; Zurück</a>';
+    }
+    ?>
+
+</div>
+
 <script>
     ZeichenUebrig(document.getElementById('message'), document.getElementById('charsLeft'));
 </script>

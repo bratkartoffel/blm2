@@ -27,7 +27,7 @@ if ($data['Geld'] < $researchData['Kosten']) {
 }
 
 Database::getInstance()->begin();
-if (Database::getInstance()->createTableEntry('auftrag', array(
+if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $researchData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
         'item' => 300 + $was,
@@ -38,14 +38,14 @@ if (Database::getInstance()->createTableEntry('auftrag', array(
     redirectTo('/?p=forschungszentrum', 141, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('mitglieder', $_SESSION['blm_user'],
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
         array('Geld' => -$researchData['Kosten']),
         array('Geld >= :whr0' => $researchData['Kosten'])) == 0) {
     Database::getInstance()->rollBack();
     redirectTo('/?p=forschungszentrum', 142, __LINE__);
 }
 
-if (Database::getInstance()->updateTableEntryCalculate('statistik', null,
+if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
         array('AusgabenForschung' => $researchData['Kosten']),
         array('user_id = :whr0' => $_SESSION['blm_user'])) == 0) {
     Database::getInstance()->rollBack();

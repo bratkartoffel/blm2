@@ -14,6 +14,7 @@ const captcha_validity_minutes = 5;
 
 class Captcha
 {
+    private bool $webpAvailable;
     private $image;
     private string $imageData;
     private int $id;
@@ -21,8 +22,13 @@ class Captcha
 
     public function __construct()
     {
-        if (!function_exists('imagejpeg')) {
-            trigger_error('Could not find the "imagejpeg" function, please ensure that the gd2 module is installed and enabled');
+        if (function_exists('imagewebp')) {
+            $this->webpAvailable = true;
+        } else {
+            $this->webpAvailable = false;
+            if (!function_exists('imagejpeg')) {
+                trigger_error('Could not find neither the "imagewebp", nor the "imagejpeg" function. Please ensure that the gd2 module is installed and enabled', E_USER_ERROR);
+            }
         }
     }
 
@@ -33,13 +39,21 @@ class Captcha
         $this->createImage();
         $this->drawCode();
         ob_start();
-        imagejpeg($this->image, null, 50);
+        if ($this->webpAvailable) {
+            imagewebp($this->image, null, 10);
+        } else {
+            imagejpeg($this->image, null, 50);
+        }
         $this->imageData = ob_get_clean();
     }
 
     public function getImageUrl(): string
     {
-        return sprintf("data:image/jpeg;base64,%s", base64_encode($this->imageData));
+        if ($this->webpAvailable) {
+            return sprintf("data:image/webp;base64,%s", base64_encode($this->imageData));
+        } else {
+            return sprintf("data:image/jpeg;base64,%s", base64_encode($this->imageData));
+        }
     }
 
     public function getId(): string

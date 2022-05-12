@@ -97,7 +97,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
                 'Von' => 0,
                 'An' => $entry['Von'],
                 'Betreff' => 'Angebot auf freiem Markt verkauft',
-                'Nachricht' => sprintf("Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) anonym gekauft.",
+                'Nachricht' => sprintf("Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) von einem anonymen Käufer gekauft.",
                     $entry['ID'], formatWeight($entry['Menge']), getItemName($entry['Was']), formatCurrency($amount))
             )) != 1) {
             Database::getInstance()->rollBack();

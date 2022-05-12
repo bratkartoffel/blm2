@@ -75,7 +75,13 @@ if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTIC
 }
 if ($success) {
     if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
-            array('Punkte' => mafia_base_data[$action]['points'], 'MafiaPlus' => mafia_base_data[$action]['points'])) !== 1) {
+            array('Punkte' => mafia_base_data[$action]['points'])) !== 1) {
+        Database::getInstance()->rollback();
+        redirectTo($backLink, 142, __LINE__);
+    }
+    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
+            array('MafiaPlus' => mafia_base_data[$action]['points']),
+            array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
         Database::getInstance()->rollback();
         redirectTo($backLink, 142, __LINE__);
     }

@@ -45,7 +45,13 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= createProfileLink($row['senderId'], $row['senderName']); ?></td>
             <td><?= createProfileLink($row['receiverId'], $row['receiverName']); ?></td>
             <td><?= formatDateTime(strtotime($row['created'])); ?></td>
-            <td><?= $row['action']; ?></td>
+            <td><?php
+                echo $row['action'];
+
+                if ($row['action'] == 'HEIST' && $row['success'] == 1) {
+                    echo sprintf(' (%s)', getItemName($row['item']));
+                }
+                ?></td>
             <td><?= ($row['action'] == 'HEIST') && $row['amount'] !== null ? formatWeight($row['amount']) : ($row['amount'] === null ? '-' : formatCurrency($row['amount'])); ?></td>
             <td><?= getYesOrNo($row['success']); ?></td>
             <td><?= formatPercent($row['chance']); ?></td>

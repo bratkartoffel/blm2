@@ -459,6 +459,14 @@ const interest_credit_rate_min = 0.020;
 // maximum credit rate (in percent)
 const interest_credit_rate_max = 0.025;
 
+if (maintenance_active) {
+    if (defined('IS_CRON')) {
+        die("Maintenance active\n");
+    } else {
+        die(sprintf('<!DOCTYPE html><html lang="de"><body><img src="/pics/big/clock.webp" alt="maintenance"/><h2>%s</h2></body></html>', maintenance_message));
+    }
+}
+
 // start a http session
 session_start();
 

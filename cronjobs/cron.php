@@ -1,5 +1,6 @@
 <?php
 error_reporting(E_ALL);
+const IS_CRON = true;
 
 if (!file_exists(dirname(__FILE__) . '/../include/config.inc.php')) {
     die('include/config.inc.php not found');

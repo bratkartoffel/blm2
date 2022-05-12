@@ -13,8 +13,11 @@ if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastActio
 }
 
 Database::getInstance()->begin();
-CheckAuftraege($_SESSION['blm_user']);
-Database::getInstance()->commit();
+if (CheckAuftraege($_SESSION['blm_user'])) {
+    Database::getInstance()->commit();
+} else {
+    Database::getInstance()->rollback();
+}
 
 $auftraege = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user']);
 $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['blm_user']);

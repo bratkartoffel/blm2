@@ -41,8 +41,9 @@ function CheckAuftraege(int $blm_user): bool
                         array('Gebaeude' . ($auftrag['item'] % 100) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, $blm_user,
-                        array('GebaeudePlus' => $auftrag['points'])) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
+                        array('GebaeudePlus' => $auftrag['points']),
+                        array('user_id = :whr0' => $blm_user)) != 1) {
                     return false;
                 }
                 break;
@@ -61,15 +62,15 @@ function CheckAuftraege(int $blm_user): bool
                         array('Forschung' . ($auftrag['item'] % 100) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, $blm_user,
-                        array('ForschungPlus' => $auftrag['points'])) != 1) {
+                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
+                        array('ForschungPlus' => $auftrag['points']),
+                        array('user_id = :whr0' => $blm_user)) != 1) {
                     return false;
                 }
                 break;
 
             // Unknown
             default:
-
                 break;
         }
         if ($auftrag['points'] > 0) {
@@ -788,7 +789,11 @@ function formatPoints(float $amount): string
 
 function formatDate(int $date): string
 {
-    return date("d.m.Y", $date);
+    if ($date > 0) {
+        return date("d.m.Y", $date);
+    } else {
+        return 'Nie';
+    }
 }
 
 function formatDateTime(?int $date): string
@@ -981,7 +986,7 @@ Date: %s', admin_name, admin_email, admin_name, admin_email, date(DATE_RFC2822))
 function createNavigationLink(string $target, string $text, string $sitterRightsRequired): string
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
-        return sprintf('<div class="NaviLink"><a href="/?p=%s">%s</a></div>', $target, $text);
+        return sprintf('<div class="NaviLink"><a href="/?p=%s">%s</a></div>%s', $target, $text, "\n");
     }
     return "";
 }

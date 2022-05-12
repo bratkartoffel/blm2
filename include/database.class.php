@@ -1374,13 +1374,15 @@ ORDER BY m.Name");
         if (sizeof($errorInfo) > 0 && $errorInfo[0] != '00000') {
             $text .= " (" . var_export($errorInfo, true) . ")";
         }
+        $file = __FILE__;
         $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
         for ($i = 1; $i < count($bt); $i++) {
-            if ($bt[$i]["file"] != __FILE__) {
+            if ($bt[$i]["file"] != $file) {
                 break;
             }
         }
-        trigger_error($bt[$i]["function"] . ": " . $text, E_USER_WARNING);
+        $text = str_replace(["\n ", "\n"], [" ", ""], $text);
+        trigger_error(sprintf("%s:%d | %s", basename($bt[$i]["file"]), $bt[$i]["line"], $text), E_USER_WARNING);
     }
 
     private function executeAndExtractField(PDOStatement $stmt, string $fieldName, array $executeParam = array()): ?string

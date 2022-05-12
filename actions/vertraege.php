@@ -38,7 +38,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Lager' . $ware => -$menge),
-                array('Lager' . $ware . ' >= :whr1' => $menge)) != 1) {
+                array('Lager' . $ware . ' >= :whr0' => $menge)) != 1) {
             Database::getInstance()->rollBack();
             redirectTo($backLink, 142, __LINE__);
         }

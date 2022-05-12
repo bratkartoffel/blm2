@@ -89,4 +89,6 @@ restrictSitter('Vertraege');
     ?>
 </table>
 
-<a href="/?p=vertraege_neu">Neuen Vertrag aufsetzen</a>
+<p>
+    <a href="/?p=vertraege_neu">Neuen Vertrag aufsetzen</a>
+</p>

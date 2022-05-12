@@ -4,17 +4,6 @@ require_once('include/config.inc.php');
 require_once('include/functions.inc.php');
 require_once('include/database.class.php');
 
-if (maintenance_active) {
-session_destroy();
-?><!DOCTYPE html>
-<html lang="de">
-<body><img src="/pics/big/clock.webp" alt="maintenance"/>
-<h2><?= maintenance_message; ?></h2></body>
-</html>
-<?php
-die();
-}
-
 ob_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 'true');
@@ -34,11 +23,14 @@ if (isLoggedIn()) {
         redirectTo('/?p=anmelden', 102);
     }
     Database::getInstance()->begin();
-    if (getOrDefault($_GET, 'rld', 0) == 1) {
+    if (getOrDefault($_GET, 'rld', 0) === 0) {
         updateLastAction();
     }
-    CheckAuftraege($_SESSION['blm_user']);
-    Database::getInstance()->commit();
+    if (CheckAuftraege($_SESSION['blm_user'])) {
+        Database::getInstance()->commit();
+    } else {
+        Database::getInstance()->rollback();
+    }
 
     $data = Database::getInstance()->getPlayerBankAndMoneyGroupIdAndBioladenLevelAndDoenerstandLevel($_SESSION['blm_user']);
     if ($data === null) {
@@ -63,7 +55,7 @@ if (isLoggedIn()) {
 <head>
     <link rel="stylesheet" type="text/css" href="styles/style.min.css?<?= game_version; ?>"/>
     <link rel="stylesheet" type="text/css" href="styles/mobile.min.css?<?= game_version; ?>"/>
-    <?= (isAdmin() ? '<link rel="stylesheet" type="text/css" href="styles/admin.min.css?<?= game_version; ?>"/>' : ''); ?>
+    <?= (isAdmin() ? '<link rel="stylesheet" type="text/css" href="styles/admin.min.css?' . game_version . '"/>' : ''); ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>

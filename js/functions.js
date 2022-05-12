@@ -88,9 +88,9 @@ function CountdownFields() {
             field.innerText = "";
             let date = new Date(value + direction * 1000);
             if (value > 86400000 && direction < 0) {
-                field.innerText += Math.floor(value / 86400000) + " Tage ";
+                field.innerText += Math.floor(value / 86400000) + " Tage";
             }
-            field.innerText += date.toLocaleTimeString("de-DE", {
+            field.innerText += ' ' + date.toLocaleTimeString("de-DE", {
                 hour12: false,
                 hour: "2-digit",
                 minute: "2-digit",

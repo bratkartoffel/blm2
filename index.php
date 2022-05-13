@@ -65,7 +65,7 @@ if (isLoggedIn()) {
 </head>
 <body onload="MarkActiveLink();">
 <div id="Navigation" class="<?= (isLoggedIn() ? 'online' : 'offline'); ?>">
-    <img id="Logo" src="/pics/style/logo.webp" alt="Logo"/>
+    <div id="Logo"></div>
     <?php
     if (isLoggedIn()) {
         ?>

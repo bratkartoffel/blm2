@@ -463,40 +463,19 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo('/?p=gruppe_einstellungen', 112, __LINE__);
         }
 
-        if (filesize($_FILES['bild']['tmp_name']) > max_profile_image_size) {
-            redirectTo('/?p=gruppe_einstellungen', 103, __LINE__);
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP, $player['Gruppe'], array('LastImageChange' => date('Y-m-d H:i:s'))) !== 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=gruppe_einstellungen', 142, __LINE__);
         }
+        Database::getInstance()->commit();
 
-        @unlink(sprintf('../pics/uploads/g_%s.jpg', $player['Gruppe']));
-        @unlink(sprintf('../pics/uploads/g_%s.png', $player['Gruppe']));
-        @unlink(sprintf('../pics/uploads/g_%s.gif', $player['Gruppe']));
-        @unlink(sprintf('../pics/uploads/g_%s.webp', $player['Gruppe']));
-        if ($_FILES['bild']['size'] == 0) {
-            redirectTo('/?p=gruppe_einstellungen', 209, __LINE__);
+        $status = uploadProfilePicture($_FILES['bild'], sprintf('../pics/uploads/g_%d.webp', $player['Gruppe']));
+        if ($status > 0) {
+            redirectTo('/?p=gruppe_einstellungen', $status, __LINE__);
+        } else {
+            redirectTo('/?p=gruppe_einstellungen', 210, __LINE__);
         }
-
-        $typ = $_FILES['bild']['type'];
-        $suffix = 'dat';
-        switch ($typ) {
-            case 'image/jpeg':
-            case 'image/jpg':
-                $suffix = 'jpg';
-                break;
-            case 'image/gif':
-                $suffix = 'gif';
-                break;
-            case 'image/png':
-                $suffix = 'png';
-                break;
-            case 'image/webp':
-                $suffix = 'webp';
-                break;
-            default:
-                redirectTo('/?p=gruppe_einstellungen', 107, __LINE__);
-                break;
-        }
-        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/uploads/g_%s.%s', $player['Gruppe'], $suffix));
-        redirectTo('/?p=gruppe_einstellungen', 210, __LINE__);
         break;
 
     // edit group description
@@ -571,9 +550,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        @unlink(sprintf("../pics/uploads/g_%d.jpg", $player['Gruppe']));
-        @unlink(sprintf("../pics/uploads/g_%d.png", $player['Gruppe']));
-        @unlink(sprintf("../pics/uploads/g_%d.gif", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.webp", $player['Gruppe']));
         redirectTo('/?p=gruppe', 228, __LINE__);
         break;
 

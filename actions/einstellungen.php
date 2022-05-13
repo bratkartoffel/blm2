@@ -92,40 +92,19 @@ switch (getOrDefault($_POST, 'a', 0)) {
 
     // Update profile picture
     case 5:
-        if (filesize($_FILES['bild']['tmp_name']) > max_profile_image_size) {
-            redirectTo('/?p=einstellungen', 103, __LINE__);
-        }
 
-        @unlink(sprintf('../pics/uploads/u_%s.jpg', $_SESSION['blm_user']));
-        @unlink(sprintf('../pics/uploads/u_%s.png', $_SESSION['blm_user']));
-        @unlink(sprintf('../pics/uploads/u_%s.gif', $_SESSION['blm_user']));
-        @unlink(sprintf('../pics/uploads/u_%s.webp', $_SESSION['blm_user']));
-        if ($_FILES['bild']['size'] == 0) {
-            redirectTo('/?p=einstellungen', 209);
+        Database::getInstance()->begin();
+        if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('LastImageChange' => date('Y-m-d H:i:s'))) !== 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=gruppe_einstellungen', 142, __LINE__);
         }
-
-        $typ = $_FILES['bild']['type'];
-        $suffix = 'dat';
-        switch ($typ) {
-            case 'image/jpeg':
-            case 'image/jpg':
-                $suffix = 'jpg';
-                break;
-            case 'image/gif':
-                $suffix = 'gif';
-                break;
-            case 'image/png':
-                $suffix = 'png';
-                break;
-            case 'image/webp':
-                $suffix = 'webp';
-                break;
-            default:
-                redirectTo('/?p=einstellungen', 107, __LINE__);
-                break;
+        Database::getInstance()->commit();
+        $status = uploadProfilePicture($_FILES['bild'], sprintf('../pics/uploads/u_%d.webp', $_SESSION['blm_user']));
+        if ($status > 0) {
+            redirectTo('/?p=einstellungen', $status, __LINE__);
+        } else {
+            redirectTo('/?p=einstellungen', 210);
         }
-        move_uploaded_file($_FILES['bild']['tmp_name'], sprintf('../pics/uploads/u_%s.%s', $_SESSION['blm_user'], $suffix));
-        redirectTo('/?p=einstellungen', 210);
         break;
 
     // Change email address

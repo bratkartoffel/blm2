@@ -643,9 +643,6 @@ function deleteAccount(int $blm_user): ?string
     }
 
     // delete his profile picture
-    @unlink(sprintf("../pics/uploads/u_%d.jpg", $blm_user));
-    @unlink(sprintf("../pics/uploads/u_%d.png", $blm_user));
-    @unlink(sprintf("../pics/uploads/u_%d.gif", $blm_user));
     @unlink(sprintf("../pics/uploads/u_%d.webp", $blm_user));
     return null;
 }
@@ -662,9 +659,7 @@ function resetAccount(int $blm_user): ?string
         if ($status !== null) {
             return $status;
         }
-        @unlink(sprintf("../pics/uploads/g_%d.jpg", $player['Gruppe']));
-        @unlink(sprintf("../pics/uploads/g_%d.png", $player['Gruppe']));
-        @unlink(sprintf("../pics/uploads/g_%d.gif", $player['Gruppe']));
+        @unlink(sprintf("../pics/uploads/g_%d.webp", $player['Gruppe']));
     }
 
     // reset all values to the starting defaults
@@ -1495,4 +1490,36 @@ function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId,
     } else {
         return '<select name="opponent">' . implode("\n", $entries) . '</select>';
     }
+}
+
+function uploadProfilePicture(array $file, string $filename): int
+{
+    if (filesize($file['tmp_name']) > max_profile_image_size) {
+        return 103;
+    }
+
+    @unlink($filename);
+    if ($file['size'] == 0) {
+        return 209;
+    }
+
+    switch ($file['type']) {
+        case 'image/jpeg':
+        case 'image/jpg':
+            $data = imagecreatefromjpeg($file['tmp_name']);
+            break;
+        case 'image/gif':
+            $data = imagecreatefromgif($file['tmp_name']);
+            break;
+        case 'image/png':
+            $data = imagecreatefrompng($file['tmp_name']);
+            break;
+        case 'image/webp':
+            $data = imagecreatefromwebp($file['tmp_name']);
+            break;
+        default:
+            return 107;
+    }
+    imagewebp($data, $filename, 50);
+    return 0;
 }

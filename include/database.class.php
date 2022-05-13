@@ -872,7 +872,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getGroupInformationById(int $group): ?array
     {
-        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Beschreibung, (SELECT SUM(Punkte) FROM mitglieder m WHERE m.Gruppe = g.ID) AS Punkte
+        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Beschreibung, (SELECT SUM(Punkte) FROM mitglieder m WHERE m.Gruppe = g.ID) AS Punkte, g.LastImageChange
             FROM gruppe g INNER JOIN mitglieder m ON g.ID = m.Gruppe
             WHERE g.ID = :id");
         $stmt->bindParam("id", $group, PDO::PARAM_INT);
@@ -1181,7 +1181,9 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerCardByID(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT m.ID, m.Name, coalesce(m.Beschreibung, '[i]Keine[/i]') AS Beschreibung, m.RegistriertAm, m.Punkte, m.Verwarnungen, m.Gesperrt, m.LastLogin, m.IgmGesendet, m.IgmEmpfangen, g.ID AS GruppeID, coalesce(g.Name, 'Keine') AS GruppeName
+        $stmt = $this->prepare("SELECT m.ID, m.Name, coalesce(m.Beschreibung, '[i]Keine[/i]') AS Beschreibung, 
+                m.RegistriertAm, m.Punkte, m.Verwarnungen, m.Gesperrt, m.LastLogin, m.IgmGesendet, m.IgmEmpfangen,
+                g.ID AS GruppeID, coalesce(g.Name, 'Keine') AS GruppeName, m.LastImageChange
             FROM mitglieder m LEFT OUTER JOIN gruppe g ON m.Gruppe = g.ID
             WHERE m.ID = :id
             AND m.ID > 0");

@@ -114,7 +114,7 @@ if ($id != 0) {
             <div class="GroupImage"><img
                         src="/pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($group['LastImageChange'] == null ? 0 : strtotime($group['LastImageChange'])); ?>"
                         alt="Gruppenbild"/></div>
-            <div><?= replaceBBCode(strlen($group['Beschreibung']) == 0 ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
+            <div class="GroupDescription"><?= replaceBBCode(strlen($group['Beschreibung']) == 0 ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
         </div>
         <div class="right">
             <div><b>Kürzel</b>: <?= escapeForOutput($group['Kuerzel']); ?></div>

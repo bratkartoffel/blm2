@@ -475,8 +475,12 @@ div.Gruppe div.right {
     text-align: left;
 }
 
-div.Gruppe div.right div {
-    text-align: inherit;
+div.Gruppe div.right div:last-of-type {
+    text-align: initial;
+}
+
+div.Gruppe div.GroupDescription {
+    max-width: 550px;
 }
 
 div.Gruppe div.GroupImage {
@@ -485,8 +489,8 @@ div.Gruppe div.GroupImage {
 }
 
 div.Gruppe div.GroupImage img {
-    max-height: 600px;
-    max-width: 600px;
+    max-height: 550px;
+    max-width: 550px;
 }
 
 div.GroupMessage {

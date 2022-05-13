@@ -47,7 +47,6 @@ if (!array_key_exists($cmb, hilfe_texte)) {
     <li><a href="/?p=hilfe&amp;mod=1&amp;cat=17">Rangliste</a></li>
     <li><a href="/?p=hilfe&amp;mod=1&amp;cat=18">Serverstatistik</a></li>
     <li><a href="/?p=hilfe&amp;mod=1&amp;cat=19">Regeln</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=20">Changelog</a></li>
     <li><a href="/?p=hilfe&amp;mod=1&amp;cat=21">Impressum</a></li>
     <li><a href="/?p=hilfe&amp;mod=1&amp;cat=23">Gruppen</a></li>
 </ol>

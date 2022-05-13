@@ -1,11 +1,6 @@
-# One day for image files
-<FilesMatch ".(jpg|jpeg|png|gif|ico|webp)$">
+# One day for images, scripts and styles
+<FilesMatch "\.(ico|webp|css|js)$">
     Header set Cache-Control "max-age=86400, public"
-</FilesMatch>
-
-# 4 hours for scripts
-<FilesMatch ".(css|js)$">
-    Header set Cache-Control "max-age=14400, public"
 </FilesMatch>
 
 # deny access to git folder

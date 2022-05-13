@@ -1047,7 +1047,6 @@ function getCurrentPage(): string
             case "index":
             case "impressum":
             case "regeln":
-            case "changelog":
             case "einstellungen":
             case "nachrichten_lesen":
             case "nachrichten_liste":

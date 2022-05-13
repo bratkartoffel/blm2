@@ -13,15 +13,6 @@ create table auftrag
 create index user_id on auftrag (user_id);
 
 
-create table changelog
-(
-    ID          int auto_increment primary key,
-    created     date          not null,
-    category    varchar(64)   not null,
-    description varchar(1024) not null
-) collate = utf8_unicode_ci;
-
-
 create table gruppe
 (
     ID           int auto_increment primary key,

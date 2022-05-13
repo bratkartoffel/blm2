@@ -111,7 +111,6 @@ if (isLoggedIn()) {
                 <div class="NaviLink"><a href="/?p=statistik">Serverstatistik</a></div>
                 <div class="NaviLink"><a href="/?p=regeln">Regeln</a></div>
                 <div class="NaviLink"><a href="/?p=hilfe">Hilfe</a></div>
-                <div class="NaviLink"><a href="/?p=changelog">Changelog</a></div>
                 <div class="NaviLink"><a href="/?p=impressum">Impressum</a></div>
                 <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" target="_blank">Spenden</a>
                 </div>

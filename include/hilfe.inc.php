@@ -24,7 +24,7 @@ Wenn die Runde läuft, dann sehen Sie einige Informationen über die Runde, zum 
 da man manche erst bei fortschreitenden Spielverlauf bekommt.
 	
 Bei jedem Gebäude steht ein kurzer Informationstext, der den Zweck des Gebäudes erklärt. Ausserdem stehen auch immer die Ausbauzeit und Ausbaukosten dabei.
-Diese werden von Stufe zu Stufe erhöht, meist um einen Faktor von ~1,3 je Stufe (genaueres können Sie dem Changelog oder dem Quelltext direkt entnehmen).
+Diese werden von Stufe zu Stufe erhöht, meist um einen Faktor von ~1,3 je Stufe.
 
 Hier ist noch eine Liste mit den verfügbaren Gebäuden und deren Voraussetzungen:
 
@@ -251,14 +251,6 @@ Und noch viele mehr.'
         'Wie bei jedem Spiel gibt es auch bei diesem hier Regeln.
 Hier wird der Umgang mit anderen Spielern und eventuelle Problemfaktoren geregelt. Alle Spieler müssen sich an diese Regeln halten.
 Bei nicht-Einhaltung der Regeln werden nach Ermessen der Admins Strafen verteilt.'
-    ),
-    120 => array(
-        'Changelog',
-        'Zeigt den Entwicklungsstand des Spiels und informiert über die Änderungen.
-
-Das Changelog ist sortiert nach Datum und Kategorie. Jede größere Änderung am Spiel wird hier festgehalten und in die
-jeweilige Kategorie (Optimierung, Bugfix, Feature, Balancing...) eingeteilt.
-Somit kann jeder Spieler sehen, was und wie etwas geändert wurde.'
     ),
     121 => array(
         'Impressum',

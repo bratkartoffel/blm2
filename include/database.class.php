@@ -3,7 +3,6 @@
 class Database
 {
     public const TABLE_JOBS = 'auftrag';
-    public const TABLE_CHANGELOG = 'changelog';
     public const TABLE_GROUP = 'gruppe';
     public const TABLE_GROUP_DIPLOMACY = 'gruppe_diplomatie';
     public const TABLE_GROUP_CASH = 'gruppe_kasse';
@@ -1081,11 +1080,6 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         $stmt->bindParam("groupId", $group_id, PDO::PARAM_INT);
         $stmt->bindParam("userId", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractField($stmt, 'count');
-    }
-
-    public function getAllChangelog(): ?array
-    {
-        return $this->executeAndExtractRows($this->prepare("SELECT * FROM changelog ORDER BY ID DESC"));
     }
 
     public function getServerStatistics(): ?array

@@ -51,6 +51,8 @@ if ($groupDiplomacy !== group_diplomacy_war &&
     redirectTo($backLink, 155, __LINE__);
 }
 
+$sperrZeit = mafia_base_data[$action]['waittime'];
+
 $chance = mafia_base_data[$action][$level]['chance'];
 $chance += $player['Gebaeude8'] * mafia_bonus_factor_pizzeria;
 $chance -= $otherPlayer['Gebaeude7'] * mafia_bonus_factor_fence;
@@ -90,7 +92,6 @@ if ($success) {
 switch ($action) {
     // espionage
     case mafia_action_espionage:
-        $sperrZeit = mafia_sperrzeit_spionage;
         if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
@@ -176,7 +177,6 @@ switch ($action) {
 
     // robbery
     case mafia_action_robbery:
-        $sperrZeit = mafia_sperrzeit_raub;
         if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
@@ -263,7 +263,6 @@ switch ($action) {
 
     // heist
     case mafia_action_heist:
-        $sperrZeit = mafia_sperrzeit_diebstahl;
         if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
@@ -378,7 +377,6 @@ switch ($action) {
 
     // attack
     case mafia_action_attack:
-        $sperrZeit = mafia_sperrzeit_bomben;
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();

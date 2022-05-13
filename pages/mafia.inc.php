@@ -51,7 +51,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
     <tr>
         <td>Spionage</td>
         <td>Sammelt Informationen über den Gegner</td>
-        <td><?= (mafia_sperrzeit_spionage / 60); ?> Minuten</td>
+        <td><?= (mafia_base_data[mafia_action_espionage]['waittime'] / 60); ?> Minuten</td>
         <td><?= formatPoints(mafia_base_data[0]['points']); ?></td>
     </tr>
     <tr>
@@ -59,19 +59,19 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         <td>Stiehlt dem Gegner zwischen <?= formatPercent(mafia_raub_min_rate); ?>
             und <?= formatPercent(mafia_raub_max_rate); ?> seines Bargeldes
         </td>
-        <td><?= (mafia_sperrzeit_raub / 60); ?> Minuten</td>
+        <td><?= (mafia_base_data[mafia_action_robbery]['waittime'] / 60); ?> Minuten</td>
         <td><?= formatPoints(mafia_base_data[1]['points']); ?></td>
     </tr>
     <tr>
         <td>Diebstahl</td>
         <td>Stiehlt dem Gegner alle Waren aus dem Lager</td>
-        <td><?= (mafia_sperrzeit_diebstahl / 60); ?> Minuten</td>
+        <td><?= (mafia_base_data[mafia_action_heist]['waittime'] / 60); ?> Minuten</td>
         <td><?= formatPoints(mafia_base_data[2]['points']); ?></td>
     </tr>
     <tr>
         <td>Anschlag</td>
         <td>Zerstört die Plantage des Gegners, senkt das Gebäudelevel um eine Stufe</td>
-        <td><?= (mafia_sperrzeit_bomben / 60); ?> Minuten</td>
+        <td><?= (mafia_base_data[mafia_action_attack]['waittime'] / 60); ?> Minuten</td>
         <td><?= formatPoints(mafia_base_data[3]['points']); ?></td>
     </tr>
 </table>

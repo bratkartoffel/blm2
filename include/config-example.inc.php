@@ -102,10 +102,6 @@ const mafia_raub_max_rate = 0.75;
 
 // blocking times for the various mafia actions
 const mafia_sperrzeit_factor_war = 0.5;
-const mafia_sperrzeit_spionage = 300;
-const mafia_sperrzeit_raub = 900;
-const mafia_sperrzeit_diebstahl = 1800;
-const mafia_sperrzeit_bomben = 14400;
 
 // point range for mafia actions (own points / enemy points must be within this range)
 const mafia_faktor_punkte = 1.5;
@@ -323,6 +319,7 @@ const mafia_base_data = array(
         array('cost' => 600, 'chance' => .4),
         array('cost' => 800, 'chance' => .5),
         'points' => 25,
+        'waittime' => 300,
     ),
     // robbery
     array(
@@ -331,6 +328,7 @@ const mafia_base_data = array(
         array('cost' => 900, 'chance' => .4),
         array('cost' => 1200, 'chance' => .5),
         'points' => 75,
+        'waittime' => 900,
     ),
     // heist
     array(
@@ -339,6 +337,7 @@ const mafia_base_data = array(
         array('cost' => 1500, 'chance' => .4),
         array('cost' => 2000, 'chance' => .5),
         'points' => 150,
+        'waittime' => 1800,
     ),
     // attack
     array(
@@ -347,6 +346,7 @@ const mafia_base_data = array(
         array('cost' => 40000, 'chance' => .15),
         array('cost' => 65000, 'chance' => .20),
         'points' => 1000,
+        'waittime' => 14400,
     ),
 );
 

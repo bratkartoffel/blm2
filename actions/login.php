@@ -34,9 +34,6 @@ if (verifyPassword($pwd, $player['user_password'])) {
 } else if ($player['sitter_password'] !== null && verifyPassword($pwd, $player['sitter_password'])) {
     $_SESSION['blm_sitter'] = true;
     $_SESSION['blm_admin'] = false;
-} else if (sha1($pwd) == $player['user_password']) {
-    $_SESSION['blm_sitter'] = false;
-    $_SESSION['blm_admin'] = ($player['Admin'] == 1);
 } else {
     redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 108, __LINE__);
 }

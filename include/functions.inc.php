@@ -1466,7 +1466,7 @@ function verifyPassword(string $password, string $hash): string
 
 function passwordNeedsUpgrade(string $hash): bool
 {
-    return strlen($hash) == 40 || password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
+    return password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
 }
 
 function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, ?int $groupDiplomacy): bool

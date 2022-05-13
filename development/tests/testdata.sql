@@ -10,7 +10,9 @@ BEGIN
         SET NR = coalesce(NR, 0) + 1;
 
         INSERT INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
-        VALUES (10 + NR, concat('test', NR), concat('test', NR, '@example.com'), sha1('changeit'));
+        VALUES (10 + NR, concat('test', NR), concat('test', NR, '@example.com'),
+                   -- password is "changeit"
+                '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
         INSERT INTO `statistik` (`user_id`) VALUES (10 + NR);
 
         IF NR = P_count THEN LEAVE insertLoop; END IF;

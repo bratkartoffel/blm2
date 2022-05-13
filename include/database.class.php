@@ -39,7 +39,7 @@ class Database
     function __construct()
     {
         try {
-            $this->link = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=utf8',
+            $this->link = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
                 database_hostname, database_database), database_username, database_password,
                 array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
         } catch (PDOException $e) {

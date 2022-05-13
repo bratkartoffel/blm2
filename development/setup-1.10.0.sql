@@ -9,7 +9,7 @@ create table auftrag
     cost     decimal(10, 2)                       not null,
     points   decimal(8, 2)                        null,
     constraint auftrag unique (user_id, item)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index user_id on auftrag (user_id);
 
 
@@ -23,7 +23,7 @@ create table gruppe
     Kasse        decimal(12, 2) default 0.00 not null,
     constraint Kuerzel unique (Kuerzel),
     constraint Name unique (Name)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 
 
 create table gruppe_diplomatie
@@ -36,7 +36,7 @@ create table gruppe_diplomatie
     Aktiv  tinyint(1) default 0                   not null,
     Betrag decimal(12, 2)                         null,
     constraint relation unique (Von, An)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index An on gruppe_diplomatie (An);
 create index Von on gruppe_diplomatie (Von);
 
@@ -48,7 +48,7 @@ create table gruppe_kasse
     user_id  int                         not null,
     amount   decimal(12, 2) default 0.00 not null,
     constraint relation unique (group_id, user_id)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index group_id on gruppe_kasse (group_id);
 create index user_id on gruppe_kasse (user_id);
 
@@ -60,7 +60,7 @@ create table gruppe_logbuch
     Spieler int                                  not null,
     Datum   datetime default current_timestamp() not null,
     Text    varchar(2048)                        not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index Gruppe on gruppe_logbuch (Gruppe);
 create index Spieler on gruppe_logbuch (Spieler);
 
@@ -73,7 +73,7 @@ create table gruppe_nachrichten
     Nachricht   varchar(4096)                          not null,
     Zeit        datetime   default current_timestamp() not null,
     Festgepinnt tinyint(1) default 0                   not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index Gruppe on gruppe_nachrichten (Gruppe);
 create index Von on gruppe_nachrichten (Von);
 
@@ -95,7 +95,7 @@ create table gruppe_rechte
     group_diplomacy  tinyint(1) default 0 not null,
     group_delete     tinyint(1) default 0 not null,
     constraint relation unique (group_id, user_id)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index group_id on gruppe_rechte (group_id);
 create index user_id on gruppe_rechte (user_id);
 
@@ -108,7 +108,7 @@ create table log_bank
     playerName varchar(20)                          not null,
     amount     decimal(11, 2)                       not null,
     target     enum ('BANK', 'HAND')                not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index playerName on log_bank (playerName);
 
 
@@ -121,7 +121,7 @@ create table log_bioladen
     amount     int(6)                               not null,
     item       smallint(2)                          not null,
     price      decimal(5, 2)                        not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index playerName on log_bioladen (playerName);
 
 
@@ -136,7 +136,7 @@ create table log_gruppenkasse
     receiverId   int                                  null,
     receiverName varchar(20)                          null,
     amount       decimal(11, 2)                       not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index groupId on log_gruppenkasse (groupId);
 create index senderName on log_gruppenkasse (senderName);
 create index receiverName on log_gruppenkasse (receiverName);
@@ -151,7 +151,7 @@ create table log_login
     playerName varchar(20)                          null,
     success    tinyint(1)                           not null,
     sitter     tinyint(1)                           not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index ip on log_login (ip);
 create index playerName on log_login (playerName);
 create index sitter on log_login (sitter);
@@ -170,7 +170,7 @@ create table log_mafia
     amount       decimal(12, 2)                                   null,
     chance       decimal(5, 3)                                    not null,
     success      tinyint(1)                                       not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index senderName on log_mafia (senderName);
 create index receiverName on log_mafia (receiverName);
 
@@ -187,7 +187,7 @@ create table log_vertraege
     amount       int                                  not null,
     price        decimal(5, 2)                        not null,
     accepted     tinyint(1)                           not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index senderId on log_vertraege (senderId);
 create index receiverId on log_vertraege (receiverId);
 
@@ -199,27 +199,27 @@ create table marktplatz
     Was   int           not null,
     Menge int           not null,
     Preis decimal(4, 2) not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index Von on marktplatz (Von);
 
 
 create table mitglieder
 (
-    ID                      int auto_increment primary key,
-    Name                    varchar(20)                                not null,
-    EMail                   varchar(96)                                not null,
-    EMailAct                char(40)                                   null,
-    Passwort                varchar(128)                               not null,
-    RegistriertAm           datetime       default current_timestamp() null,
-    Geld                    decimal(11, 2) default 0.00                not null,
-    Bank                    decimal(9, 2)  default 0.00                not null,
-    Punkte                  decimal(9, 2)  default 0.00                not null,
-    IgmGesendet             smallint(5)    default 0                   not null,
-    IgmEmpfangen            smallint(5)    default 0                   not null,
-    Admin                   tinyint(1)     default 0                   not null,
-    Betatester              tinyint(1)     default 0                   not null,
-    LastAction              datetime                                   null,
-    LastLogin               datetime                                   null,
+    ID            int auto_increment primary key,
+    Name          varchar(20)                                not null,
+    EMail         varchar(96)                                not null,
+    EMailAct      char(40)                                   null,
+    Passwort      varchar(128)                               not null,
+    RegistriertAm datetime       default current_timestamp() null,
+    Geld          decimal(11, 2) default 0.00                not null,
+    Bank          decimal(9, 2)  default 0.00                not null,
+    Punkte        decimal(9, 2)  default 0.00                not null,
+    IgmGesendet   smallint(5)    default 0                   not null,
+    IgmEmpfangen  smallint(5)    default 0                   not null,
+    Admin         tinyint(1)     default 0                   not null,
+    Betatester    tinyint(1)     default 0                   not null,
+    LastAction    datetime                                   null,
+    LastLogin     datetime                                   null,
     NextMafia               datetime                                   null,
     Notizblock              varchar(4096)                              null,
     Beschreibung            varchar(4096)                              null,
@@ -250,27 +250,27 @@ create table mitglieder
     Forschung10             smallint(2)    default 0                   not null,
     Forschung11             smallint(2)    default 0                   not null,
     Forschung12             smallint(2)    default 0                   not null,
-    Forschung13             smallint(2)    default 0                   null,
-    Forschung14             smallint(2)    default 0                   null,
-    Forschung15             smallint(2)    default 0                   not null,
-    Lager1                  int(5)         default 0                   not null,
-    Lager2                  int(5)         default 0                   not null,
-    Lager3                  int(5)         default 0                   not null,
-    Lager4                  int(5)         default 0                   not null,
-    Lager5                  int(5)         default 0                   not null,
-    Lager6                  int(5)         default 0                   not null,
-    Lager7                  int(5)         default 0                   not null,
-    Lager8                  int(5)         default 0                   not null,
-    Lager9                  int(5)         default 0                   not null,
-    Lager10                 int(5)         default 0                   not null,
-    Lager11                 int(5)         default 0                   not null,
-    Lager12                 int(5)         default 0                   not null,
-    Lager13                 int(5)         default 0                   not null,
-    Lager14                 int(5)         default 0                   not null,
-    Lager15                 int(5)         default 0                   not null,
+    Forschung13   smallint(2)    default 0                   null,
+    Forschung14   smallint(2)    default 0                   null,
+    Forschung15   smallint(2)    default 0                   not null,
+    Lager1        int(5)         default 0                   not null,
+    Lager2        int(5)         default 0                   not null,
+    Lager3        int(5)         default 0                   not null,
+    Lager4        int(5)         default 0                   not null,
+    Lager5        int(5)         default 0                   not null,
+    Lager6        int(5)         default 0                   not null,
+    Lager7        int(5)         default 0                   not null,
+    Lager8        int(5)         default 0                   not null,
+    Lager9        int(5)         default 0                   not null,
+    Lager10       int(5)         default 0                   not null,
+    Lager11       int(5)         default 0                   not null,
+    Lager12       int(5)         default 0                   not null,
+    Lager13       int(5)         default 0                   not null,
+    Lager14       int(5)         default 0                   not null,
+    Lager15       int(5)         default 0                   not null,
     constraint EMail unique (EMail),
     constraint Name unique (Name)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index Gruppe on mitglieder (Gruppe);
 
 
@@ -283,7 +283,7 @@ create table nachrichten
     Betreff   varchar(128)                           not null,
     Zeit      datetime   default current_timestamp() not null,
     Gelesen   tinyint(1) default 0                   not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index An on nachrichten (An);
 create index Von on nachrichten (Von);
 
@@ -313,7 +313,7 @@ create table sitter
     Bioladen    tinyint(1) default 0 not null,
     Bank        tinyint(1) default 0 not null,
     constraint user_id unique (user_id)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 
 
 create table statistik
@@ -340,7 +340,7 @@ create table statistik
     MafiaMinus         int(9)         default 0    not null,
     KriegMinus         int(9)         default 0    not null,
     constraint user_id unique (user_id)
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 
 
 create table vertraege
@@ -352,7 +352,7 @@ create table vertraege
     Menge int                                  not null,
     Preis decimal(4, 2)                        not null,
     Wann  datetime default current_timestamp() not null
-) collate = utf8_unicode_ci;
+) collate = utf8mb4_unicode_ci;
 create index An on vertraege (An);
 create index Von on vertraege (Von);
 

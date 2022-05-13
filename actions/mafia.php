@@ -56,7 +56,7 @@ $sperrZeit = mafia_base_data[$action]['waittime'];
 $chance = mafia_base_data[$action][$level]['chance'];
 $chance += $player['Gebaeude8'] * mafia_bonus_factor_pizzeria;
 $chance -= $otherPlayer['Gebaeude7'] * mafia_bonus_factor_fence;
-$chance = max(0.0, min($chance, 1.0));
+$chance = max(0.01, min($chance, 0.95));
 $factor = 10000;
 
 $random = mt_rand(0, $factor) / $factor;

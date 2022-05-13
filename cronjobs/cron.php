@@ -9,6 +9,10 @@ require_once(dirname(__FILE__) . '/../include/config.inc.php');
 require_once(dirname(__FILE__) . '/../include/functions.inc.php');
 require_once(dirname(__FILE__) . '/../include/database.class.php');
 
+if (!IS_CRON) {
+    die('cannot happen, just to please phpstrom nagging about unused variable');
+}
+
 if (isGameLocked()) {
     die(sprintf("Game is currently locked (%d < %d)\n", time(), last_reset));
 }

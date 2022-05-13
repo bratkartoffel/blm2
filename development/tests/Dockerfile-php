@@ -8,13 +8,13 @@ RUN apt-get update \
     # install mysql driver
     && docker-php-ext-install pdo pdo_mysql \
     # install dependencies for gd lib
-    && apt-get install -y libfreetype-dev libfreetype6 libgd3 libgd-dev zlib1g-dev zlib1g \
+    && apt-get install -y libfreetype-dev libfreetype6 libgd3 libgd-dev libwebp-dev libwebp6 zlib1g-dev zlib1g \
     # install gd lib
-    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
     && docker-php-ext-install gd \
     # cleanup sources, apt cache and build dependencies
     && docker-php-source delete \
-    && apt-get purge -y libfreetype-dev libgd-dev zlib1g-dev \
+    && apt-get purge -y libfreetype-dev libgd-dev libwebp-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* \
     # install xdebug
     && pecl channel-update pecl.php.net \

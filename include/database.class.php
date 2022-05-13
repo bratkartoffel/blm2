@@ -1235,21 +1235,21 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         $stmt = $this->prepare("SELECT ID, Name, Gruppe, Punkte
 FROM mitglieder m
 WHERE (
-            m.Gruppe != :myGroup -- exclude my own group
+            m.Gruppe != coalesce(:myGroup, -1) -- exclude my own group
         AND m.ID != :myId -- exclude myself (if user isn't in a group)
         AND (m.Punkte >= :lowPoints AND m.Punkte <= :highPoints -- include by points range
         AND m.Gruppe NOT IN -- exclude NAP and BND
             (SELECT d.Von
              FROM gruppe_diplomatie d
              WHERE d.Von = m.Gruppe
-               AND d.An = :myGroup
+               AND d.An = coalesce(:myGroup, -1)
                AND d.Aktiv = 1
                AND d.typ != " . group_diplomacy_war . "
              UNION
              SELECT d.An
              FROM gruppe_diplomatie d
              WHERE d.An = m.Gruppe
-               AND d.Von = :myGroup
+               AND d.Von = coalesce(:myGroup, -1)
                AND d.Aktiv = 1
                AND d.typ != " . group_diplomacy_war . ")
                 )
@@ -1260,14 +1260,14 @@ WHERE (
         (SELECT d.Von
          FROM gruppe_diplomatie d
          WHERE d.Von = m.Gruppe
-           AND d.An = :myGroup
+           AND d.An = coalesce(:myGroup, -1)
            AND d.Aktiv = 1
            AND d.typ = " . group_diplomacy_war . "
          UNION
          SELECT d.An
          FROM gruppe_diplomatie d
          WHERE d.An = m.Gruppe
-           AND d.Von = :myGroup
+           AND d.Von = coalesce(:myGroup, -1)
            AND d.Aktiv = 1
            AND d.typ = " . group_diplomacy_war . ")
 ORDER BY m.Name");

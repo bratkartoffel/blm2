@@ -73,7 +73,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     </tr>
     <tr>
         <td>Nächste Mafia:</td>
-        <td class="countdown"><?= formatDuration(max(0, strtotime($data['NextMafia']) + mafia_sperrzeit_spionage - time())); ?></td>
+        <td class="countdown"><?= formatDuration(max(0, strtotime($data['NextMafia']) - time())); ?></td>
     </tr>
     <tr>
         <td>Logout wegen Inaktivität:</td>

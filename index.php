@@ -180,7 +180,7 @@ if (isLoggedIn()) {
     ?>
     <div id="Footer">
         <div>Bioladenmanager 2 Version <?= game_version; ?></div>
-        <div><a href="/?p=impressum">&copy; 2007-2022, Simon Frankenberger</a></div>
+        <div><a href="/?p=impressum">© 2007-2022, Simon Frankenberger</a></div>
         <div>Letzte Änderung: <?= date("d.m.Y H:i", filemtime('.git/HEAD')); ?></div>
     </div>
 </div>

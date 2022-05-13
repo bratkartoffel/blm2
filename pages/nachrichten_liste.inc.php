@@ -29,10 +29,11 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
     </tr>
     <?php
     $entries = Database::getInstance()->getAllMessagesByAnEntries($_SESSION['blm_user'], $offset_in, messages_page_size);
+    $nr = $messageCountIn;
     foreach ($entries as $row) {
         ?>
         <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>">
-            <td><?= $row['ID']; ?></td>
+            <td><?= $nr--; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['VonID'], $row['VonName']); ?></td>
             <td>
@@ -76,10 +77,11 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
     </tr>
     <?php
     $entries = Database::getInstance()->getAllMessagesByVonEntries($_SESSION['blm_user'], $offset_out, messages_page_size);
+    $nr = $messageCountOut;
     foreach ($entries as $row) {
         ?>
         <tr>
-            <td><?= $row['ID']; ?></td>
+            <td><?= $nr--; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['AnID'], $row['AnName']); ?></td>
             <td>

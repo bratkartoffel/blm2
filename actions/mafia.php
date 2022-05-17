@@ -193,11 +193,18 @@ switch ($action) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
+                    array('EinnahmenMafia' => $amount),
+                    array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+                Database::getInstance()->rollback();
+                redirectTo($backLink, 142, __LINE__);
+            }
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'],
                     array('Geld' => -$amount), array('Geld >= :whr0' => $amount)) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
+            // TODO where to book the lost money statistics for the victim?
             if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
                     'Von' => 0,
                     'An' => $_SESSION['blm_user'],

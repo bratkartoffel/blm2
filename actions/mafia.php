@@ -185,7 +185,7 @@ switch ($action) {
         }
         $amount = null;
         if ($success) {
-            $rate = mt_rand(0, $factor) / $factor;
+            $rate = mt_rand(mafia_raub_min_rate * $factor, $factor * mafia_raub_max_rate) / $factor;
             $amount = $otherPlayer['Geld'] * $rate;
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],

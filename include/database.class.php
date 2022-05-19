@@ -1237,7 +1237,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         $stmt = $this->prepare("SELECT ID, Name, Gruppe, Punkte
 FROM mitglieder m
 WHERE (
-            m.Gruppe != coalesce(:myGroup, -1) -- exclude my own group
+            coalesce(m.Gruppe, -2) != coalesce(:myGroup, -1) -- exclude my own group
         AND m.ID != :myId -- exclude myself (if user isn't in a group)
         AND (m.Punkte >= :lowPoints AND m.Punkte <= :highPoints -- include by points range
         AND m.Gruppe NOT IN -- exclude NAP and BND
@@ -1258,7 +1258,7 @@ WHERE (
     )
    OR
    -- include all WAR opponents, regardless of points
-        m.Gruppe IN
+        coalesce(m.Gruppe, -2) IN
         (SELECT d.Von
          FROM gruppe_diplomatie d
          WHERE d.Von = m.Gruppe

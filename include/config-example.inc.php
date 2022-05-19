@@ -355,7 +355,7 @@ const plantage_base_cost = 260;
 const plantage_base_duration = 1780;
 const plantage_base_points = 120;
 const plantage_factor_cost = 1.35;
-const plantage_factor_duration = 1.25;
+const plantage_factor_duration = 1.20;
 const plantage_factor_points = 1.23;
 
 // building data for research lab
@@ -363,7 +363,7 @@ const research_lab_base_cost = 320;
 const research_lab_base_duration = 1900;
 const research_lab_base_points = 105;
 const research_lab_factor_cost = 1.37;
-const research_lab_factor_duration = 1.28;
+const research_lab_factor_duration = 1.23;
 const research_lab_factor_points = 1.20;
 
 // building data for shop
@@ -371,7 +371,7 @@ const shop_base_cost = 260;
 const shop_base_duration = 1800;
 const shop_base_points = 90;
 const shop_factor_cost = 1.35;
-const shop_factor_duration = 1.27;
+const shop_factor_duration = 1.22;
 const shop_factor_points = 1.20;
 
 // building data for kebab stand
@@ -379,7 +379,7 @@ const kebab_stand_base_cost = 310;
 const kebab_stand_base_duration = 2150;
 const kebab_stand_base_points = 115;
 const kebab_stand_factor_cost = 1.38;
-const kebab_stand_factor_duration = 1.27;
+const kebab_stand_factor_duration = 1.22;
 const kebab_stand_factor_points = 1.21;
 
 // building data for building yard
@@ -387,7 +387,7 @@ const building_yard_base_cost = 620;
 const building_yard_base_duration = 2250;
 const building_yard_base_points = 235;
 const building_yard_factor_cost = 1.40;
-const building_yard_factor_duration = 1.29;
+const building_yard_factor_duration = 1.24;
 const building_yard_factor_points = 1.22;
 
 // building data for school
@@ -395,7 +395,7 @@ const school_base_cost = 300;
 const school_base_duration = 2050;
 const school_base_points = 110;
 const school_factor_cost = 1.39;
-const school_factor_duration = 1.29;
+const school_factor_duration = 1.24;
 const school_factor_points = 1.19;
 
 // building data for fence
@@ -403,7 +403,7 @@ const fence_base_cost = 650;
 const fence_base_duration = 2800;
 const fence_base_points = 285;
 const fence_factor_cost = 1.45;
-const fence_factor_duration = 1.33;
+const fence_factor_duration = 1.28;
 const fence_factor_points = 1.17;
 
 // building data for pizza
@@ -411,7 +411,7 @@ const pizzeria_base_cost = 650;
 const pizzeria_base_duration = 2800;
 const pizzeria_base_points = 285;
 const pizzeria_factor_cost = 1.45;
-const pizzeria_factor_duration = 1.33;
+const pizzeria_factor_duration = 1.28;
 const pizzeria_factor_points = 1.17;
 
 // base production amount of all items
@@ -425,11 +425,11 @@ const production_hours_max = 12;
 
 // base data for researches
 const research_base_cost = 230;
-const research_base_duration = 1800;
+const research_base_duration = 2400;
 const research_base_points = 80;
 const research_factor_cost = 1.29;
-const research_factor_duration = 1.24;
-const research_factor_points = 1.16;
+const research_factor_duration = 1.19;
+const research_factor_points = 1.18;
 
 // minimum rate for selling prices (in percent)
 const wares_rate_min = 0.7;

@@ -15,3 +15,6 @@ fieldset.AdminVariables h2 a {
     color: black;
 }
 
+table.AdminLog td {
+    white-space: nowrap;
+}

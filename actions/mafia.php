@@ -189,18 +189,18 @@ switch ($action) {
             $amount = $otherPlayer['Geld'] * $rate;
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
-                    array('Geld' => $amount)) !== 1) {
+                    array('Geld' => $amount)) === null) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                     array('EinnahmenMafia' => $amount),
-                    array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
+                    array('user_id = :whr0' => $_SESSION['blm_user'])) === null) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'],
-                    array('Geld' => -$amount), array('Geld >= :whr0' => $amount)) !== 1) {
+                    array('Geld' => -$amount), array('Geld >= :whr0' => $amount)) === null) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
@@ -287,12 +287,12 @@ switch ($action) {
                 $valuesAdd['Lager' . $i] = $data['Lager' . $i];
             }
 
-            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], $valuesAdd) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], $valuesAdd) === null) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }
 
-            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'], $valuesSub, $wheresSub) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'], $valuesSub, $wheresSub) === null) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }

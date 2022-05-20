@@ -65,6 +65,8 @@ $rates = calculateSellRates();
         $EinnahmenSonstige = 0;
         $AusgabenSonstige = abs($difference);
     }
+    $AusgabenGesamt += $AusgabenSonstige;
+    $EinnahmenGesamt += $EinnahmenSonstige;
     ?>
     <table class="Liste EinnahmenAusgaben">
         <tr>

@@ -29,7 +29,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
     </tr>
     <?php
     $entries = Database::getInstance()->getAllMessagesByAnEntries($_SESSION['blm_user'], $offset_in, messages_page_size);
-    $nr = $messageCountIn;
+    $nr = $messageCountIn - $offset_in * messages_page_size;
     foreach ($entries as $row) {
         ?>
         <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>">
@@ -77,7 +77,7 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
     </tr>
     <?php
     $entries = Database::getInstance()->getAllMessagesByVonEntries($_SESSION['blm_user'], $offset_out, messages_page_size);
-    $nr = $messageCountOut;
+    $nr = $messageCountOut - $offset_out * messages_page_size;
     foreach ($entries as $row) {
         ?>
         <tr>

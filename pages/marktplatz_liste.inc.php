@@ -31,7 +31,7 @@ $offset = verifyOffset($offset, $offerCount, market_page_size);
     </tr>
     <?php
     $entries = Database::getInstance()->getMarktplatzEntries(array(), $offset, market_page_size);
-    $nr = $offerCount;
+    $nr = $offerCount - $offset * market_page_size;
     foreach ($entries as $row) {
         $rowNr = $nr--;
         ?>

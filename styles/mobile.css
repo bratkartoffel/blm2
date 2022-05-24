@@ -85,6 +85,10 @@
         max-width: 300px;
     }
 
+    table.Nachrichten {
+        white-space: initial;
+    }
+
     /* when user is not logged in */
     div#Navigation.offline div.NaviBox {
         text-align: center;

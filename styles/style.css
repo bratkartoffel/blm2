@@ -581,6 +581,10 @@ div.GroupLog div span:first-of-type {
 /*endregion*/
 
 /*region Nachrichten*/
+table.Nachrichten {
+    white-space: nowrap;
+}
+
 table.Nachrichten td:last-of-type {
     white-space: nowrap;
 }

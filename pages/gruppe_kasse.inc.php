@@ -1,7 +1,7 @@
 <?php
 restrictSitter('Gruppe');
 
-$receiver = getOrDefault($_GET, 'receiver');
+$receiver = getOrDefault($_GET, 'receiver', $_SESSION['blm_user']);
 $amount = getOrDefault($_GET, 'amount', .0);
 $rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user']);
 requireEntryFound($rights, '/?p=gruppe');

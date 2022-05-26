@@ -95,7 +95,7 @@ class Captcha
             imagefttext($this->image,
                 captcha_font_size,
                 rand(-20, 20),
-                10 + $i * (captcha_width / captcha_length) - rand(0, 8),
+                (int)floor(10 + $i * (captcha_width / captcha_length) - rand(0, 8)),
                 captcha_font_size + 20 + rand(-5, 5),
                 imagecolorexact($this->image, rand(150, 255), rand(150, 255), rand(150, 255)),
                 captcha_font_file,

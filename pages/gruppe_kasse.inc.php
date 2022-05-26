@@ -25,14 +25,14 @@ $users = array();
         $sum = 0;
         foreach ($data as $entry) {
             $sum += $entry['amount'];
-            if ($entry['IstMitglied'] === "1") {
+            if ($entry['IstMitglied'] == 1) {
                 $users[$entry['UserName']] = $entry['UserID'];
             }
             ?>
             <div>
                 <label><?php
                     echo createProfileLink($entry['UserID'], $entry['UserName']);
-                    if ($entry['IstMitglied'] !== "1" && $entry['UserID'] !== null) {
+                    if ($entry['IstMitglied'] != 1 && $entry['UserID'] !== null) {
                         echo ' (ausgetreten)';
                     }
                     ?></label>

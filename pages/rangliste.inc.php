@@ -40,7 +40,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
         if ($row['BenutzerID'] != $_SESSION['blm_user'] && $myself['Gruppe'] !== null && $row['GruppeID'] !== null) {
             $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($myself['Gruppe'], $row['GruppeID']);
         }
-        if ($row['BenutzerID'] == $_SESSION['blm_user'] || strtolower($row['BenutzerName']) == strtolower($q)) {
+        if ($row['BenutzerID'] == $_SESSION['blm_user'] || ($q !== null && strtolower($row['BenutzerName']) == strtolower($q))) {
             $rowExtra = ' class="highlight"';
         } else {
             $rowExtra = null;
@@ -148,7 +148,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, ranking_page_size);
     $entries = Database::getInstance()->getEwigePunkteEntries($offset_ep, ranking_page_size);
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
-        if ($row['ID'] == $_SESSION['blm_user'] || strtolower($row['Name']) == strtolower($q)) {
+        if ($row['ID'] == $_SESSION['blm_user'] || ($q !== null && strtolower($row['Name']) == strtolower($q))) {
             $rowExtra = ' class="highlight"';
         } else {
             $rowExtra = null;

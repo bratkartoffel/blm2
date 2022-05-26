@@ -10,7 +10,7 @@ if ($data['Punkte'] < mafia_min_ponts) {
     redirectTo('/?p=index', 169, __LINE__);
 }
 
-$nextMafiaTs = strtotime($data['NextMafia']);
+$nextMafiaTs = $data['NextMafia'] === null ? 0 : strtotime($data['NextMafia']);
 if ($nextMafiaTs <= time()) {
     $nextMafia = 'Sofort';
 } else {

@@ -326,7 +326,7 @@ switch ($action) {
 %s 
 
 [i]- Ihre Mafia -[/i]
-', implode("\n", $wares)))) !== 1) {
+', empty($wares) ? 'Ein angebissenes Mett-Brötchen' : implode("\n", $wares)))) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 141, __LINE__);
             }

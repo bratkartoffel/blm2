@@ -20,7 +20,8 @@ $interestRates = calculateInterestRates();
     <span style="color: red;"><?= formatCurrency(credit_limit); ?></span>.
 </p>
 <p>
-    <span style="color: red;">Wichtig! Falls der Kontostand unter <?= formatCurrency(dispo_limit) ?> fällt, wird Ihr Account automatisch resettet!</span>
+    <span style="color: red;">Wichtig! Falls der Kontostand unter <?= formatCurrency(dispo_limit) ?> fällt, wird Ihr Account automatisch resettet!
+        Von einer durchschnittlichen Zinsrate von 2% ausgehend wird diese Marke nach etwa 48 Stunden überschritten.</span>
 </p>
 <p>
     Die aktuellen Anlagenzinsen: <?= formatPercent($interestRates['Debit']); ?><br/>

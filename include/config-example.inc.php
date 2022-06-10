@@ -447,7 +447,7 @@ const deposit_limit = 100000;
 const credit_limit = -15000;
 
 // when reaching this bank account limit, a user will be reset
-const dispo_limit = -35000;
+const dispo_limit = -100000;
 
 // minimum interest rate (in percent)
 const interest_debit_rate_min = 0.015;

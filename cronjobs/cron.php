@@ -95,7 +95,7 @@ Database::getInstance()->begin();
 CheckAllAuftraege();
 handleInterestRates();
 handleItemBaseProduction();
-Database::getInstance()->updatePlayerOnlineTimes(cron_interval * 60);
+Database::getInstance()->updatePlayerOnlineTimes();
 Database::getInstance()->commit();
 
 // separate transaction for each player to reset

@@ -708,8 +708,7 @@ function resetAccount(int $blm_user): ?string
 
 function updateLastAction(): void
 {
-    Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('OnlineZeitSinceLastCron' => time() - $_SESSION['blm_lastAction']));
-    Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('LastAction' => date('Y-m-d H:i:s')));
+    Database::getInstance()->updatePlayerOnlinezeit($_SESSION['blm_user']);
     $_SESSION['blm_lastAction'] = time();
 }
 

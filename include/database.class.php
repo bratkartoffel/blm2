@@ -1280,11 +1280,16 @@ ORDER BY m.Name");
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function updatePlayerOnlineTimes(int $interval): ?int
+    public function updatePlayerOnlinezeit(int $blm_user): ?int
     {
-        $stmt = $this->prepare("UPDATE mitglieder SET OnlineZeit = OnlineZeit + IF(OnlineZeitSinceLastCron > :cronInterval, :cronInterval, OnlineZeitSinceLastCron), OnlineZeitSinceLastCron = 0");
-        $stmt->bindParam('cronInterval', $interval, PDO::PARAM_INT);
+        $stmt = $this->prepare("UPDATE mitglieder SET OnlineZeitSinceLastCron = OnlineZeitSinceLastCron + TIMESTAMPDIFF(SECOND, LastAction, NOW()), LastAction = NOW() WHERE ID = :id");
+        $stmt->bindParam('id', $blm_user, PDO::PARAM_INT);
         return $this->executeAndGetAffectedRows($stmt);
+    }
+
+    public function updatePlayerOnlineTimes(): ?int
+    {
+        return $this->executeAndGetAffectedRows($this->prepare("UPDATE mitglieder SET OnlineZeit = OnlineZeit + OnlineZeitSinceLastCron, OnlineZeitSinceLastCron = 0"));
     }
 
     public function countPendingGroupDiplomacy(int $group_id): ?int

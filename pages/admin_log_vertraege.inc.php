@@ -21,8 +21,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <label for="angenommen">Angenommen:</label>
         <select name="angenommen" id="angenommen">
             <option value="">- Alle -</option>
-            <option value="0"<?= ($angenommen == "0" ? ' selected="selected"' : '') ?>>Nein</option>
-            <option value="1"<?= ($angenommen == "1" ? ' selected="selected"' : '') ?>>Ja</option>
+            <option value="0"<?= ($angenommen === 0 ? ' selected="selected"' : '') ?>>Nein</option>
+            <option value="1"<?= ($angenommen === 1 ? ' selected="selected"' : '') ?>>Ja</option>
         </select>
         <input type="submit" value="Abschicken"/><br/>
     </form>

@@ -28,6 +28,7 @@ if ($player['EMailAct'] !== null) {
     redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 135, __LINE__);
 }
 
+Database::getInstance()->begin();
 if (verifyPassword($pwd, $player['user_password'])) {
     $_SESSION['blm_sitter'] = false;
     $_SESSION['blm_admin'] = ($player['Admin'] == 1);
@@ -35,10 +36,17 @@ if (verifyPassword($pwd, $player['user_password'])) {
     $_SESSION['blm_sitter'] = true;
     $_SESSION['blm_admin'] = false;
 } else {
+    Database::getInstance()->createTableEntry(Database::TABLE_LOG_LOGIN, array(
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'playerId' => $player['ID'],
+        'playerName' => $player['Name'],
+        'success' => 0,
+        'sitter' => 0
+    ));
+    Database::getInstance()->commit();
     redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 108, __LINE__);
 }
 
-Database::getInstance()->begin();
 if (!$_SESSION['blm_sitter']) {
     if (passwordNeedsUpgrade($player['user_password']) && Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $player['ID'],
             array('Passwort' => hashPassword($pwd))) !== 1) {

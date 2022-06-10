@@ -1,7 +1,8 @@
 <?php
 $wer = getOrDefault($_GET, 'wer');
 $ip = getOrDefault($_GET, 'ip');
-$art = getOrDefault($_GET, 'art');
+$art = getOrDefault($_GET, 'art', -1);
+$success = getOrDefault($_GET, 'success', -1);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
@@ -20,9 +21,15 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="text" name="ip" id="ip" value="<?= escapeForOutput($ip); ?>"/>
         <label for="art">Art:</label>
         <select name="art" id="art">
-            <option value="">- Alle -</option>
-            <option value="0"<?= ($art === "0" ? ' selected="selected"' : '') ?>>Regulär</option>
-            <option value="1"<?= ($art === "1" ? ' selected="selected"' : '') ?>>Sitter</option>
+            <option value="-1">- Alle -</option>
+            <option value="0"<?= ($art === 0 ? ' selected="selected"' : '') ?>>Regulär</option>
+            <option value="1"<?= ($art === 1 ? ' selected="selected"' : '') ?>>Sitter</option>
+        </select>
+        <label for="success">Erfolgreich:</label>
+        <select name="success" id="success">
+            <option value="-1">- Alle -</option>
+            <option value="0"<?= ($success === 0 ? ' selected="selected"' : '') ?>>Nein</option>
+            <option value="1"<?= ($success === 1 ? ' selected="selected"' : '') ?>>Ja</option>
         </select>
         <input type="submit" value="Abschicken"/><br/>
     </form>
@@ -40,9 +47,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_ip = empty($ip) ? "%" : $ip;
     $filter_art = $art === -1 ? null : intval($art);
-    $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $filter_art);
+    $filter_success = $success === -1 ? null : intval($success);
+    $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $filter_art, $filter_success);
     $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $filter_art, $offset, admin_log_page_size);
+    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $filter_art, $filter_success, $offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];

@@ -545,34 +545,41 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminLoginLogCount(string $werFilter, string $ipFilter, ?int $artFilter): ?int
+    public function getAdminLoginLogCount(string $werFilter, string $ipFilter, ?int $artFilter, ?int $successFilter): ?int
     {
-        if ($artFilter === null) {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM log_login WHERE playerName LIKE :wer AND IP LIKE :ip");
-        } else {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM log_login WHERE playerName LIKE :wer AND IP LIKE :ip AND sitter = :art");
-            $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
-        }
+        $sql = "SELECT count(1) AS count FROM log_login WHERE playerName LIKE :wer AND IP LIKE :ip";
+        if ($artFilter !== null) $sql .= " AND sitter = :art";
+        if ($successFilter !== null) $sql .= " AND success = :success";
+
+        $stmt = $this->prepare($sql);
         $stmt->bindParam("wer", $werFilter);
         $stmt->bindParam("ip", $ipFilter);
+
+        if ($artFilter !== null) $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
+        if ($successFilter !== null) $stmt->bindParam("success", $successFilter, PDO::PARAM_INT);
+
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminLoginLogEntries(string $werFilter, string $ipFilter, ?int $artFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminLoginLogEntries(string $werFilter, string $ipFilter, ?int $artFilter, ?int $successFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        if ($artFilter == null) {
-            $stmt = $this->prepare("SELECT * FROM log_login
-                WHERE playerName LIKE :wer AND IP LIKE :ip ORDER BY created DESC LIMIT :offset, :count");
-        } else {
-            $stmt = $this->prepare("SELECT * FROM log_login
-                WHERE playerName LIKE :wer AND IP LIKE :ip AND sitter = :art ORDER BY created DESC LIMIT :offset, :count");
-            $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
-        }
+
+        $sql = "SELECT * FROM log_login WHERE playerName LIKE :wer AND IP LIKE :ip";
+        if ($artFilter !== null) $sql .= " AND sitter = :art";
+        if ($successFilter !== null) $sql .= " AND success = :success";
+        $sql .= " ORDER BY created DESC LIMIT :offset, :count";
+
+
+        $stmt = $this->prepare($sql);
         $stmt->bindParam("wer", $werFilter);
         $stmt->bindParam("ip", $ipFilter);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+
+        if ($artFilter !== null) $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
+        if ($successFilter !== null) $stmt->bindParam("success", $successFilter, PDO::PARAM_INT);
+
         return $this->executeAndExtractRows($stmt);
     }
 

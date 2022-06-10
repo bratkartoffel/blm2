@@ -450,16 +450,16 @@ const credit_limit = -15000;
 const dispo_limit = -100000;
 
 // minimum interest rate (in percent)
-const interest_debit_rate_min = 0.015;
+const interest_debit_rate_min = 0.011;
 
 // maximum interest rate (in percent)
-const interest_debit_rate_max = 0.018;
+const interest_debit_rate_max = 0.015;
 
 // minimum credit rate (in percent)
-const interest_credit_rate_min = 0.020;
+const interest_credit_rate_min = 0.017;
 
 // maximum credit rate (in percent)
-const interest_credit_rate_max = 0.025;
+const interest_credit_rate_max = 0.023;
 
 if (maintenance_active) {
     if (defined('IS_CRON')) {

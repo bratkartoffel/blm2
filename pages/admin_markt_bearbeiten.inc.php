@@ -28,7 +28,7 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
             </tr>
             <tr>
                 <td>Von:</td>
-                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $entry['Von'], 'von', false); ?></td>
+                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $entry['Von'], 'von', false, true); ?></td>
             </tr>
             <tr>
                 <td>Was</td>

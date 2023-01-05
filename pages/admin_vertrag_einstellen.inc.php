@@ -21,7 +21,7 @@ $preis = getOrDefault($_GET, 'preis', .0);
             </tr>
             <tr>
                 <td>Absender:</td>
-                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false); ?></td>
+                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></td>
             </tr>
             <tr>
                 <td>Empfänger:</td>

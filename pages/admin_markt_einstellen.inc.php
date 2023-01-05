@@ -20,7 +20,7 @@ $preis = getOrDefault($_GET, 'preis', .0);
             </tr>
             <tr>
                 <td>Von:</td>
-                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false); ?></td>
+                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></td>
             </tr>
             <tr>
                 <td>Was</td>

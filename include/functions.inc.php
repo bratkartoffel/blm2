@@ -841,11 +841,14 @@ function createPaginationTable(string $linkBase, int $currentPage, int $entriesC
     return sprintf('<div class="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
 
-function createDropdown(array $elementsWithIDAndName, int $selectedID, string $elementName, bool $withAllEntry = true): string
+function createDropdown(array $elementsWithIDAndName, int $selectedID, string $elementName, bool $withAllEntry = true, bool $withSystemEntry = false): string
 {
     $entries = array();
     if ($withAllEntry) {
         $entries[] = '<option value="">- Alle -</option>';
+    }
+    if ($withSystemEntry) {
+        $entries[] = '<option value="0">- System -</option>';
     }
     for ($i = 0; $i < count($elementsWithIDAndName); $i++) {
         $entry = $elementsWithIDAndName[$i];

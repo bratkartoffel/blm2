@@ -2,7 +2,7 @@ alter table mitglieder
     auto_increment 100;
 
 DELIMITER $$
-CREATE PROCEDURE InsertUsers(P_count int)
+CREATE OR REPLACE PROCEDURE InsertUsers(P_count int)
 BEGIN
     DECLARE NR int;
     insertLoop:

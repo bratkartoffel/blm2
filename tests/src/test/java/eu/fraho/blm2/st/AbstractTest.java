@@ -59,10 +59,6 @@ public abstract class AbstractTest {
         Assertions.assertEquals(1, getDriver().findElements(by).size(), "Element " + by + " not found");
     }
 
-    protected void assertElementNotPresent(By by) {
-        Assertions.assertEquals(0, getDriver().findElements(by).size(), "Element " + by + " not found");
-    }
-
     protected void assertText(By by, String expected) {
         Assertions.assertEquals(expected, getDriver().findElement(by).getText());
     }

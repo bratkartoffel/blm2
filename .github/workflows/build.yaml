@@ -1,0 +1,32 @@
+name: Run system tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: Start application
+        run: docker-compose up -d
+        working-directory: development/tests
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Setup Firefox
+        uses: browser-actions/setup-firefox@latest
+        with:
+          firefox-version: latest
+      - name: Run selenium tests
+        run: ./gradlew --no-daemon check
+        working-directory: tests/

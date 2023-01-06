@@ -72,7 +72,7 @@ Database::getInstance()->commit();
 
 $email_activation_link = base_url . '/actions/activate.php?user=' . urlencode($name) . '&amp;code=' . $email_activation_code;
 if (!sendMail($email, game_title . ': Aktivierung Ihres Accounts',
-    '<html lang="de"><body><h3>Willkommen beim Bioladenmanager 2,</h3>
+    '<html lang="de"><body><h3>Hallo ' . escapeForOutput($name) . ' und Willkommen beim Bioladenmanager 2,</h3>
     <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
     <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
     <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . admin_email . '</p>

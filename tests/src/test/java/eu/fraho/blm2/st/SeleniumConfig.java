@@ -24,7 +24,7 @@ public class SeleniumConfig {
         WebDriverManager.firefoxdriver().setup();
         FirefoxOptions options = new FirefoxOptions()
                 .setProfile(new FirefoxProfile())
-//                .addArguments("-headless")
+                .addArguments("-headless")
                 ;
         WebDriver driver = new FirefoxDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));

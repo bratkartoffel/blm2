@@ -841,7 +841,7 @@ function createPaginationTable(string $linkBase, int $currentPage, int $entriesC
     return sprintf('<div class="Pagination">Seite: %s</div>', implode(" | ", $pages));
 }
 
-function createDropdown(array $elementsWithIDAndName, int $selectedID, string $elementName, bool $withAllEntry = true, bool $withSystemEntry = false): string
+function createDropdown(array $elementsWithIDAndName, ?int $selectedID, string $elementName, bool $withAllEntry = true, bool $withSystemEntry = false, bool $withNoneEntry = false): string
 {
     $entries = array();
     if ($withAllEntry) {
@@ -850,10 +850,17 @@ function createDropdown(array $elementsWithIDAndName, int $selectedID, string $e
     if ($withSystemEntry) {
         $entries[] = '<option value="0">- System -</option>';
     }
+    if ($withNoneEntry) {
+        if ($selectedID === null || $selectedID === -1) {
+            $entries[] = '<option value="-1" selected>- Kein -</option>';
+        } else {
+            $entries[] = '<option value="-1">- Kein -</option>';
+        }
+    }
     for ($i = 0; $i < count($elementsWithIDAndName); $i++) {
         $entry = $elementsWithIDAndName[$i];
         if ($entry["ID"] == $selectedID) {
-            $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $entry["ID"], $entry["Name"]);
+            $entries[] = sprintf('<option value="%d" selected>%s</option>', $entry["ID"], $entry["Name"]);
         } else {
             $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
         }
@@ -1002,6 +1009,8 @@ function getCurrentPage(): string
     if (isLoggedIn()) {
         switch ($p) {
             case "admin":
+            case "admin_benutzer":
+            case "admin_benutzer_bearbeiten":
             case "admin_test":
             case "admin_markt":
             case "admin_vertrag":

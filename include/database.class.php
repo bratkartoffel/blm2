@@ -793,6 +793,15 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getAllPlayerIdsAndNameAndEMailAndRegistriertAmAndGesperrtAndVerwarnungen(int $page, int $entriesPerPage): ?array
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT ID, Name, EMail, RegistriertAm, Gesperrt, Verwarnungen FROM mitglieder WHERE ID > 0 ORDER BY ID LIMIT :offset, :count");
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin(): ?array
     {
         $stmt = $this->prepare("SELECT ID, Name, EMail, EMailAct, LastLogin FROM mitglieder WHERE ID > 0 ORDER BY Name");
@@ -827,6 +836,13 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             WHERE m.Name = :name
             AND m.ID > 0");
         $stmt->bindParam("name", $name);
+        return $this->executeAndExtractFirstRow($stmt);
+    }
+
+    public function getPlayerDataById(int $id): ?array
+    {
+        $stmt = $this->prepare("SELECT * FROM mitglieder WHERE ID = :id AND ID > 0");
+        $stmt->bindParam("id", $id);
         return $this->executeAndExtractFirstRow($stmt);
     }
 

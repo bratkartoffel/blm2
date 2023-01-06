@@ -93,14 +93,14 @@ if (isLoggedIn()) {
                 <span>Persönlich:</span>
                 <?= createNavigationLink('gruppe', sprintf("Gruppe (%s)", $data['Gruppe'] === null ? '0' : Database::getInstance()->getUnreadGroupMessageCount($data['Gruppe'], $_SESSION['blm_user']) . ' / ' . Database::getInstance()->countPendingGroupDiplomacy($data['Gruppe'])), 'Gruppe'); ?>
                 <?= createNavigationLink('nachrichten_liste', 'Nachrichten (' . Database::getInstance()->getUnreadMessageCount($_SESSION['blm_user']) . ')', 'Nachrichten'); ?>
-                <div class="NaviLink"><a href="/?p=notizblock">Notizblock</a></div>
-                <div class="NaviLink"><a href="/?p=einstellungen">Einstellungen</a>
+                <div class="NaviLink"><a href="/?p=notizblock" id="link_notizblock">Notizblock</a></div>
+                <div class="NaviLink"><a href="/?p=einstellungen" id="link_einstellungen">Einstellungen</a>
                 </div>
                 <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);">
-                    <a href="chefbox.php" onclick="return ChefboxZeigen(this.href);"
+                    <a href="chefbox.php" id="link_chefbox" onclick="return ChefboxZeigen(this.href);"
                        target="_blank">Chefbox</a>
                 </div>
-                <?= (isAdmin() ? '<div class="NaviLink"><a href="/?p=admin">Admin-Bereich</a></div>' : ''); ?>
+                <?= (isAdmin() ? '<div class="NaviLink"><a href="/?p=admin" id="link_admin">Admin-Bereich</a></div>' : ''); ?>
             </div>
 
             <div class="NaviBlock">
@@ -108,13 +108,14 @@ if (isLoggedIn()) {
                 <div class="NaviLink">
                     <a href="/?p=rangliste&amp;o=<?= floor((Database::getInstance()->getPlayerRankById($_SESSION['blm_user']) - 1) / ranking_page_size); ?>">Rangliste</a>
                 </div>
-                <div class="NaviLink"><a href="/?p=statistik">Serverstatistik</a></div>
-                <div class="NaviLink"><a href="/?p=regeln">Regeln</a></div>
-                <div class="NaviLink"><a href="/?p=hilfe">Hilfe</a></div>
-                <div class="NaviLink"><a href="/?p=impressum">Impressum</a></div>
-                <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" target="_blank">Spenden</a>
+                <div class="NaviLink"><a href="/?p=statistik" id="link_statistik">Serverstatistik</a></div>
+                <div class="NaviLink"><a href="/?p=regeln" id="link_regeln">Regeln</a></div>
+                <div class="NaviLink"><a href="/?p=hilfe" id="link_hilfe">Hilfe</a></div>
+                <div class="NaviLink"><a href="/?p=impressum" id="link_impressum">Impressum</a></div>
+                <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" id="link_spenden"
+                                         target="_blank">Spenden</a>
                 </div>
-                <div class="NaviLink"><a href="/actions/logout.php">Abmelden</a></div>
+                <div class="NaviLink"><a href="/actions/logout.php" id="link_logout">Abmelden</a></div>
             </div>
         </div>
 
@@ -162,12 +163,13 @@ if (isLoggedIn()) {
         ?>
         <div class="NaviBox">
             <header>Navigation</header>
-            <div class="NaviLink"><a href="/?p=index">Startseite</a></div>
-            <div class="NaviLink"><a href="/?p=anmelden">Anmelden</a></div>
-            <div class="NaviLink"><a href="/?p=registrieren">Registrieren</a></div>
-            <div class="NaviLink"><a href="/?p=regeln">Regeln</a></div>
-            <div class="NaviLink"><a href="/?p=impressum">Impressum</a></div>
-            <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" target="_blank">Spenden</a>
+            <div class="NaviLink"><a href="/?p=index" id="link_index">Startseite</a></div>
+            <div class="NaviLink"><a href="/?p=anmelden" id="link_anmelden">Anmelden</a></div>
+            <div class="NaviLink"><a href="/?p=registrieren" id="link_registrieren">Registrieren</a></div>
+            <div class="NaviLink"><a href="/?p=regeln" id="link_regeln">Regeln</a></div>
+            <div class="NaviLink"><a href="/?p=impressum" id="link_impressum">Impressum</a></div>
+            <div class="NaviLink"><a href="https://www.buymeacoffee.com/bratkartoffel" id="link_spenden"
+                                     target="_blank">Spenden</a>
             </div>
         </div>
         <?php

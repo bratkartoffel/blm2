@@ -990,7 +990,7 @@ Date: %s', admin_name, admin_email, admin_name, admin_email, date(DATE_RFC2822))
 function createNavigationLink(string $target, string $text, string $sitterRightsRequired): string
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
-        return sprintf('<div class="NaviLink"><a href="/?p=%s">%s</a></div>%s', $target, $text, "\n");
+        return sprintf('<div class="NaviLink"><a href="/?p=%s" id="link_%s">%s</a></div>%s', $target, $target, $text, "\n");
     }
     return "";
 }

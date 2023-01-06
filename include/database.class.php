@@ -42,6 +42,8 @@ class Database
             $this->link = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
                 database_hostname, database_database), database_username, database_password,
                 array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
+            $this->link->query("SET time_zone = '" . date_default_timezone_get() . "'");
+            $this->queries++;
         } catch (PDOException $e) {
             die('Database connection failed: ' . $e->getMessage());
         }

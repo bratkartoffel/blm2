@@ -97,7 +97,7 @@ class RegistrationTests extends AbstractTest {
         assertElementPresent(By.id("meldung_201"));
 
         // verify that user cannot login
-        login(driver, username, "changeit");
+        login(username, "changeit");
         assertElementPresent(By.id("meldung_135"));
 
         // wrong activation token
@@ -109,6 +109,6 @@ class RegistrationTests extends AbstractTest {
         assertElementPresent(By.id("meldung_241"));
 
         // verify that user can login now
-        login(driver, username);
+        login(username);
     }
 }

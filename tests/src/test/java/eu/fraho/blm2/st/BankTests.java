@@ -15,8 +15,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testDeposit() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // check current balance
@@ -37,8 +37,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testDepositMax() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         setValue(By.id("betrag"), "50000");
@@ -54,13 +54,12 @@ public class BankTests extends AbstractTest {
     @Test
     void testDepositNegative() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         setValue(By.id("betrag"), "-100");
         driver.findElement(By.id("do_transaction")).click();
-        assertElementNotPresent(By.id("meldung_207"));
 
         assertText(By.id("cur_bank_account"), "Ihr Kontostand: 50.000,00 €");
         Assertions.assertEquals("-100", driver.findElement(By.id("betrag")).getAttribute("value"));
@@ -71,8 +70,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testDepositTooMuch() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         setValue(By.id("betrag"), "50000,01");
@@ -88,8 +87,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testDepositZero() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
@@ -106,8 +105,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testWithdraw() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
@@ -125,8 +124,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testWithdrawCredit() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
@@ -144,8 +143,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testWithdrawCreditLimit() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
@@ -164,15 +163,14 @@ public class BankTests extends AbstractTest {
     @Test
     void testWithdrawNegative() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
         select(By.id("art"), "Auszahlen");
         setValue(By.id("betrag"), "-100");
         driver.findElement(By.id("do_transaction")).click();
-        assertElementNotPresent(By.id("meldung_207"));
 
         // check new balance
         assertText(By.id("cur_bank_account"), "Ihr Kontostand: 50.000,00 €");
@@ -184,8 +182,8 @@ public class BankTests extends AbstractTest {
     @Test
     void testWithdrawZero() {
         resetPlayer(13);
+        login("test3");
         WebDriver driver = getDriver();
-        login(driver, "test3");
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100

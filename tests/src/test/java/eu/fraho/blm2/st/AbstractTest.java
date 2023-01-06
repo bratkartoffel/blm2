@@ -9,6 +9,7 @@ package eu.fraho.blm2.st;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -40,12 +41,12 @@ public abstract class AbstractTest {
         return driver;
     }
 
-    protected void login(WebDriver driver, String username) {
-        login(driver, username, "changeit");
+    protected void login(String username) {
+        login(username, "changeit");
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.id("link_logout")));
     }
 
-    protected void login(WebDriver driver, String username, String password) {
+    protected void login(String username, String password) {
         log.info("Logging in as {}:{}", username, password);
         driver.findElement(By.id("link_anmelden")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
@@ -69,7 +70,7 @@ public abstract class AbstractTest {
     protected void setValue(By by, String value) {
         WebElement element = driver.findElement(by);
         element.clear();
-        element.sendKeys(value);
+        element.sendKeys(value, Keys.TAB);
     }
 
     protected void select(By by, String label) {

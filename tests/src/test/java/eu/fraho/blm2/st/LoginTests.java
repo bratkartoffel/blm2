@@ -12,19 +12,19 @@ import org.openqa.selenium.By;
 class LoginTests extends AbstractTest {
     @Test
     void testLogin() {
-        login(getDriver(), "test1");
+        login("test1");
         assertElementPresent(By.id("meldung_202"));
     }
 
     @Test
     void testUnknownUser() {
-        login(getDriver(), "test33", "changeit");
+        login("test33", "changeit");
         assertElementPresent(By.id("meldung_108"));
     }
 
     @Test
     void testWrongPassword() {
-        login(getDriver(), "test1", "wrong");
+        login("test1", "wrong");
         assertElementPresent(By.id("meldung_108"));
     }
 }

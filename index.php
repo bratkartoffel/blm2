@@ -82,7 +82,7 @@ if (isLoggedIn()) {
 
             <div class="NaviBlock">
                 <span>Finanzen:</span>
-                <div class="NaviLink"><a href="/?p=buero">Büro</a></div>
+                <div class="NaviLink"><a href="/?p=buero" id="link_buero">Büro</a></div>
                 <?= createNavigationLink('bank', 'Bank', 'Bank'); ?>
                 <?= createNavigationLink('vertraege_liste', 'Verträge (' . Database::getInstance()->getOpenContractCount($_SESSION['blm_user']) . ')', 'Vertraege'); ?>
                 <?= createNavigationLink('marktplatz_liste', 'Marktplatz (' . Database::getInstance()->getMarktplatzCount() . ')', 'Marktplatz'); ?>

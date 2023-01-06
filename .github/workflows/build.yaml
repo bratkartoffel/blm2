@@ -30,3 +30,14 @@ jobs:
       - name: Run selenium tests
         run: ./gradlew --no-daemon check
         working-directory: tests/
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        if: always() # always run even if the previous step fails
+        with:
+          name: test-results
+          path: tests/build/reports/tests/test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          report_paths: 'tests/build/test-results/test/TEST-*.xml'

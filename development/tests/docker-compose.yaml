@@ -15,6 +15,7 @@ services:
       - ./testdata.sql:/docker-entrypoint-initdb.d/1_testdata.sql:ro
 
   application:
+    image: bratkartoffel/web:blm2-dev
     build:
       context: .
       dockerfile: Dockerfile-php

@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'com.github.ben-manes.versions' version '0.44.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    testImplementation 'org.slf4j:slf4j-simple:2.0.6'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.3.1'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.7.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+}
+
+// compile sources with UTF-8 encoding
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+test {
+    // use junit 5
+    useJUnitPlatform()
+    // print status of tests
+    testLogging { events "passed", "skipped", "failed" }
+    if (project.hasProperty("webdriver.firefox.bin")) {
+        systemProperty "webdriver.firefox.bin", project.getProperty("webdriver.firefox.bin")
+    }
+}
+
+// dependencyUpdates should only suggest released versions
+static boolean isStable(String version) {
+    boolean result = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'snapshot'].any {
+        version ==~ /(?i).*[.-]$it[.\-\d]*/
+    }
+    return !result
+}
+
+tasks.named("dependencyUpdates").configure {
+    gradleReleaseChannel = 'current'
+    revision = 'integration'
+    rejectVersionIf { !isStable(it.candidate.version) && isStable(it.currentVersion) }
+}

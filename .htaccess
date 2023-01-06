@@ -12,6 +12,7 @@ RedirectMatch 403 /development
 RedirectMatch 403 /include
 RedirectMatch 403 /pages
 RedirectMatch 403 /pics/uploads
+RedirectMatch 403 /tests
 
 # prefer compressing output with brotli
 <IfModule mod_brotli.c>

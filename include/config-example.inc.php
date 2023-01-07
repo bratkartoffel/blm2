@@ -20,11 +20,17 @@ const database_database = 'blm2';
 // base url for this game (needed for absolute urls like in mails)
 const base_url = 'https://blm2.example.com';
 
-// operator email address
-const admin_email = 'blm2@example.com';
-
 // operator name
-const admin_name = 'Simon Frankenberger';
+const admin_name = 'Insert Name Here';
+
+// operator email address
+const admin_email = 'contact-address@example.com';
+
+// address line 1 (for impressum)
+const admin_addr_line_1 = 'Street Name, may be empty';
+
+// address line 2 (for impressum)
+const admin_addr_line_2 = 'Zip-Code and Country, may be empty';
 
 // is the maintenance mode active
 const maintenance_active = false;

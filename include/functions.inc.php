@@ -1052,6 +1052,7 @@ function getCurrentPage(): string
             case "rangliste_spezial":
             case "index":
             case "impressum":
+            case "datenschutz":
             case "regeln":
             case "einstellungen":
             case "nachrichten_lesen":
@@ -1075,6 +1076,7 @@ function getCurrentPage(): string
             case "passwort_vergessen":
             case "regeln":
             case "impressum":
+            case "datenschutz":
                 $page = $p;
                 break;
             default:
@@ -1535,4 +1537,14 @@ function uploadProfilePicture(array $file, string $filename): int
     }
     imagewebp($data, $filename, 50);
     return 0;
+}
+
+function obfuscate(string $text): string
+{
+    $parts = explode('@', $text, 2);
+    if (count($parts) == 1) {
+        return bin2hex($text);
+    } else {
+        return bin2hex($parts[0]) . '@' . $parts[1];
+    }
 }

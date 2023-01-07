@@ -18,6 +18,11 @@ div.Pagination {
     margin: 20px 0;
 }
 
+p.indent {
+    white-space: pre-line;
+    padding-left: 30px;
+}
+
 /*region Forms*/
 div.form {
     background-color: #bece6b;

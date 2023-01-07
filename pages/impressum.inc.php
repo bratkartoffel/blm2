@@ -11,15 +11,33 @@
     heruntergeladen werden.
 </p>
 <p>
-    Die Lizenz (MIT Licence) kann <a href="/LICENCE.md" target="_blank">hier</a> eingesehen werden.
+    Die Lizenz (MIT Licence) kann <a href="https://github.com/bratkartoffel/blm2/blob/master/LICENCE.md" target="_blank">hier</a> eingesehen werden.
+</p>
+
+<h2>Betrieben wird diese Installation durch:</h2>
+<p class="indent">
+    <span class="bot"><?= obfuscate(admin_name); ?></span>
+    <?php
+    if (strlen(admin_addr_line_1) > 0) {
+        ?>
+        <span class="bot"><?= obfuscate(admin_addr_line_1); ?></span>
+        <?php
+    }
+    ?>
+    <?php
+    if (strlen(admin_addr_line_2) > 0) {
+        ?>
+        <span class="bot"><?= obfuscate(admin_addr_line_2); ?></span>
+        <?php
+    }
+    ?>
+    <span>E-Mail: <a class="bot"><?= obfuscate(admin_email); ?></a></span>
 </p>
 
 <h2>Programmiert wurde das Original von:</h2>
-<p>
-    Simon Frankenberger<br/>
-    Gerhardinger Str. 18<br/>
-    94474 Vilshofen<br/>
-    <a href="mailto:page-contact-1664@fraho.eu">page-contact-1664@fraho.eu</a>
+<p class="indent">
+    <span class="bot"><?= obfuscate('Simon Frankenberger'); ?></span>
+    <span>E-Mail: <a class="bot"><?= obfuscate('simon-blm2@fraho.eu'); ?></a></span>
 </p>
 
 <h2>Disclaimer</h2>
@@ -37,3 +55,7 @@
     Der Font für das Captcha wurde als "Public Domain" released und ist frei verfügbar auf
     <a href="https://www.fontspace.com/sportsball-font-f30615" target="_blank">fontspace.com</a>.
 </p>
+
+<script>
+    deobfuscate();
+</script>

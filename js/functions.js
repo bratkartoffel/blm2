@@ -164,3 +164,21 @@ function toggleRundmail() {
 
 let reloadOnCountdown = false;
 window.setInterval(CountdownFields, 1000);
+
+/* de-obfuscate fields with personal information */
+function deobfuscate() {
+    let fields = document.getElementsByClassName("bot");
+    for (let i = 0; i < fields.length; i++) {
+        let botField = fields.item(i);
+        let obf;
+        let domain = '';
+        if (botField.textContent.indexOf('@') !== -1) {
+            obf = botField.textContent.substring(0, botField.textContent.indexOf('@'));
+            domain = botField.textContent.substring(botField.textContent.indexOf('@'));
+        } else {
+            obf = botField.textContent;
+        }
+        let deobf = obf.match(/.{1,2}/g).map(v => String.fromCharCode(parseInt(v, 16))).join('');
+        botField.innerHTML = deobf + domain;
+    }
+}

@@ -12,14 +12,14 @@ $pwd = getOrDefault($_POST, 'pwd');
 session_reset();
 session_regenerate_id();
 
-// check if game is locked
-if (isGameLocked()) {
-    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 999, __LINE__);
-}
-
 // load player data
 $player = Database::getInstance()->getPlayerDataByName($name);
 requireEntryFound($player, sprintf("/?p=anmelden&name=%s", urlencode($name)), 108, __LINE__);
+
+// check if game is locked
+if (isGameLocked() && $player['Admin'] != 1) {
+    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 999, __LINE__);
+}
 
 if ($player['Gesperrt'] == 1) {
     redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 139, __LINE__);

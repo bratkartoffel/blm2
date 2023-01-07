@@ -6,6 +6,7 @@ Weitere Beschreibung folgt.
 
 ## Tests
 
-Im Ordner [tests/](tests/) kann über das `docker-compose.yaml` ein Stack gestartet werden. Für die Tests
-wird [Selenium IDE](https://www.selenium.dev/selenium-ide/) verwendet, die Testfälle können aus `blm2.side` geladen
-werden.
+Im Ordner [tests/](tests/) liegen die Tests als JUnit-Selenium Tests.
+Ein docker-compose stack mit einer vorkonfigurierten Datenbank und Webserver kann über
+das [docker-compose.yaml](tests/src/test/resources/docker-compose.yaml) gestartet werden.
+Das Spiel ist dann über [http://localhost](http://localhost) erreichbar.

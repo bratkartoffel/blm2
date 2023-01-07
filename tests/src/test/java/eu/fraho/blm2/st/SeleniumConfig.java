@@ -20,6 +20,7 @@ public class SeleniumConfig {
 
     public static synchronized WebDriver getWebDriver() {
         if (driver == null) {
+            System.out.println("Starting " + System.getProperty("webdriver.firefox.bin"));
             WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions()
                     .setProfile(new FirefoxProfile());

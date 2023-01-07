@@ -174,36 +174,36 @@ $rates = calculateSellRates();
         <tr>
             <td>&nbsp;</td>
             <td>Gebäude</td>
-            <td><?= formatPoints($data['GebaeudePlus']);
+            <td id="b_p_1"><?= formatPoints($data['GebaeudePlus']);
                 $pointsPlus += $data['GebaeudePlus']; ?></td>
         </tr>
         <tr>
             <td>+</td>
             <td>Forschung</td>
-            <td><?= formatPoints($data['ForschungPlus']);
+            <td id="b_p_2"><?= formatPoints($data['ForschungPlus']);
                 $pointsPlus += $data['ForschungPlus']; ?></td>
         </tr>
         <tr>
             <td>+</td>
             <td>Mafia</td>
-            <td><?= formatPoints($data['MafiaPlus']);
+            <td id="b_p_3"><?= formatPoints($data['MafiaPlus']);
                 $pointsPlus += $data['MafiaPlus']; ?></td>
         </tr>
         <tr class="Separator">
             <td>=</td>
             <td>Gesamtplus</td>
-            <td><?= formatPoints($pointsPlus); ?></td>
+            <td id="b_p_4"><?= formatPoints($pointsPlus); ?></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Mafia</td>
-            <td><?= formatPoints($data['MafiaMinus']);
+            <td id="b_p_5"><?= formatPoints($data['MafiaMinus']);
                 $pointsMinus += $data['MafiaMinus']; ?></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Kriege</td>
-            <td><?= formatPoints($data['KriegMinus']);
+            <td id="b_p_6"><?= formatPoints($data['KriegMinus']);
                 $pointsMinus += $data['KriegMinus']; ?></td>
         </tr>
         <tr class="Separator">
@@ -214,7 +214,7 @@ $rates = calculateSellRates();
         <tr>
             <td>=&gt;</td>
             <td>Gesamtpunkte</td>
-            <td><?= formatPoints($pointsPlus - $pointsMinus); ?></td>
+            <td id="b_p_7"><?= formatPoints($pointsPlus - $pointsMinus); ?></td>
         </tr>
     </table>
 </div>

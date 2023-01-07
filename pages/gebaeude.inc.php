@@ -58,7 +58,8 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                         </div>
                         <div>
                             <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
-                               href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;back=gebaeude">Abbrechen</a>
+                               href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;back=gebaeude"
+                               id="abort_<?= $buildingId; ?>">Abbrechen</a>
                         </div>
                         <?php
                     } else {

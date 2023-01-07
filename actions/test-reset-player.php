@@ -35,6 +35,10 @@ switch ($id) {
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 30, 'Forschung15' => 30));
         break;
 
+    case 15:
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude5' => 120));
+        break;
+
     default:
         die('unknown ID');
 }

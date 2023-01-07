@@ -83,17 +83,19 @@ switch (getOrDefault($_GET, 'a', 0)) {
     case 2:
         requireXsrfToken('/?p=nachrichten_liste');
         $id = getOrDefault($_GET, 'id', 0);
+        $offset_in = getOrDefault($_GET, 'o_in', 0);
+        $offset_out = getOrDefault($_GET, 'o_out', 0);
         $data = Database::getInstance()->getMessageByIdAndAnOrVonEquals($id, $_SESSION['blm_user']);
         requireEntryFound($data, '/?p=nachrichten_liste');
 
         Database::getInstance()->begin();
         if (Database::getInstance()->deleteTableEntry(Database::TABLE_MESSAGES, $id) !== 1) {
             Database::getInstance()->rollBack();
-            redirectTo('/?p=nachrichten_liste', 143, __LINE__);
+            redirectTo('/?p=nachrichten_liste&o_in=' . $offset_in . '&o_out=' . $offset_out, 143, __LINE__);
         }
 
         Database::getInstance()->commit();
-        redirectTo('/?p=nachrichten_liste', 211);
+        redirectTo('/?p=nachrichten_liste&o_in=' . $offset_in . '&o_out=' . $offset_out, 211);
         break;
 
     // delete all messages

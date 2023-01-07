@@ -1186,7 +1186,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllPlayerIdAndBankAndBioladenAndDoenerstand(): ?array
     {
-        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude3, Gebaeude4 FROM mitglieder"));
+        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude3, Gebaeude4 FROM mitglieder WHERE ID > 0"));
     }
 
     public function getAllPlayerIdAndResearchLevels(): ?array
@@ -1194,7 +1194,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractRows($this->prepare("SELECT ID,
         Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, 
         Forschung7, Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, 
-        Forschung13, Forschung14, Forschung15 FROM mitglieder"));
+        Forschung13, Forschung14, Forschung15 FROM mitglieder WHERE ID > 0"));
     }
 
     public function getAllPlayerIdAndNameBankSmallerEquals(float $amount): ?array

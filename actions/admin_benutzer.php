@@ -70,7 +70,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             'Verwarnungen' => $verwarnungen,
             'Gesperrt' => $gesperrt
         );
-        if ($password !== null) {
+        if ($password !== null && strlen($password) > 0) {
             $fields['Passwort'] = hashPassword($password);
         }
         if ($gruppe !== -1) {

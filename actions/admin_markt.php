@@ -45,6 +45,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // delete existing offer
     case 3:
+        requireXsrfToken('/?p=admin_markt');
         if (Database::getInstance()->deleteTableEntry(Database::TABLE_MARKET, $id) !== 1) {
             redirectBack('/?p=admin_markt', 143, __LINE__);
         } else {

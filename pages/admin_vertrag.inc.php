@@ -52,7 +52,7 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
             <td>
                 <a href="/?p=admin_vertrag_bearbeiten&amp;id=<?= $row['ID']; ?>">Bearbeiten</a> |
-                <a href="/actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>">Löschen</a>
+                <a href="/actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php

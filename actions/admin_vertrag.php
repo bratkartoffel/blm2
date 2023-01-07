@@ -48,6 +48,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // delete existing contract
     case 3:
+        requireXsrfToken('/?p=admin_vertrag');
         if (Database::getInstance()->deleteTableEntry(Database::TABLE_CONTRACTS, $id) == 0) {
             redirectBack('/?p=admin_vertrag', 143, __LINE__);
         } else {

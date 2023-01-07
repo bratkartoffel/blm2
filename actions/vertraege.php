@@ -59,6 +59,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // accept contract
     case 2:
+        requireXsrfToken('/?p=vertraege_liste');
         $data = Database::getInstance()->getContractByIdAndAn($vid, $_SESSION['blm_user']);
         requireEntryFound($data, '/?p=vertraege_liste');
 
@@ -117,6 +118,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // reject contract
     case 3:
+        requireXsrfToken('/?p=vertraege_liste');
         $data = Database::getInstance()->getContractByIDAndAnOrVonEquals($vid, $_SESSION['blm_user']);
         requireEntryFound($data, '/?p=vertraege_liste');
 

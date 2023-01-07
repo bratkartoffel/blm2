@@ -81,6 +81,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
     // delete message
     case 2:
+        requireXsrfToken('/?p=nachrichten_liste');
         $id = getOrDefault($_GET, 'id', 0);
         $data = Database::getInstance()->getMessageByIdAndAnOrVonEquals($id, $_SESSION['blm_user']);
         requireEntryFound($data, '/?p=nachrichten_liste');

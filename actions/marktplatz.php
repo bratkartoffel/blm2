@@ -51,6 +51,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
     // buy offer
     case 2:
+        requireXsrfToken('/?p=marktplatz_liste');
         $id = getOrDefault($_GET, 'id', 0);
 
         $entry = Database::getInstance()->getMarktplatzEntryById($id);
@@ -114,6 +115,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
     // retract offer
     case 3:
+        requireXsrfToken('/?p=marktplatz_liste');
         $id = getOrDefault($_GET, 'id', 0);
 
         $entry = Database::getInstance()->getMarktplatzEntryByIdAndVon($id, $_SESSION['blm_user']);

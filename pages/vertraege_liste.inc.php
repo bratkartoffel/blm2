@@ -35,9 +35,9 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis']); ?></td>
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
-                <a href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>">Annehmen</a>
+                <a href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
                 |
-                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">Ablehnen</a>
+                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
             </td>
         </tr>
         <?php

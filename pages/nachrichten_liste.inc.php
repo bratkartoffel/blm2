@@ -40,7 +40,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
                 <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
-            <td><a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>">Löschen</a></td>
+            <td><a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a></td>
         </tr>
         <?php
     }
@@ -92,7 +92,7 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
                 <?php
                 if ($row['Gelesen'] == 0 || $row['AnID'] === null) {
                     ?>
-                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>">Löschen</a>
+                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
                     <?php
                 } else {
                     echo 'Löschen';

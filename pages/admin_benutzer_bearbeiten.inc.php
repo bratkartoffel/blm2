@@ -1,6 +1,7 @@
 <?php
 requireFieldSet($_GET, 'id', '/?p=admin_benutzer');
 $id = getOrDefault($_GET, 'id', 0);
+$offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/Login_Manager.webp" alt=""/>
@@ -51,6 +52,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
+        <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <table class="Liste EditUser" id="user_general">
             <tr>
                 <th colspan="2">Benutzer bearbeiten</th>
@@ -173,6 +175,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="2"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
+        <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <table class="Liste EditUser" id="user_buildings">
             <tr>
                 <th colspan="2">Gebäude</th>
@@ -184,7 +187,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
                     <td><?= getBuildingName($i); ?></td>
                     <td><input type="number" name="gebaeude_<?= $i; ?>"
                                value="<?= escapeForOutput($entry['Gebaeude' . $i]); ?>"
-                               size="3"/>
+                               size="3" min="0"/>
                 </tr>
                 <?php
             }
@@ -199,6 +202,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="3"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
+        <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <table class="Liste EditUser" id="user_research">
             <tr>
                 <th colspan="2">Forschungen</th>
@@ -210,7 +214,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
                     <td><?= getItemName($i); ?></td>
                     <td><input type="number" name="forschung_<?= $i; ?>"
                                value="<?= escapeForOutput($entry['Forschung' . $i]); ?>"
-                               size="3"/>
+                               size="3" min="0"/>
                 </tr>
                 <?php
             }
@@ -225,6 +229,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="4"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
+        <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <table class="Liste EditUser" id="user_stock">
             <tr>
                 <th colspan="2">Lagerbestand</th>
@@ -236,7 +241,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
                     <td><?= getItemName($i); ?></td>
                     <td><input type="number" name="lager_<?= $i; ?>"
                                value="<?= escapeForOutput($entry['Lager' . $i]); ?>"
-                               size="7"/>
+                               size="7" min="0"/>
                 </tr>
                 <?php
             }

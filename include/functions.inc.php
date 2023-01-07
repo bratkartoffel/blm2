@@ -462,6 +462,12 @@ function getMessageBox(int $msg_id): ?string
         case 245:
             $text = 'Das Passwort wurde erfolgreich zurückgesetzt und Ihnen in einer neuen EMail zugeschickt';
             break;
+        case 246:
+            $text = 'Der Benutzer wurde gelöscht.';
+            break;
+        case 247:
+            $text = 'Der Benutzer wurde gespeichert.';
+            break;
 
 
         case 999:
@@ -900,7 +906,7 @@ function redirectTo(string $location, ?int $m = null, ?string $anchor = null): v
     die();
 }
 
-function redirectBack(string $redirectTo, ?int $m = null): void
+function redirectBack(string $redirectTo, ?int $m = null, ?string $anchor = null): void
 {
     if (!empty($_SERVER['HTTP_REFERER'])) {
         $location = str_replace("\n", '', $_SERVER['HTTP_REFERER']);
@@ -908,7 +914,7 @@ function redirectBack(string $redirectTo, ?int $m = null): void
         $location = $redirectTo;
     }
 
-    redirectTo($location, $m);
+    redirectTo($location, $m, $anchor);
 }
 
 function requireFieldSet(?array $array, string $field, string $redirectTo, ?string $anchor = null): void

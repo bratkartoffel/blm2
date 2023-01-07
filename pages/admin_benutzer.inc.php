@@ -33,7 +33,7 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= escapeForOutput($row['Verwarnungen']); ?></td>
             <td>
                 <a href="/?p=admin_benutzer_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
-                <a href="/actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>"
+                <a href="/actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                    onclick="return confirm('Benutzer \'<?= escapeForOutput($row['Name']); ?>\' wirklich löschen?');">Löschen</a>
             </td>
         </tr>

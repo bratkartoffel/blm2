@@ -134,6 +134,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // delete user
     case 5:
+        requireXsrfToken('/?p=admin_benutzer&o=' . $offset);
         Database::getInstance()->begin();
         $status = deleteAccount($id);
         if ($status !== null) {

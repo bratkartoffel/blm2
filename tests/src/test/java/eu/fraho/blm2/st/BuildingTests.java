@@ -23,10 +23,12 @@ public class BuildingTests extends AbstractTest {
 
         assertText(By.id("stat_money"), "5.000,00 €");
         driver.findElement(By.id("build_1")).click();
+        assertElementPresent(By.id("meldung_207"));
 
         assertText(By.id("stat_money"), "4.526,15 €");
         driver.findElement(By.id("abort_1")).click();
         driver.switchTo().alert().accept();
+        assertElementPresent(By.id("meldung_222"));
 
         assertElementPresent(By.id("build_1"));
         assertText(By.id("stat_money"), "4.881,54 €");
@@ -42,6 +44,7 @@ public class BuildingTests extends AbstractTest {
 
         assertText(By.id("stat_money"), "5.000,00 €");
         driver.findElement(By.id("build_1")).click();
+        assertElementPresent(By.id("meldung_207"));
 
         assertText(By.id("stat_money"), "4.526,15 €");
         Thread.sleep(TimeUnit.SECONDS.toMillis(2));

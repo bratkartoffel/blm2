@@ -19,21 +19,22 @@ $preis = getOrDefault($_GET, 'preis', .0);
                 <th colspan="2">Angebot einstellen</th>
             </tr>
             <tr>
-                <td>Von:</td>
+                <td><label for="von">Von:</label></td>
                 <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></td>
             </tr>
             <tr>
-                <td>Was</td>
+                <td><label for="ware">Was:</label></td>
                 <td><?= createWarenDropdown($ware, 'ware', false); ?></td>
             </tr>
             <tr>
-                <td>Menge</td>
-                <td><input type="text" name="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
+                <td><label for="menge">Menge:</label></td>
+                <td><input type="text" name="menge" id="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
                 </td>
             </tr>
             <tr>
-                <td>Preis</td>
-                <td><input type="text" name="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/> €
+                <td><label for="preis">Preis:</label></td>
+                <td><input type="text" name="preis" id="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/>
+                    €
                 </td>
             </tr>
             <tr>

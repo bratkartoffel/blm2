@@ -74,7 +74,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                 if (!array_key_exists($i, $auftraege)) {
                     ?>
                     <div>
-                        <label for="menge<?= $i; ?>">Menge:</label>
+                        <label for="amount_<?= $i; ?>">Menge:</label>
                         <input type="text" size="4" maxlength="6" name="menge" id="amount_<?= $i; ?>"
                                value="<?= $productionData[$i]['Menge']; ?>"
                                onkeyup="RechneProduktionsKosten(<?= $productionData[$i]['Menge']; ?>, <?= $productionData[$i]['Kosten']; ?>, this.value,

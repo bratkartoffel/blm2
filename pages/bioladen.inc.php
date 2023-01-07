@@ -39,7 +39,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         ?>
         <tr>
             <td id="cur_amount_<?= $i; ?>"><?= formatWeight($data['Lager' . $i]); ?></td>
-            <td><?= getItemName($i); ?></td>
+            <td><label for="amount_<?= $i; ?>"><?= getItemName($i); ?></label></td>
             <td><?= formatCurrency($prices[$i]); ?></td>
             <td>
                 <form action="/actions/bioladen.php" method="post">

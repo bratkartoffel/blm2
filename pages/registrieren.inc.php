@@ -32,7 +32,7 @@ $captcha->createCaptcha();
                    minlength="<?= username_min_len; ?>" maxlength="<?= username_max_len; ?>"/>
         </div>
         <div>
-            <label for="name">EMail-Adresse:</label>
+            <label for="email">EMail-Adresse:</label>
             <input name="email" id="email" type="email" size="20" required value="<?= escapeForOutput($email); ?>"
                    maxlength="<?= email_max_len; ?>"/>
         </div>

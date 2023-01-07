@@ -66,7 +66,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 <div class="form Einstellungen">
     <form action="/actions/einstellungen.php" method="post" name="form_beschreibung">
         <input type="hidden" name="a" value="4"/>
-        <header>Beschreibung ändern</header>
+        <header><label for="beschreibung">Beschreibung ändern</label></header>
         <div>
             <textarea id="beschreibung" maxlength="4096" name="beschreibung" cols="50" rows="15"
                       onkeyup="ZeichenUebrig(this, document.form_beschreibung.getElementsByTagName('span')[0]);"><?= escapeForOutput($data['Beschreibung'], false); ?></textarea>

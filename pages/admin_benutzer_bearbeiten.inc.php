@@ -58,7 +58,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
                 <th colspan="2">Benutzer bearbeiten</th>
             </tr>
             <tr>
-                <td>Name:</td>
+                <td><label for="username">Name:</label></td>
                 <td>
                     <input name="username" id="username" type="text" value="<?= escapeForOutput($entry['Name']); ?>"
                            size="20" required
@@ -66,18 +66,18 @@ for ($i = 1; $i <= count_buildings; $i++) {
                 </td>
             </tr>
             <tr>
-                <td>EMail:</td>
+                <td><label for="email">EMail:</label></td>
                 <td><input name="email" id="email" type="email" size="20" required
                            value="<?= escapeForOutput($entry['EMail']); ?>"
                            maxlength="<?= email_max_len; ?>"/></td>
             </tr>
             <tr>
-                <td>Aktiviert</td>
-                <td><input type="checkbox" name="email_aktiviert"
+                <td><label for="email_aktiviert">Aktiviert:</label></td>
+                <td><input type="checkbox" id="email_aktiviert" name="email_aktiviert"
                            value="1" <?= ($entry['EMailAct'] === null ? 'checked' : ''); ?>/></td>
             </tr>
             <tr>
-                <td>Passwort</td>
+                <td><label for="password">Passwort:</label></td>
                 <td><input name="password" id="password" type="password" size="20"/></td>
             </tr>
             <tr>
@@ -85,41 +85,47 @@ for ($i = 1; $i <= count_buildings; $i++) {
                 <td><?= formatDateTime(strtotime($entry['RegistriertAm'])); ?></td>
             </tr>
             <tr>
-                <td>Geld</td>
-                <td><input type="number" name="geld" value="<?= formatCurrency($entry['Geld'], false, false); ?>"
+                <td><label for="geld">Geld:</label></td>
+                <td><input type="number" name="geld" id="geld"
+                           value="<?= formatCurrency($entry['Geld'], false, false); ?>"
                            size="13"/> €
                 </td>
             </tr>
             <tr>
-                <td>Bank</td>
-                <td><input type="number" name="bank" value="<?= formatCurrency($entry['Bank'], false, false); ?>"
+                <td><label for="bank">Bank:</label></td>
+                <td><input type="number" name="bank" id="bank"
+                           value="<?= formatCurrency($entry['Bank'], false, false); ?>"
                            size="13"/> €
                 </td>
             </tr>
             <tr>
-                <td>Punkte</td>
-                <td><input type="number" name="punkte" value="<?= escapeForOutput($entry['Punkte']); ?>" size="13"/>
+                <td><label for="punkte">Punkte:</label></td>
+                <td><input type="number" name="punkte" id="punkte" value="<?= escapeForOutput($entry['Punkte']); ?>"
+                           size="13"/>
                 </td>
             </tr>
             <tr>
-                <td>IGM Gesendet</td>
-                <td><input type="number" name="igm_gesendet" value="<?= escapeForOutput($entry['IgmGesendet']); ?>"
+                <td><label for="igm_gesendet">IGM Gesendet:</label></td>
+                <td><input type="number" name="igm_gesendet" id="igm_gesendet"
+                           value="<?= escapeForOutput($entry['IgmGesendet']); ?>"
                            size="4"/>
                 </td>
             </tr>
             <tr>
-                <td>IGM Empfangen</td>
-                <td><input type="number" name="igm_empfangen" value="<?= escapeForOutput($entry['IgmEmpfangen']); ?>"
+                <td><label for="igm_empfangen">IGM Empfangen:</label></td>
+                <td><input type="number" name="igm_empfangen" id="igm_empfangen"
+                           value="<?= escapeForOutput($entry['IgmEmpfangen']); ?>"
                            size="4"/>
                 </td>
             </tr>
             <tr>
-                <td>Admin</td>
-                <td><input type="checkbox" name="admin" value="1" <?= ($entry['Admin'] == 1 ? 'checked' : ''); ?>/></td>
+                <td><label for="admin">Admin:</label></td>
+                <td><input type="checkbox" name="admin" id="admin"
+                           value="1" <?= ($entry['Admin'] == 1 ? 'checked' : ''); ?>/></td>
             </tr>
             <tr>
-                <td>Betatester</td>
-                <td><input type="checkbox" name="betatester"
+                <td><label for="betatester">Betatester:</label></td>
+                <td><input type="checkbox" name="betatester" id="betatester"
                            value="1" <?= ($entry['Betatester'] == 1 ? 'checked' : ''); ?>/></td>
             </tr>
             <tr>
@@ -139,30 +145,33 @@ for ($i = 1; $i <= count_buildings; $i++) {
                 <td><?= $entry['NextMafia'] !== null ? formatDateTime(strtotime($entry['NextMafia'])) : '<i>- Sofort -</i>'; ?></td>
             </tr>
             <tr>
-                <td>Ewige Punkte</td>
-                <td><input type="number" name="ewige_punkte" value="<?= escapeForOutput($entry['EwigePunkte']); ?>"
+                <td><label for="ewige_punkte">Ewige Punkte:</label></td>
+                <td><input type="number" name="ewige_punkte" id="ewige_punkte"
+                           value="<?= escapeForOutput($entry['EwigePunkte']); ?>"
                            size="4"/>
                 </td>
             </tr>
             <tr>
-                <td>Onlinezeit (Sekunden)</td>
-                <td><input type="number" name="onlinezeit" value="<?= escapeForOutput($entry['OnlineZeit']); ?>"
+                <td><label for="onlinezeit">Onlinezeit (Sekunden):</label></td>
+                <td><input type="number" name="onlinezeit" id="onlinezeit"
+                           value="<?= escapeForOutput($entry['OnlineZeit']); ?>"
                            size="8"/>
                 </td>
             </tr>
             <tr>
-                <td>Gruppe</td>
+                <td><label for="gruppe">Gruppe:</label></td>
                 <td><?= createDropdown($groups, $entry['Gruppe'], 'gruppe', false, false, true); ?></td>
             </tr>
             <tr>
-                <td>Verwarnungen</td>
-                <td><input type="number" name="verwarnungen" value="<?= escapeForOutput($entry['Verwarnungen']); ?>"
+                <td><label for="verwarnungen">Verwarnungen:</label></td>
+                <td><input type="number" name="verwarnungen" id="verwarnungen"
+                           value="<?= escapeForOutput($entry['Verwarnungen']); ?>"
                            size="3"/>
                 </td>
             </tr>
             <tr>
-                <td>Gesperrt</td>
-                <td><input type="checkbox" name="gesperrt"
+                <td><label for="gesperrt">Gesperrt:</label></td>
+                <td><input type="checkbox" name="gesperrt" id="gesperrt"
                            value="1" <?= ($entry['Gesperrt'] == 1 ? 'checked' : ''); ?>/></td>
             </tr>
             <tr>
@@ -184,8 +193,8 @@ for ($i = 1; $i <= count_buildings; $i++) {
             for ($i = 1; $i <= count_buildings; $i++) {
                 ?>
                 <tr>
-                    <td><?= getBuildingName($i); ?></td>
-                    <td><input type="number" name="gebaeude_<?= $i; ?>"
+                    <td><label for="gebaeude_<?= $i; ?>"><?= getBuildingName($i); ?></label></td>
+                    <td><input type="number" name="gebaeude_<?= $i; ?>" id="gebaeude_<?= $i; ?>"
                                value="<?= escapeForOutput($entry['Gebaeude' . $i]); ?>"
                                size="3" min="0"/>
                 </tr>
@@ -211,8 +220,8 @@ for ($i = 1; $i <= count_buildings; $i++) {
             for ($i = 1; $i <= count_wares; $i++) {
                 ?>
                 <tr>
-                    <td><?= getItemName($i); ?></td>
-                    <td><input type="number" name="forschung_<?= $i; ?>"
+                    <td><label for="forschung_<?= $i; ?>"><?= getItemName($i); ?></label></td>
+                    <td><input type="number" name="forschung_<?= $i; ?>" id="forschung_<?= $i; ?>"
                                value="<?= escapeForOutput($entry['Forschung' . $i]); ?>"
                                size="3" min="0"/>
                 </tr>
@@ -238,8 +247,8 @@ for ($i = 1; $i <= count_buildings; $i++) {
             for ($i = 1; $i <= count_wares; $i++) {
                 ?>
                 <tr>
-                    <td><?= getItemName($i); ?></td>
-                    <td><input type="number" name="lager_<?= $i; ?>"
+                    <td><label for="lager_<?= $i; ?>"><?= getItemName($i); ?></label></td>
+                    <td><input type="number" name="lager_<?= $i; ?>" id="lager_<?= $i; ?>"
                                value="<?= escapeForOutput($entry['Lager' . $i]); ?>"
                                size="7" min="0"/>
                 </tr>

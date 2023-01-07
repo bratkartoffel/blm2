@@ -42,7 +42,7 @@ requireEntryFound($data, '/?p=rangliste');
     </div>
     <div>
         <label for="lastLogin">Letzter Login:</label>
-        <td><?= $data['LastLogin'] !== null ? formatDateTime(strtotime($data['LastLogin'])) : '<i>- Nie -</i>'; ?></td>
+        <span><?= $data['LastLogin'] !== null ? formatDateTime(strtotime($data['LastLogin'])) : '<i>- Nie -</i>'; ?></span>
     </div>
     <div>
         <label for="warnings">Verwarnungen:</label>

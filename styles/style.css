@@ -23,6 +23,10 @@ p.indent {
     padding-left: 30px;
 }
 
+header label {
+    width: auto !important;
+}
+
 /*region Forms*/
 div.form {
     background-color: #bece6b;

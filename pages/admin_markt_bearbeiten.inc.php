@@ -27,22 +27,22 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
                 <th colspan="2">Angebot bearbeiten</th>
             </tr>
             <tr>
-                <td>Von:</td>
+                <td><label for="von">Von:</label></td>
                 <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $entry['Von'], 'von', false, true); ?></td>
             </tr>
             <tr>
-                <td>Was</td>
+                <td><label for="ware">Was:</label></td>
                 <td><?= createWarenDropdown($entry['Was'], 'ware', false); ?></td>
             </tr>
             <tr>
-                <td>Menge</td>
-                <td><input type="number" min="1" name="menge"
+                <td><label for="menge">Menge:</label></td>
+                <td><input type="number" min="1" name="menge" id="menge"
                            value="<?= formatWeight($entry['Menge'], false, 0, false); ?>" size="6"/> kg
                 </td>
             </tr>
             <tr>
-                <td>Preis</td>
-                <td><input type="number" min="0.01" step="0.01" name="preis"
+                <td><label for="preis">Preis:</label></td>
+                <td><input type="number" min="0.01" step="0.01" name="preis" id="preis"
                            value="<?= formatCurrency($entry['Preis'], false, false); ?>" size="6"/> €
                 </td>
             </tr>

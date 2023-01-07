@@ -12,6 +12,11 @@ $name = getOrDefault($_GET, 'name');
     Hier können Sie sich im Spiel anmelden. Geben Sie hierzu Ihre Logindaten ein.
 </p>
 
+<?php
+if (isGameLocked()) {
+    echo '<h3>Das Spiel ist aktuell pausiert, ein Login ist noch nicht möglich.</h3>';
+}
+?>
 <div class="form LoginForm">
     <form action="/actions/login.php" method="post">
         <header>Login für registrierte Benutzer</header>

@@ -122,19 +122,19 @@ for ($i = 1; $i <= count_buildings; $i++) {
             </tr>
             <tr>
                 <td>Letzte Aktion</td>
-                <td><?= formatDateTime(strtotime($entry['LastAction'])); ?></td>
+                <td><?= $entry['LastAction'] !== null ? formatDateTime(strtotime($entry['LastAction'])) : '<i>- Nie -</i>'; ?></td>
             </tr>
             <tr>
                 <td>Letzte Anmeldung</td>
-                <td><?= formatDateTime(strtotime($entry['LastLogin'])); ?></td>
+                <td><?= $entry['LastLogin'] !== null ? formatDateTime(strtotime($entry['LastLogin'])) : '<i>- Nie -</i>'; ?></td>
             </tr>
             <tr>
                 <td>Letzte Änderung Profilbild</td>
-                <td><?= $entry['LastImageChange'] === null ? '<i>- Nie -</i>' : formatDateTime(strtotime($entry['LastImageChange'])); ?></td>
+                <td><?= $entry['LastImageChange'] !== null ? formatDateTime(strtotime($entry['LastImageChange'])) : '<i>- Nie -</i>'; ?></td>
             </tr>
             <tr>
                 <td>Nächste Mafiaktion</td>
-                <td><?= $entry['NextMafia'] === null ? '<i>- Sofort -</i>' : formatDateTime(strtotime($entry['NextMafia'])); ?></td>
+                <td><?= $entry['NextMafia'] !== null ? formatDateTime(strtotime($entry['NextMafia'])) : '<i>- Sofort -</i>'; ?></td>
             </tr>
             <tr>
                 <td>Ewige Punkte</td>

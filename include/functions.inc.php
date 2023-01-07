@@ -708,7 +708,9 @@ function resetAccount(int $blm_user): ?string
 
 function updateLastAction(): void
 {
-    Database::getInstance()->updatePlayerOnlinezeit($_SESSION['blm_user']);
+    if (!isGameLocked()) {
+        Database::getInstance()->updatePlayerOnlinezeit($_SESSION['blm_user']);
+    }
     $_SESSION['blm_lastAction'] = time();
 }
 

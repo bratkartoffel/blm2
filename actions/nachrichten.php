@@ -100,6 +100,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
     // delete all messages
     case 3:
+        requireXsrfToken('/?p=nachrichten_liste');
         Database::getInstance()->begin();
         if (Database::getInstance()->deleteAllMessagesForUser($_SESSION['blm_user']) === null) {
             Database::getInstance()->rollBack();

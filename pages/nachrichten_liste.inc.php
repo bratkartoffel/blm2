@@ -57,7 +57,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
 
 <div>
     <a href="/?p=nachrichten_schreiben">Neue Nachricht schreiben</a> |
-    <a href="/actions/nachrichten.php?a=3">Alle Nachrichten löschen</a>
+    <a href="/actions/nachrichten.php?a=3&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Alle Nachrichten löschen</a>
 </div>
 
 <h2>Postausgang</h2>

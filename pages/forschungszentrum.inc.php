@@ -86,7 +86,8 @@ for ($i = 1; $i <= count_wares; $i++) {
                         </div>
                         <div>
                             <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
-                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;back=forschungszentrum&amp;was=<?= $i; ?>">Abbrechen</a>
+                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;back=forschungszentrum&amp;was=<?= $i; ?>"
+                               id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
                     </div>
                     <?php

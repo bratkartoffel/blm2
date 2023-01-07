@@ -19,17 +19,17 @@ requireEntryFound($rights, '/?p=gruppe');
         <th>Aktion:</th>
     </tr>
     <tr>
-        <th>Nachricht schreiben:</th>
-        <th>Nachricht pinnen:</th>
-        <th>Nachricht löschen:</th>
-        <th>Beschreibung ändern:</th>
-        <th>Bild bearbeiten</th>
-        <th>Passwort ändern:</th>
-        <th>Rechte bearbeiten:</th>
-        <th>Mitglied kicken:</th>
-        <th>Kasse verwalten:</th>
-        <th>Diplomatie ändern:</th>
-        <th>Gruppe löschen:</th>
+        <th><label for="message_write">Nachricht schreiben:</label></th>
+        <th><label for="message_pin">Nachricht pinnen:</label></th>
+        <th><label for="message_delete">Nachricht löschen:</label></th>
+        <th><label for="edit_description">Beschreibung ändern:</label></th>
+        <th><label for="edit_image">Bild bearbeiten</label></th>
+        <th><label for="edit_password">Passwort ändern:</label></th>
+        <th><label for="member_rights">Rechte bearbeiten:</label></th>
+        <th><label for="member_kick">Mitglied kicken:</label></th>
+        <th><label for="group_cash">Kasse verwalten:</label></th>
+        <th><label for="group_diplomacy">Diplomatie ändern:</label></th>
+        <th><label for="group_delete">Gruppe löschen:</label></th>
         <th></th>
     </tr>
     <?php
@@ -41,27 +41,27 @@ requireEntryFound($rights, '/?p=gruppe');
             <input type="hidden" name="user_id" value="<?= $row['UserId']; ?>"/>
             <tr>
                 <td><?= createProfileLink($row['UserId'], $row['UserName']); ?></td>
-                <td><input type="checkbox" name="message_write"
+                <td><input type="checkbox" name="message_write" id="message_write"
                            value="1" <?= ($row['message_write'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="message_pin"
+                <td><input type="checkbox" name="message_pin" id="message_pin"
                            value="1" <?= ($row['message_pin'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="message_delete"
+                <td><input type="checkbox" name="message_delete" id="message_delete"
                            value="1" <?= ($row['message_delete'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="edit_description"
+                <td><input type="checkbox" name="edit_description" id="edit_description"
                            value="1" <?= ($row['edit_description'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="edit_image"
+                <td><input type="checkbox" name="edit_image" id="edit_image"
                            value="1" <?= ($row['edit_image'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="edit_password"
+                <td><input type="checkbox" name="edit_password" id="edit_password"
                            value="1" <?= ($row['edit_password'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="member_rights"
+                <td><input type="checkbox" name="member_rights" id="member_rights"
                            value="1" <?= ($row['member_rights'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="member_kick"
+                <td><input type="checkbox" name="member_kick" id="member_kick"
                            value="1" <?= ($row['member_kick'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="group_cash"
+                <td><input type="checkbox" name="group_cash" id="group_cash"
                            value="1" <?= ($row['group_cash'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="group_diplomacy"
+                <td><input type="checkbox" name="group_diplomacy" id="group_diplomacy"
                            value="1" <?= ($row['group_diplomacy'] == 1 ? 'checked' : ''); ?>/></td>
-                <td><input type="checkbox" name="group_delete"
+                <td><input type="checkbox" name="group_delete" id="group_delete"
                            value="1" <?= ($row['group_delete'] == 1 ? 'checked' : ''); ?>/></td>
                 <td>
                     <?php

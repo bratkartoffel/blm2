@@ -26,3 +26,4 @@ REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Admin`, `Passwort`)
 VALUES (9, 'admin', 'admin@example.com', 1,
            -- password is "changeit"
         '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
+INSERT INTO `statistik` (`user_id`) VALUES (9);

@@ -253,7 +253,7 @@ class Database
     public function getPlayerRankById(int $id): ?int
     {
         $stmt = $this->prepare("with stats as (
-                SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY Punkte DESC) AS rnum, ID, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
+                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
             ) select * from stats where ID = :id;");
         $stmt->bindParam("id", $id);
         return $this->executeAndExtractField($stmt, 'rnum');
@@ -262,7 +262,7 @@ class Database
     public function getPlayerRankByName(string $name): ?int
     {
         $stmt = $this->prepare("with stats as (
-                SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY Punkte DESC) AS rnum, ID, Name, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
+                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Name, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
             ) select * from stats where Name = :name;");
         $stmt->bindParam("name", $name);
         return $this->executeAndExtractField($stmt, 'rnum');

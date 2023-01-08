@@ -11,4 +11,4 @@ $version_extra = null;
         $version_extra = '+' . substr($content, 0, 8);
     }
 }
-define('game_version', "1.10.1" . $version_extra);
+define('game_version', "1.10.2" . $version_extra);

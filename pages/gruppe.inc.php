@@ -118,6 +118,7 @@ if ($id != 0) {
         </div>
         <div class="right">
             <div><b>Kürzel</b>: <?= escapeForOutput($group['Kuerzel']); ?></div>
+            <div><b>Erstellt</b>: <?= formatDate(strtotime($group['Erstellt'])); ?></div>
             <div><b>∑ Punkte</b>: <?= formatPoints($group['Punkte']); ?></div>
             <div><b>∅ Punkte</b>: <?= formatPoints($group['Punkte'] / count($members)); ?></div>
 

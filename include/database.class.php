@@ -901,7 +901,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getGroupInformationById(int $group): ?array
     {
-        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Beschreibung, (SELECT SUM(Punkte) FROM " . self::TABLE_USERS . " m WHERE m.Gruppe = g.ID) AS Punkte, g.LastImageChange
+        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Erstellt, g.Beschreibung, (SELECT SUM(Punkte) FROM " . self::TABLE_USERS . " m WHERE m.Gruppe = g.ID) AS Punkte, g.LastImageChange
             FROM " . self::TABLE_GROUP . " g INNER JOIN " . self::TABLE_USERS . " m ON g.ID = m.Gruppe
             WHERE g.ID = :id");
         $stmt->bindParam("id", $group, PDO::PARAM_INT);

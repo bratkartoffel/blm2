@@ -41,10 +41,9 @@ if (!$database->tableExists('update_info')) {
 }
 
 echo "Enumerating update scripts\n";
-$dh = opendir('sql/');
-while (false !== ($entry = readdir($dh))) {
-    $script = 'sql/' . $entry;
-    if (mb_strpos($script, '.sql') === false) continue;
+$scripts = glob('sql/*.sql');
+sort($scripts);
+foreach ($scripts as $script) {
     if (strpos($script, '/0') !== false) {
         echo "Skipping $script\n";
         continue;
@@ -100,3 +99,4 @@ foreach ($executedScripts as $script => $checksum) {
 $database->commit();
 
 http_response_code(200);
+echo "Update finished successfully!";

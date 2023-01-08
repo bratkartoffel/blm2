@@ -50,8 +50,8 @@ date_default_timezone_set('Europe/Berlin');
  * ------------------------------------------------------------------------------------------------------
  */
 // version string as displayed in the footer
-// dynamically calculated with the short git commit id as suffix
-const game_version = "1.10.0+test";
+/** @noinspection PhpIncludeInspection */
+require_once 'game_version.inc.php';
 
 // should only be set when running tests
 // disables the captcha validation, email sending and seeds the random number generator with a deterministic value

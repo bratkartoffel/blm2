@@ -1,29 +1,40 @@
 alter table mitglieder
     auto_increment 100;
 
-DELIMITER $$
-CREATE OR REPLACE PROCEDURE InsertUsers(P_count int)
-BEGIN
-    DECLARE NR int;
-    insertLoop:
-    LOOP
-        SET NR = coalesce(NR, 0) + 1;
+-- all passwords are "changeit"
 
-        REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
-        VALUES (10 + NR, concat('test', NR), concat('test', NR, '@example.com'),
-                   -- password is "changeit"
-                '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
-        INSERT INTO `statistik` (`user_id`) VALUES (10 + NR);
+REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
+VALUES (11, 'test1', 'test1@example.com',
+        '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
+REPLACE INTO `statistik` (`user_id`)
+VALUES (11);
 
-        IF NR = P_count THEN LEAVE insertLoop; END IF;
-    END LOOP insertLoop;
-END $$
-DELIMITER ;
+REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
+VALUES (12, 'test2', 'test2@example.com',
+        '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
+REPLACE INTO `statistik` (`user_id`)
+VALUES (12);
 
-CALL InsertUsers(5);
+REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
+VALUES (13, 'test3', 'test3@example.com',
+        '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
+REPLACE INTO `statistik` (`user_id`)
+VALUES (13);
+
+REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
+VALUES (14, 'test4', 'test4@example.com',
+        '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
+REPLACE INTO `statistik` (`user_id`)
+VALUES (14);
+
+REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Passwort`)
+VALUES (15, 'test5', 'test5@example.com',
+        '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
+REPLACE INTO `statistik` (`user_id`)
+VALUES (15);
 
 REPLACE INTO `mitglieder` (`ID`, `Name`, `EMail`, `Admin`, `Passwort`)
 VALUES (9, 'admin', 'admin@example.com', 1,
-           -- password is "changeit"
         '$argon2i$v=19$m=16384,t=8,p=2$cFlRVVl2WTdFREFkaU8zQg$kphB/S9ZP41FplBbhUH1uYSURQD4kK8JYQvjtieU/ZM');
-INSERT INTO `statistik` (`user_id`) VALUES (9);
+REPLACE INTO `statistik` (`user_id`)
+VALUES (9);

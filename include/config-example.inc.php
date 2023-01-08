@@ -49,8 +49,7 @@ date_default_timezone_set('Europe/Berlin');
  * ------------------------------------------------------------------------------------------------------
  */
 // version string as displayed in the footer
-// dynamically calculated with the short git commit id as suffix
-define('game_version', "1.10.0+" . substr(file_get_contents(dirname(__FILE__) . '/../.git/HEAD'), 0, 8));
+require_once 'game_version.inc.php';
 
 // should only be set when running tests
 // disables the captcha validation

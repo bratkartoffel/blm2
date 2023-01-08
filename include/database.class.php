@@ -22,6 +22,7 @@ class Database
     public const TABLE_LOG_LOGIN = 'log_login';
     public const TABLE_LOG_MAFIA = 'log_mafia';
     public const TABLE_LOG_CONTRACTS = 'log_vertraege';
+    public const TABLE_UPDATE_INFO = 'update_info';
 
     private static ?Database $INSTANCE = null;
 
@@ -1378,12 +1379,42 @@ ORDER BY m.Name");
         return null;
     }
 
+    public function getInstallScriptChecksum(string $script): ?string
+    {
+        $stmt = $this->prepare("SELECT Checksum FROM update_info WHERE Script = :script");
+        $stmt->bindParam('script', $script);
+        return $this->executeAndExtractField($stmt, 'Checksum');
+    }
+
+    public function tableExists(string $table): bool
+    {
+        $db = database_database;
+        $stmt = $this->prepare("SELECT count(1) as count FROM information_schema.TABLES WHERE TABLE_SCHEMA = :schema AND TABLE_NAME = :table");
+        $stmt->bindParam('schema', $db);
+        $stmt->bindParam('table', $table);
+        return $this->executeAndExtractField($stmt, 'count') > 0;
+    }
+
+    public function executeFile(string $script): ?string
+    {
+        $commands = explode(';', file_get_contents($script));
+        for ($i = 0; $i < count($commands); $i++) {
+            $sql = $commands[$i];
+            if (trim($sql) == '') continue;
+            $stmt = $this->prepare($sql);
+            if (!$stmt->execute()) {
+                return $sql;
+            }
+        }
+        return null;
+    }
+
     public function getQueryCount(): int
     {
         return $this->queries;
     }
 
-    private function prepare(string $sql): ?PDOStatement
+    protected function prepare(string $sql): ?PDOStatement
     {
         $this->queries++;
         $stmt = $this->link->prepare($sql);

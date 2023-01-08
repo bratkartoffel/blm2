@@ -45,3 +45,5 @@ $offset = getOrDefault($_GET, 'o', 0);
     ?>
 </table>
 <?= createPaginationTable('/?p=admin_benutzer', $offset, $entriesCount, admin_log_page_size); ?>
+
+<a href="/?p=admin">&lt;&lt; Zurück</a>

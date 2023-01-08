@@ -11,6 +11,11 @@ const game_title = 'TST - Der Bioladenmanager 2';
 // https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
 const random_secret = 'unused for testing';
 
+// a random secret which allows to upgrade the database schema
+// please generate a random value, e.g. at
+// https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
+const upgrade_secret = 'changeit';
+
 // database access credentials
 const database_hostname = 'mariadb';
 const database_username = 'blm2_test';

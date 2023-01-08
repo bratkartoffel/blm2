@@ -7,17 +7,21 @@ header('Content-Type: text/plain; charset=UTF-8');
 ob_start();
 http_response_code(500);
 
+if (getOrDefault($_GET, 'secret') !== upgrade_secret) {
+    die('not allowed');
+}
+
 echo "Checking installation for version " . game_version . "\n";
 echo "Verifying database connection\n";
-Database::getInstance();
+$database = Database::getInstance();
 
 echo "Checking base installation\n";
 $executedScripts = array();
-if (!Database::getInstance()->tableExists('auftrag')) {
+if (!$database->tableExists('auftrag')) {
     echo "Base installation not found, executing setup script\n";
     // initial setup
     $script = 'sql/00-1.10.0-setup.sql';
-    $result = Database::getInstance()->executeFile($script);
+    $result = $database->executeFile($script);
     if ($result !== null) {
         die("Could not execute setup script, failed step: " . $result);
     }
@@ -25,11 +29,11 @@ if (!Database::getInstance()->tableExists('auftrag')) {
 }
 
 echo "Checking for update information\n";
-if (!Database::getInstance()->tableExists('update_info')) {
+if (!$database->tableExists('update_info')) {
     echo "Update information not found, execute first update script\n";
     // coming from v1.10.0
     $script = 'sql/01-1.10.1-update_info.sql';
-    $result = Database::getInstance()->executeFile($script);
+    $result = $database->executeFile($script);
     if ($result !== null) {
         die("Could not execute setup script, failed step: " . $result);
     }
@@ -47,10 +51,10 @@ while (false !== ($entry = readdir($dh))) {
     }
 
     echo "Verify update script: $script\n";
-    $dbChecksum = Database::getInstance()->getInstallScriptChecksum($script);
+    $dbChecksum = $database->getInstallScriptChecksum($script);
     if ($dbChecksum === null) {
         echo "> Script unknown, begin execution\n";
-        $result = Database::getInstance()->executeFile($script);
+        $result = $database->executeFile($script);
         if ($result !== null) {
             die("Could not execute setup script, failed step: " . $result);
         }
@@ -69,23 +73,23 @@ while (false !== ($entry = readdir($dh))) {
 
 $script = '/tmp/99_testdata.sql';
 if (file_exists($script)) {
-    echo "Verify update script: $script\n";
-    $result = Database::getInstance()->executeFile($script);
+    echo "Execute update script: $script\n";
+    $result = $database->executeFile($script);
     if ($result !== null) {
         die("Could not execute setup script, failed step: " . $result);
     }
 }
 
-Database::getInstance()->begin();
+$database->begin();
 foreach ($executedScripts as $script => $checksum) {
-    if (Database::getInstance()->createTableEntry(Database::TABLE_UPDATE_INFO, array(
+    if ($database->createTableEntry(Database::TABLE_UPDATE_INFO, array(
             'Script' => $script,
             'Checksum' => $checksum
         )) !== 1) {
-        Database::getInstance()->rollBack();
+        $database->rollBack();
         die('Could not create update_info entry for ' . $script);
     }
 }
-Database::getInstance()->commit();
+$database->commit();
 
 http_response_code(200);

@@ -11,6 +11,11 @@ const game_title = 'Der Bioladenmanager 2';
 // https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
 const random_secret = '!!replace this!!';
 
+// a random secret which allows to upgrade the database schema
+// please generate a random value, e.g. at
+// https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
+const upgrade_secret = '!!replace this!!';
+
 // database access credentials
 const database_hostname = 'localhost';
 const database_username = 'blm2';

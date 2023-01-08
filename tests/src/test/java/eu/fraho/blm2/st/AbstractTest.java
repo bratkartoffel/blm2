@@ -47,7 +47,7 @@ public abstract class AbstractTest {
             HttpClient httpClient = HttpClient.newHttpClient();
             try {
                 HttpResponse<String> response = httpClient.send(
-                        HttpRequest.newBuilder().GET().uri(URI.create("http://localhost/install/update.php")).build(),
+                        HttpRequest.newBuilder().GET().uri(URI.create("http://localhost/install/update.php?secret=changeit")).build(),
                         HttpResponse.BodyHandlers.ofString()
                 );
                 if (response.statusCode() != 200) {

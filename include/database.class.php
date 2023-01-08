@@ -252,10 +252,11 @@ class Database
 
     public function getPlayerRankById(int $id): ?int
     {
-        $stmt = $this->prepare("SELECT `row_number` FROM (SELECT (@row_number := @row_number + 1) AS `row_number`, t.ID FROM " . self::TABLE_USERS . " t, 
-            (SELECT @row_number := 0) r WHERE ID > 0 ORDER BY t.Punkte DESC, t.ID) as rnN WHERE ID = :id");
+        $stmt = $this->prepare("with stats as (
+                SELECT ROW_NUMBER() OVER (PARTITION BY 1 ORDER BY Punkte DESC) AS rnum, ID, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
+            ) select * from stats where ID = :id;");
         $stmt->bindParam("id", $id);
-        return $this->executeAndExtractField($stmt, 'row_number');
+        return $this->executeAndExtractField($stmt, 'rnum');
     }
 
     public function getPlayerRankByName(string $name): ?int

@@ -73,10 +73,17 @@ while (false !== ($entry = readdir($dh))) {
 
 $script = '/tmp/99_testdata.sql';
 if (file_exists($script)) {
-    echo "Execute update script: $script\n";
-    $result = $database->executeFile($script);
-    if ($result !== null) {
-        die("Could not execute setup script, failed step: " . $result);
+    echo "Verify update script: $script\n";
+    $dbChecksum = $database->getInstallScriptChecksum($script);
+    if ($dbChecksum === null) {
+        echo "Execute update script: $script\n";
+        $result = $database->executeFile($script);
+        if ($result !== null) {
+            die("Could not execute setup script, failed step: " . $result);
+        }
+        $executedScripts[$script] = sha1_file($script);
+    } else {
+        echo "> Script already executed\n";
     }
 }
 

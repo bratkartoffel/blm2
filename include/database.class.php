@@ -364,7 +364,7 @@ class Database
     WHERE Gruppe IS NOT NULL
     GROUP BY m.Gruppe
 )
-SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM " . self::TABLE_STATISTICS . " s INNER JOIN " . self::TABLE_GROUP . " g ON s.GruppeID = g.ID ORDER BY s.Punkte DESC, AnzMitglieder LIMIT :offset, :count");
+SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER JOIN " . self::TABLE_GROUP . " g ON s.GruppeID = g.ID ORDER BY s.Punkte DESC, AnzMitglieder LIMIT :offset, :count");
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);

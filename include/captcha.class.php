@@ -1,4 +1,10 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
 require_once('config.inc.php');
 
 const captcha_width = 200;

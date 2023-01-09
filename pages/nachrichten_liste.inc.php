@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 restrictSitter('Nachrichten');
 
 $offset_in = getOrDefault($_GET, 'o_in', 0);

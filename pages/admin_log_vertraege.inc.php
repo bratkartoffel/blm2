@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
 $angenommen = getOrDefault($_GET, 'angenommen', -1);

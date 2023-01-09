@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 requireFieldSet($_GET, 'id', '/?p=admin_benutzer');
 $id = getOrDefault($_GET, 'id', 0);
 $offset = getOrDefault($_GET, 'o', 0);

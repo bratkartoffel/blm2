@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 requireFieldSet($_GET, 'id', '/?p=admin_markt');
 $id = getOrDefault($_GET, 'id', 0);
 ?>

@@ -1,3 +1,7 @@
+# MIT Licence
+# Copyright (c) 2023 Simon Frankenberger
+# Please see LICENCE.md for complete licence text.
+
 FROM php:8.0-apache
 
 # update system

@@ -1,4 +1,10 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
 $version_extra = null;
 {
     $git_head = dirname(__FILE__) . '/../.git/HEAD';

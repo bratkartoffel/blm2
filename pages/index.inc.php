@@ -1,4 +1,12 @@
-<div id="SeitenUeberschrift">
+<?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+?>
+    <div id="SeitenUeberschrift">
     <img src="/pics/big/kontact.webp" alt=""/>
     <span>Startseite<?= createHelpLink(1, 3); ?></span>
 </div>

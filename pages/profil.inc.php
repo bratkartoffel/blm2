@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 $id = getOrDefault($_GET, 'id', $_SESSION['blm_user']);
 
 $data = Database::getInstance()->getPlayerCardByID($id);

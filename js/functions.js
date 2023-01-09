@@ -1,3 +1,10 @@
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 function ChefboxZeigen(seite) {
     const chefboxPopup = window.open(seite, 'chefbox', 'height=690,width=240,scrollbars=yes,resizable=yes');
     chefboxPopup.focus();

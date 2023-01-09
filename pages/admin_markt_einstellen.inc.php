@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 $von = getOrDefault($_GET, 'von', 0);
 $ware = getOrDefault($_GET, 'ware', 0);
 $menge = getOrDefault($_GET, 'menge', 0);

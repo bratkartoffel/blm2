@@ -1,3 +1,11 @@
+<?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/games.webp" alt=""/>
     <span>Impressum<?= createHelpLink(1, 21); ?></span>

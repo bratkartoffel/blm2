@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 restrictSitter('Marktplatz');
 
 $amount = getOrDefault($_GET, 'amount', .0);

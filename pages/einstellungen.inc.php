@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 restrictSitter('NeverAllow');
 
 $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsById($_SESSION['blm_user']);

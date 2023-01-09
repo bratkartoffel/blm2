@@ -1,5 +1,12 @@
 <?php /** @noinspection DuplicatedCode */
 /*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
+/*
  * Copy this file to 'config.inc.php' and adjust as needed
  */
 // title for this game

@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 restrictSitter('Gruppe');
 
 $rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user']);

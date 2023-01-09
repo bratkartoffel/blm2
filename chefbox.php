@@ -1,4 +1,11 @@
 <?php
+/*
+* MIT Licence
+* Copyright (c) 2023 Simon Frankenberger
+*
+* Please see LICENCE.md for complete licence text.
+*/
+
 $start = microtime(true);
 if (!file_exists('include/config.inc.php')) {
     die('include/config.inc.php not found');

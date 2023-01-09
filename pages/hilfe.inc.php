@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 require_once('./include/hilfe.inc.php');
 ?>
 <div id="SeitenUeberschrift">

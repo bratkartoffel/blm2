@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 $ware = getOrDefault($_GET, 'ware', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>

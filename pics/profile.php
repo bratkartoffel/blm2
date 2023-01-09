@@ -1,4 +1,11 @@
 <?php
+/*
+ * MIT Licence
+ * Copyright (c) 2023 Simon Frankenberger
+ *
+ * Please see LICENCE.md for complete licence text.
+ */
+
 require_once('../include/functions.inc.php');
 
 $uid = getOrDefault($_GET, 'uid', 0);

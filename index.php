@@ -60,15 +60,21 @@ if (isLoggedIn()) {
 -->
 <html lang="de">
 <head>
-    <link rel="stylesheet" type="text/css" href="styles/style.min.css?<?= game_version; ?>"/>
-    <link rel="stylesheet" type="text/css" href="styles/mobile.min.css?<?= game_version; ?>"/>
-    <?= (isAdmin() ? '<link rel="stylesheet" type="text/css" href="styles/admin.min.css?' . game_version . '"/>' : ''); ?>
+    <?php
+    $mininimizeFlag = '';
+    if (!is_testing) {
+        $mininimizeFlag = '.min';
+    }
+    ?>
+    <link rel="stylesheet" type="text/css" href="styles/style<?= $mininimizeFlag; ?>.css?<?= game_version; ?>"/>
+    <link rel="stylesheet" type="text/css" href="styles/mobile<?= $mininimizeFlag; ?>.css?<?= game_version; ?>"/>
+    <?= (isAdmin() ? '<link rel="stylesheet" type="text/css" href="styles/admin' . $mininimizeFlag . '.css?' . game_version . '"/>' : ''); ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=5.0, minimum-scale=0.60">
     <title><?= game_title; ?> - <?= ucfirst(getCurrentPage()); ?></title>
-    <script src="/js/functions.min.js?<?= game_version; ?>"></script>
+    <script src="/js/functions<?= $mininimizeFlag; ?>.js?<?= game_version; ?>"></script>
 </head>
 <body onload="MarkActiveLink();">
 <div id="Navigation" class="<?= (isLoggedIn() ? 'online' : 'offline'); ?>">

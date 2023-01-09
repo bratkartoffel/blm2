@@ -46,7 +46,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                 <input type="number" id="stunden" name="stunden" value="1" size="2" maxlength="2" min="1"
                        max="<?= production_hours_max; ?>"
                        onchange="RechneProduktionsKosten(1, <?= $productionCostSum; ?>, this.value,
-                       <?= $data['Geld']; ?>, document.getElementById('pr_ko_all'), document.getElementById('anbauen_all'));"/>
+                       <?= $data['Geld']; ?>, document.getElementById('pr_ko_all'), document.getElementById('plant_all'));"/>
                 Stunde(n) von Allem.
             </div>
             <div id="pr_ko_all">Kosten: <?= formatCurrency($productionCostSum); ?></div>
@@ -85,7 +85,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                         <input type="text" size="4" maxlength="6" name="menge" id="amount_<?= $i; ?>"
                                value="<?= $productionData[$i]['Menge']; ?>"
                                onkeyup="RechneProduktionsKosten(<?= $productionData[$i]['Menge']; ?>, <?= $productionData[$i]['Kosten']; ?>, this.value,
-                               <?= $data['Geld']; ?>, document.getElementById('pr_ko_<?= $i; ?>'), document.getElementById('anbauen_<?= $i; ?>'));"/>
+                               <?= $data['Geld']; ?>, document.getElementById('pr_ko_<?= $i; ?>'), document.getElementById('plant_<?= $i; ?>'));"/>
                         kg
                         <div id="pr_ko_<?= $i; ?>">Kosten: <?= formatCurrency($productionData[$i]['Kosten']); ?></div>
                     </div>

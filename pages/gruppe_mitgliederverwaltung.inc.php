@@ -23,7 +23,7 @@ requireEntryFound($rights, '/?p=gruppe');
     <tr>
         <th rowspan="2">Name:</th>
         <th colspan="11">Rechte</th>
-        <th>Aktion:</th>
+        <th rowspan="2">Aktion:</th>
     </tr>
     <tr>
         <th><label for="message_write">Nachricht schreiben:</label></th>
@@ -37,7 +37,6 @@ requireEntryFound($rights, '/?p=gruppe');
         <th><label for="group_cash">Kasse verwalten:</label></th>
         <th><label for="group_diplomacy">Diplomatie ändern:</label></th>
         <th><label for="group_delete">Gruppe löschen:</label></th>
-        <th></th>
     </tr>
     <?php
     $data = Database::getInstance()->getAllGroupRightsByGroupId($rights['group_id']);

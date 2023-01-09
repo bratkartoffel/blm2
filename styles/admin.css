@@ -26,10 +26,21 @@ table.AdminLog td {
     white-space: nowrap;
 }
 
-table.EditUser {
+table.EditUser,
+table.EditGroup {
     margin-bottom: 20px;
 }
 
-table.EditUser tr:last-of-type td {
+table.EditUser tr:last-of-type td,
+table.EditGroup tr:last-of-type td {
     text-align: center;
+}
+
+div.AdminEditUser {
+    display: inline-flex;
+}
+
+div.AdminEditUser,
+div.AdminEditGroup {
+    margin: 5px;
 }

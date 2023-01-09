@@ -378,6 +378,16 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractRows($stmt);
     }
 
+    public function getGroupIdAndNameAndKuerzelAndErstellt(int $page, int $entriesPerPage): ?array
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT ID, Name, Kuerzel, Erstellt
+            FROM " . self::TABLE_GROUP . " ORDER BY ID LIMIT :offset, :count");
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
     public function getLeaderOnlineTime(int $count = 1): ?array
     {
         $stmt = $this->prepare("SELECT ID, Name, Onlinezeit
@@ -909,7 +919,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getGroupInformationById(int $group): ?array
     {
-        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Erstellt, g.Beschreibung, (SELECT SUM(Punkte) FROM " . self::TABLE_USERS . " m WHERE m.Gruppe = g.ID) AS Punkte, g.LastImageChange
+        $stmt = $this->prepare("SELECT g.ID, g.Name, g.Kuerzel, g.Erstellt, g.Beschreibung, (SELECT SUM(Punkte) FROM " . self::TABLE_USERS . " m WHERE m.Gruppe = g.ID) AS Punkte, g.LastImageChange, g.Kasse
             FROM " . self::TABLE_GROUP . " g INNER JOIN " . self::TABLE_USERS . " m ON g.ID = m.Gruppe
             WHERE g.ID = :id");
         $stmt->bindParam("id", $group, PDO::PARAM_INT);

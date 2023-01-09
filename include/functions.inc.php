@@ -1029,6 +1029,7 @@ function getCurrentPage(): string
             case "admin_benutzer":
             case "admin_benutzer_bearbeiten":
             case "admin_gruppe":
+            case "admin_gruppe_bearbeiten":
             case "admin_test":
             case "admin_markt":
             case "admin_vertrag":

@@ -18,6 +18,7 @@
     <li><a href="/?p=admin_markt">Marktplatz</a></li>
     <li><a href="/?p=admin_vertrag">Verträge</a></li>
     <li><a href="/?p=admin_gruppe">Gruppen</a></li>
+    <li><a href="/?p=admin_gruppe_diplomatie">Gruppendiplomatie</a></li>
     <li><a href="/?p=admin_benutzer">Benutzer</a></li>
     <li><a href="/?p=admin_auftrag">Aufträge</a></li>
     <li>

@@ -65,7 +65,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                         </div>
                         <div>
                             <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
-                               href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;back=gebaeude"
+                               href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $buildingId; ?>">Abbrechen</a>
                         </div>
                         <?php

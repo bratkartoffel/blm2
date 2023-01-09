@@ -12,64 +12,72 @@ require_once('../include/database.class.php');
 ob_start();
 requireLogin();
 
-$back = getOrDefault($_GET, 'back', 'index');
-restrictSitter('NeverAllow', $back);
+restrictSitter('NeverAllow');
 
 $id = getOrDefault($_GET, 'id', 0);
 $auftrag = Database::getInstance()->getAuftragByIdAndVon($id, $_SESSION['blm_user']);
-requireEntryFound($id, '/?p=' . urlencode($back));
+$back = 'index';
 
 Database::getInstance()->begin();
 switch (floor($auftrag['item'] / 100)) {
     // Gebäude
     case 1:
+        $back = 'gebaeude';
+        requireXsrfToken('/?p=' . $back);
+        requireEntryFound($id, '/?p=' . $back);
         $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
-            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+            redirectTo('/?p=' . $back, 142, __LINE__);
         }
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array('AusgabenGebaeude' => -$moneyBack),
                 array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
-            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+            redirectTo('/?p=' . $back, 142, __LINE__);
         }
         break;
 
     // Produktion
     case 2:
+        $back = 'plantage';
+        requireXsrfToken('/?p=' . $back);
+        requireEntryFound($id, '/?p=' . $back);
         $duration = strtotime($auftrag['finished']) - strtotime($auftrag['created']);
         $completed = time() - strtotime($auftrag['created']);
         $percent = $completed / $duration;
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, null,
                 array('Lager' . ($auftrag['item'] % 100) => floor($auftrag['amount'] * $percent)),
                 array('ID = :whr0' => $_SESSION['blm_user'])) === null) {
-            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+            redirectTo('/?p=' . $back, 142, __LINE__);
         }
         break;
 
     // Forschung
     case 3:
+        $back = 'forschungszentrum';
+        requireXsrfToken('/?p=' . $back);
+        requireEntryFound($id, '/?p=' . $back);
         $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
-            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+            redirectTo('/?p=' . $back, 142, __LINE__);
         }
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array('AusgabenForschung' => -$moneyBack),
                 array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
-            redirectTo('/?p=' . urlencode($back), 142, __LINE__);
+            redirectTo('/?p=' . $back, 142, __LINE__);
         }
         break;
 
     // unknown action
     default:
-        redirectTo('/?p=' . urlencode($back), 112, __LINE__);
+        redirectTo('/?p=' . $back, 112, __LINE__);
         break;
 }
 
 if (Database::getInstance()->deleteTableEntry(Database::TABLE_JOBS, $id) === null) {
-    redirectTo('/?p=' . urlencode($back), 143, __LINE__);
+    redirectTo('/?p=' . $back, 143, __LINE__);
 }
 
 Database::getInstance()->commit();
-redirectTo('/?p=' . urlencode($back), 222, substr($back, 0, 1) . ($auftrag['item'] % 100));
+redirectTo('/?p=' . $back, 222, substr($back, 0, 1) . ($auftrag['item'] % 100));

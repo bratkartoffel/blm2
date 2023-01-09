@@ -107,7 +107,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                         <div>
                             <a onclick="return confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge '
                                     + '(~ <?= formatWeight($auftrag['amount'] * $percent); ?>) wird Ihnen gut geschrieben.!');"
-                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;back=plantage&amp;was=<?= $i; ?>"
+                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
                     </div>

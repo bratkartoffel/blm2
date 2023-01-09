@@ -12,7 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class GroupTests extends AbstractTest {
-    private short counter = (short) (System.currentTimeMillis() % 100_000);
+    private short counter = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
 
     @Test
     void testCreateGroup() {

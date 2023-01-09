@@ -51,8 +51,9 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= formatCurrency($row['Preis']); ?></td>
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
             <td>
-                <a href="/?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>"> Bearbeiten </a> |
-                <a href="/actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"> Löschen </a>
+                <a href="/?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>"> Bearbeiten </a> |
+                <a href="/actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">
+                    Löschen </a>
             </td>
         </tr>
         <?php

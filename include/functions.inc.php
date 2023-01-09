@@ -985,12 +985,14 @@ function sendMail(string $recipient, string $subject, string $message): bool
         $recipient = admin_email;
     }
 
-    $headers = sprintf('From: %s <%s>
-Reply-To: %s <%s>
-X-Mailer: PHP
-MIME-Version: 1.0
-Content-type: text/html; charset=utf-8
-Date: %s', admin_name, admin_email, admin_name, admin_email, date(DATE_RFC2822));
+    $headers = array(
+        'From' => sprintf('%s <%s>', admin_name, admin_email),
+        'Reply-To' => sprintf('%s <%s>', admin_name, admin_email),
+        'X-Mailer' => 'PHP/blm2-' . game_version,
+        'Date' => date(DATE_RFC2822),
+        'MIME-Version' => '1.0',
+        'Content-type' => 'text/html; charset=utf-8',
+    );
 
     return mail($recipient, $subject, $message, $headers, '-f ' . admin_email);
 }

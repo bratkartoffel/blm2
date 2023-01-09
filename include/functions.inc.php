@@ -1544,7 +1544,9 @@ function uploadProfilePicture(array $file, string $filename): int
         default:
             return 107;
     }
+    imagepalettetotruecolor($data);
     imagewebp($data, $filename, 50);
+    imagedestroy($data);
     return 0;
 }
 

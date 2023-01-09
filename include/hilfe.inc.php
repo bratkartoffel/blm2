@@ -72,7 +72,9 @@ Sobald die Plantage durch einen Angriff unter die für ein Gemüse erforderliche
 ist der Anbau des Gemüses auch nicht mehr möglich bis die Anforderungen wieder erreicht sind,
 egal welche Stufe des Gemüses erforscht ist.
 
-Die Produktionsmenge kann frei bestimmt werden, jedoch beträgt die maximale Produktionsdauer am Stück 12 Stunden.'
+Die Produktionsmenge kann frei bestimmt werden, jedoch beträgt die maximale Produktionsdauer am Stück 12 Stunden.
+Die in Auftrag gegebene Menge wird erst am Ende der eingestellten Produktionszeit vollständig ins Lager übertragen.
+Zudem gibt es eine durchgehende Basisproduktion. Alle ' . cron_interval . ' Minuten werden ' . item_base_production . ' kg / Forschungslevel eines jeden Gemüses generiert.'
     ),
     106 => array(
         'Forschungszentrum',

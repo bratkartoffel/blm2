@@ -55,222 +55,203 @@ for ($i = 1; $i <= count_buildings; $i++) {
     if (isset($_GET['lager_' . $i])) $entry['Lager' . $i] = getOrDefault($_GET, 'lager_' . $i, 0);
 }
 ?>
-<div id="FilterForm">
+<div class="form AdminEditUser">
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
-        <table class="Liste EditUser" id="user_general">
-            <tr>
-                <th colspan="2">Benutzer bearbeiten</th>
-            </tr>
-            <tr>
-                <td><label for="username">Name:</label></td>
-                <td>
-                    <input name="username" id="username" type="text" value="<?= escapeForOutput($entry['Name']); ?>"
-                           size="20" required
-                           minlength="<?= username_min_len; ?>" maxlength="<?= username_max_len; ?>"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="email">EMail:</label></td>
-                <td><input name="email" id="email" type="email" size="20" required
-                           value="<?= escapeForOutput($entry['EMail']); ?>"
-                           maxlength="<?= email_max_len; ?>"/></td>
-            </tr>
-            <tr>
-                <td><label for="email_aktiviert">Aktiviert:</label></td>
-                <td><input type="checkbox" id="email_aktiviert" name="email_aktiviert"
-                           value="1" <?= ($entry['EMailAct'] === null ? 'checked' : ''); ?>/></td>
-            </tr>
-            <tr>
-                <td><label for="password">Passwort:</label></td>
-                <td><input name="password" id="password" type="password" size="20"/></td>
-            </tr>
-            <tr>
-                <td>Registriert am</td>
-                <td><?= formatDateTime(strtotime($entry['RegistriertAm'])); ?></td>
-            </tr>
-            <tr>
-                <td><label for="geld">Geld:</label></td>
-                <td><input type="number" name="geld" id="geld"
-                           value="<?= formatCurrency($entry['Geld'], false, false); ?>"
-                           size="13"/> €
-                </td>
-            </tr>
-            <tr>
-                <td><label for="bank">Bank:</label></td>
-                <td><input type="number" name="bank" id="bank"
-                           value="<?= formatCurrency($entry['Bank'], false, false); ?>"
-                           size="13"/> €
-                </td>
-            </tr>
-            <tr>
-                <td><label for="punkte">Punkte:</label></td>
-                <td><input type="number" name="punkte" id="punkte" value="<?= escapeForOutput($entry['Punkte']); ?>"
-                           size="13"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="igm_gesendet">IGM Gesendet:</label></td>
-                <td><input type="number" name="igm_gesendet" id="igm_gesendet"
-                           value="<?= escapeForOutput($entry['IgmGesendet']); ?>"
-                           size="4"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="igm_empfangen">IGM Empfangen:</label></td>
-                <td><input type="number" name="igm_empfangen" id="igm_empfangen"
-                           value="<?= escapeForOutput($entry['IgmEmpfangen']); ?>"
-                           size="4"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="admin">Admin:</label></td>
-                <td><input type="checkbox" name="admin" id="admin"
-                           value="1" <?= ($entry['Admin'] == 1 ? 'checked' : ''); ?>/></td>
-            </tr>
-            <tr>
-                <td><label for="betatester">Betatester:</label></td>
-                <td><input type="checkbox" name="betatester" id="betatester"
-                           value="1" <?= ($entry['Betatester'] == 1 ? 'checked' : ''); ?>/></td>
-            </tr>
-            <tr>
-                <td>Letzte Aktion</td>
-                <td><?= $entry['LastAction'] !== null ? formatDateTime(strtotime($entry['LastAction'])) : '<i>- Nie -</i>'; ?></td>
-            </tr>
-            <tr>
-                <td>Letzte Anmeldung</td>
-                <td><?= $entry['LastLogin'] !== null ? formatDateTime(strtotime($entry['LastLogin'])) : '<i>- Nie -</i>'; ?></td>
-            </tr>
-            <tr>
-                <td>Letzte Änderung Profilbild</td>
-                <td><?= $entry['LastImageChange'] !== null ? formatDateTime(strtotime($entry['LastImageChange'])) : '<i>- Nie -</i>'; ?></td>
-            </tr>
-            <tr>
-                <td>Nächste Mafiaktion</td>
-                <td><?= $entry['NextMafia'] !== null ? formatDateTime(strtotime($entry['NextMafia'])) : '<i>- Sofort -</i>'; ?></td>
-            </tr>
-            <tr>
-                <td><label for="ewige_punkte">Ewige Punkte:</label></td>
-                <td><input type="number" name="ewige_punkte" id="ewige_punkte"
-                           value="<?= escapeForOutput($entry['EwigePunkte']); ?>"
-                           size="4"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="onlinezeit">Onlinezeit (Sekunden):</label></td>
-                <td><input type="number" name="onlinezeit" id="onlinezeit"
-                           value="<?= escapeForOutput($entry['OnlineZeit']); ?>"
-                           size="8"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="gruppe">Gruppe:</label></td>
-                <td><?= createDropdown($groups, $entry['Gruppe'], 'gruppe', false, false, true); ?></td>
-            </tr>
-            <tr>
-                <td><label for="verwarnungen">Verwarnungen:</label></td>
-                <td><input type="number" name="verwarnungen" id="verwarnungen"
-                           value="<?= escapeForOutput($entry['Verwarnungen']); ?>"
-                           size="3"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="gesperrt">Gesperrt:</label></td>
-                <td><input type="checkbox" name="gesperrt" id="gesperrt"
-                           value="1" <?= ($entry['Gesperrt'] == 1 ? 'checked' : ''); ?>/></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Speichern"/>
-                </td>
-            </tr>
-        </table>
+        <header>Benutzer bearbeiten</header>
+        <div>
+            <label for="username">Name:</label>
+            <input name="username" id="username" type="text" value="<?= escapeForOutput($entry['Name']); ?>"
+                   size="20" required
+                   minlength="<?= username_min_len; ?>" maxlength="<?= username_max_len; ?>"/>
+        </div>
+        <div>
+            <label for="email">EMail:</label>
+            <input name="email" id="email" type="email" size="40" required
+                   value="<?= escapeForOutput($entry['EMail']); ?>"
+                   maxlength="<?= email_max_len; ?>"/>
+        </div>
+        <div>
+            <label for="email_aktiviert">Aktiviert:</label>
+            <input type="checkbox" id="email_aktiviert" name="email_aktiviert"
+                   value="1" <?= ($entry['EMailAct'] === null ? 'checked' : ''); ?>/>
+        </div>
+        <div>
+            <label for="password">Passwort:</label>
+            <input name="password" id="password" type="password" size="20"/>
+        </div>
+        <div>
+            <label>Registriert am:</label>
+            <span><?= formatDateTime(strtotime($entry['RegistriertAm'])); ?></span>
+        </div>
+        <div>
+            <label for="geld">Geld:</label>
+            <input type="number" name="geld" id="geld"
+                   value="<?= formatCurrency($entry['Geld'], false, false); ?>"
+                   size="13"/> €
+        </div>
+        <div>
+            <label for="bank">Bank:</label>
+            <input type="number" name="bank" id="bank"
+                   value="<?= formatCurrency($entry['Bank'], false, false); ?>"
+                   size="13"/> €
+        </div>
+        <div>
+            <label for="punkte">Punkte:</label>
+            <input type="number" name="punkte" id="punkte" value="<?= escapeForOutput($entry['Punkte']); ?>"
+                   size="13"/>
+        </div>
+        <div>
+            <label for="igm_gesendet">IGM Gesendet:</label>
+            <input type="number" name="igm_gesendet" id="igm_gesendet"
+                   value="<?= escapeForOutput($entry['IgmGesendet']); ?>"
+                   size="4"/>
+        </div>
+        <div>
+            <label for="igm_empfangen">IGM Empfangen:</label>
+            <input type="number" name="igm_empfangen" id="igm_empfangen"
+                   value="<?= escapeForOutput($entry['IgmEmpfangen']); ?>"
+                   size="4"/>
+        </div>
+        <div>
+            <label for="admin">Admin:</label>
+            <input type="checkbox" name="admin" id="admin"
+                   value="1" <?= ($entry['Admin'] == 1 ? 'checked' : ''); ?>/>
+        </div>
+        <div>
+            <label for="betatester">Betatester:</label>
+            <input type="checkbox" name="betatester" id="betatester"
+                   value="1" <?= ($entry['Betatester'] == 1 ? 'checked' : ''); ?>/>
+        </div>
+        <div>
+            <label>Letzte Aktion:</label>
+            <span><?= $entry['LastAction'] !== null ? formatDateTime(strtotime($entry['LastAction'])) : '<i>- Nie -</i>'; ?></span>
+        </div>
+        <div>
+            <label>Letzte Anmeldung:</label>
+            <span><?= $entry['LastLogin'] !== null ? formatDateTime(strtotime($entry['LastLogin'])) : '<i>- Nie -</i>'; ?></span>
+        </div>
+        <div>
+            <label>Profilbild geändert:</label>
+            <span><?= $entry['LastImageChange'] !== null ? formatDateTime(strtotime($entry['LastImageChange'])) : '<i>- Nie -</i>'; ?></span>
+        </div>
+        <div>
+            <label>Nächste Mafiaktion:</label>
+            <span><?= $entry['NextMafia'] !== null ? formatDateTime(strtotime($entry['NextMafia'])) : '<i>- Sofort -</i>'; ?></span>
+        </div>
+        <div>
+            <label for="ewige_punkte">Ewige Punkte:</label>
+            <input type="number" name="ewige_punkte" id="ewige_punkte"
+                   value="<?= escapeForOutput($entry['EwigePunkte']); ?>"
+                   size="4"/>
+        </div>
+        <div>
+            <label for="onlinezeit">Onlinezeit (Sekunden):</label>
+            <input type="number" name="onlinezeit" id="onlinezeit"
+                   value="<?= escapeForOutput($entry['OnlineZeit']); ?>"
+                   size="8"/>
+        </div>
+        <div>
+            <label for="gruppe">Gruppe:</label>
+            <?php
+            echo createDropdown($groups, $entry['Gruppe'], 'gruppe', false, false, true);
+
+            if ($entry['Gruppe'] !== null) {
+                echo sprintf(' (<a href="/?p=admin_gruppe_bearbeiten&amp;id=%d">Rechte / Kasse bearbeiten</a>)', $entry['Gruppe']);
+            }
+            ?>
+        </div>
+        <div>
+            <label for="verwarnungen">Verwarnungen:</label>
+            <input type="number" name="verwarnungen" id="verwarnungen"
+                   value="<?= escapeForOutput($entry['Verwarnungen']); ?>"
+                   size="3"/>
+        </div>
+        <div>
+            <label for="gesperrt">Gesperrt:</label>
+            <input type="checkbox" name="gesperrt" id="gesperrt"
+                   value="1" <?= ($entry['Gesperrt'] == 1 ? 'checked' : ''); ?>/>
+        </div>
+        <div>
+            <input type="submit" value="Speichern" id="user_save"/>
+        </div>
     </form>
+</div>
+<br>
+<div class="form AdminEditUser">
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="2"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
-        <table class="Liste EditUser" id="user_buildings">
-            <tr>
-                <th colspan="2">Gebäude</th>
-            </tr>
-            <?php
-            for ($i = 1; $i <= count_buildings; $i++) {
-                ?>
-                <tr>
-                    <td><label for="gebaeude_<?= $i; ?>"><?= getBuildingName($i); ?></label></td>
-                    <td><input type="number" name="gebaeude_<?= $i; ?>" id="gebaeude_<?= $i; ?>"
-                               value="<?= escapeForOutput($entry['Gebaeude' . $i]); ?>"
-                               size="3" min="0"/>
-                </tr>
-                <?php
-            }
+        <header>Gebäude</header>
+        <?php
+        for ($i = 1; $i <= count_buildings; $i++) {
             ?>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Speichern"/>
-                </td>
-            </tr>
-        </table>
+            <div>
+                <label for="gebaeude_<?= $i; ?>"><?= getBuildingName($i); ?></label>
+                <input type="number" name="gebaeude_<?= $i; ?>" id="gebaeude_<?= $i; ?>"
+                       value="<?= escapeForOutput($entry['Gebaeude' . $i]); ?>"
+                       size="3" min="0"/>
+            </div>
+            <?php
+        }
+        ?>
+        <div>
+            <input type="submit" value="Speichern" id="buildings_save"/>
+        </div>
     </form>
+</div>
+
+<div class="form AdminEditUser">
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="3"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
-        <table class="Liste EditUser" id="user_research">
-            <tr>
-                <th colspan="2">Forschungen</th>
-            </tr>
-            <?php
-            for ($i = 1; $i <= count_wares; $i++) {
-                ?>
-                <tr>
-                    <td><label for="forschung_<?= $i; ?>"><?= getItemName($i); ?></label></td>
-                    <td><input type="number" name="forschung_<?= $i; ?>" id="forschung_<?= $i; ?>"
-                               value="<?= escapeForOutput($entry['Forschung' . $i]); ?>"
-                               size="3" min="0"/>
-                </tr>
-                <?php
-            }
+        <header>Forschungen</header>
+        <?php
+        for ($i = 1; $i <= count_wares; $i++) {
             ?>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Speichern"/>
-                </td>
-            </tr>
-        </table>
+            <div>
+                <label for="forschung_<?= $i; ?>"><?= getItemName($i); ?></label>
+                <input type="number" name="forschung_<?= $i; ?>" id="forschung_<?= $i; ?>"
+                       value="<?= escapeForOutput($entry['Forschung' . $i]); ?>"
+                       size="3" min="0"/>
+            </div>
+            <?php
+        }
+        ?>
+        <div>
+            <input type="submit" value="Speichern" id="research_save"/>
+        </div>
     </form>
+</div>
+
+<div class="form AdminEditUser">
     <form action="/actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="4"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
-        <table class="Liste EditUser" id="user_stock">
-            <tr>
-                <th colspan="2">Lagerbestand</th>
-            </tr>
-            <?php
-            for ($i = 1; $i <= count_wares; $i++) {
-                ?>
-                <tr>
-                    <td><label for="lager_<?= $i; ?>"><?= getItemName($i); ?></label></td>
-                    <td><input type="number" name="lager_<?= $i; ?>" id="lager_<?= $i; ?>"
-                               value="<?= escapeForOutput($entry['Lager' . $i]); ?>"
-                               size="7" min="0"/>
-                </tr>
-                <?php
-            }
+        <header>Lagerbestand</header>
+        <?php
+        for ($i = 1; $i <= count_wares; $i++) {
             ?>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Speichern"/>
-                </td>
-            </tr>
-        </table>
+            <div>
+                <label for="lager_<?= $i; ?>"><?= getItemName($i); ?></label>
+                <input type="number" name="lager_<?= $i; ?>" id="lager_<?= $i; ?>"
+                       value="<?= escapeForOutput($entry['Lager' . $i]); ?>"
+                       size="7" min="0"/>
+            </div>
+            <?php
+        }
+        ?>
+        <div>
+            <input type="submit" value="Speichern" id="stock_save"/>
+        </div>
     </form>
 </div>
 
 <div>
-    <a href="/?p=admin_benutzer">&lt;&lt; Zurück</a>
+    <a href="/?p=admin_benutzer&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
 </div>

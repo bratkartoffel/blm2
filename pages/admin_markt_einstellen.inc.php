@@ -18,38 +18,29 @@ $preis = getOrDefault($_GET, 'preis', .0);
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-<div id="FilterForm">
+<div class="form AdminCreateMarket">
     <form action="/actions/admin_markt.php" method="post">
         <input type="hidden" name="a" value="1"/>
-        <table class="Liste">
-            <tr>
-                <th colspan="2">Angebot einstellen</th>
-            </tr>
-            <tr>
-                <td><label for="von">Von:</label></td>
-                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></td>
-            </tr>
-            <tr>
-                <td><label for="ware">Was:</label></td>
-                <td><?= createWarenDropdown($ware, 'ware', false); ?></td>
-            </tr>
-            <tr>
-                <td><label for="menge">Menge:</label></td>
-                <td><input type="text" name="menge" id="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
-                </td>
-            </tr>
-            <tr>
-                <td><label for="preis">Preis:</label></td>
-                <td><input type="text" name="preis" id="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/>
-                    €
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Speichern"/>
-                </td>
-            </tr>
-        </table>
+        <header>Angebot einstellen</header>
+        <div>
+            <label for="von">Von:</label>
+            <span><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></span>
+        </div>
+        <div>
+            <label for="ware">Was:</label>
+            <span><?= createWarenDropdown($ware, 'ware', false); ?></span>
+        </div>
+        <div>
+            <label for="menge">Menge:</label>
+            <input type="text" name="menge" id="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
+        </div>
+        <div>
+            <label for="preis">Preis:</label>
+            <input type="text" name="preis" id="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/> €
+        </div>
+        <div>
+            <input type="submit" value="Speichern" id="create_entry"/>
+        </div>
     </form>
 </div>
 

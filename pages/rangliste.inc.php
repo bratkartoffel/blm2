@@ -180,61 +180,63 @@ $offset_ep = verifyOffset($offset_ep, $epCount, ranking_page_size);
 <?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_gr=%d', $offset, $offset_gr), $offset_ep, $epCount, ranking_page_size, 'o_ep', "EwigePunkte"); ?>
 
 <h2>Verschiedenes</h2>
-<table class="Liste Rangliste">
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=0">Der Bioladenfreak:</a></th>
-        <td><?php
+<div class="form RanglisteSpezial">
+    <header>Verschiedenes</header>
+
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=0">Der Bioladenfreak:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderOnlineTime();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit ' . formatDuration($data['Onlinezeit']);
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=1">Der Pate:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=1">Der Pate:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderMafia();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenMafia']) . ' für die Mafia';
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=2">Der Händlerkönig:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=2">Der Händlerkönig:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderMarket();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenMarkt']) . ' auf dem freien Markt';
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=3">Der Baumeister:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=3">Der Baumeister:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderBuildings();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenGebaeude']) . ' für Gebäude';
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=4">Das Genie:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=4">Das Genie:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderResearch();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenForschung']) . ' für die Forschung';
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=5">Der Top-Bauer:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=5">Der Top-Bauer:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderProduction();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenProduktion']) . ' für dir Produktion';
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=6">Der Kapitalist:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=6">Der Kapitalist:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderInterest();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Einnahmen von ' . formatCurrency($data['EinnahmenZinsen']) . ' durch Zinsen';
-            ?></td>
-    </tr>
-    <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=7">Der Mitteilungsbedürftige:</a></th>
-        <td><?php
+            ?></span>
+    </div>
+    <div>
+        <label><a href="/?p=rangliste_spezial&amp;type=7">Der Schwätzer:</a></label>
+        <span><?php
             $data = Database::getInstance()->getLeaderIgmSent();
             echo createProfileLink($data['ID'], $data['Name']) . ' mit ' . formatPoints($data['IgmGesendet']) . ' gesendeten Nachrichten';
-            ?></td>
-    </tr>
-</table>
+            ?></span>
+    </div>
+</div>

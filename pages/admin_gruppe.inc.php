@@ -19,29 +19,25 @@ $offset = getOrDefault($_GET, 'o', 0);
     <tr>
         <th>Name</th>
         <th>Kürzel</th>
-        <th>Registriert</th>
-        <th>Gesperrt</th>
-        <th>Verw.</th>
+        <th>Erstellt</th>
         <th>Aktion</th>
     </tr>
     <?php
-    $entriesCount = Database::getInstance()->getPlayerCount();
+    $entriesCount = Database::getInstance()->getGroupCount();
     $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAllPlayerIdsAndNameAndEMailAndRegistriertAmAndGesperrtAndVerwarnungen($offset, admin_log_page_size);
+    $entries = Database::getInstance()->getGroupIdAndNameAndKuerzelAndErstellt($offset, admin_log_page_size);
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         ?>
         <tr>
-            <td><?= createProfileLink($row['ID'], $row['Name']); ?></td>
-            <td><?= escapeForOutput($row['EMail']); ?></td>
-            <td><?= formatDate(strtotime($row['RegistriertAm'])); ?></td>
-            <td><?= getYesOrNo($row['Gesperrt']); ?></td>
-            <td><?= escapeForOutput($row['Verwarnungen']); ?></td>
+            <td><?= createGroupLink($row['ID'], $row['Name']); ?></td>
+            <td><?= escapeForOutput($row['Kuerzel']); ?></td>
+            <td><?= formatDate(strtotime($row['Erstellt'])); ?></td>
             <td>
-                <a href="/?p=admin_benutzer_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
-                <a href="/actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                   onclick="return confirm('Benutzer \'<?= escapeForOutput($row['Name']); ?>\' wirklich löschen?');">Löschen</a>
+                <a href="/?p=admin_gruppe_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
+                <a href="/actions/admin_gruppe.php?a=6&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                   onclick="return confirm('Gruppe \'<?= escapeForOutput($row['Name']); ?>\' wirklich löschen?');">Löschen</a>
             </td>
         </tr>
         <?php
@@ -51,6 +47,6 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_benutzer', $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_gruppe', $offset, $entriesCount, admin_log_page_size); ?>
 
 <a href="/?p=admin">&lt;&lt; Zurück</a>

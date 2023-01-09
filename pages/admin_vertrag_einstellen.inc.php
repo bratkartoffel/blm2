@@ -19,44 +19,36 @@ $preis = getOrDefault($_GET, 'preis', .0);
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-<div id="FilterForm">
+<div class="form AdminCreateContract">
     <form action="/actions/admin_vertrag.php" method="post">
         <input type="hidden" name="a" value="1"/>
-        <table class="Liste">
-            <tr>
-                <th colspan="2">Vertrag einstellen</th>
-            </tr>
-            <tr>
-                <td><label for="von">Absender:</label></td>
-                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></td>
-            </tr>
-            <tr>
-                <td><label for="an">Empfänger:</label></td>
-                <td><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $an, 'an', false); ?></td>
-            </tr>
-            <tr>
-                <td><label for="ware">Was:</label></td>
-                <td><?= createWarenDropdown($ware, 'ware', false); ?></td>
-            </tr>
-            <tr>
-                <td><label for="menge">Menge:</label></td>
-                <td><input type="number" min="1" name="menge" id="menge"
-                           value="<?= formatWeight($menge, false, 0, false); ?>"
-                           size="6"/> kg
-                </td>
-            </tr>
-            <tr>
-                <td><label for="preis">Preis:</label></td>
-                <td><input type="number" min="0.01" step="0.01" name="preis" id="preis"
-                           value="<?= formatCurrency($preis, false, false); ?>" size="6"/> €
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Speichern"/>
-                </td>
-            </tr>
-        </table>
+        <header>Vertrag einstellen</header>
+        <div>
+            <label for="von">Absender:</label>
+            <span><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $von, 'von', false, true); ?></span>
+        </div>
+        <div>
+            <label for="an">Empfänger:</label>
+            <span><?= createDropdown(Database::getInstance()->getAllPlayerIdsAndName(), $an, 'an', false); ?></span>
+        </div>
+        <div>
+            <label for="ware">Was:</label>
+            <span><?= createWarenDropdown($ware, 'ware', false); ?></span>
+        </div>
+        <div>
+            <label for="menge">Menge:</label>
+            <input type="number" min="1" name="menge" id="menge"
+                   value="<?= formatWeight($menge, false, 0, false); ?>"
+                   size="6"/> kg
+        </div>
+        <div>
+            <label for="preis">Preis:</label>
+            <input type="number" min="0.01" step="0.01" name="preis" id="preis"
+                   value="<?= formatCurrency($preis, false, false); ?>" size="6"/> €
+        </div>
+        <div>
+            <input type="submit" value="Speichern"/>
+        </div>
     </form>
 </div>
 

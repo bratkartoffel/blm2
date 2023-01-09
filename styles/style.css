@@ -441,13 +441,6 @@ div.Buero tr.RateGreen td {
 
 /*endregion*/
 
-/*region Verträge*/
-table.Vertraege td:last-of-type a {
-    margin: 0 10px;
-}
-
-/*endregion*/
-
 /*region Mafia*/
 table.Mafia {
     margin: 20px 0;
@@ -710,8 +703,12 @@ div.BetaTester {
     background-image: url(/pics/small/bookmark_Silver.webp);
 }
 
-table.RanglisteSpezial {
-    margin-bottom: 20px;
+div.RanglisteSpezial label {
+    padding-right: 10px;
+}
+
+div.RanglisteSpezial div:last-of-type {
+    text-align: initial;
 }
 
 /*endregion*/

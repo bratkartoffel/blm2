@@ -54,7 +54,7 @@ if ($rights['edit_description']) {
                 Noch <span>X</span> Zeichen übrig
             </div>
             <div>
-                <input type="submit" value="Speichern" onclick="return submit(this);"/>
+                <input type="submit" value="Speichern" onclick="return submit(this);" id="save_beschreibung"/>
             </div>
         </form>
     </div>
@@ -80,7 +80,7 @@ if ($rights['edit_password']) {
                        minlength="<?= password_min_len; ?>"/>
             </div>
             <div>
-                <input type="submit" value="Speichern" onclick="return submit(this);"/>
+                <input type="submit" value="Speichern" onclick="return submit(this);" id="save_password"/>
             </div>
         </form>
     </div>

@@ -31,24 +31,24 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 <input type="hidden" name="a" value="1"/>
                 <header>Neue Gruppe gründen</header>
                 <div>
-                    <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" value="<?= escapeForOutput($name); ?>"
+                    <label for="create_name">Name:</label>
+                    <input type="text" name="name" id="create_name" value="<?= escapeForOutput($name); ?>"
                            maxlength="<?= group_max_name_length; ?>"/>
                 </div>
                 <div>
-                    <label for="tag">Kürzel:</label>
-                    <input type="text" name="tag" id="tag" value="<?= escapeForOutput($tag); ?>"
+                    <label for="create_tag">Kürzel:</label>
+                    <input type="text" name="tag" id="create_tag" value="<?= escapeForOutput($tag); ?>"
                            maxlength="<?= group_max_tag_length; ?>"/>
                 </div>
                 <div>
-                    <label for="pwd">Passwort:</label>
-                    <input type="password" name="pwd" id="pwd" minlength="<?= password_min_len; ?>"/>
+                    <label for="create_pwd">Passwort:</label>
+                    <input type="password" name="pwd" id="create_pwd" minlength="<?= password_min_len; ?>"/>
                 </div>
                 <div>
                     <?php
                     if ($player['Gebaeude1'] >= min_plantage_level_create_group) {
                         ?>
-                        <input type="submit" value="Gründen" id="group_create" onclick="return submit(this);"/>
+                        <input type="submit" value="Gründen" id="create_group" onclick="return submit(this);"/>
                         <?php
                     } else {
                         ?>
@@ -64,19 +64,19 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 <input type="hidden" name="a" value="2"/>
                 <header>Gruppe beitreten</header>
                 <div>
-                    <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" value="<?= escapeForOutput($name); ?>"
+                    <label for="join_name">Name:</label>
+                    <input type="text" name="name" id="join_name" value="<?= escapeForOutput($name); ?>"
                            maxlength="<?= group_max_name_length; ?>"/>
                 </div>
                 <div>
-                    <label for="pwd">Passwort:</label>
-                    <input type="password" name="pwd" id="pwd"/>
+                    <label for="join_pwd">Passwort:</label>
+                    <input type="password" name="pwd" id="join_pwd"/>
                 </div>
                 <div>
                     <?php
                     if ($player['Gebaeude1'] >= min_plantage_level_join_group) {
                         ?>
-                        <input type="submit" value="Beitreten" id="group_join" onclick="return submit(this);"/>
+                        <input type="submit" value="Beitreten" id="join_group" onclick="return submit(this);"/>
                         <?php
                     } else {
                         ?>
@@ -111,10 +111,10 @@ if ($id != 0) {
     <div class="form Gruppe">
         <header>Gruppe: <?= escapeForOutput($group['Name']); ?></header>
         <div class="left">
-            <div class="GroupImage"><img
+            <div class="GroupImage"><img id="group_image"
                         src="/pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($group['LastImageChange'] == null ? 0 : strtotime($group['LastImageChange'])); ?>"
                         alt="Gruppenbild"/></div>
-            <div class="GroupDescription"><?= replaceBBCode(empty($group['Beschreibung']) ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
+            <div class="GroupDescription" id="gruppe_beschreibung"><?= replaceBBCode(empty($group['Beschreibung']) ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
         </div>
         <div class="right">
             <div><b>Kürzel</b>: <?= escapeForOutput($group['Kuerzel']); ?></div>

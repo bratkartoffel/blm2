@@ -1305,25 +1305,25 @@ function createGroupNaviation(int $activePage, int $group_id): string
     $items = array();
 
     if ($activePage == 0) $items[] = '<span>Board</span>';
-    else $items[] = '<span><a href="/?p=gruppe">Board</a></span>';
+    else $items[] = '<span><a href="/?p=gruppe" id="gruppe_board">Board</a></span>';
 
     if ($activePage == 1) $items[] = '<span>Mitgliederverwaltung</span>';
-    else $items[] = '<span><a href="/?p=gruppe_mitgliederverwaltung">Mitgliederverwaltung</a></span>';
+    else $items[] = '<span><a href="/?p=gruppe_mitgliederverwaltung" id="gruppe_mitgliederverwaltung">Mitgliederverwaltung</a></span>';
 
     if ($activePage == 2) $items[] = '<span>Einstellungen</span>';
-    else $items[] = '<span><a href="/?p=gruppe_einstellungen">Einstellungen</a></span>';
+    else $items[] = '<span><a href="/?p=gruppe_einstellungen" id="gruppe_einstellungen">Einstellungen</a></span>';
 
     $count = Database::getInstance()->countPendingGroupDiplomacy($group_id);
     if ($activePage == 3) $items[] = sprintf('<span>Diplomatie (%d)</span>', $count);
-    else $items[] = sprintf('<span><a href="/?p=gruppe_diplomatie">Diplomatie (%d)</a></span>', $count);
+    else $items[] = sprintf('<span><a href="/?p=gruppe_diplomatie" id="gruppe_diplomatie">Diplomatie (%d)</a></span>', $count);
 
     if ($activePage == 4) $items[] = '<span>Gruppenkasse</span>';
-    else $items[] = '<span><a href="/?p=gruppe_kasse">Gruppenkasse</a></span>';
+    else $items[] = '<span><a href="/?p=gruppe_kasse" id="gruppe_kasse">Gruppenkasse</a></span>';
 
     if ($activePage == 5) $items[] = '<span>Logbuch</span>';
-    else $items[] = '<span><a href="/?p=gruppe_logbuch">Logbuch</a></span>';
+    else $items[] = '<span><a href="/?p=gruppe_logbuch" id="gruppe_logbuch">Logbuch</a></span>';
 
-    $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');">Gruppe verlassen</a></span>';
+    $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');" id="leave_group">Gruppe verlassen</a></span>';
     return '<div id="GroupNavigation">' . implode(" | ", $items) . '</div>';
 }
 

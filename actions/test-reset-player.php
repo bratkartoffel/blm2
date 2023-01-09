@@ -36,7 +36,7 @@ switch ($id) {
         break;
 
     case 15:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude5' => 120));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 8, 'Gebaeude5' => 120));
         break;
 
     default:

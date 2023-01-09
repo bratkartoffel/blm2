@@ -43,20 +43,20 @@ public class BuildingTests extends AbstractTest {
         driver.findElement(By.id("link_gebaeude")).click();
 
         assertText(By.id("stat_money"), "5.000,00 €");
-        driver.findElement(By.id("build_1")).click();
+        driver.findElement(By.id("build_2")).click();
         assertElementPresent(By.id("meldung_207"));
 
-        assertText(By.id("stat_money"), "4.526,15 €");
+        assertText(By.id("stat_money"), "4.561,60 €");
         Thread.sleep(TimeUnit.SECONDS.toMillis(2));
 
         driver.findElement(By.id("link_gebaeude")).click();
-        assertElementPresent(By.id("build_1"));
-        assertText(By.id("g1"), "Plantage (Stufe 2)");
+        assertElementPresent(By.id("build_2"));
+        assertText(By.id("g2"), "Forschungszentrum (Stufe 1)");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_s_1"), "473,85 €");
-        assertText(By.id("b_p_1"), "182");
-        assertText(By.id("b_p_4"), "182");
-        assertText(By.id("b_p_7"), "182");
+        assertText(By.id("b_s_1"), "438,40 €");
+        assertText(By.id("b_p_1"), "126");
+        assertText(By.id("b_p_4"), "126");
+        assertText(By.id("b_p_7"), "126");
     }
 }

@@ -15,6 +15,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -78,7 +80,17 @@ public abstract class AbstractTest {
     }
 
     protected void assertElementPresent(By by) {
-        Assertions.assertEquals(1, getDriver().findElements(by).size(), "Element " + by + " not found");
+        try {
+            Assertions.assertEquals(1, driver.findElements(by).size(), "Element " + by + " not found");
+        } catch (AssertionFailedError e) {
+            if (by.toString().contains("meldung_")) {
+                List<WebElement> messageBox = driver.findElements(By.className("MessageBox"));
+                if (!messageBox.isEmpty()) {
+                    log.error("Message {} not found, but {} is beeing shown", by, messageBox.get(0).getDomAttribute("id"));
+                }
+            }
+            throw e;
+        }
     }
 
     protected void assertText(By by, String expected) {
@@ -105,6 +117,7 @@ public abstract class AbstractTest {
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());
+            driver.get("http://localhost/actions/logout.php");
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
         }

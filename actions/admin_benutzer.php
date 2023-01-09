@@ -51,7 +51,7 @@ for ($i = 1; $i <= count_wares; $i++) {
     $lager[$i] = getOrDefault($_POST, 'lager_' . $i, 0);
 }
 
-$backlink = sprintf('/?p=admin_benutzer_bearbeiten&id=%d&o=%d', $id, $offset);
+$backlink = sprintf('/?p=admin_benutzer_bearbeiten&id=' . $id . '_bearbeiten&id=%d&o=%d', $id, $offset);
 switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update basic information
     case 1:
@@ -79,14 +79,53 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if ($password !== null && strlen($password) > 0) {
             $fields['Passwort'] = hashPassword($password);
         }
-        if ($gruppe !== -1) {
+
+        // handle group update
+        if ($gruppe === -1) $gruppe = null;
+        $data = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($id);
+        if ($data['Gruppe'] === null || $data['Gruppe'] != $gruppe) {
             $fields['Gruppe'] = $gruppe;
+
+            // group changed, leave old group (if present)
+            if ($data['Gruppe'] !== null) {
+                if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_RIGHTS,
+                        array('group_id' => $data['Gruppe'], 'user_id' => $id)) !== 1) {
+                    Database::getInstance()->rollBack();
+                    redirectTo($backlink, 142, __LINE__);
+                }
+                if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_GROUP_CASH,
+                        array('group_id' => $data['Gruppe'], 'user_id' => $id, 'amount' => 0)) === null) {
+                    Database::getInstance()->rollBack();
+                    redirectTo($backlink, 142, __LINE__);
+                }
+            }
+
+            // join new group
+            if ($gruppe !== null) {
+                // create group rights entry
+                if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_RIGHTS,
+                        array('group_id' => $gruppe, 'user_id' => $id, 'message_write' => 1,)) !== 1) {
+                    Database::getInstance()->rollBack();
+                    redirectTo($backlink, 141, __LINE__);
+                }
+
+                // create group cash entry
+                if (!Database::getInstance()->existsTableEntry(Database::TABLE_GROUP_CASH,
+                    array('group_id' => $gruppe, 'user_id' => $id,))) {
+                    if (Database::getInstance()->createTableEntry(Database::TABLE_GROUP_CASH,
+                            array('group_id' => $gruppe, 'user_id' => $id,)) !== 1) {
+                        Database::getInstance()->rollBack();
+                        redirectTo($backlink, 141, __LINE__);
+                    }
+                }
+            }
         }
+
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, $fields) === null) {
             redirectTo($backlink, 142, __LINE__);
         } else {
             Database::getInstance()->commit();
-            redirectTo('/?p=admin_benutzer&o=' . $offset, 247);
+            redirectTo('/?p=admin_benutzer_bearbeiten&id=' . $id . '&o=' . $offset, 247);
         }
         break;
 
@@ -102,7 +141,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo($backlink, 142, __LINE__);
         } else {
             Database::getInstance()->commit();
-            redirectTo('/?p=admin_benutzer&o=' . $offset, 247);
+            redirectTo('/?p=admin_benutzer_bearbeiten&id=' . $id . '&o=' . $offset, 247);
         }
         break;
 
@@ -118,7 +157,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo($backlink, 142, __LINE__);
         } else {
             Database::getInstance()->commit();
-            redirectTo('/?p=admin_benutzer&o=' . $offset, 247);
+            redirectTo('/?p=admin_benutzer_bearbeiten&id=' . $id . '&o=' . $offset, 247);
         }
         break;
 
@@ -134,26 +173,26 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo($backlink, 142, __LINE__);
         } else {
             Database::getInstance()->commit();
-            redirectTo('/?p=admin_benutzer&o=' . $offset, 247);
+            redirectTo('/?p=admin_benutzer_bearbeiten&id=' . $id . '&o=' . $offset, 247);
         }
         break;
 
     // delete user
     case 5:
-        requireXsrfToken('/?p=admin_benutzer&o=' . $offset);
+        requireXsrfToken('/?p=admin_benutzer_bearbeiten&id=' . $id . '&o=' . $offset);
         Database::getInstance()->begin();
         $status = deleteAccount($id);
         if ($status !== null) {
             Database::getInstance()->rollBack();
-            redirectTo('/?p=admin_benutzer&o=' . $offset, 143, __LINE__ . '_' . $status);
+            redirectTo('/?p=admin_benutzer_bearbeiten&id=' . $id . '&o=' . $offset, 143, __LINE__ . '_' . $status);
         }
         Database::getInstance()->commit();
 
-        redirectTo('/?p=admin_benutzer&o=' . $offset, 246);
+        redirectTo('/?p=admin_benutzer&id=' . $id . '&o=' . $offset, 246);
         break;
 
     // unknown action
     default:
-        redirectBack('/?p=admin_benutzer&o=' . $offset, 112, __LINE__);
+        redirectBack('/?p=admin_benutzer&id=' . $id . '&o=' . $offset, 112, __LINE__);
         break;
 }

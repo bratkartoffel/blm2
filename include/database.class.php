@@ -276,8 +276,8 @@ class Database
     public function getPlayerRankById(int $id): ?int
     {
         $stmt = $this->prepare("with stats as (
-                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Punkte FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL ORDER BY Punkte DESC, ID
-            ) select * from stats where ID = :id;");
+                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC, ID) AS rnum, ID, Punkte FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL
+            ) select * from stats where ID = :id");
         $stmt->bindParam("id", $id);
         return $this->executeAndExtractField($stmt, 'rnum');
     }
@@ -285,8 +285,8 @@ class Database
     public function getPlayerRankByName(string $name): ?int
     {
         $stmt = $this->prepare("with stats as (
-                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Name, Punkte FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL ORDER BY Punkte DESC, ID
-            ) select * from stats where Name = :name;");
+                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC, ID) AS rnum, ID, Name, Punkte FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL
+            ) select * from stats where Name = :name");
         $stmt->bindParam("name", $name);
         return $this->executeAndExtractField($stmt, 'rnum');
     }

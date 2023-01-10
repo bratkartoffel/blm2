@@ -5,10 +5,9 @@
  * Please see LICENCE.md for complete licence text.
  */
 
-function ChefboxZeigen(seite) {
-    const chefboxPopup = window.open(seite, 'chefbox', 'height=690,width=240,scrollbars=yes,resizable=yes');
-    chefboxPopup.focus();
-    return false;
+function ChefboxZeigen() {
+    const popup = window.open('chefbox.php', 'chefbox', 'height=800,width=450,scrollbars=yes,resizable=yes');
+    popup.focus();
 }
 
 function BLMzeigen(link) {

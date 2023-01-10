@@ -7,9 +7,6 @@
 */
 
 $start = microtime(true);
-if (!file_exists('include/config.inc.php')) {
-    die('include/config.inc.php not found');
-}
 require_once('include/config.inc.php');
 require_once('include/functions.inc.php');
 require_once('include/database.class.php');
@@ -119,6 +116,18 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
 </div>
 <script>
     reloadOnCountdown = true;
+    if (opener) {
+        window.setInterval(() => {
+            let messages = opener.document.getElementsByClassName("MessageBox");
+            if (messages.length !== 0) {
+                let message = messages[0];
+                if (message.hasAttribute('reload-chefbox')) {
+                    message.removeAttribute('reload-chefbox');
+                    window.location.reload();
+                }
+            }
+        }, 1000);
+    }
 </script>
 </body>
 </html>

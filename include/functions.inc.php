@@ -123,7 +123,7 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Sie sind nicht angemeldet. Bitte melden Sie sich erst an.';
             break;
         case 103:
-            $text = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist 64 KB.';
+            $text = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist ' . (max_profile_image_size / 1024) . ' KB.';
             break;
         case 104:
             $text = 'Bitte füllen Sie alle Felder aus.';
@@ -485,11 +485,11 @@ function getMessageBox(int $msg_id): ?string
             break;
     }
 
-    return sprintf('<div class="MessageBox" id="meldung_%d">
+    return sprintf('<div class="MessageBox" id="meldung_%d" %s>
             <div class="MessageImage" id="%s"></div>
             <a id="close" onclick="document.getElementById(\'meldung_%d\').remove();">X</a>
             <span>%s</span>
-        </div>', $msg_id, $image, $msg_id, $text);
+        </div>', $msg_id, ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '', $image, $msg_id, $text);
 }
 
 function getBuildingName(int $building_id): string

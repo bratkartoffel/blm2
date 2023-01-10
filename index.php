@@ -109,8 +109,8 @@ if (isLoggedIn()) {
                 <div class="NaviLink"><a href="/?p=notizblock" id="link_notizblock">Notizblock</a></div>
                 <div class="NaviLink"><a href="/?p=einstellungen" id="link_einstellungen">Einstellungen</a>
                 </div>
-                <div class="NaviLink" onclick="return ChefboxZeigen(this.getElementsByTagName('a')[0].href);">
-                    <a href="chefbox.php" id="link_chefbox" onclick="return ChefboxZeigen(this.href);"
+                <div class="NaviLink" onclick="ChefboxZeigen(); return false;">
+                    <a href="chefbox.php" id="link_chefbox" onclick="ChefboxZeigen(); return false;"
                        target="_blank">Chefbox</a>
                 </div>
                 <?= (isAdmin() ? '<div class="NaviLink"><a href="/?p=admin" id="link_admin">Admin-Bereich</a></div>' : ''); ?>

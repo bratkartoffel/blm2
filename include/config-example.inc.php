@@ -232,10 +232,10 @@ const group_page_size = 10;
 const admin_log_page_size = 25;
 
 // number of entries to show in the market table
-const market_page_size = 25;
+const market_page_size = 20;
 
 // number of entries to show in the message table
-const messages_page_size = 25;
+const messages_page_size = 20;
 
 // maximum size for a profile picture (in bytes, default 256k)
 const max_profile_image_size = 262144;

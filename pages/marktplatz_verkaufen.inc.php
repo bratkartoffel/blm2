@@ -22,6 +22,10 @@ $price = getOrDefault($_GET, 'price', .0);
 <p>
     Hier können Sie ein neues Angebot auf den freien Markt stellen.
 </p>
+<p>
+    Das Einstellen von Angeboten ist kostenlos, jedoch gehen beim zurückziehen aus dem Markt ein kleiner Anteil
+    (<?= formatPercent(1 - market_retract_rate); ?>) der Waren verloren.
+</p>
 
 <?php
 $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);

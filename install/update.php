@@ -5,6 +5,7 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
+$start = microtime(true);
 require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
@@ -72,6 +73,7 @@ foreach ($scripts as $script) {
         if ($result !== null) {
             die(">> FAIL: Could not execute setup script, failed step: " . $result);
         }
+        echo ">> OK\n";
         $executedScripts[$script] = sha1_file($script);
     } else {
         echo ">> Script already executed, verifying checksum\n";
@@ -100,5 +102,8 @@ foreach ($executedScripts as $script => $checksum) {
 $database->commit();
 echo "> OK\n\n";
 
+$dauer = 1000 * (microtime(true) - $start);
 http_response_code(200);
-echo "Update finished successfully!";
+echo "Update finished successfully!\n";
+echo "> Execution took " . number_format($dauer, 2) . " ms\n";
+echo "> " . Database::getInstance()->getQueryCount() . " queries were executed\n";

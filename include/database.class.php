@@ -1224,16 +1224,14 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             AS AnzahlSpielerInGruppe;
 ");
         // @formatter:on
-        $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } else {
+        $result = $this->executeAndExtractFirstRow($stmt);
+        if ($result !== null) {
             $stmt = $this->prepare("SHOW TABLE STATUS FROM `" . database_database . "` WHERE `name` = :table");
             $table = self::TABLE_JOBS;
             $stmt->bindParam("table", $table);
-            $result[0]['AnzahlAuftraege'] = $this->executeAndExtractField($stmt, 'Auto_increment');
-            return $result[0];
+            $result['AnzahlAuftraege'] = $this->executeAndExtractField($stmt, 'Auto_increment');
         }
+        return $result;
     }
 
     public function getAllContractsByAnEquals(int $blm_user): ?array

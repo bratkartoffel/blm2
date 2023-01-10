@@ -25,7 +25,7 @@ $offset_out = getOrDefault($_GET, 'o_out', 0);
 $messageCountIn = Database::getInstance()->getAllMessagesByAnCount($_SESSION['blm_user']);
 $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
 ?>
-<table class="Liste Nachrichten">
+<table class="Liste Nachrichten" data-count="<?= $messageCountIn; ?>" id="MessagesIn">
     <tr>
         <th>Nr</th>
         <th>Datum / Zeit</th>
@@ -39,16 +39,18 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
     $nr = $messageCountIn - $offset_in * messages_page_size;
     foreach ($entries as $row) {
         ?>
-        <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>">
+        <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>" data-id="<?= $row['ID']; ?>">
             <td><?= $nr--; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['VonID'], $row['VonName']); ?></td>
             <td>
-                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
+                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"
+                   id="read_<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
-            <td>
-                <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_in=<?= $offset_in; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
+            <td id="action_<?=$row['ID'];?>">
+                <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_in=<?= $offset_in; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                   id="delete_<?= $row['ID']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
@@ -63,8 +65,9 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
 <?= createPaginationTable('/?p=nachrichten_liste', $offset_in, $messageCountIn, messages_page_size, 'o_in'); ?>
 
 <div>
-    <a href="/?p=nachrichten_schreiben">Neue Nachricht schreiben</a> |
-    <a href="/actions/nachrichten.php?a=3&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Alle Nachrichten löschen</a>
+    <a href="/?p=nachrichten_schreiben" id="new_message">Neue Nachricht schreiben</a> |
+    <a href="/actions/nachrichten.php?a=3&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>" id="delete_all_messages">Alle
+        Nachrichten löschen</a>
 </div>
 
 <h2>Postausgang</h2>
@@ -75,7 +78,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
 $messageCountOut = Database::getInstance()->getAllMessagesByVonCount($_SESSION['blm_user']);
 $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
 ?>
-<table class="Liste Nachrichten">
+<table class="Liste Nachrichten" data-count="<?= $messageCountOut; ?>" id="MessagesOut">
     <tr>
         <th>Nr</th>
         <th>Datum / Zeit</th>
@@ -89,22 +92,22 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
     $nr = $messageCountOut - $offset_out * messages_page_size;
     foreach ($entries as $row) {
         ?>
-        <tr>
+        <tr data-id="<?= $row['ID']; ?>">
             <td><?= $nr--; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['AnID'], $row['AnName']); ?></td>
             <td>
-                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
+                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"
+                   id="read_<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
-            <td>
+            <td id="action_<?=$row['ID'];?>">
                 <?php
                 if ($row['Gelesen'] == 0 || $row['AnID'] === null) {
                     ?>
-                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_out=<?= $offset_out; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
+                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_out=<?= $offset_out; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                       id="delete_<?= $row['ID']; ?>">Löschen</a>
                     <?php
-                } else {
-                    echo 'Löschen';
                 }
                 ?>
             </td>

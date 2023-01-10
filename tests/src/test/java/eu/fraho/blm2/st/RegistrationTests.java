@@ -105,7 +105,7 @@ class RegistrationTests extends AbstractTest {
         assertElementPresent(By.id("meldung_117"));
 
         // correct activation token
-        driver.get("http://localhost/actions/activate.php?user=" + username + "&code=07313f0e320f22cbfa35cfc220508eb3ff457c7e");
+        driver.get("http://localhost/actions/activate.php?user=" + username + "&code=" + RANDOM_TOKEN);
         assertElementPresent(By.id("meldung_241"));
 
         // verify that user can login now

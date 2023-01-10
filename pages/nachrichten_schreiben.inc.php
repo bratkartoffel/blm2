@@ -19,7 +19,7 @@ if ($reply > 0) {
 
     $receiver = $data['VonName'];
     $subject = stripos($data['Betreff'], 'Re:') === false ? 'Re: ' . $data['Betreff'] : $data['Betreff'];
-    $message = "[quote]" . $data['Nachricht'] . "[/quote]\n\n";
+    $message = "\n\n[quote]" . $data['Nachricht'] . "[/quote]";
 }
 
 $receiver = getOrDefault($_GET, 'receiver', $receiver);
@@ -40,7 +40,7 @@ $message = getOrDefault($_GET, 'message', $message);
         <div>
             <label for="receiver">Empfänger</label>
             <input type="text" name="receiver" id="receiver" value="<?= escapeForOutput($receiver); ?>"/>
-            <?= (isAdmin() ? '<a href="#" onclick="return toggleRundmail();">Admin Rundmail</a>' : ''); ?>
+            <?= (isAdmin() ? '<a href="#" onclick="return toggleRundmail();" id="toggle_rundmail">Admin Rundmail</a>' : ''); ?>
         </div>
         <div>
             <label for="subject">Betreff</label>
@@ -53,7 +53,7 @@ $message = getOrDefault($_GET, 'message', $message);
         </div>
         <div>
             Noch <span id="charsLeft">4096</span> Zeichen übrig.
-            <input type="submit" value="Absenden" onclick="return submit(this);"/>
+            <input type="submit" value="Absenden" onclick="return submit(this);" id="send_message"/>
         </div>
     </form>
 </div>

@@ -30,6 +30,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractTest {
+    static final String RANDOM_TOKEN = "07313f0e320f22cbfa35cfc220508eb3ff457c7e";
+
     private static final Logger log = LoggerFactory.getLogger(AbstractTest.class);
 
     private static final WebDriver driver = SeleniumConfig.getWebDriver();
@@ -72,6 +74,7 @@ public abstract class AbstractTest {
 
     protected void login(String username, String password) {
         log.info("Logging in as {}:{}", username, password);
+        driver.get("http://localhost/actions/logout.php");
         driver.findElement(By.id("link_anmelden")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
         inhalt.findElement(By.id("name")).sendKeys(username);
@@ -117,7 +120,6 @@ public abstract class AbstractTest {
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());
-            driver.get("http://localhost/actions/logout.php");
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
         }

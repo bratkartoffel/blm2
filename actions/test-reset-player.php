@@ -21,6 +21,8 @@ if ($status !== null) {
     die('could not reset account due to ' . $status);
 }
 
+Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('Von' => $id));
+Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('An' => $id));
 
 switch ($id) {
     case 11:

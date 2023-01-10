@@ -32,11 +32,11 @@ if ($data['An'] == $_SESSION['blm_user']) {
     <header>Nachricht lesen</header>
     <div>
         <label>Absender:</label>
-        <span><?= createProfileLink($data['VonID'], $data['VonName']); ?></span>
+        <span id="sender"><?= createProfileLink($data['VonID'], $data['VonName']); ?></span>
     </div>
     <div>
         <label>Empfänger:</label>
-        <span><?= createProfileLink($data['AnID'], $data['AnName']); ?></span>
+        <span id="receiver"><?= createProfileLink($data['AnID'], $data['AnName']); ?></span>
     </div>
     <div>
         <label>Zeit:</label>
@@ -44,9 +44,9 @@ if ($data['An'] == $_SESSION['blm_user']) {
     </div>
     <div>
         <label>Betreff:</label>
-        <span><?= escapeForOutput($data['Betreff']); ?></span>
+        <span id="subject"><?= escapeForOutput($data['Betreff']); ?></span>
     </div>
-    <div><?= replaceBBCode($data['Nachricht']); ?></div>
+    <div id="message"><?= replaceBBCode($data['Nachricht']); ?></div>
 </div>
 
 <div>

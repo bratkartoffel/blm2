@@ -1298,7 +1298,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, ?int $myGroup, float $pointsRange): ?array
     {
-        $lowPoints = $myPoints / $pointsRange;
+        $lowPoints = max(mafia_min_ponts, $myPoints / $pointsRange);
         $highPoints = $myPoints * $pointsRange;
         $stmt = $this->prepare("SELECT ID, Name, Gruppe, Punkte
 FROM " . self::TABLE_USERS . " m

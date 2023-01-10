@@ -127,7 +127,9 @@ const mafia_faktor_punkte = 1.5;
 const group_diplomacy_nap = 1;
 const group_diplomacy_bnd = 2;
 const group_diplomacy_war = 3;
-const group_diplomacy_min_duration = 7; // days
+
+// how long group diplomacy relations have to be active before they can be canceled (days)
+const group_diplomacy_min_duration = 7;
 
 // enum constants for mafia actions
 const mafia_action_espionage = 0;
@@ -136,6 +138,7 @@ const mafia_action_heist = 2;
 const mafia_action_attack = 3;
 
 // bonus factors (for chances) for the various mafia buildings
+// each building level increments the success chances by these percentages (1 = 100%, 0.5 = 50%, 0 = 0%)
 const mafia_bonus_factor_pizzeria = 0.025;
 const mafia_bonus_factor_fence = 0.025;
 
@@ -168,7 +171,7 @@ const min_plantage_level_join_group = 5;
 // minimum plantage level required to create a group
 const min_plantage_level_create_group = 8;
 
-// when surrendering a war, each member will lose this percentage of points
+// when surrendering a war, each member will lose this amount of points (1 = 100%, 0.5 = 50%, 0 = 0%)
 const group_war_loose_points = 0.10;
 
 // when surrendering a war, each member will lose that many levels of plantage
@@ -183,22 +186,22 @@ const game_round_duration = 5184000;
 // pause after a game round (in seconds, default is 7 days)
 const game_pause_duration = 604800;
 
-// search level of research lab reduces research duration by that percentage
+// each level of research lab reduces research duration (1 = 100%, 0.5 = 50%, 0 = 0%)
 const research_lab_bonus_factor = 0.055;
 
-// search level of building yard reduces building duration by that percentage
+// each level of building yard reduces building duration (1 = 100%, 0.5 = 50%, 0 = 0%)
 const building_yard_bonus_factor = 0.061;
 
 // base price for each item
 const item_price_base = 1.35;
 
-// bonus to sell price for each research level
+// bonus to sell price for each research level (1 = 100%, 0.5 = 50%, 0 = 0%)
 const item_price_research_bonus = 0.15;
 
-// bonus to sell price for each shop level
+// bonus to sell price for each shop level (1 = 100%, 0.5 = 50%, 0 = 0%)
 const item_price_shop_bonus = 0.08;
 
-// bonus to sell price for each school level
+// bonus to sell price for each school level (1 = 100%, 0.5 = 50%, 0 = 0%)
 const item_price_school_bonus = 0.12;
 
 // bonus to sell price for later items
@@ -234,24 +237,26 @@ const messages_page_size = 25;
 // maximum size for a profile picture (in bytes)
 const max_profile_image_size = 131072;
 
-// when retracting an offer from the market, return that amount of the item (in percent)
+// when retracting an offer from the market, return that amount of the item (1 = 100%, 0.5 = 50%, 0 = 0%)
 const market_retract_rate = 0.90;
 
-// when successfully selling an item on the market, the market keeps a provision (in percent)
+// when successfully selling an item on the market, the market keeps a provision (1 = 100%, 0.5 = 50%, 0 = 0%)
 const market_provision_rate = 0.02;
 
-// when retracting an active offer from the market., then just this amount of items is returned (in percent)
+// when canceling a building job, then this amount of money is refunded (1 = 100%, 0.5 = 50%, 0 = 0%)
 const action_retract_rate = 0.75;
 
 // minimum and maximum sell price of an item in percent of the current shop price
+// (1 = 100%, 0.5 = 50%, 0 = 0%)
 const market_min_sell_price = 0.75;
 const market_max_sell_price = 2;
 
 // minimum and maximum sell price of an item in percent of the current shop price
+// (1 = 100%, 0.5 = 50%, 0 = 0%)
 const contract_min_sell_price = 0.5;
 const contract_max_sell_price = 2;
 
-// starting values for each new player or resettet account
+// starting values for each new player or reset account
 // key is the database table name, value is an associative array with column => value pairs
 const starting_values = array(
     'mitglieder' => array(
@@ -448,10 +453,10 @@ const research_factor_cost = 1.29;
 const research_factor_duration = 1.19;
 const research_factor_points = 1.18;
 
-// minimum rate for selling prices (in percent)
+// minimum rate for selling prices (1 = 100%, 0.5 = 50%, 0 = 0%)
 const wares_rate_min = 0.7;
 
-// maximum rate for selling prices (in percent)
+// maximum rate for selling prices (1 = 100%, 0.5 = 50%, 0 = 0%)
 const wares_rate_max = 1.0;
 
 // interval of cronjob (in minutes)
@@ -466,16 +471,16 @@ const credit_limit = -15000;
 // when reaching this bank account limit, a user will be reset
 const dispo_limit = -100000;
 
-// minimum interest rate (in percent)
+// minimum interest rate (1 = 100%, 0.5 = 50%, 0 = 0%)
 const interest_debit_rate_min = 0.011;
 
-// maximum interest rate (in percent)
+// maximum interest rate (1 = 100%, 0.5 = 50%, 0 = 0%)
 const interest_debit_rate_max = 0.015;
 
-// minimum credit rate (in percent)
+// minimum credit rate (1 = 100%, 0.5 = 50%, 0 = 0%)
 const interest_credit_rate_min = 0.017;
 
-// maximum credit rate (in percent)
+// maximum credit rate (1 = 100%, 0.5 = 50%, 0 = 0%)
 const interest_credit_rate_max = 0.023;
 
 if (maintenance_active) {

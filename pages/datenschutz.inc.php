@@ -89,6 +89,12 @@
         <em>Mozilla/5.0 (Windows NT 6.1; Win64; x64) Gecko/X Firefox/X</em></li>
 </ul>
 <p>
+    Jeder Spieler muss sich zum spielen registrieren. Während der Registrierung werden neben einem frei wählbaren
+    Pseudonym auch eine gültige EMail-Adresse und ein Passwort gespeichert. Die EMail-Adresse wird benötigt, um den
+    Account initial zu aktivieren und im Falle eines vergessenen Passworts den Zugriff auf den Account
+    wiederherzustellen.<br>
+    Das Passwort wird mittels der modernen <a href="https://de.wikipedia.org/wiki/Hashfunktion" target="_blank">Hashfunktion</a>
+    <a href="https://de.wikipedia.org/wiki/Argon2" target="_blank">Argon2</a> gespeichert.
     Abgesehen von den genannten Informationen werden <em>keine personenbezogenen Daten</em> gespeichert.
 </p>
 <p>

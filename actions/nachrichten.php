@@ -49,7 +49,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
                     redirectTo($base_link, 142, __LINE__);
                 }
             }
-            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('IgmGesendet' => count($data))) !== 1) {
+            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('IgmGesendet' => 1)) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 142, __LINE__);
             }

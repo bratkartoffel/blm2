@@ -1042,6 +1042,8 @@ function getCurrentPage(): string
             case "admin_log_gruppenkasse":
             case "admin_log_login":
             case "admin_log_mafia":
+            case "admin_log_marktplatz":
+            case "admin_log_nachrichten":
             case "admin_log_vertraege":
                 if (!isAdmin()) {
                     redirectTo('/?p=index', 101, __LINE__);
@@ -1455,7 +1457,7 @@ EOF;
 
     $tables = array(Database::TABLE_JOBS, Database::TABLE_LOG_BANK, Database::TABLE_LOG_SHOP,
         Database::TABLE_LOG_GROUP_CASH, Database::TABLE_LOG_LOGIN, Database::TABLE_LOG_MAFIA,
-        Database::TABLE_LOG_CONTRACTS);
+        Database::TABLE_LOG_MARKET, Database::TABLE_LOG_MESSAGES, Database::TABLE_LOG_CONTRACTS);
     $status = Database::getInstance()->truncateTables($tables);
     if ($status !== null) {
         Database::getInstance()->rollBack();

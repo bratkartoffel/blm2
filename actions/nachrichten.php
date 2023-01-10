@@ -53,6 +53,15 @@ switch (getOrDefault($_GET, 'a', 0)) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 142, __LINE__);
             }
+            if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MESSAGES, array(
+                    'senderId' => $_SESSION['blm_user'],
+                    'senderName' => Database::getInstance()->getPlayerNameById($_SESSION['blm_user']),
+                    'subject' => $subject,
+                    'message' => $message
+                )) !== 1) {
+                Database::getInstance()->rollBack();
+                redirectTo($base_link, 141, __LINE__);
+            }
         } else {
             $receiverID = Database::getInstance()->getPlayerIDByName($receiver);
             requireEntryFound($receiverID, $base_link, 118, __LINE__);
@@ -78,6 +87,17 @@ switch (getOrDefault($_GET, 'a', 0)) {
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'], array('IgmGesendet' => 1)) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 142, __LINE__);
+            }
+            if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MESSAGES, array(
+                    'senderId' => $_SESSION['blm_user'],
+                    'senderName' => Database::getInstance()->getPlayerNameById($_SESSION['blm_user']),
+                    'receiverId' => $receiverID,
+                    'receiverName' => Database::getInstance()->getPlayerNameById($receiverID),
+                    'subject' => $subject,
+                    'message' => $message
+                )) !== 1) {
+                Database::getInstance()->rollBack();
+                redirectTo($base_link, 141, __LINE__);
             }
         }
 

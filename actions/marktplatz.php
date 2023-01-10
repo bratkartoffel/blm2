@@ -114,6 +114,18 @@ switch (getOrDefault($_GET, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 143, __LINE__);
         }
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MARKET, array(
+                'sellerId' => $entry['Von'],
+                'sellerName' => Database::getInstance()->getPlayerNameById($entry['Von']),
+                'buyerId' => $_SESSION['blm_user'],
+                'buyerName' => Database::getInstance()->getPlayerNameById($_SESSION['blm_user']),
+                'item' => $entry['Was'],
+                'amount' => $entry['Menge'],
+                'price' => $entry['Preis']
+            )) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+        }
         Database::getInstance()->commit();
 
         redirectTo('/?p=marktplatz_liste', 217);
@@ -147,6 +159,16 @@ switch (getOrDefault($_GET, 'a', 0)) {
             )) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+        }
+        if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MARKET, array(
+                'sellerId' => $entry['Von'],
+                'sellerName' => Database::getInstance()->getPlayerNameById($entry['Von']),
+                'item' => $entry['Was'],
+                'amount' => $entry['Menge'],
+                'price' => $entry['Preis']
+            )) != 1) {
+            Database::getInstance()->rollBack();
+            redirectTo('/?p=vertraege_liste', 141, __LINE__);
         }
         Database::getInstance()->commit();
 

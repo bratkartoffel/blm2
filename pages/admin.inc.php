@@ -29,6 +29,8 @@
             <li><a href="/?p=admin_log_gruppenkasse">Gruppenkasse</a></li>
             <li><a href="/?p=admin_log_login">Login</a></li>
             <li><a href="/?p=admin_log_mafia">Mafia</a></li>
+            <li><a href="/?p=admin_log_marktplatz">Marktplatz</a></li>
+            <li><a href="/?p=admin_log_nachrichten">Nachrichten</a></li>
             <li><a href="/?p=admin_log_vertraege">Verträge</a></li>
         </ul>
     </li>

@@ -27,6 +27,8 @@ class Database
     public const TABLE_LOG_GROUP_CASH = 'log_gruppenkasse';
     public const TABLE_LOG_LOGIN = 'log_login';
     public const TABLE_LOG_MAFIA = 'log_mafia';
+    public const TABLE_LOG_MARKET = 'log_marktplatz';
+    public const TABLE_LOG_MESSAGES = 'log_nachrichten';
     public const TABLE_LOG_CONTRACTS = 'log_vertraege';
     public const TABLE_UPDATE_INFO = 'update_info';
 
@@ -671,6 +673,58 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         }
         $stmt->bindParam("wer", $werFilter);
         $stmt->bindParam("wen", $wenFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getAdminMarketLogCount(string $verkaeuferFilter, string $kaeuferFilter): ?int
+    {
+        if ($kaeuferFilter === '%') {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MARKET . "
+            WHERE sellerName LIKE :seller AND (buyerName IS NULL OR buyerName LIKE :buyer)");
+        } else {
+            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MARKET . "
+            WHERE sellerName LIKE :seller AND buyerName LIKE :buyer");
+        }
+        $stmt->bindParam("seller", $verkaeuferFilter);
+        $stmt->bindParam("buyer", $kaeuferFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminMarketLogEntries(string $verkaeuferFilter, string $kaeuferFilter, int $page, int $entriesPerPage): ?array
+    {
+        $offset = $page * $entriesPerPage;
+        if ($kaeuferFilter === '%') {
+            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MARKET . "
+                WHERE sellerName LIKE :seller AND (buyerName IS NULL OR buyerName LIKE :buyer) ORDER BY created DESC LIMIT :offset, :count");
+        } else {
+            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MARKET . "
+                WHERE sellerName LIKE :seller AND buyerName LIKE :buyer ORDER BY created DESC LIMIT :offset, :count");
+        }
+        $stmt->bindParam("seller", $verkaeuferFilter);
+        $stmt->bindParam("buyer", $kaeuferFilter);
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getAdminMessageLogCount(string $senderFilter, string $receiverFilter): ?int
+    {
+        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MESSAGES . "
+            WHERE senderName LIKE :sender AND (receiverName IS NULL OR receiverName LIKE :receiver)");
+        $stmt->bindParam("sender", $senderFilter);
+        $stmt->bindParam("receiver", $receiverFilter);
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminMessageLogEntries(string $senderFilter, string $receiverFilter, int $page, int $entriesPerPage): ?array
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MESSAGES . "
+            WHERE senderName LIKE :sender AND (receiverName IS NULL OR receiverName LIKE :receiver) ORDER BY created DESC LIMIT :offset, :count");
+        $stmt->bindParam("sender", $senderFilter);
+        $stmt->bindParam("receiver", $receiverFilter);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);

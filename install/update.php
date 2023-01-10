@@ -102,6 +102,31 @@ foreach ($executedScripts as $script => $checksum) {
 $database->commit();
 echo "> OK\n\n";
 
+echo "Verifying existing accounts:\n";
+if (Database::getInstance()->getPlayerCount() === 0) {
+    echo "> No accounts found, creating new admin account\n";
+    Database::getInstance()->begin();
+    $id = null;
+    $password = createRandomPassword();
+    foreach (starting_values as $table => $values) {
+        if ($id !== null) $values['user_id'] = $id;
+        if ($table == Database::TABLE_USERS) {
+            $values['Name'] = 'admin';
+            $values['EMail'] = 'admin@localhost';
+            $values['Passwort'] = hashPassword($password);
+            $values['Admin'] = 1;
+        }
+        if (Database::getInstance()->createTableEntry($table, $values) === null) {
+            Database::getInstance()->rollBack();
+            die('> FAIL: Could not create new admin user');
+        }
+        if ($table == Database::TABLE_USERS) $id = Database::getInstance()->lastInsertId();
+    }
+    Database::getInstance()->commit();
+    echo "> Created new user 'admin' with password '" . $password . "'\n";
+}
+echo "> OK\n\n";
+
 $dauer = 1000 * (microtime(true) - $start);
 http_response_code(200);
 echo "Update finished successfully!\n";

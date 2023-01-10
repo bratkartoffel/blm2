@@ -14,84 +14,79 @@ ob_start();
 http_response_code(500);
 
 if (getOrDefault($_GET, 'secret') !== upgrade_secret) {
+    http_response_code(401);
     die('not allowed');
 }
 
 echo "Checking installation for version " . game_version . "\n";
-echo "Verifying database connection\n";
+echo "=========================================\n";
+echo "Verifying database connection:\n";
 $database = Database::getInstance();
+echo "> OK\n\n";
 
-echo "Checking base installation\n";
+echo "Checking base installation:\n";
 $executedScripts = array();
 if (!$database->tableExists('auftrag')) {
-    echo "Base installation not found, executing setup script\n";
+    echo "> Base installation not found, executing setup script\n";
     // initial setup
     $script = 'sql/00-1.10.0-setup.sql';
     $result = $database->executeFile($script);
     if ($result !== null) {
-        die("Could not execute setup script, failed step: " . $result);
+        die("> FAIL: Could not execute setup script, failed step: " . $result);
     }
     $executedScripts[$script] = sha1_file($script);
 }
+echo "> OK\n\n";
 
-echo "Checking for update information\n";
+echo "Checking for update information:\n";
 if (!$database->tableExists('update_info')) {
-    echo "Update information not found, execute first update script\n";
+    echo "> Update information not found, execute first update script\n";
     // coming from v1.10.0
     $script = 'sql/01-1.10.1-update_info.sql';
     $result = $database->executeFile($script);
     if ($result !== null) {
-        die("Could not execute setup script, failed step: " . $result);
+        die("> FAIL: Could not execute setup script, failed step: " . $result);
     }
     $executedScripts[$script] = sha1_file($script);
 }
+echo "> OK\n\n";
 
-echo "Enumerating update scripts\n";
+echo "Enumerating update scripts:\n";
 $scripts = glob('sql/*.sql');
 sort($scripts);
+if (file_exists('/tmp/99_testdata.sql')) {
+    $scripts[] = '/tmp/99_testdata.sql';
+}
+echo "> Found " . count($scripts) . " scripts\n";
 foreach ($scripts as $script) {
     if (strpos($script, '/0') !== false) {
-        echo "Skipping $script\n";
+        echo "> Skipping $script\n";
         continue;
     }
 
-    echo "Verify update script: $script\n";
+    echo "> Verify update script: $script\n";
     $dbChecksum = $database->getInstallScriptChecksum($script);
     if ($dbChecksum === null) {
-        echo "> Script unknown, begin execution\n";
+        echo ">> Script unknown, begin execution\n";
         $result = $database->executeFile($script);
         if ($result !== null) {
-            die("Could not execute setup script, failed step: " . $result);
+            die(">> FAIL: Could not execute setup script, failed step: " . $result);
         }
         $executedScripts[$script] = sha1_file($script);
     } else {
-        echo "> Script already executed, verifying checksum\n";
+        echo ">> Script already executed, verifying checksum\n";
         $fsChecksum = sha1_file($script);
         if ($dbChecksum !== $fsChecksum) {
-            die(sprintf("> Calculated checksum for '%s' is different between database (%s) and filesystem (%s). Please correct manually!",
+            die(sprintf(">> FAIL: Calculated checksum for '%s' is different between database (%s) and filesystem (%s). Please correct manually!",
                 $script, $dbChecksum, $fsChecksum));
         } else {
             echo ">> OK\n";
         }
     }
 }
+echo "> OK\n\n";
 
-$script = '/tmp/99_testdata.sql';
-if (file_exists($script)) {
-    echo "Verify update script: $script\n";
-    $dbChecksum = $database->getInstallScriptChecksum($script);
-    if ($dbChecksum === null) {
-        echo "Execute update script: $script\n";
-        $result = $database->executeFile($script);
-        if ($result !== null) {
-            die("Could not execute setup script, failed step: " . $result);
-        }
-        $executedScripts[$script] = sha1_file($script);
-    } else {
-        echo "> Script already executed\n";
-    }
-}
-
+echo "Saving update information:\n";
 $database->begin();
 foreach ($executedScripts as $script => $checksum) {
     if ($database->createTableEntry(Database::TABLE_UPDATE_INFO, array(
@@ -99,10 +94,11 @@ foreach ($executedScripts as $script => $checksum) {
             'Checksum' => $checksum
         )) !== 1) {
         $database->rollBack();
-        die('Could not create update_info entry for ' . $script);
+        die('> FAIL: Could not create update_info entry for ' . $script);
     }
 }
 $database->commit();
+echo "> OK\n\n";
 
 http_response_code(200);
 echo "Update finished successfully!";

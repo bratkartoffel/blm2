@@ -72,7 +72,9 @@ const is_testing = false;
 const password_min_len = 6;
 
 // password security settings
-const password_hash_algorithm = PASSWORD_ARGON2I;
+// only Argon2 variants should be used (PASSWORD_ARGON2I, PASSWORD_ARGON2D or PASSWORD_ARGON2ID)
+const password_hash_algorithm = PASSWORD_ARGON2ID;
+// options for the password hashing algorithm
 const password_hash_options = array('memory_cost' => 16384, 'time_cost' => 8, 'threads' => 2);
 
 // minimum length of usernames

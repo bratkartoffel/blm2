@@ -180,8 +180,8 @@ const group_war_loose_plantage = 1;
 // minimum amount of money to fight a war for
 const group_war_min_amount = 100000;
 
-// length of a game round (in seconds; default is about 2 months)
-const game_round_duration = 5184000;
+// length of a game round (in seconds; default is 3 months)
+const game_round_duration = 7776000;
 
 // pause after a game round (in seconds, default is 7 days)
 const game_pause_duration = 604800;

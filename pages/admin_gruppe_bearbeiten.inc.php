@@ -111,7 +111,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
                     }
                     ?>:</label>
                 <input type="number" name="amount" id="amount_<?= escapeForOutput($entry['UserID']); ?>" size="9"
-                       value="<?= formatCurrency($entry['amount'], false); ?>"/> €
+                       value="<?= formatCurrency($entry['amount'], false, false); ?>"/> €
                 <input type="submit" value="Speichern" onclick="return submit(this);"
                        id="cash_save_<?= escapeForOutput($entry['UserID']); ?>"/>
             </div>

@@ -43,7 +43,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
 
 <table class="Liste">
     <tr>
-        <th>Auftrag</th>
+        <th>Auftrag (<?= count($auftraege); ?>)</th>
         <th>Restzeit</th>
     </tr>
     <?php

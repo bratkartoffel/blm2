@@ -51,6 +51,10 @@ const maintenance_active = false;
 const maintenance_message = 'Das Spiel befindet sich gerade im Wartungsmodus (Einspielen von Updates und Bugfixes).
 Bitte versuchen Sie es in ein paar Minuten erneut.';
 
+// is the registration closed?
+// if true, then registration of new accounts is disabled
+const registration_closed = true;
+
 // set the timezone for this game
 date_default_timezone_set('Europe/Berlin');
 
@@ -74,6 +78,7 @@ const password_min_len = 6;
 // password security settings
 // only Argon2 variants should be used (PASSWORD_ARGON2I, PASSWORD_ARGON2D or PASSWORD_ARGON2ID)
 const password_hash_algorithm = PASSWORD_ARGON2ID;
+
 // options for the password hashing algorithm
 const password_hash_options = array('memory_cost' => 16384, 'time_cost' => 8, 'threads' => 2);
 
@@ -87,10 +92,6 @@ const username_max_len = 20;
 // maximum length of email addresses
 // should match "mitglieder.EMail" column
 const email_max_len = 96;
-
-// is the registration closed?
-// if true, then registration of new accounts is disabled
-const registration_closed = true;
 
 // redirect all mails sent to the users to the administrator?
 // can be used to debug / test various stuff without flooding the users with spam mails

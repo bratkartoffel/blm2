@@ -215,6 +215,9 @@ class Database
 
     public function getPlayerNameById(int $id): ?string
     {
+        if ($id === 0) {
+            return 'System';
+        }
         $stmt = $this->prepare("SELECT Name FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractField($stmt, 'Name');

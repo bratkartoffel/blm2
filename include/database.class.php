@@ -259,7 +259,7 @@ class Database
     public function getPlayerRankById(int $id): ?int
     {
         $stmt = $this->prepare("with stats as (
-                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
+                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Punkte FROM mitglieder WHERE ID > 0 AND EmailAct IS NULL ORDER BY Punkte DESC, ID
             ) select * from stats where ID = :id;");
         $stmt->bindParam("id", $id);
         return $this->executeAndExtractField($stmt, 'rnum');
@@ -268,7 +268,7 @@ class Database
     public function getPlayerRankByName(string $name): ?int
     {
         $stmt = $this->prepare("with stats as (
-                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Name, Punkte FROM mitglieder WHERE ID > 0 ORDER BY Punkte DESC, ID
+                SELECT ROW_NUMBER() OVER (ORDER BY Punkte DESC) AS rnum, ID, Name, Punkte FROM mitglieder WHERE ID > 0 AND EmailAct IS NULL ORDER BY Punkte DESC, ID
             ) select * from stats where Name = :name;");
         $stmt->bindParam("name", $name);
         return $this->executeAndExtractField($stmt, 'rnum');
@@ -347,7 +347,7 @@ class Database
         $stmt = $this->prepare("SELECT m.Name AS BenutzerName, m.ID AS BenutzerID, m.LastAction, 
                 m.Admin AS IstAdmin, m.Betatester AS IstBetatester, m.Punkte, g.Kuerzel AS GruppeName, m.Gruppe AS GruppeID
             FROM " . self::TABLE_USERS . " m LEFT OUTER JOIN " . self::TABLE_GROUP . " g ON m.Gruppe = g.ID
-            WHERE m.ID > 0 ORDER BY m.Punkte DESC, m.ID LIMIT :offset, :count");
+            WHERE m.ID > 0 AND m.EmailAct IS NULL ORDER BY m.Punkte DESC, m.ID LIMIT :offset, :count");
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);

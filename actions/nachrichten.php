@@ -94,6 +94,10 @@ switch (getOrDefault($_GET, 'a', 0)) {
         $data = Database::getInstance()->getMessageByIdAndAnOrVonEquals($id, $_SESSION['blm_user']);
         requireEntryFound($data, '/?p=nachrichten_liste');
 
+        if ($data['Von'] == $_SESSION['blm_user'] && $data['Gelesen'] == 1) {
+            redirectTo('/?p=nachrichten_liste&o_in=' . $offset_in . '&o_out=' . $offset_out, 112);
+        }
+
         Database::getInstance()->begin();
         if (Database::getInstance()->deleteTableEntry(Database::TABLE_MESSAGES, $id) !== 1) {
             Database::getInstance()->rollBack();

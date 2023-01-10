@@ -198,13 +198,13 @@ const building_yard_bonus_factor = 0.061;
 // base price for each item
 const item_price_base = 1.35;
 
-// bonus to sell price for each research level (1 = 100%, 0.5 = 50%, 0 = 0%)
+// bonus to sell price for each research level
 const item_price_research_bonus = 0.15;
 
-// bonus to sell price for each shop level (1 = 100%, 0.5 = 50%, 0 = 0%)
+// bonus to sell price for each shop level
 const item_price_shop_bonus = 0.08;
 
-// bonus to sell price for each school level (1 = 100%, 0.5 = 50%, 0 = 0%)
+// bonus to sell price for each school level
 const item_price_school_bonus = 0.12;
 
 // bonus to sell price for later items

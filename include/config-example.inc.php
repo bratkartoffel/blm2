@@ -329,7 +329,6 @@ const starting_values = array(
         'EinnahmenMafia' => 0,
         'GebaeudePlus' => 0,
         'ForschungPlus' => 0,
-        'ProduktionPlus' => 0,
         'MafiaPlus' => 0,
         'MafiaMinus' => 0,
         'KriegMinus' => 0,

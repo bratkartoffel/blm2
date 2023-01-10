@@ -32,10 +32,18 @@ class Database
 
     private static ?Database $INSTANCE = null;
 
+    public static function getInstanceForInstallCheck(): Database
+    {
+        if (self::$INSTANCE === null) {
+            self::$INSTANCE = new Database(false);
+        }
+        return self::$INSTANCE;
+    }
+
     public static function getInstance(): Database
     {
         if (self::$INSTANCE === null) {
-            self::$INSTANCE = new Database();
+            self::$INSTANCE = new Database(true);
         }
         return self::$INSTANCE;
     }
@@ -43,7 +51,7 @@ class Database
     private PDO $link;
     private int $queries = 0;
 
-    function __construct()
+    function __construct(bool $dieOnInitError)
     {
         try {
             $this->link = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
@@ -52,7 +60,11 @@ class Database
             $this->link->query("SET time_zone = '" . date_default_timezone_get() . "'");
             $this->queries++;
         } catch (PDOException $e) {
-            die('Database connection failed: ' . $e->getMessage());
+            if ($dieOnInitError) {
+                die('Database connection failed: ' . $e->getMessage());
+            } else {
+                throw $e;
+            }
         }
     }
 

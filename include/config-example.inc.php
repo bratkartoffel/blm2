@@ -234,8 +234,8 @@ const market_page_size = 25;
 // number of entries to show in the message table
 const messages_page_size = 25;
 
-// maximum size for a profile picture (in bytes)
-const max_profile_image_size = 131072;
+// maximum size for a profile picture (in bytes, default 256k)
+const max_profile_image_size = 262144;
 
 // when retracting an offer from the market, return that amount of the item (1 = 100%, 0.5 = 50%, 0 = 0%)
 const market_retract_rate = 0.90;

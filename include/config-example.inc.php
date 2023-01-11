@@ -67,10 +67,6 @@ date_default_timezone_set('Europe/Berlin');
 // version string as displayed in the footer
 require_once 'game_version.inc.php';
 
-// should only be set when running tests
-// disables the captcha validation
-const is_testing = false;
-
 // minimum length of passwords
 // any passwords shorter than this length are not allowed
 const password_min_len = 6;

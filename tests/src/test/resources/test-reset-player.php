@@ -10,10 +10,6 @@ require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
 ob_start();
-if (!is_testing) {
-    redirectTo('/?p=index', 112, __LINE__);
-}
-
 $id = getOrDefault($_GET, 'id', 0);
 Database::getInstance()->begin();
 $status = resetAccount($id);

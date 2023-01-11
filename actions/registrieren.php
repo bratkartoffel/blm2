@@ -28,7 +28,7 @@ $captcha_id = getOrDefault($_POST, 'captcha_id', 0);
 $name = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $name));
 
 $backLink = sprintf('/?p=registrieren&name=%s&email=%s', urlencode($name), urlencode($email));
-if (!is_testing && !Captcha::verifyCode($captcha_code, $captcha_id)) {
+if (constant('is_testing') === null && !Captcha::verifyCode($captcha_code, $captcha_id)) {
     redirectTo($backLink, 130, __LINE__);
 }
 

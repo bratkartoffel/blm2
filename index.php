@@ -62,7 +62,7 @@ if (isLoggedIn()) {
 <head>
     <?php
     $mininimizeFlag = '';
-    if (!is_testing) {
+    if (constant('is_testing') === null) {
         $mininimizeFlag = '.min';
     }
     ?>

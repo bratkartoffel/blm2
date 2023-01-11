@@ -966,7 +966,7 @@ function restrictSitter(string $requiredRight, string $backPage = "index"): void
 
 function createRandomCode(): string
 {
-    if (is_testing) {
+    if (constant('is_testing') !== null) {
         // "changeit"
         return '07313f0e320f22cbfa35cfc220508eb3ff457c7e';
     }
@@ -975,7 +975,7 @@ function createRandomCode(): string
 
 function createRandomPassword(): string
 {
-    if (is_testing) {
+    if (constant('is_testing') !== null) {
         return 'changeit';
     }
     return str_replace('+', '_', base64_encode(openssl_random_pseudo_bytes(12)));
@@ -983,7 +983,7 @@ function createRandomPassword(): string
 
 function sendMail(string $recipient, string $subject, string $message): bool
 {
-    if (is_testing) {
+    if (constant('is_testing') !== null) {
         return true;
     }
 
@@ -1261,7 +1261,7 @@ function calculateSellPrice(int $item_id, int $resarch_level, int $shop_level, i
 
 function calculateSellRates(): array
 {
-    if (is_testing) {
+    if (constant('is_testing') !== null) {
         srand(1337);
     } else {
         srand(intval(date("ymdH", time())) + crc32(random_secret));
@@ -1277,7 +1277,7 @@ function calculateSellRates(): array
 
 function calculateInterestRates(): array
 {
-    if (is_testing) {
+    if (constant('is_testing') !== null) {
         srand(1337);
     } else {
         srand(intval(date("ymd", time())) + crc32(random_secret));

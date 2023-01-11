@@ -57,7 +57,7 @@ switch (getOrDefault($_REQUEST, 'a')) {
         $captcha_code = getOrDefault($_POST, 'captcha_code');
         $captcha_id = getOrDefault($_POST, 'captcha_id', 0);
         $back_link = sprintf('/?p=passwort_vergessen&email=%s', urlencode($email));
-        if (!is_testing && !Captcha::verifyCode($captcha_code, $captcha_id)) {
+        if (constant('is_testing') === null && !Captcha::verifyCode($captcha_code, $captcha_id)) {
             redirectTo($back_link, 130, __LINE__);
         }
 

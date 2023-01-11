@@ -83,7 +83,7 @@ if ($rights['group_cash'] == 1) {
                        value="<?= formatCurrency($amount, false, false); ?>"/>
             </div>
             <div>
-                <input type="submit" value="Überweisen" id="gk_transfer" onclick="return submit(this);"/>
+                <input type="submit" value="Überweisen" id="gk_transfer"/>
             </div>
         </form>
     </div>

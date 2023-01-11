@@ -47,7 +47,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
                    value="<?= formatCurrency($price, false, false); ?>"/>
         </div>
         <div>
-            <input type="submit" value="Inserat erstellen" onclick="return submit(this);"/>
+            <input type="submit" value="Inserat erstellen"/>
         </div>
     </form>
 </div>

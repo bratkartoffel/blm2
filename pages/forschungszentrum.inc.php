@@ -77,7 +77,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                 if (!array_key_exists($i, $auftraege)) {
                     ?>
                     <input type="submit" name="forschen" id="research_<?= $i; ?>" value="Forschen"
-                           onclick="return submit(this);" <?= ($researchData['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
+                           <?= ($researchData['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
                     <?php
                 } else {
                     $auftrag = $auftraege[$i];

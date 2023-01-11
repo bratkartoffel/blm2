@@ -72,7 +72,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                     } else {
                         ?>
                         <input type="submit" value="Gebäude ausbauen" id="build_<?= $buildingId; ?>"
-                               onclick="return submit(this);"<?= ($playerData['Geld'] >= $nextKosten ? '' : ' disabled="disabled"'); ?>/>
+                              <?= ($playerData['Geld'] >= $nextKosten ? '' : ' disabled="disabled"'); ?>/>
                         <?php
                     }
                     ?>

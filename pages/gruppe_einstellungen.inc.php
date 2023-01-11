@@ -37,7 +37,7 @@ if ($rights['edit_image']) {
                 <input type="file" name="bild" accept="image/*"/>
             </div>
             <div>
-                <input type="submit" value="Speichern" onclick="return submit(this);"/>
+                <input type="submit" value="Speichern"/>
             </div>
         </form>
     </div>
@@ -61,7 +61,7 @@ if ($rights['edit_description']) {
                 Noch <span>X</span> Zeichen übrig
             </div>
             <div>
-                <input type="submit" value="Speichern" onclick="return submit(this);" id="save_beschreibung"/>
+                <input type="submit" value="Speichern" id="save_beschreibung"/>
             </div>
         </form>
     </div>
@@ -87,7 +87,7 @@ if ($rights['edit_password']) {
                        minlength="<?= password_min_len; ?>"/>
             </div>
             <div>
-                <input type="submit" value="Speichern" onclick="return submit(this);" id="save_password"/>
+                <input type="submit" value="Speichern" id="save_password"/>
             </div>
         </form>
     </div>
@@ -112,7 +112,7 @@ if ($rights['group_delete'] || Database::getInstance()->getGroupMemberCountById(
                 <input id="confirm" type="number" name="confirm"/>
             </div>
             <div>
-                <input type="submit" value="Ausführen" onclick="return submit(this);"/>
+                <input type="submit" value="Ausführen"/>
             </div>
         </form>
     </div>

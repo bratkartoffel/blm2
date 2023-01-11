@@ -86,7 +86,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
             <input type="file" name="bild" accept="image/*"/>
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);" id="image_save"/>
+            <input type="submit" value="Speichern" id="image_save"/>
         </div>
     </form>
 </div>
@@ -112,7 +112,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
                     ?>:</label>
                 <input type="number" name="amount" id="amount_<?= escapeForOutput($entry['UserID']); ?>" size="9"
                        value="<?= formatCurrency($entry['amount'], false, false); ?>"/> €
-                <input type="submit" value="Speichern" onclick="return submit(this);"
+                <input type="submit" value="Speichern"
                        id="cash_save_<?= escapeForOutput($entry['UserID']); ?>"/>
             </div>
         </form>
@@ -177,7 +177,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
                     <td><input type="checkbox" name="group_delete" id="group_delete_<?= $id; ?>"
                                value="1" <?= ($row['group_delete'] == 1 ? 'checked' : ''); ?>/></td>
                     <td>
-                        <input type="submit" value="Speichern" onclick="return submit(this);"
+                        <input type="submit" value="Speichern"
                                id="save_rights_<?= $id; ?>"/>
                     </td>
                 </tr>

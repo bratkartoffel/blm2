@@ -113,7 +113,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             </select>
         </div>
         <div>
-            <input type="submit" value="Angriff!" id="attack" onclick="return submit(this);"/>
+            <input type="submit" value="Angriff!" id="attack"/>
         </div>
     </form>
 </div>

@@ -55,7 +55,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                     <?php
                     if ($player['Gebaeude1'] >= min_plantage_level_create_group) {
                         ?>
-                        <input type="submit" value="Gründen" id="create_group" onclick="return submit(this);"/>
+                        <input type="submit" value="Gründen" id="create_group"/>
                         <?php
                     } else {
                         ?>
@@ -83,7 +83,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                     <?php
                     if ($player['Gebaeude1'] >= min_plantage_level_join_group) {
                         ?>
-                        <input type="submit" value="Beitreten" id="join_group" onclick="return submit(this);"/>
+                        <input type="submit" value="Beitreten" id="join_group"/>
                         <?php
                     } else {
                         ?>
@@ -204,7 +204,7 @@ if ($id != 0) {
                     <textarea cols="80" rows="15"
                               name="message"><?= escapeForOutput(getOrDefault($_GET, 'message')); ?></textarea>
                     <div>
-                        <input type="submit" value="Absenden" onclick="return submit(this);"/>
+                        <input type="submit" value="Absenden"/>
                     </div>
                 </form>
             </div>

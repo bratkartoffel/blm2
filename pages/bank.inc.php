@@ -62,7 +62,7 @@ $interestRates = calculateInterestRates();
                    value="<?= formatCurrency($betrag, false, false); ?>"/> €
         </div>
         <div>
-            <input type="submit" value="Bestätigen" id="do_transaction" onclick="return submit(this);"/>
+            <input type="submit" value="Bestätigen" id="do_transaction"/>
         </div>
     </form>
 </div>

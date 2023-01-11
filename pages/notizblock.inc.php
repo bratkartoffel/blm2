@@ -30,7 +30,7 @@ if (isset($_GET['notizblock'])) $data = $_GET['notizblock'];
                   onkeyup="ZeichenUebrig(this, document.getElementById('charsLeft'));"><?= escapeForOutput($data, false); ?></textarea>
         <div>
             Noch <span id="charsLeft">4096</span> Zeichen übrig.
-            <input type="submit" value="Speichern" onclick="return submit(this);" id="save_notes"/>
+            <input type="submit" value="Speichern" id="save_notes"/>
         </div>
     </form>
 </div>

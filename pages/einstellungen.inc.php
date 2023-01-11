@@ -41,7 +41,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
             möglich, sobald die neue Adresse bestätigt wurde!
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
@@ -65,7 +65,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
                    minlength="<?= password_min_len; ?>"/>
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
@@ -82,7 +82,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
             Noch <span>X</span> Zeichen übrig
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
@@ -100,7 +100,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
             <input type="file" name="bild" accept="image/*"/>
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
@@ -164,7 +164,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
                    id="bank"<?= ($data['Bank'] == 1 ? ' checked' : ''); ?>/>
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
@@ -198,7 +198,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
             <input id="pwd_rst_alt" type="password" name="pwd_alt" size="20" required/>
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
@@ -212,7 +212,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
             <input id="pwd_del_alt" type="password" name="pwd_alt" size="20" required/>
         </div>
         <div>
-            <input type="submit" value="Speichern" onclick="return submit(this);"/>
+            <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>

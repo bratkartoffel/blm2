@@ -53,7 +53,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                     <input type="hidden" name="was" value="<?= $i; ?>"/>
                     <input type="text" maxlength="6" name="menge" id="amount_<?= $i; ?>" size="4"
                            value="<?= formatWeight($data['Lager' . $i], false, 0, false); ?>"/>
-                    <input type="submit" value="Verkaufen" id="sell_<?= $i; ?>" onclick="return submit(this);"/>
+                    <input type="submit" value="Verkaufen" id="sell_<?= $i; ?>"/>
                 </form>
             </td>
         </tr>

@@ -72,7 +72,7 @@ requireEntryFound($rights, '/?p=gruppe');
                 <td>
                     <?php
                     if ($rights['member_rights'] && $row['user_id'] != $_SESSION['blm_user']) {
-                        echo '<input type="submit" value="Speichern" onclick="return submit(this);"/>';
+                        echo '<input type="submit" value="Speichern"/>';
                     } else {
                         echo '<input type="submit" value="Speichern" disabled />';
                     }

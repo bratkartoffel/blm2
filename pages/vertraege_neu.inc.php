@@ -54,7 +54,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
             <input type="text" name="empfaenger" id="empfaenger" value="<?= escapeForOutput($empfaenger); ?>"/>
         </div>
         <div>
-            <input type="submit" value="Absenden" onclick="return submit(this);"/>
+            <input type="submit" value="Absenden"/>
         </div>
     </form>
 </div>

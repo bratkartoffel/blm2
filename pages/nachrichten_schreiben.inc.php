@@ -53,7 +53,7 @@ $message = getOrDefault($_GET, 'message', $message);
         </div>
         <div>
             Noch <span id="charsLeft">4096</span> Zeichen übrig.
-            <input type="submit" value="Absenden" onclick="return submit(this);" id="send_message"/>
+            <input type="submit" value="Absenden" id="send_message"/>
         </div>
     </form>
 </div>

@@ -175,7 +175,7 @@ if ($rights['group_diplomacy'] == 1) {
                 <input type="text" name="group" id="group" value="<?= escapeForOutput($gruppe); ?>"/>
             </div>
             <div>
-                <input type="submit" value="Abschicken" onclick="return submit(this);"/>
+                <input type="submit" value="Abschicken"/>
             </div>
         </form>
     </div>

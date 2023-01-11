@@ -110,7 +110,7 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
-        select(By.id("art"), "Auszahlen");
+        driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "5000");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_207"));
@@ -129,7 +129,7 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
-        select(By.id("art"), "Auszahlen");
+        driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "65000");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_207"));
@@ -148,7 +148,7 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
-        select(By.id("art"), "Auszahlen");
+        driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "65000.01");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_109"));
@@ -168,7 +168,7 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
-        select(By.id("art"), "Auszahlen");
+        driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "-100");
         driver.findElement(By.id("do_transaction")).click();
 
@@ -187,7 +187,7 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         // try to deposit -100
-        select(By.id("art"), "Auszahlen");
+        driver.findElement(By.id("einzahlen")).click();
         setValue(By.id("betrag"), "0");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_110"));

@@ -41,11 +41,20 @@ $interestRates = calculateInterestRates();
         <header>Transaktion durchführen</header>
         <div>
             <label for="art">Art:</label>
-            <select name="art" id="art" onchange="AuswahlBank(this.value); return true;">
-                <option value="1"<?= ($art == 1 ? ' selected="selected"' : ''); ?> id="ac_deposit">Einzahlen</option>
-                <option value="2"<?= ($art == 2 ? ' selected="selected"' : ''); ?> id="ac_withdraw">Auszahlen</option>
-                <?= ($data['Gruppe'] != null ? '<option value="3"' . ($art == 3 ? ' selected="selected"' : '') . '>In die Gruppenkasse</option>' : ''); ?>
-            </select>
+            <div class="inline-block">
+                <input type="radio" id="einzahlen" name="art" value="1" onchange="AuswahlBank(this.value);" <?= ($art == 1 ? 'checked' : ''); ?>>
+                <label for="einzahlen">Einzahlen</label><br>
+                <input type="radio" id="auszahlen" name="art" value="2" onchange="AuswahlBank(this.value);" <?= ($art == 2 ? 'checked' : ''); ?>>
+                <label for="auszahlen">Auszahlen</label><br>
+                <?php
+                if ($data['Gruppe'] != null) {
+                    ?>
+                    <input type="radio" id="gruppen_kasse" name="art" value="3" onchange="AuswahlBank(this.value);" <?= ($art == 3 ? 'checked' : ''); ?>>
+                    <label for="gruppen_kasse">In die Gruppenkasse</label>
+                    <?php
+                }
+                ?>
+            </div>
         </div>
         <div>
             <label for="betrag">Betrag:</label>

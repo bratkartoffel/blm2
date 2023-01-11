@@ -637,6 +637,20 @@ div.Einstellungen {
 
 /*endregion*/
 
+/*region Bank*/
+div.inline-block {
+    display: inline-block;
+    border-bottom: none !important;
+    text-align: initial !important;
+}
+
+div.inline-block label {
+    text-align: initial;
+    width: initial;
+}
+
+/*endregion*/
+
 /*region Chefbox*/
 div#ChefboxHead {
     text-align: center;

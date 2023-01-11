@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.concurrent.TimeUnit;
+
 public class GroupTests extends AbstractTest {
     private short counter = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
 
@@ -197,5 +199,43 @@ public class GroupTests extends AbstractTest {
         setValue(By.id("join_pwd"), "foobar");
         driver.findElement(By.id("join_group")).submit();
         assertElementPresent(By.id("meldung_127"));
+    }
+
+    @Test
+    void testGroupCashDepositWithdraw() throws InterruptedException {
+        resetPlayer(14);
+        login("test4");
+        WebDriver driver = getDriver();
+        counter++;
+
+        driver.findElement(By.id("link_gruppe")).click();
+        setValue(By.id("create_name"), "TG" + counter);
+        setValue(By.id("create_tag"), "T" + counter);
+        setValue(By.id("create_pwd"), "changeit");
+        driver.findElement(By.id("create_group")).submit();
+        assertElementPresent(By.id("meldung_223"));
+
+        // deposit
+        driver.findElement(By.id("link_bank")).click();
+        driver.findElement(By.id("gruppen_kasse")).click();
+        setValue(By.id("betrag"), "10,23");
+        driver.findElement(By.id("do_transaction")).click();
+        assertElementPresent(By.id("meldung_235"));
+
+        // withdraw
+        driver.findElement(By.id("link_gruppe")).click();
+        driver.findElement(By.id("gruppe_kasse")).click();
+        assertText(By.id("gk_amount"), "In der Kasse befinden sich: 10,23 €");
+        assertText(By.id("gk_m_14"), "10,23 €");
+        select(By.id("receiver"), "test4");
+        setValue(By.id("amount"), "4,23");
+        driver.findElement(By.id("gk_transfer")).submit();
+        assertElementPresent(By.id("meldung_236"));
+
+        assertText(By.id("gk_amount"), "In der Kasse befinden sich: 6,00 €");
+        assertText(By.id("stat_money"), "4.994,00 €");
+
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_s_8"), "6,00 €");
     }
 }

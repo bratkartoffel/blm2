@@ -6,11 +6,18 @@
  */
 package eu.fraho.blm2.st;
 
+import com.evanlennick.retry4j.CallExecutor;
+import com.evanlennick.retry4j.CallExecutorBuilder;
+import com.evanlennick.retry4j.config.RetryConfig;
+import com.evanlennick.retry4j.config.RetryConfigBuilder;
+import com.evanlennick.retry4j.exception.RetriesExhaustedException;
+import com.evanlennick.retry4j.exception.UnexpectedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,6 +32,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -68,8 +76,23 @@ public abstract class AbstractTest {
     }
 
     protected void login(String username) {
-        login(username, "changeit");
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.id("link_logout")));
+        RetryConfig config = new RetryConfigBuilder()
+                .retryOnSpecificExceptions(TimeoutException.class)
+                .withMaxNumberOfTries(3)
+                .withDelayBetweenTries(3, ChronoUnit.SECONDS)
+                .withFixedBackoff()
+                .build();
+        try {
+            @SuppressWarnings({"unchecked", "rawtypes"})
+            CallExecutor<Boolean> executor = new CallExecutorBuilder().config(config).build();
+            executor.execute(() -> {
+                login(username, "changeit");
+                new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.id("link_logout")));
+                return true;
+            });
+        } catch (RetriesExhaustedException | UnexpectedException e) {
+            Assertions.fail(e);
+        }
     }
 
     protected void login(String username, String password) {

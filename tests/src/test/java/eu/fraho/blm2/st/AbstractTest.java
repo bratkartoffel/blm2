@@ -20,8 +20,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +29,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -49,8 +46,8 @@ public abstract class AbstractTest {
     @BeforeEach
     void resetDriver() {
         driver.manage().deleteAllCookies();
-        driver.get(String.format("http://localhost/?_=%d", System.currentTimeMillis()));
-        new WebDriverWait(driver, Duration.ofSeconds(1), Duration.ofMillis(100)).until(ExpectedConditions.titleContains("TST"));
+        driver.get("http://localhost/");
+        driver.findElement(By.id("Inhalt"));
     }
 
     @BeforeAll
@@ -87,7 +84,7 @@ public abstract class AbstractTest {
             CallExecutor<Boolean> executor = new CallExecutorBuilder().config(config).build();
             executor.execute(() -> {
                 login(username, "changeit");
-                new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.id("link_logout")));
+                driver.findElement(By.id("meldung_202"));
                 return true;
             });
         } catch (RetriesExhaustedException | UnexpectedException e) {

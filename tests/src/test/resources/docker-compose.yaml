@@ -29,4 +29,5 @@ services:
       - ../../../../:/var/www/html
       - ./config.inc.php:/var/www/html/include/config.inc.php
       - ./last_reset.inc.php:/var/www/html/include/last_reset.inc.php
-      - ./testdata.sql:/tmp/99_testdata.sql:ro
+      - ./testdata.sql:/tmp/99_testdata.sql
+      - ./test-reset-player.php:/var/www/html/actions/test-reset-player.php

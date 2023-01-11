@@ -3,3 +3,4 @@ include/config.inc.php
 include/last_reset.inc.php
 pics/uploads/*
 !pics/uploads/.gitkeep
+actions/test-*.php

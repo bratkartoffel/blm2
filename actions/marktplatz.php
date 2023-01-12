@@ -20,7 +20,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
         $price = getOrDefault($_POST, 'price', .0);
 
         $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
-        $sellPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
+        $sellPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school]);
 
         if ($ware < 1 || $ware > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 117, __LINE__);

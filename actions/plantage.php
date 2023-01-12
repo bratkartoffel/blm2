@@ -28,8 +28,8 @@ if ($alles == 1) {
     Database::getInstance()->begin();
     $sum_costs = .0;
     for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
-        if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
-        $productionData = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
+        if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i])) continue;
+        $productionData = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);
 
         if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
                 'finished' => date('Y-m-d H:i:s', time() + ($stunden * 3600)),
@@ -61,7 +61,7 @@ if ($alles == 1) {
     redirectTo('/?p=plantage', 207);
 }
 
-$productionData = calculateProductionDataForPlayer($was, $data['Gebaeude1'], $data['Forschung' . $was]);
+$productionData = calculateProductionDataForPlayer($was, $data['Gebaeude' . building_plantage], $data['Forschung' . $was]);
 $stunden = $menge / $productionData['Menge'];
 
 if ($menge > $productionData['Menge'] * Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max') || $menge <= 0) {
@@ -72,7 +72,7 @@ if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
     redirectTo('/?p=plantage', 112);
 }
 
-if (!productionRequirementsMet($was, $data['Gebaeude1'], $data['Forschung' . $was])) {
+if (!productionRequirementsMet($was, $data['Gebaeude' . building_plantage], $data['Forschung' . $was])) {
     redirectTo('/?p=plantage', 112);
 }
 

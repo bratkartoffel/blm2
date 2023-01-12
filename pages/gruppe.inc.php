@@ -55,7 +55,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 </div>
                 <div>
                     <?php
-                    if ($player['Gebaeude1'] >= Config::getInt(Config::SECTION_GROUP, 'plantage_level_create_group')) {
+                    if ($player['Gebaeude' . building_plantage] >= Config::getInt(Config::SECTION_GROUP, 'plantage_level_create_group')) {
                         ?>
                         <input type="submit" value="Gründen" id="create_group"/>
                         <?php
@@ -83,7 +83,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 </div>
                 <div>
                     <?php
-                    if ($player['Gebaeude1'] >= Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group')) {
+                    if ($player['Gebaeude' . building_plantage] >= Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group')) {
                         ?>
                         <input type="submit" value="Beitreten" id="join_group"/>
                         <?php

@@ -36,8 +36,8 @@ $rates = calculateSellRates();
         for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             if ($data['Forschung' . $i] == 0) continue;
             $temp = "Forschung" . $i;
-            $prodData = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
-            $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6'], $rates[$i]);
+            $prodData = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);
+            $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school], $rates[$i]);
             $costPerKg = $prodData['Kosten'] / $prodData['Menge'];
             $rateStep = (Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max') - Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min')) / 3;
             if ($rates[$i] >= Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max') - $rateStep) {

@@ -67,7 +67,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if ($player['GruppeID'] !== null) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 157, __LINE__);
         }
-        if ($player['Gebaeude1'] < Config::getInt(Config::SECTION_GROUP, 'plantage_level_create_group')) {
+        if ($player['Gebaeude' . building_plantage] < Config::getInt(Config::SECTION_GROUP, 'plantage_level_create_group')) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 112, __LINE__);
         }
 
@@ -134,7 +134,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if ($player['GruppeID'] !== null) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 157, __LINE__);
         }
-        if ($player['Gebaeude1'] < Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group')) {
+        if ($player['Gebaeude' . building_plantage] < Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group')) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 112, __LINE__);
         }
 
@@ -701,7 +701,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $allMembers = Database::getInstance()->getGroupMembersById($usId);
         foreach ($allMembers as $member) {
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $member['ID'],
-                    array('Gebaeude1' => -Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'),
+                    array('Gebaeude' . building_plantage => -Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'),
                         'Punkte' => -(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points') * $member['Punkte'])),
                     array('Gebaeude1 >= :whr0' => Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'))) === null) {
                 Database::getInstance()->rollBack();

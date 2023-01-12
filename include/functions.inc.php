@@ -19,6 +19,34 @@ const mafia_action_robbery = 2;
 const mafia_action_heist = 3;
 const mafia_action_attack = 4;
 
+// enum constants for buildings
+const building_plantage = 1;
+const building_research_lab = 2;
+const building_shop = 3;
+const building_kebab_stand = 4;
+const building_building_yard = 5;
+const building_school = 6;
+const building_fence = 7;
+const building_pizzeria = 8;
+
+// enum constants for items
+const item_potatoes = 1;
+const item_carrots = 2;
+const item_tomatoes = 3;
+const item_salad = 4;
+const item_apples = 5;
+const item_pears = 6;
+const item_cherries = 7;
+const item_bananas = 8;
+const item_cucumbers = 9;
+const item_grapes = 10;
+const item_tobaco = 11;
+const item_pineapple = 12;
+const item_strawberries = 13;
+const item_oranges = 14;
+const item_kiwi = 15;
+
+
 function abortWithErrorPage(string $body)
 {
     http_response_code(500);
@@ -1153,13 +1181,13 @@ function buildingRequirementsMet(int $building_id, array $player): bool
             return true;
         case 4:
         case 6:
-            return $player[$attribute] > 0 || $player['Gebaeude3'] >= 5;
+            return $player[$attribute] > 0 || $player['Gebaeude' . building_shop] >= 5;
         case 5:
-            return $player[$attribute] > 0 || ($player['Gebaeude1'] >= 8 && $player['Gebaeude2'] >= 9);
+            return $player[$attribute] > 0 || ($player['Gebaeude' . building_plantage] >= 8 && $player['Gebaeude' . building_research_lab] >= 9);
         case 7:
-            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 10000 && $player['Gebaeude1'] > 9);
+            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 10000 && $player['Gebaeude' . building_plantage] > 9);
         case 8:
-            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 25000 && $player['Gebaeude1'] > 11);
+            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 25000 && $player['Gebaeude' . building_plantage] > 11);
         default:
             return false;
     }
@@ -1234,7 +1262,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
         'Punkte' => Config::getInt($section, 'base_points') * pow(Config::getFloat($section, 'factor_points'), $player['Gebaeude' . $building_id] + $level_increment)
     );
 
-    $result['Dauer'] *= pow(1 - Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor'), $player['Gebaeude5']);
+    $result['Dauer'] *= pow(1 - Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor'), $player['Gebaeude' . building_building_yard]);
     $result['Dauer'] = (int)floor($result['Dauer']);
     return $result;
 }

@@ -31,7 +31,7 @@ if ($alles == 1) {
     for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
         $amount = $data['Lager' . $i];
         if ($amount == 0) continue;
-        $price = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
+        $price = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school]);
 
         $sumMoney += $amount * $price;
         $updateStorageValues['Lager' . $i] = -$amount;
@@ -79,7 +79,7 @@ if ($menge <= 0 || $menge > $data['Lager' . $was]) {
     redirectTo('/?p=bioladen', 125, __LINE__);
 }
 
-$price = calculateSellPrice($was, $data['Forschung' . $was], $data['Gebaeude3'], $data['Gebaeude6']);
+$price = calculateSellPrice($was, $data['Forschung' . $was], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school]);
 
 Database::getInstance()->begin();
 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],

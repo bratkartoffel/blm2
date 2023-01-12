@@ -25,9 +25,9 @@ switch ($id) {
         break;
 
     case 12:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 3, 'Gebaeude2' => 3));
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Forschung1' => 2, 'Forschung2' => 1));
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Lager1' => 100, 'Lager2' => 50));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude' . building_plantage => 3, 'Gebaeude' . building_research_lab => 3));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Forschung' . item_potatoes => 2, 'Forschung' . item_carrots => 1));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Lager' . item_potatoes => 100, 'Lager' . item_carrots => 50));
         break;
 
     case 13:
@@ -35,11 +35,11 @@ switch ($id) {
         break;
 
     case 14:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 30, 'Forschung15' => 30));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude' . building_plantage => 30, 'Forschung' . item_kiwi => 30));
         break;
 
     case 15:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude1' => 8, 'Gebaeude5' => 120));
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude' . building_plantage => 8, 'Gebaeude' . building_building_yard => 120));
         break;
 
     default:

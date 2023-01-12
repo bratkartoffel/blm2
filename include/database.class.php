@@ -6,7 +6,7 @@
  * Please see LICENCE.md for complete licence text.
  */
 
-require_once(__DIR__ . '/config.class.php');
+require_once __DIR__ . '/config.class.php';
 
 class Database
 {

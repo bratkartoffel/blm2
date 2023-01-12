@@ -17,9 +17,8 @@ if (!file_exists('../config/config.ini')) {
     die("> FAIL: config/config.ini not found");
 }
 
-require_once('../include/config.class.php');
-require_once('../include/functions.inc.php');
-require_once('../include/database.class.php');
+require_once '../include/functions.inc.php';
+require_once '../include/database.class.php';
 
 if (getOrDefault($_GET, 'secret', 'unset') !== Config::get(Config::SECTION_BASE, 'upgrade_secret')) {
     http_response_code(401);

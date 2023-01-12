@@ -15,7 +15,7 @@ $sumMoney = 0;
 $prices = array();
 for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     if ($data['Lager' . $i] == 0) continue;
-    $prices[$i] = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
+    $prices[$i] = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school]);
 
     $sumWeight += $data['Lager' . $i];
     $sumMoney += $data['Lager' . $i] * $prices[$i];

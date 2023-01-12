@@ -21,9 +21,9 @@ if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
 $data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel($_SESSION['blm_user']);
 requireEntryFound($data, '/?p=forschungszentrum', 112, __LINE__);
 
-$researchData = calculateResearchDataForPlayer($was, $data['Gebaeude2'], $data['Forschung' . $was]);
+$researchData = calculateResearchDataForPlayer($was, $data['Gebaeude' . building_research_lab], $data['Forschung' . $was]);
 
-if (!researchRequirementsMet($was, $data['Gebaeude1'], $data['Gebaeude2'])) {
+if (!researchRequirementsMet($was, $data['Gebaeude' . building_plantage], $data['Gebaeude' . building_research_lab])) {
     redirectTo('/?p=forschungszentrum', 112, __LINE__);
 }
 

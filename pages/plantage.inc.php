@@ -19,8 +19,8 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
 $productionData = array();
 $productionCostSum = .0;
 for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
-    if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
-    $productionData[$i] = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
+    if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i])) continue;
+    $productionData[$i] = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);
     if (!array_key_exists($i, $auftraege)) {
         $productionCostSum += $productionData[$i]['Kosten'];
     }
@@ -60,7 +60,7 @@ for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
 <?php
 for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     $researchAttribute = 'Forschung' . $i;
-    if (!productionRequirementsMet($i, $data['Gebaeude1'], $data[$researchAttribute])) continue;
+    if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data[$researchAttribute])) continue;
     ?>
     <div class="form Produktion">
         <header id="p<?= $i; ?>">

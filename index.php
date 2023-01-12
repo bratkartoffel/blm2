@@ -46,7 +46,7 @@ if (isLoggedIn()) {
         session_destroy();
         redirectTo('/?p=anmelden', 102);
     }
-    $data['Einkommen'] = getIncome($data['Gebaeude3'], $data['Gebaeude4']);
+    $data['Einkommen'] = getIncome($data['Gebaeude' . building_shop], $data['Gebaeude' . building_kebab_stand]);
 } else {
     $data = array();
 }
@@ -211,4 +211,13 @@ $dauer = 1000 * (microtime(true) - $start);
 <!--
 PLT:     <?= number_format($dauer, 2) . "ms\n"; ?>
 Queries: <?= Database::getInstance()->getQueryCount() . "\n"; ?>
+<?php
+$warnings = Database::getInstance()->getWarnings();
+if (count($warnings) > 0) {
+    echo "Warnings:\n";
+    foreach ($warnings as $warning) {
+        echo $warning . "\n";
+    }
+}
+?>
 -->

@@ -100,15 +100,15 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
     </script>
 
 <?php
-if (buildingRequirementsMet(1, $data)) {
-    printBuildingInformation($data, $auftraege, 1,
+if (buildingRequirementsMet(building_plantage, $data)) {
+    printBuildingInformation($data, $auftraege, building_plantage,
         'Dies ist das wichtigste Gebäude des Spiels.<br/>
 Je weiter Sie die Plantage ausbauen, desto mehr Gemüse kann schneller angebaut werden.
 Ausserdem können auch neue Gemüsesorten erst mit einem gewissen Level angebaut werden.');
 }
 
-if (buildingRequirementsMet(2, $data)) {
-    printBuildingInformation($data, $auftraege, 2,
+if (buildingRequirementsMet(building_research_lab, $data)) {
+    printBuildingInformation($data, $auftraege, building_research_lab,
         'Dies ist ebenfalls ein sehr wichtiges Gebäude in Ihrem Betrieb.<br/>
 Hier können Sie neue Gemüsesorten erforschen (damit Sie sie anbauen können)
 oder bestehende verbessern (schnellerer Anbau).<br/>
@@ -117,42 +117,42 @@ Forschungszeit für eine Stufe um ' . formatPercent(Config::getFloat(Config::SEC
 je Stufe gesenkt.');
 }
 
-if (buildingRequirementsMet(3, $data)) {
-    printBuildingInformation($data, $auftraege, 3,
+if (buildingRequirementsMet(building_shop, $data)) {
+    printBuildingInformation($data, $auftraege, building_shop,
         'Dieses Gebäude ist genau so wichtig, wie die Plantage und das Forschungszentrum,
 denn hier können Sie Ihre Gemüse verkaufen.<br/>
 Ausserdem steigt Ihr Grundeinkommen und der Preis den Sie pro Kilogramm erhalten mit jeder
 Stufe.');
 }
 
-if (buildingRequirementsMet(4, $data)) {
-    printBuildingInformation($data, $auftraege, 4,
+if (buildingRequirementsMet(building_kebab_stand, $data)) {
+    printBuildingInformation($data, $auftraege, building_kebab_stand,
         'Dieses Gebäude hat zwar nicht viel mit "Biowaren" zu tun, <br/>
 aber Sie haben erkannt, dass alleine mit Biolebensmitteln kein Geld zu verdienen ist.<br/>
 Deshalb kann man sich hier einen Dönerstand mieten, der das Grundeinkommen des Spielers erhöht.');
 }
 
-if (buildingRequirementsMet(6, $data)) {
-    printBuildingInformation($data, $auftraege, 6,
+if (buildingRequirementsMet(building_school, $data)) {
+    printBuildingInformation($data, $auftraege, building_school,
         'Hier bilden Sie Ihre Verkäufer aus, so dass diese in Ihrem Bioladen mehr Gewinn erzielen können.<br/>
 Dabei steigt der Gewinn pro Kilo und Stufe um ' . formatCurrency(Config::getFloat(Config::SECTION_SHOP, 'item_price_school_bonus')) . '!');
 }
 
-if (buildingRequirementsMet(5, $data)) {
-    printBuildingInformation($data, $auftraege, 5,
+if (buildingRequirementsMet(building_building_yard, $data)) {
+    printBuildingInformation($data, $auftraege, building_building_yard,
         'Dieses Gebäude senkt die Ausbauzeiten sämtlicher Gebäude um ' . formatPercent(Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor')) . ' pro
 Stufe.<br/>Der Bauhof wird erst beim späten Spielverlauf wichtig.');
 }
 
-if (buildingRequirementsMet(7, $data)) {
-    printBuildingInformation($data, $auftraege, 7,
+if (buildingRequirementsMet(building_fence, $data)) {
+    printBuildingInformation($data, $auftraege, building_fence,
         'Dieses Gebäude bietet den einzigen Schutz gegen Angriffe der Mafia. Dabei senkt jede Stufe des Zauns
 die Erfolgschancen des Gegners um ' . formatPercent(Config::getFloat(Config::SECTION_FENCE, 'mafia_bonus')) . '.<br/>
 Dies ist das teuerste Gebäude und dauert auch am längsten.');
 }
 
-if (buildingRequirementsMet(8, $data)) {
-    printBuildingInformation($data, $auftraege, 8,
+if (buildingRequirementsMet(building_pizzeria, $data)) {
+    printBuildingInformation($data, $auftraege, building_pizzeria,
         'Dieses Gebäude ist das genaue Gegenstück zum Zaun.<br/>
 Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto
 höher

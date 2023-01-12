@@ -29,9 +29,9 @@ function handleInterestRates(): void
     $entries = Database::getInstance()->getAllPlayerIdAndBankAndBioladenAndDoenerstand();
     foreach ($entries as $entry) {
         Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
-            array('Geld' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])));
+            array('Geld' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])));
         Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-            array('EinnahmenGebaeude' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])),
+            array('EinnahmenGebaeude' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])),
             array('user_id = :whr0' => $entry['ID']));
 
         if ($entry['Bank'] > Config::getInt(Config::SECTION_BANK, 'deposit_limit')) continue;

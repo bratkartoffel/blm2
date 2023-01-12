@@ -60,7 +60,7 @@ if ($groupDiplomacy !== group_diplomacy_war &&
 }
 
 $sperrZeit = Config::getInt($cfgSection, 'wait_time');
-$chance = getMafiaChance($cfgSection, $level, $player['Gebaeude8'], $otherPlayer['Gebaeude7']);
+$chance = getMafiaChance($cfgSection, $level, $player['Gebaeude' . building_pizzeria], $otherPlayer['Gebaeude' . building_fence]);
 
 $factor = 10000;
 $random = mt_rand(0, $factor) / $factor;
@@ -398,7 +398,7 @@ switch ($action) {
             $plantage = calculateBuildingDataForPlayer(1, $data, 0);
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'],
-                    array('Gebaeude1' => -1, 'Punkte' => -$plantage['Punkte'])) !== 1) {
+                    array('Gebaeude' . building_plantage => -1, 'Punkte' => -$plantage['Punkte'])) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }

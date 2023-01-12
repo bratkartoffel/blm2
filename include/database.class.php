@@ -33,6 +33,7 @@ class Database
     public const TABLE_LOG_MESSAGES = 'log_nachrichten';
     public const TABLE_LOG_CONTRACTS = 'log_vertraege';
     public const TABLE_UPDATE_INFO = 'update_info';
+    private const SLOW_QUERY_WARN_THRESHOLD = 10 / 1000; // 10 ms
 
     private static ?Database $INSTANCE = null;
 
@@ -54,6 +55,8 @@ class Database
 
     private PDO $link;
     private int $queries = 0;
+    private ?string $sql = null;
+    private array $warnings = array();
 
     function __construct(bool $dieOnInitError)
     {
@@ -84,6 +87,7 @@ class Database
             $this->link->rollBack();
         }
         $this->queries = 0;
+        $this->warnings = array();
     }
 
     public function begin(): bool
@@ -107,6 +111,11 @@ class Database
     public function lastInsertId(): int
     {
         return $this->link->lastInsertId();
+    }
+
+    public function getWarnings(): array
+    {
+        return $this->warnings;
     }
 
     public function createTableEntry(string $table, array $values = array()): ?int
@@ -1535,17 +1544,6 @@ ORDER BY m.Name");
         return $this->queries;
     }
 
-    protected function prepare(string $sql): ?PDOStatement
-    {
-        $this->queries++;
-        $stmt = $this->link->prepare($sql);
-        if ($stmt === false) {
-            $this->error($this->link, "Could not prepare statement: " . $sql);
-            return null;
-        }
-        return $stmt;
-    }
-
     private function error($handle, string $text): void
     {
         $errorInfo = $handle->errorInfo();
@@ -1565,12 +1563,7 @@ ORDER BY m.Name");
 
     private function executeAndExtractField(PDOStatement $stmt, string $fieldName, array $executeParam = array()): ?string
     {
-        if (count($executeParam) == 0) {
-            $executeResult = $stmt->execute();
-        } else {
-            $executeResult = $stmt->execute($executeParam);
-        }
-        if (!$executeResult) {
+        if (!($this->execute($stmt, $executeParam))) {
             $this->error($stmt, "Could not execute statement");
             return null;
         }
@@ -1583,12 +1576,7 @@ ORDER BY m.Name");
 
     public function executeAndGetAffectedRows(PDOStatement $stmt, array $executeParam = array()): ?int
     {
-        if (count($executeParam) == 0) {
-            $executeResult = $stmt->execute();
-        } else {
-            $executeResult = $stmt->execute($executeParam);
-        }
-        if (!$executeResult) {
+        if (!($this->execute($stmt, $executeParam))) {
             $this->error($stmt, "Could not execute statement");
             return null;
         }
@@ -1597,7 +1585,7 @@ ORDER BY m.Name");
 
     private function executeAndExtractRows(PDOStatement $stmt): ?array
     {
-        if (!$stmt->execute()) {
+        if (!($this->execute($stmt))) {
             $this->error($stmt, "Could not execute statement");
             return null;
         }
@@ -1616,5 +1604,37 @@ ORDER BY m.Name");
         } else {
             return $result[0];
         }
+    }
+
+    private function prepare(string $sql): ?PDOStatement
+    {
+        $this->queries++;
+        $this->sql = $sql;
+        $pre = microtime(true);
+        $stmt = $this->link->prepare($sql);
+        $post = microtime(true);
+        if ($post - $pre > self::SLOW_QUERY_WARN_THRESHOLD) {
+            $this->warnings[] = sprintf("Statement took %.02fms to prepare: %s", ($post - $pre) * 1000, $this->sql);
+        }
+        if ($stmt === false) {
+            $this->error($this->link, "Could not prepare statement: " . $sql);
+            return null;
+        }
+        return $stmt;
+    }
+
+    private function execute(PDOStatement $stmt, array $executeParam = array()): bool
+    {
+        $pre = microtime(true);
+        if (count($executeParam) == 0) {
+            $executeResult = $stmt->execute();
+        } else {
+            $executeResult = $stmt->execute($executeParam);
+        }
+        $post = microtime(true);
+        if ($post - $pre > self::SLOW_QUERY_WARN_THRESHOLD) {
+            $this->warnings[] = sprintf("Statement took %.02fms to execute: %s", ($post - $pre) * 1000, $this->sql);
+        }
+        return $executeResult;
     }
 }

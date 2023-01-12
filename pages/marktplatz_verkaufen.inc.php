@@ -24,7 +24,7 @@ $price = getOrDefault($_GET, 'price', .0);
 </p>
 <p>
     Das Einstellen von Angeboten ist kostenlos, jedoch gehen beim zurückziehen aus dem Markt ein kleiner Anteil
-    (<?= formatPercent(1 - market_retract_rate); ?>) der Waren verloren.
+    (<?= formatPercent(1 - Config::getFloat(Config::SECTION_MARKET, 'retract_rate')); ?>) der Waren verloren.
 </p>
 
 <?php
@@ -63,7 +63,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
     </tr>
     <?php
     $waresFound = false;
-    for ($i = 1; $i < count_wares; $i++) {
+    for ($i = 1; $i < Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
         if ($data['Lager' . $i] == 0) continue;
         $waresFound = true;
         $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
@@ -73,11 +73,11 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
             <td><?= formatWeight($data['Lager' . $i]); ?></td>
             <td><?= formatCurrency($sellPrice); ?></td>
             <td>
-                <?= formatCurrency($sellPrice * market_min_sell_price); ?>
-                - <?= formatCurrency($sellPrice * market_max_sell_price); ?>
+                <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_MARKET, 'min_price')); ?>
+                - <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_MARKET, 'max_price')); ?>
             </td>
             <td>
-                <a href="/?p=marktplatz_verkaufen&amp;ware=<?= $i; ?>&amp;amount=<?= $data['Lager' . $i]; ?>&amp;price=<?= $sellPrice * market_max_sell_price; ?>">Übernehmen</a>
+                <a href="/?p=marktplatz_verkaufen&amp;ware=<?= $i; ?>&amp;amount=<?= $data['Lager' . $i]; ?>&amp;price=<?= $sellPrice * Config::getFloat(Config::SECTION_MARKET, 'max_price'); ?>">Übernehmen</a>
             </td>
         </tr>
         <?php

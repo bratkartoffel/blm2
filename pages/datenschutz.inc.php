@@ -33,22 +33,22 @@
     Diese Datenschutz-Information gilt für die Datenverarbeitung durch:
 </p>
 <p class="indent">
-    <span class="bot"><?= obfuscate(admin_name); ?></span>
+    <span class="bot"><?= obfuscate(Config::get(Config::SECTION_BASE, 'admin_name')); ?></span>
     <?php
-    if (strlen(admin_addr_line_1) > 0) {
+    if (strlen(Config::get(Config::SECTION_BASE, 'admin_addr_line_1')) > 0) {
         ?>
-        <span class="bot"><?= obfuscate(admin_addr_line_1); ?></span>
+        <span class="bot"><?= obfuscate(Config::get(Config::SECTION_BASE, 'admin_addr_line_1')); ?></span>
         <?php
     }
     ?>
     <?php
-    if (strlen(admin_addr_line_2) > 0) {
+    if (strlen(Config::get(Config::SECTION_BASE, 'admin_addr_line_2')) > 0) {
         ?>
-        <span class="bot"><?= obfuscate(admin_addr_line_2); ?></span>
+        <span class="bot"><?= obfuscate(Config::get(Config::SECTION_BASE, 'admin_addr_line_2')); ?></span>
         <?php
     }
     ?>
-    <span>E-Mail: <a class="bot"><?= obfuscate(admin_email); ?></a></span>
+    <span>E-Mail: <a class="bot"><?= obfuscate(Config::get(Config::SECTION_BASE, 'admin_email')); ?></a></span>
 </p>
 <p>
     Die Bestellung eines betrieblichen Datenschutzbeauftragten ist nicht erforderlich.

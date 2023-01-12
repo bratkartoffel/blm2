@@ -1,6 +1,6 @@
 .idea
-include/config.inc.php
-include/last_reset.inc.php
+config/config.ini
+config/roundstart.ini
 pics/uploads/*
 !pics/uploads/.gitkeep
 actions/test-*.php

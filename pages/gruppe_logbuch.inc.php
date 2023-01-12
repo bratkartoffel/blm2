@@ -24,9 +24,9 @@ requireEntryFound($rights, '/?p=gruppe');
     <header>Einträge</header>
     <?php
     $messageCount = Database::getInstance()->getGroupLogCount($rights['group_id']);
-    $offset = verifyOffset($offset, $messageCount, group_page_size);
+    $offset = verifyOffset($offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
 
-    $entries = Database::getInstance()->getGroupLogEntries($rights['group_id'], $offset, group_page_size);
+    $entries = Database::getInstance()->getGroupLogEntries($rights['group_id'], $offset, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
     foreach ($entries as $row) {
         ?>
         <div>
@@ -37,4 +37,4 @@ requireEntryFound($rights, '/?p=gruppe');
     }
     ?>
 </div>
-<?= createPaginationTable('/?p=gruppe_logbuch', $offset, $messageCount, group_page_size); ?>
+<?= createPaginationTable('/?p=gruppe_logbuch', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size')); ?>

@@ -7,11 +7,6 @@
  */
 error_reporting(E_ALL);
 const IS_CRON = true;
-
-if (!file_exists(dirname(__FILE__) . '/../include/config.inc.php')) {
-    die('include/config.inc.php not found');
-}
-require_once(dirname(__FILE__) . '/../include/config.inc.php');
 require_once(dirname(__FILE__) . '/../include/functions.inc.php');
 require_once(dirname(__FILE__) . '/../include/database.class.php');
 
@@ -20,7 +15,7 @@ if (!IS_CRON) {
 }
 
 if (isGameLocked()) {
-    die(sprintf("Game is currently locked (%d < %d)\n", time(), last_reset));
+    die(sprintf("Game is currently locked (%d < %d)\n", time(), Config::getInt(Config::SECTION_BASE, 'roundstart')));
 }
 
 if (isRoundOver()) {
@@ -39,11 +34,11 @@ function handleInterestRates(): void
             array('EinnahmenGebaeude' => getIncome($entry['Gebaeude3'], $entry['Gebaeude4'])),
             array('user_id = :whr0' => $entry['ID']));
 
-        if ($entry['Bank'] > deposit_limit) continue;
+        if ($entry['Bank'] > Config::getInt(Config::SECTION_BANK, 'deposit_limit')) continue;
 
         if ($entry['Bank'] >= 0) {
             $amount = $entry['Bank'] * $interestRates['Debit'];
-            $amount = min(deposit_limit, $entry['Bank'] + $amount) - $entry['Bank'];
+            $amount = min(Config::getInt(Config::SECTION_BANK, 'deposit_limit'), $entry['Bank'] + $amount) - $entry['Bank'];
         } else {
             $amount = $entry['Bank'] * $interestRates['Credit'];
         }
@@ -60,7 +55,7 @@ function handleInterestRates(): void
 
 function handleResetDueToDispo(): void
 {
-    $entries = Database::getInstance()->getAllPlayerIdAndNameBankSmallerEquals(dispo_limit);
+    $entries = Database::getInstance()->getAllPlayerIdAndNameBankSmallerEquals(Config::getInt(Config::SECTION_BANK, 'dispo_limit'));
     foreach ($entries as $entry) {
         trigger_error(sprintf("Resetting player %s/%s", $entry['ID'], $entries['Name']));
         Database::getInstance()->begin();
@@ -74,7 +69,7 @@ function handleResetDueToDispo(): void
                 'Von' => 0,
                 'An' => $entry['ID'],
                 'Betreff' => 'Account zurückgesetzt',
-                'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency(dispo_limit) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
+                'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
             )) != 1) {
             Database::getInstance()->rollBack();
             trigger_error("Could create message after resetting player " . $entry['ID'], E_USER_WARNING);
@@ -89,9 +84,9 @@ function handleItemBaseProduction(): void
     $entries = Database::getInstance()->getAllPlayerIdAndResearchLevels();
     foreach ($entries as $entry) {
         $updates = array();
-        for ($i = 1; $i < count_wares; $i++) {
+        for ($i = 1; $i < Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             $researchLevel = $entry['Forschung' . $i];
-            $updates['Lager' . $i] = $researchLevel * item_base_production;
+            $updates['Lager' . $i] = $researchLevel * Config::getInt(Config::SECTION_PLANTAGE, 'production_cron_base');
         }
         Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'], $updates);
     }

@@ -25,7 +25,7 @@ $offset = getOrDefault($_GET, 'offset', 0);
 
 <?php
 $offerCount = Database::getInstance()->getMarktplatzCount();
-$offset = verifyOffset($offset, $offerCount, market_page_size);
+$offset = verifyOffset($offset, $offerCount, Config::getInt(Config::SECTION_BASE, 'market_page_size'));
 ?>
 <table class="Liste Marktplatz">
     <tr>
@@ -37,8 +37,8 @@ $offset = verifyOffset($offset, $offerCount, market_page_size);
         <th>Aktion</th>
     </tr>
     <?php
-    $entries = Database::getInstance()->getMarktplatzEntries(array(), $offset, market_page_size);
-    $nr = $offerCount - $offset * market_page_size;
+    $entries = Database::getInstance()->getMarktplatzEntries(array(), $offset, Config::getInt(Config::SECTION_BASE, 'market_page_size'));
+    $nr = $offerCount - $offset * Config::getInt(Config::SECTION_BASE, 'market_page_size');
     foreach ($entries as $row) {
         $rowNr = $nr--;
         ?>
@@ -53,7 +53,7 @@ $offset = verifyOffset($offset, $offerCount, market_page_size);
                 if ($row['VonId'] != $_SESSION['blm_user']) {
                     echo '<a href="./actions/marktplatz.php?a=2&amp;id=' . $row['ID'] . '&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie das Angebot Nr ' . $rowNr . ' wirklich kaufen?\')">Kaufen</a>';
                 } else {
-                    echo '<a href="./actions/marktplatz.php?a=3&amp;id=' . $row['ID'] . '&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie das Angebot Nr ' . $rowNr . ' zurückziehen?\nSie erhalten lediglich ' . formatWeight(floor($row['Menge'] * market_retract_rate)) . ' der Waren zurück.\')">Zurückziehen</a>';
+                    echo '<a href="./actions/marktplatz.php?a=3&amp;id=' . $row['ID'] . '&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie das Angebot Nr ' . $rowNr . ' zurückziehen?\nSie erhalten lediglich ' . formatWeight(floor($row['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate'))) . ' der Waren zurück.\')">Zurückziehen</a>';
                 }
                 ?>
             </td>
@@ -66,6 +66,6 @@ $offset = verifyOffset($offset, $offerCount, market_page_size);
     ?>
 </table>
 
-<?= createPaginationTable('/?p=marktplatz_liste', $offset, $offerCount, market_page_size); ?>
+<?= createPaginationTable('/?p=marktplatz_liste', $offset, $offerCount, Config::getInt(Config::SECTION_BASE, 'market_page_size')); ?>
 
 <a href="/?p=marktplatz_verkaufen">Neues Angebot einstellen</a>

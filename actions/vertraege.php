@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -30,14 +29,14 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo($backLink, 173, __LINE__);
         }
 
-        if ($ware < 1 || $ware > count_wares) {
+        if ($ware < 1 || $ware > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
             redirectTo($backLink, 117, __LINE__);
         }
 
         $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 
         $minPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
-        if ($preis < round($minPrice * contract_min_sell_price, 2) || $preis > round($minPrice * contract_max_sell_price, 2)) {
+        if ($preis < round($minPrice * Config::getFloat(Config::SECTION_CONTRACT, 'min_price'), 2) || $preis > round($minPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price'), 2)) {
             redirectTo($backLink, 153, __LINE__);
         }
 

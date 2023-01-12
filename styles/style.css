@@ -187,10 +187,10 @@ div#SeitenUeberschrift img {
     width: 64px;
 }
 
-div#SeitenUeberschrift img.help {
+img#help_image {
     float: inherit;
-    height: initial;
-    width: initial;
+    height: initial !important;
+    width: initial !important;
 }
 
 div#SeitenUeberschrift span {

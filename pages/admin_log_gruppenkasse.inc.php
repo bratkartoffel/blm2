@@ -44,8 +44,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wer = empty($wer) ? "%" : $wer;
     $filter_wen = empty($wen) ? "%" : $wen;
     $entriesCount = Database::getInstance()->getAdminGroupTreasuryLogCount($filter_wer, $filter_wen, $gruppe);
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminGroupTreasuryLogEntries($filter_wer, $filter_wen, $gruppe, $offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminGroupTreasuryLogEntries($filter_wer, $filter_wen, $gruppe, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -65,7 +65,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_gruppenkasse&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen) . '&amp;gruppe=' . $gruppe, $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_log_gruppenkasse&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen) . '&amp;gruppe=' . $gruppe, $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

@@ -32,7 +32,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
             <div class="Upgrade">
                 <?php
                 if (!array_key_exists($buildingId, $auftraege)) {
-                    $buildingData = calculateBuildingDataForPlayer($buildingId, $playerData, 1);
+                    $buildingData = calculateBuildingDataForPlayer($buildingId, $playerData);
                     $nextLevel = $playerData[$buildingAttribute] + 1;
                     $currentDuration = null;
                     $currentKosten = null;
@@ -64,7 +64,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                             (noch <span class="countdown"><?= formatDuration($currentDuration); ?></span> verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
+                            <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>', '<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>');"
                                href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $buildingId; ?>">Abbrechen</a>
                         </div>
@@ -113,7 +113,7 @@ if (buildingRequirementsMet(2, $data)) {
 Hier können Sie neue Gemüsesorten erforschen (damit Sie sie anbauen können)
 oder bestehende verbessern (schnellerer Anbau).<br/>
 Ausserdem werden neue Gemüsesorten bekannt, je höher das Forschungszentrum ist und die
-Forschungszeit für eine Stufe um ' . formatPercent(research_lab_bonus_factor) . '
+Forschungszeit für eine Stufe um ' . formatPercent(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'bonus_factor')) . '
 je Stufe gesenkt.');
 }
 
@@ -135,19 +135,19 @@ Deshalb kann man sich hier einen Dönerstand mieten, der das Grundeinkommen des 
 if (buildingRequirementsMet(6, $data)) {
     printBuildingInformation($data, $auftraege, 6,
         'Hier bilden Sie Ihre Verkäufer aus, so dass diese in Ihrem Bioladen mehr Gewinn erzielen können.<br/>
-Dabei steigt der Gewinn pro Kilo und Stufe um ' . formatCurrency(item_price_school_bonus) . '!');
+Dabei steigt der Gewinn pro Kilo und Stufe um ' . formatCurrency(Config::getInt(Config::SECTION_SHOP, 'item_price_school_bonus')) . '!');
 }
 
 if (buildingRequirementsMet(5, $data)) {
     printBuildingInformation($data, $auftraege, 5,
-        'Dieses Gebäude senkt die Ausbauzeiten sämtlicher Gebäude um ' . formatPercent(building_yard_bonus_factor) . ' pro
+        'Dieses Gebäude senkt die Ausbauzeiten sämtlicher Gebäude um ' . formatPercent(Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor')) . ' pro
 Stufe.<br/>Der Bauhof wird erst beim späten Spielverlauf wichtig.');
 }
 
 if (buildingRequirementsMet(7, $data)) {
     printBuildingInformation($data, $auftraege, 7,
         'Dieses Gebäude bietet den einzigen Schutz gegen Angriffe der Mafia. Dabei senkt jede Stufe des Zauns
-die Erfolgschancen des Gegners um ' . formatPercent(mafia_bonus_factor_fence) . '.<br/>
+die Erfolgschancen des Gegners um ' . formatPercent(Config::getFloat(Config::SECTION_FENCE, 'mafia_bonus')) . '.<br/>
 Dies ist das teuerste Gebäude und dauert auch am längsten.');
 }
 
@@ -156,5 +156,5 @@ if (buildingRequirementsMet(8, $data)) {
         'Dieses Gebäude ist das genaue Gegenstück zum Zaun.<br/>
 Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto
 höher
-sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um ' . formatPercent(mafia_bonus_factor_pizzeria) . '.');
+sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um ' . formatPercent(Config::getFloat(Config::SECTION_PIZZERIA, 'mafia_bonus')) . '.');
 }

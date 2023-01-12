@@ -22,12 +22,12 @@ $interestRates = calculateInterestRates();
 
 <p>
     Hier können Sie Ihr verdientes Geld anlegen oder auch Kredite aufnehmen, wenn es mal knapp wird. Die Zinsen
-    werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen alle <?= cron_interval; ?> Minuten. Die
-    maximale Summe, die Sie anlegen können, sind <?= formatCurrency(deposit_limit); ?>, Ihr Kreditlimit sind
-    <span style="color: red;"><?= formatCurrency(credit_limit); ?></span>.
+    werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen alle <?= Config::getInt(Config::SECTION_BASE, 'cron_interval'); ?> Minuten. Die
+    maximale Summe, die Sie anlegen können, sind <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')); ?>, Ihr Kreditlimit sind
+    <span style="color: red;"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
 </p>
 <p>
-    <span style="color: red;">Wichtig! Falls der Kontostand unter <?= formatCurrency(dispo_limit) ?> fällt, wird Ihr Account automatisch resettet!
+    <span style="color: red;">Wichtig! Falls der Kontostand unter <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) ?> fällt, wird Ihr Account automatisch resettet!
         Von einer durchschnittlichen Zinsrate von 2% ausgehend wird diese Marke nach etwa 48 Stunden überschritten.</span>
 </p>
 <p>

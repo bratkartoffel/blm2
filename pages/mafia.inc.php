@@ -13,7 +13,7 @@ $action = getOrDefault($_GET, 'action');
 $level = getOrDefault($_GET, 'level');
 
 $data = Database::getInstance()->getPlayerPointsAndMoneyAndNextMafiaAndGroupById($_SESSION['blm_user']);
-if ($data['Punkte'] < mafia_min_ponts) {
+if ($data['Punkte'] < Config::getFloat(Config::SECTION_MAFIA, 'min_points')) {
     redirectTo('/?p=index', 169, __LINE__);
 }
 
@@ -42,7 +42,8 @@ if ($nextMafiaTs <= time()) {
 if (!mafiaRequirementsMet($data['Punkte'])) {
     ?>
     <p>
-        Die Mafia kann erst ab <?= formatPoints(mafia_min_ponts); ?> verwendet werden.
+        Die Mafia kann erst ab <?= formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')); ?> verwendet
+        werden.
     </p>
     <?php
 }
@@ -58,49 +59,53 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
     <tr>
         <td>Spionage</td>
         <td>Sammelt Informationen über den Gegner</td>
-        <td><?= (mafia_base_data[mafia_action_espionage]['waittime'] / 60); ?> Minuten</td>
-        <td><?= formatPoints(mafia_base_data[0]['points']); ?></td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_ESPIONAGE, "wait_time") / 60); ?> Minuten</td>
+        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_ESPIONAGE, "points")); ?></td>
     </tr>
     <tr>
         <td>Raub</td>
-        <td>Stiehlt dem Gegner zwischen <?= formatPercent(mafia_raub_min_rate); ?>
-            und <?= formatPercent(mafia_raub_max_rate); ?> seines Bargeldes
+        <td>Stiehlt dem Gegner zwischen <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_min_rate')); ?>
+            und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')); ?> seines Bargeldes
         </td>
-        <td><?= (mafia_base_data[mafia_action_robbery]['waittime'] / 60); ?> Minuten</td>
-        <td><?= formatPoints(mafia_base_data[1]['points']); ?></td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_ROBBERY, "wait_time") / 60); ?> Minuten</td>
+        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_ROBBERY, "points")); ?></td>
     </tr>
     <tr>
         <td>Diebstahl</td>
         <td>Stiehlt dem Gegner alle Waren aus dem Lager</td>
-        <td><?= (mafia_base_data[mafia_action_heist]['waittime'] / 60); ?> Minuten</td>
-        <td><?= formatPoints(mafia_base_data[2]['points']); ?></td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_HEIST, "wait_time") / 60); ?> Minuten</td>
+        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_HEIST, "points")); ?></td>
     </tr>
     <tr>
         <td>Anschlag</td>
         <td>Zerstört die Plantage des Gegners, senkt das Gebäudelevel um eine Stufe</td>
-        <td><?= (mafia_base_data[mafia_action_attack]['waittime'] / 60); ?> Minuten</td>
-        <td><?= formatPoints(mafia_base_data[3]['points']); ?></td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_ATTACK, "wait_time") / 60); ?> Minuten</td>
+        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_ATTACK, "points")); ?></td>
     </tr>
 </table>
 
 <script>
-    let mafia_cost_data = <?=json_encode(mafia_base_data); ?>;
+    let mafia_cost_data = <?=json_encode(array(
+        mafia_action_espionage => Config::getSection(Config::SECTION_MAFIA_ESPIONAGE),
+        mafia_action_robbery => Config::getSection(Config::SECTION_MAFIA_ROBBERY),
+        mafia_action_heist => Config::getSection(Config::SECTION_MAFIA_HEIST),
+        mafia_action_attack => Config::getSection(Config::SECTION_MAFIA_ATTACK),
+    )); ?>;
 </script>
 <div class="form MafiaNewAction">
     <form action="/actions/mafia.php" method="post">
         <header>Angriff ausführen</header>
         <div>
             <label for="opponent">Gegner</label>
-            <?=createPlayerDropdownForMafia($opponent, $data['Punkte'], $_SESSION['blm_user'], $data['Gruppe']); ?>
+            <?= createPlayerDropdownForMafia($opponent, $data['Punkte'], $_SESSION['blm_user'], $data['Gruppe']); ?>
         </div>
         <div>
             <label for="action">Aktion</label>
             <select name="action" id="action" oninput="MafiaActionChange();">
-                <option value="<?= mafia_action_espionage; ?>"<?= ($action == 0 ? ' selected' : ''); ?>>Spionage
-                </option>
-                <option value="<?= mafia_action_robbery; ?>"<?= ($action == 1 ? ' selected' : ''); ?>>Raub</option>
-                <option value="<?= mafia_action_heist; ?>"<?= ($action == 2 ? ' selected' : ''); ?>>Diebstahl</option>
-                <option value="<?= mafia_action_attack; ?>"<?= ($action == 3 ? ' selected' : ''); ?>>Anschlag</option>
+                <option value="<?=mafia_action_espionage;?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>Spionage</option>
+                <option value="<?=mafia_action_robbery;?>"<?= ($action == mafia_action_robbery ? ' selected' : ''); ?>>Raub</option>
+                <option value="<?=mafia_action_heist;?>"<?= ($action == mafia_action_heist ? ' selected' : ''); ?>>Diebstahl</option>
+                <option value="<?=mafia_action_attack;?>"<?= ($action == mafia_action_attack ? ' selected' : ''); ?>>Anschlag</option>
             </select>
         </div>
         <div>

@@ -43,8 +43,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wen = empty($wen) ? "%" : $wen;
 
     $entriesCount = Database::getInstance()->getVertragCount($filter_wer, $filter_wen);
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getVertragEntries($filter_wer, $filter_wen, $offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getVertragEntries($filter_wer, $filter_wen, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
 
     for ($i = 0; $i < count($entries); $i++) {
@@ -69,7 +69,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_vertrag&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_vertrag&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>

@@ -37,8 +37,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter = empty($wer) ? "%" : $wer;
     $entriesCount = Database::getInstance()->getAdminBioladenLogCount($filter);
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminBioladenLogEntries($filter, $offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminBioladenLogEntries($filter, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -58,7 +58,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

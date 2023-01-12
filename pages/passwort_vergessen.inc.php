@@ -31,7 +31,7 @@ $captcha->createCaptcha();
 
         <div>
             <label for="email">E-Mail Adresse:</label>
-            <input name="email" id="email" type="text" size="32" maxlength="<?= email_max_len; ?>"
+            <input name="email" id="email" type="text" size="32" maxlength="<?= Config::getInt(Config::SECTION_BASE, 'email_max_len'); ?>"
                    value="<?= escapeForOutput($email); ?>"/>
         </div>
         <div>
@@ -39,8 +39,7 @@ $captcha->createCaptcha();
         </div>
         <div>
             <label for="captcha_code">Sicherheitscode:</label>
-            <input name="captcha_code" id="captcha_code" type="text" size="6" required
-                   minlength="<?= captcha_length; ?>" maxlength="<?= captcha_length; ?>"/>
+            <input name="captcha_code" id="captcha_code" type="text" size="8" required/>
         </div>
 
         <div>

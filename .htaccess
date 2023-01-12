@@ -7,6 +7,7 @@
 RedirectMatch 403 /\.git
 
 # deny direct access
+RedirectMatch 403 /config
 RedirectMatch 403 /cronjobs
 RedirectMatch 403 /development
 RedirectMatch 403 /include

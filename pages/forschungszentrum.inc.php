@@ -37,7 +37,7 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
     </script>
 
 <?php
-for ($i = 1; $i <= count_wares; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     if (!researchRequirementsMet($i, $data['Gebaeude1'], $data['Gebaeude2'])) continue;
 
     $researchData = calculateResearchDataForPlayer($i, $data['Gebaeude2'], $data['Forschung' . $i]);
@@ -92,7 +92,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                             verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * action_retract_rate); ?>', '<?= formatPercent(action_retract_rate); ?>');"
+                            <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>', '<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>');"
                                href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>

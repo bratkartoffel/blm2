@@ -5,14 +5,13 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 require_once('../include/captcha.class.php');
 
 ob_start();
 
-if (registration_closed) {
+if (Config::getBoolean(Config::SECTION_BASE, 'registration_closed')) {
     redirectTo('/?p=anmelden', 148);
 }
 
@@ -28,7 +27,7 @@ $captcha_id = getOrDefault($_POST, 'captcha_id', 0);
 $name = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $name));
 
 $backLink = sprintf('/?p=registrieren&name=%s&email=%s', urlencode($name), urlencode($email));
-if (constant('is_testing') === null && !Captcha::verifyCode($captcha_code, $captcha_id)) {
+if (!Config::getBoolean(Config::SECTION_BASE, 'testing') && !Captcha::verifyCode($captcha_code, $captcha_id)) {
     redirectTo($backLink, 130, __LINE__);
 }
 
@@ -40,11 +39,11 @@ if (empty($name) || empty($pwd1)) {
     redirectTo($backLink, 104, __LINE__);
 }
 
-if (strlen($name) < username_min_len || strlen($name) > username_max_len) {
+if (strlen($name) < Config::getInt(Config::SECTION_BASE, 'username_min_len') || strlen($name) > Config::getInt(Config::SECTION_BASE, 'username_max_len')) {
     redirectTo($backLink, 146, __LINE__);
 }
 
-if (strlen($pwd1) < password_min_len) {
+if (strlen($pwd1) < Config::getInt(Config::SECTION_BASE, 'password_min_len')) {
     redirectTo($backLink, 147, __LINE__);
 }
 
@@ -60,7 +59,12 @@ $email_activation_code = createRandomCode();
 
 $id = null;
 Database::getInstance()->begin();
-foreach (starting_values as $table => $values) {
+foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
+    foreach ($values as $key => $value) {
+        if ($value === "null" || $value === "") {
+            $values[$key] = null;
+        }
+    }
     if ($id !== null) $values['user_id'] = $id;
     if ($table == Database::TABLE_USERS) {
         $values['Name'] = $name;
@@ -76,13 +80,13 @@ foreach (starting_values as $table => $values) {
 }
 Database::getInstance()->commit();
 
-$email_activation_link = base_url . '/actions/activate.php?user=' . urlencode($name) . '&amp;code=' . $email_activation_code;
-if (!sendMail($email, game_title . ': Aktivierung Ihres Accounts',
+$email_activation_link = Config::get(Config::SECTION_BASE, 'base_url') . '/actions/activate.php?user=' . urlencode($name) . '&amp;code=' . $email_activation_code;
+if (!sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Aktivierung Ihres Accounts',
     '<html lang="de"><body><h3>Hallo ' . escapeForOutput($name) . ' und Willkommen beim Bioladenmanager 2,</h3>
     <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
     <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
-    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . admin_email . '</p>
-    Grüsse ' . admin_name . '</body></html>'
+    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . Config::get(Config::SECTION_BASE, 'admin_email') . '</p>
+    Grüsse ' . Config::get(Config::SECTION_BASE, 'admin_name') . '</body></html>'
 )) {
     redirectTo(sprintf('/?p=anmelden&name=%s', $name), 144, __LINE__);
 }

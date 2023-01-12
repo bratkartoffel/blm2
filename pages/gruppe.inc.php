@@ -30,7 +30,8 @@ if ($id == 0 || $id == $player['GruppeID']) {
         ?>
         <p>
             Hier können Sie einer bereits bestehenden Gruppe beitreten, oder eine neue gründen.
-            Zum Beitreten benötigen Sie die Plantage auf mindestens Stufe <?= min_plantage_level_join_group; ?>,
+            Zum Beitreten benötigen Sie die Plantage auf mindestens
+            Stufe <?= Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group'); ?>,
             zum Gründen müssen Sie Ihre Plantage mindestens auf Stufe 8 haben.
         </p>
         <div class="form GroupCreate">
@@ -40,20 +41,21 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 <div>
                     <label for="create_name">Name:</label>
                     <input type="text" name="name" id="create_name" value="<?= escapeForOutput($name); ?>"
-                           maxlength="<?= group_max_name_length; ?>"/>
+                           maxlength="<?= Config::getInt(Config::SECTION_GROUP, 'max_name_length'); ?>"/>
                 </div>
                 <div>
                     <label for="create_tag">Kürzel:</label>
                     <input type="text" name="tag" id="create_tag" value="<?= escapeForOutput($tag); ?>"
-                           maxlength="<?= group_max_tag_length; ?>"/>
+                           maxlength="<?= Config::getInt(Config::SECTION_GROUP, 'max_tag_length'); ?>"/>
                 </div>
                 <div>
                     <label for="create_pwd">Passwort:</label>
-                    <input type="password" name="pwd" id="create_pwd" minlength="<?= password_min_len; ?>"/>
+                    <input type="password" name="pwd" id="create_pwd"
+                           minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
                 </div>
                 <div>
                     <?php
-                    if ($player['Gebaeude1'] >= min_plantage_level_create_group) {
+                    if ($player['Gebaeude1'] >= Config::getInt(Config::SECTION_GROUP, 'plantage_level_create_group')) {
                         ?>
                         <input type="submit" value="Gründen" id="create_group"/>
                         <?php
@@ -73,7 +75,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 <div>
                     <label for="join_name">Name:</label>
                     <input type="text" name="name" id="join_name" value="<?= escapeForOutput($name); ?>"
-                           maxlength="<?= group_max_name_length; ?>"/>
+                           maxlength="<?= Config::getInt(Config::SECTION_GROUP, 'max_name_length'); ?>"/>
                 </div>
                 <div>
                     <label for="join_pwd">Passwort:</label>
@@ -81,7 +83,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
                 </div>
                 <div>
                     <?php
-                    if ($player['Gebaeude1'] >= min_plantage_level_join_group) {
+                    if ($player['Gebaeude1'] >= Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group')) {
                         ?>
                         <input type="submit" value="Beitreten" id="join_group"/>
                         <?php
@@ -119,9 +121,10 @@ if ($id != 0) {
         <header>Gruppe: <?= escapeForOutput($group['Name']); ?></header>
         <div class="left">
             <div class="GroupImage"><img id="group_image"
-                        src="/pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($group['LastImageChange'] == null ? 0 : strtotime($group['LastImageChange'])); ?>"
-                        alt="Gruppenbild"/></div>
-            <div class="GroupDescription" id="gruppe_beschreibung"><?= replaceBBCode(empty($group['Beschreibung']) ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
+                                         src="/pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($group['LastImageChange'] == null ? 0 : strtotime($group['LastImageChange'])); ?>"
+                                         alt="Gruppenbild"/></div>
+            <div class="GroupDescription"
+                 id="gruppe_beschreibung"><?= replaceBBCode(empty($group['Beschreibung']) ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
         </div>
         <div class="right">
             <div><b>Kürzel</b>: <?= escapeForOutput($group['Kuerzel']); ?></div>
@@ -129,7 +132,8 @@ if ($id != 0) {
             <div><b>∑ Punkte</b>: <?= formatPoints($group['Punkte']); ?></div>
             <div><b>∅ Punkte</b>: <?= formatPoints($group['Punkte'] / count($members)); ?></div>
 
-            <h4>Mitglieder (<?= count($members); ?> / <?= group_max_members; ?>):</h4>
+            <h4>Mitglieder (<?= count($members); ?> / <?= Config::getInt(Config::SECTION_GROUP, 'max_members'); ?>
+                ):</h4>
             <ul>
                 <?php
                 foreach ($members as $member) {
@@ -194,14 +198,14 @@ if ($id != 0) {
 
     if ($id == $player['GruppeID']) {
         $messageCount = Database::getInstance()->getGroupMessageCount($id);
-        $offset = verifyOffset($offset, $messageCount, group_page_size);
+        $offset = verifyOffset($offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
         if (array_key_exists('message_write', $rights) && $rights['message_write'] == 1) {
             ?>
             <div class="form GroupMessage">
                 <form action="/actions/gruppe.php" method="post">
                     <input type="hidden" name="a" value="4"/>
-                    <header>Nachricht schreiben</header>
-                    <textarea cols="80" rows="15"
+                    <header><label for="message">Nachricht schreiben</label></header>
+                    <textarea cols="80" rows="15" id="message"
                               name="message"><?= escapeForOutput(getOrDefault($_GET, 'message')); ?></textarea>
                     <div>
                         <input type="submit" value="Absenden"/>
@@ -213,7 +217,7 @@ if ($id != 0) {
 
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('GruppeLastMessageZeit' => date('Y-m-d H:i:s')));
 
-        $entries = Database::getInstance()->getGroupMessageEntries($id, $offset, group_page_size);
+        $entries = Database::getInstance()->getGroupMessageEntries($id, $offset, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
         foreach ($entries as $row) {
             ?>
             <div class="form GroupMessage MessagePin<?= $row['Festgepinnt']; ?>">
@@ -239,6 +243,6 @@ if ($id != 0) {
             </div>
             <?php
         }
-        echo createPaginationTable('/?p=gruppe', $offset, $messageCount, group_page_size);
+        echo createPaginationTable('/?p=gruppe', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
     }
 }

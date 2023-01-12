@@ -25,10 +25,10 @@ $q = getOrDefault($_GET, 'q');
 <?php
 if ($q !== null) {
     $playerRankByName = Database::getInstance()->getPlayerRankByName($q) - 1;
-    $offset = floor($playerRankByName / ranking_page_size);
+    $offset = floor($playerRankByName / Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
 }
 $playerCount = Database::getInstance()->getPlayerCount();
-$offset = verifyOffset($offset, $playerCount, ranking_page_size);
+$offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
 ?>
 <h2>Spieler:</h2>
 <table class="Liste Rangliste" id="User">
@@ -40,7 +40,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
     </tr>
     <?php
     $myself = Database::getInstance()->getPlayerPointsAndMoneyAndNextMafiaAndGroupById($_SESSION['blm_user']);
-    $entries = Database::getInstance()->getRanglisteUserEntries($offset, ranking_page_size);
+    $entries = Database::getInstance()->getRanglisteUserEntries($offset, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         $groupDiplomacy = null;
@@ -57,7 +57,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
         }
         ?>
         <tr<?= $rowExtra; ?>>
-            <td><?= ($offset * ranking_page_size) + $i + 1; ?></td>
+            <td><?= ($offset * Config::getInt(Config::SECTION_BASE, 'ranking_page_size')) + $i + 1; ?></td>
             <td>
                 <?php
                 echo createProfileLink($row['BenutzerID'], $row['BenutzerName']);
@@ -90,7 +90,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
     }
     ?>
 </table>
-<?= createPaginationTable(sprintf('/?p=rangliste&o_gr=%d&o_ep=%d', $offset_gr, $offset_ep), $offset, $playerCount, ranking_page_size, 'o', 'User'); ?>
+<?= createPaginationTable(sprintf('/?p=rangliste&o_gr=%d&o_ep=%d', $offset_gr, $offset_ep), $offset, $playerCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o', 'User'); ?>
 
 <div>
     <form action="/" method="get">
@@ -103,7 +103,7 @@ $offset = verifyOffset($offset, $playerCount, ranking_page_size);
 
 <?php
 $groupCount = Database::getInstance()->getGroupCount();
-$offset_gr = verifyOffset($offset_gr, $groupCount, ranking_page_size);
+$offset_gr = verifyOffset($offset_gr, $groupCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
 ?>
 <h2>Gruppen:</h2>
 <table class="Liste Rangliste" id="Gruppe">
@@ -116,7 +116,7 @@ $offset_gr = verifyOffset($offset_gr, $groupCount, ranking_page_size);
         <th>Durchschnitt</th>
     </tr>
     <?php
-    $entries = Database::getInstance()->getRanglisteGroupEntries($offset_gr, ranking_page_size);
+    $entries = Database::getInstance()->getRanglisteGroupEntries($offset_gr, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         if (strstr($row['Mitglieder'], ';' . $_SESSION['blm_user'] . ';')) {
@@ -126,7 +126,7 @@ $offset_gr = verifyOffset($offset_gr, $groupCount, ranking_page_size);
         }
         ?>
         <tr<?= $rowExtra; ?>>
-            <td><?= ($offset_gr * ranking_page_size) + $i + 1; ?></td>
+            <td><?= ($offset_gr * Config::getInt(Config::SECTION_BASE, 'ranking_page_size')) + $i + 1; ?></td>
             <td><?= createGroupLink($row['GruppeID'], $row['GruppeName']); ?></td>
             <td><?= escapeForOutput($row['GruppeKuerzel']); ?></td>
             <td><?= $row['AnzMitglieder']; ?></td>
@@ -141,11 +141,11 @@ $offset_gr = verifyOffset($offset_gr, $groupCount, ranking_page_size);
     }
     ?>
 </table>
-<?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_ep=%d', $offset, $offset_ep), $offset_gr, $groupCount, ranking_page_size, 'o_gr', 'Gruppe'); ?>
+<?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_ep=%d', $offset, $offset_ep), $offset_gr, $groupCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o_gr', 'Gruppe'); ?>
 
 <?php
 $epCount = Database::getInstance()->getEwigePunkteCount();
-$offset_ep = verifyOffset($offset_ep, $epCount, ranking_page_size);
+$offset_ep = verifyOffset($offset_ep, $epCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
 ?>
 <h2>Ewige Punkte</h2>
 <table class="Liste Rangliste" id="EwigePunkte">
@@ -155,7 +155,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, ranking_page_size);
         <th>Punkte</th>
     </tr>
     <?php
-    $entries = Database::getInstance()->getEwigePunkteEntries($offset_ep, ranking_page_size);
+    $entries = Database::getInstance()->getEwigePunkteEntries($offset_ep, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         if ($row['ID'] == $_SESSION['blm_user'] || ($q !== null && strtolower($row['Name']) == strtolower($q))) {
@@ -165,7 +165,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, ranking_page_size);
         }
         ?>
         <tr<?= $rowExtra; ?>>
-            <td><?= ($offset_ep * ranking_page_size) + $i + 1; ?></td>
+            <td><?= ($offset_ep * Config::getInt(Config::SECTION_BASE, 'ranking_page_size')) + $i + 1; ?></td>
             <td><?= createProfileLink($row['ID'], $row['Name']); ?></td>
             <td><?= formatPoints($row['EwigePunkte']); ?></td>
         </tr>
@@ -177,7 +177,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, ranking_page_size);
     }
     ?>
 </table>
-<?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_gr=%d', $offset, $offset_gr), $offset_ep, $epCount, ranking_page_size, 'o_ep', "EwigePunkte"); ?>
+<?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_gr=%d', $offset, $offset_gr), $offset_ep, $epCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o_ep', "EwigePunkte"); ?>
 
 <h2>Verschiedenes</h2>
 <table class="Liste Rangliste">

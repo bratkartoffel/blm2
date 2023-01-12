@@ -30,13 +30,13 @@ requireEntryFound($entry, '/?p=admin_gruppe');
         <div>
             <label for="name">Name:</label>
             <input name="name" id="name" type="text" value="<?= escapeForOutput($entry['Name']); ?>"
-                   size="20" required maxlength="<?= group_max_name_length; ?>"/>
+                   size="20" required maxlength="<?= Config::getInt(Config::SECTION_GROUP, 'max_name_length'); ?>"/>
         </div>
         <div>
             <label for="kuerzel">Kürzel:</label>
             <input name="kuerzel" id="kuerzel" type="text" size="8" required
                    value="<?= escapeForOutput($entry['Kuerzel']); ?>"
-                   maxlength="<?= group_max_tag_length; ?>"/>
+                   maxlength="<?= Config::getInt(Config::SECTION_GROUP, 'max_tag_length'); ?>"/>
         </div>
         <div>
             <label for="password">Passwort:</label>

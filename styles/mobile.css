@@ -34,8 +34,8 @@
         float: left;
     }
 
-    img#Logo {
-        display: none;
+    div#Logo {
+        display: none !important;
     }
 
     div#SeitenUeberschrift {

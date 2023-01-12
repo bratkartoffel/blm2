@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -28,7 +27,7 @@ if ($data === null) {
 switch ($art) {
     // deposit money
     case 1:
-        if ($betrag > $data['Geld'] || $data['Bank'] + $betrag > deposit_limit) {
+        if ($betrag > $data['Geld'] || $data['Bank'] + $betrag > Config::getInt(Config::SECTION_BANK, 'deposit_limit')) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110, __LINE__);
         }
 
@@ -59,7 +58,7 @@ switch ($art) {
 
     // withdraw money
     case 2:
-        if ($data['Bank'] - $betrag < credit_limit) {
+        if ($data['Bank'] - $betrag < Config::getInt(Config::SECTION_BANK, 'credit_limit')) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 109, __LINE__);
         }
 
@@ -68,7 +67,7 @@ switch ($art) {
                 'Geld' => +$betrag,
                 'Bank' => -$betrag
             ), array(
-                'Bank + ' . abs(credit_limit) . ' >= :whr0' => $betrag
+                'Bank + ' . abs(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . ' >= :whr0' => $betrag
             )) == 0) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);

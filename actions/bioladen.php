@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -29,7 +28,7 @@ if ($alles == 1) {
     $updateStorageWhere = array();
     Database::getInstance()->begin();
     $idx = 0;
-    for ($i = 1; $i <= count_wares; $i++) {
+    for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
         $amount = $data['Lager' . $i];
         if ($amount == 0) continue;
         $price = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
@@ -72,7 +71,7 @@ if ($alles == 1) {
     redirectTo('/?p=bioladen', 208);
 }
 
-if ($was <= 0 || $was > count_wares) {
+if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
     redirectTo('/?p=bioladen', 112, __LINE__);
 }
 

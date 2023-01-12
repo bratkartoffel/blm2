@@ -6,6 +6,40 @@
  * Please see LICENCE.md for complete licence text.
  */
 
+require_once __DIR__ . '/config.class.php';
+
+// enum constant for group diplomacy types
+const group_diplomacy_nap = 1;
+const group_diplomacy_bnd = 2;
+const group_diplomacy_war = 3;
+
+// enum constants for mafia actions
+const mafia_action_espionage = 1;
+const mafia_action_robbery = 2;
+const mafia_action_heist = 3;
+const mafia_action_attack = 4;
+
+function abortWithErrorPage(string $body)
+{
+    http_response_code(500);
+    die(sprintf('<!DOCTYPE html><html lang="de"><body><img src="/pics/big/clock.webp" alt="maintenance"/><h2>%s</h2></body></html>', $body));
+}
+
+function verifyInstallation()
+{
+    if (!file_exists(__DIR__ . '/../config/config.ini')) {
+        abortWithErrorPage('<h2 style="color: red">Ungültige Installation</h2><p>Es konnte keine <code>config.ini</code> gefunden werden.</p>');
+    }
+    try {
+        Database::getInstanceForInstallCheck();
+    } catch (PDOException $e) {
+        abortWithErrorPage('<h2 style="color: red">Ungültige Installation</h2><p>Es konnte keine Datenbankverbindung hergestellt werden, bitte überprüfe deine <code>config.inc.php</code></p>');
+    }
+    if (!Database::getInstance()->tableExists('mitglieder')) {
+        abortWithErrorPage('<h2 style="color: red">Ungültige Installation</h2><p>Datenbankschema nicht installiert, bitte führe ein Update durch.</p>');
+    }
+}
+
 function getOrderChefboxDescription(int $order_type): string
 {
     switch (floor($order_type / 100)) {
@@ -95,12 +129,12 @@ function CheckAuftraege(int $blm_user): bool
 
 function isRoundOver(): bool
 {
-    return (last_reset + game_round_duration <= time() + 5);
+    return Config::getInt(Config::SECTION_BASE, 'roundstart') + Config::getInt(Config::SECTION_BASE, 'game_round_duration') <= time();
 }
 
 function isGameLocked(): bool
 {
-    return (last_reset >= time() + 5);
+    return (Config::getInt(Config::SECTION_BASE, 'roundstart') >= time());
 }
 
 function getMessageBox(int $msg_id): ?string
@@ -123,7 +157,7 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Sie sind nicht angemeldet. Bitte melden Sie sich erst an.';
             break;
         case 103:
-            $text = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist ' . (max_profile_image_size / 1024) . ' KB.';
+            $text = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist ' . (Config::getInt(Config::SECTION_BASE, 'max_profile_image_size') / 1024) . ' KB.';
             break;
         case 104:
             $text = 'Bitte füllen Sie alle Felder aus.';
@@ -207,10 +241,10 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Der Kontostand des Mitglieds ist bereits auf dem Maximum, die Bank weigert sich die Überweisung anzunehmen!';
             break;
         case 132:
-            $text = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als ' . formatCurrency(group_war_min_amount) . ' sein!';
+            $text = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als ' . formatCurrency(Config::getInt(Config::SECTION_GROUP, 'war_min_amount')) . ' sein!';
             break;
         case 133:
-            $text = "Bitte geben Sie eine Dauer zwischen 1 und " . production_hours_max . " Stunden ein!";
+            $text = "Bitte geben Sie eine Dauer zwischen 1 und " . Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max') . " Stunden ein!";
             break;
         case 134:
             $text = "Bitte geben Sie eine gültige EMail-Adresse ein!";
@@ -243,16 +277,16 @@ function getMessageBox(int $msg_id): ?string
             $text = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
             break;
         case 144:
-            $text = sprintf('Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:%s">%s</a>', admin_email, admin_email);
+            $text = sprintf('Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:%s">%s</a>', Config::get(Config::SECTION_BASE, 'admin_email'), Config::get(Config::SECTION_BASE, 'admin_email'));
             break;
         case 145:
             $text = 'Sie müssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten können!';
             break;
         case 146:
-            $text = 'Der Benutzername darf nur zwischen ' . username_min_len . ' und ' . username_max_len . ' Zeichen enthalten';
+            $text = 'Der Benutzername darf nur zwischen ' . Config::getInt(Config::SECTION_BASE, 'username_min_len') . ' und ' . Config::getInt(Config::SECTION_BASE, 'username_max_len') . ' Zeichen enthalten';
             break;
         case 147:
-            $text = 'Das gewählte Passwort ist zu kurz, es muss mindestens aus ' . password_min_len . ' Zeichen bestehen.';
+            $text = 'Das gewählte Passwort ist zu kurz, es muss mindestens aus ' . Config::getInt(Config::SECTION_BASE, 'password_min_len') . ' Zeichen bestehen.';
             break;
         case 148:
             $text = 'Die Registrierung ist aktuell geschlossen';
@@ -285,10 +319,10 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Sie befinden sich bereits in einer Gruppe';
             break;
         case 158:
-            $text = 'Ungültiger Gruppenname (Darf nur maximal ' . group_max_name_length . ' Zeichen lang sein)';
+            $text = 'Ungültiger Gruppenname (Darf nur maximal ' . Config::getInt(Config::SECTION_GROUP, 'max_name_length') . ' Zeichen lang sein)';
             break;
         case 159:
-            $text = 'Ungültiges Gruppenkürzel  (Darf nur maximal ' . group_max_tag_length . ' Zeichen lang sein)';
+            $text = 'Ungültiges Gruppenkürzel  (Darf nur maximal ' . Config::getInt(Config::SECTION_GROUP, 'max_tag_length') . ' Zeichen lang sein)';
             break;
         case 160:
             $text = 'Token in Anfrage nicht gefunden, Aktion verweigert';
@@ -312,13 +346,13 @@ function getMessageBox(int $msg_id): ?string
             $text = 'In der Gruppenkasse befindet sich genügend Geld für den Krieg';
             break;
         case 167:
-            $text = 'Eine diplomatische Beziehung kann erst nach frühestens ' . group_diplomacy_min_duration . ' Tagen aufgekündigt werden';
+            $text = 'Eine diplomatische Beziehung kann erst nach frühestens ' . Config::getInt(Config::SECTION_GROUP, 'diplomacy_min_duration') . ' Tagen aufgekündigt werden';
             break;
         case 168:
             $text = 'Sie können sich selbst keine Nachrichten schicken!';
             break;
         case 169:
-            $text = 'Die Mafia ist erst ab ' . formatPoints(mafia_min_ponts) . ' Punkten verfügbar';
+            $text = 'Die Mafia ist erst ab ' . formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')) . ' Punkten verfügbar';
             break;
         case 170:
             $text = 'Die Mafia erholt sich noch vom letzten Auftrag.';
@@ -478,7 +512,7 @@ function getMessageBox(int $msg_id): ?string
 
 
         case 999:
-            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s', date("d.m.Y \u\m H:i", last_reset));
+            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s', date("d.m.Y \u\m H:i", Config::getInt(Config::SECTION_BASE, 'roundstart')));
             break;
         default:
             $text = sprintf('Meldungsnummer konnte nicht gefunden werden: %d', $msg_id);
@@ -644,7 +678,7 @@ function deleteAccount(int $blm_user): ?string
     }
 
     // delete the user itself
-    foreach (starting_values as $table => $ignored) {
+    foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $ignored) {
         if ($table == Database::TABLE_USERS) {
             $wheres = array('ID' => $blm_user);
         } else {
@@ -676,7 +710,12 @@ function resetAccount(int $blm_user): ?string
     }
 
     // reset all values to the starting defaults
-    foreach (starting_values as $table => $values) {
+    foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
+        foreach ($values as $key => $value) {
+            if ($value === "null" || $value === "") {
+                $values[$key] = null;
+            }
+        }
         if ($table == Database::TABLE_USERS) {
             $idField = $blm_user;
             $wheres = array();
@@ -889,7 +928,7 @@ function createWarenDropdown(int $selectedValue, string $name, bool $withAllEntr
     if ($withAllEntry) {
         $entries[] = '<option value="">- Alle -</option>';
     }
-    for ($i = 1; $i <= count_wares; $i++) {
+    for ($i = 1; $i <= Config::get(Config::SECTION_BASE, 'count_wares'); $i++) {
         if (array_key_exists('Lager' . $i, $onlyStock) && $onlyStock['Lager' . $i] == 0) continue;
         if ($i == $selectedValue) {
             $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $i, getItemName($i));
@@ -966,7 +1005,7 @@ function restrictSitter(string $requiredRight, string $backPage = "index"): void
 
 function createRandomCode(): string
 {
-    if (constant('is_testing') !== null) {
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         // "changeit"
         return '07313f0e320f22cbfa35cfc220508eb3ff457c7e';
     }
@@ -975,7 +1014,7 @@ function createRandomCode(): string
 
 function createRandomPassword(): string
 {
-    if (constant('is_testing') !== null) {
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         return 'changeit';
     }
     return str_replace('+', '_', base64_encode(openssl_random_pseudo_bytes(12)));
@@ -983,25 +1022,25 @@ function createRandomPassword(): string
 
 function sendMail(string $recipient, string $subject, string $message): bool
 {
-    if (constant('is_testing') !== null) {
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         return true;
     }
 
-    if (redirect_all_mails_to_admin) {
+    if (Config::getBoolean(Config::SECTION_BASE, 'redirect_all_mails_to_admin')) {
         $subject .= ' (original recipient ' . $recipient . ')';
-        $recipient = admin_email;
+        $recipient = Config::get(Config::SECTION_BASE, 'admin_email');
     }
 
     $headers = array(
-        'From' => sprintf('%s <%s>', admin_name, admin_email),
-        'Reply-To' => sprintf('%s <%s>', admin_name, admin_email),
+        'From' => sprintf('%s <%s>', Config::get(Config::SECTION_BASE, 'admin_name'), Config::get(Config::SECTION_BASE, 'admin_email')),
+        'Reply-To' => sprintf('%s <%s>', Config::get(Config::SECTION_BASE, 'admin_name'), Config::get(Config::SECTION_BASE, 'admin_email')),
         'X-Mailer' => 'PHP/blm2-' . game_version,
         'Date' => date(DATE_RFC2822),
         'MIME-Version' => '1.0',
         'Content-type' => 'text/html; charset=utf-8',
     );
 
-    return mail($recipient, $subject, $message, $headers, '-f ' . admin_email);
+    return mail($recipient, $subject, $message, $headers, '-f ' . Config::get(Config::SECTION_BASE, 'admin_email'));
 }
 
 function createNavigationLink(string $target, string $text, string $sitterRightsRequired): string
@@ -1015,7 +1054,7 @@ function createNavigationLink(string $target, string $text, string $sitterRights
 function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): string
 {
     if (isLoggedIn()) {
-        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img class="help" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
+        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img id="help_image" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
     }
     return "";
 }
@@ -1142,23 +1181,23 @@ function researchRequirementsMet(int $item_id, int $plantage_level, int $researc
 
 function mafiaRequirementsMet(float $points): bool
 {
-    return $points >= mafia_min_ponts;
+    return $points >= Config::getFloat(Config::SECTION_MAFIA, 'min_points');
 }
 
 function calculateProductionDataForPlayer(int $item_id, int $plantage_level, int $research_level): array
 {
     return array(
-        'Menge' => ($plantage_level * production_plantage_item_id_factor) + ($item_id * production_weight_item_id_factor) + production_base_amount + ($research_level * research_production_weight_factor),
-        'Kosten' => round(production_base_cost + ($research_level * research_production_cost_factor), 2)
+        'Menge' => ($plantage_level * Config::getInt(Config::SECTION_PLANTAGE, 'production_amount_per_level')) + ($item_id * Config::getInt(Config::SECTION_PLANTAGE, 'production_amount_per_item_id')) + Config::getInt(Config::SECTION_PLANTAGE, 'production_base_amount') + ($research_level * Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_amount_per_level')),
+        'Kosten' => round(Config::getInt(Config::SECTION_PLANTAGE, 'production_base_cost') + ($research_level * Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_cost_per_level')), 2)
     );
 }
 
 function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, int $research_level, int $level_increment = 1): array
 {
     return array(
-        'Kosten' => round((100 * $item_id) + (research_base_cost * pow(research_factor_cost, $research_level + $level_increment)), 2),
-        'Dauer' => (int)floor(max(research_min_duration, (research_base_duration * pow(research_factor_duration, $research_level + $level_increment)) * pow(1 - research_lab_bonus_factor, $research_lab_level))),
-        'Punkte' => (research_base_points * pow(research_factor_points, $research_level + $level_increment))
+        'Kosten' => round((100 * $item_id) + (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_cost'), $research_level + $level_increment)), 2),
+        'Dauer' => (int)floor(max(Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_min_duration'), (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_duration'), $research_level + $level_increment)) * pow(1 - Config::getFloat(Config::SECTION_RESEARCH_LAB, 'bonus_factor'), $research_lab_level))),
+        'Punkte' => (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_points') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_points'), $research_level + $level_increment))
     );
 }
 
@@ -1167,65 +1206,65 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
     switch ($building_id) {
         case 1:
             $result = array(
-                'Kosten' => round(plantage_base_cost * pow(plantage_factor_cost, $player['Gebaeude1'] + $level_increment), 2),
-                'Dauer' => plantage_base_duration * pow(plantage_factor_duration, $player['Gebaeude1'] + $level_increment),
-                'Punkte' => plantage_base_points * pow(plantage_factor_points, $player['Gebaeude1'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_PLANTAGE, 'plantage_base_cost') * pow(Config::getFloat(Config::SECTION_PLANTAGE, 'plantage_factor_cost'), $player['Gebaeude1'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_PLANTAGE, 'plantage_base_duration') * pow(Config::getFloat(Config::SECTION_PLANTAGE, 'plantage_factor_duration'), $player['Gebaeude1'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_PLANTAGE, 'plantage_base_points') * pow(Config::getFloat(Config::SECTION_PLANTAGE, 'plantage_factor_points'), $player['Gebaeude1'] + $level_increment)
             );
             break;
 
         case 2:
             $result = array(
-                'Kosten' => round(research_lab_base_cost * pow(research_lab_factor_cost, $player['Gebaeude2'] + $level_increment), 2),
-                'Dauer' => research_lab_base_duration * pow(research_lab_factor_duration, $player['Gebaeude2'] + $level_increment),
-                'Punkte' => research_lab_base_points * pow(research_lab_factor_points, $player['Gebaeude2'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_RESEARCH_LAB, 'base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'factor_cost'), $player['Gebaeude2'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_RESEARCH_LAB, 'base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'factor_duration'), $player['Gebaeude2'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_RESEARCH_LAB, 'base_points') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'factor_points'), $player['Gebaeude2'] + $level_increment)
             );
             break;
 
         case 3:
             $result = array(
-                'Kosten' => round(shop_base_cost * pow(shop_factor_cost, $player['Gebaeude3'] + $level_increment), 2),
-                'Dauer' => shop_base_duration * pow(shop_factor_duration, $player['Gebaeude3'] + $level_increment),
-                'Punkte' => shop_base_points * pow(shop_factor_points, $player['Gebaeude3'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_SHOP, 'base_cost') * pow(Config::getFloat(Config::SECTION_SHOP, 'factor_cost'), $player['Gebaeude3'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_SHOP, 'base_duration') * pow(Config::getFloat(Config::SECTION_SHOP, 'factor_duration'), $player['Gebaeude3'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_SHOP, 'base_points') * pow(Config::getFloat(Config::SECTION_SHOP, 'factor_points'), $player['Gebaeude3'] + $level_increment)
             );
             break;
 
         case 4:
             $result = array(
-                'Kosten' => round(kebab_stand_base_cost * pow(kebab_stand_factor_cost, $player['Gebaeude4'] + $level_increment), 2),
-                'Dauer' => kebab_stand_base_duration * pow(kebab_stand_factor_duration, $player['Gebaeude4'] + $level_increment),
-                'Punkte' => kebab_stand_base_points * pow(kebab_stand_factor_points, $player['Gebaeude4'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_KEBAB_STAND, 'base_cost') * pow(Config::getFloat(Config::SECTION_KEBAB_STAND, 'factor_cost'), $player['Gebaeude4'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_KEBAB_STAND, 'base_duration') * pow(Config::getFloat(Config::SECTION_KEBAB_STAND, 'factor_duration'), $player['Gebaeude4'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_KEBAB_STAND, 'base_points') * pow(Config::getFloat(Config::SECTION_KEBAB_STAND, 'factor_points'), $player['Gebaeude4'] + $level_increment)
             );
             break;
 
         case 5:
             $result = array(
-                'Kosten' => round(building_yard_base_cost * pow(building_yard_factor_cost, $player['Gebaeude5'] + $level_increment), 2),
-                'Dauer' => building_yard_base_duration * pow(building_yard_factor_duration, $player['Gebaeude5'] + $level_increment),
-                'Punkte' => building_yard_base_points * pow(building_yard_factor_points, $player['Gebaeude5'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_BUILDING_YARD, 'base_cost') * pow(Config::getFloat(Config::SECTION_BUILDING_YARD, 'factor_cost'), $player['Gebaeude5'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_BUILDING_YARD, 'base_duration') * pow(Config::getFloat(Config::SECTION_BUILDING_YARD, 'factor_duration'), $player['Gebaeude5'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_BUILDING_YARD, 'base_points') * pow(Config::getFloat(Config::SECTION_BUILDING_YARD, 'factor_points'), $player['Gebaeude5'] + $level_increment)
             );
             break;
 
         case 6:
             $result = array(
-                'Kosten' => round(school_base_cost * pow(school_factor_cost, $player['Gebaeude6'] + $level_increment), 2),
-                'Dauer' => school_base_duration * pow(school_factor_duration, $player['Gebaeude6'] + $level_increment),
-                'Punkte' => school_base_points * pow(school_factor_points, $player['Gebaeude6'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_SCHOOL, 'base_cost') * pow(Config::getFloat(Config::SECTION_SCHOOL, 'factor_cost'), $player['Gebaeude6'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_SCHOOL, 'base_duration') * pow(Config::getFloat(Config::SECTION_SCHOOL, 'factor_duration'), $player['Gebaeude6'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_SCHOOL, 'base_points') * pow(Config::getFloat(Config::SECTION_SCHOOL, 'factor_points'), $player['Gebaeude6'] + $level_increment)
             );
             break;
 
         case 7:
             $result = array(
-                'Kosten' => round(fence_base_cost * pow(fence_factor_cost, $player['Gebaeude7'] + $level_increment), 2),
-                'Dauer' => fence_base_duration * pow(fence_factor_duration, $player['Gebaeude7'] + $level_increment),
-                'Punkte' => fence_base_points * pow(fence_factor_points, $player['Gebaeude7'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_FENCE, 'base_cost') * pow(Config::getFloat(Config::SECTION_FENCE, 'factor_cost'), $player['Gebaeude7'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_FENCE, 'base_duration') * pow(Config::getFloat(Config::SECTION_FENCE, 'factor_duration'), $player['Gebaeude7'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_FENCE, 'base_points') * pow(Config::getFloat(Config::SECTION_FENCE, 'factor_points'), $player['Gebaeude7'] + $level_increment)
             );
             break;
 
         case 8:
             $result = array(
-                'Kosten' => round(pizzeria_base_cost * pow(pizzeria_factor_cost, $player['Gebaeude8'] + $level_increment), 2),
-                'Dauer' => pizzeria_base_duration * pow(pizzeria_factor_duration, $player['Gebaeude8'] + $level_increment),
-                'Punkte' => pizzeria_base_points * pow(pizzeria_factor_points, $player['Gebaeude8'] + $level_increment)
+                'Kosten' => round(Config::getInt(Config::SECTION_PIZZERIA, 'base_cost') * pow(Config::getFloat(Config::SECTION_PIZZERIA, 'factor_cost'), $player['Gebaeude8'] + $level_increment), 2),
+                'Dauer' => Config::getInt(Config::SECTION_PIZZERIA, 'base_duration') * pow(Config::getFloat(Config::SECTION_PIZZERIA, 'factor_duration'), $player['Gebaeude8'] + $level_increment),
+                'Punkte' => Config::getInt(Config::SECTION_PIZZERIA, 'base_points') * pow(Config::getFloat(Config::SECTION_PIZZERIA, 'factor_points'), $player['Gebaeude8'] + $level_increment)
             );
             break;
 
@@ -1238,7 +1277,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
             break;
     }
 
-    $result['Dauer'] *= pow(1 - building_yard_bonus_factor, $player['Gebaeude5']);
+    $result['Dauer'] *= pow(1 - Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor'), $player['Gebaeude5']);
     $result['Dauer'] = (int)floor($result['Dauer']);
 
     return $result;
@@ -1250,26 +1289,26 @@ function calculateSellPrice(int $item_id, int $resarch_level, int $shop_level, i
         $rate = calculateSellRates()[$item_id];
     }
     return round(
-        (item_price_base
-            + $resarch_level * item_price_research_bonus
-            + $shop_level * item_price_shop_bonus
-            + $school_level * item_price_school_bonus
-            + $item_id * item_price_item_id_factor
+        (Config::getFloat(Config::SECTION_SHOP, 'item_price_base')
+            + $resarch_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_research_bonus')
+            + $shop_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_shop_bonus')
+            + $school_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_school_bonus')
+            + $item_id * Config::getFloat(Config::SECTION_SHOP, 'item_price_item_id_factor')
         ) * $rate
         , 2);
 }
 
 function calculateSellRates(): array
 {
-    if (constant('is_testing') !== null) {
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         srand(1337);
     } else {
-        srand(intval(date("ymdH", time())) + crc32(random_secret));
+        srand(intval(date("ymdH", time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     }
     $result = array();
     $factor = 100;
-    for ($i = 1; $i <= count_wares; $i++) {
-        $result[$i] = rand(wares_rate_min * $factor, wares_rate_max * $factor) / $factor;
+    for ($i = 1; $i <= Config::get(Config::SECTION_BASE, 'count_wares'); $i++) {
+        $result[$i] = rand(Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min') * $factor, Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max') * $factor) / $factor;
     }
     srand(mt_rand());
     return $result;
@@ -1277,15 +1316,15 @@ function calculateSellRates(): array
 
 function calculateInterestRates(): array
 {
-    if (constant('is_testing') !== null) {
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         srand(1337);
     } else {
-        srand(intval(date("ymd", time())) + crc32(random_secret));
+        srand(intval(date("ymd", time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     }
     $factor = 10000;
     $result = array(
-        'Debit' => rand(interest_debit_rate_min * $factor, interest_debit_rate_max * $factor) / $factor,
-        'Credit' => rand(interest_credit_rate_min * $factor, interest_credit_rate_max * $factor) / $factor
+        'Debit' => rand(Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_min') * $factor, Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_max') * $factor) / $factor,
+        'Credit' => rand(Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') * $factor, Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max') * $factor) / $factor
     );
     srand(mt_rand());
     return $result;
@@ -1294,12 +1333,12 @@ function calculateInterestRates(): array
 function getLastIncomeTimestamp(): int
 {
     $now = time();
-    return $now - ($now % (cron_interval * 60));
+    return $now - ($now % (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60));
 }
 
 function getIncome(int $shop_level, int $kebab_stand_level): int
 {
-    return (income_base + ($shop_level * income_bonus_shop) + ($kebab_stand_level * income_bonus_kebab_stand));
+    return (Config::getInt(Config::SECTION_BASE, 'income_base') + ($shop_level * Config::getInt(Config::SECTION_BASE, 'income_bonus_shop')) + ($kebab_stand_level * Config::getInt(Config::SECTION_BASE, 'income_bonus_kebab_stand')));
 }
 
 function createBBProfileLink(int $user_id, string $user_name): string
@@ -1363,29 +1402,29 @@ function requireXsrfToken(string $link): void
 function handleRoundEnd(): void
 {
     Database::getInstance()->begin();
-    $nextStart = strtotime(date('Y-m-d H:00:00', time() + game_pause_duration));
+    $nextStart = strtotime(date('Y-m-d H:00:00', time() + Config::getInt(Config::SECTION_BASE, 'game_pause_duration')));
 
     // determine information for mail
     $expenseBuildings = '';
     foreach (Database::getInstance()->getLeaderBuildings(3) as $entry) {
         $expenseBuildings .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            base_url, $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenGebaeude']));
+            Config::get(Config::SECTION_BASE, 'base_url'), $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenGebaeude']));
     }
     $expenseResearch = '';
     foreach (Database::getInstance()->getLeaderResearch(3) as $entry) {
         $expenseResearch .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            base_url, $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenForschung']));
+            Config::get(Config::SECTION_BASE, 'base_url'), $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenForschung']));
     }
     $expenseMafia = '';
     foreach (Database::getInstance()->getLeaderMafia(3) as $entry) {
         $expenseMafia .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            base_url, $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenMafia']));
+            Config::get(Config::SECTION_BASE, 'base_url'), $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenMafia']));
     }
     $rankingPoints = '';
     $eternalPoints = 5;
     foreach (Database::getInstance()->getRanglisteUserEntries(0, 5) as $entry) {
         $rankingPoints .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            base_url, $entry['BenutzerID'], escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
+            Config::get(Config::SECTION_BASE, 'base_url'), $entry['BenutzerID'], escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
             Database::getInstance()->rollBack();
             die('Could not update eternal points for player ' . $entry['ID']);
@@ -1433,7 +1472,7 @@ EOF;
 
     $mail = str_replace(
         array('__TITLE__', '__NEXT_START__', '__BETREIBER__', '__URL__'),
-        array(game_title, formatDateTime($nextStart), admin_name, base_url),
+        array(Config::get(Config::SECTION_BASE, 'game_title'), formatDateTime($nextStart), Config::get(Config::SECTION_BASE, 'admin_name'), Config::get(Config::SECTION_BASE, 'base_url')),
         $mail);
 
     // reset all accounts
@@ -1465,29 +1504,32 @@ EOF;
     }
 
     // write the last reset file
-    $startDatetime = date('Y-m-d H:i:s', $nextStart);
-    $lastResetFile = dirname(__FILE__) . '/../include/last_reset.inc.php';
-    $fp = fopen($lastResetFile, 'w');
-    if ($fp === false) {
-        die('Could not create ' . $lastResetFile . ', please check for write permissions!');
-    }
-    fwrite($fp, "<?php
- define('last_reset', strtotime('$startDatetime'));
-");
-    fclose($fp);
+    $startTimestamp = date('Y-m-d H:i:s', $nextStart);
+    writeRoundstartFile($startTimestamp);
 
     // send the mails to all active players
     foreach ($players as $player) {
         if ($player['EMailAct'] !== null || $player['LastLogin'] === null) continue;
-        if (!sendMail($player['EMail'], game_title . ': Rundenende', str_replace('__NAME__', escapeForOutput($player['Name']), $mail))) {
+        if (!sendMail($player['EMail'], Config::get(Config::SECTION_BASE, 'game_title') . ': Rundenende', str_replace('__NAME__', escapeForOutput($player['Name']), $mail))) {
             trigger_error('Could not send mail to ' . $player['EMail'], E_USER_WARNING);
         }
     }
 }
 
+function writeRoundstartFile($startTimestamp): void
+{
+    $fp = fopen(Config::ROUNDSTART_FILE, 'w');
+    if ($fp === false) {
+        die('Could not create ' . Config::ROUNDSTART_FILE . ', please check for write permissions!');
+    }
+    fputs($fp, sprintf("; round started on %s\n", $startTimestamp));
+    fputs($fp, sprintf("roundstart = %d", strtotime($startTimestamp)));
+    fclose($fp);
+}
+
 function hashPassword(string $password): string
 {
-    return password_hash($password, password_hash_algorithm, password_hash_options);
+    return password_hash($password, PASSWORD_ARGON2ID, Config::get(Config::SECTION_BASE, 'password_hash_options'));
 }
 
 function verifyPassword(string $password, string $hash): string
@@ -1497,7 +1539,7 @@ function verifyPassword(string $password, string $hash): string
 
 function passwordNeedsUpgrade(string $hash): bool
 {
-    return password_needs_rehash($hash, password_hash_algorithm, password_hash_options);
+    return password_needs_rehash($hash, PASSWORD_ARGON2ID, Config::get(Config::SECTION_BASE, 'password_hash_options'));
 }
 
 function maybeMafiaOpponents(float $pointsLeft, float $pointsRight, ?int $groupDiplomacy): bool
@@ -1509,14 +1551,14 @@ function maybeMafiaOpponents(float $pointsLeft, float $pointsRight, ?int $groupD
     } else {
         $a = min($pointsLeft, $pointsRight);
         $b = max($pointsLeft, $pointsRight);
-        return $a > $b / mafia_faktor_punkte && $a < $b * mafia_faktor_punkte;
+        return $a > $b / Config::getFloat(Config::SECTION_MAFIA, 'points_factor') && $a < $b * Config::getFloat(Config::SECTION_MAFIA, 'points_factor');
     }
 }
 
 function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId, ?int $myGroup): ?string
 {
-    if ($myPoints < mafia_min_ponts) return null;
-    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup, mafia_faktor_punkte);
+    if ($myPoints < Config::getFloat(Config::SECTION_MAFIA, 'min_points')) return null;
+    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup, Config::getFloat(Config::SECTION_MAFIA, 'points_factor'));
     $entries = array();
     foreach ($data as $entry) {
         $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);
@@ -1530,7 +1572,7 @@ function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId,
 
 function uploadProfilePicture(array $file, string $filename): int
 {
-    if (filesize($file['tmp_name']) > max_profile_image_size) {
+    if (filesize($file['tmp_name']) > Config::getInt(Config::SECTION_BASE, 'max_profile_image_size')) {
         return 103;
     }
 
@@ -1571,3 +1613,47 @@ function obfuscate(string $text): string
         return bin2hex($parts[0]) . '@' . $parts[1];
     }
 }
+
+function getMafiaConfigSection(int $action): string
+{
+    switch ($action) {
+        case 1:
+            return Config::SECTION_MAFIA_ESPIONAGE;
+        case 2:
+            return Config::SECTION_MAFIA_ROBBERY;
+        case 3:
+            return Config::SECTION_MAFIA_HEIST;
+        case 4:
+            return Config::SECTION_MAFIA_ATTACK;
+        default:
+            trigger_error("invalid action given", E_USER_ERROR);
+    }
+}
+
+function getMafiaChance(string $cfgSection, int $level, int $pizzeriaLevel = 0, int $fenceLevel = 0): float
+{
+    $chance = floatval(Config::get($cfgSection, "chance")[$level]);
+    $chance += $pizzeriaLevel * Config::getFloat(Config::SECTION_PIZZERIA, 'mafia_bonus');
+    $chance -= $fenceLevel * Config::getFloat(Config::SECTION_FENCE, 'mafia_bonus');
+    return max(0.01, min($chance, 0.95));
+}
+
+// create the roundstart information file if it's missing
+if (!file_exists(Config::ROUNDSTART_FILE)) {
+    writeRoundstartFile(date('Y-m-d H:00:00'));
+}
+
+// set the timezone for this game
+date_default_timezone_set(Config::get(Config::SECTION_BASE, 'timezone'));
+
+// check for maintenance
+if (Config::getBoolean(Config::SECTION_BASE, "maintenance_active")) {
+    if (defined('IS_CRON')) {
+        die("Maintenance active\n");
+    } else {
+        abortWithErrorPage(Config::get(Config::SECTION_BASE, 'maintenance_message'));
+    }
+}
+
+// start a http session
+session_start();

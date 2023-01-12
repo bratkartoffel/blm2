@@ -51,8 +51,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wen = empty($wen) ? "%" : $wen;
     $filter_angenommen = $angenommen === -1 ? null : intval($angenommen);
     $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $filter_angenommen);
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $filter_angenommen, $offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $filter_angenommen, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -74,7 +74,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_vertraege&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen) . '&amp;angenommen=' . escapeForOutput($angenommen), $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_log_vertraege&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen) . '&amp;angenommen=' . escapeForOutput($angenommen), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

@@ -7,13 +7,13 @@
 */
 
 $start = microtime(true);
-require_once('include/config.inc.php');
-require_once('include/functions.inc.php');
-require_once('include/database.class.php');
+require_once 'include/game_version.inc.php';
+require_once 'include/functions.inc.php';
+require_once 'include/database.class.php';
 
-if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + session_timeout < time()) {
+if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') < time()) {
     session_destroy();
-    die('<!DOCTYPE html><html lang="de"><head><title>' . game_title . ' - Chefbox</title><script>self.close(); window.location.href = "' . base_url . '";</script></head></html>');
+    die('<!DOCTYPE html><html lang="de"><head><title>' . Config::get(Config::SECTION_BASE, 'game_title') . ' - Chefbox</title><script>self.close(); window.location.href = "' . Config::get(Config::SECTION_BASE, 'base_url') . '";</script></head></html>');
 }
 
 Database::getInstance()->begin();
@@ -32,7 +32,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta http-equiv="refresh" content="300"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
-    <title><?= game_title; ?> - Chefbox</title>
+    <title><?= Config::get(Config::SECTION_BASE, 'game_title'); ?> - Chefbox</title>
     <script src="/js/functions.min.js?<?= game_version; ?>"></script>
 </head>
 <body id="Chefbox">
@@ -73,7 +73,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     </tr>
     <tr>
         <td>Nächstes Einkommen und Zinsen:</td>
-        <td class="countdown"><?= formatDuration(getLastIncomeTimestamp() + (cron_interval * 60) - time()); ?></td>
+        <td class="countdown"><?= formatDuration(getLastIncomeTimestamp() + (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60) - time()); ?></td>
     </tr>
     <tr>
         <td>Nächste Mafia:</td>
@@ -81,7 +81,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     </tr>
     <tr>
         <td>Logout wegen Inaktivität:</td>
-        <td class="countdown"><?= formatDuration(max(0, $_SESSION['blm_lastAction'] + session_timeout - time())); ?></td>
+        <td class="countdown"><?= formatDuration(max(0, $_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') - time())); ?></td>
     </tr>
 </table>
 <table>

@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -18,13 +17,16 @@ $action = getOrDefault($_POST, 'action', -1);
 $level = getOrDefault($_POST, 'level', -1);
 
 $backLink = sprintf('/?p=mafia&opponent=%d&action=%d&level=%d', urlencode($opponent), $action, $level);
-if ($action < 0 || $action > count(mafia_base_data)) {
+if ($action < 1 || $action > 4) {
     redirectTo($backLink, 112, __LINE__);
 }
-if ($level < 0 || $level > count(mafia_base_data[0])) {
+if ($level < 0 || $level > 3) {
     redirectTo($backLink, 112, __LINE__);
 }
 
+$cfgSection = getMafiaConfigSection($action);
+$costs = intval(Config::get($cfgSection, 'costs')[$level]);
+$points = Config::getInt($cfgSection, 'points');
 $player = Database::getInstance()->getPlayerPointsAndGruppeAndMoneyAndNextMafiaAndPizzeriaById($_SESSION['blm_user']);
 if (!mafiaRequirementsMet($player['Punkte'])) {
     redirectTo($backLink, 112, __LINE__);
@@ -32,7 +34,7 @@ if (!mafiaRequirementsMet($player['Punkte'])) {
 if (strtotime($player['NextMafia']) > time()) {
     redirectTo($backLink, 170, __LINE__);
 }
-if (mafia_base_data[$action][$level]['cost'] > $player['Geld']) {
+if ($costs > $player['Geld']) {
     redirectTo($backLink, 111, __LINE__);
 }
 
@@ -57,38 +59,34 @@ if ($groupDiplomacy !== group_diplomacy_war &&
     redirectTo($backLink, 155, __LINE__);
 }
 
-$sperrZeit = mafia_base_data[$action]['waittime'];
+$sperrZeit = Config::getInt($cfgSection, 'wait_time');
+$chance = getMafiaChance($cfgSection, $level, $player['Gebaeude8'], $otherPlayer['Gebaeude7']);
 
-$chance = mafia_base_data[$action][$level]['chance'];
-$chance += $player['Gebaeude8'] * mafia_bonus_factor_pizzeria;
-$chance -= $otherPlayer['Gebaeude7'] * mafia_bonus_factor_fence;
-$chance = max(0.01, min($chance, 0.95));
 $factor = 10000;
-
 $random = mt_rand(0, $factor) / $factor;
 $success = $random <= $chance;
 
 Database::getInstance()->begin();
 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
-        array('Geld' => -mafia_base_data[$action][$level]['cost']),
-        array('Geld >= :whr0' => mafia_base_data[$action][$level]['cost'])) !== 1) {
+        array('Geld' => -$costs),
+        array('Geld >= :whr0' => $costs)) !== 1) {
     Database::getInstance()->rollback();
     redirectTo($backLink, 111, __LINE__);
 }
 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-        array('AusgabenMafia' => mafia_base_data[$action][$level]['cost']),
+        array('AusgabenMafia' => $costs),
         array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
     Database::getInstance()->rollback();
     redirectTo($backLink, 111, __LINE__);
 }
 if ($success) {
     if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
-            array('Punkte' => mafia_base_data[$action]['points'])) !== 1) {
+            array('Punkte' => $points)) !== 1) {
         Database::getInstance()->rollback();
         redirectTo($backLink, 142, __LINE__);
     }
     if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-            array('MafiaPlus' => mafia_base_data[$action]['points']),
+            array('MafiaPlus' => $points),
             array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
         Database::getInstance()->rollback();
         redirectTo($backLink, 142, __LINE__);
@@ -98,7 +96,7 @@ if ($success) {
 switch ($action) {
     // espionage
     case mafia_action_espionage:
-        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= Config::getFloat(Config::SECTION_MAFIA, 'wait_factor_war');
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
@@ -107,12 +105,12 @@ switch ($action) {
         $data = Database::getInstance()->getPlayerEspionageDataByID($otherPlayer['ID']);
         if ($success) {
             $stock = array();
-            for ($i = 1; $i <= count_wares; $i++) {
+            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
                 if ($data['Lager' . $i] == 0) continue;
                 $stock[] = sprintf('* %s: %s', getItemName($i), formatWeight($data['Lager' . $i]));
             }
             $buildings = array();
-            for ($i = 1; $i <= count_buildings; $i++) {
+            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
                 if ($data['Gebaeude' . $i] == 0) continue;
                 $buildings[] = sprintf('* %s: %d', getBuildingName($i), $data['Gebaeude' . $i]);
             }
@@ -183,7 +181,7 @@ switch ($action) {
 
     // robbery
     case mafia_action_robbery:
-        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= Config::getFloat(Config::SECTION_MAFIA, 'wait_factor_war');
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
@@ -191,7 +189,7 @@ switch ($action) {
         }
         $amount = null;
         if ($success) {
-            $rate = mt_rand(mafia_raub_min_rate * $factor, $factor * mafia_raub_max_rate) / $factor;
+            $rate = mt_rand(Config::getFloat(Config::SECTION_MAFIA, 'raub_min_rate') * $factor, $factor * Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')) / $factor;
             $amount = $otherPlayer['Geld'] * $rate;
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
@@ -276,7 +274,7 @@ switch ($action) {
 
     // heist
     case mafia_action_heist:
-        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= mafia_sperrzeit_factor_war;
+        if ($groupDiplomacy === group_diplomacy_war) $sperrZeit *= Config::getFloat(Config::SECTION_MAFIA, 'wait_factor_war');
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('NextMafia' => date('Y-m-d H:i:s', time() + $sperrZeit))) !== 1) {
             Database::getInstance()->rollback();
@@ -287,7 +285,7 @@ switch ($action) {
             $valuesSub = array();
             $valuesAdd = array();
             $wheresSub = array();
-            for ($i = 1; $i <= count_wares; $i++) {
+            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
                 $valuesSub['Lager' . $i] = -$data['Lager' . $i];
                 $wheresSub['Lager' . $i . ' >= :whr' . ($i - 1)] = $data['Lager' . $i];
                 $valuesAdd['Lager' . $i] = $data['Lager' . $i];
@@ -304,7 +302,7 @@ switch ($action) {
             }
 
             $wares = array();
-            for ($i = 1; $i <= count_wares; $i++) {
+            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
                 if ($data['Lager' . $i] == 0) continue;
                 if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                         'senderId' => $_SESSION['blm_user'],

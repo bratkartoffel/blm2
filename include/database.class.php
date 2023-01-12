@@ -6,6 +6,8 @@
  * Please see LICENCE.md for complete licence text.
  */
 
+require_once(__DIR__ . '/config.class.php');
+
 class Database
 {
     public const TABLE_JOBS = 'auftrag';
@@ -56,8 +58,14 @@ class Database
     function __construct(bool $dieOnInitError)
     {
         try {
-            $this->link = new PDO(sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
-                database_hostname, database_database), database_username, database_password,
+            $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4',
+                Config::get(Config::SECTION_DATABASE, 'hostname'),
+                Config::get(Config::SECTION_DATABASE, 'database'),
+            );
+            $this->link = new PDO(
+                $dsn,
+                Config::get(Config::SECTION_DATABASE, 'username'),
+                Config::get(Config::SECTION_DATABASE, 'password'),
                 array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
             $this->link->query("SET time_zone = '" . date_default_timezone_get() . "'");
             $this->queries++;
@@ -1226,7 +1234,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         // @formatter:on
         $result = $this->executeAndExtractFirstRow($stmt);
         if ($result !== null) {
-            $stmt = $this->prepare("SHOW TABLE STATUS FROM `" . database_database . "` WHERE `name` = :table");
+            $stmt = $this->prepare("SHOW TABLE STATUS FROM `" . Config::get(Config::SECTION_DATABASE, 'database') . "` WHERE `name` = :table");
             $table = self::TABLE_JOBS;
             $stmt->bindParam("table", $table);
             $result['AnzahlAuftraege'] = $this->executeAndExtractField($stmt, 'Auto_increment');
@@ -1353,7 +1361,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, ?int $myGroup, float $pointsRange): ?array
     {
-        $lowPoints = max(mafia_min_ponts, $myPoints / $pointsRange);
+        $lowPoints = max(Config::getFloat(Config::SECTION_MAFIA, 'min_points'), $myPoints / $pointsRange);
         $highPoints = $myPoints * $pointsRange;
         $stmt = $this->prepare("SELECT ID, Name, Gruppe, Punkte
 FROM " . self::TABLE_USERS . " m
@@ -1483,7 +1491,7 @@ ORDER BY m.Name");
 
     public function tableExists(string $table): bool
     {
-        $db = database_database;
+        $db = Config::get(Config::SECTION_DATABASE, 'database');
         $stmt = $this->prepare("SELECT count(1) as count FROM information_schema.TABLES WHERE TABLE_SCHEMA = :schema AND TABLE_NAME = :table");
         $stmt->bindParam('schema', $db);
         $stmt->bindParam('table', $table);

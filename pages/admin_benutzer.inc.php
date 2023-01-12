@@ -26,8 +26,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     </tr>
     <?php
     $entriesCount = Database::getInstance()->getPlayerCount();
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAllPlayerIdsAndNameAndEMailAndRegistriertAmAndGesperrtAndVerwarnungen($offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAllPlayerIdsAndNameAndEMailAndRegistriertAmAndGesperrtAndVerwarnungen($offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -51,6 +51,6 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_benutzer', $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_benutzer', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <a href="/?p=admin">&lt;&lt; Zurück</a>

@@ -79,12 +79,12 @@ if ($rights['edit_password']) {
             <div>
                 <label for="new_pw1">Neues Passwort:</label>
                 <input id="new_pw1" type="password" name="new_pw1" size="20" required
-                       minlength="<?= password_min_len; ?>"/>
+                       minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
             </div>
             <div>
                 <label for="new_pw2">Bestätigen:</label>
                 <input id="new_pw2" type="password" name="new_pw2" size="20" required
-                       minlength="<?= password_min_len; ?>"/>
+                       minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
             </div>
             <div>
                 <input type="submit" value="Speichern" id="save_password"/>

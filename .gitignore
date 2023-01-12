@@ -1,6 +1,5 @@
 .idea
 config/config.ini
 config/roundstart.ini
-pics/uploads/*
-!pics/uploads/.gitkeep
+pics/uploads/*.webp
 actions/test-*.php

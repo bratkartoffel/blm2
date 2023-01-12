@@ -15,6 +15,7 @@ import com.evanlennick.retry4j.exception.UnexpectedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -26,10 +27,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +49,15 @@ public abstract class AbstractTest {
     private static final AtomicBoolean installed = new AtomicBoolean();
 
     @BeforeEach
-    void resetDriver() {
+    void resetDriver(TestInfo testInfo) {
         driver.manage().deleteAllCookies();
-        driver.get("http://localhost/");
+        driver.get("http://localhost/?test=" + URLEncoder.encode("%s_%s".formatted(
+                        testInfo.getTestClass().map(Class::getName).orElse(null),
+                        testInfo.getTestMethod().map(Method::getName).orElse(null)
+                ), StandardCharsets.UTF_8)
+        );
         driver.findElement(By.id("Inhalt"));
+
     }
 
     @BeforeAll

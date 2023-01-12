@@ -1201,81 +1201,41 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
 {
     switch ($building_id) {
         case 1:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_PLANTAGE, 'plantage_base_cost') * pow(Config::getFloat(Config::SECTION_PLANTAGE, 'plantage_factor_cost'), $player['Gebaeude1'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_PLANTAGE, 'plantage_base_duration') * pow(Config::getFloat(Config::SECTION_PLANTAGE, 'plantage_factor_duration'), $player['Gebaeude1'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_PLANTAGE, 'plantage_base_points') * pow(Config::getFloat(Config::SECTION_PLANTAGE, 'plantage_factor_points'), $player['Gebaeude1'] + $level_increment)
-            );
+            $section = Config::SECTION_PLANTAGE;
             break;
-
         case 2:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_RESEARCH_LAB, 'base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'factor_cost'), $player['Gebaeude2'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_RESEARCH_LAB, 'base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'factor_duration'), $player['Gebaeude2'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_RESEARCH_LAB, 'base_points') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'factor_points'), $player['Gebaeude2'] + $level_increment)
-            );
+            $section = Config::SECTION_RESEARCH_LAB;
             break;
-
         case 3:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_SHOP, 'base_cost') * pow(Config::getFloat(Config::SECTION_SHOP, 'factor_cost'), $player['Gebaeude3'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_SHOP, 'base_duration') * pow(Config::getFloat(Config::SECTION_SHOP, 'factor_duration'), $player['Gebaeude3'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_SHOP, 'base_points') * pow(Config::getFloat(Config::SECTION_SHOP, 'factor_points'), $player['Gebaeude3'] + $level_increment)
-            );
+            $section = Config::SECTION_SHOP;
             break;
-
         case 4:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_KEBAB_STAND, 'base_cost') * pow(Config::getFloat(Config::SECTION_KEBAB_STAND, 'factor_cost'), $player['Gebaeude4'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_KEBAB_STAND, 'base_duration') * pow(Config::getFloat(Config::SECTION_KEBAB_STAND, 'factor_duration'), $player['Gebaeude4'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_KEBAB_STAND, 'base_points') * pow(Config::getFloat(Config::SECTION_KEBAB_STAND, 'factor_points'), $player['Gebaeude4'] + $level_increment)
-            );
+            $section = Config::SECTION_KEBAB_STAND;
             break;
-
         case 5:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_BUILDING_YARD, 'base_cost') * pow(Config::getFloat(Config::SECTION_BUILDING_YARD, 'factor_cost'), $player['Gebaeude5'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_BUILDING_YARD, 'base_duration') * pow(Config::getFloat(Config::SECTION_BUILDING_YARD, 'factor_duration'), $player['Gebaeude5'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_BUILDING_YARD, 'base_points') * pow(Config::getFloat(Config::SECTION_BUILDING_YARD, 'factor_points'), $player['Gebaeude5'] + $level_increment)
-            );
+            $section = Config::SECTION_BUILDING_YARD;
             break;
-
         case 6:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_SCHOOL, 'base_cost') * pow(Config::getFloat(Config::SECTION_SCHOOL, 'factor_cost'), $player['Gebaeude6'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_SCHOOL, 'base_duration') * pow(Config::getFloat(Config::SECTION_SCHOOL, 'factor_duration'), $player['Gebaeude6'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_SCHOOL, 'base_points') * pow(Config::getFloat(Config::SECTION_SCHOOL, 'factor_points'), $player['Gebaeude6'] + $level_increment)
-            );
+            $section = Config::SECTION_SCHOOL;
             break;
-
         case 7:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_FENCE, 'base_cost') * pow(Config::getFloat(Config::SECTION_FENCE, 'factor_cost'), $player['Gebaeude7'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_FENCE, 'base_duration') * pow(Config::getFloat(Config::SECTION_FENCE, 'factor_duration'), $player['Gebaeude7'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_FENCE, 'base_points') * pow(Config::getFloat(Config::SECTION_FENCE, 'factor_points'), $player['Gebaeude7'] + $level_increment)
-            );
+            $section = Config::SECTION_FENCE;
             break;
-
         case 8:
-            $result = array(
-                'Kosten' => round(Config::getInt(Config::SECTION_PIZZERIA, 'base_cost') * pow(Config::getFloat(Config::SECTION_PIZZERIA, 'factor_cost'), $player['Gebaeude8'] + $level_increment), 2),
-                'Dauer' => Config::getInt(Config::SECTION_PIZZERIA, 'base_duration') * pow(Config::getFloat(Config::SECTION_PIZZERIA, 'factor_duration'), $player['Gebaeude8'] + $level_increment),
-                'Punkte' => Config::getInt(Config::SECTION_PIZZERIA, 'base_points') * pow(Config::getFloat(Config::SECTION_PIZZERIA, 'factor_points'), $player['Gebaeude8'] + $level_increment)
-            );
+            $section = Config::SECTION_PIZZERIA;
             break;
-
         default:
-            $result = array(
-                'Kosten' => null,
-                'Dauer' => null,
-                'Punkte' => null
-            );
-            break;
+            trigger_error('Unknown building id given', E_USER_ERROR);
     }
+
+    $result = array(
+        'Kosten' => round(Config::getInt($section, 'base_cost') * pow(Config::getFloat($section, 'factor_cost'), $player['Gebaeude' . $building_id] + $level_increment), 2),
+        'Dauer' => Config::getInt($section, 'base_duration') * pow(Config::getFloat($section, 'factor_duration'), $player['Gebaeude' . $building_id] + $level_increment),
+        'Punkte' => Config::getInt($section, 'base_points') * pow(Config::getFloat($section, 'factor_points'), $player['Gebaeude' . $building_id] + $level_increment)
+    );
 
     $result['Dauer'] *= pow(1 - Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor'), $player['Gebaeude5']);
     $result['Dauer'] = (int)floor($result['Dauer']);
-
     return $result;
 }
 

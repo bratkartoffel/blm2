@@ -592,6 +592,7 @@ div.GroupLog div span:first-of-type {
 /*region Nachrichten*/
 table.Nachrichten {
     white-space: nowrap;
+    width: 100%;
 }
 
 table.Nachrichten td:last-of-type {

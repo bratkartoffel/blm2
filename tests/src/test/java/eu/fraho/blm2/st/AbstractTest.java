@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,7 +32,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 

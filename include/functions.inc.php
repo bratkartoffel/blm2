@@ -671,22 +671,24 @@ function replaceBBCode(string $text): string
 
 function deleteAccount(int $blm_user): ?string
 {
-    // delete everything associated with this user
+    // reset everything associated with this user
     $status = resetAccount($blm_user);
     if ($status !== null) {
         return 'reset_' . $status;
     }
 
-    // delete the user itself
-    foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $ignored) {
-        if ($table == Database::TABLE_USERS) {
-            $wheres = array('ID' => $blm_user);
-        } else {
-            $wheres = array('user_id' => $blm_user);
-        }
-        if (Database::getInstance()->deleteTableEntryWhere($table, $wheres) === null) {
-            return 'delete_' . $table;
-        }
+    // delete all data which was not removed by the reset
+    if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_PASSWORD_RESET, array('user_id' => $blm_user)) === null) {
+        return 'delete_' . Database::TABLE_PASSWORD_RESET;
+    }
+    if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_SITTER, array('user_id' => $blm_user)) === null) {
+        return 'delete_' . Database::TABLE_SITTER;
+    }
+    if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_STATISTICS, array('user_id' => $blm_user)) === null) {
+        return 'delete_' . Database::TABLE_STATISTICS;
+    }
+    if (Database::getInstance()->deleteTableEntry(Database::TABLE_USERS, $blm_user) === null) {
+        return 'delete_' . Database::TABLE_USERS;
     }
 
     // delete his profile picture
@@ -704,23 +706,15 @@ function resetAccount(int $blm_user): ?string
     if ($player['Gruppe'] !== null && Database::getInstance()->getGroupMemberCountById($player['Gruppe']) == 1) {
         $status = Database::getInstance()->deleteGroup($player['Gruppe']);
         if ($status !== null) {
-            return $status;
+            return 'delete_group_' . $status;
         }
         @unlink(sprintf("../pics/uploads/g_%d.webp", $player['Gruppe']));
     }
 
     // reset all values to the starting defaults
-    foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
-        if ($table == Database::TABLE_USERS) {
-            $idField = $blm_user;
-            $wheres = array();
-        } else {
-            $idField = null;
-            $wheres = array('user_id = :whr0' => $blm_user);
-        }
-        if (Database::getInstance()->updateTableEntry($table, $idField, $values, $wheres) === null) {
-            return $table;
-        }
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $blm_user,
+            Config::getSection(Config::SECTION_STARTING_VALUES)) === null) {
+        return 'reset_' . Database::TABLE_USERS;
     }
 
     // delete all other data associated with this user
@@ -730,12 +724,19 @@ function resetAccount(int $blm_user): ?string
         Database::TABLE_SITTER => 'ID',
         Database::TABLE_GROUP_RIGHTS => 'user_id',
         Database::TABLE_GROUP_CASH => 'user_id',
+        Database::TABLE_GROUP_MESSAGES => 'Von',
         Database::TABLE_CONTRACTS => 'Von',
+        Database::TABLE_STATISTICS => 'user_id',
     );
     foreach ($deleteTables as $table => $field) {
         if (Database::getInstance()->deleteTableEntryWhere($table, array($field => $blm_user)) === null) {
-            return $table;
+            return 'delete_' . $table;
         }
+    }
+
+    // recreate the statistics entry
+    if (Database::getInstance()->createTableEntry(Database::TABLE_STATISTICS, array('user_id' => $blm_user)) === null) {
+        return 'create_' . Database::TABLE_STATISTICS;
     }
 
     // handle all contracts which where sent to this user
@@ -743,11 +744,11 @@ function resetAccount(int $blm_user): ?string
     foreach ($data as $entry) {
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
                 array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
-            return 'lagerhaus';
+            return 'retract_contract_' . Database::TABLE_USERS;
         }
     }
     if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_CONTRACTS, array('An' => $blm_user)) === null) {
-        return $table;
+        return 'retract_contract_' . Database::TABLE_CONTRACTS;
     }
 
     return null;

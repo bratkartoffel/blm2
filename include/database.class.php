@@ -1482,6 +1482,24 @@ ORDER BY m.Name");
         return null;
     }
 
+    public function createUser(string $name, $email, string $email_activation_code, string $password): bool
+    {
+        $defaults = Config::getSection(Config::SECTION_STARTING_VALUES);
+        $defaults['Name'] = $name;
+        $defaults['EMail'] = $email;
+        $defaults['EMailAct'] = $email_activation_code;
+        $defaults['Passwort'] = hashPassword($password);
+        if (Database::getInstance()->createTableEntry(Database::TABLE_USERS, $defaults) === null) {
+            return false;
+        }
+        if (Database::getInstance()->createTableEntry(Database::TABLE_STATISTICS,
+                array('user_id' => Database::getInstance()->lastInsertId())) === null) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getInstallScriptChecksum(string $script): ?string
     {
         $stmt = $this->prepare("SELECT Checksum FROM " . self::TABLE_UPDATE_INFO . " WHERE Script = :script");

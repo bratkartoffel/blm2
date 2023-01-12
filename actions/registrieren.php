@@ -57,21 +57,10 @@ if (Database::getInstance()->existsPlayerByNameOrEmail($name, $email)) {
 
 $email_activation_code = createRandomCode();
 
-$id = null;
 Database::getInstance()->begin();
-foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
-    if ($id !== null) $values['user_id'] = $id;
-    if ($table == Database::TABLE_USERS) {
-        $values['Name'] = $name;
-        $values['EMail'] = $email;
-        $values['EMailAct'] = $email_activation_code;
-        $values['Passwort'] = hashPassword($pwd1);
-    }
-    if (Database::getInstance()->createTableEntry($table, $values) === null) {
-        Database::getInstance()->rollBack();
-        redirectTo($backLink, 141, __LINE__ . '_' . $table);
-    }
-    if ($table == Database::TABLE_USERS) $id = Database::getInstance()->lastInsertId();
+if (!Database::getInstance()->createUser($name, $email, $email_activation_code, $pwd1)) {
+    Database::getInstance()->rollBack();
+    redirectTo($backLink, 141, __LINE__);
 }
 Database::getInstance()->commit();
 

@@ -64,7 +64,7 @@ $rates = calculateSellRates();
         + $data['EinnahmenMarkt'] + $data['EinnahmenVertraege'] + $data['EinnahmenMafia'];
     $AusgabenGesamt = $data['AusgabenGebaeude'] + $data['AusgabenForschung'] + $data['AusgabenProduktion']
         + $data['AusgabenZinsen'] + $data['AusgabenMarkt'] + $data['AusgabenVertraege'] + $data['AusgabenMafia'];
-    $difference = Config::getSection(Config::SECTION_STARTING_VALUES)['mitglieder']['Geld'] + Config::getSection(Config::SECTION_STARTING_VALUES)['mitglieder']['Bank'] + $EinnahmenGesamt - $AusgabenGesamt - $data['Geld'] - $data['Bank'];
+    $difference = Config::getSection(Config::SECTION_STARTING_VALUES)['Geld'] + Config::getSection(Config::SECTION_STARTING_VALUES)['Bank'] + $EinnahmenGesamt - $AusgabenGesamt - $data['Geld'] - $data['Bank'];
     if ($difference < 0) {
         $EinnahmenSonstige = abs($difference);
         $AusgabenSonstige = 0;

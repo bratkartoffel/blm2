@@ -49,11 +49,9 @@ class Config
     {
         $result = self::getInstance()->_get($section, null);
         if ($section === self::SECTION_STARTING_VALUES) {
-            foreach ($result as $table => $values) {
-                foreach ($values as $key => $value) {
-                    if ($value === "null" || $value === "") {
-                        $result[$table][$key] = null;
-                    }
+            foreach ($result as $key => $value) {
+                if ($value === "null" || $value === "") {
+                    $result[$key] = null;
                 }
             }
         }

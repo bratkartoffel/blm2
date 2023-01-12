@@ -116,7 +116,7 @@ eine Übersicht über Ihre Eingaben und Ausgaben, sowie eine Aufschlüsselung ü
         'Bank',
         'Diese verwaltet Ihr Vermögen, gibt Zinsen auf Anlagen und vergibt Kredite.
 
-Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(Config::getSection(Config::SECTION_STARTING_VALUES)['mitglieder']['Geld']) . ' Startguthaben.
+Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(Config::getSection(Config::SECTION_STARTING_VALUES)['Geld']) . ' Startguthaben.
 Die maximale Summe, welche Sie einzahlen können liegt bei ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')) . '
 (Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . '.
 

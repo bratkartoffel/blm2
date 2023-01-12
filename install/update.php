@@ -118,19 +118,8 @@ if (Database::getInstance()->getPlayerCount() === 0) {
     Database::getInstance()->begin();
     $id = null;
     $password = createRandomPassword();
-    foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
-        if ($id !== null) $values['user_id'] = $id;
-        if ($table == Database::TABLE_USERS) {
-            $values['Name'] = 'admin';
-            $values['EMail'] = 'admin@localhost';
-            $values['Passwort'] = hashPassword($password);
-            $values['Admin'] = 1;
-        }
-        if (Database::getInstance()->createTableEntry($table, $values) === null) {
-            Database::getInstance()->rollBack();
-            die('> FAIL: Could not create new admin user');
-        }
-        if ($table == Database::TABLE_USERS) $id = Database::getInstance()->lastInsertId();
+    if (!Database::getInstance()->createUser('admin', 'admin@localhost', null, $password)) {
+        die('> FAIL: Could not create new admin user');
     }
     Database::getInstance()->commit();
     echo "> Created new user 'admin' with password '" . $password . "'\n";

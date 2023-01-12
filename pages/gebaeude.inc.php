@@ -135,7 +135,7 @@ Deshalb kann man sich hier einen Dönerstand mieten, der das Grundeinkommen des 
 if (buildingRequirementsMet(6, $data)) {
     printBuildingInformation($data, $auftraege, 6,
         'Hier bilden Sie Ihre Verkäufer aus, so dass diese in Ihrem Bioladen mehr Gewinn erzielen können.<br/>
-Dabei steigt der Gewinn pro Kilo und Stufe um ' . formatCurrency(Config::getInt(Config::SECTION_SHOP, 'item_price_school_bonus')) . '!');
+Dabei steigt der Gewinn pro Kilo und Stufe um ' . formatCurrency(Config::getFloat(Config::SECTION_SHOP, 'item_price_school_bonus')) . '!');
 }
 
 if (buildingRequirementsMet(5, $data)) {

@@ -2,7 +2,7 @@
 # Copyright (c) 2023 Simon Frankenberger
 # Please see LICENCE.md for complete licence text.
 
-FROM php:8.0-apache
+FROM php:7.4-apache
 
 # update system
 RUN apt-get update \
@@ -22,6 +22,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     # install xdebug
     && pecl channel-update pecl.php.net \
-    && pecl install xdebug-3.1.4
+    && pecl install xdebug-3.1.6
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini

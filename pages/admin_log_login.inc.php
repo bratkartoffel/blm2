@@ -56,8 +56,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_art = $art === -1 ? null : intval($art);
     $filter_success = $success === -1 ? null : intval($success);
     $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $filter_art, $filter_success);
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $filter_art, $filter_success, $offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $filter_art, $filter_success, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -76,7 +76,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_login&amp;wer=' . escapeForOutput($wer) . '&amp;ip=' . escapeForOutput($ip) . '&amp;art=' . escapeForOutput($art), $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_log_login&amp;wer=' . escapeForOutput($wer) . '&amp;ip=' . escapeForOutput($ip) . '&amp;art=' . escapeForOutput($art), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

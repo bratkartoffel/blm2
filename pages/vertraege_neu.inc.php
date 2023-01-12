@@ -13,7 +13,7 @@ $ware = getOrDefault($_GET, 'ware', 1);
 $menge = getOrDefault($_GET, 'menge', 0);
 $preis = getOrDefault($_GET, 'preis', .0);
 
-if ($ware <= 0 || $ware > count_wares) {
+if ($ware <= 0 || $ware > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
     redirectTo('/?p=bioladen', 112);
 }
 ?>
@@ -59,27 +59,32 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
     </form>
 </div>
 
-<h2>Warenbestand</h2>
+<h3>Warenbestand</h3>
 <table class="Liste">
     <tr>
-        <th>Lager</th>
         <th>Ware</th>
-        <th>Preis / kg</th>
+        <th>Menge</th>
+        <th>Preis (Laden)</th>
+        <th>Erlaubter Bereich</th>
         <th>Aktion</th>
     </tr>
     <?php
     $waresFound = false;
-    for ($i = 1; $i <= count_wares; $i++) {
+    for ($i = 1; $i < Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
         if ($data['Lager' . $i] == 0) continue;
         $waresFound = true;
         $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
         ?>
         <tr>
-            <td><?= formatWeight($data['Lager' . $i]); ?></td>
             <td><?= getItemName($i); ?></td>
+            <td><?= formatWeight($data['Lager' . $i]); ?></td>
             <td><?= formatCurrency($sellPrice); ?></td>
             <td>
-                <a href="/?p=vertraege_neu&amp;ware=<?= $i; ?>&amp;menge=<?= $data['Lager' . $i]; ?>&amp;preis=<?= $sellPrice * 2; ?>&empfaenger=<?= urlencode($empfaenger); ?>">Übernehmen</a>
+                <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'min_price')); ?>
+                - <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price')); ?>
+            </td>
+            <td>
+                <a href="/?p=vertraege_neu&amp;ware=<?= $i; ?>&amp;menge=<?= $data['Lager' . $i]; ?>&amp;preis=<?= $sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price'); ?>">Übernehmen</a>
             </td>
         </tr>
         <?php

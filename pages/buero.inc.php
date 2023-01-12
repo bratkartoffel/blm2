@@ -33,16 +33,16 @@ $rates = calculateSellRates();
             <th>Gewinn / kg</th>
         </tr>
         <?php
-        for ($i = 1; $i <= count_wares; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             if ($data['Forschung' . $i] == 0) continue;
             $temp = "Forschung" . $i;
             $prodData = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
             $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6'], $rates[$i]);
             $costPerKg = $prodData['Kosten'] / $prodData['Menge'];
-            $rateStep = (wares_rate_max - wares_rate_min) / 3;
-            if ($rates[$i] >= wares_rate_max - $rateStep) {
+            $rateStep = (Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max') - Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min')) / 3;
+            if ($rates[$i] >= Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max') - $rateStep) {
                 $color = 'RateGreen';
-            } else if ($rates[$i] >= wares_rate_min + $rateStep) {
+            } else if ($rates[$i] >= Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min') + $rateStep) {
                 $color = 'RateYellow';
             } else {
                 $color = 'RateRed';
@@ -64,7 +64,7 @@ $rates = calculateSellRates();
         + $data['EinnahmenMarkt'] + $data['EinnahmenVertraege'] + $data['EinnahmenMafia'];
     $AusgabenGesamt = $data['AusgabenGebaeude'] + $data['AusgabenForschung'] + $data['AusgabenProduktion']
         + $data['AusgabenZinsen'] + $data['AusgabenMarkt'] + $data['AusgabenVertraege'] + $data['AusgabenMafia'];
-    $difference = starting_values['mitglieder']['Geld'] + starting_values['mitglieder']['Bank'] + $EinnahmenGesamt - $AusgabenGesamt - $data['Geld'] - $data['Bank'];
+    $difference = Config::getSection(Config::SECTION_STARTING_VALUES)['mitglieder']['Geld'] + Config::getSection(Config::SECTION_STARTING_VALUES)['mitglieder']['Bank'] + $EinnahmenGesamt - $AusgabenGesamt - $data['Geld'] - $data['Bank'];
     if ($difference < 0) {
         $EinnahmenSonstige = abs($difference);
         $AusgabenSonstige = 0;

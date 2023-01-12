@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -23,7 +22,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         if ($new_pw1 != $new_pw2) {
             redirectTo('/?p=einstellungen', 105, __LINE__);
         }
-        if (strlen($new_pw1) < password_min_len) {
+        if (strlen($new_pw1) < Config::getInt(Config::SECTION_BASE, 'password_min_len')) {
             redirectTo('/?p=einstellungen', 147, __LINE__);
         }
         $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
@@ -123,14 +122,14 @@ switch (getOrDefault($_POST, 'a', 0)) {
         }
 
         $email_activation_code = createRandomCode();
-        $email_activation_link = base_url . '/actions/activate.php?email=' . urlencode($email) . '&amp;code=' . $email_activation_code;
+        $email_activation_link = Config::get(Config::SECTION_BASE, 'base_url') . '/actions/activate.php?email=' . urlencode($email) . '&amp;code=' . $email_activation_code;
 
-        if (!sendMail($email, game_title . ': Aktivierung Ihres Accounts',
+        if (!sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Aktivierung Ihres Accounts',
             '<html lang="de"><body><h3>Willkommen beim Bioladenmanager 2,</h3>
     <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
     <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
-    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . admin_email . '</p>
-    Grüsse ' . admin_name . '</body></html>'
+    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . Config::get(Config::SECTION_BASE, 'admin_email') . '</p>
+    Grüsse ' . Config::get(Config::SECTION_BASE, 'admin_name') . '</body></html>'
         )) {
             redirectTo(sprintf('/?p=einstellungen&email=%s', $email), 150, __LINE__);
         }
@@ -183,7 +182,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         );
         if (Database::getInstance()->existsTableEntry(Database::TABLE_SITTER, array('user_id' => $_SESSION['blm_user']))) {
             if (strlen($pw_sitter) > 0) {
-                if (strlen($pw_sitter) < password_min_len) {
+                if (strlen($pw_sitter) < Config::getInt(Config::SECTION_BASE, 'password_min_len')) {
                     Database::getInstance()->rollBack();
                     redirectTo('/?p=einstellungen', 147, __LINE__);
                 }
@@ -200,7 +199,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
                 redirectTo('/?p=einstellungen', 142, __LINE__);
             }
         } else {
-            if (strlen($pw_sitter) < password_min_len) {
+            if (strlen($pw_sitter) < Config::getInt(Config::SECTION_BASE, 'password_min_len')) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 147, __LINE__);
             }

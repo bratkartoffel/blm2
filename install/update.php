@@ -6,21 +6,26 @@
  * Please see LICENCE.md for complete licence text.
  */
 $start = microtime(true);
-require_once('../include/config.inc.php');
-require_once('../include/functions.inc.php');
-require_once('../include/database.class.php');
-
 header('Content-Type: text/plain; charset=UTF-8');
 ob_start();
 http_response_code(500);
 
-if (getOrDefault($_GET, 'secret') !== upgrade_secret) {
+require_once('../include/game_version.inc.php');
+echo "Checking installation for version " . game_version . "\n";
+echo "=========================================\n";
+if (!file_exists('../config/config.ini')) {
+    die("> FAIL: config/config.ini not found");
+}
+
+require_once('../include/config.class.php');
+require_once('../include/functions.inc.php');
+require_once('../include/database.class.php');
+
+if (getOrDefault($_GET, 'secret', 'unset') !== Config::get(Config::SECTION_BASE, 'upgrade_secret')) {
     http_response_code(401);
     die('not allowed');
 }
 
-echo "Checking installation for version " . game_version . "\n";
-echo "=========================================\n";
 echo "Verifying database connection:\n";
 $database = Database::getInstance();
 echo "> OK\n\n";
@@ -108,7 +113,7 @@ if (Database::getInstance()->getPlayerCount() === 0) {
     Database::getInstance()->begin();
     $id = null;
     $password = createRandomPassword();
-    foreach (starting_values as $table => $values) {
+    foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
         if ($id !== null) $values['user_id'] = $id;
         if ($table == Database::TABLE_USERS) {
             $values['Name'] = 'admin';

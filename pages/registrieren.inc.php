@@ -6,7 +6,7 @@
  * Please see LICENCE.md for complete licence text.
  */
 
-if (registration_closed) {
+if (Config::getBoolean(Config::SECTION_BASE, 'registration_closed')) {
     redirectTo('/?p=anmelden', 148);
 }
 
@@ -36,30 +36,30 @@ $captcha->createCaptcha();
         <div>
             <label for="name">Benutzername:</label>
             <input name="name" id="name" type="text" size="20" required value="<?= escapeForOutput($name); ?>"
-                   minlength="<?= username_min_len; ?>" maxlength="<?= username_max_len; ?>"/>
+                   minlength="<?= Config::getInt(Config::SECTION_BASE, 'username_min_len'); ?>"
+                   maxlength="<?= Config::getInt(Config::SECTION_BASE, 'username_max_len'); ?>"/>
         </div>
         <div>
             <label for="email">EMail-Adresse:</label>
             <input name="email" id="email" type="email" size="20" required value="<?= escapeForOutput($email); ?>"
-                   maxlength="<?= email_max_len; ?>"/>
+                   maxlength="<?= Config::getInt(Config::SECTION_BASE, 'email_max_len'); ?>"/>
         </div>
         <div>
             <label for="pwd1">Passwort:</label>
             <input name="pwd1" id="pwd1" type="password" size="20" required
-                   minlength="<?= password_min_len; ?>"/>
+                   minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
         </div>
         <div>
             <label for="pwd2">Bestätigung:</label>
             <input name="pwd2" id="pwd2" type="password" size="20" required
-                   minlength="<?= password_min_len; ?>"/>
+                   minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
         </div>
         <div>
             <img src="<?= $captcha->getImageUrl(); ?>" alt="Captcha" id="captcha"/>
         </div>
         <div>
             <label for="captcha_code">Sicherheitscode:</label>
-            <input name="captcha_code" id="captcha_code" type="text" size="6" required
-                   minlength="<?= captcha_length; ?>" maxlength="<?= captcha_length; ?>"/>
+            <input name="captcha_code" id="captcha_code" type="text" size="8" required/>
         </div>
 
         <div>

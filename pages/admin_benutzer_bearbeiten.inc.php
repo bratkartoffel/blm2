@@ -41,17 +41,17 @@ if (isset($_GET['verwarnungen'])) $entry['Verwarnungen'] = getOrDefault($_GET, '
 if (isset($_GET['gesperrt'])) $entry['Gesperrt'] = $_GET['gesperrt'] == "1" ? 1 : 0;
 
 // second form, building levels
-for ($i = 1; $i <= count_buildings; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
     if (isset($_GET['gebaeude_' . $i])) $entry['Gebaeude' . $i] = getOrDefault($_GET, 'gebaeude_' . $i, 0);
 }
 
 // third form, research levels
-for ($i = 1; $i <= count_buildings; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
     if (isset($_GET['forschung_' . $i])) $entry['Forschung' . $i] = getOrDefault($_GET, 'forschung_' . $i, 0);
 }
 
 // fourth form, warehouse stock
-for ($i = 1; $i <= count_buildings; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
     if (isset($_GET['lager_' . $i])) $entry['Lager' . $i] = getOrDefault($_GET, 'lager_' . $i, 0);
 }
 ?>
@@ -65,13 +65,14 @@ for ($i = 1; $i <= count_buildings; $i++) {
             <label for="username">Name:</label>
             <input name="username" id="username" type="text" value="<?= escapeForOutput($entry['Name']); ?>"
                    size="20" required
-                   minlength="<?= username_min_len; ?>" maxlength="<?= username_max_len; ?>"/>
+                   minlength="<?= Config::getInt(Config::SECTION_BASE, 'username_min_len'); ?>"
+                   maxlength="<?= Config::getInt(Config::SECTION_BASE, 'username_max_len'); ?>"/>
         </div>
         <div>
             <label for="email">EMail:</label>
             <input name="email" id="email" type="email" size="40" required
                    value="<?= escapeForOutput($entry['EMail']); ?>"
-                   maxlength="<?= email_max_len; ?>"/>
+                   maxlength="<?= Config::getInt(Config::SECTION_BASE, 'email_max_len'); ?>"/>
         </div>
         <div>
             <label for="email_aktiviert">Aktiviert:</label>
@@ -187,7 +188,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <header>Gebäude</header>
         <?php
-        for ($i = 1; $i <= count_buildings; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
             ?>
             <div>
                 <label for="gebaeude_<?= $i; ?>"><?= getBuildingName($i); ?></label>
@@ -211,7 +212,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <header>Forschungen</header>
         <?php
-        for ($i = 1; $i <= count_wares; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             ?>
             <div>
                 <label for="forschung_<?= $i; ?>"><?= getItemName($i); ?></label>
@@ -235,7 +236,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
         <header>Lagerbestand</header>
         <?php
-        for ($i = 1; $i <= count_wares; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             ?>
             <div>
                 <label for="lager_<?= $i; ?>"><?= getItemName($i); ?></label>

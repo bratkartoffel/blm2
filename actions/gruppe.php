@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -48,15 +47,15 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $name = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $name));
         $tag = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $tag));
 
-        if (strlen($name) == 0 || strlen($name) > group_max_name_length) {
+        if (strlen($name) == 0 || strlen($name) > Config::getInt(Config::SECTION_GROUP, 'max_name_length')) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 158, __LINE__);
         }
 
-        if (strlen($tag) == 0 || strlen($tag) > group_max_tag_length) {
+        if (strlen($tag) == 0 || strlen($tag) > Config::getInt(Config::SECTION_GROUP, 'max_tag_length')) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 159, __LINE__);
         }
 
-        if (strlen($pwd) < password_min_len) {
+        if (strlen($pwd) < Config::getInt(Config::SECTION_BASE, 'password_min_len')) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 147, __LINE__);
         }
 
@@ -68,7 +67,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if ($player['GruppeID'] !== null) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 157, __LINE__);
         }
-        if ($player['Gebaeude1'] < min_plantage_level_create_group) {
+        if ($player['Gebaeude1'] < Config::getInt(Config::SECTION_GROUP, 'plantage_level_create_group')) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 112, __LINE__);
         }
 
@@ -135,7 +134,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if ($player['GruppeID'] !== null) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 157, __LINE__);
         }
-        if ($player['Gebaeude1'] < min_plantage_level_join_group) {
+        if ($player['Gebaeude1'] < Config::getInt(Config::SECTION_GROUP, 'plantage_level_join_group')) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 112, __LINE__);
         }
 
@@ -145,7 +144,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if (!verifyPassword($pwd, $group['Passwort'])) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 127, __LINE__);
         }
-        if (count(Database::getInstance()->getGroupMembersById($group['ID'])) >= group_max_members) {
+        if (count(Database::getInstance()->getGroupMembersById($group['ID'])) >= Config::getInt(Config::SECTION_GROUP, 'max_members')) {
             redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 140, __LINE__);
         }
 
@@ -510,7 +509,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if ($new_pw1 != $new_pw2) {
             redirectTo('/?p=gruppe_einstellungen', 105, __LINE__);
         }
-        if (strlen($new_pw1) < password_min_len) {
+        if (strlen($new_pw1) < Config::getInt(Config::SECTION_BASE, 'password_min_len')) {
             redirectTo('/?p=gruppe_einstellungen', 147, __LINE__);
         }
 
@@ -583,7 +582,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $themId = ($diplomacy['GruppeAnId'] != $player['Gruppe'] ? $diplomacy['GruppeAnId'] : $diplomacy['GruppeVonId']);
         $themName = ($diplomacy['GruppeAnId'] != $player['Gruppe'] ? $diplomacy['GruppeAnName'] : $diplomacy['GruppeVonName']);
 
-        if (strtotime($diplomacy['Seit']) + 60 * 60 * 24 * group_diplomacy_min_duration > time()) {
+        if (strtotime($diplomacy['Seit']) + 60 * 60 * 24 * Config::getInt(Config::SECTION_GROUP, 'diplomacy_min_duration') > time()) {
             redirectTo('/?p=gruppe_diplomatie', 167, __LINE__);
         }
 
@@ -702,14 +701,14 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $allMembers = Database::getInstance()->getGroupMembersById($usId);
         foreach ($allMembers as $member) {
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $member['ID'],
-                    array('Gebaeude1' => -group_war_loose_plantage,
-                        'Punkte' => -(group_war_loose_points * $member['Punkte'])),
-                    array('Gebaeude1 >= :whr0' => group_war_loose_plantage)) === null) {
+                    array('Gebaeude1' => -Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'),
+                        'Punkte' => -(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points') * $member['Punkte'])),
+                    array('Gebaeude1 >= :whr0' => Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'))) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=gruppe_diplomatie', 142, __LINE__ . '_g' . $member['ID']);
             }
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-                    array('KriegMinus' => (group_war_loose_points * $member['Punkte'])),
+                    array('KriegMinus' => (Config::getFloat(Config::SECTION_GROUP, 'war_loose_points') * $member['Punkte'])),
                     array('user_id = :whr0' => $member['ID'])) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=gruppe_diplomatie', 142, __LINE__ . '_p' . $member['ID']);
@@ -740,8 +739,8 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
                 'Text' => sprintf('%s hat im Krieg mit %s die Kapitulation verkündet. Alle Mitglieder der Gruppe verlieren %d Level ihrer Plantage und %s ihrer Punkte. Der umkämpfte Betrag von %s geht komplett an den Gegner.',
                     createBBProfileLink($_SESSION['blm_user'], $player['Name']),
                     createBBGroupLink($themId, $themName),
-                    group_war_loose_plantage,
-                    formatPercent(group_war_loose_points),
+                    Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'),
+                    formatPercent(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points')),
                     formatCurrency(2 * $diplomacy['Betrag']))
             )) !== 1) {
             Database::getInstance()->rollBack();
@@ -791,7 +790,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         Database::getInstance()->begin();
         if ($typ == group_diplomacy_war) {
-            if ($amount < group_war_min_amount) {
+            if ($amount < Config::getInt(Config::SECTION_GROUP, 'war_min_amount')) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 132, __LINE__);
             }

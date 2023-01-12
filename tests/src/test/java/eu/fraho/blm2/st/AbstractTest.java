@@ -31,6 +31,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -74,7 +75,7 @@ public abstract class AbstractTest {
 
     protected void login(String username) {
         RetryConfig config = new RetryConfigBuilder()
-                .retryOnSpecificExceptions(TimeoutException.class)
+                .retryOnSpecificExceptions(TimeoutException.class, NoSuchElementException.class)
                 .withMaxNumberOfTries(3)
                 .withDelayBetweenTries(3, ChronoUnit.SECONDS)
                 .withFixedBackoff()

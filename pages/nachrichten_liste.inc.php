@@ -23,7 +23,7 @@ $offset_out = getOrDefault($_GET, 'o_out', 0);
 
 <?php
 $messageCountIn = Database::getInstance()->getAllMessagesByAnCount($_SESSION['blm_user']);
-$offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
+$offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SECTION_BASE, 'messages_page_size'));
 ?>
 <table class="Liste Nachrichten" data-count="<?= $messageCountIn; ?>" id="MessagesIn">
     <tr>
@@ -35,8 +35,8 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
         <th>Aktion</th>
     </tr>
     <?php
-    $entries = Database::getInstance()->getAllMessagesByAnEntries($_SESSION['blm_user'], $offset_in, messages_page_size);
-    $nr = $messageCountIn - $offset_in * messages_page_size;
+    $entries = Database::getInstance()->getAllMessagesByAnEntries($_SESSION['blm_user'], $offset_in, Config::getInt(Config::SECTION_BASE, 'messages_page_size'));
+    $nr = $messageCountIn - $offset_in * Config::getInt(Config::SECTION_BASE, 'messages_page_size');
     foreach ($entries as $row) {
         ?>
         <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>" data-id="<?= $row['ID']; ?>">
@@ -62,7 +62,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
     ?>
 </table>
 
-<?= createPaginationTable('/?p=nachrichten_liste', $offset_in, $messageCountIn, messages_page_size, 'o_in'); ?>
+<?= createPaginationTable('/?p=nachrichten_liste', $offset_in, $messageCountIn, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_in'); ?>
 
 <div>
     <a href="/?p=nachrichten_schreiben" id="new_message">Neue Nachricht schreiben</a> |
@@ -76,7 +76,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, messages_page_size);
 
 <?php
 $messageCountOut = Database::getInstance()->getAllMessagesByVonCount($_SESSION['blm_user']);
-$offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
+$offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config::SECTION_BASE, 'messages_page_size'));
 ?>
 <table class="Liste Nachrichten" data-count="<?= $messageCountOut; ?>" id="MessagesOut">
     <tr>
@@ -88,8 +88,8 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
         <th>Aktion</th>
     </tr>
     <?php
-    $entries = Database::getInstance()->getAllMessagesByVonEntries($_SESSION['blm_user'], $offset_out, messages_page_size);
-    $nr = $messageCountOut - $offset_out * messages_page_size;
+    $entries = Database::getInstance()->getAllMessagesByVonEntries($_SESSION['blm_user'], $offset_out, Config::getInt(Config::SECTION_BASE, 'messages_page_size'));
+    $nr = $messageCountOut - $offset_out * Config::getInt(Config::SECTION_BASE, 'messages_page_size');
     foreach ($entries as $row) {
         ?>
         <tr data-id="<?= $row['ID']; ?>">
@@ -121,4 +121,4 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, messages_page_size);
     ?>
 </table>
 
-<?= createPaginationTable('/?p=nachrichten_liste', $offset_out, $messageCountOut, messages_page_size, 'o_out'); ?>
+<?= createPaginationTable('/?p=nachrichten_liste', $offset_out, $messageCountOut, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_out'); ?>

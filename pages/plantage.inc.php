@@ -18,7 +18,7 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
 
 $productionData = array();
 $productionCostSum = .0;
-for ($i = 1; $i <= count_wares; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
     $productionData[$i] = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
     if (!array_key_exists($i, $auftraege)) {
@@ -44,7 +44,7 @@ for ($i = 1; $i <= count_wares; $i++) {
             <div>
                 <label for="stunden">Produziere</label>
                 <input type="number" id="stunden" name="stunden" value="1" size="2" maxlength="2" min="1"
-                       max="<?= production_hours_max; ?>"
+                       max="<?= Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'); ?>"
                        onchange="RechneProduktionsKosten(1, <?= $productionCostSum; ?>, this.value,
                        <?= $data['Geld']; ?>, document.getElementById('pr_ko_all'), document.getElementById('plant_all'));"/>
                 Stunde(n) von Allem.
@@ -58,7 +58,7 @@ for ($i = 1; $i <= count_wares; $i++) {
     </div>
 
 <?php
-for ($i = 1; $i <= count_wares; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     $researchAttribute = 'Forschung' . $i;
     if (!productionRequirementsMet($i, $data['Gebaeude1'], $data[$researchAttribute])) continue;
     ?>

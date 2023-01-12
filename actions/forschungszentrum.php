@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -15,7 +14,7 @@ restrictSitter('Forschung');
 
 $was = getOrDefault($_POST, 'was', 0);
 
-if ($was <= 0 || $was > count_wares) {
+if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
     redirectTo('/?p=forschungszentrum', 112, __LINE__);
 }
 

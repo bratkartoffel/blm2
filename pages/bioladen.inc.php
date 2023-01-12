@@ -13,7 +13,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
 $sumWeight = 0;
 $sumMoney = 0;
 $prices = array();
-for ($i = 1; $i <= count_wares; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     if ($data['Lager' . $i] == 0) continue;
     $prices[$i] = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude3'], $data['Gebaeude6']);
 
@@ -41,7 +41,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         <th>Menge / Aktion</th>
     </tr>
     <?php
-    for ($i = 1; $i <= count_wares; $i++) {
+    for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
         if ($data['Lager' . $i] == 0) continue;
         ?>
         <tr>

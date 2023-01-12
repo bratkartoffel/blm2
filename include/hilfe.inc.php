@@ -74,7 +74,7 @@ egal welche Stufe des Gemüses erforscht ist.
 
 Die Produktionsmenge kann frei bestimmt werden, jedoch beträgt die maximale Produktionsdauer am Stück 12 Stunden.
 Die in Auftrag gegebene Menge wird erst am Ende der eingestellten Produktionszeit vollständig ins Lager übertragen.
-Zudem gibt es eine durchgehende Basisproduktion. Alle ' . cron_interval . ' Minuten werden ' . item_base_production . ' kg / Forschungslevel eines jeden Gemüses generiert.'
+Zudem gibt es eine durchgehende Basisproduktion. Alle ' . Config::getInt(Config::SECTION_BASE, 'cron_interval') . ' Minuten werden ' . Config::getInt(Config::SECTION_PLANTAGE, 'production_cron_base') . ' kg / Forschungslevel eines jeden Gemüses generiert.'
     ),
     106 => array(
         'Forschungszentrum',
@@ -92,8 +92,8 @@ usw.
 
 Ausserdem werden die Forschungen für jede Stufe, welche das Gebäude erreicht, schneller abgeschlossen.
 Stufe 1 einer Forschung ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die Anbaumenge
-um ' . formatWeight(research_production_weight_factor) . ', erhöht aber zugleich auch die Kosten für den Anbau
-um ' . formatCurrency(research_production_cost_factor) . '.'
+um ' . formatWeight(Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_amount_per_level')) . ', erhöht aber zugleich auch die Kosten für den Anbau
+um ' . formatCurrency(Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_cost_per_level')) . '.'
     ),
     107 => array(
         'Bioladen',
@@ -101,7 +101,7 @@ um ' . formatCurrency(research_production_cost_factor) . '.'
 
 Es gibt keine Beschränkung, wie viel Gemüse Sie am Tag verkaufen können. Der Verkaufspreis wird aus einem Grundpreis,
 dem Marktkurs, der Stufe der Forschung des entsprechenden Gemüses, der Stufe des Bioladens und der Verkäuferschule
-berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um ' . formatCurrency(item_price_shop_bonus) . '.
+berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um ' . formatCurrency(Config::getInt(Config::SECTION_SHOP, 'item_price_shop_bonus')) . '.
 
 Der Verkaufspreis kann nicht selbst direkt eingegeben oder verändert werden.'
     ),
@@ -116,14 +116,14 @@ eine Übersicht über Ihre Eingaben und Ausgaben, sowie eine Aufschlüsselung ü
         'Bank',
         'Diese verwaltet Ihr Vermögen, gibt Zinsen auf Anlagen und vergibt Kredite.
 
-Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(starting_values['mitglieder']['Geld']) . ' Startguthaben.
-Die maximale Summe, welche Sie einzahlen können liegt bei ' . formatCurrency(deposit_limit) . '
-(Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt ' . formatCurrency(credit_limit) . '.
+Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(Config::getSection(Config::SECTION_STARTING_VALUES)['mitglieder']['Geld']) . ' Startguthaben.
+Die maximale Summe, welche Sie einzahlen können liegt bei ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')) . '
+(Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . '.
 
-Die Zinsen werden alle ' . cron_interval . ' Minuten abgerechnet.
+Die Zinsen werden alle ' . Config::getInt(Config::SECTION_BASE, 'cron_interval') . ' Minuten abgerechnet.
 Das Geld auf der Bank kann nicht (im Gegensatz zum Bargeld) von anderen Spielern geklaut werden.
 
-[color=red]Wichtig: Falls Ihr Kontostand unter ' . formatCurrency(dispo_limit) . ' fällt, wird Ihr Account automatisch resettet![/color]'
+[color=red]Wichtig: Falls Ihr Kontostand unter ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) . ' fällt, wird Ihr Account automatisch resettet![/color]'
     ),
     110 => array(
         'Verträge',
@@ -144,10 +144,10 @@ Verträge können wieder zurückgezogen werden, solange der Gegenüber diesen no
 Es können keine Teilmengen gekauft werden, es muss also das gesamte Angebot gekauft werden.
 Deshalb ist zu empfehlen, nicht 1x 10.000kg zu verkaufen, sondern besser 4x 2500kg einzustellen.
 
-Der Markt verlangt ' . formatPercent(market_provision_rate) . ' des Gesamtpreises als Provision. Diese wird beim Kauf direkt vom Erlös abgezogen.
+Der Markt verlangt ' . formatPercent(Config::getInt(Config::SECTION_MARKET, 'provision_rate')) . ' des Gesamtpreises als Provision. Diese wird beim Kauf direkt vom Erlös abgezogen.
 
 [b]Wichtig![/b]
-Man kann Angebote wieder vom Markt zurückziehen, jedoch gehen dabei ' . formatPercent(1 - market_retract_rate) . ' der Ware verloren!'
+Man kann Angebote wieder vom Markt zurückziehen, jedoch gehen dabei ' . formatPercent(1 - Config::getFloat(Config::SECTION_MARKET, 'retract_rate')) . ' der Ware verloren!'
     ),
     112 => array(
         'Mafia',
@@ -164,13 +164,13 @@ Die Erfolgschancen hängen von den gewünschten Kosten für die Aktion ab, und k
 Bei der Spionage wird der Lagerstand und das Bargeld des Angegriffenen ausspioniert und per IGM an den Angreifer geschickt.
 Da dies ein relativ billiger Vorgang ist, welcher maximal 50 % Erfolgsaussicht hat, ist dies ein perfektes Mittel um weitere Angriffe auf den Gegner zu planen.
 
-Der Raub zielt auf das Barvermögen des Gegners und stiehlt diesem per Zufall zwischen ' . formatPercent(mafia_raub_min_rate) . '
-und ' . formatPercent(mafia_raub_max_rate) . ' seines Barvermögens und schreibt es dem Angreifer gut.
+Der Raub zielt auf das Barvermögen des Gegners und stiehlt diesem per Zufall zwischen ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_min_rate')) . '
+und ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')) . ' seines Barvermögens und schreibt es dem Angreifer gut.
 
 Beim Diebstahl wird versucht, das Lager des Gegners leer zu räumen. Gelingt dieser Vorgang, so werden die Waren des Gegners dem Angreifer gutgeschrieben.
 
 Der Anschlag ist die teuerste, aber auch die fieseste Waffe gegen Ihre Konkurrenten. Dadurch ist bei dieser Art von Angriff die Obergrenze
-für den Erfolg bei ' . formatPercent(mafia_base_data[3][3]['chance']) . '.
+für den Erfolg bei ' . formatPercent(getMafiaChance(Config::SECTION_MAFIA_ATTACK, 3)) . '.
 Gelingt der Angriff, wird die Plantage des Gegners um eine Stufe verringert. Befindet sich diese schon auf dem niedrigsten Level, so passiert nichts.
 
 Bei allen Angriffsarten wird nur bei einem Fehlschlag dem Opfer eine Nachricht mit dem Namen des Angreifers zugestellt.
@@ -178,8 +178,8 @@ Einzige Ausnahme ist der Anschlag, hier erfährt der Angegriffene immer, wer ihn
 
 [b]Wichtig:[/b]
 Man kann nur Spieler angreifen,
-a) die mindestens ' . formatPoints(mafia_min_ponts) . ' Punkte haben
-b) deren Punkte maximal um ' . formatPercent(mafia_faktor_punkte - 1) . ' auseinander liegen.
+a) die mindestens ' . formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')) . ' Punkte haben
+b) deren Punkte maximal um ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'points_factor') - 1) . ' auseinander liegen.
 
 [b]Hinweis:[/b]
 Im Krieg zählen die oben genannten Angriffsbeschränkungen nicht!'
@@ -208,7 +208,7 @@ Sie können:
 - Das Sitting ein- / ausschalten und die Rechte festlegen
 
 Um ein bereits hochgeladenes Bild zu löschen, klicken Sie einfach auf den Button "Absenden" ohne eine Datei auszuwählen.
-Die maximale Größe des Profilbildes beträgt ' . (max_profile_image_size / 1024) . ' KiB
+Die maximale Größe des Profilbildes beträgt ' . (Config::getInt(Config::SECTION_BASE, 'max_profile_image_size') / 1024) . ' KiB
 
 [b]Was ist ein Sitter?[/b]
 
@@ -277,7 +277,7 @@ b) Einer bestehenden Gruppe beitreten (Plantage mind. Stufe 5)
 Falls Sie bereits eine Gruppe haben, sehen Sie hier das Gruppenportal mit dem Gruppenbild und der Beschreibung.
 Wenn Ihnen der Gründer besondere Rechte zugewiesen hat, sehen Sie oben vielleicht noch ein paar extra Menüpunkte, je nach Ihren Rechten in der Gruppe.
 
-Eine Gruppe kann maximal aus ' . group_max_members . ' Mitgliedern bestehen. Ist dieses Limit erreicht, können keine neuen Mitglieder der Gruppe beitreten.
+Eine Gruppe kann maximal aus ' . Config::getInt(Config::SECTION_GROUP, 'max_members') . ' Mitgliedern bestehen. Ist dieses Limit erreicht, können keine neuen Mitglieder der Gruppe beitreten.
 
 Die Gruppenkasse ist ein vielfältiges Feature. Sie können hier zum Beispiel Ihr Geld lagern, falls Ihr Kontostand schon beim Maximum ist
 oder sie können das Geld auch einzahlen und der Verwalter verteilt das Geld dann an die schwächeren Spieler der Gruppe als Aufbauhilfe.

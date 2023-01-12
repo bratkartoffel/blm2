@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 require_once('../include/captcha.class.php');
@@ -16,7 +15,7 @@ $email = getOrDefault($_POST, 'email');
 
 function sendRecoveryMail(string $email, array $data, string $token): bool
 {
-    return sendMail($email, game_title . ': Passwort vergessen',
+    return sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Passwort vergessen',
         sprintf('<html lang="de"><body><h3>Hallo %s,</h3>
 
 die Funktion "Passwort vergessen" wurde bei deinem Account ausgelöst. Wenn du das selbst warst, dann kannst du über folgende Link
@@ -32,13 +31,13 @@ dann wende dich bitte an einen Administrator. Diesen kannst du entweder im Spiel
 Grüsse,
 %s
 </body></html>
-', escapeForOutput($data['Name']), base_url, $data['ID'], $token, base_url, $data['ID'], $token, admin_email, admin_name
+', escapeForOutput($data['Name']), Config::get(Config::SECTION_BASE, 'base_url'), $data['ID'], $token, Config::get(Config::SECTION_BASE, 'base_url'), $data['ID'], $token, Config::get(Config::SECTION_BASE, 'admin_email'), Config::get(Config::SECTION_BASE, 'admin_name')
         ));
 }
 
 function sendPasswordMail(string $email, string $name, string $password): bool
 {
-    return sendMail($email, game_title . ': Passwort vergessen',
+    return sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Passwort vergessen',
         sprintf('<html lang="de"><body><h3>Hallo %s,</h3>
 
 dein Passwort wurde zurückgesetzt auf:
@@ -47,7 +46,7 @@ dein Passwort wurde zurückgesetzt auf:
 Grüsse,
 %s
 </body></html>
-', escapeForOutput($name), $password, admin_name
+', escapeForOutput($name), $password, Config::get(Config::SECTION_BASE, 'admin_name')
         ));
 }
 
@@ -57,7 +56,7 @@ switch (getOrDefault($_REQUEST, 'a')) {
         $captcha_code = getOrDefault($_POST, 'captcha_code');
         $captcha_id = getOrDefault($_POST, 'captcha_id', 0);
         $back_link = sprintf('/?p=passwort_vergessen&email=%s', urlencode($email));
-        if (constant('is_testing') === null && !Captcha::verifyCode($captcha_code, $captcha_id)) {
+        if (!Config::getBoolean(Config::SECTION_BASE, 'testing') && !Captcha::verifyCode($captcha_code, $captcha_id)) {
             redirectTo($back_link, 130, __LINE__);
         }
 

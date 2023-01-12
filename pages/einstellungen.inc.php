@@ -30,11 +30,13 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         </div>
         <div>
             <label for="email">Adresse:</label>
-            <input name="email" id="email" type="email" size="20" required maxlength="<?= email_max_len; ?>"/>
+            <input name="email" id="email" type="email" size="20" required
+                   maxlength="<?= Config::getInt(Config::SECTION_BASE, 'email_max_len'); ?>"/>
         </div>
         <div>
             <label for="confirm">Bestätigen:</label>
-            <input name="confirm" id="confirm" type="email" size="20" required maxlength="<?= email_max_len; ?>"/>
+            <input name="confirm" id="confirm" type="email" size="20" required
+                   maxlength="<?= Config::getInt(Config::SECTION_BASE, 'email_max_len'); ?>"/>
         </div>
         <div>
             Mit der Änderung der EMail-Adresse werden Sie <b>sofort</b> ausgeloggt. Ein erneuter Login ist erst wieder
@@ -57,12 +59,12 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         <div>
             <label for="new_pw1">Neues Passwort:</label>
             <input id="new_pw1" type="password" name="new_pw1" size="20" required
-                   minlength="<?= password_min_len; ?>"/>
+                   minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
         </div>
         <div>
             <label for="new_pw2">Bestätigen:</label>
             <input id="new_pw2" type="password" name="new_pw2" size="20" required
-                   minlength="<?= password_min_len; ?>"/>
+                   minlength="<?= Config::getInt(Config::SECTION_BASE, 'password_min_len'); ?>"/>
         </div>
         <div>
             <input type="submit" value="Speichern"/>

@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -23,7 +22,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
         $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
         $sellPrice = calculateSellPrice($ware, $data['Forschung' . $ware], $data['Gebaeude3'], $data['Gebaeude6']);
 
-        if ($ware < 1 || $ware > count_wares) {
+        if ($ware < 1 || $ware > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f&', $ware, $amount, $price), 117, __LINE__);
         }
 
@@ -31,7 +30,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f', $ware, $amount, $price), 116, __LINE__);
         }
 
-        if ($price < round($sellPrice * market_min_sell_price, 2) || $price > round($sellPrice * market_max_sell_price, 2)) {
+        if ($price < round($sellPrice * Config::getFloat(Config::SECTION_MARKET, 'min_price'), 2) || $price > round($sellPrice * Config::getFloat(Config::SECTION_MARKET, 'max_price'), 2)) {
             redirectTo(sprintf('/?p=marktplatz_verkaufen&ware=%d&amount=%d&price=%f', $ware, $amount, $price), 153, __LINE__);
         }
 
@@ -86,7 +85,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         if ($entry['Von'] != 0) {
-            $reducedAmount = round($amount * (1 - market_provision_rate), 2);
+            $reducedAmount = round($amount * (1 - Config::getInt(Config::SECTION_MARKET, 'provision_rate')), 2);
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
                     array('Geld' => $reducedAmount)) != 1) {
                 Database::getInstance()->rollBack();
@@ -141,7 +140,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
 
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
-                array('Lager' . $entry['Was'] => floor($entry['Menge'] * market_retract_rate))) != 1) {
+                array('Lager' . $entry['Was'] => floor($entry['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate')))) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 142, __LINE__);
         }
@@ -155,7 +154,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
                 'Betreff' => 'Angebot vom freien Markt zurückgezogen',
                 'Nachricht' => sprintf("Das Angebot #%d wurde vom Markt zurückgezogen. Leider sind auf dem Transport und während der Lagerung dort ein Teil der Waren verdorben.
                 Von den ursprünglichen %s konnten %s wieder in ihr Lager übernommen werden.",
-                    $entry['ID'], formatWeight($entry['Menge']), formatWeight(floor($entry['Menge'] * market_retract_rate)))
+                    $entry['ID'], formatWeight($entry['Menge']), formatWeight(floor($entry['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate'))))
             )) != 1) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 141, __LINE__);

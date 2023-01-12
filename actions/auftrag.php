@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -25,7 +24,7 @@ switch (floor($auftrag['item'] / 100)) {
         $back = 'gebaeude';
         requireXsrfToken('/?p=' . $back);
         requireEntryFound($id, '/?p=' . $back);
-        $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
+        $moneyBack = round($auftrag['cost'] * Config::getFloat(Config::SECTION_BASE, 'cancel_refund'), 2);
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
             redirectTo('/?p=' . $back, 142, __LINE__);
@@ -57,7 +56,7 @@ switch (floor($auftrag['item'] / 100)) {
         $back = 'forschungszentrum';
         requireXsrfToken('/?p=' . $back);
         requireEntryFound($id, '/?p=' . $back);
-        $moneyBack = round($auftrag['cost'] * action_retract_rate, 2);
+        $moneyBack = round($auftrag['cost'] * Config::getFloat(Config::SECTION_BASE, 'cancel_refund'), 2);
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Geld' => $moneyBack)) !== 1) {
             redirectTo('/?p=' . $back, 142, __LINE__);

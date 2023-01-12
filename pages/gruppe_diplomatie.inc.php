@@ -104,7 +104,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
                     if ($rights['group_diplomacy'] == 1) {
                         ?>
                         <a href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                           onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency(2 * $row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(group_war_loose_points); ?> seiner Punkte und <?= group_war_loose_plantage; ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
+                           onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency(2 * $row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points')); ?> seiner Punkte und <?= Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'); ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
                         <?php
                     } else {
                         echo 'Keine Rechte';
@@ -144,7 +144,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
 <?php
 if ($rights['group_diplomacy'] == 1) {
     $typ = getOrDefault($_GET, 'typ', 0);
-    $amount = getOrDefault($_GET, 'amount', group_war_min_amount);
+    $amount = getOrDefault($_GET, 'amount', Config::getInt(Config::SECTION_GROUP, 'war_min_amount'));
     ?>
     <h3>Neue diplomatische Anfrage stellen</h3>
     <div class="form GroupNewDiplomacy">
@@ -168,7 +168,7 @@ if ($rights['group_diplomacy'] == 1) {
             <div id="kriegBetrag">
                 <label for="amount">Umkämpfter Betrag:</label>
                 <input type="number" name="amount" id="amount" value="<?= formatCurrency($amount, false, false); ?>"
-                       min="<?= group_war_min_amount; ?>"/>
+                       min="<?= Config::getInt(Config::SECTION_GROUP, 'war_min_amount'); ?>"/>
             </div>
             <div>
                 <label for="group">Gruppe:</label>

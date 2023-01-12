@@ -136,12 +136,13 @@ function MarkActiveLink() {
 }
 
 function MafiaActionChange() {
-    let data = mafia_cost_data[Number.parseInt(document.getElementById('action').value)];
+    let action = Number.parseInt(document.getElementById('action').value);
+    let data = mafia_cost_data[action];
     let texts = [
-        data[0]['cost'] + ' € / ' + (100 * data[0]['chance']) + '%',
-        data[1]['cost'] + ' € / ' + (100 * data[1]['chance']) + '%',
-        data[2]['cost'] + ' € / ' + (100 * data[2]['chance']) + '%',
-        data[3]['cost'] + ' € / ' + (100 * data[3]['chance']) + '%',
+        data['costs'][0] + ' € / ' + (100 * data['chance'][0]) + '%',
+        data['costs'][1] + ' € / ' + (100 * data['chance'][1]) + '%',
+        data['costs'][2] + ' € / ' + (100 * data['chance'][2]) + '%',
+        data['costs'][3] + ' € / ' + (100 * data['chance'][3]) + '%',
     ];
 
     let options = document.getElementById('level').getElementsByTagName('option');

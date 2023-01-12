@@ -37,8 +37,8 @@ $offset = getOrDefault($_GET, 'o', 0);
     <?php
     $filter_waren = empty($ware) ? array() : array($ware);
     $entriesCount = Database::getInstance()->getMarktplatzCount($filter_waren);
-    $offset = verifyOffset($offset, $entriesCount, admin_log_page_size);
-    $entries = Database::getInstance()->getMarktplatzEntries($filter_waren, $offset, admin_log_page_size);
+    $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getMarktplatzEntries($filter_waren, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
 
     for ($i = 0; $i < count($entries); $i++) {
@@ -63,7 +63,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, admin_log_page_size); ?>
+<?= createPaginationTable('/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin_markt_einstellen">Neues Angebot erstellen</a><br/>

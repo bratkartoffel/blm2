@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -22,13 +21,13 @@ $data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevel
 requireEntryFound($data, '/?p=plantage', 112, __LINE__);
 
 if ($alles == 1) {
-    if ($stunden < 1 || $stunden > production_hours_max) {
+    if ($stunden < 1 || $stunden > Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max')) {
         redirectTo('/?p=plantage', 133, __LINE__);
     }
 
     Database::getInstance()->begin();
     $sum_costs = .0;
-    for ($i = 1; $i <= count_wares; $i++) {
+    for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
         if (!productionRequirementsMet($i, $data['Gebaeude1'], $data['Forschung' . $i])) continue;
         $productionData = calculateProductionDataForPlayer($i, $data['Gebaeude1'], $data['Forschung' . $i]);
 
@@ -65,11 +64,11 @@ if ($alles == 1) {
 $productionData = calculateProductionDataForPlayer($was, $data['Gebaeude1'], $data['Forschung' . $was]);
 $stunden = $menge / $productionData['Menge'];
 
-if ($menge > $productionData['Menge'] * production_hours_max || $menge <= 0) {
+if ($menge > $productionData['Menge'] * Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max') || $menge <= 0) {
     redirectTo('/?p=plantage', 125);
 }
 
-if ($was <= 0 || $was > count_wares) {
+if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
     redirectTo('/?p=plantage', 112);
 }
 

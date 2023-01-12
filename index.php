@@ -7,11 +7,13 @@
 */
 
 $start = microtime(true);
-require_once('include/config.inc.php');
+require_once('include/game_version.inc.php');
 require_once('include/functions.inc.php');
 require_once('include/database.class.php');
 
 ob_start();
+verifyInstallation();
+
 error_reporting(E_ALL);
 ini_set('display_errors', 'true');
 
@@ -25,7 +27,7 @@ if (isLoggedIn()) {
         redirectTo('/?p=anmelden', 999);
     }
 
-    if ($_SESSION['blm_lastAction'] + session_timeout < time()) {
+    if ($_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') < time()) {
         session_destroy();
         redirectTo('/?p=anmelden', 102);
     }
@@ -62,7 +64,7 @@ if (isLoggedIn()) {
 <head>
     <?php
     $mininimizeFlag = '';
-    if (constant('is_testing') === null) {
+    if (!Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         $mininimizeFlag = '.min';
     }
     ?>
@@ -73,7 +75,7 @@ if (isLoggedIn()) {
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=5.0, minimum-scale=0.60">
-    <title><?= game_title; ?> - <?= ucfirst(getCurrentPage()); ?></title>
+    <title><?= Config::get(Config::SECTION_BASE, 'game_title') . ' - ' . ucfirst(getCurrentPage()); ?></title>
     <script src="/js/functions<?= $mininimizeFlag; ?>.js?<?= game_version; ?>"></script>
 </head>
 <body onload="MarkActiveLink();">
@@ -119,7 +121,7 @@ if (isLoggedIn()) {
             <div class="NaviBlock">
                 <span>Allgemein:</span>
                 <div class="NaviLink">
-                    <a href="/?p=rangliste&amp;o=<?= floor((Database::getInstance()->getPlayerRankById($_SESSION['blm_user']) - 1) / ranking_page_size); ?>">Rangliste</a>
+                    <a href="/?p=rangliste&amp;o=<?= floor((Database::getInstance()->getPlayerRankById($_SESSION['blm_user']) - 1) / Config::getInt(Config::SECTION_BASE, 'ranking_page_size')); ?>">Rangliste</a>
                 </div>
                 <div class="NaviLink"><a href="/?p=statistik" id="link_statistik">Serverstatistik</a></div>
                 <div class="NaviLink"><a href="/?p=regeln" id="link_regeln">Regeln</a></div>
@@ -168,7 +170,7 @@ if (isLoggedIn()) {
                 </tr>
                 <tr>
                     <td>Nächstes Einkommen:</td>
-                    <td><?= formatTime(getLastIncomeTimestamp() + (cron_interval * 60)); ?></td>
+                    <td><?= formatTime(getLastIncomeTimestamp() + (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60)); ?></td>
                 </tr>
             </table>
         </div>

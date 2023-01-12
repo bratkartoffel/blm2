@@ -5,7 +5,6 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/config.inc.php');
 require_once('../include/functions.inc.php');
 require_once('../include/database.class.php');
 
@@ -35,19 +34,19 @@ $gesperrt = getOrDefault($_POST, 'gesperrt', 0);
 
 // second form, building levels
 $gebaeude = array();
-for ($i = 1; $i <= count_buildings; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
     $gebaeude[$i] = getOrDefault($_POST, 'gebaeude_' . $i, 0);
 }
 
 // third form, research levels
 $forschung = array();
-for ($i = 1; $i <= count_wares; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     $forschung[$i] = getOrDefault($_POST, 'forschung_' . $i, 0);
 }
 
 // fourth form, stock
 $lager = array();
-for ($i = 1; $i <= count_wares; $i++) {
+for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     $lager[$i] = getOrDefault($_POST, 'lager_' . $i, 0);
 }
 
@@ -132,7 +131,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update building levels
     case 2:
         $fields = array();
-        for ($i = 1; $i <= count_buildings; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
             $backlink .= sprintf('&gebaeude_%d=%d', $i, $gebaeude[$i]);
             $fields['Gebaeude' . $i] = $gebaeude[$i];
         }
@@ -148,7 +147,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update research levels
     case 3:
         $fields = array();
-        for ($i = 1; $i <= count_wares; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             $backlink .= sprintf('&forschung_%d=%d', $i, $forschung[$i]);
             $fields['Forschung' . $i] = $forschung[$i];
         }
@@ -164,7 +163,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update stock
     case 4:
         $fields = array();
-        for ($i = 1; $i <= count_wares; $i++) {
+        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
             $backlink .= sprintf('&lager_%d=%d', $i, $lager[$i]);
             $fields['Lager' . $i] = $lager[$i];
         }

@@ -60,11 +60,6 @@ $email_activation_code = createRandomCode();
 $id = null;
 Database::getInstance()->begin();
 foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
-    foreach ($values as $key => $value) {
-        if ($value === "null" || $value === "") {
-            $values[$key] = null;
-        }
-    }
     if ($id !== null) $values['user_id'] = $id;
     if ($table == Database::TABLE_USERS) {
         $values['Name'] = $name;

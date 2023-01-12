@@ -711,11 +711,6 @@ function resetAccount(int $blm_user): ?string
 
     // reset all values to the starting defaults
     foreach (Config::getSection(Config::SECTION_STARTING_VALUES) as $table => $values) {
-        foreach ($values as $key => $value) {
-            if ($value === "null" || $value === "") {
-                $values[$key] = null;
-            }
-        }
         if ($table == Database::TABLE_USERS) {
             $idField = $blm_user;
             $wheres = array();

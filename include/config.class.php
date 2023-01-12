@@ -47,7 +47,17 @@ class Config
 
     public static function getSection(string $section): array
     {
-        return self::getInstance()->_get($section, null);
+        $result = self::getInstance()->_get($section, null);
+        if ($section === self::SECTION_STARTING_VALUES) {
+            foreach ($result as $table => $values) {
+                foreach ($values as $key => $value) {
+                    if ($value === "null" || $value === "") {
+                        $result[$table][$key] = null;
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     public static function get(string $section, string $option)

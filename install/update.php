@@ -26,6 +26,11 @@ if (getOrDefault($_GET, 'secret', 'unset') !== Config::get(Config::SECTION_BASE,
     die('not allowed');
 }
 
+if (Config::get(Config::SECTION_BASE, 'upgrade_secret') == Config::get(Config::SECTION_BASE, 'random_secret')) {
+    http_response_code(401);
+    die('> FAIL: base.upgrade_secret and base.random_secret may not be equal');
+}
+
 echo "Verifying database connection:\n";
 $database = Database::getInstance();
 echo "> OK\n\n";

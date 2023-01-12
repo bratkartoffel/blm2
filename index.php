@@ -214,9 +214,10 @@ Queries: <?= Database::getInstance()->getQueryCount() . "\n"; ?>
 <?php
 $warnings = Database::getInstance()->getWarnings();
 if (count($warnings) > 0) {
-    echo "Warnings:\n";
-    foreach ($warnings as $warning) {
-        echo $warning . "\n";
+    echo "Warnings:\n==================\n";
+    foreach ($warnings as $i => $warning) {
+        printf("%d: %s\n", $i, $warning);
+        error_log($warning);
     }
 }
 ?>

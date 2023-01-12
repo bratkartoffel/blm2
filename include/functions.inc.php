@@ -1622,6 +1622,13 @@ function getMafiaChance(string $cfgSection, int $level, int $pizzeriaLevel = 0, 
     return max(0.01, min($chance, 0.95));
 }
 
+function trimAndRemoveControlChars(string $string): string
+{
+    // remove all control characters and trim spaces
+    // https://stackoverflow.com/a/66587087
+    return trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $string));
+}
+
 // create the roundstart information file if it's missing
 if (!file_exists(Config::ROUNDSTART_FILE)) {
     writeRoundstartFile(date('Y-m-d H:00:00'));

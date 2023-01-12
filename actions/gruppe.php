@@ -38,14 +38,9 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     case 1:
         restrictSitter('NeverAllow');
 
-        $name = getOrDefault($_POST, 'name');
-        $tag = getOrDefault($_POST, 'tag');
+        $name = trimAndRemoveControlChars(getOrDefault($_POST, 'name'));
+        $tag = trimAndRemoveControlChars(getOrDefault($_POST, 'tag'));
         $pwd = getOrDefault($_POST, 'pwd');
-
-        // remove all control characters and trim spaces
-        // https://stackoverflow.com/a/66587087
-        $name = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $name));
-        $tag = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $tag));
 
         if (strlen($name) == 0 || strlen($name) > Config::getInt(Config::SECTION_GROUP, 'max_name_length')) {
             redirectTo(sprintf('/?p=gruppe&name=%s&tag=%s', urlencode($name), urlencode($tag)), 158, __LINE__);

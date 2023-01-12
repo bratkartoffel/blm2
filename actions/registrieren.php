@@ -15,16 +15,12 @@ if (Config::getBoolean(Config::SECTION_BASE, 'registration_closed')) {
     redirectTo('/?p=anmelden', 148);
 }
 
-$name = getOrDefault($_POST, 'name');
+$name = trimAndRemoveControlChars(getOrDefault($_POST, 'name'));
 $email = getOrDefault($_POST, 'email');
 $pwd1 = getOrDefault($_POST, 'pwd1');
 $pwd2 = getOrDefault($_POST, 'pwd2');
 $captcha_code = getOrDefault($_POST, 'captcha_code');
 $captcha_id = getOrDefault($_POST, 'captcha_id', 0);
-
-// remove all control characters and trim spaces
-// https://stackoverflow.com/a/66587087
-$name = trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $name));
 
 $backLink = sprintf('/?p=registrieren&name=%s&email=%s', urlencode($name), urlencode($email));
 if (!Config::getBoolean(Config::SECTION_BASE, 'testing') && !Captcha::verifyCode($captcha_code, $captcha_id)) {

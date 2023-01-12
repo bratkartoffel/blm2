@@ -696,9 +696,8 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $allMembers = Database::getInstance()->getGroupMembersById($usId);
         foreach ($allMembers as $member) {
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $member['ID'],
-                    array('Gebaeude' . building_plantage => -Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'),
-                        'Punkte' => -(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points') * $member['Punkte'])),
-                    array('Gebaeude1 >= :whr0' => Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'))) === null) {
+                    array('Gebaeude' . building_plantage => -Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage')),
+                    array('Gebaeude' . building_plantage . ' >= :whr0' => Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'))) === null) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=gruppe_diplomatie', 142, __LINE__ . '_g' . $member['ID']);
             }

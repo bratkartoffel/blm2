@@ -160,6 +160,19 @@ public abstract class AbstractTest {
         }
     }
 
+    protected void runCronjob() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        try {
+            HttpResponse<String> response = httpClient.send(
+                    HttpRequest.newBuilder().GET().uri(URI.create("http://localhost/actions/test-run-cron.php")).build(),
+                    HttpResponse.BodyHandlers.ofString()
+            );
+            Assertions.assertEquals(200, response.statusCode());
+        } catch (IOException | InterruptedException e) {
+            Assertions.fail(e);
+        }
+    }
+
     private static HttpResponse<String> simpleHttpGet(String url) throws IOException, InterruptedException {
         return httpClient.send(
                 HttpRequest.newBuilder().GET().uri(URI.create(url)).build(),

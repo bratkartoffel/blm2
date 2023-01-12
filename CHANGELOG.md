@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The points are now calculated by the amount spent on buildings, research and mafia
+    - Before this change, the points were calculated by a formula independently which resulted in not comprehensible
+      values
 - (impressum/datenschutz) Merge pages
 - Remove donation link
 

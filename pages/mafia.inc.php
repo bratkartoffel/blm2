@@ -54,13 +54,11 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         <th>Aktion</th>
         <th>Wirkung</th>
         <th>Sperrzeit</th>
-        <th>Punkte</th>
     </tr>
     <tr>
         <td>Spionage</td>
         <td>Sammelt Informationen über den Gegner</td>
         <td><?= (Config::getInt(Config::SECTION_MAFIA_ESPIONAGE, "wait_time") / 60); ?> Minuten</td>
-        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_ESPIONAGE, "points")); ?></td>
     </tr>
     <tr>
         <td>Raub</td>
@@ -68,19 +66,16 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')); ?> seines Bargeldes
         </td>
         <td><?= (Config::getInt(Config::SECTION_MAFIA_ROBBERY, "wait_time") / 60); ?> Minuten</td>
-        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_ROBBERY, "points")); ?></td>
     </tr>
     <tr>
         <td>Diebstahl</td>
         <td>Stiehlt dem Gegner alle Waren aus dem Lager</td>
         <td><?= (Config::getInt(Config::SECTION_MAFIA_HEIST, "wait_time") / 60); ?> Minuten</td>
-        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_HEIST, "points")); ?></td>
     </tr>
     <tr>
         <td>Anschlag</td>
         <td>Zerstört die Plantage des Gegners, senkt das Gebäudelevel um eine Stufe</td>
         <td><?= (Config::getInt(Config::SECTION_MAFIA_ATTACK, "wait_time") / 60); ?> Minuten</td>
-        <td><?= formatPoints(Config::getInt(Config::SECTION_MAFIA_ATTACK, "points")); ?></td>
     </tr>
 </table>
 
@@ -102,10 +97,18 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         <div>
             <label for="action">Aktion</label>
             <select name="action" id="action" oninput="MafiaActionChange();">
+<<<<<<< HEAD
                 <option value="<?=mafia_action_espionage;?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>Spionage</option>
                 <option value="<?=mafia_action_robbery;?>"<?= ($action == mafia_action_robbery ? ' selected' : ''); ?>>Raub</option>
                 <option value="<?=mafia_action_heist;?>"<?= ($action == mafia_action_heist ? ' selected' : ''); ?>>Diebstahl</option>
                 <option value="<?=mafia_action_attack;?>"<?= ($action == mafia_action_attack ? ' selected' : ''); ?>>Anschlag</option>
+=======
+                <option value="<?= mafia_action_espionage; ?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>Spionage
+                </option>
+                <option value="<?= mafia_action_robbery; ?>"<?= ($action == mafia_action_robbery ? ' selected' : ''); ?>>Raub</option>
+                <option value="<?= mafia_action_heist; ?>"<?= ($action == mafia_action_heist ? ' selected' : ''); ?>>Diebstahl</option>
+                <option value="<?= mafia_action_attack; ?>"<?= ($action == mafia_action_attack ? ' selected' : ''); ?>>Anschlag</option>
+>>>>>>> 01232f1 (rework points system)
             </select>
         </div>
         <div>

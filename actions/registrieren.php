@@ -54,7 +54,7 @@ if (Database::getInstance()->existsPlayerByNameOrEmail($name, $email)) {
 $email_activation_code = createRandomCode();
 
 Database::getInstance()->begin();
-if (!Database::getInstance()->createUser($name, $email, $email_activation_code, $pwd1)) {
+if (Database::getInstance()->createUser($name, $email, $email_activation_code, $pwd1) === null) {
     Database::getInstance()->rollBack();
     redirectTo($backLink, 141, __LINE__);
 }

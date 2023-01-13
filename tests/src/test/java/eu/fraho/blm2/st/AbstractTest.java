@@ -6,7 +6,6 @@
  */
 package eu.fraho.blm2.st;
 
-import com.evanlennick.retry4j.CallExecutor;
 import com.evanlennick.retry4j.CallExecutorBuilder;
 import com.evanlennick.retry4j.config.RetryConfig;
 import com.evanlennick.retry4j.config.RetryConfigBuilder;
@@ -84,13 +83,12 @@ public abstract class AbstractTest {
                 .withFixedBackoff()
                 .build();
         try {
-            @SuppressWarnings({"unchecked", "rawtypes"})
-            CallExecutor<Boolean> executor = new CallExecutorBuilder().config(config).build();
-            executor.execute(() -> {
-                login(username, "changeit");
+            //noinspection unchecked
+            new CallExecutorBuilder<Boolean>().config(config).build().execute(() -> {
+                this.login(username, "changeit");
                 driver.findElement(By.id("meldung_202"));
-                return true;
-            });
+                return null;
+            }, "login");
         } catch (RetriesExhaustedException | UnexpectedException e) {
             Assertions.fail(e);
         }
@@ -134,9 +132,26 @@ public abstract class AbstractTest {
         driver.findElement(by).findElement(By.xpath("//option[. = '%s']".formatted(label))).click();
     }
 
-    protected void resetPlayer(int id) {
+    protected void resetPlayer(int id, TestInfo testInfo) {
+        HttpResponse<String> response = null;
         try {
-            HttpResponse<String> response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=" + id);
+            String testClass = testInfo.getTestClass().map(Class::getSimpleName).orElse(null);
+            String testMethod = testInfo.getTestMethod().map(Method::getName).orElse(null);
+            response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=%d&class=%s&method=%s".formatted(id, testClass, testMethod));
+            Optional<String> location = response.headers().firstValue("Location");
+            Assertions.assertTrue(location.isPresent());
+            Assertions.assertEquals("/actions/logout.php", location.get());
+        } catch (IOException | InterruptedException e) {
+            Assertions.fail(e);
+        } catch (AssertionFailedError e) {
+            log.warn(Optional.ofNullable(response).map(HttpResponse::body).orElse("no body"));
+            throw e;
+        }
+    }
+
+    protected void resetPlayer(int id, String testClass) {
+        try {
+            HttpResponse<String> response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=%d&class=%s".formatted(id, testClass));
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());

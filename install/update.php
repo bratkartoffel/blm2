@@ -64,9 +64,6 @@ echo "> OK\n\n";
 echo "Enumerating update scripts:\n";
 $scripts = glob('sql/*.sql');
 sort($scripts);
-if (file_exists('/tmp/99_testdata.sql')) {
-    $scripts[] = '/tmp/99_testdata.sql';
-}
 echo "> Found " . count($scripts) . " scripts\n";
 foreach ($scripts as $script) {
     if (strpos($script, '/0') !== false) {
@@ -117,7 +114,7 @@ if (Database::getInstance()->getPlayerCount() === 0) {
     Database::getInstance()->begin();
     $id = null;
     $password = createRandomPassword();
-    if (!Database::getInstance()->createUser('admin', 'admin@localhost', null, $password)) {
+    if (Database::getInstance()->createUser('admin', 'admin@localhost', null, $password) === null) {
         die('> FAIL: Could not create new admin user');
     }
     Database::getInstance()->commit();

@@ -5,45 +5,91 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/functions.inc.php');
-require_once('../include/database.class.php');
+require_once '../include/functions.inc.php';
+require_once '../include/database.class.php';
 
 ob_start();
 $id = getOrDefault($_GET, 'id', 0);
-Database::getInstance()->begin();
-$status = resetAccount($id);
-if ($status !== null) {
-    die('could not reset account due to ' . $status);
+if ($id === 0) {
+    http_send_status(400);
+    die('no id given');
 }
 
-Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('Von' => $id));
-Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('An' => $id));
+$testClass = getOrDefault($_GET, 'class');
+if ($testClass === null) {
+    http_send_status(400);
+    die('no class given');
+}
+$testMethod = getOrDefault($_GET, 'method');
 
-switch ($id) {
-    case 11:
-        // just reset player, no special updates afterwards needed
+Database::getInstance()->begin();
+
+// create or reset account
+if (!Database::getInstance()->existsTableEntry(Database::TABLE_USERS, array('ID' => $id))) {
+    $user = Database::getInstance()->createUser(sprintf("test%d", $id), sprintf("%s_%d@localhost", $testClass, $id), null, 'changeit');
+    Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $user, array('ID' => $id));
+    Database::getInstance()->updateTableEntry(Database::TABLE_STATISTICS, null, array('user_id' => $id), array('user_id = :whr0' => $user));
+} else {
+    resetAccount($id);
+    Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Passwort' => hashPassword('changeit')));
+}
+
+switch ($testClass) {
+    case 'BankTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+            'Geld' => 100000,
+            'Bank' => 50000,
+        ));
         break;
 
-    case 12:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude' . building_plantage => 3, 'Gebaeude' . building_research_lab => 3));
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Forschung' . item_potatoes => 2, 'Forschung' . item_carrots => 1));
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Lager' . item_potatoes => 100, 'Lager' . item_carrots => 50));
+    case 'BuildingTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+            'Gebaeude' . building_plantage => 8,
+            'Gebaeude' . building_building_yard => 120,
+        ));
         break;
 
-    case 13:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 100000, 'Bank' => 50000));
+    case 'GroupTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+            'Gebaeude' . building_plantage => 8,
+        ));
         break;
 
-    case 14:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude' . building_plantage => 30, 'Forschung' . item_kiwi => 30));
+    case 'MessageTests':
+        // delete all messages from and to this account
+        Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('Von' => $id));
+        Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('An' => $id));
         break;
 
-    case 15:
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Gebaeude' . building_plantage => 8, 'Gebaeude' . building_building_yard => 120));
+    case 'PlantageTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+            'Geld' => 15000,
+            'Gebaeude' . building_plantage => 30,
+            'Gebaeude' . building_research_lab => 3,
+            'Forschung' . item_potatoes => 2,
+            'Forschung' . item_carrots => 1,
+            'Forschung' . item_kiwi => 25,
+        ));
+        break;
+
+    case 'ResearchTests':
+        if ($testMethod !== 'testNotBuilt') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+                'Gebaeude' . building_research_lab => 10,
+            ));
+        }
+        break;
+
+    case 'ShopTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+            'Lager' . item_potatoes => 100,
+            'Lager' . item_carrots => 50,
+            'Lager' . item_apples => 27,
+        ));
         break;
 
     default:
-        die('unknown ID');
+        error_log('unknown class given: ' . $testClass);
 }
 
 Database::getInstance()->commit();

@@ -7,15 +7,24 @@
 package eu.fraho.blm2.st;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class BankTests extends AbstractTest {
+    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
+
+    @BeforeEach
+    void beforeEach() {
+        resetPlayer(USER_ID, getClass().getSimpleName());
+        login("test" + USER_ID);
+    }
+
     @Test
     void testDeposit() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -36,8 +45,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testDepositMax() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -53,8 +60,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testDepositNegative() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -69,8 +74,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testDepositTooMuch() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -86,8 +89,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testDepositZero() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -104,8 +105,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testWithdraw() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -123,8 +122,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testWithdrawCredit() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -142,8 +139,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testWithdrawCreditLimit() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -162,8 +157,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testWithdrawNegative() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
@@ -181,8 +174,6 @@ public class BankTests extends AbstractTest {
 
     @Test
     void testWithdrawZero() {
-        resetPlayer(13);
-        login("test3");
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 

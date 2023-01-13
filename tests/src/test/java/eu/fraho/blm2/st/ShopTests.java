@@ -6,15 +6,25 @@
  */
 package eu.fraho.blm2.st;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class ShopTests extends AbstractTest {
+    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
+
+    @BeforeEach
+    void beforeEach(TestInfo testInfo) {
+        resetPlayer(USER_ID, testInfo);
+        login("test" + USER_ID);
+    }
+
     @Test
     void testSellAll() {
-        resetPlayer(12);
-        login("test2");
         WebDriver driver = getDriver();
 
         driver.findElement(By.id("link_bioladen")).click();
@@ -22,16 +32,14 @@ public class ShopTests extends AbstractTest {
         driver.findElement(By.id("sell_all")).click();
 
         assertElementPresent(By.id("meldung_208"));
-        assertText(By.id("stat_money"), "5.307,50 €");
+        assertText(By.id("stat_money"), "5.374,64 €");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_1"), "307,50 €");
+        assertText(By.id("b_i_1"), "374,64 €");
     }
 
     @Test
     void testSell() {
-        resetPlayer(11);
-        login("test1");
         WebDriver driver = getDriver();
 
         driver.findElement(By.id("link_bioladen")).click();

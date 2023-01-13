@@ -6,19 +6,29 @@
  */
 package eu.fraho.blm2.st;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 class RegistrationTests extends AbstractTest {
+    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
+
+    @BeforeEach
+    void beforeEach() {
+        resetPlayer(USER_ID, getClass().getSimpleName());
+    }
+
     @Test
     void testEmailDuplicate() {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_registrieren")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
         inhalt.findElement(By.id("name")).sendKeys("testEmailDuplicate");
-        inhalt.findElement(By.id("email")).sendKeys("test1@example.com");
+        inhalt.findElement(By.id("email")).sendKeys("%s_%d@localhost".formatted(getClass().getSimpleName(), USER_ID));
         inhalt.findElement(By.id("pwd1")).sendKeys("changeit");
         inhalt.findElement(By.id("pwd2")).sendKeys("changeit");
         inhalt.findElement(By.id("captcha_code")).sendKeys("123456");
@@ -31,7 +41,7 @@ class RegistrationTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_registrieren")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
-        inhalt.findElement(By.id("name")).sendKeys("testPasswordNoMatch");
+        inhalt.findElement(By.id("name")).sendKeys("test" + (USER_ID + 1));
         inhalt.findElement(By.id("email")).sendKeys("testPasswordNoMatch@example.com");
         inhalt.findElement(By.id("pwd1")).sendKeys("changeit");
         inhalt.findElement(By.id("pwd2")).sendKeys("test1234");
@@ -45,7 +55,7 @@ class RegistrationTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_registrieren")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
-        inhalt.findElement(By.id("name")).sendKeys("testPasswordTooShort");
+        inhalt.findElement(By.id("name")).sendKeys("test" + (USER_ID + 1));
         inhalt.findElement(By.id("email")).sendKeys("testPasswordTooShort@example.com");
         inhalt.findElement(By.id("pwd1")).sendKeys("abc");
         inhalt.findElement(By.id("pwd2")).sendKeys("abc");
@@ -59,7 +69,7 @@ class RegistrationTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_registrieren")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
-        inhalt.findElement(By.id("name")).sendKeys("test1");
+        inhalt.findElement(By.id("name")).sendKeys("test" + USER_ID);
         inhalt.findElement(By.id("email")).sendKeys("testUsernameDuplicate@example.com");
         inhalt.findElement(By.id("pwd1")).sendKeys("changeit");
         inhalt.findElement(By.id("pwd2")).sendKeys("changeit");
@@ -84,12 +94,12 @@ class RegistrationTests extends AbstractTest {
 
     @Test
     void testRegistrationSuccess() {
-        String username = "test-" + System.currentTimeMillis();
+        String username = "test" + (USER_ID + 1);
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_registrieren")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
         inhalt.findElement(By.id("name")).sendKeys(username);
-        inhalt.findElement(By.id("email")).sendKeys(username + "@example.com");
+        inhalt.findElement(By.id("email")).sendKeys("test" + (USER_ID + 1) + "@localhost");
         inhalt.findElement(By.id("pwd1")).sendKeys("changeit");
         inhalt.findElement(By.id("pwd2")).sendKeys("changeit");
         inhalt.findElement(By.id("captcha_code")).sendKeys("123456");

@@ -6,17 +6,25 @@
  */
 package eu.fraho.blm2.st;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class BuildingTests extends AbstractTest {
+    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
+
+    @BeforeEach
+    void beforeEach() {
+        resetPlayer(USER_ID, getClass().getSimpleName());
+        login("test" + USER_ID);
+    }
+
     @Test
     void testBuildAndCancel() {
-        resetPlayer(11);
-        login("test1");
         WebDriver driver = getDriver();
 
         driver.findElement(By.id("link_gebaeude")).click();
@@ -25,19 +33,17 @@ public class BuildingTests extends AbstractTest {
         driver.findElement(By.id("build_1")).click();
         assertElementPresent(By.id("meldung_207"));
 
-        assertText(By.id("stat_money"), "4.526,15 €");
+        assertText(By.id("stat_money"), "1.127,63 €");
         driver.findElement(By.id("abort_1")).click();
         driver.switchTo().alert().accept();
         assertElementPresent(By.id("meldung_222"));
 
         assertElementPresent(By.id("build_1"));
-        assertText(By.id("stat_money"), "4.881,54 €");
+        assertText(By.id("stat_money"), "4.031,91 €");
     }
 
     @Test
     void testBuild() throws InterruptedException {
-        resetPlayer(15);
-        login("test5");
         WebDriver driver = getDriver();
 
         driver.findElement(By.id("link_gebaeude")).click();

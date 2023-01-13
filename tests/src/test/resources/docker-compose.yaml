@@ -31,5 +31,4 @@ services:
       - ../../../../:/var/www/html
       - ../../../../config/config-defaults.ini:/var/www/html/config/config-defaults.ini
       - ./config.ini:/var/www/html/config/config.ini
-      - ./testdata.sql:/tmp/99_testdata.sql
       - ./test-reset-player.php:/var/www/html/actions/test-reset-player.php

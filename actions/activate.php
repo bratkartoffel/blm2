@@ -14,10 +14,8 @@ $user = getOrDefault($_GET, 'user');
 $email = getOrDefault($_GET, 'email');
 $code = getOrDefault($_GET, 'code');
 $id = Database::getInstance()->getPlayerIdByNameOrEmailAndActivationToken($user, $email, $code);
+requireEntryFound($id, '/?p=index', 117, __LINE__);
 
-if ($id === null) {
-    redirectTo('/?p=index', 117, __LINE__);
-}
 Database::getInstance()->begin();
 if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('EMailAct' => null)) !== 1) {
     Database::getInstance()->rollBack();

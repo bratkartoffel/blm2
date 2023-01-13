@@ -994,11 +994,12 @@ function requireFieldSet(?array $array, string $field, string $redirectTo, ?stri
     }
 }
 
-function requireEntryFound($result, string $redirectTo, int $m = 154, ?string $anchor = null): void
+function requireEntryFound($result, string $redirectTo, int $m = 154, ?string $anchor = null)
 {
     if ($result === null || (is_array($result) && count($result) == 0)) {
         redirectTo($redirectTo, $m, $anchor);
     }
+    return $result;
 }
 
 function requireAdmin(): void

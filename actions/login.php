@@ -10,8 +10,8 @@ require_once('../include/database.class.php');
 
 ob_start();
 
-$name = getOrDefault($_POST, 'name');
-$pwd = getOrDefault($_POST, 'pwd');
+$name = requireEntryFound(getOrDefault($_POST, 'name'), "/?p=anmelden", 108, __LINE__);
+$pwd = requireEntryFound(getOrDefault($_POST, 'pwd'), "/?p=anmelden", 108, __LINE__);
 
 // force a new session
 session_reset();

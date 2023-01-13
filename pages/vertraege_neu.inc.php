@@ -13,7 +13,7 @@ $ware = getOrDefault($_GET, 'ware', 1);
 $menge = getOrDefault($_GET, 'menge', 0);
 $preis = getOrDefault($_GET, 'preis', .0);
 
-if ($ware <= 0 || $ware > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
+if ($ware <= 0 || $ware > count_wares) {
     redirectTo('/?p=bioladen', 112);
 }
 ?>
@@ -70,7 +70,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
     </tr>
     <?php
     $waresFound = false;
-    for ($i = 1; $i < Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+    for ($i = 1; $i < count_wares; $i++) {
         if ($data['Lager' . $i] == 0) continue;
         $waresFound = true;
         $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school]);

@@ -33,7 +33,7 @@ $rates = calculateSellRates();
             <th>Gewinn / kg</th>
         </tr>
         <?php
-        for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+        for ($i = 1; $i <= count_wares; $i++) {
             if ($data['Forschung' . $i] == 0) continue;
             $temp = "Forschung" . $i;
             $prodData = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);

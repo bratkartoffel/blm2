@@ -8,12 +8,13 @@
 
 restrictSitter('Gebaeude');
 
-$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'], 100, 200);
+$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'],
+    job_type_factor * job_type_building, (job_type_factor * job_type_building) + job_type_factor);
 $data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndExpenseMafia($_SESSION['blm_user']);
 
 $auftraege = array();
 for ($i = 0; $i < count($auftraege_db); $i++) {
-    $auftraege[$auftraege_db[$i]['item'] % 100] = $auftraege_db[$i];
+    $auftraege[$auftraege_db[$i]['item'] % job_type_factor] = $auftraege_db[$i];
 }
 
 function printBuildingInformation($playerData, $auftraege, $buildingId, $buildingDescription)
@@ -72,7 +73,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                     } else {
                         ?>
                         <input type="submit" value="Gebäude ausbauen" id="build_<?= $buildingId; ?>"
-                              <?= ($playerData['Geld'] >= $nextKosten ? '' : ' disabled="disabled"'); ?>/>
+                            <?= ($playerData['Geld'] >= $nextKosten ? '' : ' disabled="disabled"'); ?>/>
                         <?php
                     }
                     ?>

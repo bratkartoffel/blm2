@@ -29,7 +29,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             redirectTo($backLink, 173, __LINE__);
         }
 
-        if ($ware < 1 || $ware > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
+        if ($ware < 1 || $ware > count_wares) {
             redirectTo($backLink, 117, __LINE__);
         }
 

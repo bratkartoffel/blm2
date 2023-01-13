@@ -27,14 +27,14 @@ if ($alles == 1) {
 
     Database::getInstance()->begin();
     $sum_costs = .0;
-    for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+    for ($i = 1; $i <= count_wares; $i++) {
         if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i])) continue;
         $productionData = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);
 
         if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
                 'finished' => date('Y-m-d H:i:s', time() + ($stunden * 3600)),
                 'user_id' => $_SESSION['blm_user'],
-                'item' => 200 + $i,
+                'item' => (job_type_factor * job_type_production) + $i,
                 'amount' => ceil($stunden * $productionData['Menge']),
                 'cost' => $stunden * $productionData['Kosten']
             )) === 1) {
@@ -68,7 +68,7 @@ if ($menge > $productionData['Menge'] * Config::getInt(Config::SECTION_PLANTAGE,
     redirectTo('/?p=plantage', 125);
 }
 
-if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
+if ($was <= 0 || $was > count_wares) {
     redirectTo('/?p=plantage', 112);
 }
 
@@ -81,7 +81,7 @@ Database::getInstance()->begin();
 if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $stunden * 3600),
         'user_id' => $_SESSION['blm_user'],
-        'item' => 200 + $was,
+        'item' => (job_type_factor * job_type_production) + $was,
         'amount' => $menge,
         'cost' => $stunden * $productionData['Kosten']
     )) == 0) {

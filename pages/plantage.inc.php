@@ -8,17 +8,18 @@
 
 restrictSitter('Produktion');
 
-$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'], 200, 300);
+$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'],
+    job_type_factor * job_type_production, (job_type_factor * job_type_production) + job_type_factor);
 $data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevel($_SESSION['blm_user']);
 
 $auftraege = array();
 for ($i = 0; $i < count($auftraege_db); $i++) {
-    $auftraege[$auftraege_db[$i]['item'] % 100] = $auftraege_db[$i];
+    $auftraege[$auftraege_db[$i]['item'] % job_type_factor] = $auftraege_db[$i];
 }
 
 $productionData = array();
 $productionCostSum = .0;
-for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+for ($i = 1; $i <= count_wares; $i++) {
     if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i])) continue;
     $productionData[$i] = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);
     if (!array_key_exists($i, $auftraege)) {
@@ -58,7 +59,7 @@ for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
     </div>
 
 <?php
-for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+for ($i = 1; $i <= count_wares; $i++) {
     $researchAttribute = 'Forschung' . $i;
     if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data[$researchAttribute])) continue;
     ?>

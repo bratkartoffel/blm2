@@ -105,12 +105,12 @@ switch ($action) {
         $data = Database::getInstance()->getPlayerEspionageDataByID($otherPlayer['ID']);
         if ($success) {
             $stock = array();
-            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+            for ($i = 1; $i <= count_wares; $i++) {
                 if ($data['Lager' . $i] == 0) continue;
                 $stock[] = sprintf('* %s: %s', getItemName($i), formatWeight($data['Lager' . $i]));
             }
             $buildings = array();
-            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_buildings'); $i++) {
+            for ($i = 1; $i <= count_buildings; $i++) {
                 if ($data['Gebaeude' . $i] == 0) continue;
                 $buildings[] = sprintf('* %s: %d', getBuildingName($i), $data['Gebaeude' . $i]);
             }
@@ -285,7 +285,7 @@ switch ($action) {
             $valuesSub = array();
             $valuesAdd = array();
             $wheresSub = array();
-            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+            for ($i = 1; $i <= count_wares; $i++) {
                 $valuesSub['Lager' . $i] = -$data['Lager' . $i];
                 $wheresSub['Lager' . $i . ' >= :whr' . ($i - 1)] = $data['Lager' . $i];
                 $valuesAdd['Lager' . $i] = $data['Lager' . $i];
@@ -302,7 +302,7 @@ switch ($action) {
             }
 
             $wares = array();
-            for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+            for ($i = 1; $i <= count_wares; $i++) {
                 if ($data['Lager' . $i] == 0) continue;
                 if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MAFIA, array(
                         'senderId' => $_SESSION['blm_user'],

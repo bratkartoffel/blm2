@@ -14,7 +14,7 @@ restrictSitter('Forschung');
 
 $was = getOrDefault($_POST, 'was', 0);
 
-if ($was <= 0 || $was > Config::getInt(Config::SECTION_BASE, 'count_wares')) {
+if ($was <= 0 || $was > count_wares) {
     redirectTo('/?p=forschungszentrum', 112, __LINE__);
 }
 
@@ -35,7 +35,7 @@ Database::getInstance()->begin();
 if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $researchData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
-        'item' => 300 + $was,
+        'item' => (job_type_factor * job_type_research) + $was,
         'cost' => $researchData['Kosten'],
         'points' => $researchData['Punkte']
     )) == 0) {

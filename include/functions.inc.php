@@ -46,6 +46,21 @@ const item_strawberries = 13;
 const item_oranges = 14;
 const item_kiwi = 15;
 
+// enum constant for the job types
+// factor to separate the various types
+const job_type_factor = 100;
+// building has 1xx
+const job_type_building = 1;
+// production has 2xx
+const job_type_production = 2;
+// research has 3xx
+const job_type_research = 3;
+
+// number of implemented wares
+const count_wares = 15;
+
+// number of implemented items
+const count_buildings = 8;
 
 function abortWithErrorPage(string $body)
 {
@@ -70,15 +85,15 @@ function verifyInstallation()
 
 function getOrderChefboxDescription(int $order_type): string
 {
-    switch (floor($order_type / 100)) {
+    switch (floor($order_type / job_type_factor)) {
         case 1:
-            $result = sprintf('G: %s', getBuildingName($order_type % 100));
+            $result = sprintf('G: %s', getBuildingName($order_type % job_type_factor));
             break;
         case 2:
-            $result = sprintf('A: %s', getItemName($order_type % 100));
+            $result = sprintf('A: %s', getItemName($order_type % job_type_factor));
             break;
         case 3:
-            $result = sprintf('F: %s', getItemName($order_type % 100));
+            $result = sprintf('F: %s', getItemName($order_type % job_type_factor));
             break;
         default:
             $result = sprintf('Unbekannt (%d)', $order_type);
@@ -103,11 +118,11 @@ function CheckAuftraege(int $blm_user): bool
     $auftraege = Database::getInstance()->getAllExpiredAuftraegeByVon($blm_user);
 
     foreach ($auftraege as $auftrag) {
-        switch (floor($auftrag['item'] / 100)) {
+        switch (floor($auftrag['item'] / job_type_factor)) {
             // Gebäude
-            case 1:
+            case job_type_building:
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                        array('Gebaeude' . ($auftrag['item'] % 100) => 1)) != 1) {
+                        array('Gebaeude' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
                     return false;
                 }
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
@@ -118,17 +133,17 @@ function CheckAuftraege(int $blm_user): bool
                 break;
 
             // Produktion
-            case 2:
+            case job_type_production:
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                        array('Lager' . ($auftrag['item'] % 100) => $auftrag['amount'])) != 1) {
+                        array('Lager' . ($auftrag['item'] % job_type_factor) => $auftrag['amount'])) != 1) {
                     return false;
                 }
                 break;
 
             // Forschung
-            case 3:
+            case job_type_research:
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                        array('Forschung' . ($auftrag['item'] % 100) => 1)) != 1) {
+                        array('Forschung' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
                     return false;
                 }
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
@@ -952,7 +967,7 @@ function createWarenDropdown(int $selectedValue, string $name, bool $withAllEntr
     if ($withAllEntry) {
         $entries[] = '<option value="">- Alle -</option>';
     }
-    for ($i = 1; $i <= Config::get(Config::SECTION_BASE, 'count_wares'); $i++) {
+    for ($i = 1; $i <= count_wares; $i++) {
         if (array_key_exists('Lager' . $i, $onlyStock) && $onlyStock['Lager' . $i] == 0) continue;
         if ($i == $selectedValue) {
             $entries[] = sprintf('<option value="%d" selected="selected">%s</option>', $i, getItemName($i));
@@ -1220,7 +1235,7 @@ function calculateProductionDataForPlayer(int $item_id, int $plantage_level, int
 function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, int $research_level, int $level_increment = 1): array
 {
     return array(
-        'Kosten' => round((100 * $item_id) + (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_cost'), $research_level + $level_increment)), 2),
+        'Kosten' => round((Config::getInt(Config::SECTION_RESEARCH_LAB, 'cost_item_id_factor') * $item_id) + (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_cost'), $research_level + $level_increment)), 2),
         'Dauer' => (int)floor(max(Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_min_duration'), (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_duration'), $research_level + $level_increment)) * pow(1 - Config::getFloat(Config::SECTION_RESEARCH_LAB, 'bonus_factor'), $research_lab_level))),
         'Punkte' => (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_points') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_points'), $research_level + $level_increment))
     );
@@ -1292,7 +1307,7 @@ function calculateSellRates(): array
     }
     $result = array();
     $factor = 100;
-    for ($i = 1; $i <= Config::get(Config::SECTION_BASE, 'count_wares'); $i++) {
+    for ($i = 1; $i <= count_wares; $i++) {
         $result[$i] = rand(Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min') * $factor, Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max') * $factor) / $factor;
     }
     srand(mt_rand());

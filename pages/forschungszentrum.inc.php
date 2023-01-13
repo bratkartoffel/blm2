@@ -13,10 +13,11 @@ if ($data['Gebaeude' . building_research_lab] == 0) {
     redirectTo('/?p=gebaeude', 145, "g2");
 }
 
-$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'], 300, 400);
+$auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'],
+    job_type_factor * job_type_research, (job_type_factor * job_type_research) + job_type_factor);
 $auftraege = array();
 for ($i = 0; $i < count($auftraege_db); $i++) {
-    $auftraege[$auftraege_db[$i]['item'] % 100] = $auftraege_db[$i];
+    $auftraege[$auftraege_db[$i]['item'] % job_type_factor] = $auftraege_db[$i];
 }
 
 ?>
@@ -37,7 +38,7 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
     </script>
 
 <?php
-for ($i = 1; $i <= Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+for ($i = 1; $i <= count_wares; $i++) {
     if (!researchRequirementsMet($i, $data['Gebaeude' . building_plantage], $data['Gebaeude' . building_research_lab])) continue;
 
     $researchData = calculateResearchDataForPlayer($i, $data['Gebaeude' . building_research_lab], $data['Forschung' . $i]);

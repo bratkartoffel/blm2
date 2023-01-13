@@ -25,7 +25,7 @@ Database::getInstance()->begin();
 if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $buildingData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
-        'item' => $was + 100,
+        'item' => (job_type_factor * job_type_building) + $was,
         'cost' => $buildingData['Kosten'],
         'points' => $buildingData['Punkte']
     )) == 0) {

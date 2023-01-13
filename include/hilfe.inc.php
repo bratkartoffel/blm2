@@ -109,7 +109,7 @@ Der Verkaufspreis kann nicht selbst direkt eingegeben oder verändert werden.'
         'Büro',
         'Das Büro ist eine Art Schaltzentrale des Spiels, wo alle wichtigen Informationen Ihres Accounts zusammenlaufen.
 	
-Hier sehen Sie zum Beispiel die aktuellen Marktkurse (bewegen sich zwischen 75% und 100%, werden stündlich neu berechnet),
+Hier sehen Sie zum Beispiel die aktuellen Marktkurse (bewegen sich zwischen ' . formatPercent(Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min')) . ' und ' . formatPercent(Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max')) . ', werden stündlich neu berechnet),
 eine Übersicht über Ihre Eingaben und Ausgaben, sowie eine Aufschlüsselung über die Punkterechnung.'
     ),
     109 => array(

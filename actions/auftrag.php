@@ -18,9 +18,9 @@ $auftrag = Database::getInstance()->getAuftragByIdAndVon($id, $_SESSION['blm_use
 $back = 'index';
 
 Database::getInstance()->begin();
-switch (floor($auftrag['item'] / 100)) {
+switch (floor($auftrag['item'] / job_type_factor)) {
     // Gebäude
-    case 1:
+    case job_type_building:
         $back = 'gebaeude';
         requireXsrfToken('/?p=' . $back);
         requireEntryFound($id, '/?p=' . $back);
@@ -37,7 +37,7 @@ switch (floor($auftrag['item'] / 100)) {
         break;
 
     // Produktion
-    case 2:
+    case job_type_production:
         $back = 'plantage';
         requireXsrfToken('/?p=' . $back);
         requireEntryFound($id, '/?p=' . $back);
@@ -45,14 +45,14 @@ switch (floor($auftrag['item'] / 100)) {
         $completed = time() - strtotime($auftrag['created']);
         $percent = $completed / $duration;
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, null,
-                array('Lager' . ($auftrag['item'] % 100) => floor($auftrag['amount'] * $percent)),
+                array('Lager' . ($auftrag['item'] % job_type_factor) => floor($auftrag['amount'] * $percent)),
                 array('ID = :whr0' => $_SESSION['blm_user'])) === null) {
             redirectTo('/?p=' . $back, 142, __LINE__);
         }
         break;
 
     // Forschung
-    case 3:
+    case job_type_research:
         $back = 'forschungszentrum';
         requireXsrfToken('/?p=' . $back);
         requireEntryFound($id, '/?p=' . $back);
@@ -79,4 +79,4 @@ if (Database::getInstance()->deleteTableEntry(Database::TABLE_JOBS, $id) === nul
 }
 
 Database::getInstance()->commit();
-redirectTo('/?p=' . $back, 222, substr($back, 0, 1) . ($auftrag['item'] % 100));
+redirectTo('/?p=' . $back, 222, substr($back, 0, 1) . ($auftrag['item'] % job_type_factor));

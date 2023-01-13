@@ -63,7 +63,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
     </tr>
     <?php
     $waresFound = false;
-    for ($i = 1; $i < Config::getInt(Config::SECTION_BASE, 'count_wares'); $i++) {
+    for ($i = 1; $i < count_wares; $i++) {
         if ($data['Lager' . $i] == 0) continue;
         $waresFound = true;
         $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school]);

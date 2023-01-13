@@ -50,7 +50,7 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
     foreach ($auftraege as $auftrag) {
         $duration = strtotime($auftrag['finished']) - time();
         ?>
-        <tr class="Kategorie<?= floor($auftrag['item'] / 100); ?>">
+        <tr class="Kategorie<?= floor($auftrag['item'] / job_type_factor); ?>">
             <td><?= getOrderChefboxDescription($auftrag['item']); ?></td>
             <td class="countdown"><?= formatDuration($duration); ?></td>
         </tr>

@@ -96,8 +96,7 @@ function getOrderChefboxDescription(int $order_type): string
             $result = sprintf('F: %s', getItemName($order_type % job_type_factor));
             break;
         default:
-            $result = sprintf('Unbekannt (%d)', $order_type);
-            break;
+            trigger_error(sprintf('invalid order_type given: %d', $order_type), E_USER_ERROR);
     }
     if (strlen($result) > 14) {
         $result = substr($result, 0, 14) . '...';
@@ -589,7 +588,7 @@ function getBuildingName(int $building_id): string
         case building_pizzeria:
             return 'Pizzeria';
         default:
-            return 'Unbekannt (' . $building_id . ')';
+            trigger_error(sprintf('invalid building_id given: %d', $building_id), E_USER_ERROR);
     }
 }
 
@@ -627,7 +626,7 @@ function getItemName(int $item_id): string
         case item_kiwi:
             return 'Kiwi';
         default:
-            return 'Unbekannt (' . $item_id . ')';
+            trigger_error(sprintf('invalid item_id given: %d', $item_id), E_USER_ERROR);
     }
 }
 
@@ -829,7 +828,7 @@ function getOrDefault(array $array, string $name, $default = null)
         } else if (is_double($default) || is_float($default)) {
             return doubleval(str_replace(',', '.', $value));
         } else {
-            trigger_error("Unknown type of default '" . var_export($default, true) . "'");
+            error_log(sprintf('Unknown type of default: "%s"', var_export($default, true)));
             return $value;
         }
     }
@@ -1269,7 +1268,7 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
             $section = Config::SECTION_PIZZERIA;
             break;
         default:
-            trigger_error('Unknown building id given', E_USER_ERROR);
+            trigger_error(sprintf('Unknown building id given: %d, %d, %d', $building_id, $player['ID'], $level_increment), E_USER_ERROR);
     }
 
     $result = array(
@@ -1511,7 +1510,7 @@ EOF;
     foreach ($players as $player) {
         if ($player['EMailAct'] !== null || $player['LastLogin'] === null) continue;
         if (!sendMail($player['EMail'], Config::get(Config::SECTION_BASE, 'game_title') . ': Rundenende', str_replace('__NAME__', escapeForOutput($player['Name']), $mail))) {
-            trigger_error('Could not send mail to ' . $player['EMail'], E_USER_WARNING);
+            trigger_error(sprintf("Could not send mail to %s", $player['EMail']), E_USER_WARNING);
         }
     }
 }
@@ -1626,7 +1625,7 @@ function getMafiaConfigSection(int $action): string
         case mafia_action_attack:
             return Config::SECTION_MAFIA_ATTACK;
         default:
-            trigger_error("invalid action given", E_USER_ERROR);
+            trigger_error(sprintf('invalid mafia action given: %d', $action), E_USER_ERROR);
     }
 }
 

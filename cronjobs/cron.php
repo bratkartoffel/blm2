@@ -57,12 +57,12 @@ function handleResetDueToDispo(): void
 {
     $entries = Database::getInstance()->getAllPlayerIdAndNameBankSmallerEquals(Config::getInt(Config::SECTION_BANK, 'dispo_limit'));
     foreach ($entries as $entry) {
-        trigger_error(sprintf("Resetting player %s/%s", $entry['ID'], $entries['Name']));
+        error_log(sprintf('Resetting player %s/%s', $entry['ID'], $entries['Name']));
         Database::getInstance()->begin();
         $status = resetAccount($entry['ID']);
         if ($status !== null) {
             Database::getInstance()->rollBack();
-            trigger_error("Could not reset player " . $entry['ID'] . ' with status ' . $status, E_USER_WARNING);
+            error_log(sprintf('Could not reset player %d with status %s', $entry['ID'], $status));
             continue;
         }
         if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
@@ -72,7 +72,7 @@ function handleResetDueToDispo(): void
                 'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
             )) != 1) {
             Database::getInstance()->rollBack();
-            trigger_error("Could create message after resetting player " . $entry['ID'], E_USER_WARNING);
+            error_log(sprintf('Could create message after resetting player %d', $entry['ID']));
             continue;
         }
         Database::getInstance()->commit();

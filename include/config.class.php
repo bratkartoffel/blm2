@@ -96,14 +96,14 @@ class Config
     private function _get(string $section, ?string $option)
     {
         if (!array_key_exists($section, $this->iniFile)) {
-            trigger_error('Configuration section "' . $section . '" is not defined!', E_USER_ERROR);
+            trigger_error(sprintf('Configuration section "%s" is not defined!', $section), E_USER_ERROR);
         }
         $options = $this->iniFile[$section];
         if ($option === null) {
             return $options;
         }
         if (!array_key_exists($option, $options)) {
-            trigger_error('Configuration option "' . $section . '.' . $option . '" is not defined!', E_USER_ERROR);
+            trigger_error(sprintf('Configuration option "%s.%s" is not defined!', $section, $option), E_USER_ERROR);
         }
         return $options[$option];
     }

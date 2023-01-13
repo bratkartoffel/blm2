@@ -1561,7 +1561,7 @@ ORDER BY m.Name");
             }
         }
         $text = str_replace(["\n ", "\n"], [" ", ""], $text);
-        trigger_error(sprintf("%s:%d | %s", basename($bt[$i]["file"]), $bt[$i]["line"], $text), E_USER_WARNING);
+        error_log(sprintf("%s:%d | %s", basename($bt[$i]["file"]), $bt[$i]["line"], $text));
     }
 
     private function executeAndExtractField(PDOStatement $stmt, string $fieldName, array $executeParam = array()): ?string

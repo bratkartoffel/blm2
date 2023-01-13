@@ -33,7 +33,6 @@ class Database
     public const TABLE_LOG_MESSAGES = 'log_nachrichten';
     public const TABLE_LOG_CONTRACTS = 'log_vertraege';
     public const TABLE_UPDATE_INFO = 'update_info';
-    private const SLOW_QUERY_WARN_THRESHOLD = 10 / 1000; // 10 ms
 
     private static ?Database $INSTANCE = null;
 
@@ -57,6 +56,7 @@ class Database
     private int $queries = 0;
     private ?string $sql = null;
     private array $warnings = array();
+    private float $slow_query_threshold;
 
     function __construct(bool $dieOnInitError)
     {
@@ -72,6 +72,7 @@ class Database
                 array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
             $this->link->query("SET time_zone = '" . date_default_timezone_get() . "'");
             $this->queries++;
+            $this->slow_query_threshold = Config::getFloat(Config::SECTION_DATABASE, 'slow_query_threshold') / 1000;
         } catch (PDOException $e) {
             if ($dieOnInitError) {
                 die('Database connection failed: ' . $e->getMessage());
@@ -1613,7 +1614,7 @@ ORDER BY m.Name");
         $pre = microtime(true);
         $stmt = $this->link->prepare($sql);
         $post = microtime(true);
-        if ($post - $pre > self::SLOW_QUERY_WARN_THRESHOLD) {
+        if ($post - $pre > $this->slow_query_threshold) {
             $this->warnings[] = sprintf("Statement took %.02fms to prepare: %s", ($post - $pre) * 1000, $this->sql);
         }
         if ($stmt === false) {
@@ -1632,7 +1633,7 @@ ORDER BY m.Name");
             $executeResult = $stmt->execute($executeParam);
         }
         $post = microtime(true);
-        if ($post - $pre > self::SLOW_QUERY_WARN_THRESHOLD) {
+        if ($post - $pre > $this->slow_query_threshold) {
             $this->warnings[] = sprintf("Statement took %.02fms to execute: %s", ($post - $pre) * 1000, $this->sql);
         }
         return $executeResult;

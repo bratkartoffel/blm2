@@ -86,13 +86,13 @@ function verifyInstallation()
 function getOrderChefboxDescription(int $order_type): string
 {
     switch (floor($order_type / job_type_factor)) {
-        case 1:
+        case job_type_building:
             $result = sprintf('G: %s', getBuildingName($order_type % job_type_factor));
             break;
-        case 2:
+        case job_type_production:
             $result = sprintf('A: %s', getItemName($order_type % job_type_factor));
             break;
-        case 3:
+        case job_type_research:
             $result = sprintf('F: %s', getItemName($order_type % job_type_factor));
             break;
         default:
@@ -572,21 +572,21 @@ function getMessageBox(int $msg_id): ?string
 function getBuildingName(int $building_id): string
 {
     switch ($building_id) {
-        case 1:
+        case building_plantage:
             return 'Plantage';
-        case 2:
+        case building_research_lab:
             return 'Forschungszentrum';
-        case 3:
+        case building_shop:
             return 'Bioladen';
-        case 4:
+        case building_kebab_stand:
             return 'Dönerstand';
-        case 5:
+        case building_building_yard:
             return 'Bauhof';
-        case 6:
+        case building_school:
             return 'Verkäuferschule';
-        case 7:
+        case building_fence:
             return 'Zaun';
-        case 8:
+        case building_pizzeria:
             return 'Pizzeria';
         default:
             return 'Unbekannt (' . $building_id . ')';
@@ -596,35 +596,35 @@ function getBuildingName(int $building_id): string
 function getItemName(int $item_id): string
 {
     switch ($item_id) {
-        case 1:
+        case item_potatoes:
             return 'Kartoffeln';
-        case 2:
+        case item_carrots:
             return 'Karotten';
-        case 3:
+        case item_tomatoes:
             return 'Tomaten';
-        case 4:
+        case item_salad:
             return 'Salat';
-        case 5:
+        case item_apples:
             return 'Äpfel';
-        case 6:
+        case item_pears:
             return 'Birnen';
-        case 7:
+        case item_cherries:
             return 'Kirschen';
-        case 8:
+        case item_bananas:
             return 'Bananen';
-        case 9:
+        case item_cucumbers:
             return 'Gurken';
-        case 10:
+        case item_grapes:
             return 'Weintrauben';
-        case 11:
+        case item_tobaco:
             return 'Tabak';
-        case 12:
+        case item_pineapple:
             return 'Ananas';
-        case 13:
+        case item_strawberries:
             return 'Erdbeeren';
-        case 14:
+        case item_oranges:
             return 'Orangen';
-        case 15:
+        case item_kiwi:
             return 'Kiwi';
         default:
             return 'Unbekannt (' . $item_id . ')';
@@ -1191,18 +1191,18 @@ function buildingRequirementsMet(int $building_id, array $player): bool
 {
     $attribute = 'Gebaeude' . $building_id;
     switch ($building_id) {
-        case 1:
-        case 2:
-        case 3:
+        case building_plantage:
+        case building_research_lab:
+        case building_shop:
             return true;
-        case 4:
-        case 6:
+        case building_kebab_stand:
+        case building_school:
             return $player[$attribute] > 0 || $player['Gebaeude' . building_shop] >= 5;
-        case 5:
+        case building_building_yard:
             return $player[$attribute] > 0 || ($player['Gebaeude' . building_plantage] >= 8 && $player['Gebaeude' . building_research_lab] >= 9);
-        case 7:
+        case building_fence:
             return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 10000 && $player['Gebaeude' . building_plantage] > 9);
-        case 8:
+        case building_pizzeria:
             return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 25000 && $player['Gebaeude' . building_plantage] > 11);
         default:
             return false;
@@ -1211,12 +1211,12 @@ function buildingRequirementsMet(int $building_id, array $player): bool
 
 function productionRequirementsMet(int $item_id, int $plantage_level, int $research_level): bool
 {
-    return $item_id == 1 || $research_level > 0 && $plantage_level >= $item_id * 1.5;
+    return $item_id == item_potatoes || $research_level > 0 && $plantage_level >= $item_id * 1.5;
 }
 
 function researchRequirementsMet(int $item_id, int $plantage_level, int $research_lab_level): bool
 {
-    return $item_id == 1 || $plantage_level >= $item_id * 1.5 && $research_lab_level >= $item_id * 1.5;
+    return $item_id == item_potatoes || $plantage_level >= $item_id * 1.5 && $research_lab_level >= $item_id * 1.5;
 }
 
 function mafiaRequirementsMet(float $points): bool
@@ -1244,28 +1244,28 @@ function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, i
 function calculateBuildingDataForPlayer(int $building_id, array $player, int $level_increment = 1): array
 {
     switch ($building_id) {
-        case 1:
+        case building_plantage:
             $section = Config::SECTION_PLANTAGE;
             break;
-        case 2:
+        case building_research_lab:
             $section = Config::SECTION_RESEARCH_LAB;
             break;
-        case 3:
+        case building_shop:
             $section = Config::SECTION_SHOP;
             break;
-        case 4:
+        case building_kebab_stand:
             $section = Config::SECTION_KEBAB_STAND;
             break;
-        case 5:
+        case building_building_yard:
             $section = Config::SECTION_BUILDING_YARD;
             break;
-        case 6:
+        case building_school:
             $section = Config::SECTION_SCHOOL;
             break;
-        case 7:
+        case building_fence:
             $section = Config::SECTION_FENCE;
             break;
-        case 8:
+        case building_pizzeria:
             $section = Config::SECTION_PIZZERIA;
             break;
         default:
@@ -1617,13 +1617,13 @@ function obfuscate(string $text): string
 function getMafiaConfigSection(int $action): string
 {
     switch ($action) {
-        case 1:
+        case mafia_action_espionage:
             return Config::SECTION_MAFIA_ESPIONAGE;
-        case 2:
+        case mafia_action_robbery:
             return Config::SECTION_MAFIA_ROBBERY;
-        case 3:
+        case mafia_action_heist:
             return Config::SECTION_MAFIA_HEIST;
-        case 4:
+        case mafia_action_attack:
             return Config::SECTION_MAFIA_ATTACK;
         default:
             trigger_error("invalid action given", E_USER_ERROR);

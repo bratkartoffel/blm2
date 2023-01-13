@@ -1209,8 +1209,8 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
     public function getUnreadGroupMessageCount(int $group_id, int $blm_user): ?int
     {
         $stmt = $this->prepare("SELECT COUNT(1) AS count
-            FROM " . self::TABLE_GROUP_MESSAGES . "
-            WHERE Gruppe = :groupId AND Zeit > (SELECT m.GruppeLastMessageZeit FROM " . self::TABLE_USERS . " m WHERE id = :userId)");
+            FROM " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_GROUP_MESSAGES . " n ON m.Gruppe = n.Gruppe
+            WHERE m.ID = :userId AND m.Gruppe = :groupId AND n.Zeit > m.GruppeLastMessageZeit");
         $stmt->bindParam("groupId", $group_id, PDO::PARAM_INT);
         $stmt->bindParam("userId", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractField($stmt, 'count');
@@ -1219,28 +1219,30 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
     public function getServerStatistics(): ?array
     {
         // @formatter:off
-        $stmt = $this->prepare("SELECT
-        (SELECT SUM(AusgabenGebaeude + AusgabenForschung + AusgabenZinsen + AusgabenProduktion + AusgabenMarkt + AusgabenVertraege + AusgabenMafia) FROM " . self::TABLE_STATISTICS . ")
-            AS AusgabenGesamt,
-        (SELECT SUM(EinnahmenGebaeude + EinnahmenVerkauf + EinnahmenZinsen + EinnahmenMarkt + EinnahmenVertraege + EinnahmenMafia) FROM " . self::TABLE_STATISTICS . ")
-            AS EinnahmenGesamt,
-        (SELECT SUM(Forschung1 + Forschung2 + Forschung3 + Forschung4 + Forschung5 + Forschung6 + Forschung7 + Forschung8 + Forschung9 + Forschung10 + Forschung11 + Forschung12 + Forschung13 + Forschung14 + Forschung15) FROM " . self::TABLE_USERS . ")
-            AS GesamtForschung,
-       (SELECT SUM(AusgabenForschung) FROM " . self::TABLE_STATISTICS . ")
-            AS AusgabenForschung,
-       (SELECT COUNT(*) FROM " . self::TABLE_USERS . " WHERE ID > 0)
-            AS AnzahlSpieler,
-       (SELECT SUM(IGMGesendet) FROM " . self::TABLE_USERS . ")
-            AS AnzahlIGMs,
-       (SELECT SUM(AusgabenGebaeude) FROM " . self::TABLE_STATISTICS . ")
-            AS AusgabenGebaeude,
-       (SELECT SUM(Gebaeude1 + Gebaeude2 + Gebaeude3 + Gebaeude4 + Gebaeude5 + Gebaeude6 + Gebaeude7 + Gebaeude8) FROM " . self::TABLE_USERS . ")
-            AS GesamtGebaeude,
-       (SELECT COUNT(*) FROM " . self::TABLE_GROUP . ")
-            AS AnzahlGruppen,
-       (SELECT COUNT(*) FROM " . self::TABLE_USERS . " WHERE Gruppe IS NOT NULL)
-            AS AnzahlSpielerInGruppe;
-");
+        $stmt = $this->prepare("with
+glob_stats as (
+    SELECT
+        SUM(AusgabenGebaeude + AusgabenForschung + AusgabenZinsen + AusgabenProduktion + AusgabenMarkt + AusgabenVertraege + AusgabenMafia) AS AusgabenGesamt,
+        SUM(EinnahmenGebaeude + EinnahmenVerkauf + EinnahmenZinsen + EinnahmenMarkt + EinnahmenVertraege + EinnahmenMafia) AS EinnahmenGesamt,
+        SUM(AusgabenForschung) AS AusgabenForschung,
+        SUM(AusgabenGebaeude) AS AusgabenGebaeude
+    FROM " . self::TABLE_STATISTICS . "
+), glob_mitglieder as (
+    SELECT
+        SUM(Forschung1 + Forschung2 + Forschung3 + Forschung4 + Forschung5 + Forschung6 + Forschung7 + Forschung8 + Forschung9 + Forschung10 + Forschung11 + Forschung12 + Forschung13 + Forschung14 + Forschung15) AS GesamtForschung,
+        SUM(Gebaeude1 + Gebaeude2 + Gebaeude3 + Gebaeude4 + Gebaeude5 + Gebaeude6 + Gebaeude7 + Gebaeude8) AS GesamtGebaeude,
+        COUNT(1) AS AnzahlSpieler,
+        SUM(IGMGesendet) AS AnzahlIGMs
+    FROM " . self::TABLE_USERS . "
+    WHERE ID > 0
+)
+SELECT
+    s.*,
+    m.*,
+    (SELECT COUNT(1) FROM " . self::TABLE_GROUP . ")  AS AnzahlGruppen,
+    (SELECT COUNT(1) FROM " . self::TABLE_USERS . " WHERE Gruppe IS NOT NULL) AS AnzahlSpielerInGruppe
+FROM
+    glob_stats s, glob_mitglieder m");
         // @formatter:on
         $result = $this->executeAndExtractFirstRow($stmt);
         if ($result !== null) {

@@ -112,11 +112,15 @@ echo "Verifying existing accounts:\n";
 if (Database::getInstance()->getPlayerCount() === 0) {
     echo "> No accounts found, creating new admin account\n";
     Database::getInstance()->begin();
-    $id = null;
     $password = createRandomPassword();
-    if (Database::getInstance()->createUser('admin', 'admin@localhost', null, $password) === null) {
-        die('> FAIL: Could not create new admin user');
+    $id = Database::getInstance()->createUser('admin', 'admin@localhost', null, $password);
+    if ($id === null) {
+        die('> FAIL: Could not create new user');
     }
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Admin' => 1)) !== 1) {
+        die('> FAIL: Could not grant admin rights');
+    }
+
     Database::getInstance()->commit();
     echo "> Created new user 'admin' with password '" . $password . "'\n";
 }

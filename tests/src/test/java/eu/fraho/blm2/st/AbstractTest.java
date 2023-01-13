@@ -41,11 +41,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractTest {
     static final String RANDOM_TOKEN = "07313f0e320f22cbfa35cfc220508eb3ff457c7e";
-
     private static final Logger log = LoggerFactory.getLogger(AbstractTest.class);
-
     private static final WebDriver driver = SeleniumConfig.getWebDriver();
-
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final AtomicBoolean installed = new AtomicBoolean();
 
     @BeforeEach
@@ -63,12 +61,8 @@ public abstract class AbstractTest {
     @BeforeAll
     static void install() {
         if (installed.compareAndSet(false, true)) {
-            HttpClient httpClient = HttpClient.newHttpClient();
             try {
-                HttpResponse<String> response = httpClient.send(
-                        HttpRequest.newBuilder().GET().uri(URI.create("http://localhost/install/update.php?secret=changeit")).build(),
-                        HttpResponse.BodyHandlers.ofString()
-                );
+                HttpResponse<String> response = simpleHttpGet("http://localhost/install/update.php?secret=changeit");
                 if (response.statusCode() != 200) {
                     Assertions.fail(response.body());
                 }
@@ -141,17 +135,20 @@ public abstract class AbstractTest {
     }
 
     protected void resetPlayer(int id) {
-        HttpClient httpClient = HttpClient.newHttpClient();
         try {
-            HttpResponse<String> response = httpClient.send(
-                    HttpRequest.newBuilder().GET().uri(URI.create("http://localhost/actions/test-reset-player.php?id=" + id)).build(),
-                    HttpResponse.BodyHandlers.ofString()
-            );
+            HttpResponse<String> response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=" + id);
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
         }
+    }
+
+    private static HttpResponse<String> simpleHttpGet(String url) throws IOException, InterruptedException {
+        return httpClient.send(
+                HttpRequest.newBuilder().GET().uri(URI.create(url)).build(),
+                HttpResponse.BodyHandlers.ofString()
+        );
     }
 }

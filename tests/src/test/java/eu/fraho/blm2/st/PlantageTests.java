@@ -6,6 +6,7 @@
  */
 package eu.fraho.blm2.st;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -107,10 +108,7 @@ public class PlantageTests extends AbstractTest {
 
         driver.findElement(By.id("link_plantage")).click();
         setValue(By.id("amount_1"), "-1");
-        driver.findElement(By.id("plant_1")).submit();
-        assertElementPresent(By.id("plant_1"));
-        assertElementPresent(By.id("plant_2"));
-        assertText(By.id("stat_money"), "15.000,00 €");
+        Assertions.assertFalse(driver.findElement(By.id("plant_1")).isEnabled());
     }
     @Test
     void testPlantAllNegativeHours() {

@@ -203,7 +203,7 @@ done
 
 ### IDE (PhpStorm)
 
-Die primäre Entwicklung wird mit der IDE [PhpsStorm](https://www.jetbrains.com/phpstorm/) durchgeführt.
+Die primäre Entwicklung wird mit der IDE [PhpStorm](https://www.jetbrains.com/phpstorm/) durchgeführt.
 Um die CSS und Javascript Dateien automatisch mit dem Minify zu konvertieren können "Watcher" auf den Dateien angelegt
 werden.
 

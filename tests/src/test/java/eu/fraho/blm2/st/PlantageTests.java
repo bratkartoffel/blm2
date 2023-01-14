@@ -49,9 +49,7 @@ public class PlantageTests extends AbstractTest {
         setValue(By.id("stunden"), "13");
         assertText(By.id("pr_ko_all"), "Kosten: 9.256,00 €");
         driver.findElement(By.id("plant_all")).submit();
-        assertElementPresent(By.id("plant_1"));
-        assertElementPresent(By.id("plant_2"));
-        assertText(By.id("stat_money"), "15.000,00 €");
+        assertElementPresent(By.id("meldung_133"));
     }
 
     @Test
@@ -110,15 +108,13 @@ public class PlantageTests extends AbstractTest {
         setValue(By.id("amount_1"), "-1");
         Assertions.assertFalse(driver.findElement(By.id("plant_1")).isEnabled());
     }
+
     @Test
     void testPlantAllNegativeHours() {
         WebDriver driver = getDriver();
 
         driver.findElement(By.id("link_plantage")).click();
         setValue(By.id("stunden"), "-1");
-        driver.findElement(By.id("plant_all")).submit();
-        assertElementPresent(By.id("plant_1"));
-        assertElementPresent(By.id("plant_2"));
-        assertText(By.id("stat_money"), "15.000,00 €");
+        Assertions.assertFalse(driver.findElement(By.id("plant_all")).isEnabled());
     }
 }

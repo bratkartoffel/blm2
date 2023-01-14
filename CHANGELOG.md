@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- No changes yet
+### Changed
+
+- (impressum/datenschutz) Merge pages
+- Remove donation link
 
 ## [1.10.4] - 2023-01-14
 

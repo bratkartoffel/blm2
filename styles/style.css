@@ -148,6 +148,10 @@ div.NaviLink a {
     padding-left: 12px;
 }
 
+div.NaviSpacer {
+    height: 20px;
+}
+
 table#UserStatistik {
     width: 100%;
 }

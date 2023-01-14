@@ -1151,7 +1151,6 @@ function getCurrentPage(): string
             case "rangliste_spezial":
             case "index":
             case "impressum":
-            case "datenschutz":
             case "regeln":
             case "einstellungen":
             case "nachrichten_lesen":
@@ -1175,7 +1174,6 @@ function getCurrentPage(): string
             case "passwort_vergessen":
             case "regeln":
             case "impressum":
-            case "datenschutz":
                 $page = $p;
                 break;
             default:

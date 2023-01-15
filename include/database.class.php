@@ -1435,10 +1435,15 @@ ORDER BY m.Name");
 
     public function updatePlayerPoints(): ?int
     {
-        $stmt = $this->prepare("UPDATE " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id SET
+        $stmt = $this->prepare("UPDATE " . self::TABLE_STATISTICS . " s SET
             s.GebaeudePlus = floor(s.AusgabenGebaeude / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . "),
             s.ForschungPlus = floor(s.AusgabenForschung / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . "),
-            s.MafiaPlus = floor(s.AusgabenMafia / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . "),
+            s.MafiaPlus = floor(s.AusgabenMafia / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . ")
+            WHERE s.user_id > 0");
+        if ($this->executeAndGetAffectedRows($stmt) === null) {
+            return null;
+        }
+        $stmt = $this->prepare("UPDATE " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id SET
             m.Punkte = s.GebaeudePlus + s.ForschungPlus + s.MafiaPlus
             WHERE m.ID > 0");
         return $this->executeAndGetAffectedRows($stmt);

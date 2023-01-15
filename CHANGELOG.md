@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- No changes yet
+### Fixed
+
+- Fix calculated points in cronjob delayed by 30 minutes
 
 ## [1.10.6] - 2023-01-15
 

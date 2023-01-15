@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- No changes yet
+
+## [1.10.5] - 2023-01-15
+
 ### Changed
 
 - The points are now calculated by the amount spent on buildings, research and mafia
@@ -148,7 +152,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.4...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.5...HEAD
+
+[1.10.5]: https://github.com/bratkartoffel/blm2/compare/v1.10.4...v1.10.5
 
 [1.10.4]: https://github.com/bratkartoffel/blm2/compare/v1.10.3...v1.10.4
 

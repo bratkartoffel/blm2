@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- No changes yet
+
+## [1.10.6] - 2023-01-15
+
 ### Changed
 
 - Delete received system messages on reset
@@ -160,7 +164,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.5...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.6...HEAD
+
+[1.10.6]: https://github.com/bratkartoffel/blm2/compare/v1.10.5...v1.10.6
 
 [1.10.5]: https://github.com/bratkartoffel/blm2/compare/v1.10.4...v1.10.5
 

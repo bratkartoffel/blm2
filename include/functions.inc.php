@@ -713,6 +713,9 @@ function deleteAccount(int $blm_user): ?string
     if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_STATISTICS, array('user_id' => $blm_user)) === null) {
         return 'delete_' . Database::TABLE_STATISTICS;
     }
+    if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('An' => $blm_user)) === null) {
+        return 'delete_' . Database::TABLE_MESSAGES;
+    }
     if (Database::getInstance()->deleteTableEntry(Database::TABLE_USERS, $blm_user) === null) {
         return 'delete_' . Database::TABLE_USERS;
     }
@@ -775,6 +778,11 @@ function resetAccount(int $blm_user): ?string
     }
     if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_CONTRACTS, array('An' => $blm_user)) === null) {
         return 'retract_contract_' . Database::TABLE_CONTRACTS;
+    }
+
+    // Delete all message from System to the given user
+    if (Database::getInstance()->deleteTableEntryWhere(Database::TABLE_MESSAGES, array('Von' => 0, 'An' => $blm_user)) === null) {
+        return 'delete_' . Database::TABLE_MESSAGES . '_' . __LINE__;
     }
 
     return null;

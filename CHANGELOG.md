@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- No changes yet
+### Changed
+
+- Delete received system messages on reset
+- Delete all received messages when deleting account
 
 ## [1.10.5] - 2023-01-15
 

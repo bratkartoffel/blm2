@@ -49,7 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add basic installation verification and helpful information on errors
 - (install/update) Installation now creates an admin user if none found
-- (datenschutz) Add "Datenschutz" (privacy information) page
 - (chefbox) Automatically reload on new and finished jobs
 - (chefbox) Show total number of active jobs
 - (admin) Add edit groups (read-only, backend missing)
@@ -65,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (config) Default round length is now 3 months (was 2 months)
 - (config) Default allowed picture size for upload is now 256K (was 128K)
 - (config) Default page size for market and messages is now 20 (was 25)
+- (datenschutz) Add section about saved information for registered users
 - (admin) Message all counts as a single message now (for statistics)
 
 ### Fixed
@@ -92,6 +92,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use constants instead of hard-wired table names
+- (registrierung) Add username to account activation mail
+
+### Fixed
+
+- (nachrichten) Remember current page when deleting message
 
 ### Security
 
@@ -99,6 +104,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not allow downloading of scripts in `install/sql`
 
 ## [1.10.1] - 2023-01-08
+
+### Added
+
+- (admin) Add edit user
+- (development) Add automatic tests and run on GitHub actions
+- (impressum) Make operator name and address configurable
+- (datenschutz) Add information about data privacy
+- (update/install) Add installation and update script
+- (anmelden) Add note when game is paused
+
+### Fixed
+
+- Set database timezone on startup
+- Fixed warning when viewing profile of an user, which hasn't logged in yet
+- Minor fixes to style issues
+
+### Changed
+
+- (admin) Don't add system as target entry for contracts
+- (admin) Allow login even if the game is locked (after round)
+
+### Security
+
+- (admin) Require XSRF token to delete market offers and contracts
+- (marktplatz) Require XSRF token to buy and retract market offers
+- (nachrichten) Require XSRF token to delete messages
+- (vertraege) Require XSRF token to accept and reject contracts
+- (impressum) Obfuscate operator and creator personal information
+
+## [1.10.0] - 2022-06-15
 
 ### Added
 
@@ -118,6 +153,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.10.2]: https://github.com/bratkartoffel/blm2/compare/v1.10.1...v1.10.2
 
-[1.10.1]: https://github.com/bratkartoffel/blm2/releases/tag/v1.10.1
+[1.10.1]: https://github.com/bratkartoffel/blm2/compare/v1.10.0...v1.10.1
+
+[1.10.0]: https://github.com/bratkartoffel/blm2/releases/tag/v1.10.0
 
 [1.9.4]: https://github.com/bratkartoffel/blm2/commit/e6e567db8a59fe7c4512f2fc8a49dd914c283478

@@ -26,7 +26,6 @@ if ($level < 0 || $level > 3) {
 
 $cfgSection = getMafiaConfigSection($action);
 $costs = intval(Config::get($cfgSection, 'costs')[$level]);
-$points = Config::getInt($cfgSection, 'points');
 $player = Database::getInstance()->getPlayerPointsAndGruppeAndMoneyAndNextMafiaAndPizzeriaById($_SESSION['blm_user']);
 if (!mafiaRequirementsMet($player['Punkte'])) {
     redirectTo($backLink, 112, __LINE__);

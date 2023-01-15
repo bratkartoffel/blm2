@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - (mafia) Fixed duplicate actions in dropdown
+- (mafia) Remove reading of removed points configuration option, resulting in fatal errors
 
 ## [1.10.5] - 2023-01-15
 

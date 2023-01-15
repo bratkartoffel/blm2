@@ -26,8 +26,7 @@ if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
         'finished' => date("Y-m-d H:i:s", time() + $buildingData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
         'item' => (job_type_factor * job_type_building) + $was,
-        'cost' => $buildingData['Kosten'],
-        'points' => $buildingData['Punkte']
+        'cost' => $buildingData['Kosten']
     )) == 0) {
     Database::getInstance()->rollBack();
     redirectTo(sprintf('/?p=gebaeude&was=%d', $was), 141, __LINE__);

@@ -79,19 +79,6 @@ if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTIC
     Database::getInstance()->rollback();
     redirectTo($backLink, 111, __LINE__);
 }
-if ($success) {
-    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
-            array('Punkte' => $points)) !== 1) {
-        Database::getInstance()->rollback();
-        redirectTo($backLink, 142, __LINE__);
-    }
-    if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-            array('MafiaPlus' => $points),
-            array('user_id = :whr0' => $_SESSION['blm_user'])) !== 1) {
-        Database::getInstance()->rollback();
-        redirectTo($backLink, 142, __LINE__);
-    }
-}
 
 switch ($action) {
     // espionage
@@ -398,7 +385,7 @@ switch ($action) {
             $plantage = calculateBuildingDataForPlayer(1, $data, 0);
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $otherPlayer['ID'],
-                    array('Gebaeude' . building_plantage => -1, 'Punkte' => -$plantage['Punkte'])) !== 1) {
+                    array('Gebaeude' . building_plantage => -1)) !== 1) {
                 Database::getInstance()->rollback();
                 redirectTo($backLink, 142, __LINE__);
             }

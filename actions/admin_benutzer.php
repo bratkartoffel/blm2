@@ -21,7 +21,6 @@ $password = getOrDefault($_POST, 'password');
 $email_aktiviert = getOrDefault($_POST, 'email_aktiviert', 1);
 $geld = getOrDefault($_POST, 'geld', .0);
 $bank = getOrDefault($_POST, 'bank', .0);
-$punkte = getOrDefault($_POST, 'punkte', 0);
 $igm_gesendet = getOrDefault($_POST, 'igm_gesendet', 0);
 $igm_empfangen = getOrDefault($_POST, 'igm_empfangen', 0);
 $admin = getOrDefault($_POST, 'admin', 0);
@@ -54,8 +53,8 @@ $backlink = sprintf('/?p=admin_benutzer_bearbeiten&id=' . $id . '_bearbeiten&id=
 switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update basic information
     case 1:
-        $backlink .= sprintf('&username=%s&email=%s&email_aktiviert=%d&geld=%f&bank=%f&punkte=%d&igm_gesendet=%d&igm_empfangen=%d&admin=%d&betatester=%d&ewige_punkte=%d&onlinezeit=%d&gruppe=%d&verwarnungen=%d&gesperrt=%d',
-            $username, $email, $email_aktiviert, $geld, $bank, $punkte, $igm_gesendet, $igm_empfangen,
+        $backlink .= sprintf('&username=%s&email=%s&email_aktiviert=%d&geld=%f&bank=%f&igm_gesendet=%d&igm_empfangen=%d&admin=%d&betatester=%d&ewige_punkte=%d&onlinezeit=%d&gruppe=%d&verwarnungen=%d&gesperrt=%d',
+            $username, $email, $email_aktiviert, $geld, $bank, $igm_gesendet, $igm_empfangen,
             $admin, $betatester, $ewige_punkte, $onlinezeit, $gruppe, $verwarnungen, $gesperrt);
 
         Database::getInstance()->begin();
@@ -65,7 +64,6 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             'EMailAct' => $email_aktiviert === 1 ? null : createRandomCode(),
             'Geld' => $geld,
             'Bank' => $bank,
-            'Punkte' => $punkte,
             'IgmGesendet' => $igm_gesendet,
             'IgmEmpfangen' => $igm_empfangen,
             'Admin' => $admin,

@@ -124,11 +124,6 @@ function CheckAuftraege(int $blm_user): bool
                         array('Gebaeude' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-                        array('GebaeudePlus' => $auftrag['points']),
-                        array('user_id = :whr0' => $blm_user)) != 1) {
-                    return false;
-                }
                 break;
 
             // Produktion
@@ -145,22 +140,11 @@ function CheckAuftraege(int $blm_user): bool
                         array('Forschung' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
                     return false;
                 }
-                if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-                        array('ForschungPlus' => $auftrag['points']),
-                        array('user_id = :whr0' => $blm_user)) != 1) {
-                    return false;
-                }
                 break;
 
             // Unknown
             default:
                 break;
-        }
-        if ($auftrag['points'] > 0) {
-            if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                    array('Punkte' => $auftrag['points'])) != 1) {
-                return false;
-            }
         }
         if (Database::getInstance()->deleteTableEntry(Database::TABLE_JOBS, $auftrag['ID']) != 1) {
             return false;
@@ -1234,7 +1218,6 @@ function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, i
     return array(
         'Kosten' => round((Config::getInt(Config::SECTION_RESEARCH_LAB, 'cost_item_id_factor') * $item_id) + (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_cost'), $research_level + $level_increment)), 2),
         'Dauer' => (int)floor(max(Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_min_duration'), (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_duration'), $research_level + $level_increment)) * pow(1 - Config::getFloat(Config::SECTION_RESEARCH_LAB, 'bonus_factor'), $research_lab_level))),
-        'Punkte' => (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_points') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_points'), $research_level + $level_increment))
     );
 }
 
@@ -1272,11 +1255,11 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
     $result = array(
         'Kosten' => round(Config::getInt($section, 'base_cost') * pow(Config::getFloat($section, 'factor_cost'), $player['Gebaeude' . $building_id] + $level_increment), 2),
         'Dauer' => Config::getInt($section, 'base_duration') * pow(Config::getFloat($section, 'factor_duration'), $player['Gebaeude' . $building_id] + $level_increment),
-        'Punkte' => Config::getInt($section, 'base_points') * pow(Config::getFloat($section, 'factor_points'), $player['Gebaeude' . $building_id] + $level_increment)
     );
 
     $result['Dauer'] *= pow(1 - Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor'), $player['Gebaeude' . building_building_yard]);
     $result['Dauer'] = (int)floor($result['Dauer']);
+    $result['Punkte'] = floor($result['Kosten'] / Config::getInt(Config::SECTION_BASE, 'expense_points_factor'));
     return $result;
 }
 

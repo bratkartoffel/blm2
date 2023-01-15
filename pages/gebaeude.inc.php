@@ -47,12 +47,10 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                 }
                 $nextKosten = $buildingData['Kosten'];
                 $nextDauer = $buildingData['Dauer'];
-                $nextPunkte = $buildingData['Punkte'];
                 ?>
                 <header>Für Stufe <?= $nextLevel; ?></header>
                 <div>Kosten: <?= formatCurrency($nextKosten); ?></div>
                 <div>Dauer: <?= formatDuration($nextDauer); ?></div>
-                <div>Punkte: <?= formatPoints($nextPunkte); ?></div>
             </div>
             <div class="Action">
                 <form action="/actions/gebaeude.php" method="post">

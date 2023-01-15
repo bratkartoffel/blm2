@@ -59,14 +59,12 @@ for ($i = 1; $i <= count_wares; $i++) {
                 <span>Für Stufe <?= $data[$researchAttribute] + 1; ?>:</span>
                 <div>Dauer: <?= formatDuration($researchData['Dauer']); ?></div>
                 <div>Kosten <?= formatCurrency($researchData['Kosten']); ?></div>
-                <div>Punkte: <?= formatPoints($researchData['Punkte']); ?></div>
                 <?php
             } else {
                 ?>
                 <span>Für Stufe <?= $data[$researchAttribute] + 2; ?>:</span>
                 <div>Dauer: <?= formatDuration($researchDataNext['Dauer']); ?></div>
                 <div>Kosten <?= formatCurrency($researchDataNext['Kosten']); ?></div>
-                <div>Punkte: <?= formatPoints($researchDataNext['Punkte']); ?></div>
                 <?php
             }
             ?>

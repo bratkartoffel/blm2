@@ -61,8 +61,14 @@ public class BuildingTests extends AbstractTest {
 
         driver.findElement(By.id("link_buero")).click();
         assertText(By.id("b_s_1"), "438,40 €");
-        assertText(By.id("b_p_1"), "126");
-        assertText(By.id("b_p_4"), "126");
-        assertText(By.id("b_p_7"), "126");
+        assertText(By.id("b_p_1"), "0");
+        assertText(By.id("b_p_4"), "0");
+        assertText(By.id("b_p_7"), "0");
+
+        runCronjob();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_p_1"), "4");
+        assertText(By.id("b_p_4"), "4");
+        assertText(By.id("b_p_7"), "4");
     }
 }

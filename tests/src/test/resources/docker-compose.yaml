@@ -32,3 +32,4 @@ services:
       - ../../../../config/config-defaults.ini:/var/www/html/config/config-defaults.ini
       - ./config.ini:/var/www/html/config/config.ini
       - ./test-reset-player.php:/var/www/html/actions/test-reset-player.php
+      - ./test-run-cron.php:/var/www/html/actions/test-run-cron.php

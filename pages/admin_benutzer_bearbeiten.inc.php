@@ -29,7 +29,6 @@ if (isset($_GET['email'])) $entry['EMail'] = $_GET['email'];
 if (isset($_GET['email_aktiviert'])) $entry['EMailAct'] = $_GET['email_aktiviert'] == "1" ? null : 'x';
 if (isset($_GET['geld'])) $entry['Geld'] = getOrDefault($_GET, 'geld', .0);
 if (isset($_GET['bank'])) $entry['Bank'] = getOrDefault($_GET, 'bank', .0);
-if (isset($_GET['punkte'])) $entry['Punkte'] = getOrDefault($_GET, 'punkte', 0);
 if (isset($_GET['igm_gesendet'])) $entry['IgmGesendet'] = getOrDefault($_GET, 'igm_gesendet', 0);
 if (isset($_GET['igm_empfangen'])) $entry['IgmEmpfangen'] = getOrDefault($_GET, 'igm_empfangen', 0);
 if (isset($_GET['admin'])) $entry['Admin'] = $_GET['admin'] == "1" ? 1 : 0;
@@ -101,8 +100,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
         </div>
         <div>
             <label for="punkte">Punkte:</label>
-            <input type="number" name="punkte" id="punkte" value="<?= escapeForOutput($entry['Punkte']); ?>"
-                   size="13"/>
+            <span><?= escapeForOutput($entry['Punkte']); ?></span>
         </div>
         <div>
             <label for="igm_gesendet">IGM Gesendet:</label>

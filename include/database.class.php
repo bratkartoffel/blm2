@@ -1433,6 +1433,17 @@ ORDER BY m.Name");
         return $this->executeAndGetAffectedRows($this->prepare("UPDATE " . self::TABLE_USERS . " SET OnlineZeit = OnlineZeit + OnlineZeitSinceLastCron, OnlineZeitSinceLastCron = 0"));
     }
 
+    public function updatePlayerPoints(): ?int
+    {
+        $stmt = $this->prepare("UPDATE " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id SET
+            s.GebaeudePlus = floor(s.AusgabenGebaeude / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . "),
+            s.ForschungPlus = floor(s.AusgabenForschung / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . "),
+            s.MafiaPlus = floor(s.AusgabenMafia / " . Config::getInt(Config::SECTION_BASE, 'expense_points_factor') . "),
+            m.Punkte = s.GebaeudePlus + s.ForschungPlus + s.MafiaPlus
+            WHERE m.ID > 0");
+        return $this->executeAndGetAffectedRows($stmt);
+    }
+
     public function countPendingGroupDiplomacy(int $group_id): ?int
     {
         $stmt = $this->prepare("SELECT count(1) AS Count FROM " . self::TABLE_GROUP_DIPLOMACY . " WHERE An = :id AND Aktiv = 0");

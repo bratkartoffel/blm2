@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Delete received system messages on reset
 - Delete all received messages when deleting account
 
+### Fixed
+
+- (mafia) Fixed duplicate actions in dropdown
+
 ## [1.10.5] - 2023-01-15
 
 ### Changed

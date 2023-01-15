@@ -97,18 +97,18 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         <div>
             <label for="action">Aktion</label>
             <select name="action" id="action" oninput="MafiaActionChange();">
-<<<<<<< HEAD
-                <option value="<?=mafia_action_espionage;?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>Spionage</option>
-                <option value="<?=mafia_action_robbery;?>"<?= ($action == mafia_action_robbery ? ' selected' : ''); ?>>Raub</option>
-                <option value="<?=mafia_action_heist;?>"<?= ($action == mafia_action_heist ? ' selected' : ''); ?>>Diebstahl</option>
-                <option value="<?=mafia_action_attack;?>"<?= ($action == mafia_action_attack ? ' selected' : ''); ?>>Anschlag</option>
-=======
-                <option value="<?= mafia_action_espionage; ?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>Spionage
+                <option value="<?= mafia_action_espionage; ?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>
+                    Spionage
                 </option>
-                <option value="<?= mafia_action_robbery; ?>"<?= ($action == mafia_action_robbery ? ' selected' : ''); ?>>Raub</option>
-                <option value="<?= mafia_action_heist; ?>"<?= ($action == mafia_action_heist ? ' selected' : ''); ?>>Diebstahl</option>
-                <option value="<?= mafia_action_attack; ?>"<?= ($action == mafia_action_attack ? ' selected' : ''); ?>>Anschlag</option>
->>>>>>> 01232f1 (rework points system)
+                <option value="<?= mafia_action_robbery; ?>"<?= ($action == mafia_action_robbery ? ' selected' : ''); ?>>
+                    Raub
+                </option>
+                <option value="<?= mafia_action_heist; ?>"<?= ($action == mafia_action_heist ? ' selected' : ''); ?>>
+                    Diebstahl
+                </option>
+                <option value="<?= mafia_action_attack; ?>"<?= ($action == mafia_action_attack ? ' selected' : ''); ?>>
+                    Anschlag
+                </option>
             </select>
         </div>
         <div>

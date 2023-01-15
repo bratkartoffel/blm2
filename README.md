@@ -80,6 +80,12 @@ Hierzu kann der Generator von
 [dieser Seite](https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new)
 verwendet werden.
 
+Eine Liste der verfügbaren Parameter kann der [Standardkonfiguration](config/config-defaults.ini) entnommen werden.
+Nicht explizit gesetzte Optionen werden von dieser Datei übernommen.
+
+**Wichtig:** Die Standardkonfiguration sollte nicht geändert werden, da diese mit jedem Release neu ausgeliefert wird.
+Stattdessen sollten alle von der Standardkonfiguration abweichenden Einstellungen in der `config.ini` gesetzt werden.
+
 ### 3) Installationsprozess starten
 
 Nachdem die Konfiguration angelegt wurde, kann die Installation der Datenbank beginnen.

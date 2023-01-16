@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- (einstellungen) add gdpr compliant export of all user related information
+
 ### Changed
 
 - Remove ip address from login protocol after 30 days

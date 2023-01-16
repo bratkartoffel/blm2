@@ -222,7 +222,63 @@ switch (getOrDefault($_POST, 'a', 0)) {
         redirectTo('/?p=einstellungen', 240);
         break;
 
-    // unknown action
+    // download GDPR related data
+    case 8:
+        $passwords = Database::getInstance()->getPlayerAndSitterPasswordsById($_SESSION['blm_user']);
+        requireEntryFound($passwords, '/?p=einstellungen', 112, __LINE__);
+        if (!verifyPassword($pwd_alt, $passwords['Benutzer'])) {
+            redirectTo('/?p=einstellungen', 121, __LINE__);
+        }
+        $tmpFile = tempnam(sys_get_temp_dir(), '.zip');
+        $zip = new ZipArchive();
+        if ($zip->open($tmpFile, ZipArchive::OVERWRITE) !== true) {
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+        $profilePicture = sprintf("../pics/uploads/u_%d.webp", $_SESSION['blm_user']);
+        if (file_exists($profilePicture) && $zip->addFile($profilePicture, 'profile.webp') !== true) {
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+        $tables = array(
+            Database::TABLE_JOBS => 'user_id',
+            Database::TABLE_GROUP_CASH => 'user_id',
+            Database::TABLE_GROUP_LOG => 'Spieler',
+            Database::TABLE_GROUP_RIGHTS => 'user_id',
+            Database::TABLE_GROUP_MESSAGES => 'Von',
+            Database::TABLE_LOG_BANK => 'playerId',
+            Database::TABLE_LOG_SHOP => 'playerId',
+            Database::TABLE_LOG_GROUP_CASH => array('senderId', 'receiverId'),
+            Database::TABLE_LOG_LOGIN => 'playerId',
+            Database::TABLE_LOG_MAFIA => array('senderId', 'receiverId'),
+            Database::TABLE_LOG_MARKET => array('sellerId', 'buyerId'),
+            Database::TABLE_LOG_MESSAGES => array('senderId', 'receiverId'),
+            Database::TABLE_LOG_CONTRACTS => array('senderId', 'receiverId'),
+            Database::TABLE_MARKET => 'Von',
+            Database::TABLE_USERS => 'ID',
+            Database::TABLE_MESSAGES => array('Von', 'An'),
+            Database::TABLE_SITTER => 'user_id',
+            Database::TABLE_STATISTICS => 'user_id',
+            Database::TABLE_CONTRACTS => array('Von', 'An'),
+        );
+
+        Database::getInstance()->begin();
+        foreach ($tables as $table => $fields) {
+            $rows = Database::getInstance()->selectForExport($table, $fields, $_SESSION['blm_user']);
+            if ($zip->addFromString($table . '.json', json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) !== true) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=einstellungen', 141, __LINE__ . '_' . $table);
+            }
+        }
+        Database::getInstance()->rollBack();
+        if ($zip->close() !== true) {
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="blm2_export.zip"');
+        echo file_get_contents($tmpFile);
+        break;
+
+// unknown action
     default:
         redirectTo('/?p=einstellungen', 112, __LINE__);
         break;

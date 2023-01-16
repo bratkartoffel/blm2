@@ -172,6 +172,10 @@
     aus oben aufgelisteten Zwecken zur Datenerhebung. Ein Rückschluss der zur Verfügung stehenden Daten zu Ihrer
     Person ist für mich nicht möglich.
 </p>
+<p>
+    Ein Download aller zu Ihrem Spielprofil zugehörigen Daten ist über die
+    <a href="/?p=einstellungen#download_gdpr">Einstellungen</a> möglich.
+</p>
 <h2>
     3. Datensicherheit / Datenverarbeitung
 </h2>

@@ -171,6 +171,25 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
     </form>
 </div>
 
+<div class="form Einstellungen" id="download_gdpr">
+    <form action="/actions/einstellungen.php" method="post">
+        <input type="hidden" name="a" value="8"/>
+        <header>Gespeicherte Daten runterladen</header>
+        <div>
+            Um den Anforderungen der DSGVO zu genügen, können mit dem folgendem Button alle zu deinem Account
+            gespeicherten Informationen runtergeladen werden.<br/>
+            Da es sich hierbei um personenbezogene Daten handelt ist zur Sicherheit dein Passwort notwendig.
+        </div>
+        <div>
+            <label for="pwd_gdpr_export">Passwort:</label>
+            <input id="pwd_gdpr_export" type="password" name="pwd_alt" size="20" required/>
+        </div>
+        <div>
+            <input type="submit" value="Download starten"/>
+        </div>
+    </form>
+</div>
+
 <script>
     let enableSitting = document.getElementById('aktiviert');
 

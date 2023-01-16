@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remove ip address from login protocol after 30 days
+
 ### Fixed
 
 - Fix calculated points in cronjob delayed by 30 minutes

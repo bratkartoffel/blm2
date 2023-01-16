@@ -1449,6 +1449,14 @@ ORDER BY m.Name");
         return $this->executeAndGetAffectedRows($stmt);
     }
 
+    public function gdprCleanLoginLog(): ?int
+    {
+        $stmt = $this->prepare("UPDATE " . self::TABLE_LOG_LOGIN . "
+            SET ip = concat('ANON_', CRC32(SHA1(SHA1(ip)))), anonymized = true
+            WHERE anonymized = false AND created < date_sub(now(), interval 30 day)");
+        return $this->executeAndGetAffectedRows($stmt);
+    }
+
     public function countPendingGroupDiplomacy(int $group_id): ?int
     {
         $stmt = $this->prepare("SELECT count(1) AS Count FROM " . self::TABLE_GROUP_DIPLOMACY . " WHERE An = :id AND Aktiv = 0");

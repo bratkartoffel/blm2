@@ -98,6 +98,7 @@ handleInterestRates();
 handleItemBaseProduction();
 Database::getInstance()->updatePlayerOnlineTimes();
 Database::getInstance()->updatePlayerPoints();
+Database::getInstance()->gdprCleanLoginLog();
 Database::getInstance()->commit();
 
 // separate transaction for each player to reset

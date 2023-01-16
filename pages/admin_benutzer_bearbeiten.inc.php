@@ -88,15 +88,11 @@ for ($i = 1; $i <= count_buildings; $i++) {
         </div>
         <div>
             <label for="geld">Geld:</label>
-            <input type="number" name="geld" id="geld"
-                   value="<?= formatCurrency($entry['Geld'], false, false); ?>"
-                   size="13"/> €
+            <input type="number" name="geld" id="geld" value="<?= $entry['Geld']; ?>" size="13"/> €
         </div>
         <div>
             <label for="bank">Bank:</label>
-            <input type="number" name="bank" id="bank"
-                   value="<?= formatCurrency($entry['Bank'], false, false); ?>"
-                   size="13"/> €
+            <input type="number" name="bank" id="bank" value="<?= $entry['Bank']; ?>" size="13"/> €
         </div>
         <div>
             <label for="punkte">Punkte:</label>

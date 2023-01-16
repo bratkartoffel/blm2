@@ -52,7 +52,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                 <form action="/actions/bioladen.php" method="post">
                     <input type="hidden" name="was" value="<?= $i; ?>"/>
                     <input type="text" maxlength="6" name="menge" id="amount_<?= $i; ?>" size="4"
-                           value="<?= formatWeight($data['Lager' . $i], false, 0, false); ?>"/>
+                           value="<?= $data['Lager' . $i]; ?>"/>
                     <input type="submit" value="Verkaufen" id="sell_<?= $i; ?>"/>
                 </form>
             </td>

@@ -47,14 +47,12 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
         </div>
         <div>
             <label for="menge">Menge:</label>
-            <input type="number" min="1" name="menge" id="menge"
-                   value="<?= formatWeight($entry['Menge'], false, 0, false); ?>"
-                   size="6"/> kg
+            <input type="number" min="1" name="menge" id="menge" value="<?= $entry['Menge']; ?>" size="6"/> kg
         </div>
         <div>
             <label for="preis">Preis:</label>
-            <input type="number" min="0.01" step="0.01" name="preis" id="preis"
-                   value="<?= formatCurrency($entry['Preis'], false, false); ?>" size="6"/> €
+            <input type="number" min="0.01" step="0.01" name="preis" id="preis" value="<?= $entry['Preis']; ?>"
+                   size="6"/> €
         </div>
         <div>
             <input type="submit" value="Speichern" id="save_entry"/>

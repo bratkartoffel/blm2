@@ -79,8 +79,7 @@ if ($rights['group_cash'] == 1) {
             </div>
             <div>
                 <label for="amount">Betrag</label>
-                <input type="number" min="0" step="0.01" name="amount" id="amount"
-                       value="<?= formatCurrency($amount, false, false); ?>"/>
+                <input type="number" min="0" step="0.01" name="amount" id="amount" value="<?= $amount; ?>"/>
             </div>
             <div>
                 <input type="submit" value="Überweisen" id="gk_transfer"/>

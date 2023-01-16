@@ -43,8 +43,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
         </div>
         <div>
             <label for="price">Preis:</label>
-            <input type="number" min="1.0" step="0.01" name="price" id="price"
-                   value="<?= formatCurrency($price, false, false); ?>"/>
+            <input type="number" min="1.0" step="0.01" name="price" id="price" value="<?= $price; ?>"/>
         </div>
         <div>
             <input type="submit" value="Inserat erstellen"/>

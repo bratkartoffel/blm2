@@ -32,11 +32,11 @@ $preis = getOrDefault($_GET, 'preis', .0);
         </div>
         <div>
             <label for="menge">Menge:</label>
-            <input type="text" name="menge" id="menge" value="<?= formatWeight($menge, false); ?>" size="6"/> kg
+            <input type="text" name="menge" id="menge" value="<?= $menge; ?>" size="6"/> kg
         </div>
         <div>
             <label for="preis">Preis:</label>
-            <input type="text" name="preis" id="preis" value="<?= formatCurrency($preis, false); ?>" size="6"/> €
+            <input type="text" name="preis" id="preis" value="<?= $preis; ?>" size="6"/> €
         </div>
         <div>
             <input type="submit" value="Speichern" id="create_entry"/>

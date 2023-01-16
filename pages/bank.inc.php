@@ -22,8 +22,10 @@ $interestRates = calculateInterestRates();
 
 <p>
     Hier können Sie Ihr verdientes Geld anlegen oder auch Kredite aufnehmen, wenn es mal knapp wird. Die Zinsen
-    werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen alle <?= Config::getInt(Config::SECTION_BASE, 'cron_interval'); ?> Minuten. Die
-    maximale Summe, die Sie anlegen können, sind <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')); ?>, Ihr Kreditlimit sind
+    werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen
+    alle <?= Config::getInt(Config::SECTION_BASE, 'cron_interval'); ?> Minuten. Die
+    maximale Summe, die Sie anlegen können,
+    sind <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')); ?>, Ihr Kreditlimit sind
     <span style="color: red;"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
 </p>
 <p>
@@ -42,14 +44,17 @@ $interestRates = calculateInterestRates();
         <div>
             <label for="art">Art:</label>
             <div class="inline-block">
-                <input type="radio" id="einzahlen" name="art" value="1" onchange="AuswahlBank(this.value);" <?= ($art == 1 ? 'checked' : ''); ?>>
+                <input type="radio" id="einzahlen" name="art" value="1"
+                       onchange="AuswahlBank(this.value);" <?= ($art == 1 ? 'checked' : ''); ?>>
                 <label for="einzahlen">Einzahlen</label><br>
-                <input type="radio" id="auszahlen" name="art" value="2" onchange="AuswahlBank(this.value);" <?= ($art == 2 ? 'checked' : ''); ?>>
+                <input type="radio" id="auszahlen" name="art" value="2"
+                       onchange="AuswahlBank(this.value);" <?= ($art == 2 ? 'checked' : ''); ?>>
                 <label for="auszahlen">Auszahlen</label><br>
                 <?php
                 if ($data['Gruppe'] != null) {
                     ?>
-                    <input type="radio" id="gruppen_kasse" name="art" value="3" onchange="AuswahlBank(this.value);" <?= ($art == 3 ? 'checked' : ''); ?>>
+                    <input type="radio" id="gruppen_kasse" name="art" value="3"
+                           onchange="AuswahlBank(this.value);" <?= ($art == 3 ? 'checked' : ''); ?>>
                     <label for="gruppen_kasse">In die Gruppenkasse</label>
                     <?php
                 }
@@ -58,8 +63,7 @@ $interestRates = calculateInterestRates();
         </div>
         <div>
             <label for="betrag">Betrag:</label>
-            <input type="number" name="betrag" id="betrag" size="12" min="0" step="0.01"
-                   value="<?= formatCurrency($betrag, false, false); ?>"/> €
+            <input type="number" name="betrag" id="betrag" size="12" min="0" step="0.01" value="<?= $betrag; ?>"/> €
         </div>
         <div>
             <input type="submit" value="Bestätigen" id="do_transaction"/>

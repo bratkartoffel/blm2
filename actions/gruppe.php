@@ -624,6 +624,9 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
         $diplomacy = Database::getInstance()->getGroupDiplomacyById($id);
         requireEntryFound($diplomacy, '/?p=gruppe_diplomatie');
+        if ($diplomacy['Typ'] === group_diplomacy_war) {
+            redirectTo('/?p=gruppe_diplomatie', 112, __LINE__);
+        }
         $usId = ($diplomacy['GruppeAnId'] == $player['Gruppe'] ? $diplomacy['GruppeAnId'] : $diplomacy['GruppeVonId']);
         $usName = ($diplomacy['GruppeAnId'] == $player['Gruppe'] ? $diplomacy['GruppeAnName'] : $diplomacy['GruppeVonName']);
         $themId = ($diplomacy['GruppeAnId'] != $player['Gruppe'] ? $diplomacy['GruppeAnId'] : $diplomacy['GruppeVonId']);

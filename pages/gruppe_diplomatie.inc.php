@@ -116,18 +116,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
                 ?>
                 <td>- noch nicht aktiv-</td>
                 <td><?= formatCurrency($row['Betrag']); ?></td>
-                <td>
-                    <?php
-                    if ($rights['group_diplomacy'] == 1) {
-                        ?>
-                        <a href="/actions/gruppe.php?a=16&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                           onclick="return confirm('Wollen Sie die Kriegserklärung an <?= escapeForOutput($row['GruppeName']); ?> wirklich zurückziehen?')">Zurückziehen</a>
-                        <?php
-                    } else {
-                        echo 'Keine Rechte';
-                    }
-                    ?>
-                </td>
+                <td>-</td>
                 <?php
             }
             ?>

@@ -750,7 +750,7 @@ function resetAccount(int $blm_user): ?string
     $deleteTables = array(
         Database::TABLE_JOBS => 'user_id',
         Database::TABLE_MARKET => 'Von',
-        Database::TABLE_SITTER => 'ID',
+        Database::TABLE_SITTER => 'user_id',
         Database::TABLE_GROUP_RIGHTS => 'user_id',
         Database::TABLE_GROUP_CASH => 'user_id',
         Database::TABLE_GROUP_MESSAGES => 'Von',

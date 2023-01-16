@@ -48,7 +48,7 @@ function ZeichenUebrig(Feld, Text) {
 function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, Button) {
     const kosten = Menge * (BasisPreis / BasisMenge);
 
-    TextFeld.innerText = "Kosten: " + kosten.toLocaleString('de-DE', {
+    TextFeld.innerText = "Kosten: " + kosten.toLocaleString(navigator.language, {
         minimumFractionDigits: 2, maximumFractionDigits: 2
     }) + " €";
 

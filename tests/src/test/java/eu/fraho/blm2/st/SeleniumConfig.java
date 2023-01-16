@@ -23,7 +23,8 @@ public class SeleniumConfig {
             System.out.println("Starting " + System.getProperty("webdriver.firefox.bin"));
             WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions()
-                    .setProfile(new FirefoxProfile());
+                    .setProfile(new FirefoxProfile())
+                    .addPreference("intl.accept_languages", "en-US, en");
             if (!OS.WINDOWS.isCurrentOs()) {
                 options.addArguments("-headless");
             }

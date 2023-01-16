@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix calculated points in cronjob delayed by 30 minutes
 - (einstellungen) Resetting of account could remove other players sitter settings
+- Fix number format for browsers with english locale
 
 ## [1.10.6] - 2023-01-15
 

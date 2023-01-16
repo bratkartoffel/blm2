@@ -852,7 +852,11 @@ function createGroupLink(?int $group_id, string $name): string
 
 function formatCurrency(float $amount, bool $withSuffix = true, bool $withThousandsSeparator = true, int $decimals = 2): string
 {
-    return number_format($amount, $decimals, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' €' : '');
+    if (substr(getOrDefault($_SERVER, 'HTTP_ACCEPT_LANGUAGE', 'de'), 0, 2) === 'en') {
+        return number_format($amount, $decimals, '.', $withThousandsSeparator ? ',' : '') . ($withSuffix ? ' €' : '');
+    } else {
+        return number_format($amount, $decimals, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' €' : '');
+    }
 }
 
 function formatWeight(float $amount, bool $withSuffix = true, int $decimals = 0, bool $withThousandsSeparator = true): string

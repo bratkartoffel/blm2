@@ -141,25 +141,25 @@ public class GroupTests extends AbstractTest {
         // deposit
         driver.findElement(By.id("link_bank")).click();
         driver.findElement(By.id("gruppen_kasse")).click();
-        setValue(By.id("betrag"), "10,23");
+        setValue(By.id("betrag"), "10.23");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_235"));
 
         // withdraw
         driver.findElement(By.id("link_gruppe")).click();
         driver.findElement(By.id("gruppe_kasse")).click();
-        assertText(By.id("gk_amount"), "In der Kasse befinden sich: 10,23 €");
-        assertText(By.id("gk_m_" + USER_ID), "10,23 €");
+        assertText(By.id("gk_amount"), "In der Kasse befinden sich: 10.23 €");
+        assertText(By.id("gk_m_" + USER_ID), "10.23 €");
         select(By.id("receiver"), "test" + USER_ID);
-        setValue(By.id("amount"), "4,23");
+        setValue(By.id("amount"), "4.23");
         driver.findElement(By.id("gk_transfer")).submit();
         assertElementPresent(By.id("meldung_236"));
 
-        assertText(By.id("gk_amount"), "In der Kasse befinden sich: 6,00 €");
-        assertText(By.id("stat_money"), "4.994,00 €");
+        assertText(By.id("gk_amount"), "In der Kasse befinden sich: 6.00 €");
+        assertText(By.id("stat_money"), "4,994.00 €");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_s_8"), "6,00 €");
+        assertText(By.id("b_s_8"), "6.00 €");
     }
 
     private void createGroup(String name, String tag, String expectedMessage) {

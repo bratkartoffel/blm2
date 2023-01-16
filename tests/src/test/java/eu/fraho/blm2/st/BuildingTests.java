@@ -29,17 +29,17 @@ public class BuildingTests extends AbstractTest {
 
         driver.findElement(By.id("link_gebaeude")).click();
 
-        assertText(By.id("stat_money"), "5.000,00 €");
+        assertText(By.id("stat_money"), "5,000.00 €");
         driver.findElement(By.id("build_1")).click();
         assertElementPresent(By.id("meldung_207"));
 
-        assertText(By.id("stat_money"), "1.127,63 €");
+        assertText(By.id("stat_money"), "1,127.63 €");
         driver.findElement(By.id("abort_1")).click();
         driver.switchTo().alert().accept();
         assertElementPresent(By.id("meldung_222"));
 
         assertElementPresent(By.id("build_1"));
-        assertText(By.id("stat_money"), "4.031,91 €");
+        assertText(By.id("stat_money"), "4,031.91 €");
     }
 
     @Test
@@ -48,11 +48,11 @@ public class BuildingTests extends AbstractTest {
 
         driver.findElement(By.id("link_gebaeude")).click();
 
-        assertText(By.id("stat_money"), "5.000,00 €");
+        assertText(By.id("stat_money"), "5,000.00 €");
         driver.findElement(By.id("build_2")).click();
         assertElementPresent(By.id("meldung_207"));
 
-        assertText(By.id("stat_money"), "4.561,60 €");
+        assertText(By.id("stat_money"), "4,561.60 €");
         Thread.sleep(TimeUnit.SECONDS.toMillis(2));
 
         driver.findElement(By.id("link_gebaeude")).click();
@@ -60,7 +60,7 @@ public class BuildingTests extends AbstractTest {
         assertText(By.id("g2"), "Forschungszentrum (Stufe 1)");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_s_1"), "438,40 €");
+        assertText(By.id("b_s_1"), "438.40 €");
         assertText(By.id("b_p_1"), "0");
         assertText(By.id("b_p_4"), "0");
         assertText(By.id("b_p_7"), "0");

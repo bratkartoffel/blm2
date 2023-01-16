@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove ip address from login protocol after 30 days
 - (gruppe) Sent war declaration may no longer be retracted by the sender
+- Prefer brotli compression over deflate for static resources
 
 ### Fixed
 

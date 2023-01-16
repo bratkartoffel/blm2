@@ -57,7 +57,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SE
     }
 
     if (count($entries) == 0) {
-        echo '<tr><td colspan="6" style="text-align: center;"><i>Der Ordner ist leer.</i></td></tr>';
+        echo '<tr><td colspan="6" class="center"><i>Der Ordner ist leer.</i></td></tr>';
     }
     ?>
 </table>
@@ -116,7 +116,7 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config:
     }
 
     if (count($entries) == 0) {
-        echo '<tr><td colspan="6" style="text-align: center;"><i>Der Ordner ist leer.</i></td></tr>';
+        echo '<tr><td colspan="6" class="center"><i>Der Ordner ist leer.</i></td></tr>';
     }
     ?>
 </table>

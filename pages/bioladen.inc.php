@@ -63,7 +63,7 @@ for ($i = 1; $i <= count_wares; $i++) {
     if ($sumWeight == 0) {
         ?>
         <tr>
-            <td colspan="4" style="text-align:center;"><i>Ihr Lager ist leer</i></td>
+            <td colspan="4" class="center"><i>Ihr Lager ist leer</i></td>
         </tr>
         <?php
     } else {

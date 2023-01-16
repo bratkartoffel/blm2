@@ -21,21 +21,17 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
 }
 
 ?>
-    <div id="SeitenUeberschrift">
-        <img src="/pics/big/katomic.webp" alt=""/>
-        <span>Forschungszentrum<?= createHelpLink(1, 6); ?></span>
-    </div>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/katomic.webp" alt=""/>
+    <span>Forschungszentrum<?= createHelpLink(1, 6); ?></span>
+</div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-    <p>
-        Hier können Sie das entsprechende Gemüse erforschen bzw. verbessern.<br/>
-        Stufe 1 ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die produzierte Menge.<br/>
-    </p>
-
-    <script>
-        reloadOnCountdown = true;
-    </script>
+<p>
+    Hier können Sie das entsprechende Gemüse erforschen bzw. verbessern.<br/>
+    Stufe 1 ermöglicht den Anbau des Gemüses, jede weitere Stufe erhöht die produzierte Menge.<br/>
+</p>
 
 <?php
 for ($i = 1; $i <= count_wares; $i++) {
@@ -76,7 +72,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                 if (!array_key_exists($i, $auftraege)) {
                     ?>
                     <input type="submit" name="forschen" id="research_<?= $i; ?>" value="Forschen"
-                           <?= ($researchData['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
+                        <?= ($researchData['Kosten'] > $data['Geld']) ? ' disabled="disabled"' : ''; ?> />
                     <?php
                 } else {
                     $auftrag = $auftraege[$i];
@@ -91,7 +87,9 @@ for ($i = 1; $i <= count_wares; $i++) {
                             verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirmAbort('<?= formatCurrency($auftrag['cost'] * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>', '<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>');"
+                            <a class="delete_job"
+                               data-refund="<?= formatCurrency($auftrag['cost'] * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
+                               data-percent="<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
                                href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
@@ -104,3 +102,10 @@ for ($i = 1; $i <= count_wares; $i++) {
     </div>
     <?php
 }
+?>
+
+<script nonce="<?= getCspNonce(); ?>">
+    for (let deleteLink of document.getElementsByClassName('delete_job')) {
+        deleteLink.onclick = () => confirmAbort(deleteLink.getAttribute('data-refund'), deleteLink.getAttribute('data-percent'));
+    }
+</script>

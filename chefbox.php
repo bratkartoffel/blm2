@@ -13,7 +13,11 @@ require_once 'include/database.class.php';
 
 if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') < time()) {
     session_destroy();
-    die('<!DOCTYPE html><html lang="de"><head><title>' . Config::get(Config::SECTION_BASE, 'game_title') . ' - Chefbox</title><script>self.close(); window.location.href = "' . Config::get(Config::SECTION_BASE, 'base_url') . '";</script></head></html>');
+    die(sprintf('<!DOCTYPE html><html lang="de"><head><title>%s - Chefbox</title><script nonce="%s">self.close(); window.location.href = "%s";</script></head></html>',
+        Config::get(Config::SECTION_BASE, 'game_title'),
+        getCspNonce(),
+        Config::get(Config::SECTION_BASE, 'base_url'))
+    );
 }
 
 Database::getInstance()->begin();
@@ -25,15 +29,18 @@ if (CheckAuftraege($_SESSION['blm_user'])) {
 
 $auftraege = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user']);
 $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['blm_user']);
+sendCspHeader();
 ?><!DOCTYPE html>
 <html lang="de">
 <head>
-    <link rel="stylesheet" type="text/css" href="/styles/style.min.css?<?= game_version; ?>"/>
+    <?php
+    printHeaderCss(array('/styles/style.min.css'));
+    printHeaderJs(array('/js/functions.min.js'));
+    ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta http-equiv="refresh" content="300"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title><?= Config::get(Config::SECTION_BASE, 'game_title'); ?> - Chefbox</title>
-    <script src="/js/functions.min.js?<?= game_version; ?>"></script>
 </head>
 <body id="Chefbox">
 <div id="ChefboxHead">
@@ -84,50 +91,46 @@ $data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['bl
         <td class="countdown"><?= formatDuration(max(0, $_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') - time())); ?></td>
     </tr>
 </table>
-<table>
+<table id="with_nav_links">
     <tr>
-        <td><a href="/?p=nachrichten_liste" onclick="return BLMNavigation(this.href);">Neue Nachrichten:</a></td>
+        <td><a href="/?p=nachrichten_liste">Neue Nachrichten:</a></td>
         <td><?= Database::getInstance()->getUnreadMessageCount($_SESSION['blm_user']); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=vertraege_liste" onclick="return BLMNavigation(this.href);">Neue Verträge:</a></td>
+        <td><a href="/?p=vertraege_liste">Neue Verträge:</a></td>
         <td><?= Database::getInstance()->getOpenContractCount($_SESSION['blm_user']); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=marktplatz_liste" onclick="return BLMNavigation(this.href);">Marktangebote:</a></td>
+        <td><a href="/?p=marktplatz_liste">Marktangebote:</a></td>
         <td><?= Database::getInstance()->getMarktplatzCount(); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=rangliste" onclick="return BLMNavigation(this.href);">Spieler online:</a></td>
+        <td><a href="/?p=rangliste">Spieler online:</a></td>
         <td><?= Database::getInstance()->getOnlinePlayerCount(); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=bank" onclick="return BLMNavigation(this.href);">Bargeld:</a></td>
+        <td><a href="/?p=bank">Bargeld:</a></td>
         <td><?= formatCurrency($data['Geld']); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=bank" onclick="return BLMNavigation(this.href);">Bank-Guthaben:</a></td>
+        <td><a href="/?p=bank">Bank-Guthaben:</a></td>
         <td><?= formatCurrency($data['Bank']); ?></td>
     </tr>
 </table>
 <div id="ChefboxFooter">
-    <a href="/?p=startseite" onclick="return BLMzeigen(this.href);">BLM anzeigen / öffnen</a>
-    <a href="/?p=startseite" onclick="return BLMEnde();">Fenster schliessen</a>
+    <a id="show_blm" href="/?p=startseite">BLM anzeigen / öffnen</a>
+    <a id="close_popup" href="/?p=startseite">Fenster schliessen</a>
 </div>
-<script>
+<script nonce="<?= getCspNonce(); ?>">
     reloadOnCountdown = true;
-    if (opener) {
-        window.setInterval(() => {
-            let messages = opener.document.getElementsByClassName("MessageBox");
-            if (messages.length !== 0) {
-                let message = messages[0];
-                if (message.hasAttribute('reload-chefbox')) {
-                    message.removeAttribute('reload-chefbox');
-                    window.location.reload();
-                }
-            }
-        }, 1000);
+    chefboxPollJobs();
+
+    for (let link of document.getElementById('with_nav_links').getElementsByTagName('a')) {
+        link.onclick = () => BLMNavigation(link.href);
     }
+
+    document.getElementById('show_blm').onclick = () => BLMzeigen('/?p=startseite');
+    document.getElementById('close_popup').onclick = () => BLMEnde();
 </script>
 </body>
 </html>
@@ -137,4 +140,14 @@ $dauer = 1000 * (microtime(true) - $start);
 <!--
 PLT:     <?= number_format($dauer, 2) . "ms\n"; ?>
 Queries: <?= Database::getInstance()->getQueryCount() . "\n"; ?>
+<?php
+$warnings = Database::getInstance()->getWarnings();
+if (count($warnings) > 0) {
+    echo "Warnings:\n==================\n";
+    foreach ($warnings as $i => $warning) {
+        printf("%d: %s\n", $i, $warning);
+        error_log($warning);
+    }
+}
+?>
 -->

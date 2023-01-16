@@ -63,7 +63,7 @@ requireEntryFound($data, '/?p=rangliste');
         <label for="points">Punkte:</label>
         <span><?= formatPoints($data['Punkte']); ?> (Platz: <?php
             $rank = Database::getInstance()->getPlayerRankById($data['ID']);
-            echo sprintf('<a href="/?p=rangliste&amp;q=%s">%d</a>', urlencode($data['Name']), $rank);
+            printf('<a href="/?p=rangliste&amp;q=%s">%d</a>', urlencode($data['Name']), $rank);
             ?>)</span>
     </div>
     <?php

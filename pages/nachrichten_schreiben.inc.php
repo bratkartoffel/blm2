@@ -40,7 +40,7 @@ $message = getOrDefault($_GET, 'message', $message);
         <div>
             <label for="receiver">Empfänger</label>
             <input type="text" name="receiver" id="receiver" value="<?= escapeForOutput($receiver); ?>"/>
-            <?= (isAdmin() ? '<a href="#" onclick="return toggleRundmail();" id="toggle_rundmail">Admin Rundmail</a>' : ''); ?>
+            <?= (isAdmin() ? '<a href="#" id="toggle_rundmail">Admin Rundmail</a>' : ''); ?>
         </div>
         <div>
             <label for="subject">Betreff</label>
@@ -48,8 +48,8 @@ $message = getOrDefault($_GET, 'message', $message);
         </div>
         <div>
             <label for="message">Nachricht</label>
-            <textarea id="message" name="message" maxlength="4096" cols="60" rows="20"
-                      onkeyup="ZeichenUebrig(this, document.getElementById('charsLeft'));"><?= escapeForOutput($message, false); ?></textarea>
+            <textarea id="message" name="message" maxlength="4096" cols="60"
+                      rows="20"><?= escapeForOutput($message, false); ?></textarea>
         </div>
         <div>
             Noch <span id="charsLeft">4096</span> Zeichen übrig.
@@ -61,14 +61,20 @@ $message = getOrDefault($_GET, 'message', $message);
 <div>
     <?php
     if ($reply !== 0) {
-        echo sprintf('<a href="/?p=nachrichten_lesen&amp;id=%d">&lt;&lt; Zurück</a>', $reply);
+        printf('<a href="/?p=nachrichten_lesen&amp;id=%d">&lt;&lt; Zurück</a>', $reply);
     } else {
         echo '<a href="/?p=nachrichten_liste">&lt;&lt; Zurück</a>';
     }
     ?>
-
 </div>
 
-<script>
-    ZeichenUebrig(document.getElementById('message'), document.getElementById('charsLeft'));
+<script nonce="<?= getCspNonce(); ?>">
+    let messageElement = document.getElementById('message');
+    messageElement.onkeyup = () => ZeichenUebrig(messageElement, document.getElementById('charsLeft'));
+    ZeichenUebrig(messageElement, document.getElementById('charsLeft'));
+
+    let rundmailElement = document.getElementById('toggle_rundmail');
+    if (rundmailElement !== null) {
+        rundmailElement.onclick = () => toggleRundmail();
+    }
 </script>

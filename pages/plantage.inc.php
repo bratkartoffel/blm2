@@ -27,41 +27,41 @@ for ($i = 1; $i <= count_wares; $i++) {
     }
 }
 ?>
-    <div id="SeitenUeberschrift">
-        <img src="/pics/big/Staroffice.webp" alt=""/>
-        <span>Plantage<?= createHelpLink(1, 5); ?></span>
-    </div>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/Staroffice.webp" alt=""/>
+    <span>Plantage<?= createHelpLink(1, 5); ?></span>
+</div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-    <p>
-        Hier können Sie Ihre erforschten Obst- und Warensorten anbauen.
-    </p>
+<p>
+    Hier können Sie Ihre erforschten Obst- und Warensorten anbauen.
+</p>
 
-    <div class="form Schnellanbau">
-        <form action="/actions/plantage.php" method="post">
-            <input type="hidden" name="alles" value="1"/>
-            <header>Schnellanbau</header>
-            <div>
-                <label for="stunden">Produziere</label>
-                <input type="number" id="stunden" name="stunden" value="1" size="2" maxlength="2" min="1"
-                       max="<?= Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'); ?>"
-                       onchange="RechneProduktionsKosten(1, <?= $productionCostSum; ?>, this.value,
-                       <?= $data['Geld']; ?>, document.getElementById('pr_ko_all'), document.getElementById('plant_all'));"/>
-                Stunde(n) von Allem.
-            </div>
-            <div id="pr_ko_all">Kosten: <?= formatCurrency($productionCostSum); ?></div>
-            <div>
-                <input type="submit" value="Abschicken" id="plant_all"
-                      <?= (count($auftraege) < count($productionData) && $data['Geld'] >= $productionCostSum ? '' : ' disabled="disabled"'); ?>/>
-            </div>
-        </form>
-    </div>
+<div class="form Schnellanbau">
+    <form action="/actions/plantage.php" method="post">
+        <input type="hidden" name="alles" value="1"/>
+        <header>Schnellanbau</header>
+        <div>
+            <label for="stunden">Produziere</label>
+            <input type="number" id="stunden" name="stunden" value="1" size="2" maxlength="2" min="1"
+                   max="<?= Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'); ?>"/>
+            Stunde(n) von Allem.
+        </div>
+        <div id="pr_ko_all">Kosten: <?= formatCurrency($productionCostSum); ?></div>
+        <div>
+            <input type="submit" value="Abschicken" id="plant_all"
+                <?= (count($auftraege) < count($productionData) && $data['Geld'] >= $productionCostSum ? '' : ' disabled="disabled"'); ?>/>
+        </div>
+    </form>
+</div>
 
 <?php
+$cspFields = array();
 for ($i = 1; $i <= count_wares; $i++) {
     $researchAttribute = 'Forschung' . $i;
     if (!productionRequirementsMet($i, $data['Gebaeude' . building_plantage], $data[$researchAttribute])) continue;
+    $cspFields[] = $i;
     ?>
     <div class="form Produktion">
         <header id="p<?= $i; ?>">
@@ -84,14 +84,16 @@ for ($i = 1; $i <= count_wares; $i++) {
                     <div>
                         <label for="amount_<?= $i; ?>">Menge:</label>
                         <input type="text" size="4" maxlength="6" name="menge" id="amount_<?= $i; ?>"
-                               value="<?= $productionData[$i]['Menge']; ?>"
-                               onkeyup="RechneProduktionsKosten(<?= $productionData[$i]['Menge']; ?>, <?= $productionData[$i]['Kosten']; ?>, this.value,
-                               <?= $data['Geld']; ?>, document.getElementById('pr_ko_<?= $i; ?>'), document.getElementById('plant_<?= $i; ?>'));"/>
+                               class="amount_field"
+                               data-id="<?= $i; ?>"
+                               data-menge="<?= $productionData[$i]['Menge']; ?>"
+                               data-kosten="<?= $productionData[$i]['Kosten']; ?>"
+                               value="<?= $productionData[$i]['Menge']; ?>"/>
                         kg
                         <div id="pr_ko_<?= $i; ?>">Kosten: <?= formatCurrency($productionData[$i]['Kosten']); ?></div>
                     </div>
                     <input type="submit" name="anbauen" id="plant_<?= $i; ?>" value="Ware anbauen"
-                          />
+                    />
                     <?php
                 } else {
                     $auftrag = $auftraege[$i];
@@ -106,8 +108,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                             verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge '
-                                    + '(~ <?= formatWeight($auftrag['amount'] * $percent); ?>) wird Ihnen gut geschrieben.!');"
+                            <a class="delete_job" data-refund="<?= formatWeight($auftrag['amount'] * $percent); ?>"
                                href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
@@ -120,3 +121,36 @@ for ($i = 1; $i <= count_wares; $i++) {
     </div>
     <?php
 }
+?>
+<script nonce="<?= getCspNonce(); ?>">
+    // calculate costs for hour based production
+    let stundenElement = document.getElementById('stunden');
+    stundenElement.onchange = () => RechneProduktionsKosten(
+        1,
+        <?= $productionCostSum; ?>,
+        stundenElement.value,
+        <?= $data['Geld']; ?>,
+        document.getElementById('pr_ko_all'), document.getElementById('plant_all')
+    );
+    stundenElement.onkeyup = stundenElement.onchange;
+
+    // calculate costs for each ware
+    for (let amountField of document.getElementsByClassName('amount_field')) {
+        let id = amountField.getAttribute('data-id');
+        amountField.onchange = () => RechneProduktionsKosten(
+            amountField.getAttribute('data-menge'),
+            amountField.getAttribute('data-kosten'),
+            amountField.value,
+            <?= $data['Geld']; ?>,
+            document.getElementById('pr_ko_' + id),
+            document.getElementById('plant_' + id)
+        );
+        amountField.onkeyup = amountField.onchange;
+    }
+
+    // require confirmation when aborting production
+    for (let deleteLink of document.getElementsByClassName('delete_job')) {
+        deleteLink.onclick = () => confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge '
+            + '(~ ' + deleteLink.getAttribute('data-refund') + ') wird Ihnen gut geschrieben.');
+    }
+</script>

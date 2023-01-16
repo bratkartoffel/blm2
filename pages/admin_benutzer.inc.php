@@ -40,17 +40,23 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= escapeForOutput($row['Verwarnungen']); ?></td>
             <td>
                 <a href="/?p=admin_benutzer_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
-                <a href="/actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                   onclick="return confirm('Benutzer \'<?= escapeForOutput($row['Name']); ?>\' wirklich löschen?');">Löschen</a>
+                <a class="delete_user" data-username="<?= escapeForOutput($row['Name']); ?>"
+                   href="/actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
     }
     if ($entriesCount == 0) {
-        echo '<tr><td colspan="7" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+        echo '<tr><td colspan="7" class="center"><i>- Keine Einträge gefunden -</i></td></tr>';
     }
     ?>
 </table>
 <?= createPaginationTable('/?p=admin_benutzer', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <a href="/?p=admin">&lt;&lt; Zurück</a>
+
+<script nonce="<?= getCspNonce(); ?>">
+    for (let deleteLink of document.getElementsByClassName('delete_user')) {
+        deleteLink.onclick = () => confirm('Benutzer "' + deleteLink.getAttribute('data-username') + '"wirklich löschen?');
+    }
+</script>

@@ -59,7 +59,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         <?php
     }
     if ($entriesCount == 0) {
-        echo '<tr><td colspan="6" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+        echo '<tr><td colspan="6" class="center"><i>- Keine Einträge gefunden -</i></td></tr>';
     }
     ?>
 </table>

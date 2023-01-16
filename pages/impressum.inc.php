@@ -238,7 +238,3 @@
     Sollten diese Informationen dennoch zu den vorstehend genannten Zwecken genutzt werden, behalte ich mir
     etwaige rechtliche Schritte vor.
 </p>
-
-<script>
-    deobfuscate();
-</script>

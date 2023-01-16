@@ -139,14 +139,14 @@ if ($id != 0) {
                 foreach ($members as $member) {
                     if ($id == $player['GruppeID']) {
                         $online = strtotime($member['LastAction']) + 1800 >= time();
-                        echo sprintf('<li><img src="%s" alt="%s" title="%s"/> %s (%s)</li>',
+                        printf('<li><img src="%s" alt="%s" title="%s"/> %s (%s)</li>',
                             $online ? '/pics/style/online.webp' : '/pics/style/offline.webp',
                             $online ? 'Online' : 'Offline',
                             $online ? 'Online' : 'Offline',
                             createProfileLink($member['ID'], $member['Name']),
                             formatPoints($member['Punkte']));
                     } else {
-                        echo sprintf('<li>%s (%s)</li>',
+                        printf('<li>%s (%s)</li>',
                             createProfileLink($member['ID'], $member['Name']),
                             formatPoints($member['Punkte']));
                     }
@@ -159,7 +159,7 @@ if ($id != 0) {
                 <?php
                 if (count($diplomacy[group_diplomacy_bnd]) > 0) {
                     foreach ($diplomacy[group_diplomacy_bnd] as $entry) {
-                        echo sprintf('<li>%s</li>', createGroupLink($entry['GruppeID'], $entry['GruppeName']));
+                        printf('<li>%s</li>', createGroupLink($entry['GruppeID'], $entry['GruppeName']));
                     }
                 } else {
                     echo '<li>Keine Einträge</li>';
@@ -172,7 +172,7 @@ if ($id != 0) {
                 <?php
                 if (count($diplomacy[group_diplomacy_nap]) > 0) {
                     foreach ($diplomacy[group_diplomacy_nap] as $entry) {
-                        echo sprintf('<li>%s</li>', createGroupLink($entry['GruppeID'], $entry['GruppeName']));
+                        printf('<li>%s</li>', createGroupLink($entry['GruppeID'], $entry['GruppeName']));
                     }
                 } else {
                     echo '<li>Keine Einträge</li>';
@@ -185,7 +185,7 @@ if ($id != 0) {
                 <?php
                 if (count($diplomacy[group_diplomacy_war]) > 0) {
                     foreach ($diplomacy[group_diplomacy_war] as $entry) {
-                        echo sprintf('<li>%s</li>', createGroupLink($entry['GruppeID'], $entry['GruppeName']));
+                        printf('<li>%s</li>', createGroupLink($entry['GruppeID'], $entry['GruppeName']));
                     }
                 } else {
                     echo '<li>Keine Einträge</li>';
@@ -237,7 +237,7 @@ if ($id != 0) {
                 }
 
                 if (count($links) > 0) {
-                    echo sprintf("<div>%s</div>", implode("\n", $links));
+                    printf("<div>%s</div>", implode("\n", $links));
                 }
                 ?>
             </div>

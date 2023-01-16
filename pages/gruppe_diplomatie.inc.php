@@ -35,20 +35,18 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
                 <td><?= createGroupLink($row['GruppeID'], $row['GruppeName']); ?></td>
                 <?php
                 if ($row['Aktiv'] == 1) {
-                    echo sprintf('<td>%s</td>', formatDateTime(strtotime($row['Seit'])));
+                    printf('<td>%s</td>', formatDateTime(strtotime($row['Seit'])));
                     if ($hasRights) {
-                        echo sprintf('<td><a href="/actions/gruppe.php?a=15&amp;id=%d&amp;token=%s"
-                                onclick="return confirm(\'Wollen Sie die %s Beziehung mit %s wirklich kündigen?\')">Kündigen</a></td>',
-                            $row['ID'], $_SESSION['blm_xsrf_token'], $name, escapeForOutput($row['GruppeName']));
+                        printf('<td><a class="cancel_relation" data-type="%s" data-partner="%s" href="/actions/gruppe.php?a=15&amp;id=%d&amp;token=%s">Kündigen</a></td>',
+                            $name, escapeForOutput($row['GruppeName']), $row['ID'], $_SESSION['blm_xsrf_token']);
                     } else {
                         echo '<td>Keine Rechte</td>';
                     }
                 } else {
                     echo '<td>- noch nicht aktiv -</td>';
                     if ($hasRights) {
-                        echo sprintf('<td><a href="/actions/gruppe.php?a=16&amp;id=%d&amp;token=%s"
-                           onclick="return confirm(\'Wollen Sie die %s Anfrage an %s wirklich zurückziehen?\')">Zurückziehen</a></td>',
-                            $row['ID'], $_SESSION['blm_xsrf_token'], $name, escapeForOutput($row['GruppeName']));
+                        printf('<td><a class="retract_offer" data-type="%s" data-partner="%s" href="/actions/gruppe.php?a=16&amp;id=%d&amp;token=%s">Zurückziehen</a></td>',
+                            $name, escapeForOutput($row['GruppeName']), $row['ID'], $_SESSION['blm_xsrf_token']);
                     } else {
                         echo '<td>Keine Rechte</td>';
                     }
@@ -59,7 +57,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
         }
 
         if (count($diplomacy) == 0) {
-            echo '<tr><td colspan="3" style="text-align: center;"><i>Keine Einträge vorhanden</i></td></tr>';
+            echo '<tr><td colspan="3" class="center"><i>Keine Einträge vorhanden</i></td></tr>';
         }
         ?>
     </table>
@@ -125,7 +123,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
     }
 
     if (count($diplomacy[group_diplomacy_war]) == 0) {
-        echo '<tr><td colspan="4" style="text-align: center;"><i>Keine Einträge vorhanden</i></td></tr>';
+        echo '<tr><td colspan="4" class="center"><i>Keine Einträge vorhanden</i></td></tr>';
     }
     ?>
 </table>
@@ -142,7 +140,7 @@ if ($rights['group_diplomacy'] == 1) {
             <input type="hidden" name="a" value="18"/>
             <div>
                 <label for="typ">Typ:</label>
-                <select name="typ" id="typ" onchange="CheckKrieg(this);">
+                <select name="typ" id="typ">
                     <option value="<?= group_diplomacy_nap; ?>"<?= ($typ === group_diplomacy_nap ? ' selected' : ''); ?>>
                         Nichtangriffspakt
                     </option>
@@ -168,7 +166,6 @@ if ($rights['group_diplomacy'] == 1) {
             </div>
         </form>
     </div>
-    <script>CheckKrieg(document.getElementById('typ'));</script>
 
     <h3>Offene fremde Anfragen</h3>
     <table class="Liste GroupOpenRequests">
@@ -192,7 +189,7 @@ if ($rights['group_diplomacy'] == 1) {
             <?php
         }
         if (count($data) == 0) {
-            echo '<tr><td colspan="3" style="text-align: center;"><i>Keine Einträge vorhanden</i></td></tr>';
+            echo '<tr><td colspan="3" class="center"><i>Keine Einträge vorhanden</i></td></tr>';
         }
         ?>
     </table>
@@ -200,3 +197,20 @@ if ($rights['group_diplomacy'] == 1) {
 }
 ?>
 
+<script nonce="<?= getCspNonce(); ?>">
+    let typElement = document.getElementById('typ');
+    typElement.onchange = () => CheckKrieg(typElement);
+    CheckKrieg(typElement);
+
+    for (let cancelLink of document.getElementsByClassName('cancel_relation')) {
+        let type = cancelLink.getAttribute('data-type');
+        let partner = cancelLink.getAttribute('data-partner');
+        cancelLink.onclick = () => confirm('Wollen Sie die ' + type + ' Beziehung mit "' + partner + '" wirklich kündigen?');
+    }
+
+    for (let retractLink of document.getElementsByClassName('retract_offer')) {
+        let type = retractLink.getAttribute('data-type');
+        let partner = retractLink.getAttribute('data-partner');
+        retractLink.onclick = () => confirm('Wollen Sie die ' + type + ' Anfrage mit "' + partner + '" wirklich zurückziehen?');
+    }
+</script>

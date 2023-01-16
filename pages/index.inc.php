@@ -27,7 +27,7 @@
         nieder.
     </p>
     <p>
-        Werden Sie zum <span style="text-decoration: underline;">König</span> der Biobauern!
+        Werden Sie zum <em>König</em> der Biobauern!
     </p>
 
     <h3>Infos zur aktuellen Runde:</h3>

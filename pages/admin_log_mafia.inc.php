@@ -56,7 +56,7 @@ $offset = getOrDefault($_GET, 'o', 0);
                 echo $row['action'];
 
                 if ($row['action'] == 'HEIST' && $row['success'] == 1) {
-                    echo sprintf(' (%s)', getItemName($row['item']));
+                    printf(' (%s)', getItemName($row['item']));
                 }
                 ?></td>
             <td><?= ($row['action'] == 'HEIST') && $row['amount'] !== null ? formatWeight($row['amount']) : ($row['amount'] === null ? '-' : formatCurrency($row['amount'])); ?></td>
@@ -66,7 +66,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         <?php
     }
     if ($entriesCount == 0) {
-        echo '<tr><td colspan="6" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+        echo '<tr><td colspan="6" class="center"><i>- Keine Einträge gefunden -</i></td></tr>';
     }
     ?>
 </table>

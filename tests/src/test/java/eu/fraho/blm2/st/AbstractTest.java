@@ -33,13 +33,21 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractTest {
-    static final String RANDOM_TOKEN = "07313f0e320f22cbfa35cfc220508eb3ff457c7e";
+    public static final String RANDOM_TOKEN = "07313f0e320f22cbfa35cfc220508eb3ff457c7e";
+    private static final AtomicInteger USER_ID = new AtomicInteger(
+            // 31 days, 24 hours, 60 minutes, 60 seconds = 2_678_400 seconds per month; divided by 3 results a value at most 892_800
+            // As gruppe.Kuerzel is a varchar(6), this is perfectly fine
+            (int) (Duration.between(LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0), LocalDateTime.now()).toSeconds() / 3)
+    );
     private static final Logger log = LoggerFactory.getLogger(AbstractTest.class);
     private static final WebDriver driver = SeleniumConfig.getWebDriver();
     private static final HttpClient httpClient = HttpClient.newHttpClient();
@@ -69,6 +77,10 @@ public abstract class AbstractTest {
                 Assertions.fail(e);
             }
         }
+    }
+
+    protected static int getNextUserId() {
+        return USER_ID.getAndIncrement();
     }
 
     protected static WebDriver getDriver() {
@@ -133,11 +145,15 @@ public abstract class AbstractTest {
     }
 
     protected void resetPlayer(int id, TestInfo testInfo) {
+        resetPlayer(id, testInfo, null);
+    }
+
+    protected void resetPlayer(int id, TestInfo testInfo, Integer additionInfo) {
         HttpResponse<String> response = null;
         try {
             String testClass = testInfo.getTestClass().map(Class::getSimpleName).orElse(null);
             String testMethod = testInfo.getTestMethod().map(Method::getName).orElse(null);
-            response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=%d&class=%s&method=%s".formatted(id, testClass, testMethod));
+            response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=%d&class=%s&method=%s&additional=%d".formatted(id, testClass, testMethod, additionInfo));
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());

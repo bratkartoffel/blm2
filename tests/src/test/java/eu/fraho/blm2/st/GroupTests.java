@@ -12,31 +12,29 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class GroupTests extends AbstractTest {
-    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
-    private short counter = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
+    private final int userId1 = getNextUserId();
+    private final int userId2 = getNextUserId();
 
     @BeforeEach
     void beforeEach() {
-        resetPlayer(USER_ID, getClass().getSimpleName());
-        resetPlayer(USER_ID + 1, getClass().getSimpleName());
-        login("test" + USER_ID);
+        resetPlayer(userId1, getClass().getSimpleName());
+        resetPlayer(userId2, getClass().getSimpleName());
+        login("test" + userId1);
     }
 
     @Test
     void testCreateGroup() {
-        counter++;
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        int groupId = getNextUserId();
+        createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
     }
 
     @Test
     void testGroupChangeDescription() {
-        counter++;
+        int groupId = getNextUserId();
         WebDriver driver = getDriver();
 
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
 
         driver.findElement(By.id("gruppe_einstellungen")).click();
         setValue(By.id("beschreibung"), "Example description\n[b]with bbcode[/b]");
@@ -50,10 +48,10 @@ public class GroupTests extends AbstractTest {
 
     @Test
     void testGroupChangePassword() {
-        counter++;
+        int groupId = getNextUserId();
         WebDriver driver = getDriver();
 
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
         Assertions.assertTrue(driver.findElement(By.id("group_image")).getDomAttribute("src").endsWith("&ts=0"));
 
         driver.findElement(By.id("gruppe_einstellungen")).click();
@@ -62,10 +60,10 @@ public class GroupTests extends AbstractTest {
         driver.findElement(By.id("save_password")).submit();
         assertElementPresent(By.id("meldung_219"));
 
-        login("test" + (USER_ID + 1));
+        login("test" + userId2);
 
         driver.findElement(By.id("link_gruppe")).click();
-        setValue(By.id("join_name"), "TG" + counter);
+        setValue(By.id("join_name"), "TG" + groupId);
         setValue(By.id("join_pwd"), "changeit");
         driver.findElement(By.id("join_group")).submit();
         assertElementPresent(By.id("meldung_127"));
@@ -77,31 +75,33 @@ public class GroupTests extends AbstractTest {
 
     @Test
     void testCreateGroupDuplicateName() {
-        counter++;
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        int groupId1 = getNextUserId();
+        int groupId2 = getNextUserId();
+        createGroup("TG" + groupId1, String.valueOf(groupId1), "meldung_223");
 
-        login("test" + (USER_ID + 1));
-        createGroup("TG" + counter, "Tx" + counter, "meldung_141");
+        login("test" + userId2);
+        createGroup("TG" + groupId1, String.valueOf(groupId2), "meldung_141");
     }
 
     @Test
     void testCreateGroupDuplicateTag() {
-        counter++;
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        int groupId1 = getNextUserId();
+        int groupId2 = getNextUserId();
+        createGroup("TG" + groupId1, String.valueOf(groupId1), "meldung_223");
 
-        login("test" + (USER_ID + 1));
-        createGroup("TGx" + counter, "T" + counter, "meldung_141");
+        login("test" + userId2);
+        createGroup("TGx" + groupId2, String.valueOf(groupId1), "meldung_141");
     }
 
     @Test
     void testJoinGroup() {
-        counter++;
+        int groupId = getNextUserId();
         WebDriver driver = getDriver();
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
 
-        login("test" + (USER_ID + 1));
+        login("test" + userId2);
         driver.findElement(By.id("link_gruppe")).click();
-        setValue(By.id("join_name"), "TG" + counter);
+        setValue(By.id("join_name"), "TG" + groupId);
         setValue(By.id("join_pwd"), "changeit");
         driver.findElement(By.id("join_group")).submit();
         assertElementPresent(By.id("meldung_224"));
@@ -109,13 +109,13 @@ public class GroupTests extends AbstractTest {
 
     @Test
     void testJoinGroupWrongPassword() {
-        counter++;
+        int groupId = getNextUserId();
         WebDriver driver = getDriver();
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
 
-        login("test" + (USER_ID + 1));
+        login("test" + userId2);
         driver.findElement(By.id("link_gruppe")).click();
-        setValue(By.id("join_name"), "TG" + counter);
+        setValue(By.id("join_name"), "TG" + groupId);
         setValue(By.id("join_pwd"), "foobar");
         driver.findElement(By.id("join_group")).submit();
         assertElementPresent(By.id("meldung_127"));
@@ -134,9 +134,9 @@ public class GroupTests extends AbstractTest {
 
     @Test
     void testGroupCashDepositWithdraw() {
-        counter++;
+        int groupId = getNextUserId();
         WebDriver driver = getDriver();
-        createGroup("TG" + counter, "T" + counter, "meldung_223");
+        createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
 
         // deposit
         driver.findElement(By.id("link_bank")).click();
@@ -149,8 +149,8 @@ public class GroupTests extends AbstractTest {
         driver.findElement(By.id("link_gruppe")).click();
         driver.findElement(By.id("gruppe_kasse")).click();
         assertText(By.id("gk_amount"), "In der Kasse befinden sich: 10.23 €");
-        assertText(By.id("gk_m_" + USER_ID), "10.23 €");
-        select(By.id("receiver"), "test" + USER_ID);
+        assertText(By.id("gk_m_" + userId1), "10.23 €");
+        select(By.id("receiver"), "test" + userId1);
         setValue(By.id("amount"), "4.23");
         driver.findElement(By.id("gk_transfer")).submit();
         assertElementPresent(By.id("meldung_236"));

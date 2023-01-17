@@ -88,6 +88,33 @@ switch ($testClass) {
         ));
         break;
 
+    case 'MafiaTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+            'Lager' . item_potatoes => 100,
+            'Lager' . item_carrots => 50,
+            'Lager' . item_apples => 27,
+            'Bank' => 12345,
+        ));
+        $additional = getOrDefault($_GET, 'additional', 0);
+        switch ($additional) {
+            case 0:
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 3999));
+                break;
+
+            case 1:
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 5000));
+                break;
+
+            case 2:
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 7500));
+                break;
+
+            case 3:
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 11250));
+                break;
+        }
+        break;
+
     default:
         error_log('unknown class given: ' . $testClass);
 }

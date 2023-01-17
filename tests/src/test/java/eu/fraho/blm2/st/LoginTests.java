@@ -10,19 +10,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 class LoginTests extends AbstractTest {
-    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
+    private final int userId = getNextUserId();
 
     @BeforeEach
     void beforeEach() {
-        resetPlayer(USER_ID, getClass().getSimpleName());
+        resetPlayer(userId, getClass().getSimpleName());
     }
 
     @Test
     void testLogin() {
-        login("test" + USER_ID);
+        login("test" + userId);
     }
 
     @Test
@@ -33,7 +31,7 @@ class LoginTests extends AbstractTest {
 
     @Test
     void testWrongPassword() {
-        login("test" + USER_ID, "wrongPassword");
+        login("test" + userId, "wrongPassword");
         assertElementPresent(By.id("meldung_108"));
     }
 }

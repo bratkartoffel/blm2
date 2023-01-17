@@ -11,16 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class BuildingTests extends AbstractTest {
-    private static final int USER_ID = ThreadLocalRandom.current().nextInt(1_000_000);
+    private final int userId = getNextUserId();
 
     @BeforeEach
     void beforeEach() {
-        resetPlayer(USER_ID, getClass().getSimpleName());
-        login("test" + USER_ID);
+        resetPlayer(userId, getClass().getSimpleName());
+        login("test" + userId);
     }
 
     @Test

@@ -1565,9 +1565,9 @@ function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId,
         $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);
     }
     if (count($entries) == 0) {
-        return '<select name="opponent" disabled><option>Keine verfügbaren Gegner</option></select>';
+        return '<select name="opponent" id="opponent" disabled><option>Keine verfügbaren Gegner</option></select>';
     } else {
-        return '<select name="opponent">' . implode("\n", $entries) . '</select>';
+        return '<select name="opponent" id="opponent">' . implode("\n", $entries) . '</select>';
     }
 }
 

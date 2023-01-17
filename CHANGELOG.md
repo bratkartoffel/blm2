@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Security
+
+- Enhance htaccess, clarify required apache modules in README
 
 ## [1.10.8] - 2023-01-17
 

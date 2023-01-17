@@ -7,14 +7,14 @@
 ### 0) Voraussetzungen
 
 - Apache 2.4+ (für `.htaccess` Zugriffsbeschränkungen)
-    - mod_headers
-    - mod_rewrite
-    - mod_deflate oder mod_brotli
+  - mod_alias
+  - (empfohlen) mod_headers
+  - (empfohlen) mod_brotli und mod_setenvif
 - PHP 7.4+
-    - gd (mit WebP-Unterstützung)
-    - mcrypt
-    - pdo_mysql
-    - zip
+  - gd (mit WebP-Unterstützung)
+  - mcrypt
+  - pdo_mysql
+  - zip
 - MariaDB (10.1+) oder MySQL (5.7+)
 
 Die automatischen Tests laufen mit:

@@ -1,31 +1,39 @@
-# One day for images, scripts and styles
-<FilesMatch "\.(ico|webp|css|js)$">
-    Header set Cache-Control "max-age=86400, public"
-</FilesMatch>
+# bail out if mod alias is not found
+# this is required to protect the senstive files from being accessed by clients
+<IfModule !mod_alias.c>
+    Deny From All
+</IfModule>
 
-# deny access to git folder
-RedirectMatch 403 /\.git
+# block access to sensitive parts of this application
+<IfModule mod_alias.c>
+    RedirectMatch 403 /\.git
+    RedirectMatch 403 /config
+    RedirectMatch 403 /cronjobs
+    RedirectMatch 403 /development
+    RedirectMatch 403 /include
+    RedirectMatch 403 /install/sql
+    RedirectMatch 403 /pages
+    RedirectMatch 403 /pics/uploads
+    RedirectMatch 403 /tests
+</IfModule>
 
-# deny direct access
-RedirectMatch 403 /config
-RedirectMatch 403 /cronjobs
-RedirectMatch 403 /development
-RedirectMatch 403 /include
-RedirectMatch 403 /install/sql
-RedirectMatch 403 /pages
-RedirectMatch 403 /pics/uploads
-RedirectMatch 403 /tests
+# cache images, scripts and styles for 1 day
+<IfModule mod_headers.c>
+    <FilesMatch "\.(ico|webp|css|js)$">
+        Header set Cache-Control "max-age=86400, public"
+    </FilesMatch>
+</IfModule>
 
 # prefer compressing output with brotli
 <IfModule mod_brotli.c>
     SetOutputFilter BROTLI_COMPRESS
-    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|webp)$ no-brotli
+    SetEnvIfNoCase Request_URI \.(?:ico|webp)$ no-brotli
 </IfModule>
 
 # if brotli is not available, then use gzip
 <IfModule mod_deflate.c>
     <IfModule !mod_brotli.c>
         SetOutputFilter DEFLATE
-        SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|webp)$ no-gzip
+        SetEnvIfNoCase Request_URI \.(?:ico|webp)$ no-gzip
     </IfModule>
 </IfModule>

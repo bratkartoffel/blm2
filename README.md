@@ -14,6 +14,7 @@
     - gd (mit WebP-Unterstützung)
     - mcrypt
     - pdo_mysql
+    - zip
 - MariaDB (10.1+) oder MySQL (5.7+)
 
 Die automatischen Tests laufen mit:

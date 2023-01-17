@@ -1449,6 +1449,14 @@ ORDER BY m.Name");
         return $this->executeAndGetAffectedRows($stmt);
     }
 
+    public function gdprCleanLoginLog(): ?int
+    {
+        $stmt = $this->prepare("UPDATE " . self::TABLE_LOG_LOGIN . "
+            SET ip = concat('ANON_', CRC32(SHA1(SHA1(ip)))), anonymized = true
+            WHERE anonymized = false AND created < date_sub(now(), interval 30 day)");
+        return $this->executeAndGetAffectedRows($stmt);
+    }
+
     public function countPendingGroupDiplomacy(int $group_id): ?int
     {
         $stmt = $this->prepare("SELECT count(1) AS Count FROM " . self::TABLE_GROUP_DIPLOMACY . " WHERE An = :id AND Aktiv = 0");
@@ -1557,6 +1565,24 @@ ORDER BY m.Name");
         return null;
     }
 
+    public function selectForExport($table, $whereOr, $userId): ?array
+    {
+        $conditions = array();
+        $fields = array();
+        $i = 0;
+        if (is_array($whereOr)) {
+            foreach ($whereOr as $field) {
+                $conditions[] = sprintf('%s = :whr%d', $field, ++$i);
+                $fields['whr' . $i] = $userId;
+            }
+        } else {
+            $conditions[] = sprintf('%s = :whr0', $whereOr);
+            $fields['whr0'] = $userId;
+        }
+        $sql = sprintf("SELECT * FROM %s WHERE %s", $table, implode(" OR ", $conditions));
+        return $this->executeAndExtractRows($this->prepare($sql), $fields);
+    }
+
     public function getQueryCount(): int
     {
         return $this->queries;
@@ -1601,9 +1627,9 @@ ORDER BY m.Name");
         return $stmt->rowCount();
     }
 
-    private function executeAndExtractRows(PDOStatement $stmt): ?array
+    private function executeAndExtractRows(PDOStatement $stmt, array $executeParam = array()): ?array
     {
-        if (!($this->execute($stmt))) {
+        if (!($this->execute($stmt, $executeParam))) {
             $this->error($stmt, "Could not execute statement");
             return null;
         }

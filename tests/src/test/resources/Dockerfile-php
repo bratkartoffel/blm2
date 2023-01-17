@@ -16,6 +16,8 @@ RUN apt-get update \
     # install gd lib
     && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
     && docker-php-ext-install gd \
+    # install zip
+    && docker-php-ext-install zip \
     # cleanup sources, apt cache and build dependencies
     && docker-php-source delete \
     && apt-get purge -y libfreetype-dev libgd-dev libwebp-dev zlib1g-dev \
@@ -23,6 +25,5 @@ RUN apt-get update \
     # install xdebug
     && pecl channel-update pecl.php.net \
     && pecl install xdebug-3.1.6
-#    && cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini

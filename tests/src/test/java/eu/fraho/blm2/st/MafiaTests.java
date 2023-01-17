@@ -39,6 +39,62 @@ public class MafiaTests extends AbstractTest {
     }
 
     @Test
+    void testEspionageSuccess() {
+        login("test" + userId2);
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_mafia")).click();
+        selectByText(By.id("opponent"), "test" + userId1);
+        selectByValue(By.id("action"), "1");
+        selectByValue(By.id("level"), "3");
+        driver.findElement(By.id("attack")).submit();
+
+        // after mafia action inbox is opened
+        assertElementPresent(By.id("MessagesIn"));
+        assertText(By.id("stat_money"), "4,200.00 €");
+        driver.findElement(By.id("MessagesIn")).findElements(By.tagName("a")).get(0).click();
+
+        assertText(By.id("sender"), "System");
+        assertText(By.id("subject"), "Mafia: Spionage gegen test%d erfolgreich".formatted(userId1));
+        assertText(By.id("message"), """
+                Die Spionage gegen test%d war erfolgreich, hier die von uns in Erfahrung gebrachten Daten:
+                                
+                Bargeld: 5,000.00 €
+                                
+                Lagerstände:
+                * Kartoffeln: 100 kg
+                * Karotten: 50 kg
+                * Äpfel: 27 kg
+                                
+                Gebäudelevel:
+                * Plantage: 1
+                                
+                - Ihre Mafia -""".formatted(userId1));
+    }
+
+    @Test
+    void testEspionageFailure() {
+        login("test" + userId2);
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_mafia")).click();
+        selectByText(By.id("opponent"), "test" + userId3);
+        selectByValue(By.id("action"), "1");
+        selectByValue(By.id("level"), "3");
+        driver.findElement(By.id("attack")).submit();
+
+        // after mafia action inbox is opened
+        assertElementPresent(By.id("MessagesIn"));
+        assertText(By.id("stat_money"), "4,200.00 €");
+        driver.findElement(By.id("MessagesIn")).findElements(By.tagName("a")).get(0).click();
+
+        assertText(By.id("sender"), "System");
+        assertText(By.id("subject"), "Mafia: Spionage gegen test%d fehlgeschlagen".formatted(userId3));
+        assertText(By.id("message"), """
+                Die Spionage war leider nicht erfolgreich, die gegnerischen Wachen haben unsere Spitzel erkannt bevor diese irgendwelche relevanten Daten sammeln konnten.
+                              
+                - Ihre Mafia -""");
+    }
+
+    @Test
     void testLowerCanAttackMiddle() {
         login("test" + userId1);
         WebDriver driver = getDriver();

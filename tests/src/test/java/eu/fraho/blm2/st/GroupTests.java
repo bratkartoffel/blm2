@@ -150,7 +150,7 @@ public class GroupTests extends AbstractTest {
         driver.findElement(By.id("gruppe_kasse")).click();
         assertText(By.id("gk_amount"), "In der Kasse befinden sich: 10.23 €");
         assertText(By.id("gk_m_" + userId1), "10.23 €");
-        select(By.id("receiver"), "test" + userId1);
+        selectByText(By.id("receiver"), "test" + userId1);
         setValue(By.id("amount"), "4.23");
         driver.findElement(By.id("gk_transfer")).submit();
         assertElementPresent(By.id("meldung_236"));

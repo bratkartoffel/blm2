@@ -106,11 +106,17 @@ switch ($testClass) {
                 break;
 
             case 2:
-                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 7500));
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+                    'Punkte' => 7500,
+                    'Gebaeude' . building_pizzeria => 50,
+                ));
                 break;
 
             case 3:
-                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 11250));
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
+                    'Punkte' => 11250,
+                    'Gebaeude' . building_fence => 100,
+                ));
                 break;
         }
         break;

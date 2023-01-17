@@ -37,6 +37,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -140,8 +141,22 @@ public abstract class AbstractTest {
         element.sendKeys(value, Keys.TAB);
     }
 
-    protected void select(By by, String label) {
-        driver.findElement(by).findElement(By.xpath("//option[. = '%s']".formatted(label))).click();
+    protected void selectByText(By by, String text) {
+        for (WebElement element : driver.findElement(by).findElements(By.tagName("option"))) {
+            if (Objects.equals(element.getText(), text)) {
+                element.click();
+                break;
+            }
+        }
+    }
+
+    protected void selectByValue(By by, String value) {
+        for (WebElement element : driver.findElement(by).findElements(By.tagName("option"))) {
+            if (Objects.equals(element.getAttribute("value"), value)) {
+                element.click();
+                break;
+            }
+        }
     }
 
     protected void resetPlayer(int id, TestInfo testInfo) {

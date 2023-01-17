@@ -71,7 +71,9 @@
     div.MarktplatzNeu,
     div.MafiaNewAction,
     div.GroupCreate,
-    div.GroupJoin {
+    div.GroupJoin,
+    div.LoginForm,
+    div.RegisterForm {
         width: fit-content;
     }
 
@@ -87,8 +89,21 @@
     div.Produktion div.Action,
     div.Research div.Action {
         display: inline-block;
+        width: 210px
+    }
+
+    div.ResearchDaten,
+    div.ProduktionDaten {
+        width: 170px;
+    }
+
+    div.ResearchDaten div,
+    div.ProduktionDaten div {
+        text-align: initial !important;
+    }
+
+    div.Gebaeude div.Action {
         float: initial;
-        width: 250px
     }
 
     div.Gruppe div.GroupDescription {

@@ -29,7 +29,7 @@ $captcha->createCaptcha();
     belegt ist und wählen Sie ein Passwort, welches nur Sie wissen sollten.
 </p>
 
-<div class="form">
+<div class="form RegisterForm">
     <form action="/actions/registrieren.php" method="post">
         <header>Neuen Benutzer anlegen</header>
 

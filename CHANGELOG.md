@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- No changes yet
+### Fixed
+
+- Fixed some minor display issues for mobiles
 
 ## [1.10.7] - 2023-01-17
 

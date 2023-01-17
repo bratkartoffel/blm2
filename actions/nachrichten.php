@@ -38,7 +38,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
             Database::getInstance()->begin();
             foreach ($data as $player) {
                 if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
-                        'Von' => $_SESSION['blm_user'],
+                        'Von' => $player['ID'] == $_SESSION['blm_user'] ? 0 : $_SESSION['blm_user'],
                         'An' => $player['ID'],
                         'Nachricht' => $message,
                         'Betreff' => $subject

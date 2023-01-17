@@ -204,7 +204,7 @@ public abstract class AbstractTest {
         }
     }
 
-    private static HttpResponse<String> simpleHttpGet(String url) throws IOException, InterruptedException {
+    protected static HttpResponse<String> simpleHttpGet(String url) throws IOException, InterruptedException {
         return httpClient.send(
                 HttpRequest.newBuilder().GET().uri(URI.create(url)).build(),
                 HttpResponse.BodyHandlers.ofString()

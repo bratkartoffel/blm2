@@ -133,7 +133,7 @@ $offset_gr = verifyOffset($offset_gr, $groupCount, Config::getInt(Config::SECTIO
             <td><?= escapeForOutput($row['GruppeKuerzel']); ?></td>
             <td><?= $row['AnzMitglieder']; ?></td>
             <td><?= formatPoints($row['Punkte']); ?></td>
-            <td><?= formatPoints($row['Punkte'] / $row['AnzMitglieder']); ?></td>
+            <td><?= formatPoints((int)($row['Punkte'] / $row['AnzMitglieder'])); ?></td>
         </tr>
         <?php
     }

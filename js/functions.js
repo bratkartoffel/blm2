@@ -129,7 +129,7 @@ function MarkActiveLink() {
     }
     Array.prototype.forEach.call(document.getElementById("Navigation").getElementsByTagName("a"), (field) => {
         if (field.href.includes(page)) {
-            field.innerHTML = '→ <i>' + field.innerHTML + "</i>";
+            field.innerHTML = '<span id="activeLinkArrow">→</span> <i>' + field.innerHTML + "</i>";
             field.style.color = "#555555";
         }
     });

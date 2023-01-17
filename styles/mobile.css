@@ -38,6 +38,10 @@
         display: none;
     }
 
+    span#activeLinkArrow {
+        display: none;
+    }
+
     div#Logo {
         display: none !important;
     }

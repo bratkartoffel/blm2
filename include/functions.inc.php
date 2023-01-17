@@ -870,7 +870,7 @@ function formatWeight(float $amount, bool $withSuffix = true, int $decimals = 0,
     return number_format($amount, $decimals, ',', $withThousandsSeparator ? '.' : '') . ($withSuffix ? ' kg' : '');
 }
 
-function formatPoints(float $amount): string
+function formatPoints(int $amount): string
 {
     return number_format($amount, 0, "", ".");
 }
@@ -1543,7 +1543,7 @@ function passwordNeedsUpgrade(string $hash): bool
     return password_needs_rehash($hash, PASSWORD_ARGON2ID, Config::get(Config::SECTION_BASE, 'password_hash_options'));
 }
 
-function maybeMafiaOpponents(float $pointsLeft, float $pointsRight, ?int $groupDiplomacy): bool
+function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, ?int $groupDiplomacy): bool
 {
     if ($groupDiplomacy === group_diplomacy_nap || $groupDiplomacy === group_diplomacy_bnd) {
         return false;
@@ -1552,7 +1552,7 @@ function maybeMafiaOpponents(float $pointsLeft, float $pointsRight, ?int $groupD
     } else {
         $a = min($pointsLeft, $pointsRight);
         $b = max($pointsLeft, $pointsRight);
-        return $a > $b / Config::getFloat(Config::SECTION_MAFIA, 'points_factor') && $a < $b * Config::getFloat(Config::SECTION_MAFIA, 'points_factor');
+        return $a >= $b / Config::getFloat(Config::SECTION_MAFIA, 'points_factor') && $a <= $b * Config::getFloat(Config::SECTION_MAFIA, 'points_factor');
     }
 }
 

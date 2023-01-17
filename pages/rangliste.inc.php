@@ -44,11 +44,13 @@ $offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BAS
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
         $groupDiplomacy = null;
-        if ($row['BenutzerID'] != $_SESSION['blm_user'] && $myself['Gruppe'] !== null && $row['GruppeID'] !== null) {
-            $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($myself['Gruppe'], $row['GruppeID']);
-        }
-        if ($myself['Gruppe'] === $row['GruppeID']) {
-            $groupDiplomacy = group_diplomacy_bnd;
+        if ($myself['Gruppe'] !== null && $row['GruppeID'] !== null) {
+            if ($row['BenutzerID'] != $_SESSION['blm_user']) {
+                $groupDiplomacy = Database::getInstance()->getGroupDiplomacyTypeById($myself['Gruppe'], $row['GruppeID']);
+            }
+            if ($myself['Gruppe'] === $row['GruppeID']) {
+                $groupDiplomacy = group_diplomacy_bnd;
+            }
         }
         if ($row['BenutzerID'] == $_SESSION['blm_user'] || ($q !== null && strtolower($row['BenutzerName']) == strtolower($q))) {
             $rowExtra = ' class="highlight"';

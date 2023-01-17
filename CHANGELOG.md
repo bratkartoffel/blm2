@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed some minor display issues for mobiles
+- Fix some minor display issues for mobiles
+- Fix mafia opponent calculation partly off
 
 ## [1.10.7] - 2023-01-17
 

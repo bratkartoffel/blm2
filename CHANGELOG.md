@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- No changes yet
+
+## [1.10.7] - 2023-01-17
+
 ### Added
 
 - (einstellungen) add gdpr compliant export of all user related information
@@ -182,7 +186,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.6...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.7...HEAD
+
+[1.10.7]: https://github.com/bratkartoffel/blm2/compare/v1.10.6...v1.10.7
 
 [1.10.6]: https://github.com/bratkartoffel/blm2/compare/v1.10.5...v1.10.6
 

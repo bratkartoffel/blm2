@@ -30,6 +30,9 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         if ($broadcast == 1) {
+            if (!isAdmin()) {
+                redirectTo($base_link, 112, __LINE__);
+            }
             $data = Database::getInstance()->getAllPlayerIdsAndName();
 
             Database::getInstance()->begin();

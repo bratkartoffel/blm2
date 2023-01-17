@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix some minor display issues for mobiles
 - Fix mafia opponent calculation partly off
 
+### Security
+
+- (nachrichten) allow broadcast messages only for admins
+
 ## [1.10.7] - 2023-01-17
 
 ### Added

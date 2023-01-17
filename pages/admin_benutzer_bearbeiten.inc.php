@@ -154,7 +154,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
             echo createDropdown($groups, $entry['Gruppe'], 'gruppe', false, false, true);
 
             if ($entry['Gruppe'] !== null) {
-                echo sprintf(' (<a href="/?p=admin_gruppe_bearbeiten&amp;id=%d">Rechte / Kasse bearbeiten</a>)', $entry['Gruppe']);
+                printf(' (<a href="/?p=admin_gruppe_bearbeiten&amp;id=%d">Rechte / Kasse bearbeiten</a>)', $entry['Gruppe']);
             }
             ?>
         </div>

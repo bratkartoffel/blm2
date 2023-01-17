@@ -54,8 +54,8 @@ if ($rights['edit_description']) {
             <input type="hidden" name="a" value="12"/>
             <header><label for="beschreibung">Beschreibung ändern</label></header>
             <div>
-            <textarea id="beschreibung" maxlength="4096" name="beschreibung" cols="50" rows="15"
-                      onkeyup="ZeichenUebrig(this, document.form_beschreibung.getElementsByTagName('span')[0]);"><?= escapeForOutput($beschreibung, false); ?></textarea>
+                <textarea id="beschreibung" maxlength="4096" name="beschreibung" cols="50"
+                          rows="15"><?= escapeForOutput($beschreibung, false); ?></textarea>
             </div>
             <div>
                 Noch <span>X</span> Zeichen übrig
@@ -65,7 +65,11 @@ if ($rights['edit_description']) {
             </div>
         </form>
     </div>
-    <script>ZeichenUebrig(document.getElementById('beschreibung'), document.form_beschreibung.getElementsByTagName('span')[0]);</script>
+    <script nonce="<?= getCspNonce(); ?>">
+        let beschreibungElement = document.getElementById('beschreibung');
+        beschreibungElement.onkeyup = () => ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
+        ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
+    </script>
     <?php
 }
 

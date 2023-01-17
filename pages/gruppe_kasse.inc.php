@@ -72,7 +72,7 @@ if ($rights['group_cash'] == 1) {
                 <select name="receiver" id="receiver">
                     <?php
                     foreach ($users as $name => $id) {
-                        echo sprintf('<option value="%d"%s>%s</option>', $id, $receiver == $id ? ' selected' : '', escapeForOutput($name));
+                        printf('<option value="%d"%s>%s</option>', $id, $receiver == $id ? ' selected' : '', escapeForOutput($name));
                     }
                     ?>
                 </select>

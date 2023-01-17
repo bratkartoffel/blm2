@@ -71,15 +71,15 @@ function abortWithErrorPage(string $body)
 function verifyInstallation()
 {
     if (!file_exists(__DIR__ . '/../config/config.ini')) {
-        abortWithErrorPage('<h2 style="color: red">Ungültige Installation</h2><p>Es konnte keine <code>config.ini</code> gefunden werden.</p>');
+        abortWithErrorPage('<h2 class="red">Ungültige Installation</h2><p>Es konnte keine <code>config.ini</code> gefunden werden.</p>');
     }
     try {
         Database::getInstanceForInstallCheck();
     } catch (PDOException $e) {
-        abortWithErrorPage('<h2 style="color: red">Ungültige Installation</h2><p>Es konnte keine Datenbankverbindung hergestellt werden, bitte überprüfe deine <code>config.inc.php</code></p>');
+        abortWithErrorPage('<h2 class="red">Ungültige Installation</h2><p>Es konnte keine Datenbankverbindung hergestellt werden, bitte überprüfe deine <code>config.inc.php</code></p>');
     }
     if (!Database::getInstance()->tableExists('mitglieder')) {
-        abortWithErrorPage('<h2 style="color: red">Ungültige Installation</h2><p>Datenbankschema nicht installiert, bitte führe ein Update durch.</p>');
+        abortWithErrorPage('<h2 class="red">Ungültige Installation</h2><p>Datenbankschema nicht installiert, bitte führe ein Update durch.</p>');
     }
 }
 
@@ -547,9 +547,13 @@ function getMessageBox(int $msg_id): ?string
 
     return sprintf('<div class="MessageBox" id="meldung_%d" %s>
             <div class="MessageImage" id="%s"></div>
-            <a id="close" onclick="document.getElementById(\'meldung_%d\').remove();">X</a>
+            <a id="close">X</a>
             <span>%s</span>
-        </div>', $msg_id, ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '', $image, $msg_id, $text);
+            <script nonce="%s">document.getElementById(\'close\').onclick = () => document.getElementById(\'meldung_%d\').remove();</script>
+        </div>',
+        $msg_id,
+        ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '',
+        $image, $text, getCspNonce(), $msg_id);
 }
 
 function getBuildingName(int $building_id): string
@@ -663,10 +667,11 @@ function replaceBBCode(string $text): string
             "@\[group=(.+)#(\d{1,8})/]@SUi",
         ),
         array(
-            '<div style="text-align: center;">\1</div>',
+            '<div class="center">\1</div>',
+            // TODO CSP prevents using inline styles
             '<span style="font-size: \1px;">\2</span>',
             '<a href="\1\2">\3</a>',
-            '<a href="\1" target="_blank"><img src="\1" alt="\2" style="border: none;"/></a>',
+            '<a href="\1" target="_blank"><img src="\1" alt="\2"/></a>',
             '<a href="/?p=profil&amp;id=\2">\1</a>',
             '<a href="/?p=gruppe&amp;id=\2">\1</a>',
         ),
@@ -685,6 +690,7 @@ function replaceBBCode(string $text): string
                 '/\[quote](.*)\[\/quote]/Uism'
             ),
             array(
+                // TODO CSP prevents using inline styles
                 '<span style="color: \1;">\2</span>',
                 '<\1>\2</\1>',
                 '<blockquote>\1</blockquote>'
@@ -1366,8 +1372,11 @@ function createGroupNaviation(int $activePage, int $group_id): string
     if ($activePage == 5) $items[] = '<span>Logbuch</span>';
     else $items[] = '<span><a href="/?p=gruppe_logbuch" id="gruppe_logbuch">Logbuch</a></span>';
 
-    $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" onclick="return confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');" id="leave_group">Gruppe verlassen</a></span>';
-    return '<div id="GroupNavigation">' . implode(" | ", $items) . '</div>';
+    $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" id="leave_group">Gruppe verlassen</a></span>';
+    return sprintf('<div id="GroupNavigation">%s</div>
+<script nonce="' . getCspNonce() . '">
+    document.getElementById(\'leave_group\').onclick = () => confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');
+</script>', implode(" | ", $items));
 }
 
 function getGroupDiplomacyTypeName(int $id): string
@@ -1635,6 +1644,37 @@ function trimAndRemoveControlChars(string $string): string
     // remove all control characters and trim spaces
     // https://stackoverflow.com/a/66587087
     return trim(preg_replace('/[^\PCc^\PCn^\PCs]/u', '', $string));
+}
+
+function getCspNonce(): string
+{
+    $_REQUEST['CSP_NONCE'] = getOrDefault($_REQUEST, 'CSP_NONCE', bin2hex(openssl_random_pseudo_bytes(12)));
+    return $_REQUEST['CSP_NONCE'];
+}
+
+function sendCspHeader(): void
+{
+    header(sprintf("Content-Security-Policy: script-src 'nonce-%s'; img-src 'self' data:; style-src 'nonce-%s';", getCspNonce(), getCspNonce()));
+}
+
+function printHeaderCss(array $styles): void
+{
+    foreach ($styles as $style) {
+        if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+            $style = str_replace('.min.', '.', $style);
+        }
+        printf('<link rel="stylesheet" type="text/css" href="%s?%s" nonce="%s"/>' . "\n", $style, game_version, getCspNonce());
+    }
+}
+
+function printHeaderJs(array $scripts): void
+{
+    foreach ($scripts as $script) {
+        if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+            $script = str_replace('.min.', '.', $script);
+        }
+        printf('<script src="%s?%s" nonce="%s"></script>' . "\n", $script, game_version, getCspNonce());
+    }
 }
 
 // create the roundstart information file if it's missing

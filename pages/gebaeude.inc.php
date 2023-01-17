@@ -63,7 +63,9 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                             (noch <span class="countdown"><?= formatDuration($currentDuration); ?></span> verbleibend)
                         </div>
                         <div>
-                            <a onclick="return confirmAbort('<?= formatCurrency($currentKosten * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>', '<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>');"
+                            <a class="delete_job"
+                               data-refund="<?= formatCurrency($currentKosten * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
+                               data-percent="<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
                                href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $buildingId; ?>">Abbrechen</a>
                         </div>
@@ -83,20 +85,16 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
 }
 
 ?>
-    <div id="SeitenUeberschrift">
-        <img src="/pics/big/kfm_home.webp" alt=""/>
-        <span>Gebäude<?= createHelpLink(1, 4); ?></span>
-    </div>
+<div id="SeitenUeberschrift">
+    <img src="/pics/big/kfm_home.webp" alt=""/>
+    <span>Gebäude<?= createHelpLink(1, 4); ?></span>
+</div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
-    <p>
-        Hier können Sie alle Ihre Gebäude ausbauen und ihre aktuelle Stufe sehen.
-    </p>
-
-    <script>
-        reloadOnCountdown = true;
-    </script>
+<p>
+    Hier können Sie alle Ihre Gebäude ausbauen und ihre aktuelle Stufe sehen.
+</p>
 
 <?php
 if (buildingRequirementsMet(building_plantage, $data)) {
@@ -157,3 +155,10 @@ Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt
 höher
 sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um ' . formatPercent(Config::getFloat(Config::SECTION_PIZZERIA, 'mafia_bonus')) . '.');
 }
+?>
+
+<script nonce="<?= getCspNonce(); ?>">
+    for (let deleteLink of document.getElementsByClassName('delete_job')) {
+        deleteLink.onclick = () => confirmAbort(deleteLink.getAttribute('data-refund'), deleteLink.getAttribute('data-percent'));
+    }
+</script>

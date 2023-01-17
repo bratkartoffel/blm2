@@ -26,10 +26,10 @@ $interestRates = calculateInterestRates();
     alle <?= Config::getInt(Config::SECTION_BASE, 'cron_interval'); ?> Minuten. Die
     maximale Summe, die Sie anlegen können,
     sind <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')); ?>, Ihr Kreditlimit sind
-    <span style="color: red;"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
+    <span class="red"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
 </p>
 <p>
-    <span style="color: red;">Wichtig! Falls der Kontostand unter <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) ?> fällt, wird Ihr Account automatisch resettet!
+    <span class="red">Wichtig! Falls der Kontostand unter <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) ?> fällt, wird Ihr Account automatisch resettet!
         Von einer durchschnittlichen Zinsrate von 2% ausgehend wird diese Marke nach etwa 48 Stunden überschritten.</span>
 </p>
 <p>
@@ -44,17 +44,14 @@ $interestRates = calculateInterestRates();
         <div>
             <label for="art">Art:</label>
             <div class="inline-block">
-                <input type="radio" id="einzahlen" name="art" value="1"
-                       onchange="AuswahlBank(this.value);" <?= ($art == 1 ? 'checked' : ''); ?>>
+                <input type="radio" id="einzahlen" name="art" value="1" <?= ($art == 1 ? 'checked' : ''); ?>>
                 <label for="einzahlen">Einzahlen</label><br>
-                <input type="radio" id="auszahlen" name="art" value="2"
-                       onchange="AuswahlBank(this.value);" <?= ($art == 2 ? 'checked' : ''); ?>>
+                <input type="radio" id="auszahlen" name="art" value="2" <?= ($art == 2 ? 'checked' : ''); ?>>
                 <label for="auszahlen">Auszahlen</label><br>
                 <?php
                 if ($data['Gruppe'] != null) {
                     ?>
-                    <input type="radio" id="gruppen_kasse" name="art" value="3"
-                           onchange="AuswahlBank(this.value);" <?= ($art == 3 ? 'checked' : ''); ?>>
+                    <input type="radio" id="gruppen_kasse" name="art" value="3" <?= ($art == 3 ? 'checked' : ''); ?>>
                     <label for="gruppen_kasse">In die Gruppenkasse</label>
                     <?php
                 }
@@ -71,14 +68,14 @@ $interestRates = calculateInterestRates();
     </form>
 </div>
 
-<script>
+<script nonce="<?= getCspNonce(); ?>">
     function AuswahlBank(option) {
         const Zeiger = document.form_bank.betrag;
         const KontostandAusgabe = <?=$data['Bank'];?>;
         const BargeldAusgabe = <?=$data['Geld'];?>;
         const currentValue = Number.parseFloat(Zeiger.value);
         if (currentValue === 0.0 || currentValue === KontostandAusgabe || currentValue === BargeldAusgabe) {
-            if (option === "1" || option === "3") {
+            if (option === 1 || option === 3) {
                 Zeiger.value = BargeldAusgabe;
             } else if (KontostandAusgabe >= 0) {
                 Zeiger.value = KontostandAusgabe;
@@ -86,5 +83,13 @@ $interestRates = calculateInterestRates();
         }
     }
 
-    AuswahlBank("<?=$art;?>");
+    // setup handlers
+    document.getElementById('einzahlen').onchange = () => AuswahlBank(1);
+    document.getElementById('auszahlen').onchange = () => AuswahlBank(2);
+    if (document.getElementById('gruppen_kasse') !== null) {
+        document.getElementById('gruppen_kasse').onchange = () => AuswahlBank(3);
+    }
+
+    // select element
+    AuswahlBank(<?=$art;?>);
 </script>

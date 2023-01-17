@@ -68,7 +68,7 @@ $offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BAS
                     echo '<div class="UserRank BetaTester"></div>';
                 }
                 if ($row['GruppeID'] !== null) {
-                    echo sprintf(' (<a href="/?p=gruppe&id=%d">%s</a>)',
+                    printf(' (<a href="/?p=gruppe&id=%d">%s</a>)',
                         $row['GruppeID'],
                         $row['GruppeName']);
                 }
@@ -77,10 +77,10 @@ $offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BAS
             <td><?= formatPoints($row['Punkte']); ?></td>
             <td><?php
                 if ($row['BenutzerID'] != $_SESSION['blm_user']) {
-                    echo sprintf('(<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
+                    printf('(<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
                         escapeForOutput($row['BenutzerName']), escapeForOutput($row['BenutzerName']));
                     if (mafiaRequirementsMet($row['Punkte']) && mafiaRequirementsMet($myself['Punkte']) && maybeMafiaOpponents($row['Punkte'], $myself['Punkte'], $groupDiplomacy)) {
-                        echo sprintf(' | <a href="/?p=mafia&amp;opponent=%d">Mafia</a>', $row['BenutzerID']);
+                        printf(' | <a href="/?p=mafia&amp;opponent=%d">Mafia</a>', $row['BenutzerID']);
                     }
                     echo ')';
                 }
@@ -137,7 +137,7 @@ $offset_gr = verifyOffset($offset_gr, $groupCount, Config::getInt(Config::SECTIO
     }
 
     if (count($entries) == 0) {
-        echo '<tr><td colspan="6" style="text-align: center;"><i>Bisher wurden noch keine Gruppen erstellt.</i></td></tr>';
+        echo '<tr><td colspan="6" class="center"><i>Bisher wurden noch keine Gruppen erstellt.</i></td></tr>';
     }
     ?>
 </table>
@@ -173,7 +173,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, Config::getInt(Config::SECTION_B
     }
 
     if (count($entries) == 0) {
-        echo '<tr><td colspan="3" style="text-align: center;"><i>Bisher sind noch keine ewigen Punkte vergeben worden.</i></td></tr>';
+        echo '<tr><td colspan="3" class="center"><i>Bisher sind noch keine ewigen Punkte vergeben worden.</i></td></tr>';
     }
     ?>
 </table>

@@ -169,8 +169,29 @@ function toggleRundmail() {
     return false;
 }
 
-let reloadOnCountdown = false;
-window.setInterval(CountdownFields, 1000);
+// used in einstellungen.inc.php
+function enableSitterOptions(enabled) {
+    Array.prototype.forEach.call(document.getElementById('sitterSettings').getElementsByTagName('input'), (field) => {
+        if (field === enableSitting || field.type === 'submit' || field.type === 'hidden') return;
+        field.disabled = !enabled;
+    });
+}
+
+// used in chefbox.php
+function chefboxPollJobs() {
+    if (opener) {
+        window.setInterval(() => {
+            let messages = opener.document.getElementsByClassName("MessageBox");
+            if (messages.length !== 0) {
+                let message = messages[0];
+                if (message.hasAttribute('reload-chefbox')) {
+                    message.removeAttribute('reload-chefbox');
+                    window.location.reload();
+                }
+            }
+        }, 1000);
+    }
+}
 
 /* de-obfuscate fields with personal information */
 function deobfuscate() {
@@ -189,3 +210,6 @@ function deobfuscate() {
         botField.innerHTML = deobf + domain;
     }
 }
+
+let reloadOnCountdown = false;
+window.setInterval(CountdownFields, 1000);

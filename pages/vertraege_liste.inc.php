@@ -51,7 +51,7 @@ restrictSitter('Vertraege');
     }
 
     if (count($entries) == 0) {
-        echo '<tr><td colspan="8" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
+        echo '<tr><td colspan="8" class="center"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
     }
     ?>
 </table>
@@ -84,14 +84,14 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis']); ?></td>
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
-                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>">Zurückziehen</a>
+                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Zurückziehen</a>
             </td>
         </tr>
         <?php
     }
 
     if (count($entries) == 0) {
-        echo '<tr><td colspan="8" style="text-align: center;"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
+        echo '<tr><td colspan="8" class="center"><i>Sie haben keine Verträge in diesem Ordner.</i></td></tr>';
     }
     ?>
 </table>

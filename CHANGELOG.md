@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (einstellungen) Resetting of account could remove other players sitter settings
 - Fix number format for browsers with english locale
 
+### Security
+
+- Add `Content-Security-Policy` header
+
 ## [1.10.6] - 2023-01-15
 
 ### Changed

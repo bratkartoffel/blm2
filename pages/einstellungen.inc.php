@@ -77,8 +77,8 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         <input type="hidden" name="a" value="4"/>
         <header><label for="beschreibung">Beschreibung ändern</label></header>
         <div>
-            <textarea id="beschreibung" maxlength="4096" name="beschreibung" cols="50" rows="15"
-                      onkeyup="ZeichenUebrig(this, document.form_beschreibung.getElementsByTagName('span')[0]);"><?= escapeForOutput($data['Beschreibung'], false); ?></textarea>
+            <textarea id="beschreibung" maxlength="4096" name="beschreibung" cols="50"
+                      rows="15"><?= escapeForOutput($data['Beschreibung'], false); ?></textarea>
         </div>
         <div>
             Noch <span>X</span> Zeichen übrig
@@ -88,7 +88,11 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         </div>
     </form>
 </div>
-<script>ZeichenUebrig(document.getElementById('beschreibung'), document.form_beschreibung.getElementsByTagName('span')[0]);</script>
+<script nonce="<?= getCspNonce(); ?>">
+    let beschreibungElement = document.getElementById('beschreibung');
+    beschreibungElement.onkeyup = () => ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
+    ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
+</script>
 
 <div class="form Einstellungen">
     <form action="/actions/einstellungen.php" method="post" enctype="multipart/form-data">
@@ -190,16 +194,8 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
     </form>
 </div>
 
-<script>
+<script nonce="<?= getCspNonce(); ?>">
     let enableSitting = document.getElementById('aktiviert');
-
-    function enableSitterOptions(enabled) {
-        Array.prototype.forEach.call(document.getElementById('sitterSettings').getElementsByTagName('input'), (field) => {
-            if (field === enableSitting || field.type === 'submit' || field.type === 'hidden') return;
-            field.disabled = !enabled;
-        });
-    }
-
     enableSitting.addEventListener('change', (event) => enableSitterOptions(event.currentTarget.checked));
     enableSitterOptions(enableSitting.checked);
 </script>

@@ -36,17 +36,23 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= formatDate(strtotime($row['Erstellt'])); ?></td>
             <td>
                 <a href="/?p=admin_gruppe_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
-                <a href="/actions/admin_gruppe.php?a=6&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                   onclick="return confirm('Gruppe \'<?= escapeForOutput($row['Name']); ?>\' wirklich löschen?');">Löschen</a>
+                <a class="delete_group" data-groupname="<?= escapeForOutput($row['Name']); ?>"
+                   href="/actions/admin_gruppe.php?a=6&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
     }
     if ($entriesCount == 0) {
-        echo '<tr><td colspan="7" style="text-align: center;"><i>- Keine Einträge gefunden -</i></td></tr>';
+        echo '<tr><td colspan="7" class="center"><i>- Keine Einträge gefunden -</i></td></tr>';
     }
     ?>
 </table>
 <?= createPaginationTable('/?p=admin_gruppe', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <a href="/?p=admin">&lt;&lt; Zurück</a>
+
+<script nonce="<?= getCspNonce(); ?>">
+    for (let deleteLink of document.getElementsByClassName('delete_group')) {
+        deleteLink.onclick = () => confirm('Gruppe "' + deleteLink.getAttribute('data-groupname') + '"wirklich löschen?');
+    }
+</script>

@@ -34,6 +34,14 @@ header label {
     width: auto !important;
 }
 
+.center {
+    text-align: center;
+}
+
+.red {
+    color: red;
+}
+
 /*region Forms*/
 div.form {
     background-color: #bece6b;
@@ -629,6 +637,14 @@ table.Nachrichten tr.Ungelesen td {
 
 div.NachrichtSchreiben {
     margin-bottom: 20px;
+}
+
+/*endregion*/
+
+/*region Notizblock*/
+textarea#notizblock {
+    width: 480px;
+    height: 400px;
 }
 
 /*endregion*/

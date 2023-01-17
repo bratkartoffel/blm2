@@ -78,8 +78,8 @@ requireEntryFound($rights, '/?p=gruppe');
                     }
 
                     if ($rights['member_kick'] && $row['user_id'] != $_SESSION['blm_user']) {
-                        echo '<a href="/actions/gruppe.php?a=10&amp;user_id=' . $row['UserId'] . '&amp;token=' . $_SESSION['blm_xsrf_token'] . '"
-                            onclick="return confirm(\'Wollen Sie das Mitglied ' . escapeForOutput($row['UserName']) . ' wirklich aus der Gruppe entfernen?\');">Kicken</a>';
+                        printf('<a class="kick_member" data-username="%s" href="/actions/gruppe.php?a=10&amp;user_id=%s&amp;token=%s">Kicken</a>',
+                            escapeForOutput($row['UserName']), $row['UserId'], $_SESSION['blm_xsrf_token']);
                     }
                     ?>
                 </td>
@@ -89,3 +89,10 @@ requireEntryFound($rights, '/?p=gruppe');
     }
     ?>
 </table>
+
+<script nonce="<?= getCspNonce(); ?>">
+    for (let kickLink of document.getElementsByClassName('kick_member')) {
+        let username = kickLink.getAttribute('data-username');
+        kickLink.onclick = () => confirm('Wollen Sie das Mitglied "' + username + '" wirklich aus der Gruppe entfernen?');
+    }
+</script>

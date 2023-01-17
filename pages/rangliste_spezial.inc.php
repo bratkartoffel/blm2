@@ -145,7 +145,7 @@ switch ($type) {
     $nr = 1;
     $entries = $loader();
     foreach ($entries as $row) {
-        echo sprintf($formatter($row), $nr++);
+        printf($formatter($row), $nr++);
     }
     ?>
 </table>

@@ -50,6 +50,8 @@ if (isLoggedIn()) {
 } else {
     $data = array();
 }
+
+sendCspHeader();
 ?><!DOCTYPE html>
 <!--
 	Site generated:   <?= date("r", time()) . "\n"; ?>
@@ -63,22 +65,22 @@ if (isLoggedIn()) {
 <html lang="de">
 <head>
     <?php
-    $mininimizeFlag = '';
-    if (!Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-        $mininimizeFlag = '.min';
-    }
+    printHeaderCss(array(
+        '/styles/style.min.css',
+        '/styles/mobile.min.css',
+        '/styles/admin.min.css',
+    ));
+    printHeaderJs(array(
+        '/js/functions.min.js',
+    ));
     ?>
-    <link rel="stylesheet" type="text/css" href="styles/style<?= $mininimizeFlag; ?>.css?<?= game_version; ?>"/>
-    <link rel="stylesheet" type="text/css" href="styles/mobile<?= $mininimizeFlag; ?>.css?<?= game_version; ?>"/>
-    <?= (isAdmin() ? '<link rel="stylesheet" type="text/css" href="styles/admin' . $mininimizeFlag . '.css?' . game_version . '"/>' : ''); ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="Bioladenmanager, Evil Eye Productions, Browsergame, Simon Frankenberger"/>
     <meta name="language" content="de"/>
     <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=5.0, minimum-scale=0.60">
     <title><?= Config::get(Config::SECTION_BASE, 'game_title') . ' - ' . ucfirst(getCurrentPage()); ?></title>
-    <script src="/js/functions<?= $mininimizeFlag; ?>.js?<?= game_version; ?>"></script>
 </head>
-<body onload="MarkActiveLink();">
+<body>
 <div id="Navigation" class="<?= (isLoggedIn() ? 'online' : 'offline'); ?>">
     <div id="Logo"></div>
     <?php
@@ -111,9 +113,8 @@ if (isLoggedIn()) {
                 <div class="NaviLink"><a href="/?p=notizblock" id="link_notizblock">Notizblock</a></div>
                 <div class="NaviLink"><a href="/?p=einstellungen" id="link_einstellungen">Einstellungen</a>
                 </div>
-                <div class="NaviLink" onclick="ChefboxZeigen(); return false;">
-                    <a href="chefbox.php" id="link_chefbox" onclick="ChefboxZeigen(); return false;"
-                       target="_blank">Chefbox</a>
+                <div class="NaviLink">
+                    <a href="chefbox.php" id="link_chefbox" target="_blank">Chefbox</a>
                 </div>
                 <?= (isAdmin() ? '<div class="NaviLink"><a href="/?p=admin" id="link_admin">Admin-Bereich</a></div>' : ''); ?>
             </div>
@@ -139,9 +140,9 @@ if (isLoggedIn()) {
                     <td>Benutzer ID:</td>
                     <td><?php
                         if ($_SESSION['blm_sitter']) {
-                            echo sprintf('%d (Sitter)', $_SESSION['blm_user']);
+                            printf('%d (Sitter)', $_SESSION['blm_user']);
                         } else {
-                            echo sprintf('%d', $_SESSION['blm_user']);
+                            printf('%d', $_SESSION['blm_user']);
                         }
                         ?></td>
                 </tr>
@@ -197,6 +198,14 @@ if (isLoggedIn()) {
         <div>Letzte Änderung: <?= date("d.m.Y H:i", filemtime('.git/HEAD')); ?></div>
     </div>
 </div>
+<script nonce="<?= getCspNonce(); ?>">
+    MarkActiveLink();
+    deobfuscate();
+    let chefboxLink = document.getElementById('link_chefbox');
+    if (chefboxLink !== null) {
+        chefboxLink.onclick = () => ChefboxZeigen();
+    }
+</script>
 </body>
 </html>
 <?php

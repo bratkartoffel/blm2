@@ -130,7 +130,7 @@ if ($id != 0) {
             <div><b>Kürzel</b>: <?= escapeForOutput($group['Kuerzel']); ?></div>
             <div><b>Erstellt</b>: <?= formatDate(strtotime($group['Erstellt'])); ?></div>
             <div><b>∑ Punkte</b>: <?= formatPoints($group['Punkte']); ?></div>
-            <div><b>∅ Punkte</b>: <?= formatPoints($group['Punkte'] / count($members)); ?></div>
+            <div><b>∅ Punkte</b>: <?= formatPoints((int)($group['Punkte'] / count($members))); ?></div>
 
             <h4>Mitglieder (<?= count($members); ?> / <?= Config::getInt(Config::SECTION_GROUP, 'max_members'); ?>
                 ):</h4>

@@ -84,7 +84,7 @@ function handleItemBaseProduction(): void
     $entries = Database::getInstance()->getAllPlayerIdAndResearchLevels();
     foreach ($entries as $entry) {
         $updates = array();
-        for ($i = 1; $i < count_wares; $i++) {
+        for ($i = 1; $i <= count_wares; $i++) {
             $researchLevel = $entry['Forschung' . $i];
             $updates['Lager' . $i] = $researchLevel * Config::getInt(Config::SECTION_PLANTAGE, 'production_cron_base');
         }

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- (cron) fix off-by-one error for base production, generate kiwi's now
+
 ### Security
 
 - Enhance htaccess, clarify required apache modules in README

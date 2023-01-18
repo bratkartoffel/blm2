@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- (cron) fix off-by-one error for base production, generate kiwi's now
+- (cron) fix now base production for kiwi's
+- (vertraege / marktplatz) fix kiwi's not shown in stock
 
 ### Security
 

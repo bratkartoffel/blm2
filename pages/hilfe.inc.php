@@ -6,7 +6,7 @@
  * Please see LICENCE.md for complete licence text.
  */
 
-require_once('./include/hilfe.inc.php');
+require_once __DIR__ . '/hilfe.inc.php';
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/khelpcenter.webp" alt=""/>

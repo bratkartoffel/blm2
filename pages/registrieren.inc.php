@@ -13,7 +13,7 @@ if (Config::getBoolean(Config::SECTION_BASE, 'registration_closed')) {
 $name = getOrDefault($_GET, 'name');
 $email = getOrDefault($_GET, 'email');
 
-require_once('include/captcha.class.php');
+require_once __DIR__ . '/../include/captcha.class.php';
 $captcha = new Captcha();
 $captcha->createCaptcha();
 ?>

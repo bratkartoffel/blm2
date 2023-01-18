@@ -8,7 +8,7 @@
 
 $email = getOrDefault($_GET, 'email');
 
-require_once('include/captcha.class.php');
+require_once __DIR__ . '/../include/captcha.class.php';
 $captcha = new Captcha();
 $captcha->createCaptcha();
 ?>

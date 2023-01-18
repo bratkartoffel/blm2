@@ -7,8 +7,8 @@
  */
 error_reporting(E_ALL);
 const IS_CRON = true;
-require_once(dirname(__FILE__) . '/../include/functions.inc.php');
-require_once(dirname(__FILE__) . '/../include/database.class.php');
+require_once __DIR__ . '/../include/functions.inc.php';
+require_once __DIR__ . '/../include/database.class.php';
 
 if (!IS_CRON) {
     die('cannot happen, just to please PhpStorm nagging about unused variable');

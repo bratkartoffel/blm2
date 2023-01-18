@@ -12,14 +12,14 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'false');
 ob_start();
 
-require_once('include/config.class.php');
+require_once __DIR__ . '/include/config.class.php';
 if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
     ini_set('display_errors', 'true');
 }
 
-require_once('include/functions.inc.php');
-require_once('include/game_version.inc.php');
-require_once('include/database.class.php');
+require_once __DIR__ . '/include/functions.inc.php';
+require_once __DIR__ . '/include/game_version.inc.php';
+require_once __DIR__ . '/include/database.class.php';
 
 verifyInstallation();
 

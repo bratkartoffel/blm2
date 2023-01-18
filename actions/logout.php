@@ -5,7 +5,7 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-require_once('../include/functions.inc.php');
+require_once __DIR__ . '/../include/functions.inc.php';
 
 ob_start();
 session_destroy();

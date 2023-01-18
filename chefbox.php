@@ -7,9 +7,9 @@
 */
 
 $start = microtime(true);
-require_once 'include/game_version.inc.php';
-require_once 'include/functions.inc.php';
-require_once 'include/database.class.php';
+require_once __DIR__ . '/include/game_version.inc.php';
+require_once __DIR__ . '/include/functions.inc.php';
+require_once __DIR__ . '/include/database.class.php';
 
 if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') < time()) {
     session_destroy();

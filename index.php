@@ -7,15 +7,21 @@
 */
 
 $start = microtime(true);
-require_once('include/game_version.inc.php');
-require_once('include/functions.inc.php');
-require_once('include/database.class.php');
-
-ob_start();
-verifyInstallation();
 
 error_reporting(E_ALL);
-ini_set('display_errors', 'true');
+ini_set('display_errors', 'false');
+ob_start();
+
+require_once('include/config.class.php');
+if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+    ini_set('display_errors', 'true');
+}
+
+require_once('include/functions.inc.php');
+require_once('include/game_version.inc.php');
+require_once('include/database.class.php');
+
+verifyInstallation();
 
 if (isLoggedIn()) {
     if (!isAdmin() && isRoundOver()) {

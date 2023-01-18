@@ -147,6 +147,18 @@ Update finished successfully!
 Die initiale Installtion erstellt auch einen Admin-Benutzer (`admin`) mit einem zufällig generiertem Passwort.
 Das Passwort wird in der Ausgabe angezeigt und ist in dem obigen Beispiel `gCcKhP0KiSwjtXlS`.
 
+### 4) Cronjob einrichten
+
+Das Spiel benötigt einen Cronjob, welcher periodisch läuft. Dies dient dazu, die Zinsen, das Basiseinkommen und diverse
+weitere Funktionen durchzuführen.
+
+Das Intervall des Cronjobs ist standardmässig 30 Minuten, ein Cronjob auf Systemebene könnte somit wie folgt aussehen:
+
+```text
+# min   hour    day     month   weekday  command
+*/30    *       *       *       *        /usr/bin/php /var/www/htdocs/cronjobs/cron.php
+```
+
 ### Spiel aktualisieren
 
 Nach der Installation einer neuen Version sollte das `update.php` nochmals aufgerufen werden.

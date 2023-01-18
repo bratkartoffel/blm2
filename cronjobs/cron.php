@@ -5,7 +5,16 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
+
 error_reporting(E_ALL);
+ini_set('display_errors', 'false');
+ob_start();
+
+require_once __DIR__ . '/../include/config.class.php';
+if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+    ini_set('display_errors', 'true');
+}
+
 const IS_CRON = true;
 require_once __DIR__ . '/../include/functions.inc.php';
 require_once __DIR__ . '/../include/database.class.php';

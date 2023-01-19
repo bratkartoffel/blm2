@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- No changes yet
+
+## [1.10.9] - 2023-01-19
+
 ### Changed
 
 - generate source maps to ease debugging CSS/ JS
@@ -212,7 +216,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.8...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.9...HEAD
+
+[1.10.9]: https://github.com/bratkartoffel/blm2/compare/v1.10.8...v1.10.9
 
 [1.10.8]: https://github.com/bratkartoffel/blm2/compare/v1.10.7...v1.10.8
 

@@ -10,6 +10,7 @@
     RedirectMatch 403 /config
     RedirectMatch 403 /cronjobs
     RedirectMatch 403 /development
+    RedirectMatch 403 /doc
     RedirectMatch 403 /include
     RedirectMatch 403 /install/sql
     RedirectMatch 403 /pages

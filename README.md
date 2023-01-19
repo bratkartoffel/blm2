@@ -1,6 +1,20 @@
 # Der Bioladenmanager 2 (BLM 2)
 
-> Ein einfaches Open Source Aufbaustrategie Spiel
+> Ein einfaches, klassisches Open Source Aufbaustrategie Spiel
+
+Der Bioladenmanager ist ein klassisches Echtzeit-Aufbaustrategie Spiel.
+Pflanze auf deiner Plantage 15 verschiedene Obst- und Gemüsesorten an, erfosche im Forschungszentrum neue Pflanzen und
+verbessere die bereits bekannten.
+Im Bioladen kannst du die Waren an virtuelle Kunden verkaufen und per Marktplatz auch an andere Spieler.
+Mit der Mafia kannst du deine Gegenspieler ausrauben und ihre Plantagen attackieren um dir so einen Vorteil im harten
+Wettbewerb zu erkämpfen.
+Organisiere dich mit anderen Spielern in Gruppen, schliesse Bündnisse oder führe Krieg.
+
+Das komplette Spiel ist kostenlos, werbefrei, OpenSource und auf Geschwindigkeit optimiert.
+Selbst mit einer Edge-Mobilfunkverbindung ist der Spiel noch sehr gut spielbar.
+
+![Gebäude und Plantage](doc/buildings_plantage.webp)
+![Mafia und Rangliste](doc/mafia_rangliste.webp)
 
 ## Installation
 

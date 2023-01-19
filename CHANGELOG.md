@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (cron) fix now base production for kiwi's
 - (vertraege / marktplatz) fix kiwi's not shown in stock
+- (registrieren) fix missing import of game_version
 
 ### Security
 

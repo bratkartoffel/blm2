@@ -8,6 +8,7 @@
 function ChefboxZeigen() {
     const popup = window.open('chefbox.php', 'chefbox', 'height=800,width=450,scrollbars=yes,resizable=yes');
     popup.focus();
+    return false;
 }
 
 function BLMzeigen(link) {

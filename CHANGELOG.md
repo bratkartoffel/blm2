@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (vertraege / marktplatz) fix kiwi's not shown in stock
 - (registrieren) fix missing import of game_version
 - (hilfe) fix page not loading due to errors introduced by refactorings
+- (chefbox) do not open twice
 
 ### Security
 

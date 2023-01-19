@@ -1660,9 +1660,6 @@ function sendCspHeader(): void
 function printHeaderCss(array $styles): void
 {
     foreach ($styles as $style) {
-        if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-            $style = str_replace('.min.', '.', $style);
-        }
         printf('<link rel="stylesheet" type="text/css" href="%s?%s" nonce="%s"/>' . "\n", $style, game_version, getCspNonce());
     }
 }
@@ -1670,9 +1667,6 @@ function printHeaderCss(array $styles): void
 function printHeaderJs(array $scripts): void
 {
     foreach ($scripts as $script) {
-        if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-            $script = str_replace('.min.', '.', $script);
-        }
         printf('<script src="%s?%s" nonce="%s"></script>' . "\n", $script, game_version, getCspNonce());
     }
 }

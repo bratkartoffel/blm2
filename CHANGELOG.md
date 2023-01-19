@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- generate source maps to ease debugging CSS/ JS
+
 ### Fixed
 
 - (cron) fix now base production for kiwi's

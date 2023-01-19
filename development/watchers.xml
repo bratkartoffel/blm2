@@ -1,6 +1,7 @@
 <TaskOptions>
     <TaskOptions>
-        <option name="arguments" value="--compilation_level SIMPLE_OPTIMIZATIONS --js $FileName$"/>
+        <option name="arguments"
+                value="--compilation_level SIMPLE_OPTIMIZATIONS --js $FileName$ --create_source_map $FileNameWithoutExtension$.js.map"/>
         <option name="checkSyntaxErrors" value="true"/>
         <option name="description"/>
         <option name="exitCodeBehavior" value="ERROR"/>
@@ -20,7 +21,8 @@
         <envs/>
     </TaskOptions>
     <TaskOptions>
-        <option name="arguments" value="-i $FileName$ -o $FileNameWithoutExtension$.min.css --no-restructure --stat"/>
+        <option name="arguments"
+                value="--input $FileName$ --output $FileNameWithoutExtension$.min.css --source-map $FileNameWithoutExtension$.css.map --no-restructure"/>
         <option name="checkSyntaxErrors" value="true"/>
         <option name="description"/>
         <option name="exitCodeBehavior" value="ERROR"/>

@@ -1,0 +1,5 @@
+<IfModule mod_headers.c>
+    <Files functions.min.js>
+        Header set SourceMap functions.js.map
+    </Files>
+</IfModule>

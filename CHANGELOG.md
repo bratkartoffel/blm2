@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- No changes yet
+### Changed
+
+- use `index.php` for determination of last change timestamp
 
 ## [1.10.9] - 2023-01-19
 

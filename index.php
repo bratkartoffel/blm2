@@ -201,7 +201,7 @@ sendCspHeader();
     <div id="Footer">
         <div>Bioladenmanager 2 Version <?= game_version; ?></div>
         <div><a href="/?p=impressum">© 2007-2023, Simon Frankenberger</a></div>
-        <div>Letzte Änderung: <?= date("d.m.Y H:i", filemtime('.git/HEAD')); ?></div>
+        <div>Letzte Änderung: <?= date("d.m.Y H:i", filemtime(__FILE__)); ?></div>
     </div>
 </div>
 <script nonce="<?= getCspNonce(); ?>">

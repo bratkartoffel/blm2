@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- use `index.php` for determination of last change timestamp
+- use `game_version.php` for determination of last change timestamp
 
 ## [1.10.9] - 2023-01-19
 

@@ -2,6 +2,10 @@ name: Run system tests
 
 on:
   push:
+    branches:
+      - master
+    tags:
+      - v*
   pull_request:
   schedule:
     - cron: '0 0 * * 0' # weekly

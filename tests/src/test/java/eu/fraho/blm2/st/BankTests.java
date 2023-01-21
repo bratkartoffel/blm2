@@ -39,7 +39,7 @@ public class BankTests extends AbstractTest {
 
         // check new balance
         assertText(By.id("cur_bank_account"), "Ihr Kontostand: 55,000.00 €");
-        assertValue(By.id("betrag"), new BigDecimal("45000"));
+        assertValue(By.id("betrag"), new BigDecimal("45000.00"));
         assertText(By.id("stat_money"), "95,000.00 €");
         assertText(By.id("stat_bank"), "55,000.00 €");
     }
@@ -54,7 +54,7 @@ public class BankTests extends AbstractTest {
         assertElementPresent(By.id("meldung_207"));
 
         assertText(By.id("cur_bank_account"), "Ihr Kontostand: 100,000.00 €");
-        assertValue(By.id("betrag"), new BigDecimal("0"));
+        assertValue(By.id("betrag"), new BigDecimal("0.00"));
         assertText(By.id("stat_money"), "50,000.00 €");
         assertText(By.id("stat_bank"), "100,000.00 €");
     }

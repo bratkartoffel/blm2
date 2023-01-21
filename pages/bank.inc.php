@@ -73,20 +73,21 @@ $interestRates = calculateInterestRates();
         const field = document.form_bank.betrag;
         const bank = <?=$data['Bank'];?>;
         const hand = <?=$data['Geld'];?>;
-        const maxDeposit = Math.min(hand, <?=Config::getInt(Config::SECTION_BANK, 'deposit_limit'); ?> - bank);
-        const currentValue = Number.parseFloat(field.value);
+        const maxDeposit = Math.min(hand, <?=Config::getInt(Config::SECTION_BANK, 'deposit_limit'); ?> - bank).toFixed(2);
+        const maxWithdraw = Math.max(0, bank).toFixed(2);
+        const currentValue = Number.parseFloat(field.value).toFixed(2);
         // only change value if the user didn't change it yet
-        if (currentValue === 0.0
+        if (currentValue === "0.00"
             || currentValue === maxDeposit
-            || currentValue === Math.max(0, bank)
-            || currentValue === hand
+            || currentValue === maxWithdraw
+            || currentValue === hand.toFixed(2)
         ) {
             switch (option) {
                 case 1: // einzahlen
                     field.value = maxDeposit;
                     break;
                 case 2: // auszahlen
-                    field.value = Math.max(0, bank);
+                    field.value = maxWithdraw;
                     break;
                 case 3: // gruppenkasse
                     field.value = hand;

@@ -70,15 +70,27 @@ $interestRates = calculateInterestRates();
 
 <script nonce="<?= getCspNonce(); ?>">
     function AuswahlBank(option) {
-        const Zeiger = document.form_bank.betrag;
-        const KontostandAusgabe = <?=$data['Bank'];?>;
-        const BargeldAusgabe = <?=$data['Geld'];?>;
-        const currentValue = Number.parseFloat(Zeiger.value);
-        if (currentValue === 0.0 || currentValue === KontostandAusgabe || currentValue === BargeldAusgabe) {
-            if (option === 1 || option === 3) {
-                Zeiger.value = BargeldAusgabe;
-            } else if (KontostandAusgabe >= 0) {
-                Zeiger.value = KontostandAusgabe;
+        const field = document.form_bank.betrag;
+        const bank = <?=$data['Bank'];?>;
+        const hand = <?=$data['Geld'];?>;
+        const maxDeposit = Math.min(hand, <?=Config::getInt(Config::SECTION_BANK, 'deposit_limit'); ?> - bank);
+        const currentValue = Number.parseFloat(field.value);
+        // only change value if the user didn't change it yet
+        if (currentValue === 0.0
+            || currentValue === maxDeposit
+            || currentValue === Math.max(0, bank)
+            || currentValue === hand
+        ) {
+            switch (option) {
+                case 1: // einzahlen
+                    field.value = maxDeposit;
+                    break;
+                case 2: // auszahlen
+                    field.value = Math.max(0, bank);
+                    break;
+                case 3: // gruppenkasse
+                    field.value = hand;
+                    break;
             }
         }
     }

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -133,6 +134,10 @@ public abstract class AbstractTest {
 
     protected void assertText(By by, String expected) {
         Assertions.assertEquals(expected, getDriver().findElement(by).getText());
+    }
+
+    protected void assertValue(By by, BigDecimal expected) {
+        Assertions.assertEquals(expected, new BigDecimal(getDriver().findElement(by).getAttribute("value")));
     }
 
     protected void setValue(By by, String value) {

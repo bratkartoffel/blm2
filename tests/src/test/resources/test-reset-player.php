@@ -40,6 +40,9 @@ switch ($testClass) {
             'Geld' => 100000,
             'Bank' => 50000,
         ));
+        if ($testMethod === 'testTextFieldPreFilled') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 100001, 'Bank' => 123.01, 'Gruppe' => 1));
+        }
         break;
 
     case 'BuildingTests':

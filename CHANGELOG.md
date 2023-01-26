@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.10.10] - 2023-01-26
+
 ### Changed
 
 - use `game_version.php` for determination of last change timestamp
 - (bank) prefill textfield with maximum possible value (#11)
+
+### Fixed
+
 - (gruppe_diplomatie) fix refusing diplomacy requests
 
 ### Security
@@ -224,7 +231,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.9...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.10...HEAD
+
+[1.10.10]: https://github.com/bratkartoffel/blm2/compare/v1.10.9...v1.10.10
 
 [1.10.9]: https://github.com/bratkartoffel/blm2/compare/v1.10.8...v1.10.9
 

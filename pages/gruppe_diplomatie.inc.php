@@ -22,7 +22,7 @@ foreach ($diplomacy_db as $entry) {
 function printDiplomacyTable($diplomacy, $name, $hasRights)
 {
     ?>
-    <table class="Liste">
+    <table class="Liste" id="diplomacy_<?= $name; ?>" data-count="<?= count($diplomacy); ?>">
         <tr>
             <th>Partner</th>
             <th>Gültig seit</th>
@@ -162,23 +162,25 @@ if ($rights['group_diplomacy'] == 1) {
                 <input type="text" name="group" id="group" value="<?= escapeForOutput($gruppe); ?>"/>
             </div>
             <div>
-                <input type="submit" value="Abschicken"/>
+                <input type="submit" value="Abschicken" id="send_diplomacy_offer"/>
             </div>
         </form>
     </div>
 
+    <?php
+    $data = Database::getInstance()->getAllPendingGroupDiplomacyById($rights['group_id']);
+    ?>
     <h3>Offene fremde Anfragen</h3>
-    <table class="Liste GroupOpenRequests">
+    <table class="Liste GroupOpenRequests" data-count="<?= count($data); ?>" id="IncomingRequests">
         <tr>
             <th>Typ</th>
             <th>Gruppe</th>
             <th>Aktion</th>
         </tr>
         <?php
-        $data = Database::getInstance()->getAllPendingGroupDiplomacyById($rights['group_id']);
         foreach ($data as $row) {
             ?>
-            <tr>
+            <tr data-id="<?= $row['ID']; ?>">
                 <td><?= getGroupDiplomacyTypeName($row['Typ']); ?></td>
                 <td><?= createGroupLink($row['VonId'], $row['VonName']); ?></td>
                 <td>

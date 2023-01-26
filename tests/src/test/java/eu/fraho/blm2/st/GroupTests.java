@@ -11,6 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class GroupTests extends AbstractTest {
     private final int userId1 = getNextUserId();
@@ -160,6 +163,104 @@ public class GroupTests extends AbstractTest {
 
         driver.findElement(By.id("link_buero")).click();
         assertText(By.id("b_s_8"), "6.00 €");
+    }
+
+    @Test
+    void testGroupNapAccept() {
+        int groupId1 = getNextUserId();
+        int groupId2 = getNextUserId();
+        WebDriver driver = getDriver();
+        // as user1
+        {
+            createGroup("TG" + groupId1, String.valueOf(groupId1), "meldung_223");
+        }
+
+        // as user2
+        {
+            login("test" + userId2);
+            createGroup("TG" + groupId2, String.valueOf(groupId2), "meldung_223");
+            driver.findElement(By.id("gruppe_diplomatie")).click();
+            selectByValue(By.id("typ"), "1");
+            setValue(By.id("group"), "TG" + groupId1);
+            driver.findElement(By.id("send_diplomacy_offer")).submit();
+            assertElementPresent(By.id("meldung_229"));
+        }
+
+        // as user1
+        {
+            login("test" + userId1);
+            assertText(By.id("link_gruppe"), "Gruppe (0 / 1)");
+            driver.findElement(By.id("link_gruppe")).click();
+            assertText(By.id("gruppe_diplomatie"), "Diplomatie (1)");
+            driver.findElement(By.id("gruppe_diplomatie")).click();
+
+            Assertions.assertEquals("1", driver.findElement(By.id("IncomingRequests")).getAttribute("data-count"));
+            List<WebElement> links = driver.findElement(By.id("IncomingRequests")).findElements(By.tagName("a"));
+            Assertions.assertEquals(3, links.size());
+            Assertions.assertEquals("TG" + groupId2, links.get(0).getText());
+
+            // accept
+            links.get(1).click();
+            assertElementPresent(By.id("meldung_231"));
+            Assertions.assertEquals("1", driver.findElement(By.id("diplomacy_NAP")).getAttribute("data-count"));
+        }
+
+        // as user2
+        {
+            login("test" + userId2);
+            driver.findElement(By.id("link_gruppe")).click();
+            driver.findElement(By.id("gruppe_diplomatie")).click();
+            Assertions.assertEquals("1", driver.findElement(By.id("diplomacy_NAP")).getAttribute("data-count"));
+        }
+    }
+
+    @Test
+    void testGroupBndRefuse() {
+        int groupId1 = getNextUserId();
+        int groupId2 = getNextUserId();
+        WebDriver driver = getDriver();
+        // as user1
+        {
+            createGroup("TG" + groupId1, String.valueOf(groupId1), "meldung_223");
+        }
+
+        // as user2
+        {
+            login("test" + userId2);
+            createGroup("TG" + groupId2, String.valueOf(groupId2), "meldung_223");
+            driver.findElement(By.id("gruppe_diplomatie")).click();
+            selectByValue(By.id("typ"), "2");
+            setValue(By.id("group"), "TG" + groupId1);
+            driver.findElement(By.id("send_diplomacy_offer")).submit();
+            assertElementPresent(By.id("meldung_229"));
+        }
+
+        // as user1
+        {
+            login("test" + userId1);
+            assertText(By.id("link_gruppe"), "Gruppe (0 / 1)");
+            driver.findElement(By.id("link_gruppe")).click();
+            assertText(By.id("gruppe_diplomatie"), "Diplomatie (1)");
+            driver.findElement(By.id("gruppe_diplomatie")).click();
+
+            Assertions.assertEquals("1", driver.findElement(By.id("IncomingRequests")).getAttribute("data-count"));
+            List<WebElement> links = driver.findElement(By.id("IncomingRequests")).findElements(By.tagName("a"));
+            Assertions.assertEquals(3, links.size());
+            Assertions.assertEquals("TG" + groupId2, links.get(0).getText());
+
+            // refuse
+            links.get(2).click();
+            assertElementPresent(By.id("meldung_216"));
+            Assertions.assertEquals("0", driver.findElement(By.id("diplomacy_BND")).getAttribute("data-count"));
+        }
+
+        // as user2
+        {
+            login("test" + userId2);
+            driver.findElement(By.id("link_gruppe")).click();
+            driver.findElement(By.id("gruppe_diplomatie")).click();
+            Assertions.assertEquals("0", driver.findElement(By.id("diplomacy_BND")).getAttribute("data-count"));
+        }
     }
 
     private void createGroup(String name, String tag, String expectedMessage) {

@@ -182,8 +182,10 @@ if ($rights['group_diplomacy'] == 1) {
                 <td><?= getGroupDiplomacyTypeName($row['Typ']); ?></td>
                 <td><?= createGroupLink($row['VonId'], $row['VonName']); ?></td>
                 <td>
-                    <a href="/actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>">Annehmen</a>
-                    <a href="/actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>">Ablehnen</a>
+                    <a id="accept_<?= $row['ID']; ?>"
+                       href="/actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>                    &amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
+                    <a id="refuse_<?= $row['ID']; ?>"
+                       href="/actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>                    &amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
                 </td>
             </tr>
             <?php

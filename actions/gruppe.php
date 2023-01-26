@@ -843,6 +843,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // accept diplomacy request
     case 19:
+        requireXsrfToken('/?p=gruppe_diplomatie');
         $id = getOrDefault($_GET, 'id', 0);
 
         $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);
@@ -898,6 +899,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // reject diplomacy request
     case 20:
+        requireXsrfToken('/?p=gruppe_diplomatie');
         $id = getOrDefault($_GET, 'id', 0);
 
         $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);

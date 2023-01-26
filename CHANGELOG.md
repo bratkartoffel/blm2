@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (bank) prefill textfield with maximum possible value (#11)
 - (gruppe_diplomatie) fix refusing diplomacy requests
 
+### Security
+
+- (gruppe_diplomatie) require CSRF token when refusing or accepting diplomacy requests
+
 ## [1.10.9] - 2023-01-19
 
 ### Changed

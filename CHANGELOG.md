@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - use `game_version.php` for determination of last change timestamp
-- (bank) Prefill textfield with maximum possible value (#11)
+- (bank) prefill textfield with maximum possible value (#11)
+- (gruppe_diplomatie) fix refusing diplomacy requests
 
 ## [1.10.9] - 2023-01-19
 

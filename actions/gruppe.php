@@ -920,7 +920,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
             }
         }
 
-        if (Database::getInstance()->updateTableEntry(Database::TABLE_GROUP_DIPLOMACY, $id, array('Aktiv' => 1)) !== 1) {
+        if (Database::getInstance()->deleteTableEntry(Database::TABLE_GROUP_DIPLOMACY, $id) !== 1) {
             Database::getInstance()->rollback();
             redirectTo('/?p=gruppe_diplomatie', 142, __LINE__);
         }

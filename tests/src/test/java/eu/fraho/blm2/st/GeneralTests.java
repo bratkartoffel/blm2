@@ -28,7 +28,7 @@ public class GeneralTests extends AbstractTest {
             "tests/build.gradle",
     })
     void testSensitiveFilesInacessible(String path) throws IOException, InterruptedException {
-        HttpResponse<String> response = simpleHttpGet("http://localhost/%s".formatted(path));
+        HttpResponse<String> response = simpleHttpGet(String.format("http://localhost/%s", path));
         Assertions.assertEquals(HttpStatus.SC_FORBIDDEN, response.statusCode());
     }
 }

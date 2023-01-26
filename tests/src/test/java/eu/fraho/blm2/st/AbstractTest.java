@@ -58,7 +58,7 @@ public abstract class AbstractTest {
     @BeforeEach
     void resetDriver(TestInfo testInfo) {
         driver.manage().deleteAllCookies();
-        driver.get("http://localhost/?test=" + URLEncoder.encode("%s_%s".formatted(
+        driver.get("http://localhost/?test=" + URLEncoder.encode(String.format("%s_%s",
                         testInfo.getTestClass().map(Class::getName).orElse(null),
                         testInfo.getTestMethod().map(Method::getName).orElse(null)
                 ), StandardCharsets.UTF_8)
@@ -173,7 +173,7 @@ public abstract class AbstractTest {
         try {
             String testClass = testInfo.getTestClass().map(Class::getSimpleName).orElse(null);
             String testMethod = testInfo.getTestMethod().map(Method::getName).orElse(null);
-            response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=%d&class=%s&method=%s&additional=%d".formatted(id, testClass, testMethod, additionInfo));
+            response = simpleHttpGet(String.format("http://localhost/actions/test-reset-player.php?id=%d&class=%s&method=%s&additional=%d", id, testClass, testMethod, additionInfo));
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());
@@ -187,7 +187,7 @@ public abstract class AbstractTest {
 
     protected void resetPlayer(int id, String testClass) {
         try {
-            HttpResponse<String> response = simpleHttpGet("http://localhost/actions/test-reset-player.php?id=%d&class=%s".formatted(id, testClass));
+            HttpResponse<String> response = simpleHttpGet(String.format("http://localhost/actions/test-reset-player.php?id=%d&class=%s", id, testClass));
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
             Assertions.assertEquals("/actions/logout.php", location.get());

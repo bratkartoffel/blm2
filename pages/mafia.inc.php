@@ -62,8 +62,9 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
     </tr>
     <tr>
         <td>Raub</td>
-        <td>Stiehlt dem Gegner zwischen <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_min_rate')); ?>
-            und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')); ?> seines Bargeldes
+        <td>Stiehlt dem Gegner
+            zwischen <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'min_rate')); ?>
+            und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate')); ?> seines Bargeldes
         </td>
         <td><?= (Config::getInt(Config::SECTION_MAFIA_ROBBERY, "wait_time") / 60); ?> Minuten</td>
     </tr>

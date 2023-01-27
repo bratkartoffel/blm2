@@ -175,7 +175,7 @@ switch ($action) {
         }
         $amount = null;
         if ($success) {
-            $rate = mt_rand(Config::getFloat(Config::SECTION_MAFIA, 'raub_min_rate') * $factor, $factor * Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')) / $factor;
+            $rate = mt_rand(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'min_rate') * $factor, $factor * Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate')) / $factor;
             $amount = $otherPlayer['Geld'] * $rate;
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],

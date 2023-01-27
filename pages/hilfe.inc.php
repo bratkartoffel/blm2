@@ -168,6 +168,8 @@ Der Raub zielt auf das Barvermögen des Gegners und stiehlt diesem per Zufall zw
 und ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate')) . ' seines Barvermögens und schreibt es dem Angreifer gut.
 
 Beim Diebstahl wird versucht, das Lager des Gegners leer zu räumen. Gelingt dieser Vorgang, so werden die Waren des Gegners dem Angreifer gutgeschrieben.
+Hierbei werden per Zufall zwischen ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'min_rate')) . '
+und ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'max_rate')) . ' seines Lagers gestohlen
 
 Der Anschlag ist die teuerste, aber auch die fieseste Waffe gegen Ihre Konkurrenten. Dadurch ist bei dieser Art von Angriff die Obergrenze
 für den Erfolg bei ' . formatPercent(getMafiaChance(Config::SECTION_MAFIA_ATTACK, 3)) . '.

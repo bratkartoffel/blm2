@@ -70,7 +70,11 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
     </tr>
     <tr>
         <td>Diebstahl</td>
-        <td>Stiehlt dem Gegner alle Waren aus dem Lager</td>
+        <td>Stiehlt dem Gegner
+            zwischen <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'min_rate')); ?>
+            und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'max_rate')); ?>
+            seiner Waren aus dem Lager
+        </td>
         <td><?= (Config::getInt(Config::SECTION_MAFIA_HEIST, "wait_time") / 60); ?> Minuten</td>
     </tr>
     <tr>

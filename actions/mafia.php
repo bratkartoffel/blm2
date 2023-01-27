@@ -175,7 +175,7 @@ switch ($action) {
         }
         $amount = null;
         if ($success) {
-            $rate = mt_rand(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'min_rate') * $factor, $factor * Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate')) / $factor;
+            $rate = getRandomRate(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'min_rate'), Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate'));
             $amount = $otherPlayer['Geld'] * $rate;
 
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $_SESSION['blm_user'],
@@ -268,6 +268,11 @@ switch ($action) {
         }
         $data = Database::getInstance()->getPlayerStock($otherPlayer['ID']);
         if ($success) {
+            // iterate over each item, set stock to the amount of wares which where stolen
+            $rate = getRandomRate(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'min_rate'), Config::getFloat(Config::SECTION_MAFIA_HEIST, 'max_rate'));
+            foreach ($data as $id => $val) {
+                $data[$id] = (int)floor($val * $rate);
+            }
             $valuesSub = array();
             $valuesAdd = array();
             $wheresSub = array();

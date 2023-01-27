@@ -1328,6 +1328,15 @@ function calculateInterestRates(): array
     return $result;
 }
 
+function getRandomRate(float $min, float $max)
+{
+    $factor = 10000;
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+        return ($min + $max) / 2;
+    }
+    return mt_rand($min * $factor, $max * $factor) / $factor;
+}
+
 function getLastIncomeTimestamp(): int
 {
     $now = time();

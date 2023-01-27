@@ -93,6 +93,32 @@ public class MafiaTests extends AbstractTest {
     }
 
     @Test
+    void testHeistSuccess() {
+        login("test" + userId2);
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_mafia")).click();
+        selectByText(By.id("opponent"), "test" + userId1);
+        selectByValue(By.id("action"), "3");
+        selectByValue(By.id("level"), "3");
+        driver.findElement(By.id("attack")).submit();
+
+        // after mafia action inbox is opened
+        assertElementPresent(By.id("MessagesIn"));
+        assertText(By.id("stat_money"), "3,000.00 €");
+        driver.findElement(By.id("MessagesIn")).findElements(By.tagName("a")).get(0).click();
+
+        assertText(By.id("sender"), "System");
+        assertText(By.id("subject"), String.format("Mafia: Diebstahl gegen test%d erfolgreich", userId1));
+        assertText(By.id("message"), "Der Diebstahl verlief ohne Probleme, wir konnten das gesamte Lager ausräumen. Folgende Waren konnten sichergestellt werden:\n" +
+                                     "\n" +
+                                     "* Kartoffeln: 57 kg\n" +
+                                     "* Karotten: 28 kg\n" +
+                                     "* Äpfel: 15 kg\n" +
+                                     "\n" +
+                                     "- Ihre Mafia -");
+    }
+
+    @Test
     void testLowerCanAttackMiddle() {
         login("test" + userId1);
         WebDriver driver = getDriver();

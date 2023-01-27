@@ -164,10 +164,12 @@ Die Erfolgschancen hängen von den gewünschten Kosten für die Aktion ab, und k
 Bei der Spionage wird der Lagerstand und das Bargeld des Angegriffenen ausspioniert und per IGM an den Angreifer geschickt.
 Da dies ein relativ billiger Vorgang ist, welcher maximal 50 % Erfolgsaussicht hat, ist dies ein perfektes Mittel um weitere Angriffe auf den Gegner zu planen.
 
-Der Raub zielt auf das Barvermögen des Gegners und stiehlt diesem per Zufall zwischen ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_min_rate')) . '
-und ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'raub_max_rate')) . ' seines Barvermögens und schreibt es dem Angreifer gut.
+Der Raub zielt auf das Barvermögen des Gegners und stiehlt diesem per Zufall zwischen ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'min_rate')) . '
+und ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate')) . ' seines Barvermögens und schreibt es dem Angreifer gut.
 
 Beim Diebstahl wird versucht, das Lager des Gegners leer zu räumen. Gelingt dieser Vorgang, so werden die Waren des Gegners dem Angreifer gutgeschrieben.
+Hierbei werden per Zufall zwischen ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'min_rate')) . '
+und ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'max_rate')) . ' seines Lagers gestohlen
 
 Der Anschlag ist die teuerste, aber auch die fieseste Waffe gegen Ihre Konkurrenten. Dadurch ist bei dieser Art von Angriff die Obergrenze
 für den Erfolg bei ' . formatPercent(getMafiaChance(Config::SECTION_MAFIA_ATTACK, 3)) . '.

@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (mafia) move configuration `mafia.raub_min_rate` and `mafia.raub_max_rate` to `mafia_robbery.min_rate`
   and `mafia_robbery.max_rate`
 
+### Fixed
+
+- (mafia_heist) add dummy item to victim message if no wares have been stolen
+
 ## [1.10.10] - 2023-01-26
 
 ### Changed

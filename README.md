@@ -111,51 +111,40 @@ Die Installation läuft automtisch ab und kann einige Sekunden dauern.
 Währenddessen lädt die Seite und es wird erst nach Abschluss der Installation der Status ausgegeben.
 
 ```text
-Checking installation for version 1.10.3+master
-=========================================
-Verifying database connection:
-> OK
-
-Checking base installation:
-> Base installation not found, executing setup script
-> OK
-
-Checking for update information:
-> Update information not found, execute first update script
-> OK
-
-Enumerating update scripts:
-> Found 7 scripts
-> Skipping sql/00-1.10.0-setup.sql
-> Skipping sql/01-1.10.1-update_info.sql
-> Verify update script: sql/10-1.10.2-groups-created.sql
->> Script unknown, begin execution
->> OK
-> Verify update script: sql/11-1.10.3-log_marktplatz.sql
->> Script unknown, begin execution
->> OK
-> Verify update script: sql/12-1.10.3-log_nachrichten.sql
->> Script unknown, begin execution
->> OK
-> Verify update script: sql/13-1.10.3-fix_points.sql
->> Script unknown, begin execution
->> OK
-> Verify update script: sql/14-1.10.3-drop_statistik-ProduktionPlus.sql
->> Script unknown, begin execution
->> OK
-> OK
-
-Saving update information:
-> OK
-
-Verifying existing accounts:
-> No accounts found, creating new admin account
-> Created new user 'admin' with password 'gCcKhP0KiSwjtXlS'
-> OK
+[OK]: Checking installation for version 1.11.0:
+[OK]: Verifying upgrade credentials
+[OK]: Verifying secrets changed
+[OK]: Verifying database connection
+[NEEDS UPGRADE]: Checking base installation
+[OK]: Executing basic setup script
+[NEEDS UPGRADE]: Checking for update information
+[OK]: Creating initial update information
+[OK]: Enumerating update scripts (Found 11 scripts)
+[OK]: Checking sql/00-1.10.0-setup.sql (skipped)
+[OK]: Checking sql/01-1.10.1-update_info.sql (skipped)
+[OK]: Executing new sql/10-1.10.2-groups-created.sql
+[OK]: Executing new sql/11-1.10.3-log_marktplatz.sql
+[OK]: Executing new sql/12-1.10.3-log_nachrichten.sql
+[OK]: Executing new sql/13-1.10.3-fix_points.sql
+[OK]: Executing new sql/14-1.10.3-drop_statistik-ProduktionPlus.sql
+[OK]: Executing new sql/15-1.10.4-drop_auftrag-points.sql
+[OK]: Executing new sql/16-1.10.6-log_login-add-anonymized.sql
+[OK]: Executing new sql/17-1.10.7-nachrichten-delete-self-messages.sql
+[OK]: Executing new sql/18-1.10.10-runtime_config.sql
+[OK]: Saving update information
+[NEEDS UPGRADE]: Verifying existing accounts (No accounts found)
+[OK]: Create new admin account (New user 'admin' with password 'gCcKhP0KiSwjtXlS')
+[OK]: Checking for runtime configuration
+[NEEDS UPGRADE]: Verifying last cronjob run timestamp (Entry not found)
+[OK]: Create lastcron entry
+[NEEDS UPGRADE]: Verifying last points calculation timestamp (Entry not found)
+[OK]: Create lastpoints entry
+[NEEDS UPGRADE]: Verifying currently active round (No active round found)
+[OK]: Starting new round
 
 Update finished successfully!
-> Execution took 1,232.94 ms
-> 81 queries were executed
+Execution took 1,215.51 ms
+102 queries were executed
 ```
 
 Die initiale Installtion erstellt auch einen Admin-Benutzer (`admin`) mit einem zufällig generiertem Passwort.

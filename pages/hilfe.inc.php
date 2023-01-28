@@ -241,8 +241,8 @@ das nächste Grundeinkommen oder die Zinsen verbucht werden.'
     ),
     117 => array(
         'Rangliste',
-        'Zeigt die besten Spieler nach Punkten sortiert an.
-Zusätzlich gibt es noch spezielle Sondertitel, beispielsweise den "Bioladenfreak" mit der längsten Onlinezeit.'
+        'Zeigt die besten Spieler nach Punkten sortiert an. Die Punkte werden alle ' . Config::getInt(Config::SECTION_BASE, 'points_interval') . ' Stunden neu berechnet.
+ Zusätzlich gibt es noch spezielle Sondertitel, beispielsweise den "Bioladenfreak" mit der längsten Onlinezeit.'
     ),
     118 => array(
         'Serverstatistik',

@@ -1328,6 +1328,14 @@ function calculateInterestRates(): array
     return $result;
 }
 
+function calculateResetCreditLimit(): int
+{
+    $resetMedianRates = (Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') + Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max')) / 2;
+    $resetCreditLimit = (int)(Config::getInt(Config::SECTION_BANK, 'credit_limit') * pow(1 + $resetMedianRates, 96));
+    $resetCreditLimit -= 10000 + ($resetCreditLimit % 10000);
+    return $resetCreditLimit;
+}
+
 function getRandomRate(float $min, float $max)
 {
     $factor = 10000;

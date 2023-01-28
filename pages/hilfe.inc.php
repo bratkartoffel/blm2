@@ -127,7 +127,7 @@ Die Zinsen werden alle ' . Config::getInt(Config::SECTION_BASE, 'cron_interval')
 Das Geld auf der Bank kann nicht (im Gegensatz zum Bargeld) von anderen Spielern geklaut werden.
 Die Kapazität der Bank kann mit Hilfe des Bankschliessfaches je Stufe verdoppelt werden.
 
-[color=red]Wichtig: Falls Ihr Kontostand unter ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) . ' fällt, wird Ihr Account automatisch resettet![/color]'
+[color=red]Wichtig: Falls Ihr Kontostand unter ' . calculateResetCreditLimit() . ' fällt, wird Ihr Account automatisch resettet![/color]'
     ),
     110 => array(
         'Verträge',

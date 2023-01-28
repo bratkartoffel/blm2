@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (gebaeude) add new bank building to increase the deposit limit
 
+### Removed
+
+- removed `bank.dispo_limit`, the value is now automatically calculated:
+    - `bank.credit_limit` for 96h with median debit rates
+
 ### Fixed
 
 - fix some minor inconsistencies for `Forschung`-columns in `mitglieder` database table

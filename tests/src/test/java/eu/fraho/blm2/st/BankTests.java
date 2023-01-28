@@ -6,6 +6,7 @@
  */
 package eu.fraho.blm2.st;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -257,7 +258,16 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_buero")).click();
         assertText(By.id("b_i_3"), "100.00 €");
-
         assertText(By.id("stat_bank"), "100,000.00 €");
+    }
+
+    @Test
+    void testResetAfterDispoLimit() {
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_nachrichten_liste")).click();
+        assertText(By.id("stat_money"), "5,000.00 €");
+        Assertions.assertEquals("1", driver.findElement(By.id("MessagesIn")).getAttribute("data-count"));
     }
 }

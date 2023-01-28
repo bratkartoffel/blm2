@@ -13,6 +13,10 @@ $art = getOrDefault($_GET, 'art', 1);
 $betrag = getOrDefault($_GET, 'betrag', .0);
 $interestRates = calculateInterestRates();
 $depositLimit = pow(2, $data['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
+
+$resetMedianRates = (Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') + Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max')) / 2;
+$resetCreditLimit = calculateResetCreditLimit();
+
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/kwallet.webp" alt=""/>
@@ -30,8 +34,8 @@ $depositLimit = pow(2, $data['Gebaeude' . building_bank]) * Config::getInt(Confi
     <span class="red"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
 </p>
 <p>
-    <span class="red">Wichtig! Falls der Kontostand unter <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) ?> fällt, wird Ihr Account automatisch resettet!
-        Von einer durchschnittlichen Zinsrate von 2% ausgehend wird diese Marke nach etwa 48 Stunden überschritten.</span>
+    <span class="red">Wichtig! Falls der Kontostand unter <?= formatCurrency($resetCreditLimit); ?> fällt, wird Ihr Account automatisch resettet!
+        Von einer durchschnittlichen Zinsrate von <?= formatPercent($resetMedianRates); ?> ausgehend wird diese Marke nach etwa 48 Stunden überschritten.</span>
 </p>
 <p>
     Die aktuellen Anlagenzinsen: <?= formatPercent($interestRates['Debit']); ?><br/>

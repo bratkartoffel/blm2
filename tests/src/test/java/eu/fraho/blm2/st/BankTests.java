@@ -226,4 +226,38 @@ public class BankTests extends AbstractTest {
         assertText(By.id("stat_money"), "70,000.00 €");
         assertText(By.id("stat_bank"), "200,000.00 €");
     }
+
+    @Test
+    void testInterestPlusWithCron() {
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_i_3"), "660.00 €");
+
+        assertText(By.id("stat_bank"), "50,660.00 €");
+    }
+
+    @Test
+    void testInterestPlusWithCronAndBuilding() {
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_i_3"), "1,318.68 €");
+
+        assertText(By.id("stat_bank"), "101,218.68 €");
+    }
+
+    @Test
+    void testInterestPlusLimitWithCron() {
+        runCronjob();
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_i_3"), "100.00 €");
+
+        assertText(By.id("stat_bank"), "100,000.00 €");
+    }
 }

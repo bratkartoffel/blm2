@@ -117,7 +117,11 @@ CheckAllAuftraege($database);
 handleInterestRates($database);
 handleItemBaseProduction($database);
 $database->updatePlayerOnlineTimes();
-$database->updatePlayerPoints();
+$points_interval = Config::getInt(Config::SECTION_BASE, 'points_interval') * 60;
+$last_points = Config::getInt(Config::SECTION_DBCONF, 'lastpoints');
+if ($last_points + $points_interval + 60 >= time()) {
+    $database->updatePlayerPoints();
+}
 $database->gdprCleanLoginLog();
 $database->updateLastCron();
 $database->commit();

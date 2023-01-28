@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (mafia) heist now steals only between 40% and 75% of the stock, not all wares
 - (installer) enhance installer output format, should be easier to parse for scripts
 - (config) move `roundstart` from file to database
+- (rangliste) points are now calculated every 6 hours instead of 30 minutes
 
 ### Fixed
 

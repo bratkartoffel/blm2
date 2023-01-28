@@ -10,6 +10,9 @@ $offset = getOrDefault($_GET, 'o', 0);
 $offset_gr = getOrDefault($_GET, 'o_gr', 0);
 $offset_ep = getOrDefault($_GET, 'o_ep', 0);
 $q = getOrDefault($_GET, 'q');
+
+$lastPoints = formatTime(Config::getInt(Config::SECTION_DBCONF, 'lastpoints'));
+$nextPoints = formatTime(Config::getInt(Config::SECTION_DBCONF, 'lastpoints') + Config::getInt(Config::SECTION_BASE, 'points_interval') * 3600);
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/Login_Manager.webp" alt=""/>
@@ -20,6 +23,8 @@ $q = getOrDefault($_GET, 'q');
 
 <p>
     Hier werden die Besten der Besten aufgelistet, sortiert nach ihren Punkten.
+    Die Punkte wurden zuletzt um <?= $lastPoints; ?> berechnet.
+    Das nächste Update erfolgt um <?= $nextPoints; ?>.
 </p>
 
 <?php

@@ -237,9 +237,32 @@ $step = "Verifying last cronjob run timestamp";
         $step = "Create lastcron entry";
         {
             $database->begin();
-            if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'lastcron', 'conf_value' => time())) === null) {
+            $lastCron = time();
+            $lastCron -= ($lastCron % (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60));
+            if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'lastcron', 'conf_value' => $lastCron)) === null) {
                 $database->rollBack();
                 print_status($step, status_fail, "Could not insert lastcron information");
+            }
+            $database->commit();
+            print_status($step, status_ok);
+        }
+    }
+}
+
+$step = "Verifying last points calculation timestamp";
+{
+    if ($database->existsTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'lastpoints'))) {
+        print_status($step, status_ok);
+    } else {
+        print_status($step, status_needs_upgrade, "Entry not found");
+        $step = "Create lastpoints entry";
+        {
+            $database->begin();
+            $lastCron = time();
+            $lastCron -= ($lastCron % (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60));
+            if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'lastpoints', 'conf_value' => $lastCron)) === null) {
+                $database->rollBack();
+                print_status($step, status_fail, "Could not insert lastpoints information");
             }
             $database->commit();
             print_status($step, status_ok);

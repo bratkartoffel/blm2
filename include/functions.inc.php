@@ -1331,8 +1331,7 @@ function getRandomRate(float $min, float $max)
 
 function getLastIncomeTimestamp(): int
 {
-    $now = time();
-    return $now - ($now % (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60));
+    return Config::getInt(Config::SECTION_DBCONF, 'lastcron');
 }
 
 function getIncome(int $shop_level, int $kebab_stand_level): int

@@ -1451,6 +1451,12 @@ ORDER BY m.Name");
         $stmt = $this->prepare("UPDATE " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id SET
             m.Punkte = s.GebaeudePlus + s.ForschungPlus + s.MafiaPlus
             WHERE m.ID > 0");
+        if ($this->executeAndGetAffectedRows($stmt) === null) {
+            return null;
+        }
+        $stmt = $this->prepare("UPDATE " . self::TABLE_RUNTIME_CONFIG . " SET
+            conf_value = UNIX_TIMESTAMP()
+            WHERE conf_name = 'lastpoints'");
         return $this->executeAndGetAffectedRows($stmt);
     }
 

@@ -158,8 +158,8 @@ sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um ' . formatPerce
 
 if (buildingRequirementsMet(building_bank, $data)) {
     printBuildingInformation($data, $auftraege, building_bank,
-        'Mit wachsendem Imperium stellten Sie schnell fest, dass Ihre lokale Bank mit Ihren Einlagen überfordert ist,<br/>
-und ihr Bankschlieesfach regelmässig überfüllt war. Jede Stufe dieses Gebäudes verdoppelt den maximal erlaubten Betrag in Ihrer Bank.');
+        'Mit wachsendem Imperium stellten Sie schnell fest, dass Ihre lokale Bank mit Ihren Einlagen überfordert ist<br/>
+und ihr Bankschliessfach regelmässig überfüllt war. Jede Stufe dieses Gebäudes verdoppelt den maximal erlaubten Betrag in Ihrer Bank.');
 }
 ?>
 

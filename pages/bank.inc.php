@@ -12,6 +12,7 @@ $data = Database::getInstance()->getPlayerNameAndBankAndMoneyAndGroupById($_SESS
 $art = getOrDefault($_GET, 'art', 1);
 $betrag = getOrDefault($_GET, 'betrag', .0);
 $interestRates = calculateInterestRates();
+$depositLimit = pow(2, $data['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
 ?>
 <div id="SeitenUeberschrift">
     <img src="/pics/big/kwallet.webp" alt=""/>
@@ -25,7 +26,7 @@ $interestRates = calculateInterestRates();
     werden jeden Tag neu ausgerechnet. Gebucht werden die Zinsen
     alle <?= Config::getInt(Config::SECTION_BASE, 'cron_interval'); ?> Minuten. Die
     maximale Summe, die Sie anlegen können,
-    sind <?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')); ?>, Ihr Kreditlimit sind
+    sind <?= formatCurrency($depositLimit); ?>, Ihr Kreditlimit sind
     <span class="red"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
 </p>
 <p>
@@ -73,7 +74,7 @@ $interestRates = calculateInterestRates();
         const field = document.form_bank.betrag;
         const bank = <?=$data['Bank'];?>;
         const hand = <?=$data['Geld'];?>;
-        const maxDeposit = Math.min(hand, <?=Config::getInt(Config::SECTION_BANK, 'deposit_limit'); ?> - bank).toFixed(2);
+        const maxDeposit = Math.min(hand, <?=$depositLimit; ?> - bank).toFixed(2);
         const maxWithdraw = Math.max(0, bank).toFixed(2);
         const currentValue = Number.parseFloat(field.value).toFixed(2);
         // only change value if the user didn't change it yet

@@ -51,7 +51,10 @@ Hier ist noch eine Liste mit den verfügbaren Gebäuden und deren Voraussetzunge
 - Zaun (gesenkte Erfolgschance für gegnerischen Mafiaangriff)
 
 [b]Plantage Stufe >= 11 und Ausgaben für Mafia >= 25.000 €:[/b]
-- Pizzeria (Erhöht die Erfolgschancen der Mafia)'
+- Pizzeria (Erhöht die Erfolgschancen der Mafia)
+
+[b]Plantage Stufe >= 15 und Einnahmen durch Zinsen >= 100.000 €:[/b]
+- Bankschliessfach (Erhöht die Kapazität der Bank)'
     ),
     105 => array(
         'Plantage',
@@ -116,12 +119,13 @@ eine Übersicht über Ihre Eingaben und Ausgaben, sowie eine Aufschlüsselung ü
         'Bank',
         'Diese verwaltet Ihr Vermögen, gibt Zinsen auf Anlagen und vergibt Kredite.
 
-Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(Config::getSection(Config::SECTION_STARTING_VALUES)['Geld']) . ' Startguthaben.
-Die maximale Summe, welche Sie einzahlen können liegt bei ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')) . '
+Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(Config::getSection(Config::SECTION_STARTING_VALUES)['Bank']) . ' Startguthaben.
+Die maximale Summe, welche Sie zu Beginn einzahlen können liegt bei ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')) . '
 (Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . '.
 
 Die Zinsen werden alle ' . Config::getInt(Config::SECTION_BASE, 'cron_interval') . ' Minuten abgerechnet.
 Das Geld auf der Bank kann nicht (im Gegensatz zum Bargeld) von anderen Spielern geklaut werden.
+Die Kapazität der Bank kann mit Hilfe des Bankschliessfaches je Stufe verdoppelt werden.
 
 [color=red]Wichtig: Falls Ihr Kontostand unter ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) . ' fällt, wird Ihr Account automatisch resettet![/color]'
     ),

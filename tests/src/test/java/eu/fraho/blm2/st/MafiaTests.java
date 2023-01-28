@@ -111,13 +111,14 @@ public class MafiaTests extends AbstractTest {
 
         assertText(By.id("sender"), "System");
         assertText(By.id("subject"), String.format("Mafia: Diebstahl gegen test%d erfolgreich", userId1));
-        assertText(By.id("message"), "Der Diebstahl verlief ohne Probleme, wir konnten das gesamte Lager ausräumen. Folgende Waren konnten sichergestellt werden:\n" +
-                                     "\n" +
-                                     "* Kartoffeln: 57 kg\n" +
-                                     "* Karotten: 28 kg\n" +
-                                     "* Äpfel: 15 kg\n" +
-                                     "\n" +
-                                     "- Ihre Mafia -");
+        assertText(By.id("message"), """
+                Der Diebstahl verlief ohne Probleme, wir konnten das gesamte Lager ausräumen. Folgende Waren konnten sichergestellt werden:
+
+                * Kartoffeln: 57 kg
+                * Karotten: 28 kg
+                * Äpfel: 15 kg
+
+                - Ihre Mafia -""");
     }
 
     @Test

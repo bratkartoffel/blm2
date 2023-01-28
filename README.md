@@ -11,7 +11,7 @@ Wettbewerb zu erkämpfen.
 Organisiere dich mit anderen Spielern in Gruppen, schliesse Bündnisse oder führe Krieg.
 
 Das komplette Spiel ist kostenlos, werbefrei, OpenSource und auf Geschwindigkeit optimiert.
-Selbst mit einer Edge-Mobilfunkverbindung ist der Spiel noch sehr gut spielbar.
+Selbst mit einer Edge-Mobilfunkverbindung ist das Spiel noch sehr gut spielbar.
 
 ![Gebäude und Plantage](doc/buildings_plantage.webp)
 ![Mafia und Rangliste](doc/mafia_rangliste.webp)
@@ -71,10 +71,10 @@ admin_name = "Insert Name Here"
 ; operator email address
 admin_email = "contact-address@example.com"
 
-; address line 1 (for impressum)
+; address line 1 (for impressum, optional)
 admin_addr_line_1 = "Street Name, may be empty"
 
-; address line 2 (for impressum)
+; address line 2 (for impressum, optional)
 admin_addr_line_2 = "Zip-Code and Country, may be empty"
 
 [database]

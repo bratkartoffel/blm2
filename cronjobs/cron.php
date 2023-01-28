@@ -117,7 +117,7 @@ CheckAllAuftraege($database);
 handleInterestRates($database);
 handleItemBaseProduction($database);
 $database->updatePlayerOnlineTimes();
-$points_interval = Config::getInt(Config::SECTION_BASE, 'points_interval') * 60;
+$points_interval = Config::getInt(Config::SECTION_BASE, 'points_interval') * 3600;
 $last_points = Config::getInt(Config::SECTION_DBCONF, 'lastpoints');
 if ($last_points + $points_interval + 60 >= time()) {
     $database->updatePlayerPoints();

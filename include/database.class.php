@@ -964,7 +964,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerNameAndBankAndMoneyAndGroupById(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT Name, Bank, Geld, Gruppe FROM " . self::TABLE_USERS . " WHERE ID = :id");
+        $stmt = $this->prepare("SELECT Name, Bank, Geld, Gruppe, Gebaeude9 FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -1094,10 +1094,10 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getPlayerMoneyAndBuildingLevelsAndExpenseMafia(int $id): ?array
+    public function getPlayerMoneyAndBuildingLevelsAndExpenseMafiaAndEinnahmenZinsen(int $id): ?array
     {
         $stmt = $this->prepare("SELECT m.Geld, m.Gebaeude1, m.Gebaeude2, m.Gebaeude3, m.Gebaeude4,
-                m.Gebaeude5, m.Gebaeude6, m.Gebaeude7, m.Gebaeude8, s.AusgabenMafia
+                m.Gebaeude5, m.Gebaeude6, m.Gebaeude7, m.Gebaeude8, m.Gebaeude9, s.AusgabenMafia, s.EinnahmenZinsen
             FROM " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id
             WHERE m.ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
@@ -1305,9 +1305,9 @@ FROM
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getAllPlayerIdAndBankAndBioladenAndDoenerstand(): ?array
+    public function getAllPlayerIdAndBankAndBioladenAndDoenerstandAndBank(): ?array
     {
-        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude3, Gebaeude4 FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
+        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude3, Gebaeude4, Gebaeude9 FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
     }
 
     public function getAllPlayerIdAndResearchLevels(): ?array

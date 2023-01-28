@@ -43,6 +43,15 @@ switch ($testClass) {
         if ($testMethod === 'testTextFieldPreFilled') {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 100001, 'Bank' => 123.01, 'Gruppe' => 1));
         }
+        if ($testMethod === 'testDepositWithBankSafe') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 200000, 'Bank' => 70000, 'Gebaeude9' => 1));
+        }
+        if ($testMethod === 'testInterestPlusLimitWithCron') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => 99900));
+        }
+        if ($testMethod === 'testInterestPlusWithCronAndBuilding') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => 99900, 'Gebaeude9' => 1));
+        }
         break;
 
     case 'BuildingTests':

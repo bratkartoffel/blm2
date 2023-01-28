@@ -23,11 +23,12 @@ $data = Database::getInstance()->getPlayerNameAndBankAndMoneyAndGroupById($_SESS
 if ($data === null) {
     redirectTo('/?p=bank', 112, __LINE__);
 }
+$depositLimit = pow(2, $data['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
 
 switch ($art) {
     // deposit money
     case 1:
-        if ($betrag > $data['Geld'] || $data['Bank'] + $betrag > Config::getInt(Config::SECTION_BANK, 'deposit_limit')) {
+        if ($betrag > $data['Geld'] || $data['Bank'] + $betrag > $depositLimit) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 110, __LINE__);
         }
 

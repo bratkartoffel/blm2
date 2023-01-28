@@ -6,7 +6,6 @@
  */
 package eu.fraho.blm2.st;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -93,7 +92,6 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
-        // try to deposit -100
         setValue(By.id("betrag"), "0");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_110"));
@@ -109,7 +107,6 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
-        // try to deposit -100
         driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "5000");
         driver.findElement(By.id("do_transaction")).click();
@@ -126,7 +123,6 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
-        // try to deposit -100
         driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "65000");
         driver.findElement(By.id("do_transaction")).click();
@@ -143,7 +139,6 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
-        // try to deposit -100
         driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "65000.01");
         driver.findElement(By.id("do_transaction")).click();
@@ -161,7 +156,6 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
-        // try to deposit -100
         driver.findElement(By.id("auszahlen")).click();
         setValue(By.id("betrag"), "-100");
         driver.findElement(By.id("do_transaction")).click();
@@ -178,7 +172,6 @@ public class BankTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_bank")).click();
 
-        // try to deposit -100
         driver.findElement(By.id("einzahlen")).click();
         setValue(By.id("betrag"), "0");
         driver.findElement(By.id("do_transaction")).click();
@@ -215,5 +208,56 @@ public class BankTests extends AbstractTest {
 
         driver.findElement(By.id("gruppen_kasse")).click();
         assertValue(By.id("betrag"), new BigDecimal("100"));
+    }
+
+    @Test
+    void testDepositWithBankSafe() {
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_bank")).click();
+
+        driver.findElement(By.id("einzahlen")).click();
+        assertValue(By.id("betrag"), new BigDecimal("130000.00"));
+
+        driver.findElement(By.id("do_transaction")).click();
+        assertElementPresent(By.id("meldung_207"));
+
+        assertText(By.id("cur_bank_account"), "Ihr Kontostand: 200,000.00 €");
+        assertValue(By.id("betrag"), new BigDecimal("0.00"));
+        assertText(By.id("stat_money"), "70,000.00 €");
+        assertText(By.id("stat_bank"), "200,000.00 €");
+    }
+
+    @Test
+    void testInterestPlusWithCron() {
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_i_3"), "660.00 €");
+
+        assertText(By.id("stat_bank"), "50,660.00 €");
+    }
+
+    @Test
+    void testInterestPlusWithCronAndBuilding() {
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_i_3"), "1,318.68 €");
+
+        assertText(By.id("stat_bank"), "101,218.68 €");
+    }
+
+    @Test
+    void testInterestPlusLimitWithCron() {
+        runCronjob();
+        runCronjob();
+
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_buero")).click();
+        assertText(By.id("b_i_3"), "100.00 €");
+
+        assertText(By.id("stat_bank"), "100,000.00 €");
     }
 }

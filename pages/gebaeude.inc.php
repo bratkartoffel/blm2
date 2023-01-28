@@ -10,7 +10,7 @@ restrictSitter('Gebaeude');
 
 $auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'],
     job_type_factor * job_type_building, (job_type_factor * job_type_building) + job_type_factor);
-$data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndExpenseMafia($_SESSION['blm_user']);
+$data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndExpenseMafiaAndEinnahmenZinsen($_SESSION['blm_user']);
 
 $auftraege = array();
 for ($i = 0; $i < count($auftraege_db); $i++) {
@@ -154,6 +154,12 @@ if (buildingRequirementsMet(building_pizzeria, $data)) {
 Je weiter Sie die Pizzeria ausbauen, desto mehr Mafiosi lassen sich in der Stadt nieder und desto
 höher
 sind Ihre Erfolgschancen. Dabei steigen die Chancen pro Stufe um ' . formatPercent(Config::getFloat(Config::SECTION_PIZZERIA, 'mafia_bonus')) . '.');
+}
+
+if (buildingRequirementsMet(building_bank, $data)) {
+    printBuildingInformation($data, $auftraege, building_bank,
+        'Mit wachsendem Imperium stellten Sie schnell fest, dass Ihre lokale Bank mit Ihren Einlagen überfordert ist,<br/>
+und ihr Bankschlieesfach regelmässig überfüllt war. Jede Stufe dieses Gebäudes verdoppelt den maximal erlaubten Betrag in Ihrer Bank.');
 }
 ?>
 

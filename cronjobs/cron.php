@@ -46,7 +46,7 @@ function CheckAllAuftraege(Database $database): void
 function handleInterestRates(Database $database): void
 {
     $interestRates = calculateInterestRates();
-    $entries = $database->getAllPlayerIdAndBankAndBioladenAndDoenerstand();
+    $entries = $database->getAllPlayerIdAndBankAndBioladenAndDoenerstandAndBank();
     foreach ($entries as $entry) {
         $database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
             array('Geld' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])));
@@ -54,11 +54,12 @@ function handleInterestRates(Database $database): void
             array('EinnahmenGebaeude' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])),
             array('user_id = :whr0' => $entry['ID']));
 
-        if ($entry['Bank'] > Config::getInt(Config::SECTION_BANK, 'deposit_limit')) continue;
+        $depositLimit = pow(2, $entry['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
+        if ($entry['Bank'] >= $depositLimit) continue;
 
         if ($entry['Bank'] >= 0) {
             $amount = $entry['Bank'] * $interestRates['Debit'];
-            $amount = min(Config::getInt(Config::SECTION_BANK, 'deposit_limit'), $entry['Bank'] + $amount) - $entry['Bank'];
+            $amount = min($depositLimit, $entry['Bank'] + $amount) - $entry['Bank'];
         } else {
             $amount = $entry['Bank'] * $interestRates['Credit'];
         }

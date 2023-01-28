@@ -28,6 +28,7 @@ const building_building_yard = 5;
 const building_school = 6;
 const building_fence = 7;
 const building_pizzeria = 8;
+const building_bank = 9;
 
 // enum constants for items
 const item_potatoes = 1;
@@ -60,7 +61,7 @@ const job_type_research = 3;
 const count_wares = 15;
 
 // number of implemented items
-const count_buildings = 8;
+const count_buildings = 9;
 
 function abortWithErrorPage(string $body)
 {
@@ -567,6 +568,8 @@ function getBuildingName(int $building_id): string
             return 'Zaun';
         case building_pizzeria:
             return 'Pizzeria';
+        case building_bank:
+            return 'Bankschliessfach';
         default:
             trigger_error(sprintf('invalid building_id given: %d', $building_id), E_USER_ERROR);
     }
@@ -1195,6 +1198,8 @@ function buildingRequirementsMet(int $building_id, array $player): bool
             return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 10000 && $player['Gebaeude' . building_plantage] > 9);
         case building_pizzeria:
             return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 25000 && $player['Gebaeude' . building_plantage] > 11);
+        case building_bank:
+            return $player[$attribute] > 0 || ($player['Gebaeude' . building_plantage] >= 15 && $player['EinnahmenZinsen'] >= 100000);
         default:
             return false;
     }
@@ -1257,6 +1262,9 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
             break;
         case building_pizzeria:
             $section = Config::SECTION_PIZZERIA;
+            break;
+        case building_bank:
+            $section = Config::SECTION_BANK;
             break;
         default:
             trigger_error(sprintf('Unknown building id given: %d, %d, %d', $building_id, $player['ID'], $level_increment), E_USER_ERROR);

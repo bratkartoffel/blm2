@@ -52,7 +52,7 @@ if (isGameLocked()) {
     if (isAdmin()) {
         $lastcron = Config::getInt(Config::SECTION_DBCONF, 'lastcron');
         if (time() - $lastcron > 1.5 * (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60)) {
-            echo '<h2>Der Cronjob ist zuletzt um ' . formatDateTime($lastcron) . ' gelaufen, bitte prüfe deine Installation!</h2>';
+            echo '<h2 class="red">Der Cronjob ist zuletzt am ' . formatDateTime($lastcron) . ' gelaufen, bitte prüfe deine Installation!</h2>';
         }
     }
 }

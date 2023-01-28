@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- (config) add check when cronjob did last run, show warning if it's not beeing executed to admin
+- (config) add check when cronjob did last run, show warning if it's not being executed to admin
 
 ### Changed
 

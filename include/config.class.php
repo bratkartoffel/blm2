@@ -8,7 +8,6 @@
 
 class Config
 {
-    public const ROUNDSTART_FILE = __DIR__ . '/../config/roundstart.ini';
     public const SECTION_BASE = 'base';
     public const SECTION_CAPTCHA = 'captcha';
     public const SECTION_DATABASE = 'database';
@@ -30,6 +29,7 @@ class Config
     public const SECTION_MAFIA_HEIST = 'mafia_heist';
     public const SECTION_MAFIA_ATTACK = 'mafia_attack';
     public const SECTION_GROUP = 'group';
+    public const SECTION_DBCONF = 'runtime_conf';
 
     private static ?Config $INSTANCE = null;
     private array $iniFile;
@@ -39,10 +39,22 @@ class Config
         $defaultsIni = parse_ini_file(__DIR__ . '/../config/config-defaults.ini', true);
         $userIni = parse_ini_file(__DIR__ . '/../config/config.ini', true);
         $this->iniFile = array_replace_recursive($defaultsIni, $userIni);
+    }
 
-        // load round start information
-        $roundStartIni = parse_ini_file(self::ROUNDSTART_FILE);
-        $this->iniFile[self::SECTION_BASE]['roundstart'] = $roundStartIni['roundstart'];
+    public static function enhanceFromDb(?array $executeAndExtractRows)
+    {
+        if ($executeAndExtractRows === null) return;
+        foreach ($executeAndExtractRows as $row) {
+            switch ($row['conf_name']) {
+                case 'roundstart':
+                case 'lastcron':
+                    self::getInstance()->iniFile[self::SECTION_DBCONF][$row['conf_name']] = intval($row['conf_value']);
+                    break;
+                default:
+                    self::getInstance()->iniFile[self::SECTION_DBCONF][$row['conf_name']] = $row['conf_value'];
+                    break;
+            }
+        }
     }
 
     public static function getSection(string $section): array

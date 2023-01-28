@@ -104,14 +104,6 @@ function getOrderChefboxDescription(int $order_type): string
     return $result;
 }
 
-function CheckAllAuftraege(): void
-{
-    $players = Database::getInstance()->getAllPlayerIdsAndName();
-    foreach ($players as $player) {
-        CheckAuftraege($player['ID']);
-    }
-}
-
 function CheckAuftraege(int $blm_user): bool
 {
     $auftraege = Database::getInstance()->getAllExpiredAuftraegeByVon($blm_user);
@@ -155,12 +147,12 @@ function CheckAuftraege(int $blm_user): bool
 
 function isRoundOver(): bool
 {
-    return Config::getInt(Config::SECTION_BASE, 'roundstart') + Config::getInt(Config::SECTION_BASE, 'game_round_duration') <= time();
+    return Config::getInt(Config::SECTION_DBCONF, 'roundstart') + Config::getInt(Config::SECTION_BASE, 'game_round_duration') <= time();
 }
 
 function isGameLocked(): bool
 {
-    return (Config::getInt(Config::SECTION_BASE, 'roundstart') >= time());
+    return (Config::getInt(Config::SECTION_DBCONF, 'roundstart') >= time());
 }
 
 function getMessageBox(int $msg_id): ?string
@@ -538,7 +530,7 @@ function getMessageBox(int $msg_id): ?string
 
 
         case 999:
-            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s', date("d.m.Y \u\m H:i", Config::getInt(Config::SECTION_BASE, 'roundstart')));
+            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s', date("d.m.Y \u\m H:i", Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
             break;
         default:
             $text = sprintf('Meldungsnummer konnte nicht gefunden werden: %d', $msg_id);
@@ -1513,9 +1505,10 @@ EOF;
         die('Could not reset tables with status ' . $status);
     }
 
-    // write the last reset file
-    $startTimestamp = date('Y-m-d H:i:s', $nextStart);
-    writeRoundstartFile($startTimestamp);
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_RUNTIME_CONFIG, null, array('conf_value' => $nextStart), array('conf_name' => 'roundstart')) !== 1) {
+        Database::getInstance()->rollBack();
+        die('Could not set new roundstart');
+    }
 
     // send the mails to all active players
     foreach ($players as $player) {
@@ -1524,17 +1517,6 @@ EOF;
             trigger_error(sprintf("Could not send mail to %s", $player['EMail']), E_USER_WARNING);
         }
     }
-}
-
-function writeRoundstartFile($startTimestamp): void
-{
-    $fp = fopen(Config::ROUNDSTART_FILE, 'w');
-    if ($fp === false) {
-        die('Could not create ' . Config::ROUNDSTART_FILE . ', please check for write permissions!');
-    }
-    fputs($fp, sprintf("; round started on %s\n", $startTimestamp));
-    fputs($fp, sprintf("roundstart = %d", strtotime($startTimestamp)));
-    fclose($fp);
 }
 
 function hashPassword(string $password): string
@@ -1678,11 +1660,6 @@ function printHeaderJs(array $scripts): void
     foreach ($scripts as $script) {
         printf('<script src="%s?%s" nonce="%s"></script>' . "\n", $script, game_version, getCspNonce());
     }
-}
-
-// create the roundstart information file if it's missing
-if (!file_exists(Config::ROUNDSTART_FILE)) {
-    writeRoundstartFile(date('Y-m-d H:00:00'));
 }
 
 // set the timezone for this game

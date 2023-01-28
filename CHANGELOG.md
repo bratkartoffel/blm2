@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- (config) add check when cronjob did last run, show warning if it's not beeing executed to admin
+
 ### Changed
 
 - (mafia) move configuration `mafia.raub_min_rate` and `mafia.raub_max_rate` to `mafia_robbery.min_rate`
   and `mafia_robbery.max_rate`
 - (mafia) heist now steals only between 40% and 75% of the stock, not all wares
 - (installer) enhance installer output format, should be easier to parse for scripts
+- (config) move `roundstart` from file to database
 
 ### Fixed
 

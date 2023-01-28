@@ -37,14 +37,22 @@ while (count($data) < 3) {
     $data[] = array('BenutzerName' => 'niemand');
 }
 
+$roundstart = Config::getInt(Config::SECTION_DBCONF, 'roundstart');
 if (isGameLocked()) {
-    echo 'Die letzte Runde ist beendet, die neue Runde beginnt am <b>' . formatDateTime(Config::getInt(Config::SECTION_BASE, 'roundstart')) . '</b>.<br />
+    echo 'Die letzte Runde ist beendet, die neue Runde beginnt am <b>' . formatDateTime($roundstart) . '</b>.<br />
 					Die Rundengewinner stehen in der Rundmail, welche versandt wurde.';
 } else if (isRoundOver()) {
-    echo 'Die letzte Runde ist beendet, die neue Runde beginnt voraussichtlich am <b>' . formatDateTime(Config::getInt(Config::SECTION_BASE, 'roundstart') + Config::getInt(Config::SECTION_BASE, 'game_round_duration') + Config::getInt(Config::SECTION_BASE, 'game_pause_duration')) . '</b>.';
+    echo 'Die letzte Runde ist beendet, die neue Runde beginnt voraussichtlich am <b>' . formatDateTime($roundstart + Config::getInt(Config::SECTION_BASE, 'game_round_duration') + Config::getInt(Config::SECTION_BASE, 'game_pause_duration')) . '</b>.';
 } else {
-    echo 'Die aktuelle Runde läuft seit dem <b>' . formatDate(Config::getInt(Config::SECTION_BASE, 'roundstart')) . '</b> und dauert somit <b>bis zum ' . formatDateTime(Config::getInt(Config::SECTION_BASE, 'roundstart') + Config::getInt(Config::SECTION_BASE, 'game_round_duration')) . '.</b><br />
+    echo 'Die aktuelle Runde läuft seit dem <b>' . formatDate($roundstart) . '</b> und dauert somit <b>bis zum ' . formatDateTime($roundstart + Config::getInt(Config::SECTION_BASE, 'game_round_duration')) . '.</b><br />
 					Der Erstplatzierte ist im Moment <b>' . escapeForOutput($data[0]['BenutzerName']) . '</b>, 
 					gefolgt von <b>' . escapeForOutput($data[1]['BenutzerName']) . '</b> und 
 					<b>' . escapeForOutput($data[2]['BenutzerName']) . '.</b>';
+
+    if (isAdmin()) {
+        $lastcron = Config::getInt(Config::SECTION_DBCONF, 'lastcron');
+        if (time() - $lastcron > 1.5 * (Config::getInt(Config::SECTION_BASE, 'cron_interval') * 60)) {
+            echo '<h2>Der Cronjob ist zuletzt um ' . formatDateTime($lastcron) . ' gelaufen, bitte prüfe deine Installation!</h2>';
+        }
+    }
 }

@@ -204,6 +204,68 @@ $step = "Verifying existing accounts";
     }
 }
 
+$step = "Checking for runtime configuration";
+{
+    if (file_exists(__DIR__ . '/../config/roundstart.ini')) {
+        print_status($step, status_needs_upgrade, "Found roundstart.ini");
+        $step = "Migrating roundstart.ini to database";
+        {
+            $roundStartIni = parse_ini_file(__DIR__ . '/../config/roundstart.ini');
+            $database->begin();
+            if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'roundstart', 'conf_value' => $roundStartIni['roundstart'])) === null) {
+                $database->rollBack();
+                print_status($step, status_fail, "Could not insert roundstart information");
+            }
+            if (!unlink(__DIR__ . '/../config/roundstart.ini')) {
+                $database->rollBack();
+                print_status($step, status_fail, "Could not delete obsolete config/roundstart.ini");
+            }
+            $database->commit();
+            print_status($step, status_ok);
+        }
+    } else {
+        print_status($step, status_ok);
+    }
+}
+
+$step = "Verifying last cronjob run timestamp";
+{
+    if ($database->existsTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'lastcron'))) {
+        print_status($step, status_ok);
+    } else {
+        print_status($step, status_needs_upgrade, "Entry not found");
+        $step = "Create lastcron entry";
+        {
+            $database->begin();
+            if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'lastcron', 'conf_value' => time())) === null) {
+                $database->rollBack();
+                print_status($step, status_fail, "Could not insert lastcron information");
+            }
+            $database->commit();
+            print_status($step, status_ok);
+        }
+    }
+}
+
+$step = "Verifying currently active round";
+{
+    if ($database->existsTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'roundstart'))) {
+        print_status($step, status_ok);
+    } else {
+        print_status($step, status_needs_upgrade, "No active round found");
+        $step = "Starting new round";
+        {
+            $database->begin();
+            if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'roundstart', 'conf_value' => time())) === null) {
+                $database->rollBack();
+                print_status($step, status_fail, "Could not insert roundstart information");
+            }
+            $database->commit();
+            print_status($step, status_ok);
+        }
+    }
+}
+
 $dauer = 1000 * (microtime(true) - $start);
 http_response_code(200);
 echo "\n";

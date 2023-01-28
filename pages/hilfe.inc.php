@@ -53,7 +53,7 @@ Hier ist noch eine Liste mit den verfügbaren Gebäuden und deren Voraussetzunge
 [b]Plantage Stufe >= 11 und Ausgaben für Mafia >= 25.000 €:[/b]
 - Pizzeria (Erhöht die Erfolgschancen der Mafia)
 
-[b]Plantage Stufe >= 15 und Einnahmen durch Zinsen >= 100.000 €:[/b]
+[b]Plantage Stufe >= 20 und Einnahmen durch Zinsen >= 100.000 €:[/b]
 - Bankschliessfach (Erhöht die Kapazität der Bank)'
     ),
     105 => array(

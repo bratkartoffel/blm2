@@ -23,8 +23,11 @@ if (!IS_CRON) {
     die('cannot happen, just to please PhpStorm nagging about unused variable');
 }
 
+// also loads runtime configuration from database
+$database = Database::getInstance();
+
 if (isGameLocked()) {
-    die(sprintf("Game is currently locked (%d < %d)\n", time(), Config::getInt(Config::SECTION_BASE, 'roundstart')));
+    die(sprintf("Game is currently locked (%d < %d)\n", time(), Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
 }
 
 if (isRoundOver()) {
@@ -32,14 +35,22 @@ if (isRoundOver()) {
     die("Game reset completed!\n");
 }
 
-function handleInterestRates(): void
+function CheckAllAuftraege(Database $database): void
+{
+    $players = $database->getAllPlayerIdsAndName();
+    foreach ($players as $player) {
+        CheckAuftraege($player['ID']);
+    }
+}
+
+function handleInterestRates(Database $database): void
 {
     $interestRates = calculateInterestRates();
-    $entries = Database::getInstance()->getAllPlayerIdAndBankAndBioladenAndDoenerstand();
+    $entries = $database->getAllPlayerIdAndBankAndBioladenAndDoenerstand();
     foreach ($entries as $entry) {
-        Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
+        $database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
             array('Geld' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])));
-        Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
+        $database->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
             array('EinnahmenGebaeude' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])),
             array('user_id = :whr0' => $entry['ID']));
 
@@ -53,62 +64,63 @@ function handleInterestRates(): void
         }
         $amount = round($amount, 2);
         if ($amount != 0) {
-            Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
+            $database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
                 array('Bank' => $amount));
-            Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
+            $database->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
                 array($amount > 0 ? 'EinnahmenZinsen' : 'AusgabenZinsen' => abs($amount)),
                 array('user_id = :whr0' => $entry['ID']));
         }
     }
 }
 
-function handleResetDueToDispo(): void
+function handleResetDueToDispo(Database $database): void
 {
-    $entries = Database::getInstance()->getAllPlayerIdAndNameBankSmallerEquals(Config::getInt(Config::SECTION_BANK, 'dispo_limit'));
+    $entries = $database->getAllPlayerIdAndNameBankSmallerEquals(Config::getInt(Config::SECTION_BANK, 'dispo_limit'));
     foreach ($entries as $entry) {
         error_log(sprintf('Resetting player %s/%s', $entry['ID'], $entries['Name']));
-        Database::getInstance()->begin();
+        $database->begin();
         $status = resetAccount($entry['ID']);
         if ($status !== null) {
-            Database::getInstance()->rollBack();
+            $database->rollBack();
             error_log(sprintf('Could not reset player %d with status %s', $entry['ID'], $status));
             continue;
         }
-        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
+        if ($database->createTableEntry(Database::TABLE_MESSAGES, array(
                 'Von' => 0,
                 'An' => $entry['ID'],
                 'Betreff' => 'Account zurückgesetzt',
                 'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency(Config::getInt(Config::SECTION_BANK, 'dispo_limit')) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
             )) != 1) {
-            Database::getInstance()->rollBack();
+            $database->rollBack();
             error_log(sprintf('Could create message after resetting player %d', $entry['ID']));
             continue;
         }
-        Database::getInstance()->commit();
+        $database->commit();
     }
 }
 
-function handleItemBaseProduction(): void
+function handleItemBaseProduction(Database $database): void
 {
-    $entries = Database::getInstance()->getAllPlayerIdAndResearchLevels();
+    $entries = $database->getAllPlayerIdAndResearchLevels();
     foreach ($entries as $entry) {
         $updates = array();
         for ($i = 1; $i <= count_wares; $i++) {
             $researchLevel = $entry['Forschung' . $i];
             $updates['Lager' . $i] = $researchLevel * Config::getInt(Config::SECTION_PLANTAGE, 'production_cron_base');
         }
-        Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'], $updates);
+        $database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'], $updates);
     }
 }
 
-Database::getInstance()->begin();
-CheckAllAuftraege();
-handleInterestRates();
-handleItemBaseProduction();
-Database::getInstance()->updatePlayerOnlineTimes();
-Database::getInstance()->updatePlayerPoints();
-Database::getInstance()->gdprCleanLoginLog();
-Database::getInstance()->commit();
+$database->begin();
+CheckAllAuftraege($database);
+handleInterestRates($database);
+handleItemBaseProduction($database);
+$database->updatePlayerOnlineTimes();
+$database->updatePlayerPoints();
+$database->gdprCleanLoginLog();
+$database->updateLastCron();
+$database->commit();
 
 // separate transaction for each player to reset
-handleResetDueToDispo();
+handleResetDueToDispo($database);

@@ -206,6 +206,7 @@ public abstract class AbstractTest {
                     HttpResponse.BodyHandlers.ofString()
             );
             Assertions.assertEquals(200, response.statusCode());
+            Arrays.stream(response.body().split("\n")).forEach(l -> log.info("Cronjob: {}", l));
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
         }

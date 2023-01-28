@@ -33,6 +33,7 @@ class Database
     public const TABLE_LOG_MESSAGES = 'log_nachrichten';
     public const TABLE_LOG_CONTRACTS = 'log_vertraege';
     public const TABLE_UPDATE_INFO = 'update_info';
+    public const TABLE_RUNTIME_CONFIG = 'runtime_config';
 
     private static ?Database $INSTANCE = null;
 
@@ -73,6 +74,10 @@ class Database
             $this->link->query("SET time_zone = '" . date_default_timezone_get() . "'");
             $this->queries++;
             $this->slow_query_threshold = Config::getFloat(Config::SECTION_DATABASE, 'slow_query_threshold') / 1000;
+
+            // load runtime configuration
+            $stmt = $this->prepare("SELECT conf_name, conf_value FROM " . self::TABLE_RUNTIME_CONFIG);
+            @Config::enhanceFromDb($this->executeAndExtractRows($stmt));
         } catch (PDOException $e) {
             if ($dieOnInitError) {
                 die('Database connection failed: ' . $e->getMessage());
@@ -169,7 +174,7 @@ class Database
             $stmt = $this->prepare(sprintf("UPDATE %s SET %s WHERE ID = :id%s", $table, implode(", ", $fields), implode(" ", $wheres)));
             $changes['id'] = $id;
         } else {
-            $stmt = $this->prepare(sprintf("UPDATE %s SET %s WHERE ID = ID%s", $table, implode(", ", $fields), implode(" ", $wheres)));
+            $stmt = $this->prepare(sprintf("UPDATE %s SET %s WHERE 1=1%s", $table, implode(", ", $fields), implode(" ", $wheres)));
         }
         return $this->executeAndGetAffectedRows($stmt, $changes);
     }
@@ -1455,6 +1460,11 @@ ORDER BY m.Name");
             SET ip = concat('ANON_', CRC32(SHA1(SHA1(ip)))), anonymized = true
             WHERE anonymized = false AND created < date_sub(now(), interval 30 day)");
         return $this->executeAndGetAffectedRows($stmt);
+    }
+
+    public function updateLastCron(): ?int
+    {
+        return $this->executeAndGetAffectedRows($this->prepare("REPLACE INTO " . self::TABLE_RUNTIME_CONFIG . " SET conf_name = 'lastcron', conf_value = UNIX_TIMESTAMP()"));
     }
 
     public function countPendingGroupDiplomacy(int $group_id): ?int

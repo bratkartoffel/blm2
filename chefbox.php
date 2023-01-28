@@ -11,6 +11,9 @@ require_once __DIR__ . '/include/game_version.inc.php';
 require_once __DIR__ . '/include/functions.inc.php';
 require_once __DIR__ . '/include/database.class.php';
 
+// also loads runtime configuration from database
+$database = Database::getInstance();
+
 if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastAction'] + Config::getInt(Config::SECTION_BASE, 'session_timeout') < time()) {
     session_destroy();
     die(sprintf('<!DOCTYPE html><html lang="de"><head><title>%s - Chefbox</title><script nonce="%s">self.close(); window.location.href = "%s";</script></head></html>',
@@ -20,15 +23,15 @@ if (!isLoggedIn() || isRoundOver() || isGameLocked() || $_SESSION['blm_lastActio
     );
 }
 
-Database::getInstance()->begin();
+$database->begin();
 if (CheckAuftraege($_SESSION['blm_user'])) {
-    Database::getInstance()->commit();
+    $database->commit();
 } else {
-    Database::getInstance()->rollback();
+    $database->rollback();
 }
 
-$auftraege = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user']);
-$data = Database::getInstance()->getPlayerNextMafiaAndMoneyAndBank($_SESSION['blm_user']);
+$auftraege = $database->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user']);
+$data = $database->getPlayerNextMafiaAndMoneyAndBank($_SESSION['blm_user']);
 sendCspHeader();
 ?><!DOCTYPE html>
 <html lang="de">
@@ -94,19 +97,19 @@ sendCspHeader();
 <table id="with_nav_links">
     <tr>
         <td><a href="/?p=nachrichten_liste">Neue Nachrichten:</a></td>
-        <td><?= Database::getInstance()->getUnreadMessageCount($_SESSION['blm_user']); ?></td>
+        <td><?= $database->getUnreadMessageCount($_SESSION['blm_user']); ?></td>
     </tr>
     <tr>
         <td><a href="/?p=vertraege_liste">Neue Verträge:</a></td>
-        <td><?= Database::getInstance()->getOpenContractCount($_SESSION['blm_user']); ?></td>
+        <td><?= $database->getOpenContractCount($_SESSION['blm_user']); ?></td>
     </tr>
     <tr>
         <td><a href="/?p=marktplatz_liste">Marktangebote:</a></td>
-        <td><?= Database::getInstance()->getMarktplatzCount(); ?></td>
+        <td><?= $database->getMarktplatzCount(); ?></td>
     </tr>
     <tr>
         <td><a href="/?p=rangliste">Spieler online:</a></td>
-        <td><?= Database::getInstance()->getOnlinePlayerCount(); ?></td>
+        <td><?= $database->getOnlinePlayerCount(); ?></td>
     </tr>
     <tr>
         <td><a href="/?p=bank">Bargeld:</a></td>
@@ -139,9 +142,9 @@ $dauer = 1000 * (microtime(true) - $start);
 ?>
 <!--
 PLT:     <?= number_format($dauer, 2) . "ms\n"; ?>
-Queries: <?= Database::getInstance()->getQueryCount() . "\n"; ?>
+Queries: <?= $database->getQueryCount() . "\n"; ?>
 <?php
-$warnings = Database::getInstance()->getWarnings();
+$warnings = $database->getWarnings();
 if (count($warnings) > 0) {
     echo "Warnings:\n==================\n";
     foreach ($warnings as $i => $warning) {

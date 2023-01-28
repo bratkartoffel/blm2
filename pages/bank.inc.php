@@ -35,7 +35,7 @@ $resetCreditLimit = calculateResetCreditLimit();
 </p>
 <p>
     <span class="red">Wichtig! Falls der Kontostand unter <?= formatCurrency($resetCreditLimit); ?> fällt, wird Ihr Account automatisch resettet!
-        Von einer durchschnittlichen Zinsrate von <?= formatPercent($resetMedianRates); ?> ausgehend wird diese Marke nach etwa 48 Stunden überschritten.</span>
+        Von einer durchschnittlichen Zinsrate von <?= formatPercent($resetMedianRates); ?> ausgehend wird diese Marke nach etwa 96 Stunden überschritten.</span>
 </p>
 <p>
     Die aktuellen Anlagenzinsen: <?= formatPercent($interestRates['Debit']); ?><br/>

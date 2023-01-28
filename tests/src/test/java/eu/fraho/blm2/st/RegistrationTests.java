@@ -27,7 +27,7 @@ class RegistrationTests extends AbstractTest {
         driver.findElement(By.id("link_registrieren")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
         inhalt.findElement(By.id("name")).sendKeys("testEmailDuplicate");
-        inhalt.findElement(By.id("email")).sendKeys(String.format("%s_%d@localhost", getClass().getSimpleName(), userId1));
+        inhalt.findElement(By.id("email")).sendKeys("%s_%d@localhost".formatted(getClass().getSimpleName(), userId1));
         inhalt.findElement(By.id("pwd1")).sendKeys("changeit");
         inhalt.findElement(By.id("pwd2")).sendKeys("changeit");
         inhalt.findElement(By.id("captcha_code")).sendKeys("123456");

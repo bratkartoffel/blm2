@@ -54,20 +54,21 @@ public class MafiaTests extends AbstractTest {
         driver.findElement(By.id("MessagesIn")).findElements(By.tagName("a")).get(0).click();
 
         assertText(By.id("sender"), "System");
-        assertText(By.id("subject"), String.format("Mafia: Spionage gegen test%d erfolgreich", userId1));
-        assertText(By.id("message"), String.format("Die Spionage gegen test%d war erfolgreich, hier die von uns in Erfahrung gebrachten Daten:\n" +
-                                      "\n" +
-                                      "Bargeld: 5,000.00 €\n" +
-                                      "\n" +
-                                      "Lagerstände:\n" +
-                                      "* Kartoffeln: 100 kg\n" +
-                                      "* Karotten: 50 kg\n" +
-                                      "* Äpfel: 27 kg\n" +
-                                      "\n" +
-                                      "Gebäudelevel:\n" +
-                                      "* Plantage: 1\n" +
-                                      "\n" +
-                                      "- Ihre Mafia -", userId1));
+        assertText(By.id("subject"), "Mafia: Spionage gegen test%d erfolgreich".formatted(userId1));
+        assertText(By.id("message"), """
+                Die Spionage gegen test%d war erfolgreich, hier die von uns in Erfahrung gebrachten Daten:
+                                
+                Bargeld: 5,000.00 €
+                                
+                Lagerstände:
+                * Kartoffeln: 100 kg
+                * Karotten: 50 kg
+                * Äpfel: 27 kg
+                                
+                Gebäudelevel:
+                * Plantage: 1
+                                
+                - Ihre Mafia -""".formatted(userId1));
     }
 
     @Test
@@ -86,10 +87,11 @@ public class MafiaTests extends AbstractTest {
         driver.findElement(By.id("MessagesIn")).findElements(By.tagName("a")).get(0).click();
 
         assertText(By.id("sender"), "System");
-        assertText(By.id("subject"), String.format("Mafia: Spionage gegen test%d fehlgeschlagen", userId3));
-        assertText(By.id("message"), "Die Spionage war leider nicht erfolgreich, die gegnerischen Wachen haben unsere Spitzel erkannt bevor diese irgendwelche relevanten Daten sammeln konnten.\n" +
-                                     "\n" +
-                                     "- Ihre Mafia -");
+        assertText(By.id("subject"), "Mafia: Spionage gegen test%d fehlgeschlagen".formatted(userId3));
+        assertText(By.id("message"), """
+                Die Spionage war leider nicht erfolgreich, die gegnerischen Wachen haben unsere Spitzel erkannt bevor diese irgendwelche relevanten Daten sammeln konnten.
+                              
+                - Ihre Mafia -""");
     }
 
     @Test

@@ -20,4 +20,4 @@ function getVersionExtra()
     return $version_extra;
 }
 
-define('game_version', "1.10.10" . getVersionExtra());
+define('game_version', "1.11.0" . getVersionExtra());

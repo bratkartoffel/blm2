@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.0] - 2023-01-28
+
 ### Added
 
 - (config) add check when cronjob did last run, show warning if it's not being executed to admin
@@ -246,7 +250,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.10.10...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.0...HEAD
+
+[1.11.0]: https://github.com/bratkartoffel/blm2/compare/v1.10.10...v1.10.11
 
 [1.10.10]: https://github.com/bratkartoffel/blm2/compare/v1.10.9...v1.10.10
 

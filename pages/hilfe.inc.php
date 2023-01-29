@@ -148,7 +148,7 @@ Verträge können wieder zurückgezogen werden, solange der Gegenüber diesen no
 Es können keine Teilmengen gekauft werden, es muss also das gesamte Angebot gekauft werden.
 Deshalb ist zu empfehlen, nicht 1x 10.000kg zu verkaufen, sondern besser 4x 2500kg einzustellen.
 
-Der Markt verlangt ' . formatPercent(Config::getInt(Config::SECTION_MARKET, 'provision_rate')) . ' des Gesamtpreises als Provision. Diese wird beim Kauf direkt vom Erlös abgezogen.
+Der Markt verlangt ' . formatPercent(Config::getFloat(Config::SECTION_MARKET, 'provision_rate')) . ' des Gesamtpreises als Provision. Diese wird beim Kauf direkt vom Erlös abgezogen.
 
 [b]Wichtig![/b]
 Man kann Angebote wieder vom Markt zurückziehen, jedoch gehen dabei ' . formatPercent(1 - Config::getFloat(Config::SECTION_MARKET, 'retract_rate')) . ' der Ware verloren!'

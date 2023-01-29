@@ -1235,7 +1235,7 @@ glob_stats as (
 ), glob_mitglieder as (
     SELECT
         SUM(Forschung1 + Forschung2 + Forschung3 + Forschung4 + Forschung5 + Forschung6 + Forschung7 + Forschung8 + Forschung9 + Forschung10 + Forschung11 + Forschung12 + Forschung13 + Forschung14 + Forschung15) AS GesamtForschung,
-        SUM(Gebaeude1 + Gebaeude2 + Gebaeude3 + Gebaeude4 + Gebaeude5 + Gebaeude6 + Gebaeude7 + Gebaeude8) AS GesamtGebaeude,
+        SUM(Gebaeude1 + Gebaeude2 + Gebaeude3 + Gebaeude4 + Gebaeude5 + Gebaeude6 + Gebaeude7 + Gebaeude8 + Gebaeude9) AS GesamtGebaeude,
         COUNT(1) AS AnzahlSpieler,
         SUM(IGMGesendet) AS AnzahlIGMs
     FROM " . self::TABLE_USERS . "

@@ -7,6 +7,7 @@
  */
 
 $data = Database::getInstance()->getInformationForBuero($_SESSION['blm_user']);
+$groupCash = Database::getInstance()->getGroupCashSumByUserId($_SESSION['blm_user']);
 $rates = calculateSellRates();
 ?>
 <div id="SeitenUeberschrift">
@@ -63,7 +64,8 @@ $rates = calculateSellRates();
     $EinnahmenGesamt = $data['EinnahmenVerkauf'] + $data['EinnahmenGebaeude'] + $data['EinnahmenZinsen']
         + $data['EinnahmenMarkt'] + $data['EinnahmenVertraege'] + $data['EinnahmenMafia'];
     $AusgabenGesamt = $data['AusgabenGebaeude'] + $data['AusgabenForschung'] + $data['AusgabenProduktion']
-        + $data['AusgabenZinsen'] + $data['AusgabenMarkt'] + $data['AusgabenVertraege'] + $data['AusgabenMafia'];
+        + $data['AusgabenZinsen'] + $data['AusgabenMarkt'] + $data['AusgabenVertraege'] + $data['AusgabenMafia']
+        + $groupCash;
     $difference = Config::getSection(Config::SECTION_STARTING_VALUES)['Geld'] + Config::getSection(Config::SECTION_STARTING_VALUES)['Bank'] + $EinnahmenGesamt - $AusgabenGesamt - $data['Geld'] - $data['Bank'];
     if ($difference < 0) {
         $EinnahmenSonstige = abs($difference);
@@ -156,8 +158,13 @@ $rates = calculateSellRates();
         </tr>
         <tr>
             <td>-</td>
+            <td>Einlagen Gruppenkasse:</td>
+            <td id="b_s_8"><?= formatCurrency($groupCash); ?></td>
+        </tr>
+        <tr>
+            <td>-</td>
             <td>Ausgaben Sonstiges:</td>
-            <td id="b_s_8"><?= formatCurrency($AusgabenSonstige); ?></td>
+            <td><?= formatCurrency($AusgabenSonstige); ?></td>
         </tr>
         <tr class="Separator">
             <td>=</td>

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - (gebaeude) add new bank building to increase the deposit limit
+- (buero) also consider group cash for balance
 
 ### Removed
 

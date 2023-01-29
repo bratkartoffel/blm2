@@ -1040,6 +1040,13 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractField($stmt, 'Kasse');
     }
 
+    public function getGroupCashSumByUserId(int $blm_user): ?float
+    {
+        $stmt = $this->prepare("SELECT coalesce(SUM(amount), 0) AS summe FROM " . self::TABLE_GROUP_CASH . " WHERE user_id = :uid");
+        $stmt->bindParam("uid", $blm_user, PDO::PARAM_INT);
+        return $this->executeAndExtractField($stmt, 'summe');
+    }
+
     public function getAllGroupCashById(int $group_id): ?array
     {
         $stmt = $this->prepare("SELECT k.*, m.ID AS UserID, coalesce(m.Name, 'Gelöscht') AS UserName, if(m.Gruppe = g.ID, 1, 0) AS IstMitglied

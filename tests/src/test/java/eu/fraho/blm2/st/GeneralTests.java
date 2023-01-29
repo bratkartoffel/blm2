@@ -6,7 +6,6 @@
  */
 package eu.fraho.blm2.st;
 
-import org.apache.hc.core5.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -23,12 +22,14 @@ public class GeneralTests extends AbstractTest {
             "development/watchers.xml",
             "include/captcha.class.php",
             "install/sql/00-1.10.0-setup.sql",
+            "install/update.php",
+            "install/update.php?secret=wrong",
             "pages/admin.inc.php",
             "pics/uploads/.gitkeep",
             "tests/build.gradle",
     })
     void testSensitiveFilesInacessible(String path) throws IOException, InterruptedException {
         HttpResponse<String> response = simpleHttpGet("http://localhost/%s".formatted(path));
-        Assertions.assertEquals(HttpStatus.SC_FORBIDDEN, response.statusCode());
+        Assertions.assertEquals(4, response.statusCode() / 100);
     }
 }

@@ -85,7 +85,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
         }
 
         if ($entry['Von'] != 0) {
-            $reducedAmount = round($amount * (1 - Config::getInt(Config::SECTION_MARKET, 'provision_rate')), 2);
+            $reducedAmount = round($amount * (1 - Config::getFloat(Config::SECTION_MARKET, 'provision_rate')), 2);
             if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
                     array('Geld' => $reducedAmount)) != 1) {
                 Database::getInstance()->rollBack();

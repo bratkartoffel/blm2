@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - fix some minor inconsistencies for `Forschung`-columns in `mitglieder` database table
+- fix market provision not being calculated
 
 ## [1.11.0] - 2023-01-28
 

@@ -980,8 +980,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerStock(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT Lager1, Lager2, Lager3, Lager4, Lager5, Lager6, Lager7, Lager8,
-       Lager9, Lager10, Lager11, Lager12, Lager13, Lager14, Lager15 FROM " . self::TABLE_USERS . " WHERE ID = :id");
+        $stmt = $this->prepare("SELECT " . getAllStockFields() . " FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
@@ -1096,8 +1095,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerMoneyAndBuildingLevelsAndExpenseMafiaAndEinnahmenZinsen(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT m.Geld, m.Gebaeude1, m.Gebaeude2, m.Gebaeude3, m.Gebaeude4,
-                m.Gebaeude5, m.Gebaeude6, m.Gebaeude7, m.Gebaeude8, m.Gebaeude9, s.AusgabenMafia, s.EinnahmenZinsen
+        $stmt = $this->prepare("SELECT m.Geld, " . getAllBuildingFields() . ", s.AusgabenMafia, s.EinnahmenZinsen
             FROM " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id
             WHERE m.ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
@@ -1106,19 +1104,14 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerMoneyAndResearchLevelsAndPlantageLevel(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT Geld, Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, Forschung7,
-       Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, Forschung13, Forschung14, Forschung15, Gebaeude1
-            FROM " . self::TABLE_USERS . " WHERE ID = :id");
+        $stmt = $this->prepare("SELECT Geld, Gebaeude1, " . getAllResearchFields() . " FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
     }
 
     public function getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, Forschung7,
-       Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, Forschung13, Forschung14, Forschung15,
-       Lager1, Lager2, Lager3, Lager4, Lager5, Lager6, Lager7, Lager8, Lager9, Lager10, Lager11, Lager12, Lager13, Lager14, Lager15,
-       Gebaeude3,  Gebaeude6
+        $stmt = $this->prepare("SELECT " . getAllResearchFields() . ", " . getAllStockFields() . ", Gebaeude3,  Gebaeude6
             FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
@@ -1173,9 +1166,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
 
     public function getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT Geld, Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, 
-            Forschung7, Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, 
-            Forschung13, Forschung14, Forschung15, Gebaeude1, Gebaeude2
+        $stmt = $this->prepare("SELECT Geld, " . getAllResearchFields() . ", Gebaeude1, Gebaeude2
             FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam("id", $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);
@@ -1234,8 +1225,8 @@ glob_stats as (
     FROM " . self::TABLE_STATISTICS . "
 ), glob_mitglieder as (
     SELECT
-        SUM(Forschung1 + Forschung2 + Forschung3 + Forschung4 + Forschung5 + Forschung6 + Forschung7 + Forschung8 + Forschung9 + Forschung10 + Forschung11 + Forschung12 + Forschung13 + Forschung14 + Forschung15) AS GesamtForschung,
-        SUM(Gebaeude1 + Gebaeude2 + Gebaeude3 + Gebaeude4 + Gebaeude5 + Gebaeude6 + Gebaeude7 + Gebaeude8 + Gebaeude9) AS GesamtGebaeude,
+        SUM(" . getAllResearchFields('+') . ") AS GesamtForschung,
+        SUM(" . getAllBuildingFields('+') . ") AS GesamtGebaeude,
         COUNT(1) AS AnzahlSpieler,
         SUM(IGMGesendet) AS AnzahlIGMs
     FROM " . self::TABLE_USERS . "
@@ -1312,10 +1303,7 @@ FROM
 
     public function getAllPlayerIdAndResearchLevels(): ?array
     {
-        return $this->executeAndExtractRows($this->prepare("SELECT ID,
-            Forschung1, Forschung2, Forschung3, Forschung4, Forschung5, Forschung6, 
-            Forschung7, Forschung8, Forschung9, Forschung10, Forschung11, Forschung12, 
-            Forschung13, Forschung14, Forschung15 FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
+        return $this->executeAndExtractRows($this->prepare("SELECT ID, " . getAllResearchFields() . " FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
     }
 
     public function getAllPlayerIdAndNameBankSmallerEquals(float $amount): ?array
@@ -1339,11 +1327,7 @@ FROM
 
     public function getPlayerEspionageDataByID(int $blm_user): ?array
     {
-        $stmt = $this->prepare("SELECT ID, Name, Geld, Gebaeude1, Gebaeude2, Gebaeude3, Gebaeude4,
-            Gebaeude5, Gebaeude6, Gebaeude7, Gebaeude8,
-            Lager1, Lager2, Lager3, Lager4, Lager5, Lager6, 
-            Lager7, Lager8, Lager9, Lager10, Lager11, Lager12, 
-            Lager13, Lager14, Lager15
+        $stmt = $this->prepare("SELECT ID, Name, Geld, " . getAllBuildingFields() . ", " . getAllStockFields() . "
             FROM " . self::TABLE_USERS . " WHERE ID = :id");
         $stmt->bindParam('id', $blm_user, PDO::PARAM_INT);
         return $this->executeAndExtractFirstRow($stmt);

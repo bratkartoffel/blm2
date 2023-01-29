@@ -1677,6 +1677,30 @@ function printHeaderJs(array $scripts): void
     }
 }
 
+function getAllBuildingFields(string $separator = ','): string
+{
+    return getAllFields('Gebaeude', count_buildings, $separator);
+}
+
+function getAllResearchFields(string $separator = ','): string
+{
+    return getAllFields('Forschung', count_wares, $separator);
+}
+
+function getAllStockFields(string $separator = ','): string
+{
+    return getAllFields('Lager', count_wares, $separator);
+}
+
+function getAllFields(string $prefix, int $count, string $separator = ','): string
+{
+    $result = array();
+    for ($i = 1; $i <= $count; $i++) {
+        $result[] = $prefix . $i;
+    }
+    return implode($separator, $result);
+}
+
 // set the timezone for this game
 date_default_timezone_set(Config::get(Config::SECTION_BASE, 'timezone'));
 

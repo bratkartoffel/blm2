@@ -44,7 +44,7 @@ function print_status(string $step, int $status, ?string $extraInfo = null): voi
 require_once __DIR__ . '/../include/game_version.inc.php';
 $step = sprintf("Checking installation for version %s:", game_version);
 {
-    if (!file_exists('../config/config.ini')) {
+    if (!file_exists(__DIR__ . '/../config/config.ini')) {
         print_status($step, status_fail, "config/config.ini not found");
     }
     print_status($step, status_ok);
@@ -55,7 +55,7 @@ require_once __DIR__ . '/../include/database.class.php';
 
 $step = "Verifying upgrade credentials";
 {
-    if (getOrDefault($_GET, 'secret', 'unset') !== Config::get(Config::SECTION_BASE, 'upgrade_secret')) {
+    if (php_sapi_name() !== 'cli' && getOrDefault($_GET, 'secret', 'unset') !== Config::get(Config::SECTION_BASE, 'upgrade_secret')) {
         http_response_code(401);
         print_status($step, status_fail, "invalid credentials");
     }

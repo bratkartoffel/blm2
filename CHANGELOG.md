@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Changed
+
+- `install/update.php` can now be invoked by cli (without secret)
 
 ## [1.11.1] - 2023-01-29
 

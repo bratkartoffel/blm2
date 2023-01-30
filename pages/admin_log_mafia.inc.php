@@ -58,7 +58,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     $filter_wer = empty($wer) ? null : $wer;
     $filter_wen = empty($wen) ? null : $wen;
     $filter_art = empty($art) ? null : $art;
-    $filter_success = $success === -1 ? null : intval($success);
+    $filter_success = $success === -1 ? null : $success;
     $entriesCount = Database::getInstance()->getAdminMafiaLogCount($filter_wer, $filter_wen, $filter_art, $filter_success);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
     $entries = Database::getInstance()->getAdminMafiaLogEntries($filter_wer, $filter_wen, $filter_art, $filter_success, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
@@ -88,7 +88,11 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_mafia&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('/?p=admin_log_mafia&amp;wer=' . escapeForOutput($wer)
+    . '&amp;wen=' . escapeForOutput($wen)
+    . '&amp;art=' . escapeForOutput($art)
+    . '&amp;success=' . escapeForOutput($success)
+    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

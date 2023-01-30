@@ -37,17 +37,15 @@ $data = Database::getInstance()->getServerStatistics();
     </tr>
     <tr>
         <td>Anzahl aller Aufträge:</td>
-        <td><?php
-            $data['AnzahlAuftraege']++;
-            echo $data['AnzahlAuftraege'] - 1; ?></td>
+        <td><?= $data['AnzahlAuftraege']; ?></td>
     </tr>
     <tr>
         <td>Ausgaben / Auftrag:</td>
-        <td><?= formatCurrency($data['AusgabenGesamt'] / $data['AnzahlAuftraege']); ?></td>
+        <td><?= $data['AnzahlAuftraege'] == 0 ? '0' : formatCurrency($data['AusgabenGesamt'] / $data['AnzahlAuftraege']); ?></td>
     </tr>
     <tr>
         <td>Gewinn / Auftrag:</td>
-        <td><?= formatCurrency(($data['EinnahmenGesamt'] - $data['AusgabenGesamt']) / $data['AnzahlAuftraege']); ?></td>
+        <td><?= $data['AnzahlAuftraege'] == 0 ? '0' : formatCurrency(($data['EinnahmenGesamt'] - $data['AusgabenGesamt']) / $data['AnzahlAuftraege']); ?></td>
     </tr>
 </table>
 

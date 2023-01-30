@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - sporadic test failures
 - (admin) fix textfield datatype issues, allow to specify fraction for some fields
 - (admin) minor style fixes for various admin pages
+- (statistik) fix off-by-one error for count of jobs
 
 ### Added
 

@@ -211,6 +211,11 @@ sendCspHeader();
     if (chefboxLink !== null) {
         chefboxLink.onclick = () => ChefboxZeigen();
     }
+
+    let links = document.getElementById('Navigation').getElementsByTagName('a');
+    for (let link of links) {
+        link.href += '#Inhalt';
+    }
 </script>
 </body>
 </html>

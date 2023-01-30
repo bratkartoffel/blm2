@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `install/update.php` can now be invoked by cli (without secret)
 - don't just invalidate, delete old http-session on login
+- (mobile) scroll to content when navigating to the pages
 
 ### Fixed
 

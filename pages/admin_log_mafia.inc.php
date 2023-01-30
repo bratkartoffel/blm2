@@ -8,6 +8,8 @@
 
 $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
+$art = getOrDefault($_GET, 'art');
+$success = getOrDefault($_GET, 'success', -1);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
@@ -24,6 +26,20 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <label for="wen">Wen:</label>
         <input type="text" name="wen" id="wen" value="<?= escapeForOutput($wen); ?>"/>
+        <label for="art">Art:</label>
+        <select name="art" id="art">
+            <option value="">- Alle -</option>
+            <option value="ESPIONAGE"<?= ($art === 'ESPIONAGE' ? ' selected="selected"' : '') ?>>Spionage</option>
+            <option value="ROBBERY"<?= ($art === 'ROBBERY' ? ' selected="selected"' : '') ?>>Raub</option>
+            <option value="HEIST"<?= ($art === 'HEIST' ? ' selected="selected"' : '') ?>>Diebstahl</option>
+            <option value="ATTACK"<?= ($art === 'ATTACK' ? ' selected="selected"' : '') ?>>Angriff</option>
+        </select>
+        <label for="success">Erfolgreich:</label>
+        <select name="success" id="success">
+            <option value="-1">- Alle -</option>
+            <option value="0"<?= ($success === 0 ? ' selected="selected"' : '') ?>>Nein</option>
+            <option value="1"<?= ($success === 1 ? ' selected="selected"' : '') ?>>Ja</option>
+        </select>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>
@@ -39,11 +55,13 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Chance</th>
     </tr>
     <?php
-    $filter_wer = empty($wer) ? "%" : $wer;
-    $filter_wen = empty($wen) ? "%" : $wen;
-    $entriesCount = Database::getInstance()->getAdminMafiaLogCount($filter_wer, $filter_wen);
+    $filter_wer = empty($wer) ? null : $wer;
+    $filter_wen = empty($wen) ? null : $wen;
+    $filter_art = empty($art) ? null : $art;
+    $filter_success = $success === -1 ? null : intval($success);
+    $entriesCount = Database::getInstance()->getAdminMafiaLogCount($filter_wer, $filter_wen, $filter_art, $filter_success);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
-    $entries = Database::getInstance()->getAdminMafiaLogEntries($filter_wer, $filter_wen, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminMafiaLogEntries($filter_wer, $filter_wen, $filter_art, $filter_success, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];

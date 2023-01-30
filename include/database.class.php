@@ -647,22 +647,37 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminMafiaLogCount(string $werFilter, string $wenFilter): ?int
+    public function getAdminMafiaLogCount(?string $werFilter, ?string $wenFilter, ?string $artFilter, ?int $filter_success): ?int
     {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MAFIA . "
-            WHERE senderName LIKE :wer AND receiverName LIKE :wen");
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("wen", $wenFilter);
+        $wheres = array("1=1");
+        if ($werFilter !== null) $wheres[] = " senderName LIKE :wer";
+        if ($wenFilter !== null) $wheres[] = " receiverName LIKE :wen";
+        if ($artFilter !== null) $wheres[] = " action = :art";
+        if ($filter_success !== null) $wheres[] = " success = :success";
+
+        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MAFIA . " WHERE " . implode(" AND ", $wheres));
+        if ($werFilter !== null) $stmt->bindParam("wer", $werFilter);
+        if ($wenFilter !== null) $stmt->bindParam("wen", $wenFilter);
+        if ($artFilter !== null) $stmt->bindParam("art", $artFilter);
+        if ($filter_success !== null) $stmt->bindParam("success", $filter_success, PDO::PARAM_INT);
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminMafiaLogEntries(string $werFilter, string $wenFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminMafiaLogEntries(?string $werFilter, ?string $wenFilter, ?string $artFilter, ?int $filter_success, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MAFIA . "
-            WHERE senderName LIKE :wer AND receiverName LIKE :wen ORDER BY created DESC LIMIT :offset, :count");
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("wen", $wenFilter);
+        $wheres = array("1=1");
+        if ($werFilter !== null) $wheres[] = " senderName LIKE :wer";
+        if ($wenFilter !== null) $wheres[] = " receiverName LIKE :wen";
+        if ($artFilter !== null) $wheres[] = " action = :art";
+        if ($filter_success !== null) $wheres[] = " success = :success";
+
+        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MAFIA . " WHERE " . implode(" AND ", $wheres) . "
+            ORDER BY created DESC LIMIT :offset, :count");
+        if ($werFilter !== null) $stmt->bindParam("wer", $werFilter);
+        if ($wenFilter !== null) $stmt->bindParam("wen", $wenFilter);
+        if ($artFilter !== null) $stmt->bindParam("art", $artFilter);
+        if ($filter_success !== null) $stmt->bindParam("success", $filter_success, PDO::PARAM_INT);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);

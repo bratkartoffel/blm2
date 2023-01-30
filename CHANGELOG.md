@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - sporadic test failures
 - (admin) fix textfield datatype issues, allow to specify fraction for some fields
 
+### Added
+
+- (admin) add filter for mafia log type and success
+
 ## [1.11.1] - 2023-01-29
 
 ### Added

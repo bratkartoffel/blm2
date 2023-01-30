@@ -42,6 +42,10 @@ header label {
     color: red;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 /*region Forms*/
 div.form {
     background-color: #bece6b;

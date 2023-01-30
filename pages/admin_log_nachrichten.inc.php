@@ -51,7 +51,7 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= createProfileLink($row['receiverId'], $row['receiverName']); ?></td>
             <td><?= formatDateTime(strtotime($row['created'])); ?></td>
             <td><?= escapeForOutput($row['subject']); ?></td>
-            <td><?= escapeForOutput($row['message']); ?></td>
+            <td><?= replaceBBCode($row['message']); ?></td>
         </tr>
         <?php
     }

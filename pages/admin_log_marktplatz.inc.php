@@ -28,7 +28,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     </form>
 </div>
 
-<table class="Liste AdminLog">
+<table class="Liste AdminLog nowrap">
     <tr>
         <th>Verkäufer</th>
         <th>Käufer</th>

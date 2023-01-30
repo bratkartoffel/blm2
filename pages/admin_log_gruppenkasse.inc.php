@@ -31,7 +31,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     </form>
 </div>
 
-<table class="Liste AdminLog">
+<table class="Liste AdminLog nowrap">
     <tr>
         <th>Wer</th>
         <th>Wen</th>
@@ -52,7 +52,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         ?>
         <tr>
             <td><?= createProfileLink($row['senderId'], $row['senderName']); ?></td>
-            <td><?= ($row['receiverId'] === null ? '-' : createProfileLink($row['receiverId'], $row['receiverName'])); ?></td>
+            <td><?= ($row['receiverId'] === null ? '' : createProfileLink($row['receiverId'], $row['receiverName'])); ?></td>
             <td><?= createGroupLink($row['groupId'], $row['groupName']); ?></td>
             <td><?= formatDateTime(strtotime($row['created'])); ?></td>
             <td><?= formatCurrency($row['amount']); ?></td>

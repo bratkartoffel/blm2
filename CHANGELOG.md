@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - help text for Bioladen now shows the correct bonus amount per level
 - sporadic test failures
 - (admin) fix textfield datatype issues, allow to specify fraction for some fields
+- (admin) minor style fixes for various admin pages
 
 ### Added
 

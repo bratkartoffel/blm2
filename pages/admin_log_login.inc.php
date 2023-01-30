@@ -42,7 +42,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     </form>
 </div>
 
-<table class="Liste AdminLog">
+<table class="Liste AdminLog nowrap">
     <tr>
         <th>Wer</th>
         <th>IP</th>

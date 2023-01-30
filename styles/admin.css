@@ -22,10 +22,6 @@ fieldset.AdminVariables h2 a {
     color: black;
 }
 
-table.AdminLog td {
-    white-space: nowrap;
-}
-
 table.EditUser tr:last-of-type td,
 table.EditGroup tr:last-of-type td {
     text-align: center;

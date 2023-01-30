@@ -1642,7 +1642,11 @@ function getMafiaChance(string $cfgSection, int $level, int $pizzeriaLevel = 0, 
     $chance = floatval(Config::get($cfgSection, "chance")[$level]);
     $chance += $pizzeriaLevel * Config::getFloat(Config::SECTION_PIZZERIA, 'mafia_bonus');
     $chance -= $fenceLevel * Config::getFloat(Config::SECTION_FENCE, 'mafia_bonus');
-    return max(0.01, min($chance, 0.95));
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+        return $chance;
+    } else {
+        return max(0.01, min($chance, 0.95));
+    }
 }
 
 function trimAndRemoveControlChars(string $string): string

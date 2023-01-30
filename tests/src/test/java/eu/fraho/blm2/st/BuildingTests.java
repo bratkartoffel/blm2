@@ -65,7 +65,7 @@ public class BuildingTests extends AbstractTest {
         assertText(By.id("b_p_7"), "0");
 
         runCronjob();
-        driver.findElement(By.id("link_buero")).click();
+        driver.navigate().refresh();
         assertText(By.id("b_p_1"), "4");
         assertText(By.id("b_p_4"), "4");
         assertText(By.id("b_p_7"), "4");

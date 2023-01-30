@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - help text for Bioladen now shows the correct bonus amount per level
+- sporadic test failures
 
 ## [1.11.1] - 2023-01-29
 

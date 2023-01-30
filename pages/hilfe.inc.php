@@ -187,8 +187,9 @@ Man kann nur Spieler angreifen,
 a) die mindestens ' . formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')) . ' Punkte haben
 b) deren Punkte maximal um ' . formatPercent(Config::getFloat(Config::SECTION_MAFIA, 'points_factor') - 1) . ' auseinander liegen.
 
-[b]Hinweis:[/b]
-Im Krieg zählen die oben genannten Angriffsbeschränkungen nicht!'
+[b]Hinweise:[/b]
+a) Im Krieg zählen die oben genannten Angriffsbeschränkungen nicht!
+b) Jede Aktion hat (unabhängig vom Level des Zauns und der Pizzeria) mindestens 1% und maximal 95% Erfolgschance.'
     ),
     113 => array(
         'Nachrichten (IGM)',

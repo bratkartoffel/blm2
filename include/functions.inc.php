@@ -841,7 +841,7 @@ function verifyOffset(int $offset, int $entriesCount, int $entriesPerPage): int
 
 function createProfileLink(?int $blm_user, string $name): string
 {
-    if ($blm_user == 0) return $name;
+    if ($blm_user === null || $blm_user === 0) return $name;
     return sprintf('<a href="/?p=profil&amp;id=%d">%s</a>', $blm_user, escapeForOutput($name));
 }
 

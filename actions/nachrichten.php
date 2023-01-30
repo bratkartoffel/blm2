@@ -59,7 +59,8 @@ switch (getOrDefault($_GET, 'a', 0)) {
                     'senderId' => $_SESSION['blm_user'],
                     'senderName' => Database::getInstance()->getPlayerNameById($_SESSION['blm_user']),
                     'subject' => $subject,
-                    'message' => $message
+                    'message' => $message,
+                    'receiverName' => 'Rundmail'
                 )) !== 1) {
                 Database::getInstance()->rollBack();
                 redirectTo($base_link, 141, __LINE__);

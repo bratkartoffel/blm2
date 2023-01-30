@@ -48,13 +48,7 @@ $offset = getOrDefault($_GET, 'o', 0);
         ?>
         <tr>
             <td><?= createProfileLink($row['senderId'], $row['senderName']); ?></td>
-            <td><?php
-                if ($row['receiverId'] === null) {
-                    echo '<i>Rundmail</i>';
-                } else {
-                    echo createProfileLink($row['receiverId'], $row['receiverName']);
-                }
-                ?></td>
+            <td><?= createProfileLink($row['receiverId'], $row['receiverName']); ?></td>
             <td><?= formatDateTime(strtotime($row['created'])); ?></td>
             <td><?= escapeForOutput($row['subject']); ?></td>
             <td><?= escapeForOutput($row['message']); ?></td>

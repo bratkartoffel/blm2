@@ -273,9 +273,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.0...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.1...HEAD
 
-[1.11.0]: https://github.com/bratkartoffel/blm2/compare/v1.10.10...v1.10.11
+[1.11.1]: https://github.com/bratkartoffel/blm2/compare/v1.11.0...v1.11.1
+
+[1.11.0]: https://github.com/bratkartoffel/blm2/compare/v1.10.10...v1.11.0
 
 [1.10.10]: https://github.com/bratkartoffel/blm2/compare/v1.10.9...v1.10.10
 

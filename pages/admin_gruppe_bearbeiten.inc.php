@@ -53,7 +53,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
         </div>
         <div>
             <label for="kasse">Kasse:</label>
-            <input type="number" name="kasse" id="kasse" value="<?= $entry['Kasse']; ?>" size="13"/> €
+            <input type="number" name="kasse" id="kasse" value="<?= $entry['Kasse']; ?>" size="13" min="0" step="0.01"/> €
         </div>
         <div>
             <label>Bild geändert:</label>
@@ -108,7 +108,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
                         echo ' (ausgetreten)';
                     }
                     ?>:</label>
-                <input type="number" name="amount" id="amount_<?= $entry['UserID']; ?>" size="9"
+                <input type="number" name="amount" id="amount_<?= $entry['UserID']; ?>" size="9" min="0" step="0.01"
                        value="<?= $entry['amount']; ?>"/> €
                 <input type="submit" value="Speichern"
                        id="cash_save_<?= escapeForOutput($entry['UserID']); ?>"/>

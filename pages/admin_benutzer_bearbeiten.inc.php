@@ -88,11 +88,11 @@ for ($i = 1; $i <= count_buildings; $i++) {
         </div>
         <div>
             <label for="geld">Geld:</label>
-            <input type="number" name="geld" id="geld" value="<?= $entry['Geld']; ?>" size="13"/> €
+            <input type="number" name="geld" id="geld" value="<?= $entry['Geld']; ?>" size="13" min="0" step="0.01"/> €
         </div>
         <div>
             <label for="bank">Bank:</label>
-            <input type="number" name="bank" id="bank" value="<?= $entry['Bank']; ?>" size="13"/> €
+            <input type="number" name="bank" id="bank" value="<?= $entry['Bank']; ?>" size="13" step="0.01"/> €
         </div>
         <div>
             <label for="punkte">Punkte:</label>
@@ -100,13 +100,13 @@ for ($i = 1; $i <= count_buildings; $i++) {
         </div>
         <div>
             <label for="igm_gesendet">IGM Gesendet:</label>
-            <input type="number" name="igm_gesendet" id="igm_gesendet"
+            <input type="number" name="igm_gesendet" id="igm_gesendet" min="0"
                    value="<?= escapeForOutput($entry['IgmGesendet']); ?>"
                    size="4"/>
         </div>
         <div>
             <label for="igm_empfangen">IGM Empfangen:</label>
-            <input type="number" name="igm_empfangen" id="igm_empfangen"
+            <input type="number" name="igm_empfangen" id="igm_empfangen" min="0"
                    value="<?= escapeForOutput($entry['IgmEmpfangen']); ?>"
                    size="4"/>
         </div>
@@ -138,13 +138,13 @@ for ($i = 1; $i <= count_buildings; $i++) {
         </div>
         <div>
             <label for="ewige_punkte">Ewige Punkte:</label>
-            <input type="number" name="ewige_punkte" id="ewige_punkte"
+            <input type="number" name="ewige_punkte" id="ewige_punkte" min="0"
                    value="<?= escapeForOutput($entry['EwigePunkte']); ?>"
                    size="4"/>
         </div>
         <div>
             <label for="onlinezeit">Onlinezeit (Sekunden):</label>
-            <input type="number" name="onlinezeit" id="onlinezeit"
+            <input type="number" name="onlinezeit" id="onlinezeit" min="0"
                    value="<?= escapeForOutput($entry['OnlineZeit']); ?>"
                    size="8"/>
         </div>
@@ -160,7 +160,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
         </div>
         <div>
             <label for="verwarnungen">Verwarnungen:</label>
-            <input type="number" name="verwarnungen" id="verwarnungen"
+            <input type="number" name="verwarnungen" id="verwarnungen" min="0"
                    value="<?= escapeForOutput($entry['Verwarnungen']); ?>"
                    size="3"/>
         </div>

@@ -8,6 +8,7 @@
 $start = microtime(true);
 header('Content-Type: text/plain; charset=UTF-8');
 ob_start();
+chdir(__DIR__);
 http_response_code(500);
 
 const status_ok = 1;
@@ -41,17 +42,17 @@ function print_status(string $step, int $status, ?string $extraInfo = null): voi
 }
 
 
-require_once __DIR__ . '/../include/game_version.inc.php';
+require_once '../include/game_version.inc.php';
 $step = sprintf("Checking installation for version %s:", game_version);
 {
-    if (!file_exists(__DIR__ . '/../config/config.ini')) {
+    if (!file_exists('../config/config.ini')) {
         print_status($step, status_fail, "config/config.ini not found");
     }
     print_status($step, status_ok);
 }
 
-require_once __DIR__ . '/../include/functions.inc.php';
-require_once __DIR__ . '/../include/database.class.php';
+require_once '../include/functions.inc.php';
+require_once '../include/database.class.php';
 
 $step = "Verifying upgrade credentials";
 {
@@ -59,7 +60,7 @@ $step = "Verifying upgrade credentials";
         http_response_code(401);
         print_status($step, status_fail, "invalid credentials");
     }
-    print_status($step, status_ok);
+    print_status($step, status_ok, sprintf("Called by %s", php_sapi_name()));
 }
 
 $step = "Verifying secrets changed";
@@ -133,9 +134,9 @@ $scripts = array();
 
 
 foreach ($scripts as $script) {
-    $step = sprintf("Checking %s", $script);
+    $step = sprintf("Checking %s", basename($script));
     {
-        if (strpos($script, '/0') !== false) {
+        if (strpos(basename($script), '0') === 0) {
             print_status($step, status_ok, 'skipped');
             continue;
         }
@@ -206,17 +207,17 @@ $step = "Verifying existing accounts";
 
 $step = "Checking for runtime configuration";
 {
-    if (file_exists(__DIR__ . '/../config/roundstart.ini')) {
+    if (file_exists('../config/roundstart.ini')) {
         print_status($step, status_needs_upgrade, "Found roundstart.ini");
         $step = "Migrating roundstart.ini to database";
         {
-            $roundStartIni = parse_ini_file(__DIR__ . '/../config/roundstart.ini');
+            $roundStartIni = parse_ini_file('../config/roundstart.ini');
             $database->begin();
             if ($database->createTableEntry(Database::TABLE_RUNTIME_CONFIG, array('conf_name' => 'roundstart', 'conf_value' => $roundStartIni['roundstart'])) === null) {
                 $database->rollBack();
                 print_status($step, status_fail, "Could not insert roundstart information");
             }
-            if (!unlink(__DIR__ . '/../config/roundstart.ini')) {
+            if (!unlink('../config/roundstart.ini')) {
                 $database->rollBack();
                 print_status($step, status_fail, "Could not delete obsolete config/roundstart.ini");
             }

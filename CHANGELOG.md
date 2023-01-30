@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `install/update.php` can now be invoked by cli (without secret)
 
+### Fixed
+
+- help text for Bioladen now shows the correct bonus amount per level
+
 ## [1.11.1] - 2023-01-29
 
 ### Added

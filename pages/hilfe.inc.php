@@ -104,7 +104,7 @@ um ' . formatCurrency(Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_c
 
 Es gibt keine Beschränkung, wie viel Gemüse Sie am Tag verkaufen können. Der Verkaufspreis wird aus einem Grundpreis,
 dem Marktkurs, der Stufe der Forschung des entsprechenden Gemüses, der Stufe des Bioladens und der Verkäuferschule
-berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um ' . formatCurrency(Config::getInt(Config::SECTION_SHOP, 'item_price_shop_bonus')) . '.
+berechnet. Dabei erhöht jede Stufe des Bioladens den Verkaufspreis um ' . formatCurrency(Config::getFloat(Config::SECTION_SHOP, 'item_price_shop_bonus')) . '.
 
 Der Verkaufspreis kann nicht selbst direkt eingegeben oder verändert werden.'
     ),

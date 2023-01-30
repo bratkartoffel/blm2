@@ -15,7 +15,7 @@ $pwd = requireEntryFound(getOrDefault($_POST, 'pwd'), "/?p=anmelden", 108, __LIN
 
 // force a new session
 session_reset();
-session_regenerate_id();
+session_regenerate_id(true);
 
 // load player data
 $player = Database::getInstance()->getPlayerDataByName($name);
@@ -73,7 +73,6 @@ if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_LOGIN, array(
         'sitter' => $_SESSION['blm_sitter'] ? 1 : 0
     )) !== 1) {
     Database::getInstance()->rollBack();
-    session_destroy();
     redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 141, __LINE__);
 }
 

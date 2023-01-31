@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - (admin) add filter for mafia log type and success
+- (admin) implement edit groups
 
 ## [1.11.1] - 2023-01-29
 

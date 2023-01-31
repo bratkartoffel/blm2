@@ -528,6 +528,9 @@ function getMessageBox(int $msg_id): ?string
         case 247:
             $text = 'Der Benutzer wurde gespeichert.';
             break;
+        case 248:
+            $text = 'Die Gruppe wurde gespeichert.';
+            break;
 
 
         case 999:
@@ -840,10 +843,10 @@ function verifyOffset(int $offset, int $entriesCount, int $entriesPerPage): int
     }
 }
 
-function createProfileLink(?int $blm_user, string $name): string
+function createProfileLink(?int $blm_user, string $name, string $page = 'profil'): string
 {
     if ($blm_user === null || $blm_user === 0) return $name;
-    return sprintf('<a href="/?p=profil&amp;id=%d">%s</a>', $blm_user, escapeForOutput($name));
+    return sprintf('<a href="/?p=%s&amp;id=%d">%s</a>', $page, $blm_user, escapeForOutput($name));
 }
 
 function createGroupLink(?int $group_id, string $name): string

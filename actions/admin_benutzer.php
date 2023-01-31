@@ -49,12 +49,12 @@ for ($i = 1; $i <= count_wares; $i++) {
     $lager[$i] = getOrDefault($_POST, 'lager_' . $i, 0);
 }
 
-$backlink = sprintf('/?p=admin_benutzer_bearbeiten&id=' . $id . '_bearbeiten&id=%d&o=%d', $id, $offset);
+$backlink = sprintf('/?p=admin_benutzer_bearbeiten&id=%d&o=%d', $id, $offset);
 switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update basic information
     case 1:
         $backlink .= sprintf('&username=%s&email=%s&email_aktiviert=%d&geld=%f&bank=%f&igm_gesendet=%d&igm_empfangen=%d&admin=%d&betatester=%d&ewige_punkte=%d&onlinezeit=%d&gruppe=%d&verwarnungen=%d&gesperrt=%d',
-            $username, $email, $email_aktiviert, $geld, $bank, $igm_gesendet, $igm_empfangen,
+            urlencode($username), urlencode($email), $email_aktiviert, $geld, $bank, $igm_gesendet, $igm_empfangen,
             $admin, $betatester, $ewige_punkte, $onlinezeit, $gruppe, $verwarnungen, $gesperrt);
 
         Database::getInstance()->begin();

@@ -227,7 +227,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, Config::getInt(Config::SECTION_B
         <th><a href="/?p=rangliste_spezial&amp;type=5">Der Top-Bauer:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderProduction();
-            echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenProduktion']) . ' für dir Produktion';
+            echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenProduktion']) . ' für die Produktion';
             ?></td>
     </tr>
     <tr>

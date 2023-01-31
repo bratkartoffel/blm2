@@ -326,23 +326,6 @@ class Database
         return $this->executeAndExtractField($this->prepare("SELECT count(1) AS count FROM " . self::TABLE_USERS . " WHERE ID > 0"), 'count');
     }
 
-    public function getAdminBankLogCount(string $werFilter): ?int
-    {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_BANK . " WHERE playerName LIKE :wer");
-        $stmt->bindParam("wer", $werFilter);
-        return $this->executeAndExtractField($stmt, 'count');
-    }
-
-    public function getAdminBankLogEntries(string $werFilter, int $page, int $entriesPerPage): ?array
-    {
-        $offset = $page * $entriesPerPage;
-        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_BANK . " WHERE log_bank.playerName LIKE :wer ORDER BY created DESC LIMIT :offset, :count");
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
-        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
-        return $this->executeAndExtractRows($stmt);
-    }
-
     public function getAllMessagesByAnCount(int $blm_user): ?int
     {
         $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_MESSAGES . " WHERE An = :id ORDER BY Zeit DESC");
@@ -576,6 +559,31 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             array(
                 "playerName LIKE :wer" => $werFilter,
                 "item = :ware" => $wareFilter,
+            )
+        );
+        $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
+        $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getAdminBankLogCount(?string $werFilter, ?string $wohinFilter): ?int
+    {
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_BANK . " WHERE ((1))",
+            array(
+                "playerName LIKE :wer" => $werFilter,
+                "target = :wohin" => $wohinFilter,
+            )
+        );
+        return $this->executeAndExtractField($stmt, 'count');
+    }
+
+    public function getAdminBankLogEntries(?string $werFilter, ?string $wohinFilter, int $page, int $entriesPerPage): ?array
+    {
+        $offset = $page * $entriesPerPage;
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_BANK . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "playerName LIKE :wer" => $werFilter,
+                "target = :wohin" => $wohinFilter,
             )
         );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);

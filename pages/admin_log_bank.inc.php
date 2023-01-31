@@ -7,6 +7,7 @@
  */
 
 $wer = getOrDefault($_GET, 'wer');
+$wohin = getOrDefault($_GET, 'wohin');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
@@ -21,6 +22,13 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="hidden" name="p" value="admin_log_bank"/>
         <label for="wer">Wer:</label>
         <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
+        <label for="wohin">Wohin:</label>
+        <select name="wohin" id="wohin">
+            <option value="">- Alle -</option>
+            <option value="HAND"<?= ($wohin === 'HAND' ? ' selected="selected"' : '') ?>>Hand</option>
+            <option value="BANK"<?= ($wohin === 'BANK' ? ' selected="selected"' : '') ?>>Bank</option>
+        </select>
+
         <input type="submit" value="Abschicken"/>
     </form>
 </div>
@@ -33,10 +41,11 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Wohin</th>
     </tr>
     <?php
-    $filter = empty($wer) ? "%" : $wer;
-    $entriesCount = Database::getInstance()->getAdminBankLogCount($filter);
+    $filter_wer = empty($wer) ? null : $wer;
+    $filter_wohin = empty($wohin) ? null : $wohin;
+    $entriesCount = Database::getInstance()->getAdminBankLogCount($filter_wer, $filter_wohin);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
-    $entries = Database::getInstance()->getAdminBankLogEntries($filter, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminBankLogEntries($filter_wer, $filter_wohin, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -54,7 +63,9 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_bank&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('/?p=admin_log_bank&amp;wer=' . escapeForOutput($wer)
+    . '&amp;wohin=' . escapeForOutput($wohin)
+    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

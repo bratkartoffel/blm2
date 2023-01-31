@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.2] - 2023-01-31
+
 ### Changed
 
 - `install/update.php` can now be invoked by cli (without secret)
@@ -286,7 +290,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.1...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.2...HEAD
+
+[1.11.2]: https://github.com/bratkartoffel/blm2/compare/v1.11.1...v1.11.2
 
 [1.11.1]: https://github.com/bratkartoffel/blm2/compare/v1.11.0...v1.11.1
 

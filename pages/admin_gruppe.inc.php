@@ -37,7 +37,7 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td>
                 <a href="/?p=admin_gruppe_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
                 <a class="delete_group" data-groupname="<?= escapeForOutput($row['Name']); ?>"
-                   href="/actions/admin_gruppe.php?a=6&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
+                   href="/actions/admin_gruppe.php?a=4&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php

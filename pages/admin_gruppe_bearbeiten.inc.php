@@ -65,31 +65,6 @@ requireEntryFound($entry, '/?p=admin_gruppe');
     </form>
 </div>
 
-<br>
-
-<div class="form AdminEditGroup">
-    <form action="/actions/admin_gruppe.php" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="a" value="2"/>
-        <input type="hidden" name="id" value="<?= $id; ?>"/>
-        <input type="hidden" name="o" value="<?= $offset; ?>"/>
-        <header>Gruppenbild ändern</header>
-        <div>
-            Um das aktuelle Bild zu löschen, einfach den<br/>
-            Speichern-Button drücken, ohne ein Bild auszuwählen.
-        </div>
-        <div class="GroupImage"><img id="group_image"
-                                     src="/pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($entry['LastImageChange'] == null ? 0 : strtotime($entry['LastImageChange'])); ?>"
-                                     alt="Gruppenbild"/></div>
-        <div>
-            <input type="file" name="bild" accept="image/*"/>
-        </div>
-        <div>
-            <input type="submit" value="Speichern" id="image_save"/>
-        </div>
-    </form>
-</div>
-
-
 <div class="form">
     <header>Gruppenkasse</header>
     <?php
@@ -97,18 +72,18 @@ requireEntryFound($entry, '/?p=admin_gruppe');
     foreach ($data as $entry) {
         ?>
         <form action="/actions/admin_gruppe.php" method="post">
-            <input type="hidden" name="a" value="3"/>
+            <input type="hidden" name="a" value="2"/>
             <input type="hidden" name="id" value="<?= $id; ?>"/>
             <input type="hidden" name="user_id" value="<?= escapeForOutput($entry['UserID']); ?>"/>
             <input type="hidden" name="o" value="<?= $offset; ?>"/>
             <div>
                 <label for="amount_<?= escapeForOutput($entry['UserID']); ?>"><?php
-                    echo createProfileLink($entry['UserID'], $entry['UserName']);
+                    echo createProfileLink($entry['UserID'], $entry['UserName'], 'admin_benutzer_bearbeiten');
                     if ($entry['IstMitglied'] != 1 && $entry['UserID'] !== null) {
                         echo ' (ausgetreten)';
                     }
                     ?>:</label>
-                <input type="number" name="amount" id="amount_<?= $entry['UserID']; ?>" size="9" min="0" step="0.01"
+                <input type="number" name="amount" id="amount_<?= $entry['UserID']; ?>" size="12" min="0" step="0.01"
                        value="<?= $entry['amount']; ?>"/> €
                 <input type="submit" value="Speichern"
                        id="cash_save_<?= escapeForOutput($entry['UserID']); ?>"/>
@@ -146,12 +121,12 @@ requireEntryFound($entry, '/?p=admin_gruppe');
         foreach ($data as $row) {
             ?>
             <form action="/actions/admin_gruppe.php" method="post">
-                <input type="hidden" name="a" value="4"/>
+                <input type="hidden" name="a" value="3"/>
                 <input type="hidden" name="id" value="<?= $id; ?>"/>
                 <input type="hidden" name="user_id" value="<?= escapeForOutput($row['UserId']); ?>"/>
                 <input type="hidden" name="o" value="<?= $offset; ?>"/>
                 <tr>
-                    <td><?= createProfileLink($row['UserId'], $row['UserName']); ?></td>
+                    <td><?= createProfileLink($row['UserId'], $row['UserName'], 'admin_benutzer_bearbeiten'); ?></td>
                     <td><input type="checkbox" name="message_write" id="message_write_<?= $id; ?>"
                                value="1" <?= ($row['message_write'] == 1 ? 'checked' : ''); ?>/></td>
                     <td><input type="checkbox" name="message_pin" id="message_pin_<?= $id; ?>"

@@ -7,6 +7,7 @@
  */
 
 $wer = getOrDefault($_GET, 'wer');
+$ware = getOrDefault($_GET, 'ware', -1);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
@@ -21,6 +22,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="hidden" name="p" value="admin_log_bioladen"/>
         <label for="wer">Wer:</label>
         <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
+        <label for="ware">Ware:</label>
+        <?= createWarenDropdown($ware, 'ware'); ?>
         <input type="submit" value="Abschicken"/>
     </form>
 </div>
@@ -35,10 +38,11 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Gesamtpreis</th>
     </tr>
     <?php
-    $filter = empty($wer) ? "%" : $wer;
-    $entriesCount = Database::getInstance()->getAdminBioladenLogCount($filter);
+    $filter_wer = empty($wer) ? null : $wer;
+    $filter_ware = $ware === -1 ? null : $ware;
+    $entriesCount = Database::getInstance()->getAdminBioladenLogCount($filter_wer, $filter_ware);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
-    $entries = Database::getInstance()->getAdminBioladenLogEntries($filter, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminBioladenLogEntries($filter_wer, $filter_ware, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -58,7 +62,9 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer)
+    . '&amp;ware=' . escapeForOutput($ware)
+    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

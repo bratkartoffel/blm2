@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - don't just invalidate, delete old http-session on login
 - (mobile) scroll to content when navigating to the pages
 - (admin) do not set null for broadcast message receiver, use fixed "Rundmail"
+- (admin) add some more filters to the various logs
 
 ### Fixed
 

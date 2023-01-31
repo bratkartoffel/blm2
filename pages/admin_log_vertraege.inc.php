@@ -8,6 +8,7 @@
 
 $wer = getOrDefault($_GET, 'wer');
 $wen = getOrDefault($_GET, 'wen');
+$ware = getOrDefault($_GET, 'ware', -1);
 $angenommen = getOrDefault($_GET, 'angenommen', -1);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
@@ -25,6 +26,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
         <label for="wen">Wen:</label>
         <input type="text" name="wen" id="wen" value="<?= escapeForOutput($wen); ?>"/>
+        <label for="ware">Ware:</label>
+        <?= createWarenDropdown($ware, 'ware'); ?>
         <label for="angenommen">Angenommen:</label>
         <select name="angenommen" id="angenommen">
             <option value="">- Alle -</option>
@@ -47,12 +50,13 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Angenommen?</th>
     </tr>
     <?php
-    $filter_wer = empty($wer) ? "%" : $wer;
-    $filter_wen = empty($wen) ? "%" : $wen;
-    $filter_angenommen = $angenommen === -1 ? null : intval($angenommen);
-    $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $filter_angenommen);
+    $filter_wer = empty($wer) ? null : $wer;
+    $filter_wen = empty($wen) ? null : $wen;
+    $filter_ware = $ware === -1 ? null : $ware;
+    $filter_angenommen = $angenommen === -1 ? null : $angenommen;
+    $entriesCount = Database::getInstance()->getAdminVertraegeLogCount($filter_wer, $filter_wen, $filter_ware, $filter_angenommen);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
-    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $filter_angenommen, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminVertraegeLogEntries($filter_wer, $filter_wen, $filter_ware, $filter_angenommen, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -74,7 +78,11 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_vertraege&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen) . '&amp;angenommen=' . escapeForOutput($angenommen), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('/?p=admin_log_vertraege&amp;wer=' . escapeForOutput($wer)
+    . '&amp;wen=' . escapeForOutput($wen)
+    . '&amp;ware=' . escapeForOutput($ware)
+    . '&amp;angenommen=' . escapeForOutput($angenommen)
+    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

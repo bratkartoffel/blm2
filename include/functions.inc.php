@@ -817,7 +817,8 @@ function getOrDefault(array $array, string $name, $default = null)
         } else if (is_string($default)) {
             return $value;
         } else if (is_integer($default)) {
-            return intval($value);
+            if ($value === "") return $default;
+            else return intval($value);
         } else if (is_double($default) || is_float($default)) {
             return doubleval(str_replace(',', '.', $value));
         } else {

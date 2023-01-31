@@ -8,6 +8,7 @@
 
 $verkaeufer = getOrDefault($_GET, 'verkaeufer');
 $kaeufer = getOrDefault($_GET, 'kaeufer');
+$ware = getOrDefault($_GET, 'ware', -1);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
@@ -24,6 +25,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <input type="text" name="verkaeufer" id="verkaeufer" value="<?= escapeForOutput($verkaeufer); ?>"/>
         <label for="kaeufer">Käufer:</label>
         <input type="text" name="kaeufer" id="kaeufer" value="<?= escapeForOutput($kaeufer); ?>"/>
+        <label for="ware">Ware:</label>
+        <?= createWarenDropdown($ware, 'ware'); ?>
         <input type="submit" value="Abschicken"/><br/>
     </form>
 </div>
@@ -39,11 +42,12 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Gesamtpreis</th>
     </tr>
     <?php
-    $filter_verkaeufer = empty($verkaeufer) ? "%" : $verkaeufer;
-    $filter_kaeufer = empty($kaeufer) ? "%" : $kaeufer;
-    $entriesCount = Database::getInstance()->getAdminMarketLogCount($filter_verkaeufer, $filter_kaeufer);
+    $filter_verkaeufer = empty($verkaeufer) ? null : $verkaeufer;
+    $filter_kaeufer = empty($kaeufer) ? null : $kaeufer;
+    $filter_ware = $ware === -1 ? null : $ware;
+    $entriesCount = Database::getInstance()->getAdminMarketLogCount($filter_verkaeufer, $filter_kaeufer, $filter_ware);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
-    $entries = Database::getInstance()->getAdminMarketLogEntries($filter_verkaeufer, $filter_kaeufer, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
+    $entries = Database::getInstance()->getAdminMarketLogEntries($filter_verkaeufer, $filter_kaeufer, $filter_ware, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
 
     for ($i = 0; $i < count($entries); $i++) {
         $row = $entries[$i];
@@ -70,7 +74,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_marktplatz&amp;verkaeufer=' . escapeForOutput($verkaeufer) . '&amp;kaeufer=' . escapeForOutput($kaeufer), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('/?p=admin_log_marktplatz&amp;verkaeufer=' . escapeForOutput($verkaeufer)
+    . '&amp;kaeufer=' . escapeForOutput($kaeufer)
+    . '&amp;ware=' . escapeForOutput($ware)
+    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

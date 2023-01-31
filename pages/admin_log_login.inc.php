@@ -51,10 +51,10 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Art</th>
     </tr>
     <?php
-    $filter_wer = empty($wer) ? "%" : $wer;
-    $filter_ip = empty($ip) ? "%" : $ip;
-    $filter_art = $art === -1 ? null : intval($art);
-    $filter_success = $success === -1 ? null : intval($success);
+    $filter_wer = empty($wer) ? null : $wer;
+    $filter_ip = empty($ip) ? null : $ip;
+    $filter_art = $art === -1 ? null : $art;
+    $filter_success = $success === -1 ? null : $success;
     $entriesCount = Database::getInstance()->getAdminLoginLogCount($filter_wer, $filter_ip, $filter_art, $filter_success);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
     $entries = Database::getInstance()->getAdminLoginLogEntries($filter_wer, $filter_ip, $filter_art, $filter_success, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));

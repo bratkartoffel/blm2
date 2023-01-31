@@ -37,8 +37,8 @@ $offset = getOrDefault($_GET, 'o', 0);
         <th>Nachricht</th>
     </tr>
     <?php
-    $filter_sender = empty($absender) ? "%" : $absender;
-    $filter_receiver = empty($empfaenger) ? "%" : $empfaenger;
+    $filter_sender = empty($absender) ? null : $absender;
+    $filter_receiver = empty($empfaenger) ? null : $empfaenger;
     $entriesCount = Database::getInstance()->getAdminMessageLogCount($filter_sender, $filter_receiver);
     $offset = verifyOffset($offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
     $entries = Database::getInstance()->getAdminMessageLogEntries($filter_sender, $filter_receiver, $offset, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size'));
@@ -60,7 +60,9 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_nachrichten&amp;absender=' . escapeForOutput($filter_sender) . '&amp;empfaenger=' . escapeForOutput($empfaenger), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('/?p=admin_log_nachrichten&amp;absender=' . escapeForOutput($filter_sender)
+    . '&amp;empfaenger=' . escapeForOutput($empfaenger)
+    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

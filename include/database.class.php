@@ -558,211 +558,193 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         }
     }
 
-    public function getAdminBioladenLogCount(string $werFilter): ?int
+    public function getAdminBioladenLogCount(?string $werFilter, ?int $wareFilter): ?int
     {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_SHOP . " WHERE playerName LIKE :wer");
-        $stmt->bindParam("wer", $werFilter);
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_SHOP . " WHERE ((1))",
+            array(
+                "playerName LIKE :wer" => $werFilter,
+                "item = :ware" => $wareFilter,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminBioladenLogEntries(string $werFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminBioladenLogEntries(?string $werFilter, ?int $wareFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_SHOP . "
-            WHERE playerName LIKE :wer ORDER BY created DESC LIMIT :offset, :count");
-        $stmt->bindParam("wer", $werFilter);
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_SHOP . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "playerName LIKE :wer" => $werFilter,
+                "item = :ware" => $wareFilter,
+            )
+        );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminGroupTreasuryLogCount(string $werFilter, string $wenFilter, ?int $groupFilter): ?int
+    public function getAdminGroupTreasuryLogCount(?string $werFilter, ?string $wenFilter, ?int $groupFilter): ?int
     {
-        if ($groupFilter == null) {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_GROUP_CASH . "
-                WHERE senderName LIKE :wer AND (receiverId IS NULL OR receiverName LIKE :wen)");
-        } else {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_GROUP_CASH . "
-                WHERE groupId = :gruppe AND (senderName LIKE :wer AND (receiverId IS NULL OR receiverName LIKE :wen))");
-            $stmt->bindParam("gruppe", $groupFilter, PDO::PARAM_INT);
-        }
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("wen", $wenFilter);
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_GROUP_CASH . " WHERE ((1))",
+            array(
+                "groupId = :gruppe" => $groupFilter,
+                "senderName LIKE :wer" => $werFilter,
+                "receiverName LIKE :wen" => $wenFilter,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminGroupTreasuryLogEntries(string $werFilter, string $wenFilter, ?int $groupFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminGroupTreasuryLogEntries(?string $werFilter, ?string $wenFilter, ?int $groupFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        if ($groupFilter == null) {
-            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_GROUP_CASH . "
-                WHERE senderName LIKE :wer AND (receiverId IS NULL OR receiverName LIKE :wen) ORDER BY created DESC LIMIT :offset, :count");
-        } else {
-            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_GROUP_CASH . "
-                WHERE groupId = :gruppe AND (senderName LIKE :wer AND (receiverId IS NULL OR receiverName LIKE :wen)) ORDER BY created DESC LIMIT :offset, :count");
-            $stmt->bindParam("gruppe", $groupFilter, PDO::PARAM_INT);
-        }
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("wen", $wenFilter);
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_GROUP_CASH . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "groupId = :gruppe" => $groupFilter,
+                "senderName LIKE :wer" => $werFilter,
+                "receiverName LIKE :wen" => $wenFilter,
+            )
+        );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminLoginLogCount(string $werFilter, string $ipFilter, ?int $artFilter, ?int $successFilter): ?int
+    public function getAdminLoginLogCount(?string $werFilter, ?string $ipFilter, ?int $artFilter, ?int $successFilter): ?int
     {
-        $sql = "SELECT count(1) AS count FROM " . self::TABLE_LOG_LOGIN . " WHERE playerName LIKE :wer AND IP LIKE :ip";
-        if ($artFilter !== null) $sql .= " AND sitter = :art";
-        if ($successFilter !== null) $sql .= " AND success = :success";
-
-        $stmt = $this->prepare($sql);
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("ip", $ipFilter);
-
-        if ($artFilter !== null) $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
-        if ($successFilter !== null) $stmt->bindParam("success", $successFilter, PDO::PARAM_INT);
-
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_LOGIN . " WHERE ((1))",
+            array(
+                "playerName LIKE :wer" => $werFilter,
+                "IP LIKE :ip" => $ipFilter,
+                "sitter = :art" => $artFilter,
+                "success = :success" => $successFilter,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminLoginLogEntries(string $werFilter, string $ipFilter, ?int $artFilter, ?int $successFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminLoginLogEntries(?string $werFilter, ?string $ipFilter, ?int $artFilter, ?int $successFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-
-        $sql = "SELECT * FROM " . self::TABLE_LOG_LOGIN . " WHERE playerName LIKE :wer AND IP LIKE :ip";
-        if ($artFilter !== null) $sql .= " AND sitter = :art";
-        if ($successFilter !== null) $sql .= " AND success = :success";
-        $sql .= " ORDER BY created DESC LIMIT :offset, :count";
-
-
-        $stmt = $this->prepare($sql);
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("ip", $ipFilter);
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_LOGIN . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "playerName LIKE :wer" => $werFilter,
+                "IP LIKE :ip" => $ipFilter,
+                "sitter = :art" => $artFilter,
+                "success = :success" => $successFilter,
+            )
+        );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
-
-        if ($artFilter !== null) $stmt->bindParam("art", $artFilter, PDO::PARAM_INT);
-        if ($successFilter !== null) $stmt->bindParam("success", $successFilter, PDO::PARAM_INT);
-
         return $this->executeAndExtractRows($stmt);
     }
 
     public function getAdminMafiaLogCount(?string $werFilter, ?string $wenFilter, ?string $artFilter, ?int $filter_success): ?int
     {
-        $wheres = array("1=1");
-        if ($werFilter !== null) $wheres[] = " senderName LIKE :wer";
-        if ($wenFilter !== null) $wheres[] = " receiverName LIKE :wen";
-        if ($artFilter !== null) $wheres[] = " action = :art";
-        if ($filter_success !== null) $wheres[] = " success = :success";
-
-        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MAFIA . " WHERE " . implode(" AND ", $wheres));
-        if ($werFilter !== null) $stmt->bindParam("wer", $werFilter);
-        if ($wenFilter !== null) $stmt->bindParam("wen", $wenFilter);
-        if ($artFilter !== null) $stmt->bindParam("art", $artFilter);
-        if ($filter_success !== null) $stmt->bindParam("success", $filter_success, PDO::PARAM_INT);
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_MAFIA . " WHERE ((1))",
+            array(
+                "senderName LIKE :wer" => $werFilter,
+                "receiverName LIKE :wen" => $wenFilter,
+                "action = :art" => $artFilter,
+                "success = :success" => $filter_success,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
     public function getAdminMafiaLogEntries(?string $werFilter, ?string $wenFilter, ?string $artFilter, ?int $filter_success, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        $wheres = array("1=1");
-        if ($werFilter !== null) $wheres[] = " senderName LIKE :wer";
-        if ($wenFilter !== null) $wheres[] = " receiverName LIKE :wen";
-        if ($artFilter !== null) $wheres[] = " action = :art";
-        if ($filter_success !== null) $wheres[] = " success = :success";
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_MAFIA . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "senderName LIKE :wer" => $werFilter,
+                "receiverName LIKE :wen" => $wenFilter,
+                "action = :art" => $artFilter,
+                "success = :success" => $filter_success,
+            )
+        );
 
-        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MAFIA . " WHERE " . implode(" AND ", $wheres) . "
-            ORDER BY created DESC LIMIT :offset, :count");
-        if ($werFilter !== null) $stmt->bindParam("wer", $werFilter);
-        if ($wenFilter !== null) $stmt->bindParam("wen", $wenFilter);
-        if ($artFilter !== null) $stmt->bindParam("art", $artFilter);
-        if ($filter_success !== null) $stmt->bindParam("success", $filter_success, PDO::PARAM_INT);
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminVertraegeLogCount(string $werFilter, string $wenFilter, ?int $angenommenFilter): ?int
+    public function getAdminVertraegeLogCount(?string $werFilter, ?string $wenFilter, ?int $wareFilter, ?int $angenommenFilter): ?int
     {
-        if ($angenommenFilter === null) {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_CONTRACTS . "
-                WHERE senderName LIKE :wer AND receiverName LIKE :wen");
-        } else {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_CONTRACTS . "
-                WHERE senderName LIKE :wer AND receiverName LIKE :wen AND accepted = :angenommen");
-            $stmt->bindParam("angenommen", $angenommenFilter, PDO::PARAM_INT);
-        }
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("wen", $wenFilter);
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_CONTRACTS . " WHERE ((1))",
+            array(
+                "senderName LIKE :wer" => $werFilter,
+                "receiverName LIKE :wen" => $wenFilter,
+                "item = :ware" => $wareFilter,
+                "accepted = :angenommen" => $angenommenFilter,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminVertraegeLogEntries(string $werFilter, string $wenFilter, ?int $angenommenFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminVertraegeLogEntries(?string $werFilter, ?string $wenFilter, ?int $wareFilter, ?int $angenommenFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        if ($angenommenFilter === null) {
-            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_CONTRACTS . "
-                WHERE senderName LIKE :wer AND receiverName LIKE :wen ORDER BY created DESC LIMIT :offset, :count");
-        } else {
-            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_CONTRACTS . "
-                WHERE senderName LIKE :wer AND receiverName LIKE :wen AND accepted = :angenommen ORDER BY created DESC LIMIT :offset, :count");
-            $stmt->bindParam("angenommen", $angenommenFilter, PDO::PARAM_INT);
-        }
-        $stmt->bindParam("wer", $werFilter);
-        $stmt->bindParam("wen", $wenFilter);
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_CONTRACTS . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "senderName LIKE :wer" => $werFilter,
+                "receiverName LIKE :wen" => $wenFilter,
+                "item = :ware" => $wareFilter,
+                "accepted = :angenommen" => $angenommenFilter,
+            )
+        );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminMarketLogCount(string $verkaeuferFilter, string $kaeuferFilter): ?int
+    public function getAdminMarketLogCount(?string $verkaeuferFilter, ?string $kaeuferFilter, ?int $wareFilter): ?int
     {
-        if ($kaeuferFilter === '%') {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MARKET . "
-            WHERE sellerName LIKE :seller AND (buyerName IS NULL OR buyerName LIKE :buyer)");
-        } else {
-            $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MARKET . "
-            WHERE sellerName LIKE :seller AND buyerName LIKE :buyer");
-        }
-        $stmt->bindParam("seller", $verkaeuferFilter);
-        $stmt->bindParam("buyer", $kaeuferFilter);
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_MARKET . " WHERE ((1))",
+            array(
+                "sellerName LIKE :wer" => $verkaeuferFilter,
+                "buyerName LIKE :wen" => $kaeuferFilter,
+                "item = :ware" => $wareFilter,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminMarketLogEntries(string $verkaeuferFilter, string $kaeuferFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminMarketLogEntries(?string $verkaeuferFilter, ?string $kaeuferFilter, ?int $wareFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        if ($kaeuferFilter === '%') {
-            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MARKET . "
-                WHERE sellerName LIKE :seller AND (buyerName IS NULL OR buyerName LIKE :buyer) ORDER BY created DESC LIMIT :offset, :count");
-        } else {
-            $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MARKET . "
-                WHERE sellerName LIKE :seller AND buyerName LIKE :buyer ORDER BY created DESC LIMIT :offset, :count");
-        }
-        $stmt->bindParam("seller", $verkaeuferFilter);
-        $stmt->bindParam("buyer", $kaeuferFilter);
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_MARKET . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "sellerName LIKE :wer" => $verkaeuferFilter,
+                "buyerName LIKE :wen" => $kaeuferFilter,
+                "item = :ware" => $wareFilter,
+            )
+        );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAdminMessageLogCount(string $senderFilter, string $receiverFilter): ?int
+    public function getAdminMessageLogCount(?string $senderFilter, ?string $receiverFilter): ?int
     {
-        $stmt = $this->prepare("SELECT count(1) AS count FROM " . self::TABLE_LOG_MESSAGES . "
-            WHERE senderName LIKE :sender AND (receiverName IS NULL OR receiverName LIKE :receiver)");
-        $stmt->bindParam("sender", $senderFilter);
-        $stmt->bindParam("receiver", $receiverFilter);
+        $stmt = $this->prepareAndBind("SELECT count(1) AS count FROM " . self::TABLE_LOG_MESSAGES . " WHERE ((1))",
+            array(
+                "senderName LIKE :wer" => $senderFilter,
+                "receiverName LIKE :wen" => $receiverFilter,
+            )
+        );
         return $this->executeAndExtractField($stmt, 'count');
     }
 
-    public function getAdminMessageLogEntries(string $senderFilter, string $receiverFilter, int $page, int $entriesPerPage): ?array
+    public function getAdminMessageLogEntries(?string $senderFilter, ?string $receiverFilter, int $page, int $entriesPerPage): ?array
     {
         $offset = $page * $entriesPerPage;
-        $stmt = $this->prepare("SELECT * FROM " . self::TABLE_LOG_MESSAGES . "
-            WHERE senderName LIKE :sender AND (receiverName IS NULL OR receiverName LIKE :receiver) ORDER BY created DESC LIMIT :offset, :count");
-        $stmt->bindParam("sender", $senderFilter);
-        $stmt->bindParam("receiver", $receiverFilter);
+        $stmt = $this->prepareAndBind("SELECT * FROM " . self::TABLE_LOG_MESSAGES . " WHERE ((1)) ORDER BY created DESC LIMIT :offset, :count",
+            array(
+                "senderName LIKE :wer" => $senderFilter,
+                "receiverName LIKE :wen" => $receiverFilter,
+            )
+        );
         $stmt->bindParam("offset", $offset, PDO::PARAM_INT);
         $stmt->bindParam("count", $entriesPerPage, PDO::PARAM_INT);
         return $this->executeAndExtractRows($stmt);
@@ -1686,6 +1668,25 @@ ORDER BY m.Name");
             $this->error($this->link, "Could not prepare statement: " . $sql);
             return null;
         }
+        return $stmt;
+    }
+
+    private function prepareAndBind(string $template, array $wheres = array()): ?PDOStatement
+    {
+        $wheres = array_filter($wheres, fn($value) => $value !== null);
+        if (empty($wheres)) {
+            return $this->prepare(str_replace("((1))", "1=1", $template));
+        }
+
+        $sql = str_replace("((1))", implode(" AND ", array_keys($wheres)), $template);
+        $stmt = $this->prepare($sql);
+        if ($stmt === null) return null;
+
+        foreach ($wheres as $key => &$value) {
+            $bindField = substr($key, strrpos($key, ':') + 1);
+            $stmt->bindParam($bindField, $value);
+        }
+
         return $stmt;
     }
 

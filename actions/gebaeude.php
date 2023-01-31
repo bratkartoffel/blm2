@@ -13,7 +13,7 @@ requireLogin();
 restrictSitter('Gebaeude');
 
 $was = getOrDefault($_POST, 'was', 0);
-$data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndExpenseMafiaAndEinnahmenZinsen($_SESSION['blm_user']);
+$data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndPointsAndEinnahmenZinsen($_SESSION['blm_user']);
 requireEntryFound($data, '/?p=gebaeude', 112, __LINE__);
 $buildingData = calculateBuildingDataForPlayer($was, $data);
 

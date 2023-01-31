@@ -1105,9 +1105,9 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getPlayerMoneyAndBuildingLevelsAndExpenseMafiaAndEinnahmenZinsen(int $id): ?array
+    public function getPlayerMoneyAndBuildingLevelsAndPointsAndEinnahmenZinsen(int $id): ?array
     {
-        $stmt = $this->prepare("SELECT m.Geld, " . getAllBuildingFields() . ", s.AusgabenMafia, s.EinnahmenZinsen
+        $stmt = $this->prepare("SELECT m.Geld, m.Punkte, " . getAllBuildingFields() . ", s.EinnahmenZinsen
             FROM " . self::TABLE_USERS . " m INNER JOIN " . self::TABLE_STATISTICS . " s ON m.ID = s.user_id
             WHERE m.ID = :id");
         $stmt->bindParam("id", $id, PDO::PARAM_INT);

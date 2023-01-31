@@ -1199,9 +1199,8 @@ function buildingRequirementsMet(int $building_id, array $player): bool
         case building_building_yard:
             return $player[$attribute] > 0 || ($player['Gebaeude' . building_plantage] >= 8 && $player['Gebaeude' . building_research_lab] >= 9);
         case building_fence:
-            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 10000 && $player['Gebaeude' . building_plantage] > 9);
         case building_pizzeria:
-            return $player[$attribute] > 0 || ($player['AusgabenMafia'] >= 25000 && $player['Gebaeude' . building_plantage] > 11);
+            return $player[$attribute] > 0 || mafiaRequirementsMet($player['Punkte']);
         case building_bank:
             return $player[$attribute] > 0 || ($player['Gebaeude' . building_plantage] >= 20 && $player['EinnahmenZinsen'] >= 100000);
         default:

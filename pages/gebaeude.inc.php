@@ -10,7 +10,7 @@ restrictSitter('Gebaeude');
 
 $auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'],
     job_type_factor * job_type_building, (job_type_factor * job_type_building) + job_type_factor);
-$data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndExpenseMafiaAndEinnahmenZinsen($_SESSION['blm_user']);
+$data = Database::getInstance()->getPlayerMoneyAndBuildingLevelsAndPointsAndEinnahmenZinsen($_SESSION['blm_user']);
 
 $auftraege = array();
 for ($i = 0; $i < count($auftraege_db); $i++) {

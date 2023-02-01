@@ -11,7 +11,7 @@ restrictSitter('Gruppe');
 $name = getOrDefault($_GET, 'name');
 $tag = getOrDefault($_GET, 'tag');
 $id = getOrDefault($_GET, 'id', 0);
-$offset = getOrDefault($_GET, 'offset', 0);
+$offset = getOrDefault($_GET, 'o', 0);
 $player = Database::getInstance()->getPlayerNameAndPointsAndGruppeAndPlantageLevelById($_SESSION['blm_user']);
 $rights = array();
 ?>

@@ -180,12 +180,12 @@ sendCspHeader();
         ?>
         <div class="NaviBox">
             <header>Navigation</header>
-            <div class="NaviLink"><a href="/?p=index" id="link_index">Startseite</a></div>
-            <div class="NaviLink"><a href="/?p=anmelden" id="link_anmelden">Anmelden</a></div>
-            <div class="NaviLink"><a href="/?p=registrieren" id="link_registrieren">Registrieren</a></div>
-            <div class="NaviLink"><a href="/?p=regeln" id="link_regeln">Regeln</a></div>
+            <?= createNavigationLink('index', 'Startseite'); ?>
+            <?= createNavigationLink('anmelden', 'Anmelden'); ?>
+            <?= createNavigationLink('registrieren', 'Registrieren'); ?>
+            <?= createNavigationLink('regeln', 'Regeln'); ?>
             <div class="NaviSpacer"></div>
-            <div class="NaviLink"><a href="/?p=impressum" id="link_impressum">Impressum / Datenschutz</a></div>
+            <?= createNavigationLink('impressum', 'Impressum / Datenschutz'); ?>
         </div>
         <?php
     }
@@ -208,12 +208,18 @@ sendCspHeader();
         chefboxLink.onclick = () => ChefboxZeigen();
     }
 
+    <?php
+    if(isLoggedIn()) {
+    ?>
     let links = document.getElementById('Navigation').getElementsByTagName('a');
     for (let link of links) {
         if (link.classList.contains("inactive")) {
             link.href += '#Inhalt';
         }
     }
+    <?php
+    }
+    ?>
 </script>
 </body>
 </html>

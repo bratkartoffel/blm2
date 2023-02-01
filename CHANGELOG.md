@@ -9,17 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- do not require mafia expenses to build fence and pizzeria
+- (gebaeude) do not require mafia expenses to build fence and pizzeria
     - this allows users which don't have other players in range to build these buildings
 - active link is now marked using css instead of javascript
 - remove unused / simplify javascript code
-- (bank building) change bonus factor from `2 ^ Level` to `1.75 ^ Level`, rounded up to `50'000`
+- (bank) change bonus factor from `2 ^ Level` to `1.75 ^ Level`, rounded up to `50'000`
 
 ### Fixed
 
-- (gruppe) pagination for group messages is now working again
-- page reloads again correctly when clicking active link
-- (chefbox) csp error for help link
+- (gruppe) fix pagination for group messages is now working again
+- fix page reloads when clicking link for currently active page
+- (chefbox) fix csp error for help link
 
 ### Removed
 

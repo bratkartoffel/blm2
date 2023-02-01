@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - do not require mafia expenses to build fence and pizzeria
     - this allows users which don't have other players in range to build these buildings
+- active link is now marked using css instead of javascript
 
 ### Fixed
 

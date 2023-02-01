@@ -117,26 +117,6 @@ function CountdownFields() {
     Array.prototype.forEach.call(document.getElementsByClassName('countup'), field => countdown(field, 1))
 }
 
-function MarkActiveLink() {
-    let params = new URLSearchParams(window.location.search);
-    let page;
-    if (params.has('p')) {
-        page = params.get('p');
-    } else {
-        page = 'index';
-    }
-    if (page.includes('_')) {
-        page = page.split('_')[0];
-    }
-    Array.prototype.forEach.call(document.getElementById("Navigation").getElementsByTagName("a"), (field) => {
-        if (field.href.includes(page)) {
-            field.innerHTML = '<span id="activeLinkArrow">→</span> <i>' + field.innerHTML + "</i>";
-            field.style.color = "#555555";
-            field.classList.add("activeLink");
-        }
-    });
-}
-
 function MafiaActionChange() {
     let action = Number.parseInt(document.getElementById('action').value);
     let data = mafia_cost_data[action];

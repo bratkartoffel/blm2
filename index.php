@@ -94,7 +94,7 @@ sendCspHeader();
         ?>
         <div class="NaviBox" id="Navi">
             <header>Navigation</header>
-            <div class="NaviLink"><a href="/?p=index">Startseite</a></div>
+            <?= createNavigationLink('index', 'Startseite'); ?>
             <div class="NaviBlock">
                 <span>Gebäude:</span>
                 <?= createNavigationLink('gebaeude', 'Gebäude', 'Gebaeude'); ?>
@@ -105,7 +105,7 @@ sendCspHeader();
 
             <div class="NaviBlock">
                 <span>Finanzen:</span>
-                <div class="NaviLink"><a href="/?p=buero" id="link_buero">Büro</a></div>
+                <?= createNavigationLink('buero', 'Büro'); ?>
                 <?= createNavigationLink('bank', 'Bank', 'Bank'); ?>
                 <?= createNavigationLink('vertraege_liste', 'Verträge (' . Database::getInstance()->getOpenContractCount($_SESSION['blm_user']) . ')', 'Vertraege'); ?>
                 <?= createNavigationLink('marktplatz_liste', 'Marktplatz (' . Database::getInstance()->getMarktplatzCount() . ')', 'Marktplatz'); ?>
@@ -116,24 +116,21 @@ sendCspHeader();
                 <span>Persönlich:</span>
                 <?= createNavigationLink('gruppe', sprintf("Gruppe (%s)", $data['Gruppe'] === null ? '0' : Database::getInstance()->getUnreadGroupMessageCount($data['Gruppe'], $_SESSION['blm_user']) . ' / ' . Database::getInstance()->countPendingGroupDiplomacy($data['Gruppe'])), 'Gruppe'); ?>
                 <?= createNavigationLink('nachrichten_liste', 'Nachrichten (' . Database::getInstance()->getUnreadMessageCount($_SESSION['blm_user']) . ')', 'Nachrichten'); ?>
-                <div class="NaviLink"><a href="/?p=notizblock" id="link_notizblock">Notizblock</a></div>
-                <div class="NaviLink"><a href="/?p=einstellungen" id="link_einstellungen">Einstellungen</a>
-                </div>
+                <?= createNavigationLink('notizblock', 'Notizblock'); ?>
+                <?= createNavigationLink('einstellungen', 'Einstellungen'); ?>
                 <div class="NaviLink">
                     <a href="chefbox.php" id="link_chefbox" target="_blank">Chefbox</a>
                 </div>
-                <?= (isAdmin() ? '<div class="NaviLink"><a href="/?p=admin" id="link_admin">Admin-Bereich</a></div>' : ''); ?>
+                <?= (isAdmin() ? createNavigationLink('admin', 'Admin-Bereich') : ''); ?>
             </div>
 
             <div class="NaviBlock">
                 <span>Allgemein:</span>
-                <div class="NaviLink">
-                    <a href="/?p=rangliste&amp;o=<?= floor((Database::getInstance()->getPlayerRankById($_SESSION['blm_user']) - 1) / Config::getInt(Config::SECTION_BASE, 'ranking_page_size')); ?>">Rangliste</a>
-                </div>
-                <div class="NaviLink"><a href="/?p=statistik" id="link_statistik">Serverstatistik</a></div>
-                <div class="NaviLink"><a href="/?p=regeln" id="link_regeln">Regeln</a></div>
-                <div class="NaviLink"><a href="/?p=hilfe" id="link_hilfe">Hilfe</a></div>
-                <div class="NaviLink"><a href="/?p=impressum" id="link_impressum">Impressum / Datenschutz</a></div>
+                <?= createNavigationLink('rangliste', 'Rangliste'); ?>
+                <?= createNavigationLink('statistik', 'Serverstatistik'); ?>
+                <?= createNavigationLink('regeln', 'Regeln'); ?>
+                <?= createNavigationLink('hilfe', 'Hilfe'); ?>
+                <?= createNavigationLink('impressum', 'Impressum / Datenschutz'); ?>
                 <div class="NaviSpacer"></div>
                 <div class="NaviLink"><a href="/actions/logout.php" id="link_logout">Abmelden</a></div>
             </div>
@@ -205,7 +202,6 @@ sendCspHeader();
     </div>
 </div>
 <script nonce="<?= getCspNonce(); ?>">
-    MarkActiveLink();
     deobfuscate();
     let chefboxLink = document.getElementById('link_chefbox');
     if (chefboxLink !== null) {
@@ -214,7 +210,7 @@ sendCspHeader();
 
     let links = document.getElementById('Navigation').getElementsByTagName('a');
     for (let link of links) {
-        if (!link.classList.contains("activeLink")) {
+        if (link.classList.contains("inactive")) {
             link.href += '#Inhalt';
         }
     }

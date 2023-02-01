@@ -17,6 +17,15 @@ a {
     text-decoration: none;
 }
 
+div#Navigation a.active:before {
+    content: '→ ';
+}
+
+div#Navigation a.active {
+    color: #555555;
+    font-style: italic;
+}
+
 .countdown {
     white-space: nowrap;
 }

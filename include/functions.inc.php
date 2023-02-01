@@ -829,7 +829,11 @@ function getOrDefault(array $array, string $name, $default = null)
             return $value;
         }
     }
-    return $default;
+    if (is_callable($default)) {
+        return $default();
+    } else {
+        return $default;
+    }
 }
 
 function verifyOffset(int $offset, int $entriesCount, int $entriesPerPage): int
@@ -1031,8 +1035,9 @@ function requireLogin(): void
     }
 }
 
-function isAccessAllowedIfSitter(string $requiredRight): bool
+function isAccessAllowedIfSitter(?string $requiredRight): bool
 {
+    if ($requiredRight === null) return true;
     return !$_SESSION['blm_sitter'] || Database::getInstance()->getSitterPermissions($_SESSION['blm_user'], $requiredRight) === "1";
 }
 
@@ -1083,10 +1088,11 @@ function sendMail(string $recipient, string $subject, string $message): bool
     return mail($recipient, $subject, $message, $headers, '-f ' . Config::get(Config::SECTION_BASE, 'admin_email'));
 }
 
-function createNavigationLink(string $target, string $text, string $sitterRightsRequired): string
+function createNavigationLink(string $target, string $text, ?string $sitterRightsRequired = null): string
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
-        return sprintf('<div class="NaviLink"><a href="/?p=%s" id="link_%s">%s</a></div>%s', $target, $target, $text, "\n");
+        return sprintf('<div class="NaviLink"><a href="/?p=%s" id="link_%s" class="%s">%s</a></div>%s',
+            $target, $target, $target === getCurrentPage() ? "active" : "inactive", $text, "\n");
     }
     return "";
 }

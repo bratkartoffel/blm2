@@ -6,7 +6,9 @@
  * Please see LICENCE.md for complete licence text.
  */
 
-$offset = getOrDefault($_GET, 'o', 0);
+$offset = getOrDefault($_GET, 'o', function () {
+    return floor((Database::getInstance()->getPlayerRankById($_SESSION['blm_user']) - 1) / Config::getInt(Config::SECTION_BASE, 'ranking_page_size'));
+});
 $offset_gr = getOrDefault($_GET, 'o_gr', 0);
 $offset_ep = getOrDefault($_GET, 'o_ep', 0);
 $q = getOrDefault($_GET, 'q');

@@ -78,6 +78,7 @@ public abstract class AbstractTest {
                 }
                 Arrays.stream(response.body().split("\n")).forEach(l -> log.info("Installer: {}", l));
             } catch (IOException | InterruptedException e) {
+                driver.quit();
                 Assertions.fail(e);
             }
         }

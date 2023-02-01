@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - (gruppe) pagination for group messages is now working again
+- page reloads again correctly when clicking active link
 
 ## [1.11.2] - 2023-01-31
 

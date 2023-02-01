@@ -214,7 +214,9 @@ sendCspHeader();
 
     let links = document.getElementById('Navigation').getElementsByTagName('a');
     for (let link of links) {
-        link.href += '#Inhalt';
+        if (!link.classList.contains("activeLink")) {
+            link.href += '#Inhalt';
+        }
     }
 </script>
 </body>

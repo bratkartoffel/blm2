@@ -132,6 +132,7 @@ function MarkActiveLink() {
         if (field.href.includes(page)) {
             field.innerHTML = '<span id="activeLinkArrow">→</span> <i>' + field.innerHTML + "</i>";
             field.style.color = "#555555";
+            field.classList.add("activeLink");
         }
     });
 }

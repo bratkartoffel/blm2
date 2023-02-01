@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - this allows users which don't have other players in range to build these buildings
 - active link is now marked using css instead of javascript
 - remove unused / simplify javascript code
+- (bank building) change bonus factor from `2 ^ Level` to `1.75 ^ Level`, rounded up to `50'000`
 
 ### Fixed
 

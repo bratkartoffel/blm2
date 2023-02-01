@@ -1634,6 +1634,12 @@ function getMafiaChance(string $cfgSection, int $level, int $pizzeriaLevel = 0, 
     }
 }
 
+function calculateDepositLimit(int $bankLevel): float
+{
+    $limit = pow(Config::getFloat(Config::SECTION_BANK, 'bonus_factor_upgrade'), $bankLevel) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
+    return ceil($limit / 50000) * 50000;
+}
+
 function trimAndRemoveControlChars(string $string): string
 {
     // remove all control characters and trim spaces

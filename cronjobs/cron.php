@@ -54,7 +54,7 @@ function handleInterestRates(Database $database): void
             array('EinnahmenGebaeude' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])),
             array('user_id = :whr0' => $entry['ID']));
 
-        $depositLimit = pow(2, $entry['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
+        $depositLimit = calculateDepositLimit($entry['Gebaeude' . building_bank]);
         if ($entry['Bank'] >= $depositLimit) continue;
 
         if ($entry['Bank'] >= 0) {

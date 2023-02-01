@@ -12,7 +12,7 @@ $data = Database::getInstance()->getPlayerNameAndBankAndMoneyAndGroupById($_SESS
 $art = getOrDefault($_GET, 'art', 1);
 $betrag = getOrDefault($_GET, 'betrag', .0);
 $interestRates = calculateInterestRates();
-$depositLimit = pow(2, $data['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
+$depositLimit = calculateDepositLimit($data['Gebaeude' . building_bank]);
 
 $resetMedianRates = (Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') + Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max')) / 2;
 $resetCreditLimit = calculateResetCreditLimit();

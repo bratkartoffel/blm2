@@ -23,7 +23,7 @@ $data = Database::getInstance()->getPlayerNameAndBankAndMoneyAndGroupById($_SESS
 if ($data === null) {
     redirectTo('/?p=bank', 112, __LINE__);
 }
-$depositLimit = pow(2, $data['Gebaeude' . building_bank]) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
+$depositLimit = calculateDepositLimit($data['Gebaeude' . building_bank]);
 
 switch ($art) {
     // deposit money

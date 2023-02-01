@@ -18,7 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (gruppe) pagination for group messages is now working again
 - page reloads again correctly when clicking active link
-- (chefbox) csp error for help link 
+- (chefbox) csp error for help link
+
+### Removed
+
+- (nachrichten) remove bbcode for color and fontsize, didn't work since CSP addition
 
 ## [1.11.2] - 2023-01-31
 

@@ -636,29 +636,10 @@ function getYesOrNo(int $bool): string
 
 function replaceBBCode(string $text): string
 {
-    $colors[] = "aqua";
-    $colors[] = "black";
-    $colors[] = "blue";
-    $colors[] = "fuchsia";
-    $colors[] = "gray";
-    $colors[] = "green";
-    $colors[] = "lime";
-    $colors[] = "maroon";
-    $colors[] = "navy";
-    $colors[] = "olive";
-    $colors[] = "orange";
-    $colors[] = "purple";
-    $colors[] = "red";
-    $colors[] = "silver";
-    $colors[] = "teal";
-    $colors[] = "white";
-    $colors[] = "yellow";
-
     $result = escapeForOutput($text);
     $result = preg_replace(
         array(
             '/\[center](.*)\[\/center]/Uis',
-            "/\[size=([12]\d)](.*)\[\/size]/Uis",
             "/\[url=&quot;(https?:\/\/|www.|https?:\/\/www.)([a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/url]/SiU",
             "/\[img=&quot;(https?:\/\/[a-z\d\-_.\/]{3,32}\.[a-z]{3,4})&quot;](.*)\[\/img]/SiU",
             "@\[player=(.+)#(\d{1,8})/]@SUi",
@@ -666,8 +647,6 @@ function replaceBBCode(string $text): string
         ),
         array(
             '<div class="center">\1</div>',
-            // TODO CSP prevents using inline styles
-            '<span style="font-size: \1px;">\2</span>',
             '<a href="\1\2">\3</a>',
             '<a href="\1" target="_blank"><img src="\1" alt="\2"/></a>',
             '<a href="/?p=profil&amp;id=\2">\1</a>',
@@ -683,13 +662,10 @@ function replaceBBCode(string $text): string
 
         $result = preg_replace(
             array(
-                "/\[color=(#[\da-f]{6}|" . implode("|", $colors) . ")](.*)\[\/color]/is",
                 "/\[([bui])](.*)\[\/\\1]/Uis",
                 '/\[quote](.*)\[\/quote]/Uism'
             ),
             array(
-                // TODO CSP prevents using inline styles
-                '<span style="color: \1;">\2</span>',
                 '<\1>\2</\1>',
                 '<blockquote>\1</blockquote>'
             ),

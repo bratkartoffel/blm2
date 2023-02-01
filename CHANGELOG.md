@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (mobile) scroll to content when navigating to the pages
 - (admin) do not set null for broadcast message receiver, use fixed "Rundmail"
 - (admin) add some more filters to the various logs
+- (gebaeude) change cost factor for bank building from `1.70` -> `1.85` and duration factor from `1.60` -> `1.75`
 
 ### Fixed
 

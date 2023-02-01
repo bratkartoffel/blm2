@@ -1097,10 +1097,10 @@ function createNavigationLink(string $target, string $text, ?string $sitterRight
     return "";
 }
 
-function createHelpLink(int $module, int $category, ?string $linkExtraAttributes = null): string
+function createHelpLink(int $module, int $category): string
 {
     if (isLoggedIn()) {
-        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" %s><img id="help_image" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category, $linkExtraAttributes);
+        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" id="link_show_help"><img id="help_image" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category);
     }
     return "";
 }

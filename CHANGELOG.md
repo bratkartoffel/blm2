@@ -12,11 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - do not require mafia expenses to build fence and pizzeria
     - this allows users which don't have other players in range to build these buildings
 - active link is now marked using css instead of javascript
+- remove unused / simplify javascript code
 
 ### Fixed
 
 - (gruppe) pagination for group messages is now working again
 - page reloads again correctly when clicking active link
+- (chefbox) csp error for help link 
 
 ## [1.11.2] - 2023-01-31
 

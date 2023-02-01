@@ -48,7 +48,7 @@ sendCspHeader();
 <body id="Chefbox">
 <div id="ChefboxHead">
     <h1>BLM 2</h1>
-    <h3>Chefbox<?= createHelpLink(1, 16, 'onclick="return BLMNavigation(this.href);"'); ?></h3>
+    <h3>Chefbox<?= createHelpLink(1, 16); ?></h3>
 </div>
 
 <table class="Liste">
@@ -132,8 +132,9 @@ sendCspHeader();
         link.onclick = () => BLMNavigation(link.href);
     }
 
-    document.getElementById('show_blm').onclick = () => BLMzeigen('/?p=startseite');
+    document.getElementById('show_blm').onclick = () => BLMNavigation('/?p=startseite');
     document.getElementById('close_popup').onclick = () => BLMEnde();
+    document.getElementById('link_show_help').onclick = () => BLMNavigation(document.getElementById('link_show_help').href);
 </script>
 </body>
 </html>

@@ -11,16 +11,6 @@ function ChefboxZeigen() {
     return false;
 }
 
-function BLMzeigen(link) {
-    if (opener) {
-        opener.focus();
-    } else {
-        const blm = window.open(link, 'blm', 'fullscreen=yes,location=yes,resizable=yes,menubar=yes,scrollbars=yes,status=yes,toolbar=yes');
-        blm.focus();
-    }
-    return false;
-}
-
 function BLMEnde() {
     if (opener) {
         opener.focus();
@@ -36,7 +26,9 @@ function BLMNavigation(link) {
         opener.document.location.href = link;
         opener.focus();
     } else {
-        BLMzeigen(link);
+        let blm2 = window.open(link);
+        opener = blm2;
+        blm2.focus();
     }
     return false;
 }
@@ -46,6 +38,7 @@ function ZeichenUebrig(Feld, Text) {
     return true;
 }
 
+// used in plantage.inc.php
 function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, Button) {
     const kosten = Menge * (BasisPreis / BasisMenge);
 
@@ -62,6 +55,7 @@ function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, 
     }
 }
 
+// used in gruppe_diplomatie.inc.php
 function CheckKrieg(e) {
     if (e.selectedIndex === 2) {
         document.getElementById('kriegBetrag').style.display = 'block';
@@ -72,13 +66,6 @@ function CheckKrieg(e) {
 
 function confirmAbort(kosten, percentReturn) {
     return confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen nur ' + percentReturn + ' (entspricht ' + kosten + ') der Kosten zurückerstattet!');
-}
-
-function submit(button) {
-    button.form.submit();
-    button.disabled = 'disabled';
-    button.value = 'Bitte warten...';
-    return false;
 }
 
 function CountdownFields() {
@@ -117,6 +104,7 @@ function CountdownFields() {
     Array.prototype.forEach.call(document.getElementsByClassName('countup'), field => countdown(field, 1))
 }
 
+// used in mafia.inc.php
 function MafiaActionChange() {
     let action = Number.parseInt(document.getElementById('action').value);
     let data = mafia_cost_data[action];
@@ -134,7 +122,6 @@ function MafiaActionChange() {
 }
 
 // used in nachrichten_schreiben.inc.php
-// noinspection JSUnusedGlobalSymbols
 function toggleRundmail() {
     let f = document.getElementById('receiver');
     let b = document.getElementById('broadcast');

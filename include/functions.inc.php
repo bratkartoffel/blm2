@@ -1337,7 +1337,9 @@ function getLastIncomeTimestamp(): int
 
 function getIncome(int $shop_level, int $kebab_stand_level): int
 {
-    return (Config::getInt(Config::SECTION_BASE, 'income_base') + ($shop_level * Config::getInt(Config::SECTION_BASE, 'income_bonus_shop')) + ($kebab_stand_level * Config::getInt(Config::SECTION_BASE, 'income_bonus_kebab_stand')));
+    return (Config::getInt(Config::SECTION_BASE, 'income_base')
+        + ($shop_level * Config::getInt(Config::SECTION_SHOP, 'income_bonus'))
+        + ($kebab_stand_level * Config::getInt(Config::SECTION_KEBAB_STAND, 'income_bonus')));
 }
 
 function createBBProfileLink(int $user_id, string $user_name): string

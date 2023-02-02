@@ -43,7 +43,7 @@ function CheckAllAuftraege(Database $database): void
     }
 }
 
-function handleInterestRates(Database $database): void
+function handleInterestRatesAndBaseIncome(Database $database): void
 {
     $interestRates = calculateInterestRates();
     $entries = $database->getAllPlayerIdAndBankAndBioladenAndDoenerstandAndBank();
@@ -115,7 +115,7 @@ function handleItemBaseProduction(Database $database): void
 
 $database->begin();
 CheckAllAuftraege($database);
-handleInterestRates($database);
+handleInterestRatesAndBaseIncome($database);
 handleItemBaseProduction($database);
 $database->updatePlayerOnlineTimes();
 $points_interval = Config::getInt(Config::SECTION_BASE, 'points_interval') * 3600;

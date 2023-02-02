@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - active link is now marked using css instead of javascript
 - remove unused / simplify javascript code
 - (bank) change bonus factor from `2 ^ Level` to `1.75 ^ Level`, rounded up to `50'000`
+- move configuration `base.income_bonus_shop` to `shop.income_bonus` and increase `5 -> 12`
+- move configuration `base.income_bonus_kebab_stand` to `kebab_stand.income_bonus` and increase `8 -> 20`
 
 ### Fixed
 

@@ -99,15 +99,17 @@ switch (getOrDefault($_GET, 'a', 0)) {
             }
         }
 
-        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
-                'Von' => 0,
-                'An' => $entry['Von'],
-                'Betreff' => 'Angebot auf freiem Markt verkauft',
-                'Nachricht' => sprintf("Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) von einem anonymen Käufer gekauft.",
-                    $entry['ID'], formatWeight($entry['Menge']), getItemName($entry['Was']), formatCurrency($amount))
-            )) != 1) {
-            Database::getInstance()->rollBack();
-            redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+        if ($entry['Von'] > 0) {
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
+                    'Von' => 0,
+                    'An' => $entry['Von'],
+                    'Betreff' => 'Angebot auf freiem Markt verkauft',
+                    'Nachricht' => sprintf("Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) von einem anonymen Käufer gekauft.",
+                        $entry['ID'], formatWeight($entry['Menge']), getItemName($entry['Was']), formatCurrency($amount))
+                )) != 1) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+            }
         }
         if (Database::getInstance()->deleteTableEntry(Database::TABLE_MARKET, $entry['ID']) != 1) {
             Database::getInstance()->rollBack();
@@ -148,16 +150,18 @@ switch (getOrDefault($_GET, 'a', 0)) {
             Database::getInstance()->rollBack();
             redirectTo('/?p=marktplatz_liste', 143, __LINE__);
         }
-        if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
-                'Von' => 0,
-                'An' => $entry['Von'],
-                'Betreff' => 'Angebot vom freien Markt zurückgezogen',
-                'Nachricht' => sprintf("Das Angebot #%d wurde vom Markt zurückgezogen. Leider sind auf dem Transport und während der Lagerung dort ein Teil der Waren verdorben.
+        if ($entry['Von'] > 0) {
+            if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(
+                    'Von' => 0,
+                    'An' => $entry['Von'],
+                    'Betreff' => 'Angebot vom freien Markt zurückgezogen',
+                    'Nachricht' => sprintf("Das Angebot #%d wurde vom Markt zurückgezogen. Leider sind auf dem Transport und während der Lagerung dort ein Teil der Waren verdorben.
                 Von den ursprünglichen %s konnten %s wieder in ihr Lager übernommen werden.",
-                    $entry['ID'], formatWeight($entry['Menge']), formatWeight(floor($entry['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate'))))
-            )) != 1) {
-            Database::getInstance()->rollBack();
-            redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+                        $entry['ID'], formatWeight($entry['Menge']), formatWeight(floor($entry['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate'))))
+                )) != 1) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=marktplatz_liste', 141, __LINE__);
+            }
         }
         if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_MARKET, array(
                 'sellerId' => $entry['Von'],

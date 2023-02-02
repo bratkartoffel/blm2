@@ -9,13 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- (config) move configuration `base.income_bonus_shop` to `shop.income_bonus` and increase `5 -> 12`
+- (config) move configuration `base.income_bonus_kebab_stand` to `kebab_stand.income_bonus` and increase `8 -> 20`
 - (gebaeude) do not require mafia expenses to build fence and pizzeria
     - this allows users which don't have other players in range to build these buildings
 - active link is now marked using css instead of javascript
 - remove unused / simplify javascript code
 - (bank) change bonus factor from `2 ^ Level` to `1.75 ^ Level`, rounded up to `50'000`
-- move configuration `base.income_bonus_shop` to `shop.income_bonus` and increase `5 -> 12`
-- move configuration `base.income_bonus_kebab_stand` to `kebab_stand.income_bonus` and increase `8 -> 20`
+- (research) increase `production_amount_per_level` `8 -> 12`
+- (research) increase `production_cost_per_level` `4 -> 7`
+- (plantage) increase `production_amount_per_item_id` `20 -> 30`
 
 ### Fixed
 
@@ -60,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- removed `bank.dispo_limit`, the value is now automatically calculated:
+- (config) removed `bank.dispo_limit`, the value is now automatically calculated:
     - `bank.credit_limit` for 96h with median debit rates
 
 ### Fixed
@@ -76,11 +79,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- (mafia) move configuration `mafia.raub_min_rate` and `mafia.raub_max_rate` to `mafia_robbery.min_rate`
-  and `mafia_robbery.max_rate`
+- (config) move configuration `mafia.raub_min_rate` to `mafia_robbery.min_rate`
+- (config) move configuration `mafia.raub_max_rate` to `mafia_robbery.max_rate`
+- (config) move `roundstart` from file to database
 - (mafia) heist now steals only between 40% and 75% of the stock, not all wares
 - (installer) enhance installer output format, should be easier to parse for scripts
-- (config) move `roundstart` from file to database
 - (rangliste) points are now calculated every 6 hours instead of 30 minutes
 
 ### Fixed

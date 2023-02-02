@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.3] - 2023-02-02
+
 ### Changed
 
 - (config) move configuration `base.income_bonus_shop` to `shop.income_bonus` and increase `5 -> 12`
@@ -312,7 +316,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.2...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.3...HEAD
+
+[1.11.3]: https://github.com/bratkartoffel/blm2/compare/v1.11.2...v1.11.3
 
 [1.11.2]: https://github.com/bratkartoffel/blm2/compare/v1.11.1...v1.11.2
 

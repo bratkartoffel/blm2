@@ -127,10 +127,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $data = Database::getInstance()->getContractByIDAndAnOrVonEquals($vid, $_SESSION['blm_user']);
         requireEntryFound($data, '/?p=vertraege_liste');
 
-        $myId = ($data['An'] === $_SESSION['blm_user'] ? $data['An'] : $data['Von']);
-        $myName = ($data['An'] === $_SESSION['blm_user'] ? Database::getInstance()->getPlayerNameById($data['An']) : Database::getInstance()->getPlayerNameById($data['Von']));
-        $hisId = ($data['An'] === $_SESSION['blm_user'] ? $data['Von'] : $data['An']);
-        $hisName = ($data['An'] === $_SESSION['blm_user'] ? Database::getInstance()->getPlayerNameById($data['Von']) : Database::getInstance()->getPlayerNameById($data['An']));
+        $myId = ($data['An'] == $_SESSION['blm_user'] ? $data['An'] : $data['Von']);
+        $myName = ($data['An'] == $_SESSION['blm_user'] ? Database::getInstance()->getPlayerNameById($data['An']) : Database::getInstance()->getPlayerNameById($data['Von']));
+        $hisId = ($data['An'] == $_SESSION['blm_user'] ? $data['Von'] : $data['An']);
+        $hisName = ($data['An'] == $_SESSION['blm_user'] ? Database::getInstance()->getPlayerNameById($data['Von']) : Database::getInstance()->getPlayerNameById($data['An']));
 
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $data['Von'],

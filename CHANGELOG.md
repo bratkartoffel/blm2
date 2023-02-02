@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Fixed
+
+- (vertrage) fix messages for contracts sent to the wrong user
 
 ## [1.11.3] - 2023-02-02
 

@@ -662,10 +662,12 @@ function replaceBBCode(string $text): string
 
         $result = preg_replace(
             array(
+                "/\[color=red](.*)\[\/color]/is",
                 "/\[([bui])](.*)\[\/\\1]/Uis",
                 '/\[quote](.*)\[\/quote]/Uism'
             ),
             array(
+                '<span class="red">\1</span>',
                 '<\1>\2</\1>',
                 '<blockquote>\1</blockquote>'
             ),

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (vertrage) fix messages for contracts sent to the wrong user
 - (marktplatz) do not send message about bought / retracted offers to `System` user
+- (help) fix not replaced bbcode in bank help text
 
 ### Changed
 

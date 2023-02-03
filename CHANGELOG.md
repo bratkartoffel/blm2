@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - the `mafia.min_points` is the only requirement then
 - (config) add `mafia.points_factor_cutoff`
     - all players with more than the configured points are excluded from the `mafia.points_factor` limitations
+- (gruppe) scroll to group messages when pinning / unpinning / writing / deleting message
 
 ## [1.11.3] - 2023-02-02
 

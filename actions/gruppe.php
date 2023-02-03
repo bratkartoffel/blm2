@@ -27,7 +27,7 @@ function pinMessage($id, $pinned)
     }
 
     Database::getInstance()->commit();
-    redirectTo('/?p=gruppe', 242, __LINE__);
+    redirectTo('/?p=gruppe', 242, "GroupMessages");
 }
 
 switch (getOrDefault($_REQUEST, 'a', 0)) {
@@ -230,7 +230,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     case 4:
         $message = getOrDefault($_POST, 'message');
         if (strlen($message) < 4) {
-            redirectTo(sprintf('/?p=gruppe&message=%s', urlencode($message)), 128, __LINE__);
+            redirectTo(sprintf('/?p=gruppe&message=%s', urlencode($message)), 128, "__LINE__");
         }
 
         $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);
@@ -249,7 +249,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        redirectTo('/?p=gruppe', 204, __LINE__);
+        redirectTo('/?p=gruppe', 204, "GroupMessages");
         break;
 
     // pin message
@@ -277,7 +277,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        redirectTo('/?p=gruppe', 242, __LINE__);
+        redirectTo('/?p=gruppe', 242, "GroupMessages");
         break;
 
     // ---------------------------------------------------------------------------------------

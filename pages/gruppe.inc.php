@@ -194,55 +194,59 @@ if ($id != 0) {
             </ul>
         </div>
     </div>
-    <?php
+    <div id="GroupMessages">
+        <?php
 
-    if ($id == $player['GruppeID']) {
-        $messageCount = Database::getInstance()->getGroupMessageCount($id);
-        $offset = verifyOffset($offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
-        if (array_key_exists('message_write', $rights) && $rights['message_write'] == 1) {
-            ?>
-            <div class="form GroupMessage">
-                <form action="/actions/gruppe.php" method="post">
-                    <input type="hidden" name="a" value="4"/>
-                    <header><label for="message">Nachricht schreiben</label></header>
-                    <textarea cols="80" rows="15" id="message"
-                              name="message"><?= escapeForOutput(getOrDefault($_GET, 'message')); ?></textarea>
-                    <div>
-                        <input type="submit" value="Absenden"/>
-                    </div>
-                </form>
-            </div>
-            <?php
-        }
-
-        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('GruppeLastMessageZeit' => date('Y-m-d H:i:s')));
-
-        $entries = Database::getInstance()->getGroupMessageEntries($id, $offset, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
-        foreach ($entries as $row) {
-            ?>
-            <div class="form GroupMessage MessagePin<?= $row['Festgepinnt']; ?>">
-                <header><?= sprintf('Absender: %s / %s', createProfileLink($row['VonID'], $row['VonName']), formatDateTime(strtotime($row['Zeit']))); ?></header>
-                <div><?= replaceBBCode($row['Nachricht']); ?></div>
-                <?php
-                $links = array();
-                if (array_key_exists('message_pin', $rights) && $rights['message_pin'] == 1) {
-                    if ($row['Festgepinnt'] == 0) {
-                        $links[] = sprintf('<span><a href="/actions/gruppe.php?a=5&amp;id=%d">Festpinnen</a></span>', $row['ID']);
-                    } else {
-                        $links[] = sprintf('<span><a href="/actions/gruppe.php?a=6&amp;id=%d">Lösen</a></span>', $row['ID']);
-                    }
-                }
-                if (array_key_exists('message_delete', $rights) && $rights['message_delete'] == 1) {
-                    $links[] = sprintf('<span><a href="/actions/gruppe.php?a=7&amp;id=%d">Löschen</a></span>', $row['ID']);
-                }
-
-                if (count($links) > 0) {
-                    printf("<div>%s</div>", implode("\n", $links));
-                }
+        if ($id == $player['GruppeID']) {
+            $messageCount = Database::getInstance()->getGroupMessageCount($id);
+            $offset = verifyOffset($offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
+            if (array_key_exists('message_write', $rights) && $rights['message_write'] == 1) {
                 ?>
-            </div>
-            <?php
+                <div class="form GroupMessage">
+                    <form action="/actions/gruppe.php" method="post">
+                        <input type="hidden" name="a" value="4"/>
+                        <header><label for="message">Nachricht schreiben</label></header>
+                        <textarea cols="80" rows="15" id="message"
+                                  name="message"><?= escapeForOutput(getOrDefault($_GET, 'message')); ?></textarea>
+                        <div>
+                            <input type="submit" value="Absenden"/>
+                        </div>
+                    </form>
+                </div>
+                <?php
+            }
+
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('GruppeLastMessageZeit' => date('Y-m-d H:i:s')));
+
+            $entries = Database::getInstance()->getGroupMessageEntries($id, $offset, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
+            foreach ($entries as $row) {
+                ?>
+                <div class="form GroupMessage MessagePin<?= $row['Festgepinnt']; ?>">
+                    <header><?= sprintf('Absender: %s / %s', createProfileLink($row['VonID'], $row['VonName']), formatDateTime(strtotime($row['Zeit']))); ?></header>
+                    <div><?= replaceBBCode($row['Nachricht']); ?></div>
+                    <?php
+                    $links = array();
+                    if (array_key_exists('message_pin', $rights) && $rights['message_pin'] == 1) {
+                        if ($row['Festgepinnt'] == 0) {
+                            $links[] = sprintf('<span><a href="/actions/gruppe.php?a=5&amp;id=%d">Festpinnen</a></span>', $row['ID']);
+                        } else {
+                            $links[] = sprintf('<span><a href="/actions/gruppe.php?a=6&amp;id=%d">Lösen</a></span>', $row['ID']);
+                        }
+                    }
+                    if (array_key_exists('message_delete', $rights) && $rights['message_delete'] == 1) {
+                        $links[] = sprintf('<span><a href="/actions/gruppe.php?a=7&amp;id=%d">Löschen</a></span>', $row['ID']);
+                    }
+
+                    if (count($links) > 0) {
+                        printf("<div>%s</div>", implode("\n", $links));
+                    }
+                    ?>
+                </div>
+                <?php
+            }
+            echo createPaginationTable('/?p=gruppe', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
         }
-        echo createPaginationTable('/?p=gruppe', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
-    }
+        ?>
+    </div>
+    <?php
 }

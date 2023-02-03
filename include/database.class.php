@@ -1372,10 +1372,18 @@ FROM
         return $this->executeAndExtractFirstRow($stmt);
     }
 
-    public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, ?int $myGroup, float $pointsRange): ?array
+    public function getAllPlayerIdAndNameWhereMafiaPossible(float $myPoints, int $myId, ?int $myGroup, float $pointsRange, int $pointsCutoff): ?array
     {
-        $lowPoints = max(Config::getFloat(Config::SECTION_MAFIA, 'min_points'), $myPoints / $pointsRange);
-        $highPoints = $myPoints * $pointsRange;
+        if ($pointsRange <= 1.0) {
+            $pointsRange = 1000;
+        }
+        if ($myPoints >= $pointsCutoff) {
+            $lowPoints = min($pointsCutoff, $myPoints / $pointsRange);
+            $highPoints = $pointsCutoff * 1000;
+        } else {
+            $lowPoints = max(Config::getFloat(Config::SECTION_MAFIA, 'min_points'), $myPoints / $pointsRange);
+            $highPoints = $myPoints * $pointsRange;
+        }
         $stmt = $this->prepare("SELECT ID, Name, Gruppe, Punkte
 FROM " . self::TABLE_USERS . " m
 WHERE (

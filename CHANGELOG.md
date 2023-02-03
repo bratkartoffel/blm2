@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (vertrage) fix messages for contracts sent to the wrong user
 - (marktplatz) do not send message about bought / retracted offers to `System` user
 
+### Changed
+
+- (config) support values <= 1.0 for `mafia.points_factor`
+    - setting to 1.0 or lower effectively disables the mafia factor checks and everyone can attack everyone
+    - the `mafia.min_points` is the only requirement then
+- (config) add `mafia.points_factor_cutoff`
+    - all players with more than the configured points are excluded from the `mafia.points_factor` limitations
+
 ## [1.11.3] - 2023-02-02
 
 ### Changed

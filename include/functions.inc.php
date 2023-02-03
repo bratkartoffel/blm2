@@ -1543,16 +1543,22 @@ function maybeMafiaOpponents(int $pointsLeft, int $pointsRight, ?int $groupDiplo
     } else if ($groupDiplomacy === group_diplomacy_war) {
         return true;
     } else {
+        $pointsFactor = Config::getFloat(Config::SECTION_MAFIA, 'points_factor');
+        if ($pointsFactor <= 1.0) {
+            return true;
+        }
+        $pointsFactorCutoff = Config::getInt(Config::SECTION_MAFIA, 'points_factor_cutoff');
         $a = min($pointsLeft, $pointsRight);
         $b = max($pointsLeft, $pointsRight);
-        return $a >= $b / Config::getFloat(Config::SECTION_MAFIA, 'points_factor') && $a <= $b * Config::getFloat(Config::SECTION_MAFIA, 'points_factor');
+        return ($a >= $pointsFactorCutoff && $b >= $pointsFactorCutoff) || ($a >= $b / $pointsFactor && $a <= $b * $pointsFactor);
     }
 }
 
 function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId, ?int $myGroup): ?string
 {
     if ($myPoints < Config::getFloat(Config::SECTION_MAFIA, 'min_points')) return null;
-    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup, Config::getFloat(Config::SECTION_MAFIA, 'points_factor'));
+    $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup,
+        Config::getFloat(Config::SECTION_MAFIA, 'points_factor'), $pointsFactorCutoff = Config::getInt(Config::SECTION_MAFIA, 'points_factor_cutoff'));
     $entries = array();
     foreach ($data as $entry) {
         $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);

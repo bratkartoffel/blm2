@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.4] - 2023-02-03
+
 ### Fixed
 
 - (vertrage) fix messages for contracts sent to the wrong user
@@ -329,7 +333,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.3...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.4...HEAD
+
+[1.11.4]: https://github.com/bratkartoffel/blm2/compare/v1.11.3...v1.11.4
 
 [1.11.3]: https://github.com/bratkartoffel/blm2/compare/v1.11.2...v1.11.3
 

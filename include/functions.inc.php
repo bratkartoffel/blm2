@@ -1719,4 +1719,10 @@ if (Config::getBoolean(Config::SECTION_BASE, "maintenance_active")) {
 }
 
 // start a http session
+{
+    $currentCookieParams = session_get_cookie_params();
+    $currentCookieParams['httponly'] = true;
+    $currentCookieParams['samesite'] = 'Strict';
+    session_set_cookie_params($currentCookieParams);
+}
 session_start();

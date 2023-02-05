@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Security
+
+- enforce `SameSite` and `HttpOnly` attribute for session cookie
 
 ## [1.11.4] - 2023-02-03
 

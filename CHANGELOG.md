@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - enforce `SameSite` and `HttpOnly` attribute for session cookie
+- enhance CSP policy header
 
 ## [1.11.4] - 2023-02-03
 

@@ -24,9 +24,9 @@ services:
     environment:
       SMTPHOST: "localhost"
     ports:
-      - "80:80"
+      - "8080:80"
     tmpfs:
-      - /var/www/html/config:uid=33,gid=33
+      - /var/www/html/config
     volumes:
       - ../../../../:/var/www/html
       - ../../../../config/config-defaults.ini:/var/www/html/config/config-defaults.ini

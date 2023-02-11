@@ -141,13 +141,13 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         driver.findElement(By.id("auszahlen")).click();
-        setValue(By.id("betrag"), "65000.01");
+        setValue(By.id("betrag"), "80000.01");
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_109"));
 
         // check new balance
         assertText(By.id("cur_bank_account"), "Ihr Kontostand: 50,000.00 €");
-        assertValue(By.id("betrag"), new BigDecimal("65000.01"));
+        assertValue(By.id("betrag"), new BigDecimal("80000.01"));
         assertText(By.id("stat_money"), "100,000.00 €");
         assertText(By.id("stat_bank"), "50,000.00 €");
     }
@@ -217,15 +217,15 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_bank")).click();
 
         driver.findElement(By.id("einzahlen")).click();
-        assertValue(By.id("betrag"), new BigDecimal("130000.00"));
+        assertValue(By.id("betrag"), new BigDecimal("80000.00"));
 
         driver.findElement(By.id("do_transaction")).click();
         assertElementPresent(By.id("meldung_207"));
 
-        assertText(By.id("cur_bank_account"), "Ihr Kontostand: 200,000.00 €");
+        assertText(By.id("cur_bank_account"), "Ihr Kontostand: 150,000.00 €");
         assertValue(By.id("betrag"), new BigDecimal("0.00"));
-        assertText(By.id("stat_money"), "70,000.00 €");
-        assertText(By.id("stat_bank"), "200,000.00 €");
+        assertText(By.id("stat_money"), "120,000.00 €");
+        assertText(By.id("stat_bank"), "150,000.00 €");
     }
 
     @Test

@@ -121,13 +121,13 @@ eine Übersicht über Ihre Eingaben und Ausgaben, sowie eine Aufschlüsselung ü
 
 Sie haben von Anfang an ein Bankkonto mit ' . formatCurrency(Config::getSection(Config::SECTION_STARTING_VALUES)['Bank']) . ' Startguthaben.
 Die maximale Summe, welche Sie zu Beginn einzahlen können liegt bei ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'deposit_limit')) . '
-(Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . '.
+(Bitte beachten: Bei diesem Betrag bekommen Sie auch keine Zinsen mehr!), die maximale Kreditsumme beträgt ' . formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . ', steigt jedoch mit jeder Stufe des Bankschliessfaches.
 
 Die Zinsen werden alle ' . Config::getInt(Config::SECTION_BASE, 'cron_interval') . ' Minuten abgerechnet.
 Das Geld auf der Bank kann nicht (im Gegensatz zum Bargeld) von anderen Spielern geklaut werden.
-Die Kapazität der Bank kann mit Hilfe des Bankschliessfaches je Stufe verdoppelt werden.
+Die Kapazität der Bank kann mit Hilfe des Bankschliessfaches je Stufe um den Faktor ' . formatCurrency(Config::getFloat(Config::SECTION_BANK, 'bonus_factor_upgrade'), false) . ' erhöht werden.
 
-[color=red]Wichtig: Falls Ihr Kontostand unter ' . formatCurrency(calculateResetCreditLimit()) . ' fällt, wird Ihr Account automatisch resettet![/color]'
+[color=red]Wichtig: Falls Ihr Kontostand unter das Dispo-Limit fällt, wird Ihr Account automatisch resettet![/color]'
     ),
     110 => array(
         'Verträge',

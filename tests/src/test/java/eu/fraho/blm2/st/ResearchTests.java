@@ -41,15 +41,15 @@ public class ResearchTests extends AbstractTest {
         assertElementPresent(By.id("meldung_207"));
         assertElementPresent(By.id("abort_1"));
 
-        assertText(By.id("stat_money"), "4,517.26 €");
+        assertText(By.id("stat_money"), "3,617.26 €");
         driver.findElement(By.id("abort_1")).click();
         driver.switchTo().alert().accept();
         assertElementPresent(By.id("meldung_222"));
 
         assertElementPresent(By.id("research_1"));
-        assertText(By.id("stat_money"), "4,879.32 €");
+        assertText(By.id("stat_money"), "4,654.32 €");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_s_2"), "120.68 €");
+        assertText(By.id("b_s_2"), "345.68 €");
     }
 }

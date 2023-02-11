@@ -24,6 +24,7 @@ if ($data === null) {
     redirectTo('/?p=bank', 112, __LINE__);
 }
 $depositLimit = calculateDepositLimit($data['Gebaeude' . building_bank]);
+$creditLimit = calculateCreditLimit($data['Gebaeude' . building_bank]);
 
 switch ($art) {
     // deposit money
@@ -59,7 +60,7 @@ switch ($art) {
 
     // withdraw money
     case 2:
-        if ($data['Bank'] - $betrag < Config::getInt(Config::SECTION_BANK, 'credit_limit')) {
+        if ($data['Bank'] - $betrag < $creditLimit) {
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 109, __LINE__);
         }
 
@@ -68,7 +69,7 @@ switch ($art) {
                 'Geld' => +$betrag,
                 'Bank' => -$betrag
             ), array(
-                'Bank + ' . abs(Config::getInt(Config::SECTION_BANK, 'credit_limit')) . ' >= :whr0' => $betrag
+                'Bank - ' . $betrag . ' >= :whr0' => $creditLimit
             )) == 0) {
             Database::getInstance()->rollBack();
             redirectTo(sprintf('/?p=bank&art=%d&betrag=%f', $art, $betrag), 142, __LINE__);

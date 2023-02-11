@@ -53,14 +53,14 @@ switch ($testClass) {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => 99900, 'Gebaeude9' => 1));
         }
         if ($testMethod === 'testResetAfterDispoLimit') {
-            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => -109000));
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => -210000));
         }
         break;
 
     case 'BuildingTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
             'Gebaeude' . building_plantage => 8,
-            'Gebaeude' . building_building_yard => 120,
+            'Gebaeude' . building_building_yard => 80,
         ));
         break;
 

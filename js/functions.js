@@ -176,7 +176,7 @@ function deobfuscate() {
             obf = botField.textContent;
         }
         let deobf = obf.match(/.{1,2}/g).map(v => String.fromCharCode(parseInt(v, 16))).join('');
-        botField.innerHTML = deobf + domain;
+        botField.textContent = deobf + domain;
     }
 }
 

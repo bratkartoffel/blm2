@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New logo by u/Anakha, thanks!
 
+### Fixed
+
+- (impressum) Fix broken de-obfuscation with some browsers
+
 ### Security
 
 - enforce `SameSite` and `HttpOnly` attribute for session cookie

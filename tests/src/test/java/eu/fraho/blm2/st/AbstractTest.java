@@ -11,6 +11,9 @@ import com.evanlennick.retry4j.config.RetryConfig;
 import com.evanlennick.retry4j.config.RetryConfigBuilder;
 import com.evanlennick.retry4j.exception.RetriesExhaustedException;
 import com.evanlennick.retry4j.exception.UnexpectedException;
+import org.checkerframework.checker.regex.qual.Regex;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +46,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 public abstract class AbstractTest {
     public static final String RANDOM_TOKEN = "07313f0e320f22cbfa35cfc220508eb3ff457c7e";
@@ -138,6 +142,10 @@ public abstract class AbstractTest {
 
     protected void assertText(By by, String expected) {
         Assertions.assertEquals(expected, getDriver().findElement(by).getText());
+    }
+
+    protected void assertTextMatches(By by, @Regex String expected) {
+        MatcherAssert.assertThat(getDriver().findElement(by).getText(), Matchers.matchesPattern(Pattern.compile(expected, Pattern.MULTILINE | Pattern.DOTALL)));
     }
 
     protected void assertValue(By by, BigDecimal expected) {

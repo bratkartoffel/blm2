@@ -30,6 +30,7 @@ class Captcha
         ob_start();
         imagewebp($this->image, null, 10);
         $this->imageData = ob_get_clean();
+        mt_srand(random_int(0, PHP_INT_MAX));
     }
 
     public function getImageUrl(): string
@@ -55,6 +56,7 @@ class Captcha
             }
             if ($result) break;
         }
+        mt_srand(random_int(0, PHP_INT_MAX));
         return $result;
     }
 
@@ -62,12 +64,11 @@ class Captcha
     {
         $chars = str_split(Config::get(Config::SECTION_CAPTCHA, 'chars'));
         $date = strtotime(date('Y-m-d H:i:00')) + ($offset * 60);
-        srand(crc32($this->id . Config::get(Config::SECTION_BASE, 'random_secret')) + $date);
+        mt_srand(crc32($this->id . Config::get(Config::SECTION_BASE, 'random_secret')) + $date);
         $code = '';
         for ($i = 0; $i < Config::getInt(Config::SECTION_CAPTCHA, 'length'); $i++) {
-            $code .= $chars[rand(0, count($chars) - 1)];
+            $code .= $chars[mt_rand(0, count($chars) - 1)];
         }
-        srand(mt_rand());
         return $code;
     }
 
@@ -75,11 +76,11 @@ class Captcha
     {
         $this->image = imagecreatetruecolor(Config::getInt(Config::SECTION_CAPTCHA, 'width'), Config::getInt(Config::SECTION_CAPTCHA, 'height'));
         for ($i = 0; $i < Config::getInt(Config::SECTION_CAPTCHA, 'security'); $i++) {
-            $rand_x = rand(0, Config::getInt(Config::SECTION_CAPTCHA, 'width'));
-            $rand_y = rand(0, Config::getInt(Config::SECTION_CAPTCHA, 'height'));
+            $rand_x = mt_rand(0, Config::getInt(Config::SECTION_CAPTCHA, 'width'));
+            $rand_y = mt_rand(0, Config::getInt(Config::SECTION_CAPTCHA, 'height'));
 
             imagefilledrectangle($this->image, $rand_x, $rand_y, $rand_x + Config::getInt(Config::SECTION_CAPTCHA, 'rect_size'), $rand_y + Config::getInt(Config::SECTION_CAPTCHA, 'rect_size'),
-                imagecolorexact($this->image, rand(0, 180), rand(0, 180), rand(0, 180))
+                imagecolorexact($this->image, mt_rand(0, 180), mt_rand(0, 180), mt_rand(0, 180))
             );
         }
     }
@@ -89,10 +90,10 @@ class Captcha
         for ($i = 0; $i < Config::getInt(Config::SECTION_CAPTCHA, 'length'); $i++) {
             imagefttext($this->image,
                 Config::getInt(Config::SECTION_CAPTCHA, 'fontsize'),
-                rand(-20, 20),
-                (int)floor(10 + $i * (Config::getInt(Config::SECTION_CAPTCHA, 'width') / Config::getInt(Config::SECTION_CAPTCHA, 'length')) - rand(0, 8)),
-                Config::getInt(Config::SECTION_CAPTCHA, 'fontsize') + 20 + rand(-5, 5),
-                imagecolorexact($this->image, rand(150, 255), rand(150, 255), rand(150, 255)),
+                mt_rand(-20, 20),
+                (int)floor(10 + $i * (Config::getInt(Config::SECTION_CAPTCHA, 'width') / Config::getInt(Config::SECTION_CAPTCHA, 'length')) - mt_rand(0, 8)),
+                Config::getInt(Config::SECTION_CAPTCHA, 'fontsize') + 20 + mt_rand(-5, 5),
+                imagecolorexact($this->image, mt_rand(150, 255), mt_rand(150, 255), mt_rand(150, 255)),
                 Config::get(Config::SECTION_CAPTCHA, 'font'),
                 $this->code[$i]
             );

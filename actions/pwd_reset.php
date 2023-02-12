@@ -81,7 +81,7 @@ switch (getOrDefault($_REQUEST, 'a')) {
             } else {
                 // mail was sent within the last 4h, so just ignore this request
                 // insert minimum delay for security reasons
-                usleep(mt_rand(300000, 800000));
+                usleep(random_int(300000, 800000));
             }
             redirectTo('/?p=anmelden', 244);
         }

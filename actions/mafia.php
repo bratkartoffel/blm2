@@ -61,8 +61,7 @@ if ($groupDiplomacy !== group_diplomacy_war &&
 $sperrZeit = Config::getInt($cfgSection, 'wait_time');
 $chance = getMafiaChance($cfgSection, $level, $player['Gebaeude' . building_pizzeria], $otherPlayer['Gebaeude' . building_fence]);
 
-$factor = 10000;
-$random = mt_rand(0, $factor) / $factor;
+$random = getRandomRate(0, 1);
 $success = $random <= $chance;
 
 Database::getInstance()->begin();

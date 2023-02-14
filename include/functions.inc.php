@@ -1313,10 +1313,10 @@ function calculateInterestRates(): array
     return $result;
 }
 
-function calculateResetCreditLimit(): int
+function calculateResetCreditLimit(int $bankLevel): int
 {
     $resetMedianRates = (Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') + Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max')) / 2;
-    $resetCreditLimit = (int)(Config::getInt(Config::SECTION_BANK, 'credit_limit') * pow(1 + $resetMedianRates, 96));
+    $resetCreditLimit = (int)(calculateCreditLimit($bankLevel) * pow(1 + $resetMedianRates, 96));
     $resetCreditLimit -= 10000 + ($resetCreditLimit % 10000);
     return $resetCreditLimit;
 }
@@ -1642,6 +1642,11 @@ function calculateDepositLimit(int $bankLevel): float
 {
     $limit = pow(Config::getFloat(Config::SECTION_BANK, 'bonus_factor_upgrade'), $bankLevel) * Config::getInt(Config::SECTION_BANK, 'deposit_limit');
     return ceil($limit / 50000) * 50000;
+}
+
+function calculateCreditLimit(int $bankLevel): float
+{
+    return pow(Config::getFloat(Config::SECTION_BANK, 'credit_limit_factor'), $bankLevel) * Config::getInt(Config::SECTION_BANK, 'credit_limit');
 }
 
 function trimAndRemoveControlChars(string $string): string

@@ -1310,7 +1310,7 @@ FROM
 
     public function getAllPlayerIdAndBankAndBioladenAndDoenerstandAndBank(): ?array
     {
-        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude3, Gebaeude4, Gebaeude9 FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
+        return $this->executeAndExtractRows($this->prepare("SELECT ID, Bank, Gebaeude" . building_shop . ", Gebaeude" . building_kebab_stand . ", Gebaeude" . building_bank . " FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
     }
 
     public function getAllPlayerIdAndResearchLevels(): ?array
@@ -1318,10 +1318,11 @@ FROM
         return $this->executeAndExtractRows($this->prepare("SELECT ID, " . getAllResearchFields() . " FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
     }
 
-    public function getAllPlayerIdAndNameBankSmallerEquals(float $amount): ?array
+    public function getAllPlayerIdAndNameForDispoReset(int $creditLimit, float $creditLimitFactor): ?array
     {
-        $stmt = $this->prepare("SELECT ID, Name FROM " . self::TABLE_USERS . " WHERE Bank <= :amount AND ID > 0");
-        $stmt->bindParam('amount', $amount);
+        $stmt = $this->prepare("SELECT ID, Name, Gebaeude" . building_bank . " FROM " . self::TABLE_USERS . " WHERE Bank <= :amount * pow(:limitFactor, Gebaeude" . building_bank . ") AND ID > 0");
+        $stmt->bindParam('amount', $creditLimit);
+        $stmt->bindParam('limitFactor', $creditLimitFactor);
         return $this->executeAndExtractRows($stmt);
     }
 

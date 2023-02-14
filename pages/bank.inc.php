@@ -15,7 +15,7 @@ $interestRates = calculateInterestRates();
 $depositLimit = calculateDepositLimit($data['Gebaeude' . building_bank]);
 
 $resetMedianRates = (Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') + Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max')) / 2;
-$resetCreditLimit = calculateResetCreditLimit();
+$resetCreditLimit = calculateResetCreditLimit($data['Gebaeude' . building_bank]);
 
 ?>
 <div id="SeitenUeberschrift">
@@ -31,7 +31,7 @@ $resetCreditLimit = calculateResetCreditLimit();
     alle <?= Config::getInt(Config::SECTION_BASE, 'cron_interval'); ?> Minuten. Die
     maximale Summe, die Sie anlegen können,
     sind <?= formatCurrency($depositLimit); ?>, Ihr Kreditlimit sind
-    <span class="red"><?= formatCurrency(Config::getInt(Config::SECTION_BANK, 'credit_limit')); ?></span>.
+    <span class="red"><?= formatCurrency(calculateCreditLimit($data['Gebaeude' . building_bank])); ?></span>.
 </p>
 <p>
     <span class="red">Wichtig! Falls der Kontostand unter <?= formatCurrency($resetCreditLimit); ?> fällt, wird Ihr Account automatisch resettet!

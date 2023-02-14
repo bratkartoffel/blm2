@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New logo by u/Anakha, thanks!
 - Minor enhancements about random calculated values
+- Warehouse can now hold upto `999,999` kg of each ware (was `99,999`)
 
 ### Fixed
 

@@ -24,12 +24,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Increase production for each plantage level:
     - (plantage) increase `production_amount_per_level` `10 -> 30`
     - (plantage) increase `production_amount_per_item_id` `30 -> 100`
+  - Change research base durations:
+    - (research_lab) increase `research_base_duration` `2400 -> 3600`
+    - (research_lab) increase `research_factor_duration` `1.19 -> 1.22`
   - Reduce research duration per building level:
     - (research_lab) increase `bonus_factor` `0.055 -> 0.10`
   - Increase production per research level:
     - (research_lab) increase `production_amount_per_level` `12 -> 30`
     - (research_lab) increase `production_cost_per_level` `7 -> 25`
-    - (research_lab) increase `cost_item_id_factor` `100 -> 1000`
+    - (research_lab) increase `cost_item_id_factor` `100 -> 10000`
   - Decrease building time for each building yard level:
     - (building_yard) increase `bonus_factor` `0.061 -> 0.08`
   - Decrease deposit amount of bank per building level:

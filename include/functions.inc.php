@@ -46,6 +46,9 @@ const item_pineapple = 12;
 const item_strawberries = 13;
 const item_oranges = 14;
 const item_kiwi = 15;
+const item_lemon = 16;
+const item_pepper = 17;
+const item_raspberry = 18;
 
 // enum constant for the job types
 // factor to separate the various types
@@ -58,10 +61,10 @@ const job_type_production = 2;
 const job_type_research = 3;
 
 // number of implemented wares
-const count_wares = 15;
+const count_wares = item_raspberry;
 
 // number of implemented items
-const count_buildings = 9;
+const count_buildings = building_bank;
 
 function abortWithErrorPage(string $body)
 {
@@ -611,6 +614,12 @@ function getItemName(int $item_id): string
             return 'Orangen';
         case item_kiwi:
             return 'Kiwi';
+        case item_lemon:
+            return 'Zitrone';
+        case item_pepper:
+            return 'Paprika';
+        case item_raspberry:
+            return 'Himbeere';
         default:
             trigger_error(sprintf('invalid item_id given: %d', $item_id), E_USER_ERROR);
     }

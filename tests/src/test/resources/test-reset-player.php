@@ -88,6 +88,7 @@ switch ($testClass) {
         break;
 
     case 'ResearchTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 15000));
         if ($testMethod !== 'testNotBuilt') {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
                 'Gebaeude' . building_research_lab => 10,

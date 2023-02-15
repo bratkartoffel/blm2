@@ -24,6 +24,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     # install xdebug
     && pecl channel-update pecl.php.net \
-    && pecl install xdebug-3.1.6
+    && pecl install xdebug-3.1.6 \
+    # remove not needed packages
+    && apt-get --purge -y autoremove \
+    # clean apt cache
+    && rm -rf /var/lib/apt/lists/*
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini

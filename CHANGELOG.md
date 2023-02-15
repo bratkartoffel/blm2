@@ -21,40 +21,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (impressum) Fix broken de-obfuscation with some browsers
 - many balancing tweaks, thanks u/schokoboy!
-  - Increase production for each plantage level:
-    - (plantage) increase `production_amount_per_level` `10 -> 30`
-    - (plantage) increase `production_amount_per_item_id` `30 -> 100`
-  - Change research base durations:
-    - (research_lab) increase `research_base_duration` `2400 -> 3600`
-    - (research_lab) increase `research_factor_duration` `1.19 -> 1.22`
-  - Reduce research duration per building level:
-    - (research_lab) increase `bonus_factor` `0.055 -> 0.10`
-  - Increase production per research level:
-    - (research_lab) increase `production_amount_per_level` `12 -> 30`
-    - (research_lab) increase `production_cost_per_level` `7 -> 25`
-    - (research_lab) increase `cost_item_id_factor` `100 -> 10000`
-  - Decrease building time for each building yard level:
-    - (building_yard) increase `bonus_factor` `0.061 -> 0.08`
-  - Decrease deposit amount of bank per building level:
-    - (bank) decrease `bonus_factor_upgrade` `1.75 -> 1.50`
-      - Level 0: `100.000`
-      - Level 1: `200.000 -> 150.000`
-      - Level 2: `350.000 -> 250.000`
-      - Level 3: `550.000 -> 350.000`
-      - Level 4: `950.000 -> 550.000`
-      - Level 5: `1.650.000 -> 800.000`
-      - Level 6: `2.900.000 -> 1.150.000`
-      - Level 7: `5.050.000 -> 1.750.000`
-    - (bank) increase `credit_limit` `-15000 -> -30000`
-  - Increase credit limit depending on bank building level
-    - Each level of the bank building will now increase the credit amount by a factor of `3`
-      - Level 0: `30.000`
-      - Level 1: `90.000`
-      - Level 2: `270.000`
-      - Level 3: `810.000`
-      - Level 4: `2.430.000`
-      - Level 5: `7.290.000`
-      - Level 6: `21.870.000`
+    - Increase production for each plantage level:
+        - (plantage) increase `production_amount_per_level` `10 -> 30`
+        - (plantage) increase `production_amount_per_item_id` `30 -> 100`
+    - Change research base durations:
+        - (research_lab) increase `research_base_duration` `2400 -> 3600`
+        - (research_lab) increase `research_factor_duration` `1.19 -> 1.22`
+    - Reduce research duration per building level:
+        - (research_lab) increase `bonus_factor` `0.055 -> 0.10`
+    - Increase production per research level:
+        - (research_lab) increase `production_amount_per_level` `12 -> 30`
+        - (research_lab) increase `production_cost_per_level` `7 -> 25`
+        - (research_lab) increase `cost_item_id_factor` `100 -> 10000`
+    - Decrease building time for each building yard level:
+        - (building_yard) increase `bonus_factor` `0.061 -> 0.08`
+    - Decrease deposit amount of bank per building level:
+        - (bank) decrease `bonus_factor_upgrade` `1.75 -> 1.50`
+            - Level 0: `100.000`
+            - Level 1: `200.000 -> 150.000`
+            - Level 2: `350.000 -> 250.000`
+            - Level 3: `550.000 -> 350.000`
+            - Level 4: `950.000 -> 550.000`
+            - Level 5: `1.650.000 -> 800.000`
+            - Level 6: `2.900.000 -> 1.150.000`
+            - Level 7: `5.050.000 -> 1.750.000`
+        - (bank) increase `credit_limit` `-15000 -> -30000`
+    - Increase credit limit depending on bank building level
+        - Each level of the bank building will now increase the credit amount by a factor of `3`
+            - Level 0: `30.000`
+            - Level 1: `90.000`
+            - Level 2: `270.000`
+            - Level 3: `810.000`
+            - Level 4: `2.430.000`
+            - Level 5: `7.290.000`
+            - Level 6: `21.870.000`
 
 ### Security
 

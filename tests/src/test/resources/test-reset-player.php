@@ -83,7 +83,7 @@ switch ($testClass) {
             'Gebaeude' . building_research_lab => 3,
             'Forschung' . item_potatoes => 2,
             'Forschung' . item_carrots => 1,
-            'Forschung' . item_kiwi => 25,
+            'Forschung' . item_kiwi => 20,
         ));
         break;
 

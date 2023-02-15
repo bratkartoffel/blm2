@@ -531,6 +531,11 @@ div.GroupMessage {
     display: block;
     margin-bottom: 20px;
     width: max-content;
+    max-width: 800px;
+}
+
+div.GroupMessage div:last-of-type {
+    text-align: initial;
 }
 
 div.GroupMessage div:last-of-type a {

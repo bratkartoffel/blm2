@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
             - Level 4: `2.430.000`
             - Level 5: `7.290.000`
             - Level 6: `21.870.000`
+- (gruppe) do not center text for group messages if user has no right to pin messages
 
 ### Security
 

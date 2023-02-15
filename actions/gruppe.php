@@ -144,6 +144,11 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->begin();
+        if (passwordNeedsUpgrade($group['Passwort']) && Database::getInstance()->updateTableEntry(Database::TABLE_GROUP, $group['ID'],
+                array('Passwort' => hashPassword($pwd))) !== 1) {
+            Database::getInstance()->rollBack();
+            redirectTo(sprintf("/?p=gruppe&name=%s", urlencode($name)), 142, __LINE__);
+        }
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Gruppe' => $group['ID']), array('Gruppe IS NULL')) !== 1) {
             Database::getInstance()->rollBack();

@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - enforce `SameSite` and `HttpOnly` attribute for session cookie
 - enhance CSP policy header
+- (gruppe) upgrade password hash if the hashing parameters changed when a player joins a group
 
 ## [1.11.4] - 2023-02-03
 

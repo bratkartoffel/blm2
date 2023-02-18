@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.5] - 2023-02-18
+
 ### Added
 
 - Add 3 new items (lemon, bell pepper and raspberries)
@@ -387,7 +391,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.4...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.5...HEAD
+
+[1.11.5]: https://github.com/bratkartoffel/blm2/compare/v1.11.4...v1.11.5
 
 [1.11.4]: https://github.com/bratkartoffel/blm2/compare/v1.11.3...v1.11.4
 

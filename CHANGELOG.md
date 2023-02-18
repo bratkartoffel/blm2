@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Fixed
+
+- (bank) fix wrong limit calculation for resetting accounts due to insolvency
 
 ## [1.11.5] - 2023-02-18
 

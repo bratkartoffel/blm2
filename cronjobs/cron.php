@@ -76,12 +76,13 @@ function handleInterestRatesAndBaseIncome(Database $database): void
 
 function handleResetDueToDispo(Database $database): void
 {
-    $entries = $database->getAllPlayerIdAndNameForDispoReset(
-        Config::getInt(Config::SECTION_BANK, 'credit_limit'),
-        Config::getFloat(Config::SECTION_BANK, 'credit_limit_factor')
-    );
+    $entries = $database->getAllPlayerIdAndBankAndBioladenAndDoenerstandAndBank();
     foreach ($entries as $entry) {
-        error_log(sprintf('Resetting player %s/%s', $entry['ID'], $entry['Name']));
+        $limit = calculateResetCreditLimit($entry['Gebaeude' . building_bank]);
+        if ($limit <= $entry['Bank']) {
+            continue;
+        }
+        error_log(sprintf('Resetting player %s/%s (%.2f < %d)', $entry['ID'], $database->getPlayerNameById($entry['ID']), $entry['Bank'], $limit));
         $database->begin();
         $status = resetAccount($entry['ID']);
         if ($status !== null) {
@@ -93,7 +94,7 @@ function handleResetDueToDispo(Database $database): void
                 'Von' => 0,
                 'An' => $entry['ID'],
                 'Betreff' => 'Account zurückgesetzt',
-                'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency(calculateResetCreditLimit($entry['Gebaeude' . building_bank])) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
+                'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency($limit) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
             )) != 1) {
             $database->rollBack();
             error_log(sprintf('Could create message after resetting player %d', $entry['ID']));

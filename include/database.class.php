@@ -1318,14 +1318,6 @@ FROM
         return $this->executeAndExtractRows($this->prepare("SELECT ID, " . getAllResearchFields() . " FROM " . self::TABLE_USERS . " WHERE ID > 0 AND EmailAct IS NULL"));
     }
 
-    public function getAllPlayerIdAndNameForDispoReset(int $creditLimit, float $creditLimitFactor): ?array
-    {
-        $stmt = $this->prepare("SELECT ID, Name, Gebaeude" . building_bank . " FROM " . self::TABLE_USERS . " WHERE Bank <= :amount * pow(:limitFactor, Gebaeude" . building_bank . ") AND ID > 0");
-        $stmt->bindParam('amount', $creditLimit);
-        $stmt->bindParam('limitFactor', $creditLimitFactor);
-        return $this->executeAndExtractRows($stmt);
-    }
-
     public function getPlayerCardByID(int $blm_user): ?array
     {
         $stmt = $this->prepare("SELECT m.ID, m.Name, coalesce(m.Beschreibung, '[i]Keine[/i]') AS Beschreibung, 

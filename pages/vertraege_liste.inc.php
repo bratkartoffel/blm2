@@ -42,10 +42,11 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis']); ?></td>
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
-                <!-- TODO confirm? -->
-                <a href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
+                <a class="accept_contract" data-id="<?= $entry['ID']; ?>"
+                   href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
                 |
-                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
+                <a clasS="reject_contract" data-id="<?= $entry['ID']; ?>"
+                   href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
             </td>
         </tr>
         <?php
@@ -100,3 +101,16 @@ restrictSitter('Vertraege');
 <p>
     <a href="/?p=vertraege_neu">Neuen Vertrag aufsetzen</a>
 </p>
+
+<script nonce="<?= getCspNonce(); ?>">
+    // require confirmation when buying offer
+    for (let acceptLink of document.getElementsByClassName('accept_contract')) {
+        let number = acceptLink.getAttribute('data-id');
+        acceptLink.onclick = () => confirm('Wollen Sie den Vertrag Nr ' + number + ' wirklich annehmen?');
+    }
+    // require confirmation when buying offer
+    for (let rejectLink of document.getElementsByClassName('reject_contract')) {
+        let number = rejectLink.getAttribute('data-id');
+        rejectLink.onclick = () => confirm('Wollen Sie den Vertrag Nr ' + number + ' wirklich ablehnen?');
+    }
+</script>

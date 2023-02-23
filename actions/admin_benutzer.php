@@ -14,45 +14,26 @@ requireAdmin();
 $id = getOrDefault($_REQUEST, 'id', 0);
 $offset = getOrDefault($_REQUEST, 'o', 0);
 
-// first form, basic data
-$username = getOrDefault($_POST, 'username');
-$email = getOrDefault($_POST, 'email');
-$password = getOrDefault($_POST, 'password');
-$email_aktiviert = getOrDefault($_POST, 'email_aktiviert', 1);
-$geld = getOrDefault($_POST, 'geld', .0);
-$bank = getOrDefault($_POST, 'bank', .0);
-$igm_gesendet = getOrDefault($_POST, 'igm_gesendet', 0);
-$igm_empfangen = getOrDefault($_POST, 'igm_empfangen', 0);
-$admin = getOrDefault($_POST, 'admin', 0);
-$betatester = getOrDefault($_POST, 'betatester', 0);
-$ewige_punkte = getOrDefault($_POST, 'ewige_punkte', 0);
-$onlinezeit = getOrDefault($_POST, 'onlinezeit', 0);
-$gruppe = getOrDefault($_POST, 'gruppe', -1);
-$verwarnungen = getOrDefault($_POST, 'verwarnungen', 0);
-$gesperrt = getOrDefault($_POST, 'gesperrt', 0);
-
-// second form, building levels
-$gebaeude = array();
-for ($i = 1; $i <= count_buildings; $i++) {
-    $gebaeude[$i] = getOrDefault($_POST, 'gebaeude_' . $i, 0);
-}
-
-// third form, research levels
-$forschung = array();
-for ($i = 1; $i <= count_wares; $i++) {
-    $forschung[$i] = getOrDefault($_POST, 'forschung_' . $i, 0);
-}
-
-// fourth form, stock
-$lager = array();
-for ($i = 1; $i <= count_wares; $i++) {
-    $lager[$i] = getOrDefault($_POST, 'lager_' . $i, 0);
-}
-
 $backlink = sprintf('/?p=admin_benutzer_bearbeiten&id=%d&o=%d', $id, $offset);
 switch (getOrDefault($_REQUEST, 'a', 0)) {
     // update basic information
     case 1:
+        $username = getOrDefault($_POST, 'username');
+        $email = getOrDefault($_POST, 'email');
+        $password = getOrDefault($_POST, 'password');
+        $email_aktiviert = getOrDefault($_POST, 'email_aktiviert', 1);
+        $geld = getOrDefault($_POST, 'geld', .0);
+        $bank = getOrDefault($_POST, 'bank', .0);
+        $igm_gesendet = getOrDefault($_POST, 'igm_gesendet', 0);
+        $igm_empfangen = getOrDefault($_POST, 'igm_empfangen', 0);
+        $admin = getOrDefault($_POST, 'admin', 0);
+        $betatester = getOrDefault($_POST, 'betatester', 0);
+        $ewige_punkte = getOrDefault($_POST, 'ewige_punkte', 0);
+        $onlinezeit = getOrDefault($_POST, 'onlinezeit', 0);
+        $gruppe = getOrDefault($_POST, 'gruppe', -1);
+        $verwarnungen = getOrDefault($_POST, 'verwarnungen', 0);
+        $gesperrt = getOrDefault($_POST, 'gesperrt', 0);
+
         $backlink .= sprintf('&username=%s&email=%s&email_aktiviert=%d&geld=%f&bank=%f&igm_gesendet=%d&igm_empfangen=%d&admin=%d&betatester=%d&ewige_punkte=%d&onlinezeit=%d&gruppe=%d&verwarnungen=%d&gesperrt=%d',
             urlencode($username), urlencode($email), $email_aktiviert, $geld, $bank, $igm_gesendet, $igm_empfangen,
             $admin, $betatester, $ewige_punkte, $onlinezeit, $gruppe, $verwarnungen, $gesperrt);
@@ -128,6 +109,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // update building levels
     case 2:
+        $gebaeude = array();
+        for ($i = 1; $i <= count_buildings; $i++) {
+            $gebaeude[$i] = getOrDefault($_POST, 'gebaeude_' . $i, 0);
+        }
         $fields = array();
         for ($i = 1; $i <= count_buildings; $i++) {
             $backlink .= sprintf('&gebaeude_%d=%d', $i, $gebaeude[$i]);
@@ -144,6 +129,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // update research levels
     case 3:
+        $forschung = array();
+        for ($i = 1; $i <= count_wares; $i++) {
+            $forschung[$i] = getOrDefault($_POST, 'forschung_' . $i, 0);
+        }
         $fields = array();
         for ($i = 1; $i <= count_wares; $i++) {
             $backlink .= sprintf('&forschung_%d=%d', $i, $forschung[$i]);
@@ -160,6 +149,10 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
 
     // update stock
     case 4:
+        $lager = array();
+        for ($i = 1; $i <= count_wares; $i++) {
+            $lager[$i] = getOrDefault($_POST, 'lager_' . $i, 0);
+        }
         $fields = array();
         for ($i = 1; $i <= count_wares; $i++) {
             $backlink .= sprintf('&lager_%d=%d', $i, $lager[$i]);

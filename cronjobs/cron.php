@@ -27,12 +27,12 @@ if (!IS_CRON) {
 $database = Database::getInstance();
 
 if (isGameLocked()) {
-    die(sprintf("Game is currently locked (%d < %d)\n", time(), Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
+    die(sprintf('Game is currently locked (%d < %d)' . "\n", time(), Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
 }
 
 if (isRoundOver()) {
     handleRoundEnd();
-    die("Game reset completed!\n");
+    die('Game reset completed!' . "\n");
 }
 
 function CheckAllAuftraege(Database $database): void
@@ -94,7 +94,7 @@ function handleResetDueToDispo(Database $database): void
                 'Von' => 0,
                 'An' => $entry['ID'],
                 'Betreff' => 'Account zurückgesetzt',
-                'Nachricht' => "Nachdem Ihr Kontostand unter " . formatCurrency($limit) . " gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu"
+                'Nachricht' => sprintf('Nachdem Ihr Kontostand unter %s gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu', formatCurrency($limit))
             )) != 1) {
             $database->rollBack();
             error_log(sprintf('Could create message after resetting player %d', $entry['ID']));

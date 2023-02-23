@@ -16,7 +16,7 @@ function BLMEnde() {
         opener.focus();
         self.close();
     } else {
-        document.location.href = "/actions/logout.php?popup=1";
+        document.location.href = '/actions/logout.php?popup=1';
     }
     return false;
 }
@@ -42,16 +42,16 @@ function ZeichenUebrig(Feld, Text) {
 function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, Button) {
     const kosten = Menge * (BasisPreis / BasisMenge);
 
-    TextFeld.innerText = "Kosten: " + kosten.toLocaleString(navigator.language, {
+    TextFeld.innerText = 'Kosten: ' + kosten.toLocaleString(navigator.language, {
         minimumFractionDigits: 2, maximumFractionDigits: 2
-    }) + " €";
+    }) + ' €';
 
     if (kosten > Geld || kosten < 0 || isNaN(kosten)) {
-        Button.enabled = "";
-        Button.disabled = "disabled";
+        Button.enabled = '';
+        Button.disabled = 'disabled';
     } else {
-        Button.disabled = "";
-        Button.enabled = "enabled";
+        Button.disabled = '';
+        Button.enabled = 'enabled';
     }
 }
 
@@ -79,16 +79,16 @@ function CountdownFields() {
             value = Date.parse('1970-01-01T' + hours + 'Z') + (1000 * 86400 * days);
         }
         if (value > 0 || direction > 0) {
-            field.innerText = "";
+            field.innerText = '';
             let date = new Date(value + direction * 1000);
             if (value > 86400000 && direction < 0) {
-                field.innerText += Math.floor(value / 86400000) + " Tage";
+                field.innerText += Math.floor(value / 86400000) + ' Tage';
             }
-            field.innerText += ' ' + date.toLocaleTimeString("de-DE", {
+            field.innerText += ' ' + date.toLocaleTimeString('de-DE', {
                 hour12: false,
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
                 timeZone: 'UTC'
             });
             if (field.innerText === '00:00:00' && reloadOnCountdown) {
@@ -150,7 +150,7 @@ function enableSitterOptions(enabled) {
 function chefboxPollJobs() {
     if (opener) {
         window.setInterval(() => {
-            let messages = opener.document.getElementsByClassName("MessageBox");
+            let messages = opener.document.getElementsByClassName('MessageBox');
             if (messages.length !== 0) {
                 let message = messages[0];
                 if (message.hasAttribute('reload-chefbox')) {
@@ -164,7 +164,7 @@ function chefboxPollJobs() {
 
 /* de-obfuscate fields with personal information */
 function deobfuscate() {
-    let fields = document.getElementsByClassName("bot");
+    let fields = document.getElementsByClassName('bot');
     for (let i = 0; i < fields.length; i++) {
         let botField = fields.item(i);
         let obf;

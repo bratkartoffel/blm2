@@ -104,7 +104,7 @@ switch (getOrDefault($_GET, 'a', 0)) {
                     'Von' => 0,
                     'An' => $entry['Von'],
                     'Betreff' => 'Angebot auf freiem Markt verkauft',
-                    'Nachricht' => sprintf("Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) von einem anonymen Käufer gekauft.",
+                    'Nachricht' => sprintf('Soeben wurde das Angebot #%d (%s %s zu insgesamt %s) von einem anonymen Käufer gekauft.',
                         $entry['ID'], formatWeight($entry['Menge']), getItemName($entry['Was']), formatCurrency($amount))
                 )) != 1) {
                 Database::getInstance()->rollBack();
@@ -155,8 +155,8 @@ switch (getOrDefault($_GET, 'a', 0)) {
                     'Von' => 0,
                     'An' => $entry['Von'],
                     'Betreff' => 'Angebot vom freien Markt zurückgezogen',
-                    'Nachricht' => sprintf("Das Angebot #%d wurde vom Markt zurückgezogen. Leider sind auf dem Transport und während der Lagerung dort ein Teil der Waren verdorben.
-                Von den ursprünglichen %s konnten %s wieder in ihr Lager übernommen werden.",
+                    'Nachricht' => sprintf('Das Angebot #%d wurde vom Markt zurückgezogen. Leider sind auf dem Transport und während der Lagerung dort ein Teil der Waren verdorben.
+                Von den ursprünglichen %s konnten %s wieder in ihr Lager übernommen werden.',
                         $entry['ID'], formatWeight($entry['Menge']), formatWeight(floor($entry['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate'))))
                 )) != 1) {
                 Database::getInstance()->rollBack();

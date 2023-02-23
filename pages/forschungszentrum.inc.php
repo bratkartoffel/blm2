@@ -10,7 +10,7 @@ restrictSitter('Forschung');
 
 $data = Database::getInstance()->getPlayerMoneyAndResearchLevelsAndPlantageLevelAndResearchLabLevel($_SESSION['blm_user']);
 if ($data['Gebaeude' . building_research_lab] == 0) {
-    redirectTo('/?p=gebaeude', 145, "g2");
+    redirectTo('/?p=gebaeude', 145, 'g2');
 }
 
 $auftraege_db = Database::getInstance()->getAllAuftraegeByVonAndWasGreaterEqualsAndWasSmaller($_SESSION['blm_user'],
@@ -39,7 +39,7 @@ for ($i = 1; $i <= count_wares; $i++) {
 
     $researchData = calculateResearchDataForPlayer($i, $data['Gebaeude' . building_research_lab], $data['Forschung' . $i]);
     $researchDataNext = calculateResearchDataForPlayer($i, $data['Gebaeude' . building_research_lab], $data['Forschung' . $i], 2);
-    $researchAttribute = "Forschung" . $i;
+    $researchAttribute = 'Forschung' . $i;
     ?>
     <div class="form Research">
         <header id="f<?= $i; ?>">

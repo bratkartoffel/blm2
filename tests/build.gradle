@@ -41,13 +41,13 @@ test {
     // use junit 5
     useJUnitPlatform()
     // print status of tests
-    testLogging { events "passed", "skipped", "failed" }
-    if (project.hasProperty("webdriver.firefox.bin")) {
-        systemProperty "webdriver.firefox.bin", project.getProperty("webdriver.firefox.bin")
+    testLogging { events 'passed', 'skipped', 'failed' }
+    if (project.hasProperty('webdriver.firefox.bin')) {
+        systemProperty 'webdriver.firefox.bin', project.getProperty('webdriver.firefox.bin')
     }
 }
 
-tasks.named("dependencyUpdates").configure {
+tasks.named('dependencyUpdates').configure {
     gradleReleaseChannel = 'current'
     revision = 'integration'
 }

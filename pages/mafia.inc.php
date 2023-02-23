@@ -58,7 +58,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
     <tr>
         <td>Spionage</td>
         <td>Sammelt Informationen über den Gegner</td>
-        <td><?= (Config::getInt(Config::SECTION_MAFIA_ESPIONAGE, "wait_time") / 60); ?> Minuten</td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_ESPIONAGE, 'wait_time') / 60); ?> Minuten</td>
     </tr>
     <tr>
         <td>Raub</td>
@@ -66,7 +66,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             zwischen <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'min_rate')); ?>
             und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_ROBBERY, 'max_rate')); ?> seines Bargeldes
         </td>
-        <td><?= (Config::getInt(Config::SECTION_MAFIA_ROBBERY, "wait_time") / 60); ?> Minuten</td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_ROBBERY, 'wait_time') / 60); ?> Minuten</td>
     </tr>
     <tr>
         <td>Diebstahl</td>
@@ -75,12 +75,12 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             und <?= formatPercent(Config::getFloat(Config::SECTION_MAFIA_HEIST, 'max_rate')); ?>
             seiner Waren aus dem Lager
         </td>
-        <td><?= (Config::getInt(Config::SECTION_MAFIA_HEIST, "wait_time") / 60); ?> Minuten</td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_HEIST, 'wait_time') / 60); ?> Minuten</td>
     </tr>
     <tr>
         <td>Anschlag</td>
         <td>Zerstört die Plantage des Gegners, senkt das Gebäudelevel um eine Stufe</td>
-        <td><?= (Config::getInt(Config::SECTION_MAFIA_ATTACK, "wait_time") / 60); ?> Minuten</td>
+        <td><?= (Config::getInt(Config::SECTION_MAFIA_ATTACK, 'wait_time') / 60); ?> Minuten</td>
     </tr>
 </table>
 

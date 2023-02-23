@@ -10,8 +10,8 @@ require_once __DIR__ . '/../include/database.class.php';
 
 ob_start();
 
-$name = requireEntryFound(getOrDefault($_POST, 'name'), "/?p=anmelden", 108, __LINE__);
-$pwd = requireEntryFound(getOrDefault($_POST, 'pwd'), "/?p=anmelden", 108, __LINE__);
+$name = requireEntryFound(getOrDefault($_POST, 'name'), '/?p=anmelden', 108, __LINE__);
+$pwd = requireEntryFound(getOrDefault($_POST, 'pwd'), '/?p=anmelden', 108, __LINE__);
 
 // force a new session
 session_reset();
@@ -19,18 +19,18 @@ session_regenerate_id(true);
 
 // load player data
 $player = Database::getInstance()->getPlayerDataByName($name);
-requireEntryFound($player, sprintf("/?p=anmelden&name=%s", urlencode($name)), 108, __LINE__);
+requireEntryFound($player, sprintf('/?p=anmelden&name=%s', urlencode($name)), 108, __LINE__);
 
 // check if game is locked
 if (isGameLocked() && $player['Admin'] != 1) {
-    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 999, __LINE__);
+    redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 999, __LINE__);
 }
 
 if ($player['Gesperrt'] == 1) {
-    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 139, __LINE__);
+    redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 139, __LINE__);
 }
 if ($player['EMailAct'] !== null) {
-    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 135, __LINE__);
+    redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 135, __LINE__);
 }
 
 Database::getInstance()->begin();
@@ -49,19 +49,19 @@ if (verifyPassword($pwd, $player['user_password'])) {
         'sitter' => 0
     ));
     Database::getInstance()->commit();
-    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 108, __LINE__);
+    redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 108, __LINE__);
 }
 
 if (!$_SESSION['blm_sitter']) {
     if (passwordNeedsUpgrade($player['user_password']) && Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $player['ID'],
             array('Passwort' => hashPassword($pwd))) !== 1) {
         Database::getInstance()->rollBack();
-        redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 142, __LINE__);
+        redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 142, __LINE__);
     }
     if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $player['ID'],
             array('LastLogin' => date('Y-m-d H:i:s'), 'LastAction' => date('Y-m-d H:i:s'))) !== 1) {
         Database::getInstance()->rollBack();
-        redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 142, __LINE__);
+        redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 142, __LINE__);
     }
 }
 
@@ -73,7 +73,7 @@ if (Database::getInstance()->createTableEntry(Database::TABLE_LOG_LOGIN, array(
         'sitter' => $_SESSION['blm_sitter'] ? 1 : 0
     )) !== 1) {
     Database::getInstance()->rollBack();
-    redirectTo(sprintf("/?p=anmelden&name=%s", urlencode($name)), 141, __LINE__);
+    redirectTo(sprintf('/?p=anmelden&name=%s', urlencode($name)), 141, __LINE__);
 }
 
 Database::getInstance()->commit();

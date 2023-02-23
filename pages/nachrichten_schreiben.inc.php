@@ -19,7 +19,7 @@ if ($reply > 0) {
 
     $receiver = $data['VonName'];
     $subject = stripos($data['Betreff'], 'Re:') === false ? 'Re: ' . $data['Betreff'] : $data['Betreff'];
-    $message = "\n\n[quote]" . $data['Nachricht'] . "[/quote]";
+    $message = "\n\n" . '[quote]' . $data['Nachricht'] . '[/quote]';
 }
 
 $receiver = getOrDefault($_GET, 'receiver', $receiver);

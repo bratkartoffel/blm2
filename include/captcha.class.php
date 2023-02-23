@@ -35,7 +35,7 @@ class Captcha
 
     public function getImageUrl(): string
     {
-        return sprintf("data:image/webp;base64,%s", base64_encode($this->imageData));
+        return sprintf('data:image/webp;base64,%s', base64_encode($this->imageData));
     }
 
     public function getId(): string

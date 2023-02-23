@@ -23,7 +23,7 @@ if ($data['Geld'] < $buildingData['Kosten'] || !buildingRequirementsMet($was, $d
 
 Database::getInstance()->begin();
 if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
-        'finished' => date("Y-m-d H:i:s", time() + $buildingData['Dauer']),
+        'finished' => date('Y-m-d H:i:s', time() + $buildingData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
         'item' => (job_type_factor * job_type_building) + $was,
         'cost' => $buildingData['Kosten']
@@ -49,4 +49,4 @@ if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTIC
 }
 
 Database::getInstance()->commit();
-redirectTo('/?p=gebaeude', 207, "g" . $was);
+redirectTo('/?p=gebaeude', 207, sprintf('g%s', $was));

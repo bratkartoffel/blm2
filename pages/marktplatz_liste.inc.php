@@ -51,11 +51,11 @@ $offset = verifyOffset($offset, $offerCount, Config::getInt(Config::SECTION_BASE
             <td>
                 <?php
                 if ($row['VonId'] != $_SESSION['blm_user']) {
-                    printf('<a class="buy_offer" data-id="%d"  href="./actions/marktplatz.php?a=2&amp;id=%s&amp;token=%s">Kaufen</a>',
+                    printf('<a class="buy_offer" data-id="%d" href="/actions/marktplatz.php?a=2&amp;id=%s&amp;token=%s">Kaufen</a>',
                         $rowNr, $row['ID'], $_SESSION['blm_xsrf_token']);
                 } else {
                     $refundWeight = formatWeight(floor($row['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate')), false);
-                    printf('<a class="retract_offer" data-id="%d" data-refund="%s" href="./actions/marktplatz.php?a=3&amp;id=%s&amp;token=%s">Zurückziehen</a>',
+                    printf('<a class="retract_offer" data-id="%d" data-refund="%s" href="/actions/marktplatz.php?a=3&amp;id=%s&amp;token=%s">Zurückziehen</a>',
                         $rowNr, $refundWeight, $row['ID'], $_SESSION['blm_xsrf_token']);
                 }
                 ?>

@@ -36,7 +36,7 @@ $rates = calculateSellRates();
         <?php
         for ($i = 1; $i <= count_wares; $i++) {
             if ($data['Forschung' . $i] == 0) continue;
-            $temp = "Forschung" . $i;
+            $temp = 'Forschung' . $i;
             $prodData = calculateProductionDataForPlayer($i, $data['Gebaeude' . building_plantage], $data['Forschung' . $i]);
             $sellPrice = calculateSellPrice($i, $data['Forschung' . $i], $data['Gebaeude' . building_shop], $data['Gebaeude' . building_school], $rates[$i]);
             $costPerKg = $prodData['Kosten'] / $prodData['Menge'];

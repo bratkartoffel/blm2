@@ -79,7 +79,7 @@ if (!productionRequirementsMet($was, $data['Gebaeude' . building_plantage], $dat
 Database::getInstance()->begin();
 
 if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
-        'finished' => date("Y-m-d H:i:s", time() + $stunden * 3600),
+        'finished' => date('Y-m-d H:i:s', time() + $stunden * 3600),
         'user_id' => $_SESSION['blm_user'],
         'item' => (job_type_factor * job_type_production) + $was,
         'amount' => $menge,
@@ -104,4 +104,4 @@ if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTIC
 }
 
 Database::getInstance()->commit();
-redirectTo('/?p=plantage', 207, "p" . $was);
+redirectTo('/?p=plantage', 207, sprintf('p%s', $was));

@@ -22,4 +22,4 @@ if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
     redirectTo('/?p=index', 117, __LINE__);
 }
 Database::getInstance()->commit();
-redirectTo("/?p=anmelden", 241);
+redirectTo('/?p=anmelden', 241);

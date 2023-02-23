@@ -60,7 +60,7 @@ if (isLoggedIn()) {
 sendCspHeader();
 ?><!DOCTYPE html>
 <!--
-	Site generated:   <?= date("r", time()) . "\n"; ?>
+	Site generated:   <?= date('r', time()) . "\n"; ?>
 	Client:           <?= escapeForOutput($_SERVER['REMOTE_ADDR']) . "\n"; ?>
 	Server:           <?= escapeForOutput($_SERVER['SERVER_ADDR']) . "\n"; ?>
 	Script:           <?= escapeForOutput($_SERVER['PHP_SELF']) . "\n"; ?>
@@ -198,7 +198,7 @@ sendCspHeader();
     <div id="Footer">
         <div>Bioladenmanager 2 Version <?= game_version; ?></div>
         <div><a href="/?p=impressum">© 2007-2023, Simon Frankenberger</a></div>
-        <div>Letzte Änderung: <?= date("d.m.Y H:i", filemtime(__DIR__ . '/include/game_version.inc.php')); ?></div>
+        <div>Letzte Änderung: <?= date('d.m.Y H:i', filemtime(__DIR__ . '/include/game_version.inc.php')); ?></div>
     </div>
 </div>
 <script nonce="<?= getCspNonce(); ?>">
@@ -213,7 +213,7 @@ sendCspHeader();
     ?>
     let links = document.getElementById('Navigation').getElementsByTagName('a');
     for (let link of links) {
-        if (link.classList.contains("inactive")) {
+        if (link.classList.contains('inactive')) {
             link.href += '#Inhalt';
         }
     }
@@ -227,7 +227,7 @@ sendCspHeader();
 $dauer = 1000 * (microtime(true) - $start);
 ?>
 <!--
-PLT:     <?= number_format($dauer, 2) . "ms\n"; ?>
+PLT:     <?= number_format($dauer, 2); ?>ms
 Queries: <?= Database::getInstance()->getQueryCount() . "\n"; ?>
 <?php
 $warnings = Database::getInstance()->getWarnings();

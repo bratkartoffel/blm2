@@ -97,7 +97,6 @@ switch (getOrDefault($_POST, 'a', 0)) {
 
     // Update profile picture
     case 5:
-
         Database::getInstance()->begin();
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'], array('LastImageChange' => date('Y-m-d H:i:s'))) !== 1) {
             Database::getInstance()->rollBack();
@@ -234,7 +233,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         if ($zip->open($tmpFile, ZipArchive::OVERWRITE) !== true) {
             redirectTo('/?p=einstellungen', 141, __LINE__);
         }
-        $profilePicture = sprintf("../pics/uploads/u_%d.webp", $_SESSION['blm_user']);
+        $profilePicture = sprintf('../pics/uploads/u_%d.webp', $_SESSION['blm_user']);
         if (file_exists($profilePicture) && $zip->addFile($profilePicture, 'profile.webp') !== true) {
             redirectTo('/?p=einstellungen', 141, __LINE__);
         }
@@ -278,7 +277,7 @@ switch (getOrDefault($_POST, 'a', 0)) {
         echo file_get_contents($tmpFile);
         break;
 
-// unknown action
+    // unknown action
     default:
         redirectTo('/?p=einstellungen', 112, __LINE__);
         break;

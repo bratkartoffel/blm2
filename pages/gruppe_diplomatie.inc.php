@@ -100,6 +100,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
                 <td>
                     <?php
                     if ($rights['group_diplomacy'] == 1) {
+                        // FIXME CSP!
                         ?>
                         <a href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                            onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency(2 * $row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points')); ?> seiner Punkte und <?= Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'); ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
@@ -185,9 +186,9 @@ if ($rights['group_diplomacy'] == 1) {
                 <td><?= createGroupLink($row['VonId'], $row['VonName']); ?></td>
                 <td>
                     <a id="accept_<?= $row['ID']; ?>"
-                       href="/actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>                    &amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
+                       href="/actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
                     <a id="refuse_<?= $row['ID']; ?>"
-                       href="/actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>                    &amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
+                       href="/actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
                 </td>
             </tr>
             <?php

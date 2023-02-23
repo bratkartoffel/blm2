@@ -179,7 +179,8 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Sie sind nicht angemeldet. Bitte melden Sie sich erst an.';
             break;
         case 103:
-            $text = 'Das Bild ist zu gross. Die maximale Grösse des Bildes ist ' . (Config::getInt(Config::SECTION_BASE, 'max_profile_image_size') / 1024) . ' KB.';
+            $text = sprintf('Das Bild ist zu gross. Die maximale Grösse des Bildes ist %d KB.',
+                Config::getInt(Config::SECTION_BASE, 'max_profile_image_size') / 1024);
             break;
         case 104:
             $text = 'Bitte füllen Sie alle Felder aus.';
@@ -263,52 +264,59 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Der Kontostand des Mitglieds ist bereits auf dem Maximum, die Bank weigert sich die Überweisung anzunehmen!';
             break;
         case 132:
-            $text = 'Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als ' . formatCurrency(Config::getInt(Config::SECTION_GROUP, 'war_min_amount')) . ' sein!';
+            $text = sprintf('Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als %s sein!',
+                formatCurrency(Config::getInt(Config::SECTION_GROUP, 'war_min_amount')));
             break;
         case 133:
-            $text = "Bitte geben Sie eine Dauer zwischen 1 und " . Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max') . " Stunden ein!";
+            $text = sprintf('Bitte geben Sie eine Dauer zwischen 1 und %s Stunden ein!',
+                Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'));
             break;
         case 134:
-            $text = "Bitte geben Sie eine gültige EMail-Adresse ein!";
+            $text = 'Bitte geben Sie eine gültige EMail-Adresse ein!';
             break;
         case 135:
-            $text = "Ihr Account ist noch nicht aktiviert.<br />Bitte klicken Sie auf den Link, den Sie per EMail erhalten haben.<br />Falls Sie keinen Link erhalten haben, so wenden Sie sich bitte mit Ihrem Benutzernamen und <br />der registrierten EMailadresse als Absender an die im Impressum angegebene Adresse.";
+            $text = 'Ihr Account ist noch nicht aktiviert.<br />Bitte klicken Sie auf den Link, den Sie per EMail erhalten haben.<br />Falls Sie keinen Link erhalten haben, so wenden Sie sich bitte mit Ihrem Benutzernamen und <br />der registrierten EMailadresse als Absender an die im Impressum angegebene Adresse.';
             break;
         case 136:
-            $text = "Bitte geben Sie ein Sitterpasswort ein!";
+            $text = 'Bitte geben Sie ein Sitterpasswort ein!';
             break;
         case 137:
-            $text = "Es ist Weihnachten. Die Mafiabosse haben untereinander bis zum Ende der Feiertage einen Waffenstillstand geschlossen.";
+            $text = 'Es ist Weihnachten. Die Mafiabosse haben untereinander bis zum Ende der Feiertage einen Waffenstillstand geschlossen.';
             break;
         case 138:
-            $text = "Sitter dürfen beim Spiel nicht teilnehmen, tut mir Leid...";
+            $text = 'Sitter dürfen beim Spiel nicht teilnehmen, tut mir Leid...';
             break;
         case 139:
-            $text = "Ihr Account wurde von einem Administrator gesperrt. Bitte kontaktieren Sie einen Administrator im Forum für weitere Informationen. Falls diese Sperre dauerhaft ist, dann wird Ihr Account zwei Wochen nach Beginn der Sperre gelöscht.";
+            $text = 'Ihr Account wurde von einem Administrator gesperrt. Bitte kontaktieren Sie einen Administrator im Forum für weitere Informationen. Falls diese Sperre dauerhaft ist, dann wird Ihr Account zwei Wochen nach Beginn der Sperre gelöscht.';
             break;
         case 140:
-            $text = "Die Gruppe wurde gefunden und das Passwort ist korrekt, jedoch hat die Gruppe die maximale Mitgliederzahl schon erreicht.";
+            $text = 'Die Gruppe wurde gefunden und das Passwort ist korrekt, jedoch hat die Gruppe die maximale Mitgliederzahl schon erreicht.';
             break;
         case 141:
-            $text = "Datenbankfehler, konnte neuen Eintrag nicht anlegen";
+            $text = 'Datenbankfehler, konnte neuen Eintrag nicht anlegen';
             break;
         case 142:
-            $text = "Datenbankfehler, konnte bestehenden Eintrag nicht bearbeiten";
+            $text = 'Datenbankfehler, konnte bestehenden Eintrag nicht bearbeiten';
             break;
         case 143:
-            $text = "Datenbankfehler, konnte bestehenden Eintrag nicht löschen";
+            $text = 'Datenbankfehler, konnte bestehenden Eintrag nicht löschen';
             break;
         case 144:
-            $text = sprintf('Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:%s">%s</a>', Config::get(Config::SECTION_BASE, 'admin_email'), Config::get(Config::SECTION_BASE, 'admin_email'));
+            $text = sprintf('Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:%s">%s</a>',
+                Config::get(Config::SECTION_BASE, 'admin_email'),
+                Config::get(Config::SECTION_BASE, 'admin_email'));
             break;
         case 145:
             $text = 'Sie müssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten können!';
             break;
         case 146:
-            $text = 'Der Benutzername darf nur zwischen ' . Config::getInt(Config::SECTION_BASE, 'username_min_len') . ' und ' . Config::getInt(Config::SECTION_BASE, 'username_max_len') . ' Zeichen enthalten';
+            $text = sprintf('Der Benutzername darf nur zwischen %s und %s Zeichen enthalten',
+                Config::getInt(Config::SECTION_BASE, 'username_min_len'),
+                Config::getInt(Config::SECTION_BASE, 'username_max_len'));
             break;
         case 147:
-            $text = 'Das gewählte Passwort ist zu kurz, es muss mindestens aus ' . Config::getInt(Config::SECTION_BASE, 'password_min_len') . ' Zeichen bestehen.';
+            $text = sprintf('Das gewählte Passwort ist zu kurz, es muss mindestens aus %s Zeichen bestehen.',
+                Config::getInt(Config::SECTION_BASE, 'password_min_len'));
             break;
         case 148:
             $text = 'Die Registrierung ist aktuell geschlossen';
@@ -341,10 +349,12 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Sie befinden sich bereits in einer Gruppe';
             break;
         case 158:
-            $text = 'Ungültiger Gruppenname (Darf nur maximal ' . Config::getInt(Config::SECTION_GROUP, 'max_name_length') . ' Zeichen lang sein)';
+            $text = sprintf('Ungültiger Gruppenname (Darf nur maximal %s Zeichen lang sein)',
+                Config::getInt(Config::SECTION_GROUP, 'max_name_length'));
             break;
         case 159:
-            $text = 'Ungültiges Gruppenkürzel  (Darf nur maximal ' . Config::getInt(Config::SECTION_GROUP, 'max_tag_length') . ' Zeichen lang sein)';
+            $text = sprintf('Ungültiges Gruppenkürzel (Darf nur maximal %s Zeichen lang sein)',
+                Config::getInt(Config::SECTION_GROUP, 'max_tag_length'));
             break;
         case 160:
             $text = 'Token in Anfrage nicht gefunden, Aktion verweigert';
@@ -368,13 +378,15 @@ function getMessageBox(int $msg_id): ?string
             $text = 'In der Gruppenkasse befindet sich genügend Geld für den Krieg';
             break;
         case 167:
-            $text = 'Eine diplomatische Beziehung kann erst nach frühestens ' . Config::getInt(Config::SECTION_GROUP, 'diplomacy_min_duration') . ' Tagen aufgekündigt werden';
+            $text = sprintf('Eine diplomatische Beziehung kann erst nach frühestens %s Tagen aufgekündigt werden',
+                Config::getInt(Config::SECTION_GROUP, 'diplomacy_min_duration'));
             break;
         case 168:
             $text = 'Sie können sich selbst keine Nachrichten schicken!';
             break;
         case 169:
-            $text = 'Die Mafia ist erst ab ' . formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')) . ' Punkten verfügbar';
+            $text = sprintf('Die Mafia ist erst ab %s Punkten verfügbar',
+                formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')));
             break;
         case 170:
             $text = 'Die Mafia erholt sich noch vom letzten Auftrag.';
@@ -537,7 +549,8 @@ function getMessageBox(int $msg_id): ?string
 
 
         case 999:
-            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s', date("d.m.Y \u\m H:i", Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
+            $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s',
+                date('d.m.Y \u\m H:i', Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
             break;
         default:
             $text = sprintf('Meldungsnummer konnte nicht gefunden werden: %d', $msg_id);
@@ -638,9 +651,9 @@ function isLoggedIn(): bool
 function getYesOrNo(int $bool): string
 {
     if ($bool == 0)
-        return "Nein";
+        return 'Nein';
     else
-        return "Ja";
+        return 'Ja';
 }
 
 function replaceBBCode(string $text): string
@@ -649,10 +662,10 @@ function replaceBBCode(string $text): string
     $result = preg_replace(
         array(
             '/\[center](.*)\[\/center]/Uis',
-            "/\[url=&quot;(https?:\/\/|www.|https?:\/\/www.)([a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/url]/SiU",
-            "/\[img=&quot;(https?:\/\/[a-z\d\-_.\/]{3,32}\.[a-z]{3,4})&quot;](.*)\[\/img]/SiU",
-            "@\[player=(.+)#(\d{1,8})/]@SUi",
-            "@\[group=(.+)#(\d{1,8})/]@SUi",
+            '/\[url=&quot;(https?:\/\/|www.|https?:\/\/www.)([a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/url]/SiU',
+            '/\[img=&quot;(https?:\/\/[a-z\d\-_.\/]{3,32}\.[a-z]{3,4})&quot;](.*)\[\/img]/SiU',
+            '@\[player=(.+)#(\d{1,8})/]@SUi',
+            '@\[group=(.+)#(\d{1,8})/]@SUi',
         ),
         array(
             '<div class="center">\1</div>',
@@ -671,8 +684,8 @@ function replaceBBCode(string $text): string
 
         $result = preg_replace(
             array(
-                "/\[color=red](.*)\[\/color]/is",
-                "/\[([bui])](.*)\[\/\\1]/Uis",
+                '/\[color=red](.*)\[\/color]/is',
+                '/\[([bui])](.*)\[\/\\1]/Uis',
                 '/\[quote](.*)\[\/quote]/Uism'
             ),
             array(
@@ -712,7 +725,7 @@ function deleteAccount(int $blm_user): ?string
     }
 
     // delete his profile picture
-    @unlink(sprintf("../pics/uploads/u_%d.webp", $blm_user));
+    @unlink(sprintf('../pics/uploads/u_%d.webp', $blm_user));
     return null;
 }
 
@@ -721,14 +734,14 @@ function resetAccount(int $blm_user): ?string
     // delete group if the user is the only member
     $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($blm_user);
     if ($player === null) {
-        return "loading player";
+        return 'loading player';
     }
     if ($player['Gruppe'] !== null && Database::getInstance()->getGroupMemberCountById($player['Gruppe']) == 1) {
         $status = Database::getInstance()->deleteGroup($player['Gruppe']);
         if ($status !== null) {
             return 'delete_group_' . $status;
         }
-        @unlink(sprintf("../pics/uploads/g_%d.webp", $player['Gruppe']));
+        @unlink(sprintf('../pics/uploads/g_%d.webp', $player['Gruppe']));
     }
 
     // reset all values to the starting defaults
@@ -789,7 +802,7 @@ function updateLastAction(): void
 
 function escapeForOutput(?string $text, bool $withNl2Br = true): string
 {
-    if ($text === null) return "";
+    if ($text === null) return '';
     $data = htmlentities(stripslashes($text), ENT_QUOTES, 'UTF-8');
     if ($withNl2Br) {
         return nl2br($data);
@@ -807,7 +820,7 @@ function getOrDefault(array $array, string $name, $default = null)
         } else if (is_string($default)) {
             return $value;
         } else if (is_integer($default)) {
-            if ($value === "") return $default;
+            if ($value === '') return $default;
             else return intval($value);
         } else if (is_double($default) || is_float($default)) {
             return doubleval(str_replace(',', '.', $value));
@@ -862,13 +875,13 @@ function formatWeight(float $amount, bool $withSuffix = true, int $decimals = 0,
 
 function formatPoints(int $amount): string
 {
-    return number_format($amount, 0, "", ".");
+    return number_format($amount, 0, '', '.');
 }
 
 function formatDate(int $date): string
 {
     if ($date > 0) {
-        return date("d.m.Y", $date);
+        return date('d.m.Y', $date);
     } else {
         return 'Nie';
     }
@@ -879,12 +892,12 @@ function formatDateTime(?int $date): string
     if ($date === null)
         return 'Jetzt';
     else
-        return date("d.m.Y H:i:s", $date);
+        return date('d.m.Y H:i:s', $date);
 }
 
 function formatTime(int $date): string
 {
-    return date("H:i:s", $date);
+    return date('H:i:s', $date);
 }
 
 function formatDuration(int $amount, bool $withHours = true): string
@@ -913,16 +926,16 @@ function createPaginationTable(string $linkBase, int $currentPage, int $entriesC
         $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
             $pages[] = sprintf('<a href="%s&amp;%s=%d%s">%d</a>',
-                $linkBase, $offsetField, $page, $anchor == null ? '' : "#$anchor", $page + 1);
+                $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $page + 1);
         } else {
             $pages[] = $page + 1;
         }
     }
     if (count($pages) == 0) {
-        $pages[] = "1";
+        $pages[] = '1';
     }
 
-    return sprintf('<div class="Pagination">Seite: %s</div>', implode(" | ", $pages));
+    return sprintf('<div class="Pagination">Seite: %s</div>', implode(' | ', $pages));
 }
 
 function createDropdown(array $elementsWithIDAndName, ?int $selectedID, string $elementName, bool $withAllEntry = true, bool $withSystemEntry = false, bool $withNoneEntry = false): string
@@ -943,10 +956,10 @@ function createDropdown(array $elementsWithIDAndName, ?int $selectedID, string $
     }
     for ($i = 0; $i < count($elementsWithIDAndName); $i++) {
         $entry = $elementsWithIDAndName[$i];
-        if ($entry["ID"] == $selectedID) {
-            $entries[] = sprintf('<option value="%d" selected>%s</option>', $entry["ID"], $entry["Name"]);
+        if ($entry['ID'] == $selectedID) {
+            $entries[] = sprintf('<option value="%d" selected>%s</option>', $entry['ID'], $entry['Name']);
         } else {
-            $entries[] = sprintf('<option value="%d">%s</option>', $entry["ID"], $entry["Name"]);
+            $entries[] = sprintf('<option value="%d">%s</option>', $entry['ID'], $entry['Name']);
         }
     }
     return sprintf('<select name="%s">%s</select>', $elementName, implode("\n", $entries));
@@ -973,10 +986,10 @@ function redirectTo(string $location, ?int $m = null, ?string $anchor = null): v
 {
     $location = preg_replace('/&m=(\\d+)/', '', $location);
     if ($m != null) {
-        $location .= "&m=" . $m;
+        $location .= '&m=' . $m;
     }
     if ($anchor != null) {
-        $location .= "#" . urlencode($anchor);
+        $location .= '#' . urlencode($anchor);
     }
     header('Location: ' . $location, true, 303);
     die();
@@ -1011,24 +1024,24 @@ function requireEntryFound($result, string $redirectTo, int $m = 154, ?string $a
 function requireAdmin(): void
 {
     if (!isAdmin()) {
-        redirectTo("/?p=index", 112, __LINE__);
+        redirectTo('/?p=index', 112, __LINE__);
     }
 }
 
 function requireLogin(): void
 {
     if (!isLoggedIn()) {
-        redirectTo("/?p=index", 102, __LINE__);
+        redirectTo('/?p=index', 102, __LINE__);
     }
 }
 
 function isAccessAllowedIfSitter(?string $requiredRight): bool
 {
     if ($requiredRight === null) return true;
-    return !$_SESSION['blm_sitter'] || Database::getInstance()->getSitterPermissions($_SESSION['blm_user'], $requiredRight) === "1";
+    return !$_SESSION['blm_sitter'] || Database::getInstance()->getSitterPermissions($_SESSION['blm_user'], $requiredRight) === '1';
 }
 
-function restrictSitter(string $requiredRight, string $backPage = "index"): void
+function restrictSitter(string $requiredRight, string $backPage = 'index'): void
 {
     if (!isAccessAllowedIfSitter($requiredRight)) {
         redirectTo('/?p=' . $backPage, 112, __LINE__);
@@ -1038,7 +1051,7 @@ function restrictSitter(string $requiredRight, string $backPage = "index"): void
 function createRandomCode(): string
 {
     if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-        // "changeit"
+        // sha1('changeit')
         return '07313f0e320f22cbfa35cfc220508eb3ff457c7e';
     }
     return sha1(openssl_random_pseudo_bytes(32));
@@ -1079,9 +1092,9 @@ function createNavigationLink(string $target, string $text, ?string $sitterRight
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
         return sprintf('<div class="NaviLink"><a href="/?p=%s" id="link_%s" class="%s">%s</a></div>%s',
-            $target, $target, $target === getCurrentPage() ? "active" : "inactive", $text, "\n");
+            $target, $target, $target === getCurrentPage() ? 'active' : 'inactive', $text, "\n");
     }
-    return "";
+    return '';
 }
 
 function createHelpLink(int $module, int $category): string
@@ -1089,7 +1102,7 @@ function createHelpLink(int $module, int $category): string
     if (isLoggedIn()) {
         return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" id="link_show_help"><img id="help_image" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category);
     }
-    return "";
+    return '';
 }
 
 function getCurrentPage(): string
@@ -1097,81 +1110,81 @@ function getCurrentPage(): string
     $p = array_key_exists('p', $_GET) ? $_GET['p'] : 'index';
     if (isLoggedIn()) {
         switch ($p) {
-            case "admin":
-            case "admin_benutzer":
-            case "admin_benutzer_bearbeiten":
-            case "admin_gruppe":
-            case "admin_gruppe_bearbeiten":
-            case "admin_test":
-            case "admin_markt":
-            case "admin_vertrag":
-            case "admin_vertrag_einstellen":
-            case "admin_vertrag_bearbeiten":
-            case "admin_markt_einstellen":
-            case "admin_markt_bearbeiten":
-            case "admin_log_bank":
-            case "admin_log_bioladen":
-            case "admin_log_gruppenkasse":
-            case "admin_log_login":
-            case "admin_log_mafia":
-            case "admin_log_marktplatz":
-            case "admin_log_nachrichten":
-            case "admin_log_vertraege":
+            case 'admin':
+            case 'admin_benutzer':
+            case 'admin_benutzer_bearbeiten':
+            case 'admin_gruppe':
+            case 'admin_gruppe_bearbeiten':
+            case 'admin_test':
+            case 'admin_markt':
+            case 'admin_vertrag':
+            case 'admin_vertrag_einstellen':
+            case 'admin_vertrag_bearbeiten':
+            case 'admin_markt_einstellen':
+            case 'admin_markt_bearbeiten':
+            case 'admin_log_bank':
+            case 'admin_log_bioladen':
+            case 'admin_log_gruppenkasse':
+            case 'admin_log_login':
+            case 'admin_log_mafia':
+            case 'admin_log_marktplatz':
+            case 'admin_log_nachrichten':
+            case 'admin_log_vertraege':
                 if (!isAdmin()) {
                     redirectTo('/?p=index', 101, __LINE__);
                 }
                 $page = $p;
                 break;
-            case "bank":
-            case "bioladen":
-            case "buero":
-            case "forschungszentrum":
-            case "gebaeude":
-            case "marktplatz_liste":
-            case "marktplatz_verkaufen":
-            case "plantage":
-            case "vertraege_liste":
-            case "vertraege_neu":
-            case "mafia":
-            case "statistik":
-            case "gruppe":
-            case "gruppe_einstellungen":
-            case "gruppe_mitgliederverwaltung":
-            case "gruppe_diplomatie":
-            case "gruppe_kasse":
-            case "gruppe_logbuch":
-            case "gruppe_krieg_details":
-            case "rangliste":
-            case "rangliste_spezial":
-            case "index":
-            case "impressum":
-            case "regeln":
-            case "einstellungen":
-            case "nachrichten_lesen":
-            case "nachrichten_liste":
-            case "nachrichten_schreiben":
-            case "notizblock":
-            case "hilfe":
-            case "profil":
-            case "special":
+            case 'bank':
+            case 'bioladen':
+            case 'buero':
+            case 'forschungszentrum':
+            case 'gebaeude':
+            case 'marktplatz_liste':
+            case 'marktplatz_verkaufen':
+            case 'plantage':
+            case 'vertraege_liste':
+            case 'vertraege_neu':
+            case 'mafia':
+            case 'statistik':
+            case 'gruppe':
+            case 'gruppe_einstellungen':
+            case 'gruppe_mitgliederverwaltung':
+            case 'gruppe_diplomatie':
+            case 'gruppe_kasse':
+            case 'gruppe_logbuch':
+            case 'gruppe_krieg_details':
+            case 'rangliste':
+            case 'rangliste_spezial':
+            case 'index':
+            case 'impressum':
+            case 'regeln':
+            case 'einstellungen':
+            case 'nachrichten_lesen':
+            case 'nachrichten_liste':
+            case 'nachrichten_schreiben':
+            case 'notizblock':
+            case 'hilfe':
+            case 'profil':
+            case 'special':
                 $page = $p;
                 break;
             default:
-                $page = "index";
+                $page = 'index';
                 break;
         }
     } else {
         switch ($p) {
-            case "anmelden":
-            case "registrieren":
-            case "index":
-            case "passwort_vergessen":
-            case "regeln":
-            case "impressum":
+            case 'anmelden':
+            case 'registrieren':
+            case 'index':
+            case 'passwort_vergessen':
+            case 'regeln':
+            case 'impressum':
                 $page = $p;
                 break;
             default:
-                $page = "index";
+                $page = 'index';
                 break;
         }
     }
@@ -1297,7 +1310,7 @@ function calculateSellRates(): array
     if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         mt_srand(1337);
     } else {
-        mt_srand(intval(date("ymdH", time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
+        mt_srand(intval(date('ymdH', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     }
     $result = array();
     for ($i = 1; $i <= count_wares; $i++) {
@@ -1312,7 +1325,7 @@ function calculateInterestRates(): array
     if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         mt_srand(1337);
     } else {
-        mt_srand(intval(date("ymd", time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
+        mt_srand(intval(date('ymd', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     }
     $result = array(
         'Debit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_max')),
@@ -1349,12 +1362,12 @@ function getIncome(int $shop_level, int $kebab_stand_level): int
 
 function createBBProfileLink(int $user_id, string $user_name): string
 {
-    return sprintf("[player=%s#%d/]", $user_name, $user_id);
+    return sprintf('[player=%s#%d/]', $user_name, $user_id);
 }
 
 function createBBGroupLink(int $group_id, string $group_name): string
 {
-    return sprintf("[group=%s#%d/]", $group_name, $group_id);
+    return sprintf('[group=%s#%d/]', $group_name, $group_id);
 }
 
 function createGroupNaviation(int $activePage, int $group_id): string
@@ -1384,7 +1397,7 @@ function createGroupNaviation(int $activePage, int $group_id): string
     return sprintf('<div id="GroupNavigation">%s</div>
 <script nonce="' . getCspNonce() . '">
     document.getElementById(\'leave_group\').onclick = () => confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');
-</script>', implode(" | ", $items));
+</script>', implode(' | ', $items));
 }
 
 function getGroupDiplomacyTypeName(int $id): string
@@ -1521,7 +1534,7 @@ EOF;
     foreach ($players as $player) {
         if ($player['EMailAct'] !== null || $player['LastLogin'] === null) continue;
         if (!sendMail($player['EMail'], Config::get(Config::SECTION_BASE, 'game_title') . ': Rundenende', str_replace('__NAME__', escapeForOutput($player['Name']), $mail))) {
-            trigger_error(sprintf("Could not send mail to %s", $player['EMail']), E_USER_WARNING);
+            trigger_error(sprintf('Could not send mail to %s', $player['EMail']), E_USER_WARNING);
         }
     }
 }
@@ -1637,7 +1650,7 @@ function getMafiaConfigSection(int $action): string
 
 function getMafiaChance(string $cfgSection, int $level, int $pizzeriaLevel = 0, int $fenceLevel = 0): float
 {
-    $chance = floatval(Config::get($cfgSection, "chance")[$level]);
+    $chance = floatval(Config::get($cfgSection, 'chance')[$level]);
     $chance += $pizzeriaLevel * Config::getFloat(Config::SECTION_PIZZERIA, 'mafia_bonus');
     $chance -= $fenceLevel * Config::getFloat(Config::SECTION_FENCE, 'mafia_bonus');
     if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
@@ -1718,7 +1731,7 @@ function getAllFields(string $prefix, int $count, string $separator = ','): stri
 date_default_timezone_set(Config::get(Config::SECTION_BASE, 'timezone'));
 
 // check for maintenance
-if (Config::getBoolean(Config::SECTION_BASE, "maintenance_active")) {
+if (Config::getBoolean(Config::SECTION_BASE, 'maintenance_active')) {
     if (defined('IS_CRON')) {
         die("Maintenance active\n");
     } else {

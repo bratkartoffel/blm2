@@ -82,7 +82,7 @@ $resetCreditLimit = calculateResetCreditLimit($data['Gebaeude' . building_bank])
         const maxWithdraw = Math.max(0, bank).toFixed(2);
         const currentValue = Number.parseFloat(field.value).toFixed(2);
         // only change value if the user didn't change it yet
-        if (currentValue === "0.00"
+        if (currentValue === '0.00'
             || currentValue === maxDeposit
             || currentValue === maxWithdraw
             || currentValue === hand.toFixed(2)

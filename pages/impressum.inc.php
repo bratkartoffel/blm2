@@ -19,8 +19,9 @@
     heruntergeladen werden.
 </p>
 <p>
-    Die Lizenz (MIT Licence) kann <a href="https://github.com/bratkartoffel/blm2/blob/master/LICENCE.md"
-                                     target="_blank">hier</a> eingesehen werden.
+    Die Lizenz (MIT Licence) kann
+    <a href="https://github.com/bratkartoffel/blm2/blob/master/LICENCE.md" target="_blank">hier</a>
+    eingesehen werden.
 </p>
 
 <h2>Betrieben wird diese Installation durch:</h2>

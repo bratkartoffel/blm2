@@ -26,18 +26,18 @@ $groups = Database::getInstance()->getAllGroupIdsAndName();
 // first form, general user data
 if (isset($_GET['username'])) $entry['Name'] = $_GET['username'];
 if (isset($_GET['email'])) $entry['EMail'] = $_GET['email'];
-if (isset($_GET['email_aktiviert'])) $entry['EMailAct'] = $_GET['email_aktiviert'] == "1" ? null : 'x';
+if (isset($_GET['email_aktiviert'])) $entry['EMailAct'] = $_GET['email_aktiviert'] == '1' ? null : 'x';
 if (isset($_GET['geld'])) $entry['Geld'] = getOrDefault($_GET, 'geld', .0);
 if (isset($_GET['bank'])) $entry['Bank'] = getOrDefault($_GET, 'bank', .0);
 if (isset($_GET['igm_gesendet'])) $entry['IgmGesendet'] = getOrDefault($_GET, 'igm_gesendet', 0);
 if (isset($_GET['igm_empfangen'])) $entry['IgmEmpfangen'] = getOrDefault($_GET, 'igm_empfangen', 0);
-if (isset($_GET['admin'])) $entry['Admin'] = $_GET['admin'] == "1" ? 1 : 0;
-if (isset($_GET['betatester'])) $entry['Betatester'] = $_GET['betatester'] == "1" ? 1 : 0;
+if (isset($_GET['admin'])) $entry['Admin'] = $_GET['admin'] == '1' ? 1 : 0;
+if (isset($_GET['betatester'])) $entry['Betatester'] = $_GET['betatester'] == '1' ? 1 : 0;
 if (isset($_GET['ewige_punkte'])) $entry['EwigePunkte'] = getOrDefault($_GET, 'ewige_punkte', 0);
 if (isset($_GET['onlinezeit'])) $entry['OnlineZeit'] = getOrDefault($_GET, 'onlinezeit', 0);
 if (isset($_GET['gruppe'])) $entry['Gruppe'] = $_GET['gruppe'];
 if (isset($_GET['verwarnungen'])) $entry['Verwarnungen'] = getOrDefault($_GET, 'verwarnungen', 0);
-if (isset($_GET['gesperrt'])) $entry['Gesperrt'] = $_GET['gesperrt'] == "1" ? 1 : 0;
+if (isset($_GET['gesperrt'])) $entry['Gesperrt'] = $_GET['gesperrt'] == '1' ? 1 : 0;
 
 // second form, building levels
 for ($i = 1; $i <= count_buildings; $i++) {

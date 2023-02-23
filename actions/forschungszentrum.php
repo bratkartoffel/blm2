@@ -33,7 +33,7 @@ if ($data['Geld'] < $researchData['Kosten']) {
 
 Database::getInstance()->begin();
 if (Database::getInstance()->createTableEntry(Database::TABLE_JOBS, array(
-        'finished' => date("Y-m-d H:i:s", time() + $researchData['Dauer']),
+        'finished' => date('Y-m-d H:i:s', time() + $researchData['Dauer']),
         'user_id' => $_SESSION['blm_user'],
         'item' => (job_type_factor * job_type_research) + $was,
         'cost' => $researchData['Kosten']
@@ -57,4 +57,4 @@ if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_STATISTIC
 }
 
 Database::getInstance()->commit();
-redirectTo('/?p=forschungszentrum', 207, "f" . $was);
+redirectTo('/?p=forschungszentrum', 207, sprintf('f%s', $was));

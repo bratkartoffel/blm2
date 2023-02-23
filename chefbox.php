@@ -142,7 +142,7 @@ sendCspHeader();
 $dauer = 1000 * (microtime(true) - $start);
 ?>
 <!--
-PLT:     <?= number_format($dauer, 2) . "ms\n"; ?>
+PLT:     <?= number_format($dauer, 2); ?>ms
 Queries: <?= $database->getQueryCount() . "\n"; ?>
 <?php
 $warnings = $database->getWarnings();

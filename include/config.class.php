@@ -62,7 +62,7 @@ class Config
         $result = self::getInstance()->_get($section, null);
         if ($section === self::SECTION_STARTING_VALUES) {
             foreach ($result as $key => $value) {
-                if ($value === "null" || $value === "") {
+                if ($value === 'null' || $value === '') {
                     $result[$key] = null;
                 }
             }
@@ -88,9 +88,9 @@ class Config
     public static function getBoolean(string $section, string $option): bool
     {
         switch (self::get($section, $option)) {
-            case "1":
-            case "yes":
-            case "true":
+            case '1':
+            case 'yes':
+            case 'true':
                 return true;
             default:
                 return false;

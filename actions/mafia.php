@@ -308,7 +308,7 @@ switch ($action) {
                     redirectTo($backLink, 141, __LINE__);
                 }
 
-                $wares[] = sprintf("* %s: %s", getItemName($i), formatWeight($data['Lager' . $i]));
+                $wares[] = sprintf('* %s: %s', getItemName($i), formatWeight($data['Lager' . $i]));
             }
 
             if (Database::getInstance()->createTableEntry(Database::TABLE_MESSAGES, array(

@@ -69,7 +69,7 @@ switch (getOrDefault($_REQUEST, 'a')) {
             if (strtotime($request['created']) < time() - (3600 * 4)) {
                 Database::getInstance()->begin();
                 if (Database::getInstance()->updateTableEntry(Database::TABLE_PASSWORD_RESET, $request['ID'],
-                        array('created' => date("Y-m-d H:i:s"))) !== 1) {
+                        array('created' => date('Y-m-d H:i:s'))) !== 1) {
                     Database::getInstance()->rollBack();
                     redirectTo($back_link, 142, __LINE__);
                 }

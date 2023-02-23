@@ -27,7 +27,7 @@ function pinMessage($id, $pinned)
     }
 
     Database::getInstance()->commit();
-    redirectTo('/?p=gruppe', 242, "GroupMessages");
+    redirectTo('/?p=gruppe', 242, 'GroupMessages');
 }
 
 switch (getOrDefault($_REQUEST, 'a', 0)) {
@@ -147,7 +147,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         if (passwordNeedsUpgrade($group['Passwort']) && Database::getInstance()->updateTableEntry(Database::TABLE_GROUP, $group['ID'],
                 array('Passwort' => hashPassword($pwd))) !== 1) {
             Database::getInstance()->rollBack();
-            redirectTo(sprintf("/?p=gruppe&name=%s", urlencode($name)), 142, __LINE__);
+            redirectTo(sprintf('/?p=gruppe&name=%s', urlencode($name)), 142, __LINE__);
         }
         if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $_SESSION['blm_user'],
                 array('Gruppe' => $group['ID']), array('Gruppe IS NULL')) !== 1) {
@@ -235,7 +235,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     case 4:
         $message = getOrDefault($_POST, 'message');
         if (strlen($message) < 4) {
-            redirectTo(sprintf('/?p=gruppe&message=%s', urlencode($message)), 128, "__LINE__");
+            redirectTo(sprintf('/?p=gruppe&message=%s', urlencode($message)), 128, __LINE__);
         }
 
         $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);
@@ -254,7 +254,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        redirectTo('/?p=gruppe', 204, "GroupMessages");
+        redirectTo('/?p=gruppe', 204, 'GroupMessages');
         break;
 
     // pin message
@@ -282,7 +282,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        redirectTo('/?p=gruppe', 242, "GroupMessages");
+        redirectTo('/?p=gruppe', 242, 'GroupMessages');
         break;
 
     // ---------------------------------------------------------------------------------------
@@ -555,7 +555,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         Database::getInstance()->commit();
-        @unlink(sprintf("../pics/uploads/g_%d.webp", $player['Gruppe']));
+        @unlink(sprintf('../pics/uploads/g_%d.webp', $player['Gruppe']));
         redirectTo('/?p=gruppe', 228, __LINE__);
         break;
 

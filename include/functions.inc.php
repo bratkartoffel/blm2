@@ -978,7 +978,7 @@ function redirectTo(string $location, ?int $m = null, ?string $anchor = null): v
     if ($anchor != null) {
         $location .= "#" . urlencode($anchor);
     }
-    header('Location: ' . $location);
+    header('Location: ' . $location, true, 303);
     die();
 }
 

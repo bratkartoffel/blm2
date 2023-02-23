@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- redirects now send a `303` instead of a `302` status code
+
 ### Fixed
 
 - (bank) fix wrong limit calculation for resetting accounts due to insolvency

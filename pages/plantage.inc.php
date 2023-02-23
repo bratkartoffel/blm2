@@ -39,7 +39,8 @@ for ($i = 1; $i <= count_wares; $i++) {
 </p>
 
 <div class="form Schnellanbau">
-    <form action="/actions/plantage.php" method="post">
+    <form action="/actions/plantage.php" method="post" id="fast_plant" data-cost-per-hour="<?= $productionCostSum; ?>"
+          data-geld="<?= $data['Geld']; ?>">
         <input type="hidden" name="alles" value="1"/>
         <header>Schnellanbau</header>
         <div>
@@ -108,7 +109,8 @@ for ($i = 1; $i <= count_wares; $i++) {
                             verbleibend)
                         </div>
                         <div>
-                            <a class="delete_job" data-refund="<?= formatWeight($auftrag['amount'] * $percent); ?>"
+                            <a class="delete_plant_job"
+                               data-refund="<?= formatWeight($auftrag['amount'] * $percent); ?>"
                                href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
@@ -122,35 +124,3 @@ for ($i = 1; $i <= count_wares; $i++) {
     <?php
 }
 ?>
-<script nonce="<?= getCspNonce(); ?>">
-    // calculate costs for hour based production
-    let stundenElement = document.getElementById('stunden');
-    stundenElement.onchange = () => RechneProduktionsKosten(
-        1,
-        <?= $productionCostSum; ?>,
-        stundenElement.value,
-        <?= $data['Geld']; ?>,
-        document.getElementById('pr_ko_all'), document.getElementById('plant_all')
-    );
-    stundenElement.onkeyup = stundenElement.onchange;
-
-    // calculate costs for each ware
-    for (let amountField of document.getElementsByClassName('amount_field')) {
-        let id = amountField.getAttribute('data-id');
-        amountField.onchange = () => RechneProduktionsKosten(
-            amountField.getAttribute('data-menge'),
-            amountField.getAttribute('data-kosten'),
-            amountField.value,
-            <?= $data['Geld']; ?>,
-            document.getElementById('pr_ko_' + id),
-            document.getElementById('plant_' + id)
-        );
-        amountField.onkeyup = amountField.onchange;
-    }
-
-    // require confirmation when aborting production
-    for (let deleteLink of document.getElementsByClassName('delete_job')) {
-        deleteLink.onclick = () => confirm('Wollen Sie den Auftrag wirklich abbrechen? Sie bekommen die Kosten nicht zurück erstattet, lediglich die bisher produzierte Menge '
-            + '(~ ' + deleteLink.getAttribute('data-refund') + ') wird Ihnen gut geschrieben.');
-    }
-</script>

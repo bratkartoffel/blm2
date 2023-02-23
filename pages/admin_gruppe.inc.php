@@ -50,9 +50,3 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= createPaginationTable('/?p=admin_gruppe', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <a href="/?p=admin">&lt;&lt; Zurück</a>
-
-<script nonce="<?= getCspNonce(); ?>">
-    for (let deleteLink of document.getElementsByClassName('delete_group')) {
-        deleteLink.onclick = () => confirm('Gruppe "' + deleteLink.getAttribute('data-groupname') + '"wirklich löschen?');
-    }
-</script>

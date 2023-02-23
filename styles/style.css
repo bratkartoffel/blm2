@@ -237,7 +237,7 @@ div.MessageBox {
     padding: 6px;
 }
 
-div.MessageBox a#close {
+div.MessageBox a#close_message {
     cursor: pointer;
     float: right;
     margin-left: 20px;

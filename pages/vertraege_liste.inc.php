@@ -101,16 +101,3 @@ restrictSitter('Vertraege');
 <p>
     <a href="/?p=vertraege_neu">Neuen Vertrag aufsetzen</a>
 </p>
-
-<script nonce="<?= getCspNonce(); ?>">
-    // require confirmation when buying offer
-    for (let acceptLink of document.getElementsByClassName('accept_contract')) {
-        let number = acceptLink.getAttribute('data-id');
-        acceptLink.onclick = () => confirm('Wollen Sie den Vertrag Nr ' + number + ' wirklich annehmen?');
-    }
-    // require confirmation when buying offer
-    for (let rejectLink of document.getElementsByClassName('reject_contract')) {
-        let number = rejectLink.getAttribute('data-id');
-        rejectLink.onclick = () => confirm('Wollen Sie den Vertrag Nr ' + number + ' wirklich ablehnen?');
-    }
-</script>

@@ -103,9 +103,3 @@ for ($i = 1; $i <= count_wares; $i++) {
     <?php
 }
 ?>
-
-<script nonce="<?= getCspNonce(); ?>">
-    for (let deleteLink of document.getElementsByClassName('delete_job')) {
-        deleteLink.onclick = () => confirmAbort(deleteLink.getAttribute('data-refund'), deleteLink.getAttribute('data-percent'));
-    }
-</script>

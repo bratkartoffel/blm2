@@ -201,26 +201,6 @@ sendCspHeader();
         <div>Letzte Änderung: <?= date('d.m.Y H:i', filemtime(__DIR__ . '/include/game_version.inc.php')); ?></div>
     </div>
 </div>
-<script nonce="<?= getCspNonce(); ?>">
-    deobfuscate();
-    let chefboxLink = document.getElementById('link_chefbox');
-    if (chefboxLink !== null) {
-        chefboxLink.onclick = () => ChefboxZeigen();
-    }
-
-    <?php
-    if(isLoggedIn()) {
-    ?>
-    let links = document.getElementById('Navigation').getElementsByTagName('a');
-    for (let link of links) {
-        if (link.classList.contains('inactive')) {
-            link.href += '#Inhalt';
-        }
-    }
-    <?php
-    }
-    ?>
-</script>
 </body>
 </html>
 <?php

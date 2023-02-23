@@ -162,9 +162,3 @@ if (buildingRequirementsMet(building_bank, $data)) {
 und ihr Bankschliessfach regelmässig überfüllt war. Jede Stufe dieses Gebäudes erhöht den maximal erlaubten Betrag in Ihrer Bank um den Faktor ' . formatCurrency(Config::getFloat(Config::SECTION_BANK, 'bonus_factor_upgrade'), false));
 }
 ?>
-
-<script nonce="<?= getCspNonce(); ?>">
-    for (let deleteLink of document.getElementsByClassName('delete_job')) {
-        deleteLink.onclick = () => confirmAbort(deleteLink.getAttribute('data-refund'), deleteLink.getAttribute('data-percent'));
-    }
-</script>

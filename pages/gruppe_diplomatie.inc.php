@@ -45,7 +45,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
                 } else {
                     echo '<td>- noch nicht aktiv -</td>';
                     if ($hasRights) {
-                        printf('<td><a class="retract_offer" data-type="%s" data-partner="%s" href="/actions/gruppe.php?a=16&amp;id=%d&amp;token=%s">Zurückziehen</a></td>',
+                        printf('<td><a class="retract_relation_offer" data-type="%s" data-partner="%s" href="/actions/gruppe.php?a=16&amp;id=%d&amp;token=%s">Zurückziehen</a></td>',
                             $name, escapeForOutput($row['GruppeName']), $row['ID'], $_SESSION['blm_xsrf_token']);
                     } else {
                         echo '<td>Keine Rechte</td>';
@@ -100,10 +100,13 @@ function printDiplomacyTable($diplomacy, $name, $hasRights)
                 <td>
                     <?php
                     if ($rights['group_diplomacy'] == 1) {
-                        // FIXME CSP!
                         ?>
-                        <a href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                           onclick="return confirm('Wollen Sie in dem Krieg mit <?= escapeForOutput($row['GruppeName']); ?> wirklich kapitulieren? Der umkämpfte Betrag (<?= formatCurrency(2 * $row['Betrag']); ?>) geht an den Gegner, jeder Ihrer Gruppenmitglieder verliert <?= formatPercent(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points')); ?> seiner Punkte und <?= Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'); ?> Stufe(n) seiner Plantagen!')">Aufgeben</a>
+                        <a class="war_surrender"
+                           href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                           data-name="<?= escapeForOutput($row['GruppeName']); ?>"
+                           data-amount="<?= formatCurrency(2 * $row['Betrag']); ?>"
+                           data-points="<?= formatPercent(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points')); ?>"
+                           data-plantage="<?= Config::getInt(Config::SECTION_GROUP, 'war_loose_plantage'); ?>">Aufgeben</a>
                         <?php
                     } else {
                         echo 'Keine Rechte';
@@ -140,8 +143,8 @@ if ($rights['group_diplomacy'] == 1) {
         <form action="/actions/gruppe.php" method="post">
             <input type="hidden" name="a" value="18"/>
             <div>
-                <label for="typ">Typ:</label>
-                <select name="typ" id="typ">
+                <label for="relation_typ">Typ:</label>
+                <select name="typ" id="relation_typ">
                     <option value="<?= group_diplomacy_nap; ?>"<?= ($typ === group_diplomacy_nap ? ' selected' : ''); ?>>
                         Nichtangriffspakt
                     </option>
@@ -201,21 +204,3 @@ if ($rights['group_diplomacy'] == 1) {
     <?php
 }
 ?>
-
-<script nonce="<?= getCspNonce(); ?>">
-    let typElement = document.getElementById('typ');
-    typElement.onchange = () => CheckKrieg(typElement);
-    CheckKrieg(typElement);
-
-    for (let cancelLink of document.getElementsByClassName('cancel_relation')) {
-        let type = cancelLink.getAttribute('data-type');
-        let partner = cancelLink.getAttribute('data-partner');
-        cancelLink.onclick = () => confirm('Wollen Sie die ' + type + ' Beziehung mit "' + partner + '" wirklich kündigen?');
-    }
-
-    for (let retractLink of document.getElementsByClassName('retract_offer')) {
-        let type = retractLink.getAttribute('data-type');
-        let partner = retractLink.getAttribute('data-partner');
-        retractLink.onclick = () => confirm('Wollen Sie die ' + type + ' Anfrage mit "' + partner + '" wirklich zurückziehen?');
-    }
-</script>

@@ -559,9 +559,8 @@ function getMessageBox(int $msg_id): ?string
 
     return sprintf('<div class="MessageBox" id="meldung_%d" %s>
             <div class="MessageImage" id="%s"></div>
-            <a id="close">X</a>
+            <a id="close_message">X</a>
             <span>%s</span>
-            <script nonce="%s">document.getElementById(\'close\').onclick = () => document.getElementById(\'meldung_%d\').remove();</script>
         </div>',
         $msg_id,
         ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '',
@@ -1394,10 +1393,7 @@ function createGroupNaviation(int $activePage, int $group_id): string
     else $items[] = '<span><a href="/?p=gruppe_logbuch" id="gruppe_logbuch">Logbuch</a></span>';
 
     $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" id="leave_group">Gruppe verlassen</a></span>';
-    return sprintf('<div id="GroupNavigation">%s</div>
-<script nonce="' . getCspNonce() . '">
-    document.getElementById(\'leave_group\').onclick = () => confirm(\'Wollen Sie wirklich aus der Gruppe austreten?\');
-</script>', implode(' | ', $items));
+    return sprintf('<div id="GroupNavigation">%s</div>', implode(' | ', $items));
 }
 
 function getGroupDiplomacyTypeName(int $id): string
@@ -1699,7 +1695,7 @@ function printHeaderCss(array $styles): void
 function printHeaderJs(array $scripts): void
 {
     foreach ($scripts as $script) {
-        printf('<script src="%s?%s" nonce="%s"></script>' . "\n", $script, game_version, getCspNonce());
+        printf('<script defer src="%s?%s" nonce="%s"></script>' . "\n", $script, game_version, getCspNonce());
     }
 }
 

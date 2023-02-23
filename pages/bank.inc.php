@@ -44,7 +44,7 @@ $resetCreditLimit = calculateResetCreditLimit($data['Gebaeude' . building_bank])
 <h3 id="cur_bank_account">Ihr Kontostand: <?php echo formatCurrency($data['Bank']); ?></h3>
 
 <div class="form Bank">
-    <form action="/actions/bank.php" method="post" name="form_bank">
+    <form action="/actions/bank.php" method="post" name="form_bank" id="form_bank">
         <header>Transaktion durchführen</header>
         <div>
             <label for="art">Art:</label>
@@ -65,49 +65,13 @@ $resetCreditLimit = calculateResetCreditLimit($data['Gebaeude' . building_bank])
         </div>
         <div>
             <label for="betrag">Betrag:</label>
-            <input type="number" name="betrag" id="betrag" size="12" min="0" step="0.01" value="<?= $betrag; ?>"/> €
+            <input type="number" name="betrag" id="betrag" size="12" min="0" step="0.01"
+                   value="<?= $betrag; ?>" data-bank="<?= $data['Bank']; ?>"
+                   data-geld="<?= $data['Geld']; ?>" data-deposit-limit="<?= $depositLimit; ?>"
+            /> €
         </div>
         <div>
             <input type="submit" value="Bestätigen" id="do_transaction"/>
         </div>
     </form>
 </div>
-
-<script nonce="<?= getCspNonce(); ?>">
-    function AuswahlBank(option) {
-        const field = document.form_bank.betrag;
-        const bank = <?=$data['Bank'];?>;
-        const hand = <?=$data['Geld'];?>;
-        const maxDeposit = Math.min(hand, <?=$depositLimit; ?> - bank).toFixed(2);
-        const maxWithdraw = Math.max(0, bank).toFixed(2);
-        const currentValue = Number.parseFloat(field.value).toFixed(2);
-        // only change value if the user didn't change it yet
-        if (currentValue === '0.00'
-            || currentValue === maxDeposit
-            || currentValue === maxWithdraw
-            || currentValue === hand.toFixed(2)
-        ) {
-            switch (option) {
-                case 1: // einzahlen
-                    field.value = maxDeposit;
-                    break;
-                case 2: // auszahlen
-                    field.value = maxWithdraw;
-                    break;
-                case 3: // gruppenkasse
-                    field.value = hand;
-                    break;
-            }
-        }
-    }
-
-    // setup handlers
-    document.getElementById('einzahlen').onchange = () => AuswahlBank(1);
-    document.getElementById('auszahlen').onchange = () => AuswahlBank(2);
-    if (document.getElementById('gruppen_kasse') !== null) {
-        document.getElementById('gruppen_kasse').onchange = () => AuswahlBank(3);
-    }
-
-    // select element
-    AuswahlBank(<?=$art;?>);
-</script>

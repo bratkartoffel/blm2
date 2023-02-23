@@ -89,10 +89,3 @@ requireEntryFound($rights, '/?p=gruppe');
     }
     ?>
 </table>
-
-<script nonce="<?= getCspNonce(); ?>">
-    for (let kickLink of document.getElementsByClassName('kick_member')) {
-        let username = kickLink.getAttribute('data-username');
-        kickLink.onclick = () => confirm('Wollen Sie das Mitglied "' + username + '" wirklich aus der Gruppe entfernen?');
-    }
-</script>

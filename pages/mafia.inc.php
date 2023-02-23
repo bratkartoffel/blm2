@@ -92,8 +92,8 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
             <?= createPlayerDropdownForMafia($opponent, $data['Punkte'], $_SESSION['blm_user'], $data['Gruppe']); ?>
         </div>
         <div>
-            <label for="action">Aktion</label>
-            <select name="action" id="action">
+            <label for="mafia_action">Aktion</label>
+            <select name="action" id="mafia_action">
                 <option value="<?= mafia_action_espionage; ?>"<?= ($action == mafia_action_espionage ? ' selected' : ''); ?>>
                     Spionage
                 </option>
@@ -122,11 +122,8 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         </div>
     </form>
 </div>
-<script nonce="<?= getCspNonce(); ?>">
-    // add handler for action selection
-    let actionElement = document.getElementById('action');
-    actionElement.oninput = () => MafiaActionChange();
 
+<script nonce="<?= getCspNonce(); ?>">
     // cost and duration data for mafia actions
     let mafia_cost_data = <?=json_encode(array(
         mafia_action_espionage => Config::getSection(Config::SECTION_MAFIA_ESPIONAGE),
@@ -134,7 +131,4 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
         mafia_action_heist => Config::getSection(Config::SECTION_MAFIA_HEIST),
         mafia_action_attack => Config::getSection(Config::SECTION_MAFIA_ATTACK),
     ));?>;
-
-    // calculate cost dropdown values
-    MafiaActionChange();
 </script>

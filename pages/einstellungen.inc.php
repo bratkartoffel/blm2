@@ -81,7 +81,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
                       rows="15"><?= escapeForOutput($data['Beschreibung'], false); ?></textarea>
         </div>
         <div>
-            Noch <span>X</span> Zeichen übrig
+            Noch <span>4096</span> Zeichen übrig
         </div>
         <div>
             <input type="submit" value="Speichern"/>

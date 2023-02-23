@@ -400,6 +400,20 @@ function getMessageBox(int $msg_id): ?string
         case 173:
             $text = 'Sie können sich selbst keine Verträge schicken.';
             break;
+        case 174:
+            $text = 'Export konnte nicht geladen werden';
+            break;
+        case 175:
+            $text = 'Export stammt von einer anderen Runde';
+            break;
+        case 176:
+            $text = sprintf("Die Signatur einer Tabelle stimmt nicht. Stimmt der konfigurierte Algorithmus (%s.%s=%s) mit dem Export überein? Ist die maximale Tabellengrösse (%s.%s=%s) ausreichend?",
+                Config::SECTION_BASE, 'export_hmac',
+                Config::get(Config::SECTION_BASE, 'export_hmac'),
+                Config::SECTION_BASE, '.import_max_table_size',
+                Config::getInt(Config::SECTION_BASE, 'import_max_table_size')
+            );
+            break;
 
 
         case 201:
@@ -545,6 +559,9 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 248:
             $text = 'Die Gruppe wurde gespeichert.';
+            break;
+        case 249:
+            $text = 'Import abgeschlossen.';
             break;
 
 
@@ -823,6 +840,8 @@ function getOrDefault(array $array, string $name, $default = null)
             else return intval($value);
         } else if (is_double($default) || is_float($default)) {
             return doubleval(str_replace(',', '.', $value));
+        } else if (is_bool($default)) {
+            return boolval($value);
         } else {
             error_log(sprintf('Unknown type of default: "%s"', var_export($default, true)));
             return $value;
@@ -1112,6 +1131,7 @@ function getCurrentPage(): string
             case 'admin':
             case 'admin_benutzer':
             case 'admin_benutzer_bearbeiten':
+            case 'admin_benutzer_importieren':
             case 'admin_gruppe':
             case 'admin_gruppe_bearbeiten':
             case 'admin_test':
@@ -1721,6 +1741,36 @@ function getAllFields(string $prefix, int $count, string $separator = ','): stri
         $result[] = $prefix . $i;
     }
     return implode($separator, $result);
+}
+
+function getTablesForGdprExport(): array
+{
+    return array(
+        Database::TABLE_JOBS => 'user_id',
+        Database::TABLE_GROUP_CASH => 'user_id',
+        Database::TABLE_GROUP_LOG => 'Spieler',
+        Database::TABLE_GROUP_RIGHTS => 'user_id',
+        Database::TABLE_GROUP_MESSAGES => 'Von',
+        Database::TABLE_LOG_BANK => 'playerId',
+        Database::TABLE_LOG_SHOP => 'playerId',
+        Database::TABLE_LOG_GROUP_CASH => array('senderId', 'receiverId'),
+        Database::TABLE_LOG_LOGIN => 'playerId',
+        Database::TABLE_LOG_MAFIA => array('senderId', 'receiverId'),
+        Database::TABLE_LOG_MARKET => array('sellerId', 'buyerId'),
+        Database::TABLE_LOG_MESSAGES => array('senderId', 'receiverId'),
+        Database::TABLE_LOG_CONTRACTS => array('senderId', 'receiverId'),
+        Database::TABLE_MARKET => 'Von',
+        Database::TABLE_USERS => 'ID',
+        Database::TABLE_MESSAGES => array('Von', 'An'),
+        Database::TABLE_SITTER => 'user_id',
+        Database::TABLE_STATISTICS => 'user_id',
+        Database::TABLE_CONTRACTS => array('Von', 'An'),
+    );
+}
+
+function getHmac(string $data): string
+{
+    return hash_hmac(Config::get(Config::SECTION_BASE, 'export_hmac'), $data, Config::get(Config::SECTION_BASE, 'random_secret'), true);
 }
 
 // set the timezone for this game

@@ -53,4 +53,4 @@ $offset = getOrDefault($_GET, 'o', 0);
 </table>
 <?= createPaginationTable('pages', '/?p=admin_benutzer', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
-<a href="/?p=admin">&lt;&lt; Zurück</a>
+<a href="/?p=admin">&lt;&lt; Zurück</a> | <a href="/?p=admin_benutzer_importieren">Importieren</a>

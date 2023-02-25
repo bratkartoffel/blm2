@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - this allows an administrator to restore deleted accounts or
       developers to copy accounts from one environment to another
 
+### Fixed
+
+- the refactoring of the javascript parts broke some functionality (chefbox, characters left in textfields)
+
 ### Security
 
 - (einstellungen) GDPR exports are now cryptographically signed

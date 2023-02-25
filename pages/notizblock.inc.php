@@ -28,14 +28,8 @@ if (isset($_GET['notizblock'])) $data = $_GET['notizblock'];
         <header><label for="notizblock">Notizblock</label></header>
         <textarea id="notizblock" name="notizblock" maxlength="4096"><?= escapeForOutput($data, false); ?></textarea>
         <div>
-            Noch <span id="charsLeft">4096</span> Zeichen übrig.
+            Noch <span id="chars_left">4096</span> Zeichen übrig.
             <input type="submit" value="Speichern" id="save_notes"/>
         </div>
     </form>
 </div>
-
-<script nonce="<?= getCspNonce(); ?>">
-    let messageElement = document.getElementById('notizblock');
-    messageElement.onkeyup = () => ZeichenUebrig(messageElement, document.getElementById('charsLeft'));
-    ZeichenUebrig(messageElement, document.getElementById('charsLeft'));
-</script>

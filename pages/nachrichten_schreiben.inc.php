@@ -52,7 +52,7 @@ $message = getOrDefault($_GET, 'message', $message);
                       rows="20"><?= escapeForOutput($message, false); ?></textarea>
         </div>
         <div>
-            Noch <span id="charsLeft">4096</span> Zeichen übrig.
+            Noch <span id="chars_left">4096</span> Zeichen übrig.
             <input type="submit" value="Absenden" id="send_message"/>
         </div>
     </form>
@@ -67,14 +67,3 @@ $message = getOrDefault($_GET, 'message', $message);
     }
     ?>
 </div>
-
-<script nonce="<?= getCspNonce(); ?>">
-    let messageElement = document.getElementById('message');
-    messageElement.onkeyup = () => ZeichenUebrig(messageElement, document.getElementById('charsLeft'));
-    ZeichenUebrig(messageElement, document.getElementById('charsLeft'));
-
-    let rundmailElement = document.getElementById('toggle_rundmail');
-    if (rundmailElement !== null) {
-        rundmailElement.onclick = () => toggleRundmail();
-    }
-</script>

@@ -174,9 +174,15 @@ function toggleRundmail() {
 // used in einstellungen.inc.php
 function enableSitterOptions(enabled) {
     Array.prototype.forEach.call(document.getElementById('sitterSettings').getElementsByTagName('input'), (field) => {
-        if (field === enableSitting || field.type === 'submit' || field.type === 'hidden') return;
+        if (field.id === 'sitting_aktiviert' || field.type === 'submit' || field.type === 'hidden') return;
         field.disabled = !enabled;
     });
+}
+
+// used in admin_benutzer_importieren.inc.php
+function enableImportOptions(enabled) {
+    document.getElementById('verify').disabled = enabled;
+    document.getElementById('ignore_round').disabled = enabled;
 }
 
 // used in chefbox.php
@@ -423,7 +429,73 @@ if (document.getElementById('fast_plant') !== null) {
     setupPlantage();
 }
 
+// used for messagebox
 let closeMessageBox = document.getElementById('close_message');
 if (closeMessageBox !== null) {
     closeMessageBox.onclick = () => closeMessageBox.parentElement.remove();
 }
+
+// used for admin_benutzer_importieren.inc.php
+function setupAdminBenutzerImportieren() {
+    let form = document.getElementById('gdpr_import');
+    if (form !== null) {
+        let ignoreMetadata = document.getElementById('ignore_metadata');
+        ignoreMetadata.addEventListener('change', (event) => enableImportOptions(event.currentTarget.checked));
+        enableImportOptions(ignoreMetadata.checked);
+    }
+}
+
+setupAdminBenutzerImportieren();
+
+// used for einstellungen.inc.php
+function setupEinstellungen() {
+    let enableSitting = document.getElementById('sitting_aktiviert');
+    if (enableSitting !== null) {
+        enableSitting.addEventListener('change', (event) => enableSitterOptions(event.currentTarget.checked));
+        enableSitterOptions(enableSitting.checked);
+    }
+}
+
+setupEinstellungen();
+
+// used for einstellungen.inc.php, gruppe_einstellungen.inc.php, nachrichten_schreiben.inc.php and notizblock.inc.php
+function setupCharsLeft(fieldId) {
+    let beschreibungElement = document.getElementById(fieldId);
+    let charsLeftElement = document.getElementById('chars_left');
+    if (beschreibungElement !== null) {
+        beschreibungElement.onkeyup = () => ZeichenUebrig(beschreibungElement, charsLeftElement);
+        ZeichenUebrig(beschreibungElement, charsLeftElement);
+    }
+}
+
+setupCharsLeft('beschreibung');
+setupCharsLeft('notizblock');
+setupCharsLeft('message');
+
+// used for nachrichten_schreiben.inc.php
+function setupNachrichtSchreiben() {
+    let rundmailElement = document.getElementById('toggle_rundmail');
+    if (rundmailElement !== null) {
+        rundmailElement.onclick = () => toggleRundmail();
+    }
+}
+
+setupNachrichtSchreiben();
+
+// used for chefbox.php
+function setupChefbox() {
+    if (document.getElementById('Chefbox') !== null) {
+        reloadOnCountdown = true;
+        chefboxPollJobs();
+
+        for (let link of document.getElementById('with_nav_links').getElementsByTagName('a')) {
+            link.onclick = () => BLMNavigation(link.href);
+        }
+
+        document.getElementById('show_blm').onclick = () => BLMNavigation('/?p=startseite');
+        document.getElementById('close_popup').onclick = () => BLMEnde();
+        document.getElementById('link_show_help').onclick = () => BLMNavigation(document.getElementById('link_show_help').href);
+    }
+}
+
+setupChefbox();

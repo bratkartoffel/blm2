@@ -24,7 +24,7 @@ requireEntryFound($data, '/?p=rangliste');
     sein Profil selbst verantwortlich!
 </p>
 
-<div class="form Profil">
+<div class="form Profil" id="profile_<?= $id; ?>">
     <header>Profil</header>
     <div>
         <label for="name">Name:</label>

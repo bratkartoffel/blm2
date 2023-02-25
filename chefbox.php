@@ -124,18 +124,6 @@ sendCspHeader();
     <a id="show_blm" href="/?p=startseite">BLM anzeigen / öffnen</a>
     <a id="close_popup" href="/?p=startseite">Fenster schliessen</a>
 </div>
-<script nonce="<?= getCspNonce(); ?>">
-    reloadOnCountdown = true;
-    chefboxPollJobs();
-
-    for (let link of document.getElementById('with_nav_links').getElementsByTagName('a')) {
-        link.onclick = () => BLMNavigation(link.href);
-    }
-
-    document.getElementById('show_blm').onclick = () => BLMNavigation('/?p=startseite');
-    document.getElementById('close_popup').onclick = () => BLMEnde();
-    document.getElementById('link_show_help').onclick = () => BLMNavigation(document.getElementById('link_show_help').href);
-</script>
 </body>
 </html>
 <?php

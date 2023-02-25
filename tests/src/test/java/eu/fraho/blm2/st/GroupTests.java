@@ -180,7 +180,7 @@ public class GroupTests extends AbstractTest {
             login("test" + userId2);
             createGroup("TG" + groupId2, String.valueOf(groupId2), "meldung_223");
             driver.findElement(By.id("gruppe_diplomatie")).click();
-            selectByValue(By.id("typ"), "1");
+            selectByValue(By.id("relation_typ"), "1");
             setValue(By.id("group"), "TG" + groupId1);
             driver.findElement(By.id("send_diplomacy_offer")).submit();
             assertElementPresent(By.id("meldung_229"));
@@ -229,7 +229,7 @@ public class GroupTests extends AbstractTest {
             login("test" + userId2);
             createGroup("TG" + groupId2, String.valueOf(groupId2), "meldung_223");
             driver.findElement(By.id("gruppe_diplomatie")).click();
-            selectByValue(By.id("typ"), "2");
+            selectByValue(By.id("relation_typ"), "2");
             setValue(By.id("group"), "TG" + groupId1);
             driver.findElement(By.id("send_diplomacy_offer")).submit();
             assertElementPresent(By.id("meldung_229"));

@@ -196,7 +196,7 @@ public class BankTests extends AbstractTest {
         assertValue(By.id("betrag"), new BigDecimal("123.01"));
 
         driver.findElement(By.id("gruppen_kasse")).click();
-        assertValue(By.id("betrag"), new BigDecimal("100001"));
+        assertValue(By.id("betrag"), new BigDecimal("100001.00"));
 
         // manually change the value, it shouldn't update automatically now
         setValue(By.id("betrag"), "100");

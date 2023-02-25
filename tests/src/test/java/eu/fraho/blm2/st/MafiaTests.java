@@ -44,7 +44,7 @@ public class MafiaTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_mafia")).click();
         selectByText(By.id("opponent"), "test" + userId1);
-        selectByValue(By.id("action"), "1");
+        selectByValue(By.id("mafia_action"), "1");
         selectByValue(By.id("level"), "3");
         driver.findElement(By.id("attack")).submit();
 
@@ -77,7 +77,7 @@ public class MafiaTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_mafia")).click();
         selectByText(By.id("opponent"), "test" + userId3);
-        selectByValue(By.id("action"), "1");
+        selectByValue(By.id("mafia_action"), "1");
         selectByValue(By.id("level"), "3");
         driver.findElement(By.id("attack")).submit();
 
@@ -100,7 +100,7 @@ public class MafiaTests extends AbstractTest {
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_mafia")).click();
         selectByText(By.id("opponent"), "test" + userId1);
-        selectByValue(By.id("action"), "3");
+        selectByValue(By.id("mafia_action"), "3");
         selectByValue(By.id("level"), "3");
         driver.findElement(By.id("attack")).submit();
 

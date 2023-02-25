@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.6] - 2023-02-25
+
 ### Changed
 
 - redirects now send a `303` instead of a `302` status code
@@ -399,7 +403,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.5...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.6...HEAD
+
+[1.11.6]: https://github.com/bratkartoffel/blm2/compare/v1.11.5...v1.11.6
 
 [1.11.5]: https://github.com/bratkartoffel/blm2/compare/v1.11.4...v1.11.5
 

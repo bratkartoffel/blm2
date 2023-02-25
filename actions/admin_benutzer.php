@@ -204,6 +204,12 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         $new_id = getOrDefault($_POST, 'new_id', false);
         $ignore_round = getOrDefault($_POST, 'ignore_round', false);
         $with_logs = getOrDefault($_POST, 'with_logs', false);
+        $ignore_metadata = getOrDefault($_POST, 'ignore_metadata', false);
+
+        if ($ignore_metadata) {
+            $ignore_round = true;
+            $verify = false;
+        }
 
         $zip = new ZipArchive();
         if ($zip->open($_FILES['import']['tmp_name']) !== true) {
@@ -211,7 +217,12 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
         }
 
         // load metadata
-        $metadata = loadAndVerifyFromExport($zip, 'metadata.json', $verify);
+        if ($ignore_metadata) {
+            $user = loadAndVerifyFromExport($zip, 'mitglieder.json', $verify);
+            $metadata = array('user_id' => intval($user[0]['ID']));
+        } else {
+            $metadata = loadAndVerifyFromExport($zip, 'metadata.json', $verify);
+        }
 
         // verify round
         if (!$ignore_round && $metadata['round_start'] !== formatDateTime(Config::getInt(Config::SECTION_DBCONF, 'roundstart'))) {

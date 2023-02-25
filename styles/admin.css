@@ -35,3 +35,7 @@ div.AdminEditUser,
 div.AdminEditGroup {
     margin: 5px;
 }
+
+div.AdminImportUser label {
+    width: 250px;
+}

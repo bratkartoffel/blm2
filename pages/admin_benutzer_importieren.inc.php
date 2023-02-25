@@ -29,10 +29,14 @@ Folgende Funktionen können eingestellt werden:
     <li><em>Runde ignorieren:</em> Ist diese Option nicht aktiv, so lässt sich ein Export nur in der selben Runde wieder
         einspielen.
     </li>
+    <li><em>Metadata ignorieren:</em> Ältere Exporte enthalten noch keine <code>metadata.json</code> und können somit
+        nicht direkt importiert werden. Mit dieser Option wird diese Voraussetzung gelockert, so dass auch ältere
+        Exporte importiert werden können.
+    </li>
 </ul>
 
 <div class="form AdminImportUser">
-    <form action="/actions/admin_benutzer.php" method="post"  enctype="multipart/form-data">
+    <form action="/actions/admin_benutzer.php" method="post" enctype="multipart/form-data" name="gdpr_import" id="gdpr_import">
         <input type="hidden" name="a" value="6"/>
         <input type="hidden" name="token" value="<?= $_SESSION['blm_xsrf_token']; ?>"/>
         <header>Benutzer importieren</header>
@@ -57,11 +61,15 @@ Folgende Funktionen können eingestellt werden:
             <input type="checkbox" name="with_logs" value="1" id="with_logs"/>
         </div>
         <div>
-            <input type="submit" value="Importieren"/>
+            <label for="ignore_metadata">Metadata ignorieren?</label>
+            <input type="checkbox" name="ignore_metadata" value="1" id="ignore_metadata"/>
+        </div>
+        <div>
+            <input type="submit" value="Importieren" id="do_import"/>
         </div>
     </form>
 </div>
 
 <p>
-    <a href="/?p=admin">&lt;&lt; Zurück</a>
+    <a href="/?p=admin_benutzer" id="link_back">&lt;&lt; Zurück</a>
 </p>

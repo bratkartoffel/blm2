@@ -63,7 +63,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin_markt_einstellen">Neues Angebot erstellen</a><br/>

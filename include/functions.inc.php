@@ -918,23 +918,23 @@ function formatPercent(float $amount, bool $withSuffix = true, int $precision = 
     return number_format($amount * 100, $precision, ',', '') . ($withSuffix ? ' %' : '');
 }
 
-function createPaginationTable(string $linkBase, int $currentPage, int $entriesCount, int $entriesPerPage, string $offsetField = 'o', ?string $anchor = null): string
+function createPaginationTable(string $id, string $linkBase, int $currentPage, int $entriesCount, int $entriesPerPage, string $offsetField = 'o', ?string $anchor = null): string
 {
     $pages = array();
     for ($i = 0; $i < $entriesCount; $i += $entriesPerPage) {
         $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
-            $pages[] = sprintf('<a href="%s&amp;%s=%d%s">%d</a>',
-                $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $page + 1);
+            $pages[] = sprintf('<a href="%s&amp;%s=%d%s" id="%s_%d">%d</a>',
+                $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $id, $page + 1, $page + 1);
         } else {
-            $pages[] = $page + 1;
+            $pages[] = sprintf('<span id="%s_active_%d">%d</span>', $id, $page + 1, $page + 1);
         }
     }
     if (count($pages) == 0) {
         $pages[] = '1';
     }
 
-    return sprintf('<div class="Pagination">Seite: %s</div>', implode(' | ', $pages));
+    return sprintf('<div class="Pagination" id="%s">Seite: %s</div>', $id, implode(' | ', $pages));
 }
 
 function createDropdown(array $elementsWithIDAndName, ?int $selectedID, string $elementName, bool $withAllEntry = true, bool $withSystemEntry = false, bool $withNoneEntry = false): string

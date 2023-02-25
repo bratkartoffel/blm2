@@ -62,7 +62,7 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SE
     ?>
 </table>
 
-<?= createPaginationTable('/?p=nachrichten_liste', $offset_in, $messageCountIn, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_in'); ?>
+<?= createPaginationTable("pages_inbox", '/?p=nachrichten_liste', $offset_in, $messageCountIn, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_in'); ?>
 
 <div>
     <a href="/?p=nachrichten_schreiben" id="new_message">Neue Nachricht schreiben</a> |
@@ -121,4 +121,4 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config:
     ?>
 </table>
 
-<?= createPaginationTable('/?p=nachrichten_liste', $offset_out, $messageCountOut, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_out'); ?>
+<?= createPaginationTable("pages_sent", '/?p=nachrichten_liste', $offset_out, $messageCountOut, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_out'); ?>

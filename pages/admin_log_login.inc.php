@@ -76,7 +76,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_login&amp;wer=' . escapeForOutput($wer) . '&amp;ip=' . escapeForOutput($ip) . '&amp;art=' . escapeForOutput($art), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_log_login&amp;wer=' . escapeForOutput($wer) . '&amp;ip=' . escapeForOutput($ip) . '&amp;art=' . escapeForOutput($art), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="/?p=admin">&lt;&lt; Zurück</a>

@@ -99,7 +99,7 @@ $offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BAS
     }
     ?>
 </table>
-<?= createPaginationTable(sprintf('/?p=rangliste&o_gr=%d&o_ep=%d', $offset_gr, $offset_ep), $offset, $playerCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o', 'User'); ?>
+<?= createPaginationTable("pages_users", sprintf('/?p=rangliste&o_gr=%d&o_ep=%d', $offset_gr, $offset_ep), $offset, $playerCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o', 'User'); ?>
 
 <div>
     <form action="/" method="get">
@@ -150,7 +150,7 @@ $offset_gr = verifyOffset($offset_gr, $groupCount, Config::getInt(Config::SECTIO
     }
     ?>
 </table>
-<?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_ep=%d', $offset, $offset_ep), $offset_gr, $groupCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o_gr', 'Gruppe'); ?>
+<?= createPaginationTable("pages_groups", sprintf('/?p=rangliste&o=%d&o_ep=%d', $offset, $offset_ep), $offset_gr, $groupCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o_gr', 'Gruppe'); ?>
 
 <?php
 $epCount = Database::getInstance()->getEwigePunkteCount();
@@ -186,7 +186,7 @@ $offset_ep = verifyOffset($offset_ep, $epCount, Config::getInt(Config::SECTION_B
     }
     ?>
 </table>
-<?= createPaginationTable(sprintf('/?p=rangliste&o=%d&o_gr=%d', $offset, $offset_gr), $offset_ep, $epCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o_ep', "EwigePunkte"); ?>
+<?= createPaginationTable("pages_immortal", sprintf('/?p=rangliste&o=%d&o_gr=%d', $offset, $offset_gr), $offset_ep, $epCount, Config::getInt(Config::SECTION_BASE, 'ranking_page_size'), 'o_ep', "EwigePunkte"); ?>
 
 <h2>Verschiedenes</h2>
 <table class="Liste Rangliste">

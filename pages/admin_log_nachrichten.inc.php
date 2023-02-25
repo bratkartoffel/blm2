@@ -60,7 +60,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_nachrichten&amp;absender=' . escapeForOutput($filter_sender)
+<?= createPaginationTable('pages', '/?p=admin_log_nachrichten&amp;absender=' . escapeForOutput($filter_sender)
     . '&amp;empfaenger=' . escapeForOutput($empfaenger)
     , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 

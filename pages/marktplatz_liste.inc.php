@@ -69,6 +69,6 @@ $offset = verifyOffset($offset, $offerCount, Config::getInt(Config::SECTION_BASE
     ?>
 </table>
 
-<?= createPaginationTable('/?p=marktplatz_liste', $offset, $offerCount, Config::getInt(Config::SECTION_BASE, 'market_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=marktplatz_liste', $offset, $offerCount, Config::getInt(Config::SECTION_BASE, 'market_page_size')); ?>
 
 <a href="/?p=marktplatz_verkaufen">Neues Angebot einstellen</a>

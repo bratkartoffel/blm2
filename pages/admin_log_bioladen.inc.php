@@ -62,7 +62,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer)
+<?= createPaginationTable('pages', '/?p=admin_log_bioladen&amp;wer=' . escapeForOutput($wer)
     . '&amp;ware=' . escapeForOutput($ware)
     , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 

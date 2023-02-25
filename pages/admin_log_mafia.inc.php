@@ -88,7 +88,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_mafia&amp;wer=' . escapeForOutput($wer)
+<?= createPaginationTable('pages', '/?p=admin_log_mafia&amp;wer=' . escapeForOutput($wer)
     . '&amp;wen=' . escapeForOutput($wen)
     . '&amp;art=' . escapeForOutput($art)
     . '&amp;success=' . escapeForOutput($success)

@@ -37,4 +37,4 @@ requireEntryFound($rights, '/?p=gruppe');
     }
     ?>
 </div>
-<?= createPaginationTable('/?p=gruppe_logbuch', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=gruppe_logbuch', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size')); ?>

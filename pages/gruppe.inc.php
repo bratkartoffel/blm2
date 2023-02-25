@@ -244,7 +244,7 @@ if ($id != 0) {
                 </div>
                 <?php
             }
-            echo createPaginationTable('/?p=gruppe', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
+            echo createPaginationTable('pages', '/?p=gruppe', $offset, $messageCount, Config::getInt(Config::SECTION_BASE, 'group_page_size'));
         }
         ?>
     </div>

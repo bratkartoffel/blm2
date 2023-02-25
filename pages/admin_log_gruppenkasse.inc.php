@@ -66,7 +66,7 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('/?p=admin_log_gruppenkasse&amp;wer=' . escapeForOutput($wer)
+<?= createPaginationTable('pages', '/?p=admin_log_gruppenkasse&amp;wer=' . escapeForOutput($wer)
     . '&amp;wen=' . escapeForOutput($wen)
     . '&amp;gruppe=' . $gruppe
     , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>

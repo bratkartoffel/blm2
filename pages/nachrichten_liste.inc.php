@@ -39,7 +39,8 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SE
     $nr = $messageCountIn - $offset_in * Config::getInt(Config::SECTION_BASE, 'messages_page_size');
     foreach ($entries as $row) {
         ?>
-        <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>" data-id="<?= $row['ID']; ?>">
+        <tr class="<?= ($row['Gelesen'] == 0 ? 'Ungelesen' : 'Gelesen'); ?>" data-id="<?= $row['ID']; ?>"
+            id="message_<?= $row['ID']; ?>">
             <td><?= $nr--; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['VonID'], $row['VonName']); ?></td>
@@ -48,9 +49,10 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SE
                    id="read_<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
-            <td id="action_<?=$row['ID'];?>">
+            <td id="action_<?= $row['ID']; ?>">
                 <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_in=<?= $offset_in; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                   id="delete_<?= $row['ID']; ?>">Löschen</a>
+                   id="delete_<?= $row['ID']; ?>" class="delete-message"
+                   data-id="<?= $row['ID']; ?>" data-token="<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
@@ -92,7 +94,7 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config:
     $nr = $messageCountOut - $offset_out * Config::getInt(Config::SECTION_BASE, 'messages_page_size');
     foreach ($entries as $row) {
         ?>
-        <tr data-id="<?= $row['ID']; ?>">
+        <tr data-id="<?= $row['ID']; ?>" id="message_<?= $row['ID']; ?>">
             <td><?= $nr--; ?></td>
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['AnID'], $row['AnName']); ?></td>
@@ -101,12 +103,13 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config:
                    id="read_<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
-            <td id="action_<?=$row['ID'];?>">
+            <td id="action_<?= $row['ID']; ?>">
                 <?php
                 if ($row['Gelesen'] == 0 || $row['AnID'] === null) {
                     ?>
                     <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_out=<?= $offset_out; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
-                       id="delete_<?= $row['ID']; ?>">Löschen</a>
+                       id="delete_<?= $row['ID']; ?>" class="delete-message"
+                       data-id="<?= $row['ID']; ?>" data-token="<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
                     <?php
                 }
                 ?>

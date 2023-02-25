@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Changed
+
+- (nachrichten_liste) delete messages using async ajax
+    - this should make it easier to delete many messages at once, e.g. when using a mobile
+- (nachrichten_schreiben) replace link to toggle admin roundmail by checkbox
 
 ## [1.11.7] - 2023-02-25
 

@@ -1702,7 +1702,7 @@ function getCspNonce(): string
 
 function sendCspHeader(): void
 {
-    header(sprintf("Content-Security-Policy: default-src 'none'; script-src 'nonce-%s'; img-src 'self' data:; style-src 'nonce-%s'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; base-uri 'self'; require-trusted-types-for 'script';", getCspNonce(), getCspNonce()));
+    header(sprintf("Content-Security-Policy: default-src 'none'; script-src 'nonce-%s'; connect-src 'self'; img-src 'self' data:; style-src 'nonce-%s'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; base-uri 'self'; require-trusted-types-for 'script';", getCspNonce(), getCspNonce()));
 }
 
 function printHeaderCss(array $styles): void

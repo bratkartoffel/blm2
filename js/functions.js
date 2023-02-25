@@ -154,23 +154,6 @@ function ChangeBankDepositWithdraw() {
     }
 }
 
-// used in nachrichten_schreiben.inc.php
-function toggleRundmail() {
-    let f = document.getElementById('receiver');
-    let b = document.getElementById('broadcast');
-    if (b.value === '0') {
-        f.value = 'RUNDMAIL';
-        f.disabled = 'disabled';
-        b.value = '1';
-    } else {
-        f.value = '';
-        f.disabled = '';
-        f.enabled = 'enabled';
-        b.value = '0';
-    }
-    return false;
-}
-
 // used in einstellungen.inc.php
 function enableSitterOptions(enabled) {
     Array.prototype.forEach.call(document.getElementById('sitterSettings').getElementsByTagName('input'), (field) => {
@@ -472,16 +455,6 @@ setupCharsLeft('beschreibung');
 setupCharsLeft('notizblock');
 setupCharsLeft('message');
 
-// used for nachrichten_schreiben.inc.php
-function setupNachrichtSchreiben() {
-    let rundmailElement = document.getElementById('toggle_rundmail');
-    if (rundmailElement !== null) {
-        rundmailElement.onclick = () => toggleRundmail();
-    }
-}
-
-setupNachrichtSchreiben();
-
 // used for chefbox.php
 function setupChefbox() {
     if (document.getElementById('Chefbox') !== null) {
@@ -499,3 +472,40 @@ function setupChefbox() {
 }
 
 setupChefbox();
+
+// used for nachrichten_liste.inc.php
+function setupMessageDeleteAjax() {
+    let deleteLinks = document.getElementsByClassName('delete-message');
+    for (let link of deleteLinks) {
+        let id = link.getAttribute('data-id');
+        let token = link.getAttribute('data-token');
+        link.onclick = function () {
+            const req = new XMLHttpRequest();
+            req.open('post', '/actions/ajax.php', true);
+            req.onreadystatechange = function () {
+                if (this.readyState !== 4) return;
+                if (this.status === 200 || this.status === 404) {
+                    let row = document.getElementById('message_' + id);
+                    if (row.parentElement.getElementsByTagName('tr').length === 2) {
+                        window.location.reload();
+                    } else {
+                        row.remove();
+                    }
+                } else {
+                    console.log("could not delete #" + id);
+                }
+            };
+            req.onerror = () => {
+                console.log("could not delete #" + id);
+            }
+            let body = new FormData();
+            body.set('a', '1');
+            body.set('id', id);
+            body.set('token', token);
+            req.send(body);
+            return false;
+        };
+    }
+}
+
+setupMessageDeleteAjax();

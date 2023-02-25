@@ -35,12 +35,11 @@ $message = getOrDefault($_GET, 'message', $message);
 
 <div class="form NachrichtSchreiben">
     <form action="/actions/nachrichten.php?a=1" method="post">
-        <input type="hidden" name="broadcast" id="broadcast" value="0"/>
         <header>Nachricht</header>
         <div>
             <label for="receiver">Empfänger</label>
             <input type="text" name="receiver" id="receiver" value="<?= escapeForOutput($receiver); ?>"/>
-            <?= (isAdmin() ? '<a href="#" id="toggle_rundmail">Admin Rundmail</a>' : ''); ?>
+            <?= (isAdmin() ? '<input type="checkbox" name="broadcast" id="broadcast" value="1"> <label for="broadcast">Admin Rundmail</label>' : ''); ?>
         </div>
         <div>
             <label for="subject">Betreff</label>

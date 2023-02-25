@@ -48,6 +48,9 @@ public class AdminTests extends AbstractTest {
 
     @Test
     void testImportLegacyUserNewId() {
+        // import uses a new id, so increment the internal counter
+        getNextUserId();
+
         WebDriver driver = getDriver();
         File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/export_test-import-no-metadata.zip")).getFile());
 

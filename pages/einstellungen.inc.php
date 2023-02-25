@@ -81,18 +81,13 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
                       rows="15"><?= escapeForOutput($data['Beschreibung'], false); ?></textarea>
         </div>
         <div>
-            Noch <span>4096</span> Zeichen übrig
+            Noch <span id="chars_left">4096</span> Zeichen übrig
         </div>
         <div>
             <input type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
-<script nonce="<?= getCspNonce(); ?>">
-    let beschreibungElement = document.getElementById('beschreibung');
-    beschreibungElement.onkeyup = () => ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
-    ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
-</script>
 
 <div class="form Einstellungen">
     <form action="/actions/einstellungen.php" method="post" enctype="multipart/form-data">
@@ -117,7 +112,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
         <header>Sitting konfigurieren</header>
         <div>
             <label for="aktiviert">Sitting erlauben?</label>
-            <input type="checkbox" name="aktiviert" value="1"
+            <input type="checkbox" name="aktiviert" id="sitting_aktiviert" value="1"
                    id="aktiviert"<?= ($data['Gebaeude'] !== null ? ' checked' : ''); ?>/>
         </div>
         <div>
@@ -194,11 +189,6 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
     </form>
 </div>
 
-<script nonce="<?= getCspNonce(); ?>">
-    let enableSitting = document.getElementById('aktiviert');
-    enableSitting.addEventListener('change', (event) => enableSitterOptions(event.currentTarget.checked));
-    enableSitterOptions(enableSitting.checked);
-</script>
 <h2>Danger-Zone</h2>
 
 <p>

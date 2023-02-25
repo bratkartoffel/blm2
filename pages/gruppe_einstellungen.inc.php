@@ -58,18 +58,13 @@ if ($rights['edit_description']) {
                           rows="15"><?= escapeForOutput($beschreibung, false); ?></textarea>
             </div>
             <div>
-                Noch <span>X</span> Zeichen übrig
+                Noch <span id="chars_left">4096</span> Zeichen übrig
             </div>
             <div>
                 <input type="submit" value="Speichern" id="save_beschreibung"/>
             </div>
         </form>
     </div>
-    <script nonce="<?= getCspNonce(); ?>">
-        let beschreibungElement = document.getElementById('beschreibung');
-        beschreibungElement.onkeyup = () => ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
-        ZeichenUebrig(beschreibungElement, document.form_beschreibung.getElementsByTagName('span')[0]);
-    </script>
     <?php
 }
 

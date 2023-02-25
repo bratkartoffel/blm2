@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Added
+
+- (admin) add import function for gdpr exports
+    - this allows an administrator to restore deleted accounts or
+      developers to copy accounts from one environment to another
+
+### Security
+
+- (einstellungen) GDPR exports are now cryptographically signed
 
 ## [1.11.6] - 2023-02-25
 

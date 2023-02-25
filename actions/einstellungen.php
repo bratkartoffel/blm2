@@ -5,6 +5,7 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
+require_once __DIR__ . '/../include/game_version.inc.php';
 require_once __DIR__ . '/../include/functions.inc.php';
 require_once __DIR__ . '/../include/database.class.php';
 
@@ -237,32 +238,30 @@ switch (getOrDefault($_POST, 'a', 0)) {
         if (file_exists($profilePicture) && $zip->addFile($profilePicture, 'profile.webp') !== true) {
             redirectTo('/?p=einstellungen', 141, __LINE__);
         }
-        $tables = array(
-            Database::TABLE_JOBS => 'user_id',
-            Database::TABLE_GROUP_CASH => 'user_id',
-            Database::TABLE_GROUP_LOG => 'Spieler',
-            Database::TABLE_GROUP_RIGHTS => 'user_id',
-            Database::TABLE_GROUP_MESSAGES => 'Von',
-            Database::TABLE_LOG_BANK => 'playerId',
-            Database::TABLE_LOG_SHOP => 'playerId',
-            Database::TABLE_LOG_GROUP_CASH => array('senderId', 'receiverId'),
-            Database::TABLE_LOG_LOGIN => 'playerId',
-            Database::TABLE_LOG_MAFIA => array('senderId', 'receiverId'),
-            Database::TABLE_LOG_MARKET => array('sellerId', 'buyerId'),
-            Database::TABLE_LOG_MESSAGES => array('senderId', 'receiverId'),
-            Database::TABLE_LOG_CONTRACTS => array('senderId', 'receiverId'),
-            Database::TABLE_MARKET => 'Von',
-            Database::TABLE_USERS => 'ID',
-            Database::TABLE_MESSAGES => array('Von', 'An'),
-            Database::TABLE_SITTER => 'user_id',
-            Database::TABLE_STATISTICS => 'user_id',
-            Database::TABLE_CONTRACTS => array('Von', 'An'),
-        );
+        $json = json_encode(array(
+            'game_version' => game_version,
+            'round_start' => formatDateTime(Config::getInt(Config::SECTION_DBCONF, 'roundstart')),
+            'export_timestamp' => formatDateTime(time()),
+            'hmac_algorithm' => Config::get(Config::SECTION_BASE, 'export_hmac'),
+            'user_id' => $_SESSION['blm_user'],
+        ), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($zip->addFromString('metadata.json', $json) !== true) {
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+        if ($zip->addFromString('metadata.json.hmac', getHmac($json)) !== true) {
+            redirectTo('/?p=einstellungen', 141, __LINE__);
+        }
+        $tables = getTablesForGdprExport();
 
         Database::getInstance()->begin();
         foreach ($tables as $table => $fields) {
             $rows = Database::getInstance()->selectForExport($table, $fields, $_SESSION['blm_user']);
-            if ($zip->addFromString($table . '.json', json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) !== true) {
+            $json = json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($zip->addFromString($table . '.json', $json) !== true) {
+                Database::getInstance()->rollBack();
+                redirectTo('/?p=einstellungen', 141, __LINE__ . '_' . $table);
+            }
+            if ($zip->addFromString($table . '.json.hmac', getHmac($json)) !== true) {
                 Database::getInstance()->rollBack();
                 redirectTo('/?p=einstellungen', 141, __LINE__ . '_' . $table);
             }

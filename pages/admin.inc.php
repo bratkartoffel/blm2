@@ -19,7 +19,7 @@
     <li><a href="/?p=admin_vertrag">Verträge</a></li>
     <li><a href="/?p=admin_gruppe">Gruppen</a></li>
     <li><a href="/?p=admin_gruppe_diplomatie">Gruppendiplomatie</a> (TODO)</li>
-    <li><a href="/?p=admin_benutzer">Benutzer</a></li>
+    <li><a href="/?p=admin_benutzer" id="link_admin_benutzer">Benutzer</a></li>
     <li><a href="/?p=admin_auftrag">Aufträge</a> (TODO)</li>
     <li>
         Logbücher:

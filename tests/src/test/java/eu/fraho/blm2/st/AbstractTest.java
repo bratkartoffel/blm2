@@ -176,6 +176,14 @@ public abstract class AbstractTest {
         }
     }
 
+    protected void setCheckbox(By by, boolean state) {
+        WebDriver driver = getDriver();
+        WebElement element = driver.findElement(by);
+        if (element.isSelected() != state) {
+            element.click();
+        }
+    }
+
     protected void resetPlayer(int id, TestInfo testInfo) {
         resetPlayer(id, testInfo, null);
     }
@@ -223,6 +231,7 @@ public abstract class AbstractTest {
     }
 
     protected static HttpResponse<String> simpleHttpGet(String url) throws IOException, InterruptedException {
+        log.info("Calling {}", url);
         return httpClient.send(
                 HttpRequest.newBuilder().GET().uri(URI.create(url)).build(),
                 HttpResponse.BodyHandlers.ofString()

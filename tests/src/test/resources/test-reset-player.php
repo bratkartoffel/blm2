@@ -137,6 +137,20 @@ switch ($testClass) {
         }
         break;
 
+    case 'AdminTests':
+        Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Admin' => 1));
+
+        if (substr($testMethod, 0, 10) === 'testImport') {
+            // delete all other accounts
+            $players = Database::getInstance()->getAllPlayerIdsAndName();
+            foreach ($players as $player) {
+                if ($player['ID'] != $id && $player['Name'] !== 'admin') {
+                    deleteAccount($player['ID']);
+                }
+            }
+        }
+        break;
+
     default:
         error_log('unknown class given: ' . $testClass);
 }

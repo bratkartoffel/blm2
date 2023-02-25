@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - redirects now send a `303` instead of a `302` status code
 - (vertraege) accepting / rejecting contracts now show a confirmation dialogue
+- many small refactorings under the hood
 
 ### Fixed
 

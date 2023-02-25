@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.7] - 2023-02-25
+
 ### Added
 
 - (admin) add import function for gdpr exports
@@ -415,7 +419,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.6...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.7...HEAD
+
+[1.11.7]: https://github.com/bratkartoffel/blm2/compare/v1.11.6...v1.11.7
 
 [1.11.6]: https://github.com/bratkartoffel/blm2/compare/v1.11.5...v1.11.6
 

@@ -50,7 +50,7 @@ public class MessageTests extends AbstractTest {
 
         String messageId = driver.findElement(By.id("MessagesOut")).findElements(By.tagName("tr")).get(1).getAttribute("data-id");
         driver.findElement(By.id("delete_" + messageId)).click();
-        assertElementPresent(By.id("meldung_211"));
+        Assertions.assertEquals("0", driver.findElement(By.id("MessagesOut")).getAttribute("data-count"));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class MessageTests extends AbstractTest {
         driver.findElement(By.id("link_nachrichten_liste")).click();
         String messageId = driver.findElement(By.id("MessagesIn")).findElements(By.tagName("tr")).get(1).getAttribute("data-id");
         driver.findElement(By.id("delete_" + messageId)).click();
-        assertElementPresent(By.id("meldung_211"));
+        Assertions.assertEquals("0", driver.findElement(By.id("MessagesIn")).getAttribute("data-count"));
     }
 
     @Test

@@ -7,38 +7,31 @@ on:
       - develop
   pull_request:
 
+permissions:
+  checks: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
+      - uses: step-security/harden-runner@c8454efe5d0bdefd25384362fe217428ca277d57 # v2.2.0
         with:
-          lfs: true
-      - name: Start application
-        run: docker-compose pull --quiet && docker-compose up -d
+          disable-sudo: true
+          egress-policy: audit
+      - uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
+      - run: docker-compose pull --quiet && docker-compose up -d
         working-directory: tests/src/test/resources/
-      - name: Setup java
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3.10.0
         with:
           distribution: 'adopt'
           java-version: '17'
           cache: 'gradle'
-      - name: Setup Firefox
-        uses: browser-actions/setup-firefox@latest
+      - uses: browser-actions/setup-firefox@2904820ff2e2cfeadf033d26ce136d65509ce7fc # v1.1.0
         with:
           firefox-version: latest
-      - name: Run selenium tests
-        run: ./gradlew --no-daemon check
+      - run: ./gradlew --no-daemon check
         working-directory: tests/
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        if: always() # always run even if the previous step fails
-        with:
-          name: test-results
-          path: tests/build/reports/tests/test
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v3
+      - uses: mikepenz/action-junit-report@4fa23552acda20a6a1d44f16224a90efbeb6c5f1 # v3.7.5
         if: always() # always run even if the previous step fails
         with:
           report_paths: 'tests/build/test-results/test/TEST-*.xml'

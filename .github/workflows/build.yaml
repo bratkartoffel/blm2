@@ -28,7 +28,7 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
           cache: 'gradle'
-      - uses: browser-actions/setup-firefox@c9a023197515de07de202b8db64e521659084923 # v1.1.1
+      - uses: browser-actions/setup-firefox@2904820ff2e2cfeadf033d26ce136d65509ce7fc # v1.1.0
         with:
           firefox-version: latest
       - run: ./gradlew --no-daemon check

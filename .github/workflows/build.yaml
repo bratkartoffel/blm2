@@ -17,7 +17,23 @@ jobs:
       - uses: step-security/harden-runner@1f99358870fe1c846a3ccba386cc2b2246836776 # v2.2.1
         with:
           disable-sudo: true
-          egress-policy: audit
+          egress-policy: block
+          allowed-endpoints: >
+            api.adoptopenjdk.net:443
+            api.github.com:443
+            download-installer.cdn.mozilla.net:443
+            download.mozilla.org:443
+            downloads.gradle-dn.com:443
+            github.com:443
+            jcenter.bintray.com:443
+            objects.githubusercontent.com:443
+            ocsp.digicert.com:80
+            plugins.gradle.org:443
+            plugins-artifacts.gradle.org:443
+            r3.o.lencr.org:80
+            registry-1.docker.io:443
+            repo.maven.apache.org:443
+            services.gradle.org:443
       - uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
         with:
           lfs: true
@@ -31,6 +47,7 @@ jobs:
       - uses: browser-actions/setup-firefox@2904820ff2e2cfeadf033d26ce136d65509ce7fc # v1.1.0
         with:
           firefox-version: latest
+      - uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b # v1.0.6
       - run: ./gradlew --no-daemon check
         working-directory: tests/
       - uses: mikepenz/action-junit-report@4fa23552acda20a6a1d44f16224a90efbeb6c5f1 # v3.7.5

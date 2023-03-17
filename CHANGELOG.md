@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.8] - 2023-03-17
+
 ### Changed
 
 - (nachrichten_liste) delete messages using async ajax
@@ -424,7 +428,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.7...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.8...HEAD
+
+[1.11.8]: https://github.com/bratkartoffel/blm2/compare/v1.11.7...v1.11.8
 
 [1.11.7]: https://github.com/bratkartoffel/blm2/compare/v1.11.6...v1.11.7
 

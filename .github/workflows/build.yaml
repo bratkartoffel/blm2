@@ -48,7 +48,7 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
           cache: 'gradle'
-      - uses: browser-actions/setup-firefox@c9a023197515de07de202b8db64e521659084923 # v1.1.1
+      - uses: browser-actions/setup-firefox@f87e4ecedea37498da7a121eddc97dac1d93b26f # v1.1.1
         with:
           firefox-version: latest
       - uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b # v1.0.6

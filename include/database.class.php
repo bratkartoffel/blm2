@@ -1446,7 +1446,7 @@ ORDER BY m.Name');
             return null;
         }
         $stmt = $this->prepare('UPDATE ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id SET
-            m.Punkte = s.GebaeudePlus + s.ForschungPlus + s.MafiaPlus
+            m.Punkte = s.GebaeudePlus + s.ForschungPlus + s.MafiaPlus - s.MafiaMinus - s.KriegMinus
             WHERE m.ID > 0');
         if ($this->executeAndGetAffectedRows($stmt) === null) {
             return null;

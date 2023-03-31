@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.11.9] - 2023-03-31
+
 ### Fixed
 
 - (rangliste) also consider malus points from mafia actions and wars in calculation
@@ -430,7 +434,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.8...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.11.9...HEAD
+
+[1.11.9]: https://github.com/bratkartoffel/blm2/compare/v1.11.8...v1.11.9
 
 [1.11.8]: https://github.com/bratkartoffel/blm2/compare/v1.11.7...v1.11.8
 

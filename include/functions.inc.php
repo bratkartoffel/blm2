@@ -1118,7 +1118,7 @@ function sendMail(string $recipient, string $subject, string $templateName, arra
         $mail->isSMTP();
         $mail->Host = Config::get(Config::SECTION_MAIL, 'hostname');
         $mail->Port = Config::getInt(Config::SECTION_MAIL, 'port');
-        $mail->SMTPAutoTLS = true;
+        $mail->SMTPAutoTLS = Config::getBoolean(Config::SECTION_MAIL, 'auto_tls');
         if (Config::getBoolean(Config::SECTION_MAIL, 'authentication')) {
             $mail->Username = Config::get(Config::SECTION_MAIL, 'username');
             $mail->Password = Config::get(Config::SECTION_MAIL, 'password');

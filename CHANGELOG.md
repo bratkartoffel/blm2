@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - (reset) reset player stock for the items added in `1.11.5`
+- (bank) allow larger values for bank and money (needed for bank level 10+)
 
 ## [1.11.9] - 2023-03-31
 

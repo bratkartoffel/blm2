@@ -418,14 +418,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             WHERE ID > 0
             ORDER BY Onlinezeit DESC, ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderMafia(int $count = 1): ?array
@@ -434,14 +427,36 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             FROM ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id
             ORDER BY s.AusgabenMafia DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getMafiaGodfather(int $count = 1): ?array
+    {
+        $stmt = $this->prepare('WITH x AS (
+    SELECT senderName, receiverName, action, success FROM ' . self::TABLE_LOG_MAFIA . ' m GROUP BY senderId, created
+)
+SELECT senderName, COUNT(*) AS cnt, SUM(success) AS success FROM x GROUP BY senderName ORDER BY cnt DESC LIMIT 0, :limit');
+        $stmt->bindParam('limit', $count, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getMafiaVictim(int $count = 1): ?array
+    {
+        $stmt = $this->prepare('WITH x AS (
+    SELECT senderName, receiverName, action, success FROM ' . self::TABLE_LOG_MAFIA . ' m GROUP BY senderId, created
+)
+SELECT receiverName, COUNT(*) AS cnt, SUM(success) AS success FROM x GROUP BY receiverName ORDER BY cnt DESC LIMIT 0, :limit');
+        $stmt->bindParam('limit', $count, PDO::PARAM_INT);
+        return $this->executeAndExtractRows($stmt);
+    }
+
+    public function getMafiaAttackTypes(): ?array
+    {
+        $stmt = $this->prepare('WITH x AS (
+    SELECT senderName, receiverName, action, success, SUM(amount) as amount FROM ' . self::TABLE_LOG_MAFIA . ' m GROUP BY senderId, created
+)
+SELECT action, COUNT(*) AS cnt, SUM(success) AS success, SUM(amount) as amount FROM x GROUP BY action ORDER BY cnt DESC');
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderMarket(int $count = 1): ?array
@@ -450,14 +465,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             FROM ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id
             ORDER BY s.AusgabenMarkt DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderBuildings(int $count = 1): ?array
@@ -466,14 +474,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             FROM ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id
             ORDER BY s.AusgabenGebaeude DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderResearch(int $count = 1): ?array
@@ -482,14 +483,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             FROM ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id
             ORDER BY s.AusgabenForschung DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderProduction(int $count = 1): ?array
@@ -499,13 +493,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             ORDER BY s.AusgabenProduktion DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
         $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderInterest(int $count = 1): ?array
@@ -515,13 +503,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             ORDER BY s.EinnahmenZinsen DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
         $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getLeaderIgmSent(int $count = 1): ?array
@@ -532,13 +514,7 @@ SELECT s.*, g.Kuerzel AS GruppeKuerzel, g.Name AS GruppeName FROM stats s INNER 
             ORDER BY IgmGesendet DESC, ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
         $result = $this->executeAndExtractRows($stmt);
-        if (count($result) == 0) {
-            return null;
-        } elseif ($count == 1) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $this->executeAndExtractRows($stmt);
     }
 
     public function getAdminBioladenLogCount(?string $werFilter, ?int $wareFilter): ?int

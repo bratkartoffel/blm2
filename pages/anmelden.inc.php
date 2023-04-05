@@ -44,5 +44,5 @@ if (isGameLocked()) {
 </div>
 
 <div>
-    <a hreF="/?p=passwort_vergessen">Passwort vergessen?</a>
+    <a hreF="/?p=passwort_vergessen" id="link_passwort_vergessen">Passwort vergessen?</a>
 </div>

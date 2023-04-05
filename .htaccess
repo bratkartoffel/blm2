@@ -13,9 +13,11 @@
     RedirectMatch 403 /doc
     RedirectMatch 403 /include
     RedirectMatch 403 /install/sql
+    RedirectMatch 403 /mails
     RedirectMatch 403 /pages
     RedirectMatch 403 /pics/uploads
     RedirectMatch 403 /tests
+    RedirectMatch 403 /vendor
 </IfModule>
 
 # cache images, scripts and styles for 1 day

@@ -43,7 +43,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
             möglich, sobald die neue Adresse bestätigt wurde!
         </div>
         <div>
-            <input type="submit" value="Speichern"/>
+            <input type="submit" value="Speichern" id="changeEmail"/>
         </div>
     </form>
 </div>

@@ -13,41 +13,20 @@ ob_start();
 
 $email = getOrDefault($_POST, 'email');
 
-function sendRecoveryMail(string $email, array $data, string $token): bool
+function sendRecoveryMail(string $email, string $name, string $resetLink): bool
 {
-    return sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Passwort vergessen',
-        sprintf('<html lang="de"><body><h3>Hallo %s,</h3>
-
-die Funktion "Passwort vergessen" wurde bei deinem Account ausgelöst. Wenn du das selbst warst, dann kannst du über folgende Link
-dein Passwort zurücksetzen:
-<p>
-    <a href="%s/actions/pwd_reset.php?a=2&amp;id=%d&amp;token=%s">%s/actions/pwd_reset.php?a=2&amp;id=%d&amp;token=%s</a>
-</p>
-<p>
-Klicke bitte nur auf den Link, wenn du die Anfrage auch selbst ausgelöst hast. Wenn du die Anfrage nicht gestellt hast,
-dann wende dich bitte an einen Administrator. Diesen kannst du entweder im Spiel oder auch per Mail erreichen: %s
-</p>
-
-Grüsse,
-%s
-</body></html>
-', escapeForOutput($data['Name']), Config::get(Config::SECTION_BASE, 'base_url'), $data['ID'], $token, Config::get(Config::SECTION_BASE, 'base_url'), $data['ID'], $token, Config::get(Config::SECTION_BASE, 'admin_email'), Config::get(Config::SECTION_BASE, 'admin_name')
-        ));
+    return sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Passwort vergessen', 'password_recovery', array(
+            '{{USERNAME}}' => escapeForOutput($name),
+            '{{RESET_LINK}}' => $resetLink,
+    ));
 }
 
 function sendPasswordMail(string $email, string $name, string $password): bool
 {
-    return sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Passwort vergessen',
-        sprintf('<html lang="de"><body><h3>Hallo %s,</h3>
-
-dein Passwort wurde zurückgesetzt auf:
-<p>%s</p>
-
-Grüsse,
-%s
-</body></html>
-', escapeForOutput($name), $password, Config::get(Config::SECTION_BASE, 'admin_name')
-        ));
+    return sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Dein neues Passwort', 'password_reset', array(
+            '{{USERNAME}}' => escapeForOutput($name),
+            '{{PASSWORD}}' => $password,
+    ));
 }
 
 switch (getOrDefault($_REQUEST, 'a')) {
@@ -69,11 +48,16 @@ switch (getOrDefault($_REQUEST, 'a')) {
             if (strtotime($request['created']) < time() - (3600 * 4)) {
                 Database::getInstance()->begin();
                 if (Database::getInstance()->updateTableEntry(Database::TABLE_PASSWORD_RESET, $request['ID'],
-                        array('created' => date('Y-m-d H:i:s'))) !== 1) {
+                                array('created' => date('Y-m-d H:i:s'))) !== 1) {
                     Database::getInstance()->rollBack();
                     redirectTo($back_link, 142, __LINE__);
                 }
-                if (!sendRecoveryMail($email, $data, $request['token'])) {
+                $link = sprintf('%s/actions/pwd_reset.php?a=2&id=%d&token=%s',
+                        Config::get(Config::SECTION_BASE, 'base_url'),
+                        $data['ID'],
+                        $request['token']
+                );
+                if (!sendRecoveryMail($email, $data['Name'], $link)) {
                     Database::getInstance()->rollBack();
                     redirectTo($back_link, 172, __LINE__);
                 }
@@ -89,13 +73,18 @@ switch (getOrDefault($_REQUEST, 'a')) {
         $token = createRandomCode();
         Database::getInstance()->begin();
         if (Database::getInstance()->createTableEntry(Database::TABLE_PASSWORD_RESET, array(
-                'user_id' => $data['ID'],
-                'token' => $token
-            )) !== 1) {
+                        'user_id' => $data['ID'],
+                        'token' => $token
+                )) !== 1) {
             Database::getInstance()->rollBack();
             redirectTo($back_link, 141, __LINE__);
         }
-        if (!sendRecoveryMail($email, $data, $token)) {
+        $link = sprintf('%s/actions/pwd_reset.php?a=2&id=%d&token=%s',
+                Config::get(Config::SECTION_BASE, 'base_url'),
+                $data['ID'],
+                $token
+        );
+        if (!sendRecoveryMail($email, $data['Name'], $link)) {
             Database::getInstance()->rollBack();
             redirectTo($back_link, 172, __LINE__);
         }

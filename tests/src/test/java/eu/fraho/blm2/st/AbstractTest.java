@@ -11,6 +11,8 @@ import com.evanlennick.retry4j.config.RetryConfig;
 import com.evanlennick.retry4j.config.RetryConfigBuilder;
 import com.evanlennick.retry4j.exception.RetriesExhaustedException;
 import com.evanlennick.retry4j.exception.UnexpectedException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -41,7 +43,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,10 +60,12 @@ public abstract class AbstractTest {
             (int) (Duration.between(LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0), LocalDateTime.now()).toSeconds() / 3)
     );
     public static final String LOCALHOST = "localhost:8080";
+    public static final String INBUCKET_HOST = "localhost:8081";
     private static final Logger log = LoggerFactory.getLogger(AbstractTest.class);
     private static final WebDriver driver = SeleniumConfig.getWebDriver();
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final AtomicBoolean installed = new AtomicBoolean();
+    private static final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @BeforeEach
     void resetDriver(TestInfo testInfo) {
@@ -213,6 +219,22 @@ public abstract class AbstractTest {
             Assertions.assertEquals("/actions/logout.php", location.get());
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
+        }
+    }
+
+    protected Map<String, ?> getLatestMail(String mailbox) {
+        try {
+            HttpResponse<String> response = simpleHttpGet("http://%s/api/v1/mailbox/%s".formatted(INBUCKET_HOST, mailbox));
+            List<Map<String, ?>> value = objectMapper.readValue(response.body(), new TypeReference<>() {
+            });
+            Assertions.assertFalse(value.isEmpty());
+            String id = (String) value.get(value.size() - 1).get("id");
+            response = simpleHttpGet("http://%s/api/v1/mailbox/%s/%s".formatted(INBUCKET_HOST, mailbox, id));
+            return objectMapper.readValue(response.body(), new TypeReference<>() {
+            });
+        } catch (IOException | InterruptedException e) {
+            Assertions.fail(e);
+            return Collections.emptyMap();
         }
     }
 

@@ -21,8 +21,6 @@ services:
       context: .
       dockerfile: Dockerfile-php
     restart: unless-stopped
-    environment:
-      SMTPHOST: "localhost"
     ports:
       - "8080:80"
     tmpfs:
@@ -33,3 +31,10 @@ services:
       - ./config.ini:/var/www/html/config/config.ini
       - ./test-reset-player.php:/var/www/html/actions/test-reset-player.php
       - ./test-run-cron.php:/var/www/html/actions/test-run-cron.php
+
+  inbucket:
+    image: inbucket/inbucket:3.0.4
+    restart: unless-stopped
+    ports:
+      - "8081:9000"
+      - "2500:2500"

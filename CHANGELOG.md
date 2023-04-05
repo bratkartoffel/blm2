@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (mailing) add PHPMailer for sending mails, allow manual configuration
 
+### Changed
+
+- (passwort_vergessen) generated passwords now only contains lowercase chars, uppercase chars and digits
+
 ### Fixed
 
 - (reset) reset player stock for the items added in `1.11.5`

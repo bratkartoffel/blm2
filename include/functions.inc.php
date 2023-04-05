@@ -1086,7 +1086,7 @@ function createRandomPassword(): string
     if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
         return 'changeit';
     }
-    return str_replace('+', '_', base64_encode(openssl_random_pseudo_bytes(12)));
+    return substr(str_replace(array('+', '/'), '', base64_encode(openssl_random_pseudo_bytes(16))), 0, 12);
 }
 
 function sendMail(string $recipient, string $subject, string $templateName, array $replacements): bool

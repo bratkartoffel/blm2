@@ -122,15 +122,12 @@ switch (getOrDefault($_POST, 'a', 0)) {
         }
 
         $email_activation_code = createRandomCode();
-        $email_activation_link = Config::get(Config::SECTION_BASE, 'base_url') . '/actions/activate.php?email=' . urlencode($email) . '&amp;code=' . $email_activation_code;
+        $email_activation_link = sprintf('%s/actions/activate.php?email=%s&code=%s', Config::get(Config::SECTION_BASE, 'base_url'), urlencode($email), $email_activation_code);
 
-        if (!sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Aktivierung Ihres Accounts',
-            '<html lang="de"><body><h3>Willkommen beim Bioladenmanager 2,</h3>
-    <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
-    <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
-    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . Config::get(Config::SECTION_BASE, 'admin_email') . '</p>
-    Grüsse ' . Config::get(Config::SECTION_BASE, 'admin_name') . '</body></html>'
-        )) {
+        if (!sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Änderung EMail-Addresse', 'email_change', array(
+            '{{USERNAME}}' => escapeForOutput(Database::getInstance()->getPlayerNameById($_SESSION['blm_user'])),
+            '{{ACTIVATION_LINK}}' => $email_activation_link,
+        ))) {
             redirectTo(sprintf('/?p=einstellungen&email=%s', $email), 150, __LINE__);
         }
 

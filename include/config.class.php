@@ -9,6 +9,7 @@
 class Config
 {
     public const SECTION_BASE = 'base';
+    public const SECTION_MAIL = 'mail';
     public const SECTION_CAPTCHA = 'captcha';
     public const SECTION_DATABASE = 'database';
     public const SECTION_PLANTAGE = 'plantage';

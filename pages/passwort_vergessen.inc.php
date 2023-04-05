@@ -44,7 +44,7 @@ $captcha->createCaptcha();
 
         <div>
             <input type="hidden" name="captcha_id" value="<?= $captcha->getId(); ?>"/>
-            <input type="submit" id="login" value="Abschicken"/>
+            <input type="submit" id="forgot_password" value="Abschicken"/>
         </div>
     </form>
 </div>

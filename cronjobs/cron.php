@@ -17,6 +17,7 @@ if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
 
 const IS_CRON = true;
 require_once __DIR__ . '/../include/functions.inc.php';
+require_once __DIR__ . '/../include/game_version.inc.php';
 require_once __DIR__ . '/../include/database.class.php';
 
 if (!IS_CRON) {

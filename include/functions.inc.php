@@ -7,6 +7,12 @@
  */
 
 require_once __DIR__ . '/config.class.php';
+require_once __DIR__ . '/../vendor/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../vendor/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../vendor/PHPMailer/src/PHPMailer.php';
+
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 // enum constant for group diplomacy types
 const group_diplomacy_nap = 1;
@@ -117,7 +123,7 @@ function CheckAuftraege(int $blm_user): bool
             // Gebäude
             case job_type_building:
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                        array('Gebaeude' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
+                                array('Gebaeude' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
                     return false;
                 }
                 break;
@@ -125,7 +131,7 @@ function CheckAuftraege(int $blm_user): bool
             // Produktion
             case job_type_production:
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                        array('Lager' . ($auftrag['item'] % job_type_factor) => $auftrag['amount'])) != 1) {
+                                array('Lager' . ($auftrag['item'] % job_type_factor) => $auftrag['amount'])) != 1) {
                     return false;
                 }
                 break;
@@ -133,7 +139,7 @@ function CheckAuftraege(int $blm_user): bool
             // Forschung
             case job_type_research:
                 if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $blm_user,
-                        array('Forschung' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
+                                array('Forschung' . ($auftrag['item'] % job_type_factor) => 1)) != 1) {
                     return false;
                 }
                 break;
@@ -180,7 +186,7 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 103:
             $text = sprintf('Das Bild ist zu gross. Die maximale Grösse des Bildes ist %d KB.',
-                Config::getInt(Config::SECTION_BASE, 'max_profile_image_size') / 1024);
+                    Config::getInt(Config::SECTION_BASE, 'max_profile_image_size') / 1024);
             break;
         case 104:
             $text = 'Bitte füllen Sie alle Felder aus.';
@@ -265,11 +271,11 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 132:
             $text = sprintf('Bei einem Krieg muss der Betrag, um welchen gekämpft wird, größer als %s sein!',
-                formatCurrency(Config::getInt(Config::SECTION_GROUP, 'war_min_amount')));
+                    formatCurrency(Config::getInt(Config::SECTION_GROUP, 'war_min_amount')));
             break;
         case 133:
             $text = sprintf('Bitte geben Sie eine Dauer zwischen 1 und %s Stunden ein!',
-                Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'));
+                    Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'));
             break;
         case 134:
             $text = 'Bitte geben Sie eine gültige EMail-Adresse ein!';
@@ -303,20 +309,20 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 144:
             $text = sprintf('Der neue Benutzer wurde zwar erstellt, jedoch konnte die Aktivierungsmail nicht versendet werden. Bitte wende dich per EMail an den Admin: <a href="mailto:%s">%s</a>',
-                Config::get(Config::SECTION_BASE, 'admin_email'),
-                Config::get(Config::SECTION_BASE, 'admin_email'));
+                    Config::get(Config::SECTION_BASE, 'admin_email'),
+                    Config::get(Config::SECTION_BASE, 'admin_email'));
             break;
         case 145:
             $text = 'Sie müssen zuerst mal ein Forschungszentrum bauen, bevor Sie Forschungen starten können!';
             break;
         case 146:
             $text = sprintf('Der Benutzername darf nur zwischen %s und %s Zeichen enthalten',
-                Config::getInt(Config::SECTION_BASE, 'username_min_len'),
-                Config::getInt(Config::SECTION_BASE, 'username_max_len'));
+                    Config::getInt(Config::SECTION_BASE, 'username_min_len'),
+                    Config::getInt(Config::SECTION_BASE, 'username_max_len'));
             break;
         case 147:
             $text = sprintf('Das gewählte Passwort ist zu kurz, es muss mindestens aus %s Zeichen bestehen.',
-                Config::getInt(Config::SECTION_BASE, 'password_min_len'));
+                    Config::getInt(Config::SECTION_BASE, 'password_min_len'));
             break;
         case 148:
             $text = 'Die Registrierung ist aktuell geschlossen';
@@ -350,11 +356,11 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 158:
             $text = sprintf('Ungültiger Gruppenname (Darf nur maximal %s Zeichen lang sein)',
-                Config::getInt(Config::SECTION_GROUP, 'max_name_length'));
+                    Config::getInt(Config::SECTION_GROUP, 'max_name_length'));
             break;
         case 159:
             $text = sprintf('Ungültiges Gruppenkürzel (Darf nur maximal %s Zeichen lang sein)',
-                Config::getInt(Config::SECTION_GROUP, 'max_tag_length'));
+                    Config::getInt(Config::SECTION_GROUP, 'max_tag_length'));
             break;
         case 160:
             $text = 'Token in Anfrage nicht gefunden, Aktion verweigert';
@@ -379,14 +385,14 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 167:
             $text = sprintf('Eine diplomatische Beziehung kann erst nach frühestens %s Tagen aufgekündigt werden',
-                Config::getInt(Config::SECTION_GROUP, 'diplomacy_min_duration'));
+                    Config::getInt(Config::SECTION_GROUP, 'diplomacy_min_duration'));
             break;
         case 168:
             $text = 'Sie können sich selbst keine Nachrichten schicken!';
             break;
         case 169:
             $text = sprintf('Die Mafia ist erst ab %s Punkten verfügbar',
-                formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')));
+                    formatPoints(Config::getFloat(Config::SECTION_MAFIA, 'min_points')));
             break;
         case 170:
             $text = 'Die Mafia erholt sich noch vom letzten Auftrag.';
@@ -408,10 +414,10 @@ function getMessageBox(int $msg_id): ?string
             break;
         case 176:
             $text = sprintf("Die Signatur einer Tabelle stimmt nicht. Stimmt der konfigurierte Algorithmus (%s.%s=%s) mit dem Export überein? Ist die maximale Tabellengrösse (%s.%s=%s) ausreichend?",
-                Config::SECTION_BASE, 'export_hmac',
-                Config::get(Config::SECTION_BASE, 'export_hmac'),
-                Config::SECTION_BASE, '.import_max_table_size',
-                Config::getInt(Config::SECTION_BASE, 'import_max_table_size')
+                    Config::SECTION_BASE, 'export_hmac',
+                    Config::get(Config::SECTION_BASE, 'export_hmac'),
+                    Config::SECTION_BASE, '.import_max_table_size',
+                    Config::getInt(Config::SECTION_BASE, 'import_max_table_size')
             );
             break;
 
@@ -528,7 +534,7 @@ function getMessageBox(int $msg_id): ?string
             $text = 'Der Krieg wurde beendet. Leider war kein Sieg mehr in Aussicht.';
             break;
         case 238:
-            $text = 'Die EMail-Adresse wurde geändert.';
+            $text = 'Die EMail-Adresse wurde geändert. Bitte beachte dass der Login erst wieder möglich ist, sobald die neue Adresse bestätigt wurde.';
             break;
         case 239:
             $text = 'Der Sitterzugang wurde gelöscht.';
@@ -567,7 +573,7 @@ function getMessageBox(int $msg_id): ?string
 
         case 999:
             $text = sprintf('Das Spiel ist zur Zeit pausiert.<br />Die neue Runde startet am %s',
-                date('d.m.Y \u\m H:i', Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
+                    date('d.m.Y \u\m H:i', Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
             break;
         default:
             $text = sprintf('Meldungsnummer konnte nicht gefunden werden: %d', $msg_id);
@@ -579,9 +585,9 @@ function getMessageBox(int $msg_id): ?string
             <a id="close_message">X</a>
             <span>%s</span>
         </div>',
-        $msg_id,
-        ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '',
-        $image, $text, getCspNonce(), $msg_id);
+            $msg_id,
+            ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '',
+            $image, $text, getCspNonce(), $msg_id);
 }
 
 function getBuildingName(int $building_id): string
@@ -676,21 +682,21 @@ function replaceBBCode(string $text): string
 {
     $result = escapeForOutput($text);
     $result = preg_replace(
-        array(
-            '/\[center](.*)\[\/center]/Uis',
-            '/\[url=&quot;(https?:\/\/|www.|https?:\/\/www.)([a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/url]/SiU',
-            '/\[img=&quot;(https?:\/\/[a-z\d\-_.\/]{3,32}\.[a-z]{3,4})&quot;](.*)\[\/img]/SiU',
-            '@\[player=(.+)#(\d{1,8})/]@SUi',
-            '@\[group=(.+)#(\d{1,8})/]@SUi',
-        ),
-        array(
-            '<div class="center">\1</div>',
-            '<a href="\1\2">\3</a>',
-            '<a href="\1" target="_blank"><img src="\1" alt="\2"/></a>',
-            '<a href="/?p=profil&amp;id=\2">\1</a>',
-            '<a href="/?p=gruppe&amp;id=\2">\1</a>',
-        ),
-        $result
+            array(
+                    '/\[center](.*)\[\/center]/Uis',
+                    '/\[url=&quot;(https?:\/\/|www.|https?:\/\/www.)([a-z\d\-_.]{3,32}\.[a-z]{2,4})&quot;](.*)\[\/url]/SiU',
+                    '/\[img=&quot;(https?:\/\/[a-z\d\-_.\/]{3,32}\.[a-z]{3,4})&quot;](.*)\[\/img]/SiU',
+                    '@\[player=(.+)#(\d{1,8})/]@SUi',
+                    '@\[group=(.+)#(\d{1,8})/]@SUi',
+            ),
+            array(
+                    '<div class="center">\1</div>',
+                    '<a href="\1\2">\3</a>',
+                    '<a href="\1" target="_blank"><img src="\1" alt="\2"/></a>',
+                    '<a href="/?p=profil&amp;id=\2">\1</a>',
+                    '<a href="/?p=gruppe&amp;id=\2">\1</a>',
+            ),
+            $result
     );
 
     // the following tags may be nested, so run in a loop until everything is replaced
@@ -699,17 +705,17 @@ function replaceBBCode(string $text): string
         $last_text = $result;
 
         $result = preg_replace(
-            array(
-                '/\[color=red](.*)\[\/color]/is',
-                '/\[([bui])](.*)\[\/\\1]/Uis',
-                '/\[quote](.*)\[\/quote]/Uism'
-            ),
-            array(
-                '<span class="red">\1</span>',
-                '<\1>\2</\1>',
-                '<blockquote>\1</blockquote>'
-            ),
-            $result);
+                array(
+                        '/\[color=red](.*)\[\/color]/is',
+                        '/\[([bui])](.*)\[\/\\1]/Uis',
+                        '/\[quote](.*)\[\/quote]/Uism'
+                ),
+                array(
+                        '<span class="red">\1</span>',
+                        '<\1>\2</\1>',
+                        '<blockquote>\1</blockquote>'
+                ),
+                $result);
     }
 
     return $result;
@@ -762,20 +768,20 @@ function resetAccount(int $blm_user): ?string
 
     // reset all values to the starting defaults
     if (Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $blm_user,
-            Config::getSection(Config::SECTION_STARTING_VALUES)) === null) {
+                    Config::getSection(Config::SECTION_STARTING_VALUES)) === null) {
         return 'reset_' . Database::TABLE_USERS;
     }
 
     // delete all other data associated with this user
     $deleteTables = array(
-        Database::TABLE_JOBS => 'user_id',
-        Database::TABLE_MARKET => 'Von',
-        Database::TABLE_SITTER => 'user_id',
-        Database::TABLE_GROUP_RIGHTS => 'user_id',
-        Database::TABLE_GROUP_CASH => 'user_id',
-        Database::TABLE_GROUP_MESSAGES => 'Von',
-        Database::TABLE_CONTRACTS => 'Von',
-        Database::TABLE_STATISTICS => 'user_id',
+            Database::TABLE_JOBS => 'user_id',
+            Database::TABLE_MARKET => 'Von',
+            Database::TABLE_SITTER => 'user_id',
+            Database::TABLE_GROUP_RIGHTS => 'user_id',
+            Database::TABLE_GROUP_CASH => 'user_id',
+            Database::TABLE_GROUP_MESSAGES => 'Von',
+            Database::TABLE_CONTRACTS => 'Von',
+            Database::TABLE_STATISTICS => 'user_id',
     );
     foreach ($deleteTables as $table => $field) {
         if (Database::getInstance()->deleteTableEntryWhere($table, array($field => $blm_user)) === null) {
@@ -792,7 +798,7 @@ function resetAccount(int $blm_user): ?string
     $data = Database::getInstance()->getAllContractsByAnEquals($blm_user);
     foreach ($data as $entry) {
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['Von'],
-                array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
+                        array('Lager' . $entry['Was'] => $entry['Menge'])) !== 1) {
             return 'retract_contract_' . Database::TABLE_USERS;
         }
     }
@@ -944,7 +950,7 @@ function createPaginationTable(string $id, string $linkBase, int $currentPage, i
         $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
             $pages[] = sprintf('<a href="%s&amp;%s=%d%s" id="%s_%d">%d</a>',
-                $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $id, $page + 1, $page + 1);
+                    $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $id, $page + 1, $page + 1);
         } else {
             $pages[] = sprintf('<span id="%s_active_%d">%d</span>', $id, $page + 1, $page + 1);
         }
@@ -1083,34 +1089,59 @@ function createRandomPassword(): string
     return str_replace('+', '_', base64_encode(openssl_random_pseudo_bytes(12)));
 }
 
-function sendMail(string $recipient, string $subject, string $message): bool
+function sendMail(string $recipient, string $subject, string $templateName, array $replacements): bool
 {
-    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-        return true;
-    }
-
     if (Config::getBoolean(Config::SECTION_BASE, 'redirect_all_mails_to_admin')) {
         $subject .= ' (original recipient ' . $recipient . ')';
         $recipient = Config::get(Config::SECTION_BASE, 'admin_email');
     }
 
-    $headers = array(
-        'From' => sprintf('%s <%s>', Config::get(Config::SECTION_BASE, 'admin_name'), Config::get(Config::SECTION_BASE, 'admin_email')),
-        'Reply-To' => sprintf('%s <%s>', Config::get(Config::SECTION_BASE, 'admin_name'), Config::get(Config::SECTION_BASE, 'admin_email')),
-        'X-Mailer' => 'PHP/blm2-' . game_version,
-        'Date' => date(DATE_RFC2822),
-        'MIME-Version' => '1.0',
-        'Content-type' => 'text/html; charset=utf-8',
-    );
+    // load template
+    $html = file_get_contents(__DIR__ . '/../mails/' . $templateName . '.html.tpl');
+    $txt = file_get_contents(__DIR__ . '/../mails/' . $templateName . '.txt.tpl');
 
-    return mail($recipient, $subject, $message, $headers, '-f ' . Config::get(Config::SECTION_BASE, 'admin_email'));
+    // fix replacements
+    $replacements['{{GAME_TITLE}}'] = Config::get(Config::SECTION_BASE, 'game_title');
+    $replacements['{{GAME_URL}}'] = Config::get(Config::SECTION_BASE, 'base_url');
+    $replacements['{{ADMIN_EMAIL}}'] = Config::get(Config::SECTION_BASE, 'admin_email');
+    $replacements['{{ADMIN_NAME}}'] = Config::get(Config::SECTION_BASE, 'admin_name');
+
+    // replace placeholders
+    foreach ($replacements as $search => $replace) {
+        $html = str_replace($search, is_array($replace) ? implode("\n", preg_filter('/^(.*)$/', '<li>$0</li>', $replace)) : $replace, $html);
+        $txt = str_replace($search, is_array($replace) ? implode("\n", $replace) : $replace, $txt);
+    }
+
+    $mail = new PHPMailer(true);
+    PHPMailer::$validator = 'html5';
+    try {
+        $mail->isSMTP();
+        $mail->Host = Config::get(Config::SECTION_MAIL, 'hostname');
+        $mail->Port = Config::getInt(Config::SECTION_MAIL, 'port');
+        $mail->SMTPAutoTLS = true;
+        if (Config::getBoolean(Config::SECTION_MAIL, 'authentication')) {
+            $mail->Username = Config::get(Config::SECTION_MAIL, 'username');
+            $mail->Password = Config::get(Config::SECTION_MAIL, 'password');
+        }
+        $mail->setFrom(Config::get(Config::SECTION_BASE, 'admin_email'), Config::get(Config::SECTION_BASE, 'admin_name'));
+        $mail->addAddress($recipient);
+        $mail->isHTML();
+        $mail->CharSet = "UTF-8";
+        $mail->Subject = $subject;
+        $mail->Body = $html;
+        $mail->AltBody = $txt;
+        return $mail->send();
+    } catch (Exception $e) {
+        trigger_error('Could not send mail. Error: ' . $mail->ErrorInfo);
+        return false;
+    }
 }
 
 function createNavigationLink(string $target, string $text, ?string $sitterRightsRequired = null): string
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
         return sprintf('<div class="NaviLink"><a href="/?p=%s" id="link_%s" class="%s">%s</a></div>%s',
-            $target, $target, $target === getCurrentPage() ? 'active' : 'inactive', $text, "\n");
+                $target, $target, $target === getCurrentPage() ? 'active' : 'inactive', $text, "\n");
     }
     return '';
 }
@@ -1251,16 +1282,16 @@ function mafiaRequirementsMet(float $points): bool
 function calculateProductionDataForPlayer(int $item_id, int $plantage_level, int $research_level): array
 {
     return array(
-        'Menge' => ($plantage_level * Config::getInt(Config::SECTION_PLANTAGE, 'production_amount_per_level')) + ($item_id * Config::getInt(Config::SECTION_PLANTAGE, 'production_amount_per_item_id')) + Config::getInt(Config::SECTION_PLANTAGE, 'production_base_amount') + ($research_level * Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_amount_per_level')),
-        'Kosten' => round(Config::getInt(Config::SECTION_PLANTAGE, 'production_base_cost') + ($research_level * Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_cost_per_level')), 2)
+            'Menge' => ($plantage_level * Config::getInt(Config::SECTION_PLANTAGE, 'production_amount_per_level')) + ($item_id * Config::getInt(Config::SECTION_PLANTAGE, 'production_amount_per_item_id')) + Config::getInt(Config::SECTION_PLANTAGE, 'production_base_amount') + ($research_level * Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_amount_per_level')),
+            'Kosten' => round(Config::getInt(Config::SECTION_PLANTAGE, 'production_base_cost') + ($research_level * Config::getInt(Config::SECTION_RESEARCH_LAB, 'production_cost_per_level')), 2)
     );
 }
 
 function calculateResearchDataForPlayer(int $item_id, int $research_lab_level, int $research_level, int $level_increment = 1): array
 {
     return array(
-        'Kosten' => round((Config::getInt(Config::SECTION_RESEARCH_LAB, 'cost_item_id_factor') * $item_id) + (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_cost'), $research_level + $level_increment)), 2),
-        'Dauer' => (int)floor(max(Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_min_duration'), (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_duration'), $research_level + $level_increment)) * pow(1 - Config::getFloat(Config::SECTION_RESEARCH_LAB, 'bonus_factor'), $research_lab_level))),
+            'Kosten' => round((Config::getInt(Config::SECTION_RESEARCH_LAB, 'cost_item_id_factor') * $item_id) + (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_cost') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_cost'), $research_level + $level_increment)), 2),
+            'Dauer' => (int)floor(max(Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_min_duration'), (Config::getInt(Config::SECTION_RESEARCH_LAB, 'research_base_duration') * pow(Config::getFloat(Config::SECTION_RESEARCH_LAB, 'research_factor_duration'), $research_level + $level_increment)) * pow(1 - Config::getFloat(Config::SECTION_RESEARCH_LAB, 'bonus_factor'), $research_lab_level))),
     );
 }
 
@@ -1299,8 +1330,8 @@ function calculateBuildingDataForPlayer(int $building_id, array $player, int $le
     }
 
     $result = array(
-        'Kosten' => round(Config::getInt($section, 'base_cost') * pow(Config::getFloat($section, 'factor_cost'), $player['Gebaeude' . $building_id] + $level_increment), 2),
-        'Dauer' => Config::getInt($section, 'base_duration') * pow(Config::getFloat($section, 'factor_duration'), $player['Gebaeude' . $building_id] + $level_increment),
+            'Kosten' => round(Config::getInt($section, 'base_cost') * pow(Config::getFloat($section, 'factor_cost'), $player['Gebaeude' . $building_id] + $level_increment), 2),
+            'Dauer' => Config::getInt($section, 'base_duration') * pow(Config::getFloat($section, 'factor_duration'), $player['Gebaeude' . $building_id] + $level_increment),
     );
 
     $result['Dauer'] *= pow(1 - Config::getFloat(Config::SECTION_BUILDING_YARD, 'bonus_factor'), $player['Gebaeude' . building_building_yard]);
@@ -1315,13 +1346,13 @@ function calculateSellPrice(int $item_id, int $resarch_level, int $shop_level, i
         $rate = calculateSellRates()[$item_id];
     }
     return round(
-        (Config::getFloat(Config::SECTION_SHOP, 'item_price_base')
-            + $resarch_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_research_bonus')
-            + $shop_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_shop_bonus')
-            + $school_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_school_bonus')
-            + $item_id * Config::getFloat(Config::SECTION_SHOP, 'item_price_item_id_factor')
-        ) * $rate
-        , 2);
+            (Config::getFloat(Config::SECTION_SHOP, 'item_price_base')
+                    + $resarch_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_research_bonus')
+                    + $shop_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_shop_bonus')
+                    + $school_level * Config::getFloat(Config::SECTION_SHOP, 'item_price_school_bonus')
+                    + $item_id * Config::getFloat(Config::SECTION_SHOP, 'item_price_item_id_factor')
+            ) * $rate
+            , 2);
 }
 
 function calculateSellRates(): array
@@ -1347,8 +1378,8 @@ function calculateInterestRates(): array
         mt_srand(intval(date('ymd', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     }
     $result = array(
-        'Debit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_max')),
-        'Credit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max'))
+            'Debit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_max')),
+            'Credit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max'))
     );
     mt_srand(random_int(0, PHP_INT_MAX));
     return $result;
@@ -1375,8 +1406,8 @@ function getLastIncomeTimestamp(): int
 function getIncome(int $shop_level, int $kebab_stand_level): int
 {
     return (Config::getInt(Config::SECTION_BASE, 'income_base')
-        + ($shop_level * Config::getInt(Config::SECTION_SHOP, 'income_bonus'))
-        + ($kebab_stand_level * Config::getInt(Config::SECTION_KEBAB_STAND, 'income_bonus')));
+            + ($shop_level * Config::getInt(Config::SECTION_SHOP, 'income_bonus'))
+            + ($kebab_stand_level * Config::getInt(Config::SECTION_KEBAB_STAND, 'income_bonus')));
 }
 
 function createBBProfileLink(int $user_id, string $user_name): string
@@ -1443,75 +1474,73 @@ function handleRoundEnd(): void
     $nextStart = strtotime(date('Y-m-d H:00:00', time() + Config::getInt(Config::SECTION_BASE, 'game_pause_duration')));
 
     // determine information for mail
-    $expenseBuildings = '';
+    $expenseBuildings = array();
     foreach (Database::getInstance()->getLeaderBuildings(3) as $entry) {
-        $expenseBuildings .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            Config::get(Config::SECTION_BASE, 'base_url'), $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenGebaeude']));
+        $expenseBuildings[] = sprintf('%s (%s)', escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenGebaeude']));
     }
-    $expenseResearch = '';
+    $expenseResearch = array();
     foreach (Database::getInstance()->getLeaderResearch(3) as $entry) {
-        $expenseResearch .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            Config::get(Config::SECTION_BASE, 'base_url'), $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenForschung']));
+        $expenseResearch[] = sprintf('%s (%s)', escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenForschung']));
     }
-    $expenseMafia = '';
+    $expenseMafia = array();
     foreach (Database::getInstance()->getLeaderMafia(3) as $entry) {
-        $expenseMafia .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            Config::get(Config::SECTION_BASE, 'base_url'), $entry['ID'], escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenMafia']));
+        $expenseMafia[] = sprintf('%s (%s)', escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenMafia']));
     }
-    $rankingPoints = '';
+    $godfatherMafia = array();
+    foreach (Database::getInstance()->getMafiaGodfather(3) as $entry) {
+        $godfatherMafia[] = sprintf('%s (führte %s Aktionen aus, davon %s erfolgreich)', escapeForOutput($entry['senderName']), formatPoints($entry['cnt']), formatPoints($entry['success']));
+    }
+    $victimMafia = array();
+    foreach (Database::getInstance()->getMafiaVictim(3) as $entry) {
+        $victimMafia[] = sprintf('%s (war das Ziel von %s Aktionen, davon %s erfolgreich)', escapeForOutput($entry['receiverName']), formatPoints($entry['cnt']), formatPoints($entry['success']));
+    }
+    $attacksMafia = array();
+    foreach (Database::getInstance()->getMafiaAttackTypes() as $entry) {
+        switch ($entry['action']) {
+            case 'HEIST':
+                $attacksMafia[] = sprintf('Diebstahl (%s Angriffe, davon %s erfolgreich. Geklaute Menge: %s Tonnen)',
+                        formatPoints($entry['cnt']),
+                        formatPoints($entry['success']),
+                        formatCurrency($entry['amount'] / 1000, false, true, 0));
+                break;
+            case 'ROBBERY':
+                $attacksMafia[] = sprintf('Raub (%s Angriffe, davon %s erfolgreich. Geraubte Summe: %s)',
+                        formatPoints($entry['cnt']),
+                        formatPoints($entry['success']),
+                        formatCurrency($entry['amount']));
+                break;
+            case 'ESPIONAGE':
+                $attacksMafia[] = sprintf('Spionage (%s Angriffe, davon %s erfolgreich)',
+                        formatPoints($entry['cnt']),
+                        formatPoints($entry['success']));
+                break;
+            case 'ATTACK':
+                $attacksMafia[] = sprintf('Anschlag (%s Angriffe, davon %s erfolgreich)',
+                        formatPoints($entry['cnt']),
+                        formatPoints($entry['success']));
+                break;
+        }
+    }
+    $rankingPoints = array();
     $eternalPoints = 5;
     foreach (Database::getInstance()->getRanglisteUserEntries(0, 5) as $entry) {
-        $rankingPoints .= sprintf('<li><a href="%s/?p=profil&amp;id=%d">%s</a> (%s)</li>',
-            Config::get(Config::SECTION_BASE, 'base_url'), $entry['BenutzerID'], escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
+        $rankingPoints[] = sprintf('%s (%s)', escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
         if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
             Database::getInstance()->rollBack();
             die('Could not update eternal points for player ' . $entry['ID']);
         }
     }
 
-    $mail = <<<EOF
-<html lang="de">
-<body>
-<p>
-Hallo __NAME__,
-</p>
-
-<p>
-die aktuelle Runde des Spiels "<a href="__URL__">__TITLE__</a>" geht zu Ende.<br/>
-Die Auswertung ist abgeschlossen und folgende Spieler stachen besonders heraus:
-</p>
-
-<h3>Höchste Ausgaben für Gebäude</h3>
-<ol>
-    $expenseBuildings
-</ol>
-<h3>Höchste Ausgaben für Forschung</h3>
-<ol>
-    $expenseResearch
-</ol>
-<h3>Höchste Ausgaben für die Mafia</h3>
-<ol>
-    $expenseMafia
-</ol>
-
-<h3>Die höchsten Punkstände</h3>
-<ol>
-    $rankingPoints
-</ol>
-
-<p>
-Die nächste Runde startet am __NEXT_START__, halte dich bereit.
-</p>
-
-Grüsse,<br/>
-__BETREIBER__
-</body>
-EOF;
-
-    $mail = str_replace(
-        array('__TITLE__', '__NEXT_START__', '__BETREIBER__', '__URL__'),
-        array(Config::get(Config::SECTION_BASE, 'game_title'), formatDateTime($nextStart), Config::get(Config::SECTION_BASE, 'admin_name'), Config::get(Config::SECTION_BASE, 'base_url')),
-        $mail);
+    $replacements = array(
+            '{{EXPENSE_BUILDINGS_LIST}}' => $expenseBuildings,
+            '{{EXPENSE_RESEARCH_LIST}}' => $expenseResearch,
+            '{{EXPENSE_MAFIA_LIST}}' => $expenseMafia,
+            '{{MAFIA_GODFATHER_LIST}}' => $godfatherMafia,
+            '{{MAFIA_VICTIM_LIST}}' => $victimMafia,
+            '{{MAFIA_ATTACKS_LIST}}' => $attacksMafia,
+            '{{POINTS_LIST}}' => $rankingPoints,
+            '{{NEXT_START}}' => formatDateTime($nextStart),
+    );
 
     // reset all accounts
     $players = Database::getInstance()->getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin();
@@ -1533,15 +1562,16 @@ EOF;
     Database::getInstance()->commit();
 
     $tables = array(Database::TABLE_JOBS, Database::TABLE_LOG_BANK, Database::TABLE_LOG_SHOP,
-        Database::TABLE_LOG_GROUP_CASH, Database::TABLE_LOG_LOGIN, Database::TABLE_LOG_MAFIA,
-        Database::TABLE_LOG_MARKET, Database::TABLE_LOG_MESSAGES, Database::TABLE_LOG_CONTRACTS);
+            Database::TABLE_LOG_GROUP_CASH, Database::TABLE_LOG_LOGIN, Database::TABLE_LOG_MAFIA,
+            Database::TABLE_LOG_MARKET, Database::TABLE_LOG_MESSAGES, Database::TABLE_LOG_CONTRACTS);
     $status = Database::getInstance()->truncateTables($tables);
     if ($status !== null) {
         Database::getInstance()->rollBack();
         die('Could not reset tables with status ' . $status);
     }
 
-    if (Database::getInstance()->updateTableEntry(Database::TABLE_RUNTIME_CONFIG, null, array('conf_value' => $nextStart), array('conf_name' => 'roundstart')) !== 1) {
+    if (Database::getInstance()->updateTableEntry(Database::TABLE_RUNTIME_CONFIG, null,
+                    array('conf_value' => $nextStart), array('conf_name = :whr0' => 'roundstart')) !== 1) {
         Database::getInstance()->rollBack();
         die('Could not set new roundstart');
     }
@@ -1549,7 +1579,8 @@ EOF;
     // send the mails to all active players
     foreach ($players as $player) {
         if ($player['EMailAct'] !== null || $player['LastLogin'] === null) continue;
-        if (!sendMail($player['EMail'], Config::get(Config::SECTION_BASE, 'game_title') . ': Rundenende', str_replace('__NAME__', escapeForOutput($player['Name']), $mail))) {
+        $replacements['{{USERNAME}}'] = escapeForOutput($player['Name']);
+        if (!sendMail($player['EMail'], Config::get(Config::SECTION_BASE, 'game_title') . ': Rundenende', 'round_end', $replacements)) {
             trigger_error(sprintf('Could not send mail to %s', $player['EMail']), E_USER_WARNING);
         }
     }
@@ -1592,7 +1623,7 @@ function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId,
 {
     if ($myPoints < Config::getFloat(Config::SECTION_MAFIA, 'min_points')) return null;
     $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup,
-        Config::getFloat(Config::SECTION_MAFIA, 'points_factor'), $pointsFactorCutoff = Config::getInt(Config::SECTION_MAFIA, 'points_factor_cutoff'));
+            Config::getFloat(Config::SECTION_MAFIA, 'points_factor'), $pointsFactorCutoff = Config::getInt(Config::SECTION_MAFIA, 'points_factor_cutoff'));
     $entries = array();
     foreach ($data as $entry) {
         $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);
@@ -1746,25 +1777,25 @@ function getAllFields(string $prefix, int $count, string $separator = ','): stri
 function getTablesForGdprExport(): array
 {
     return array(
-        Database::TABLE_JOBS => 'user_id',
-        Database::TABLE_GROUP_CASH => 'user_id',
-        Database::TABLE_GROUP_LOG => 'Spieler',
-        Database::TABLE_GROUP_RIGHTS => 'user_id',
-        Database::TABLE_GROUP_MESSAGES => 'Von',
-        Database::TABLE_LOG_BANK => 'playerId',
-        Database::TABLE_LOG_SHOP => 'playerId',
-        Database::TABLE_LOG_GROUP_CASH => array('senderId', 'receiverId'),
-        Database::TABLE_LOG_LOGIN => 'playerId',
-        Database::TABLE_LOG_MAFIA => array('senderId', 'receiverId'),
-        Database::TABLE_LOG_MARKET => array('sellerId', 'buyerId'),
-        Database::TABLE_LOG_MESSAGES => array('senderId', 'receiverId'),
-        Database::TABLE_LOG_CONTRACTS => array('senderId', 'receiverId'),
-        Database::TABLE_MARKET => 'Von',
-        Database::TABLE_USERS => 'ID',
-        Database::TABLE_MESSAGES => array('Von', 'An'),
-        Database::TABLE_SITTER => 'user_id',
-        Database::TABLE_STATISTICS => 'user_id',
-        Database::TABLE_CONTRACTS => array('Von', 'An'),
+            Database::TABLE_JOBS => 'user_id',
+            Database::TABLE_GROUP_CASH => 'user_id',
+            Database::TABLE_GROUP_LOG => 'Spieler',
+            Database::TABLE_GROUP_RIGHTS => 'user_id',
+            Database::TABLE_GROUP_MESSAGES => 'Von',
+            Database::TABLE_LOG_BANK => 'playerId',
+            Database::TABLE_LOG_SHOP => 'playerId',
+            Database::TABLE_LOG_GROUP_CASH => array('senderId', 'receiverId'),
+            Database::TABLE_LOG_LOGIN => 'playerId',
+            Database::TABLE_LOG_MAFIA => array('senderId', 'receiverId'),
+            Database::TABLE_LOG_MARKET => array('sellerId', 'buyerId'),
+            Database::TABLE_LOG_MESSAGES => array('senderId', 'receiverId'),
+            Database::TABLE_LOG_CONTRACTS => array('senderId', 'receiverId'),
+            Database::TABLE_MARKET => 'Von',
+            Database::TABLE_USERS => 'ID',
+            Database::TABLE_MESSAGES => array('Von', 'An'),
+            Database::TABLE_SITTER => 'user_id',
+            Database::TABLE_STATISTICS => 'user_id',
+            Database::TABLE_CONTRACTS => array('Von', 'An'),
     );
 }
 

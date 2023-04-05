@@ -37,8 +37,8 @@ if (!Database::getInstance()->existsTableEntry(Database::TABLE_USERS, array('ID'
 switch ($testClass) {
     case 'BankTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-            'Geld' => 100000,
-            'Bank' => 50000,
+                'Geld' => 100000,
+                'Bank' => 50000,
         ));
         if ($testMethod === 'testTextFieldPreFilled') {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 100001, 'Bank' => 123.01, 'Gruppe' => 1));
@@ -59,14 +59,14 @@ switch ($testClass) {
 
     case 'BuildingTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-            'Gebaeude' . building_plantage => 8,
-            'Gebaeude' . building_building_yard => 80,
+                'Gebaeude' . building_plantage => 8,
+                'Gebaeude' . building_building_yard => 80,
         ));
         break;
 
     case 'GroupTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-            'Gebaeude' . building_plantage => 8,
+                'Gebaeude' . building_plantage => 8,
         ));
         break;
 
@@ -78,12 +78,12 @@ switch ($testClass) {
 
     case 'PlantageTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-            'Geld' => 15000,
-            'Gebaeude' . building_plantage => 30,
-            'Gebaeude' . building_research_lab => 3,
-            'Forschung' . item_potatoes => 2,
-            'Forschung' . item_carrots => 1,
-            'Forschung' . item_kiwi => 20,
+                'Geld' => 15000,
+                'Gebaeude' . building_plantage => 30,
+                'Gebaeude' . building_research_lab => 3,
+                'Forschung' . item_potatoes => 2,
+                'Forschung' . item_carrots => 1,
+                'Forschung' . item_kiwi => 20,
         ));
         break;
 
@@ -91,25 +91,25 @@ switch ($testClass) {
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Geld' => 15000));
         if ($testMethod !== 'testNotBuilt') {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-                'Gebaeude' . building_research_lab => 10,
+                    'Gebaeude' . building_research_lab => 10,
             ));
         }
         break;
 
     case 'ShopTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-            'Lager' . item_potatoes => 100,
-            'Lager' . item_carrots => 50,
-            'Lager' . item_apples => 27,
+                'Lager' . item_potatoes => 100,
+                'Lager' . item_carrots => 50,
+                'Lager' . item_apples => 27,
         ));
         break;
 
     case 'MafiaTests':
         Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-            'Lager' . item_potatoes => 100,
-            'Lager' . item_carrots => 50,
-            'Lager' . item_apples => 27,
-            'Bank' => 12345,
+                'Lager' . item_potatoes => 100,
+                'Lager' . item_carrots => 50,
+                'Lager' . item_apples => 27,
+                'Bank' => 12345,
         ));
         $additional = getOrDefault($_GET, 'additional', 0);
         switch ($additional) {
@@ -123,15 +123,15 @@ switch ($testClass) {
 
             case 2:
                 Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-                    'Punkte' => 7500,
-                    'Gebaeude' . building_pizzeria => 50,
+                        'Punkte' => 7500,
+                        'Gebaeude' . building_pizzeria => 50,
                 ));
                 break;
 
             case 3:
                 Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-                    'Punkte' => 11250,
-                    'Gebaeude' . building_fence => 100,
+                        'Punkte' => 11250,
+                        'Gebaeude' . building_fence => 100,
                 ));
                 break;
         }
@@ -148,6 +148,16 @@ switch ($testClass) {
                     deleteAccount($player['ID']);
                 }
             }
+        }
+        break;
+
+    case 'MailingTests':
+        if ($testMethod === 'testPasswordRecovery') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Passwort' => 'foobar'));
+            Database::getInstance()->createTableEntry(Database::TABLE_PASSWORD_RESET, array(
+                    'user_id' => $id,
+                    'token' => '07313f0e320f22cbfa35cfc220508eb3ff457c7e'
+            ));
         }
         break;
 

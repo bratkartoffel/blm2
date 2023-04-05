@@ -61,14 +61,12 @@ if (Database::getInstance()->createUser($name, $email, $email_activation_code, $
 }
 Database::getInstance()->commit();
 
-$email_activation_link = Config::get(Config::SECTION_BASE, 'base_url') . '/actions/activate.php?user=' . urlencode($name) . '&amp;code=' . $email_activation_code;
-if (!sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Aktivierung Ihres Accounts',
-    '<html lang="de"><body><h3>Hallo ' . escapeForOutput($name) . ' und Willkommen beim Bioladenmanager 2,</h3>
-    <p>Doch bevor Sie Ihr eigenes Imperium aufbauen können, müssen Sie Ihren Account aktivieren. Klicken Sie hierzu bitte auf folgenden Link:</p>
-    <p><a href="' . $email_activation_link . '">' . $email_activation_link . '</a></p>
-    <p>Falls Sie sich nicht bei diesem Spiel registriert haben, so leiten Sie die EMail bitte ohne Bearbeitung weiter an: ' . Config::get(Config::SECTION_BASE, 'admin_email') . '</p>
-    Grüsse ' . Config::get(Config::SECTION_BASE, 'admin_name') . '</body></html>'
-)) {
+$email_activation_link = sprintf('%s/actions/activate.php?user=%s&code=%s', Config::get(Config::SECTION_BASE, 'base_url'), urlencode($name), $email_activation_code);
+
+if (!sendMail($email, Config::get(Config::SECTION_BASE, 'game_title') . ': Registrierung', 'registration', array(
+    '{{USERNAME}}' => escapeForOutput($name),
+    '{{ACTIVATION_LINK}}' => $email_activation_link,
+))) {
     redirectTo(sprintf('/?p=anmelden&name=%s', $name), 144, __LINE__);
 }
 

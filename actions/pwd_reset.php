@@ -11,7 +11,7 @@ require_once __DIR__ . '/../include/captcha.class.php';
 
 ob_start();
 
-$email = getOrDefault($_POST, 'email');
+$email = trim(getOrDefault($_POST, 'email'));
 
 function sendRecoveryMail(string $email, string $name, string $resetLink): bool
 {

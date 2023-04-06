@@ -19,7 +19,7 @@ foreach ($diplomacy_db as $entry) {
     $diplomacy[intval($entry['Typ'])][] = $entry;
 }
 
-function printDiplomacyTable($diplomacy, $name, $hasRights)
+function printDiplomacyTable($diplomacy, $name, $hasRights): void
 {
     ?>
     <table class="Liste" id="diplomacy_<?= $name; ?>" data-count="<?= count($diplomacy); ?>">

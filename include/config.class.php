@@ -42,7 +42,7 @@ class Config
         $this->iniFile = array_replace_recursive($defaultsIni, $userIni);
     }
 
-    public static function enhanceFromDb(?array $executeAndExtractRows)
+    public static function enhanceFromDb(?array $executeAndExtractRows): void
     {
         if ($executeAndExtractRows === null) return;
         foreach ($executeAndExtractRows as $row) {

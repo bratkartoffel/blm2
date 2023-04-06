@@ -74,10 +74,10 @@ requireEntryFound($entry, '/?p=admin_gruppe');
         <form action="/actions/admin_gruppe.php" method="post">
             <input type="hidden" name="a" value="2"/>
             <input type="hidden" name="id" value="<?= $id; ?>"/>
-            <input type="hidden" name="user_id" value="<?= escapeForOutput($entry['UserID']); ?>"/>
+            <input type="hidden" name="user_id" value="<?= $entry['UserID']; ?>"/>
             <input type="hidden" name="o" value="<?= $offset; ?>"/>
             <div>
-                <label for="amount_<?= escapeForOutput($entry['UserID']); ?>"><?php
+                <label for="amount_<?= $entry['UserID']; ?>"><?php
                     echo createProfileLink($entry['UserID'], $entry['UserName'], 'admin_benutzer_bearbeiten');
                     if ($entry['IstMitglied'] != 1 && $entry['UserID'] !== null) {
                         echo ' (ausgetreten)';
@@ -86,7 +86,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
                 <input type="number" name="amount" id="amount_<?= $entry['UserID']; ?>" size="12" min="0" step="0.01"
                        value="<?= $entry['amount']; ?>"/> €
                 <input type="submit" value="Speichern"
-                       id="cash_save_<?= escapeForOutput($entry['UserID']); ?>"/>
+                       id="cash_save_<?= $entry['UserID']; ?>"/>
             </div>
         </form>
         <?php

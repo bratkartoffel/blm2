@@ -72,13 +72,13 @@ const count_wares = item_raspberry;
 // number of implemented items
 const count_buildings = building_bank;
 
-function abortWithErrorPage(string $body)
+function abortWithErrorPage(string $body): void
 {
     http_response_code(500);
     die(sprintf('<!DOCTYPE html><html lang="de"><body><img src="/pics/big/clock.webp" alt="maintenance"/><h2>%s</h2></body></html>', $body));
 }
 
-function verifyInstallation()
+function verifyInstallation(): void
 {
     if (!file_exists(__DIR__ . '/../config/config.ini')) {
         abortWithErrorPage('<h2 class="red">Ungültige Installation</h2><p>Es konnte keine <code>config.ini</code> gefunden werden.</p>');
@@ -587,7 +587,7 @@ function getMessageBox(int $msg_id): ?string
         </div>',
             $msg_id,
             ($msg_id == 207 || $msg_id == 220 || $msg_id == 222) ? 'reload-chefbox' : '',
-            $image, $text, getCspNonce(), $msg_id);
+            $image, $text);
 }
 
 function getBuildingName(int $building_id): string
@@ -1623,7 +1623,7 @@ function createPlayerDropdownForMafia(int $opponent, float $myPoints, int $myId,
 {
     if ($myPoints < Config::getFloat(Config::SECTION_MAFIA, 'min_points')) return null;
     $data = Database::getInstance()->getAllPlayerIdAndNameWhereMafiaPossible($myPoints, $myId, $myGroup,
-            Config::getFloat(Config::SECTION_MAFIA, 'points_factor'), $pointsFactorCutoff = Config::getInt(Config::SECTION_MAFIA, 'points_factor_cutoff'));
+            Config::getFloat(Config::SECTION_MAFIA, 'points_factor'), Config::getInt(Config::SECTION_MAFIA, 'points_factor_cutoff'));
     $entries = array();
     foreach ($data as $entry) {
         $entries[] = sprintf('<option value="%d"%s>%s</option>', $entry['ID'], $entry['ID'] == $opponent ? ' selected' : '', $entry['Name']);

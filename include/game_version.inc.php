@@ -5,7 +5,7 @@
  *
  * Please see LICENCE.md for complete licence text.
  */
-function getVersionExtra()
+function getVersionExtra(): ?string
 {
     $version_extra = null;
     $git_head = __DIR__ . '/../.git/HEAD';

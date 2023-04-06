@@ -12,7 +12,7 @@ ob_start();
 requireLogin();
 restrictSitter('Gruppe');
 
-function pinMessage($id, $pinned)
+function pinMessage($id, $pinned): void
 {
     $player = Database::getInstance()->getPlayerNameAndGroupIdAndGroupRightsById($_SESSION['blm_user']);
 

@@ -17,7 +17,7 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
     $auftraege[$auftraege_db[$i]['item'] % job_type_factor] = $auftraege_db[$i];
 }
 
-function printBuildingInformation($playerData, $auftraege, $buildingId, $buildingDescription)
+function printBuildingInformation($playerData, $auftraege, $buildingId, $buildingDescription): void
 {
     $buildingAttribute = 'Gebaeude' . $buildingId;
     ?>

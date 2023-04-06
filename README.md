@@ -29,13 +29,13 @@ Selbst mit einer Edge-Mobilfunkverbindung ist das Spiel noch sehr gut spielbar.
   - mcrypt
   - pdo_mysql
   - zip
-- MariaDB (10.1+) oder MySQL (5.7+)
+- MariaDB 10.2+ (oder MySQL 8.0+)
 
 Die automatischen Tests laufen mit:
 
-- Apache `2.4.54`
+- Apache `2.4.56`
 - PHP `7.4.33`
-- MariaDB `10.10.2`.
+- MariaDB `10.2.44`.
 
 Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Jannuar 2023) mit:
 

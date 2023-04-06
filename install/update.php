@@ -126,7 +126,7 @@ $scripts = array();
 {
     $scripts = glob('sql/*.sql');
     if ($scripts === false) {
-        print_status($step, status_fail, sprintf('Could not list scripts in install/sql/, please check access permissions'));
+        print_status($step, status_fail, 'Could not list scripts in install/sql/, please check access permissions');
     }
     sort($scripts);
     print_status($step, status_ok, sprintf('Found %d scripts', count($scripts)));

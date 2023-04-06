@@ -60,7 +60,7 @@ public abstract class AbstractTest {
             (int) (Duration.between(LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0), LocalDateTime.now()).toSeconds() / 3)
     );
     public static final String LOCALHOST = "localhost:8080";
-    public static final String INBUCKET_HOST = "localhost:8081";
+    public static final String INBUCKET_HOST = "localhost:9000";
     private static final Logger log = LoggerFactory.getLogger(AbstractTest.class);
     private static final WebDriver driver = SeleniumConfig.getWebDriver();
     private static final HttpClient httpClient = HttpClient.newHttpClient();

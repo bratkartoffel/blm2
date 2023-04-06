@@ -2,7 +2,7 @@
 # Copyright (c) 2023 Simon Frankenberger
 # Please see LICENCE.md for complete licence text.
 
-FROM php:7.4-apache
+FROM php:7.4.33-apache
 
 # update system
 RUN apt-get update \

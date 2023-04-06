@@ -145,7 +145,7 @@ class Database
             $conditions[] = sprintf('%s = :whr%d', $field, ++$i);
             $fields['whr' . $i] = $value;
         }
-        $sql = sprintf('SELECT 1 AS found WHERE EXISTS(SELECT 1 FROM %s WHERE %s)', $table, implode(' AND ', $conditions));
+        $sql = sprintf('SELECT 1 as found FROM %s WHERE %s', $table, implode(' AND ', $conditions));
         return $this->executeAndExtractField($this->prepare($sql), 'found', $fields) !== null;
     }
 
@@ -492,7 +492,6 @@ SELECT action, COUNT(*) AS cnt, SUM(success) AS success, SUM(amount) as amount F
             FROM ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id
             ORDER BY s.AusgabenProduktion DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
         return $this->executeAndExtractRows($stmt);
     }
 
@@ -502,7 +501,6 @@ SELECT action, COUNT(*) AS cnt, SUM(success) AS success, SUM(amount) as amount F
             FROM ' . self::TABLE_USERS . ' m INNER JOIN ' . self::TABLE_STATISTICS . ' s ON m.ID = s.user_id
             ORDER BY s.EinnahmenZinsen DESC, m.ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
         return $this->executeAndExtractRows($stmt);
     }
 
@@ -513,7 +511,6 @@ SELECT action, COUNT(*) AS cnt, SUM(success) AS success, SUM(amount) as amount F
             WHERE ID > 0
             ORDER BY IgmGesendet DESC, ID LIMIT 0, :limit');
         $stmt->bindParam('limit', $count, PDO::PARAM_INT);
-        $result = $this->executeAndExtractRows($stmt);
         return $this->executeAndExtractRows($stmt);
     }
 

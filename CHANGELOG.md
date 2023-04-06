@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Changed
+
+- cleanup sources
+- document minimum supported mariadb version (`10.1 -> 10.2`)
+- run tests against the minimum supported php and mariadb versions
 
 ## [1.12.0] - 2023-04-05
 
@@ -422,7 +426,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Set database timezone on startup
-- Fixed warning when viewing profile of an user, which hasn't logged in yet
+- Fixed warning when viewing profile of a user, which hasn't logged in yet
 - Minor fixes to style issues
 
 ### Changed

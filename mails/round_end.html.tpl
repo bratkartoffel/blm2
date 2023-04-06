@@ -37,7 +37,7 @@
     {{MAFIA_VICTIM_LIST}}
 </ol>
 
-<h3>MMafia Aktionen nach Typ:</h3>
+<h3>Mafia Aktionen nach Typ:</h3>
 <ol>
     {{MAFIA_ATTACKS_LIST}}
 </ol>

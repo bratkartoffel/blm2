@@ -55,6 +55,9 @@ switch ($testClass) {
         if ($testMethod === 'testResetAfterDispoLimit') {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => -230000));
         }
+        if ($testMethod === 'testResetAfterDispoCron') {
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => -30000));
+        }
         break;
 
     case 'BuildingTests':

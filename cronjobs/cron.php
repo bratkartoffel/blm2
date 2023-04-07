@@ -24,9 +24,6 @@ if (!IS_CRON) {
     die('cannot happen, just to please PhpStorm nagging about unused variable');
 }
 
-// also loads runtime configuration from database
-$database = Database::getInstance();
-
 if (isGameLocked()) {
     die(sprintf('Game is currently locked (%d < %d)' . "\n", time(), Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
 }
@@ -50,10 +47,10 @@ function handleInterestRatesAndBaseIncome(Database $database): void
     $entries = $database->getAllPlayerIdAndBankAndBioladenAndDoenerstandAndBank();
     foreach ($entries as $entry) {
         $database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
-            array('Geld' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])));
+                array('Geld' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])));
         $database->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-            array('EinnahmenGebaeude' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])),
-            array('user_id = :whr0' => $entry['ID']));
+                array('EinnahmenGebaeude' => getIncome($entry['Gebaeude' . building_shop], $entry['Gebaeude' . building_kebab_stand])),
+                array('user_id = :whr0' => $entry['ID']));
 
         $depositLimit = calculateDepositLimit($entry['Gebaeude' . building_bank]);
         if ($entry['Bank'] >= $depositLimit) continue;
@@ -67,10 +64,10 @@ function handleInterestRatesAndBaseIncome(Database $database): void
         $amount = round($amount, 2);
         if ($amount != 0) {
             $database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['ID'],
-                array('Bank' => $amount));
+                    array('Bank' => $amount));
             $database->updateTableEntryCalculate(Database::TABLE_STATISTICS, null,
-                array($amount > 0 ? 'EinnahmenZinsen' : 'AusgabenZinsen' => abs($amount)),
-                array('user_id = :whr0' => $entry['ID']));
+                    array($amount > 0 ? 'EinnahmenZinsen' : 'AusgabenZinsen' => abs($amount)),
+                    array('user_id = :whr0' => $entry['ID']));
         }
     }
 }
@@ -92,11 +89,11 @@ function handleResetDueToDispo(Database $database): void
             continue;
         }
         if ($database->createTableEntry(Database::TABLE_MESSAGES, array(
-                'Von' => 0,
-                'An' => $entry['ID'],
-                'Betreff' => 'Account zurückgesetzt',
-                'Nachricht' => sprintf('Nachdem Ihr Kontostand unter %s gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu', formatCurrency($limit))
-            )) != 1) {
+                        'Von' => 0,
+                        'An' => $entry['ID'],
+                        'Betreff' => 'Account zurückgesetzt',
+                        'Nachricht' => sprintf('Nachdem Ihr Kontostand unter %s gefallen ist wurden Sie gezwungen, Insolvenz anzumelden. Sie haben sich an der Grenze zu Absurdistan einen neuen Pass geholt und versuchen Ihr Glück mit einer neuen Identität nochmal neu', formatCurrency($limit))
+                )) != 1) {
             $database->rollBack();
             error_log(sprintf('Could create message after resetting player %d', $entry['ID']));
             continue;
@@ -118,19 +115,26 @@ function handleItemBaseProduction(Database $database): void
     }
 }
 
-$database->begin();
-CheckAllAuftraege($database);
-handleInterestRatesAndBaseIncome($database);
-handleItemBaseProduction($database);
-$database->updatePlayerOnlineTimes();
-$points_interval = Config::getInt(Config::SECTION_BASE, 'points_interval') * 3600;
-$last_points = Config::getInt(Config::SECTION_DBCONF, 'lastpoints');
-if ($last_points + $points_interval - 60 <= time()) {
-    $database->updatePlayerPoints();
-}
-$database->gdprCleanLoginLog();
-$database->updateLastCron();
-$database->commit();
+function runCron(): void
+{
+    // also loads runtime configuration from database
+    $database = Database::getInstance();
+    $database->begin();
+    CheckAllAuftraege($database);
+    handleInterestRatesAndBaseIncome($database);
+    handleItemBaseProduction($database);
+    $database->updatePlayerOnlineTimes();
+    $points_interval = Config::getInt(Config::SECTION_BASE, 'points_interval') * 3600;
+    $last_points = Config::getInt(Config::SECTION_DBCONF, 'lastpoints');
+    if ($last_points + $points_interval - 60 <= time()) {
+        $database->updatePlayerPoints();
+    }
+    $database->gdprCleanLoginLog();
+    $database->updateLastCron();
+    $database->commit();
 
-// separate transaction for each player to reset
-handleResetDueToDispo($database);
+    // separate transaction for each player to reset
+    handleResetDueToDispo($database);
+}
+
+runCron();

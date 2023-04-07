@@ -234,9 +234,9 @@ public class BankTests extends AbstractTest {
 
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_3"), "630.00 €");
+        assertText(By.id("b_i_3"), "525.00 €");
 
-        assertText(By.id("stat_bank"), "50,630.00 €");
+        assertText(By.id("stat_bank"), "50,525.00 €");
     }
 
     @Test
@@ -245,9 +245,9 @@ public class BankTests extends AbstractTest {
 
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_3"), "1,258.74 €");
+        assertText(By.id("b_i_3"), "1,048.95 €");
 
-        assertText(By.id("stat_bank"), "101,158.74 €");
+        assertText(By.id("stat_bank"), "100,948.95 €");
     }
 
     @Test
@@ -269,5 +269,23 @@ public class BankTests extends AbstractTest {
         driver.findElement(By.id("link_nachrichten_liste")).click();
         assertText(By.id("stat_money"), "5,000.00 €");
         Assertions.assertEquals("1", driver.findElement(By.id("MessagesIn")).getAttribute("data-count"));
+    }
+
+    @Test
+    void testResetAfterDispoCron() {
+        WebDriver driver = getDriver();
+        driver.findElement(By.id("link_bank")).click();
+
+        assertText(By.className("red"), "-30,000.00 €");
+        assertText(By.id("cur_bank_account"), "Ihr Kontostand: -30,000.00 €");
+
+        runCronjob(24 * 2); // twice per hour, 24 hours max
+        driver.findElement(By.id("link_bank")).click();
+        assertText(By.id("cur_bank_account"), "Ihr Kontostand: -49,529.57 €");
+
+        runCronjob();
+        driver.findElement(By.id("link_bank")).click();
+        assertText(By.id("cur_bank_account"), "Ihr Kontostand: 0.00 €");
+        assertText(By.id("stat_money"), "5,000.00 €");
     }
 }

@@ -30,10 +30,10 @@ public class ShopTests extends AbstractTest {
         driver.findElement(By.id("sell_all")).click();
 
         assertElementPresent(By.id("meldung_208"));
-        assertText(By.id("stat_money"), "5,374.64 €");
+        assertText(By.id("stat_money"), "5,330.45 €");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_1"), "374.64 €");
+        assertText(By.id("b_i_1"), "330.45 €");
     }
 
     @Test
@@ -46,13 +46,13 @@ public class ShopTests extends AbstractTest {
         driver.findElement(By.id("sell_1")).click();
 
         assertElementPresent(By.id("meldung_208"));
-        assertText(By.id("stat_money"), "5,054.60 €");
+        assertText(By.id("stat_money"), "5,048.60 €");
         assertText(By.id("cur_amount_1"), "70 kg");
 
         driver.findElement(By.id("sell_1")).click();
-        assertText(By.id("stat_money"), "5,182.00 €");
+        assertText(By.id("stat_money"), "5,162.00 €");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_1"), "182.00 €");
+        assertText(By.id("b_i_1"), "162.00 €");
     }
 }

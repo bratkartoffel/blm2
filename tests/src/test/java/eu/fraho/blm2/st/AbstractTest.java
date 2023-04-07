@@ -239,10 +239,14 @@ public abstract class AbstractTest {
     }
 
     protected void runCronjob() {
+        runCronjob(1);
+    }
+
+    protected void runCronjob(int count) {
         HttpClient httpClient = HttpClient.newHttpClient();
         try {
             HttpResponse<String> response = httpClient.send(
-                    HttpRequest.newBuilder().GET().uri(URI.create("http://%s/actions/test-run-cron.php".formatted(LOCALHOST))).build(),
+                    HttpRequest.newBuilder().GET().uri(URI.create("http://%s/actions/test-run-cron.php?count=%d".formatted(LOCALHOST, count))).build(),
                     HttpResponse.BodyHandlers.ofString()
             );
             Assertions.assertEquals(200, response.statusCode());

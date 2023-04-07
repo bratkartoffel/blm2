@@ -1357,11 +1357,7 @@ function calculateSellPrice(int $item_id, int $resarch_level, int $shop_level, i
 
 function calculateSellRates(): array
 {
-    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-        mt_srand(1337);
-    } else {
-        mt_srand(intval(date('ymdH', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
-    }
+    mt_srand(intval(date('ymdH', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     $result = array();
     for ($i = 1; $i <= count_wares; $i++) {
         $result[$i] = getRandomRate(Config::getFloat(Config::SECTION_SHOP, 'sell_rate_min'), Config::getFloat(Config::SECTION_SHOP, 'sell_rate_max'), 100);
@@ -1372,11 +1368,7 @@ function calculateSellRates(): array
 
 function calculateInterestRates(): array
 {
-    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
-        mt_srand(1337);
-    } else {
-        mt_srand(intval(date('ymd', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
-    }
+    mt_srand(intval(date('ymd', time())) + crc32(Config::get(Config::SECTION_BASE, 'random_secret')));
     $result = array(
             'Debit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_debit_rate_max')),
             'Credit' => getRandomRate(Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min'), Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max'))
@@ -1397,7 +1389,11 @@ function calculateResetCreditLimit(int $bankLevel): int
 
 function getRandomRate(float $min, float $max, int $factor = 10000): float
 {
-    return mt_rand($min * $factor, $max * $factor) / $factor;
+    if (Config::getBoolean(Config::SECTION_BASE, 'testing')) {
+        return ($min + $max) / 2;
+    } else {
+        return mt_rand($min * $factor, $max * $factor) / $factor;
+    }
 }
 
 function getLastIncomeTimestamp(): int

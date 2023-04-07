@@ -1388,7 +1388,9 @@ function calculateInterestRates(): array
 function calculateResetCreditLimit(int $bankLevel): int
 {
     $resetMedianRates = (Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_min') + Config::getFloat(Config::SECTION_BANK, 'interest_credit_rate_max')) / 2;
-    $resetCreditLimit = (int)(calculateCreditLimit($bankLevel) * pow(1 + $resetMedianRates, 96));
+    $resetHours = Config::getInt(Config::SECTION_BANK, 'max_credit_reset_hours');
+    $exponent = $resetHours * (60.0 / Config::getInt(Config::SECTION_BASE, 'cron_interval'));
+    $resetCreditLimit = (int)(calculateCreditLimit($bankLevel) * pow(1 + $resetMedianRates, $exponent));
     $resetCreditLimit -= 10000 + ($resetCreditLimit % 10000);
     return $resetCreditLimit;
 }

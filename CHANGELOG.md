@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - (reset) also reset research levels for the items added in `1.11.5`
 - (reset) calculate final points prior resetting
+- (bank) correctly calculate reset amount
+  - description allowed up to 96h prior reset, but the calculated value was reached after 48h
 
 ## [1.12.0] - 2023-04-05
 

@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - document minimum supported mariadb version (`10.1 -> 10.2`)
 - run tests against the minimum supported php and mariadb versions
 
+### Fixed
+
+- (reset) also reset research levels for the items added in `1.11.5`
+
 ## [1.12.0] - 2023-04-05
 
 ### Added

@@ -1470,32 +1470,35 @@ function requireXsrfToken(string $link): void
 
 function handleRoundEnd(): void
 {
-    Database::getInstance()->begin();
+    $database = Database::getInstance();
+
+    $database->begin();
+    $database->updatePlayerPoints();
     $nextStart = strtotime(date('Y-m-d H:00:00', time() + Config::getInt(Config::SECTION_BASE, 'game_pause_duration')));
 
     // determine information for mail
     $expenseBuildings = array();
-    foreach (Database::getInstance()->getLeaderBuildings(3) as $entry) {
+    foreach ($database->getLeaderBuildings(3) as $entry) {
         $expenseBuildings[] = sprintf('%s (%s)', escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenGebaeude']));
     }
     $expenseResearch = array();
-    foreach (Database::getInstance()->getLeaderResearch(3) as $entry) {
+    foreach ($database->getLeaderResearch(3) as $entry) {
         $expenseResearch[] = sprintf('%s (%s)', escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenForschung']));
     }
     $expenseMafia = array();
-    foreach (Database::getInstance()->getLeaderMafia(3) as $entry) {
+    foreach ($database->getLeaderMafia(3) as $entry) {
         $expenseMafia[] = sprintf('%s (%s)', escapeForOutput($entry['Name']), formatCurrency($entry['AusgabenMafia']));
     }
     $godfatherMafia = array();
-    foreach (Database::getInstance()->getMafiaGodfather(3) as $entry) {
+    foreach ($database->getMafiaGodfather(3) as $entry) {
         $godfatherMafia[] = sprintf('%s (führte %s Aktionen aus, davon %s erfolgreich)', escapeForOutput($entry['senderName']), formatPoints($entry['cnt']), formatPoints($entry['success']));
     }
     $victimMafia = array();
-    foreach (Database::getInstance()->getMafiaVictim(3) as $entry) {
+    foreach ($database->getMafiaVictim(3) as $entry) {
         $victimMafia[] = sprintf('%s (war das Ziel von %s Aktionen, davon %s erfolgreich)', escapeForOutput($entry['receiverName']), formatPoints($entry['cnt']), formatPoints($entry['success']));
     }
     $attacksMafia = array();
-    foreach (Database::getInstance()->getMafiaAttackTypes() as $entry) {
+    foreach ($database->getMafiaAttackTypes() as $entry) {
         switch ($entry['action']) {
             case 'HEIST':
                 $attacksMafia[] = sprintf('Diebstahl (%s Angriffe, davon %s erfolgreich. Geklaute Menge: %s Tonnen)',
@@ -1523,10 +1526,10 @@ function handleRoundEnd(): void
     }
     $rankingPoints = array();
     $eternalPoints = 5;
-    foreach (Database::getInstance()->getRanglisteUserEntries(0, 5) as $entry) {
+    foreach ($database->getRanglisteUserEntries(0, 5) as $entry) {
         $rankingPoints[] = sprintf('%s (%s)', escapeForOutput($entry['BenutzerName']), formatPoints($entry['Punkte']));
-        if (Database::getInstance()->updateTableEntryCalculate(Database::TABLE_USERS, $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
-            Database::getInstance()->rollBack();
+        if ($database->updateTableEntryCalculate(Database::TABLE_USERS, $entry['BenutzerID'], array('EwigePunkte' => $eternalPoints--)) !== 1) {
+            $database->rollBack();
             die('Could not update eternal points for player ' . $entry['ID']);
         }
     }
@@ -1543,36 +1546,36 @@ function handleRoundEnd(): void
     );
 
     // reset all accounts
-    $players = Database::getInstance()->getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin();
+    $players = $database->getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin();
     foreach ($players as $player) {
         if ($player['LastLogin'] === null) {
             $status = deleteAccount($player['ID']);
             if ($status !== null) {
-                Database::getInstance()->rollBack();
+                $database->rollBack();
                 die('Could not delete player ' . $player['ID'] . ' with status ' . $status);
             }
         } else {
             $status = resetAccount($player['ID']);
             if ($status !== null) {
-                Database::getInstance()->rollBack();
+                $database->rollBack();
                 die('Could not reset player ' . $player['ID'] . ' with status ' . $status);
             }
         }
     }
-    Database::getInstance()->commit();
+    $database->commit();
 
     $tables = array(Database::TABLE_JOBS, Database::TABLE_LOG_BANK, Database::TABLE_LOG_SHOP,
             Database::TABLE_LOG_GROUP_CASH, Database::TABLE_LOG_LOGIN, Database::TABLE_LOG_MAFIA,
             Database::TABLE_LOG_MARKET, Database::TABLE_LOG_MESSAGES, Database::TABLE_LOG_CONTRACTS);
-    $status = Database::getInstance()->truncateTables($tables);
+    $status = $database->truncateTables($tables);
     if ($status !== null) {
-        Database::getInstance()->rollBack();
+        $database->rollBack();
         die('Could not reset tables with status ' . $status);
     }
 
-    if (Database::getInstance()->updateTableEntry(Database::TABLE_RUNTIME_CONFIG, null,
+    if ($database->updateTableEntry(Database::TABLE_RUNTIME_CONFIG, null,
                     array('conf_value' => $nextStart), array('conf_name = :whr0' => 'roundstart')) !== 1) {
-        Database::getInstance()->rollBack();
+        $database->rollBack();
         die('Could not set new roundstart');
     }
 

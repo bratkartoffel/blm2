@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - (reset) also reset research levels for the items added in `1.11.5`
+- (reset) calculate final points prior resetting
 
 ## [1.12.0] - 2023-04-05
 

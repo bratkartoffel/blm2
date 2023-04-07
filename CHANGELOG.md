@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - cleanup sources
 - document minimum supported mariadb version (`10.1 -> 10.2`)
 - run tests against the minimum supported php and mariadb versions
+- (balancing) change interest rates for bank
+  - `interest_debit_rate_min: 0.011 -> 0.008`
+  - `interest_debit_rate_max: 0.015 -> 0.013`
+  - `interest_credit_rate_min: 0.017 -> 0.008`
+  - `interest_credit_rate_max: 0.023 -> 0.013`
 
 ### Fixed
 

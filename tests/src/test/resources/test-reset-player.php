@@ -53,7 +53,7 @@ switch ($testClass) {
             Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => 99900, 'Gebaeude9' => 1));
         }
         if ($testMethod === 'testResetAfterDispoLimit') {
-            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => -210000));
+            Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Bank' => -230000));
         }
         break;
 

@@ -27,6 +27,8 @@ public class GeneralTests extends AbstractTest {
             "pages/admin.inc.php",
             "pics/uploads/.gitkeep",
             "tests/build.gradle",
+            "mails/email_change.html.tpl",
+            "vendor/PHPMailer/src/VERSION",
     })
     void testSensitiveFilesInacessible(String path) throws IOException, InterruptedException {
         HttpResponse<String> response = simpleHttpGet("http://%s/%s".formatted(LOCALHOST, path));

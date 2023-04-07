@@ -234,9 +234,9 @@ public class BankTests extends AbstractTest {
 
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_3"), "660.00 €");
+        assertText(By.id("b_i_3"), "630.00 €");
 
-        assertText(By.id("stat_bank"), "50,660.00 €");
+        assertText(By.id("stat_bank"), "50,630.00 €");
     }
 
     @Test
@@ -245,9 +245,9 @@ public class BankTests extends AbstractTest {
 
         WebDriver driver = getDriver();
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_i_3"), "1,318.68 €");
+        assertText(By.id("b_i_3"), "1,258.74 €");
 
-        assertText(By.id("stat_bank"), "101,218.68 €");
+        assertText(By.id("stat_bank"), "101,158.74 €");
     }
 
     @Test

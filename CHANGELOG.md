@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.12.1] - 2023-04-08
+
 ### Changed
 
 - cleanup sources
@@ -466,7 +470,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.12.0...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.12.1...HEAD
+
+[1.12.1]: https://github.com/bratkartoffel/blm2/compare/v1.12.0...v1.12.1
 
 [1.12.0]: https://github.com/bratkartoffel/blm2/compare/v1.11.9...v1.12.0
 

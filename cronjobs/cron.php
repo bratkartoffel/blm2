@@ -24,6 +24,9 @@ if (!IS_CRON) {
     die('cannot happen, just to please PhpStorm nagging about unused variable');
 }
 
+// initialize configuration from database
+Database::getInstance();
+
 if (isGameLocked()) {
     die(sprintf('Game is currently locked (%d < %d)' . "\n", time(), Config::getInt(Config::SECTION_DBCONF, 'roundstart')));
 }

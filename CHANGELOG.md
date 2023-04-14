@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Fixed
+
+- fix cronjob not being run due to latest refactorings
 
 ## [1.12.1] - 2023-04-08
 

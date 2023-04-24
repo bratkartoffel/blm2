@@ -23,7 +23,7 @@ java {
 dependencies {
     testImplementation 'org.slf4j:slf4j-simple:2.0.7'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.8.3'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.9.0'
     testImplementation 'com.evanlennick:retry4j:0.15.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'

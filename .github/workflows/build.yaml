@@ -56,7 +56,7 @@ jobs:
       - uses: browser-actions/setup-firefox@f87e4ecedea37498da7a121eddc97dac1d93b26f # v1.1.1
         with:
           firefox-version: latest
-      - uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b # v1.0.6
+      - uses: gradle/wrapper-validation-action@56b90f209b02bf6d1deae490e9ef18b21a389cd4 # v1.1.0
       - run: ./gradlew --no-daemon check
         working-directory: tests/
       - uses: mikepenz/action-junit-report@150e2f992e4fad1379da2056d1d1c279f520e058 # v3.8.0

@@ -69,7 +69,7 @@ public class MessageTests extends AbstractTest {
         assertText(By.id("action_" + messageId), "");
 
         // try to delete by direct api call
-        driver.get("http://%s/actions/nachrichten.php?a=2&id=%s&token=%s".formatted(LOCALHOST, messageId, RANDOM_TOKEN));
+        driver.get("%s/actions/nachrichten.php?a=2&id=%s&token=%s".formatted(AbstractTest.BASE_URL, messageId, RANDOM_TOKEN));
         assertElementPresent(By.id("meldung_112"));
     }
 

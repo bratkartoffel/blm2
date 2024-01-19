@@ -22,7 +22,7 @@ for ($i = 1; $i <= count_wares; $i++) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/warehause.webp" alt=""/>
+    <img src="./pics/big/warehause.webp" alt=""/>
     <span>Bioladen<?= createHelpLink(1, 7); ?></span>
 </div>
 
@@ -49,7 +49,7 @@ for ($i = 1; $i <= count_wares; $i++) {
             <td><label for="amount_<?= $i; ?>"><?= getItemName($i); ?></label></td>
             <td><?= formatCurrency($prices[$i]); ?></td>
             <td>
-                <form action="/actions/bioladen.php" method="post">
+                <form action="./actions/bioladen.php" method="post">
                     <input type="hidden" name="was" value="<?= $i; ?>"/>
                     <input type="text" maxlength="6" name="menge" id="amount_<?= $i; ?>" size="4"
                            value="<?= $data['Lager' . $i]; ?>"/>
@@ -70,7 +70,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         ?>
         <tr class="StorageSellAll">
             <td colspan="4">Alles (<?= formatWeight($sumWeight); ?>) für <?= formatCurrency($sumMoney); ?> verkaufen:
-                <form action="/actions/bioladen.php" method="post">
+                <form action="./actions/bioladen.php" method="post">
                     <input type="hidden" name="alles" value="1"/>
                     <input type="submit" value="Verkaufen" id="sell_all"/>
                 </form>

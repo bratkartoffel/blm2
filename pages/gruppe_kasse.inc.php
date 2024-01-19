@@ -14,7 +14,7 @@ $rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user'])
 requireEntryFound($rights, '/?p=gruppe');
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/Community_Help.webp" alt=""/>
+        <img src="./pics/big/Community_Help.webp" alt=""/>
         <span>Gruppe - Kasse<?= createHelpLink(1, 23); ?></span>
     </div>
 
@@ -64,7 +64,7 @@ if ($amount == 0) $amount = $kassenstand;
 if ($rights['group_cash'] == 1) {
     ?>
     <div class="form GruppeKasseAction">
-        <form action="/actions/gruppe.php" method="post">
+        <form action="./actions/gruppe.php" method="post">
             <input type="hidden" name="a" value="8"/>
             <header>Auszahlen</header>
             <div>

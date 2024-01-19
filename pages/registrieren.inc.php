@@ -18,7 +18,7 @@ $captcha = new Captcha();
 $captcha->createCaptcha();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/babelfish.webp" alt=""/>
+    <img src="./pics/big/babelfish.webp" alt=""/>
     <span>Registrieren</span>
 </div>
 
@@ -30,7 +30,7 @@ $captcha->createCaptcha();
 </p>
 
 <div class="form RegisterForm">
-    <form action="/actions/registrieren.php" method="post">
+    <form action="./actions/registrieren.php" method="post">
         <header>Neuen Benutzer anlegen</header>
 
         <div>

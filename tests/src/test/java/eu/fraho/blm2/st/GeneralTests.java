@@ -31,7 +31,7 @@ public class GeneralTests extends AbstractTest {
             "vendor/PHPMailer/src/VERSION",
     })
     void testSensitiveFilesInacessible(String path) throws IOException, InterruptedException {
-        HttpResponse<String> response = simpleHttpGet("http://%s/%s".formatted(LOCALHOST, path));
+        HttpResponse<String> response = simpleHttpGet("%s/%s".formatted(AbstractTest.BASE_URL, path));
         Assertions.assertEquals(4, response.statusCode() / 100);
     }
 }

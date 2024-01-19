@@ -13,7 +13,7 @@ $ware = getOrDefault($_GET, 'ware', 0);
 $price = getOrDefault($_GET, 'price', .0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/package_network.webp" alt=""/>
+    <img src="./pics/big/package_network.webp" alt=""/>
     <span>Marktplatz inserieren<?= createHelpLink(1, 11); ?></span>
 </div>
 
@@ -31,7 +31,7 @@ $price = getOrDefault($_GET, 'price', .0);
 $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 ?>
 <div class="form MarktplatzNeu">
-    <form action="/actions/marktplatz.php?a=1" method="post">
+    <form action="./actions/marktplatz.php?a=1" method="post">
         <header>Angebotsdaten</header>
         <div>
             <label for="amount">Menge:</label>
@@ -76,7 +76,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
                 - <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_MARKET, 'max_price')); ?>
             </td>
             <td>
-                <a href="/?p=marktplatz_verkaufen&amp;ware=<?= $i; ?>&amp;amount=<?= $data['Lager' . $i]; ?>&amp;price=<?= $sellPrice * Config::getFloat(Config::SECTION_MARKET, 'max_price'); ?>">Übernehmen</a>
+                <a href="./?p=marktplatz_verkaufen&amp;ware=<?= $i; ?>&amp;amount=<?= $data['Lager' . $i]; ?>&amp;price=<?= $sellPrice * Config::getFloat(Config::SECTION_MARKET, 'max_price'); ?>">Übernehmen</a>
             </td>
         </tr>
         <?php
@@ -89,5 +89,5 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
 </table>
 
 <div>
-    <a href="/?p=marktplatz_liste">&lt;&lt; Zurück</a>
+    <a href="./?p=marktplatz_liste">&lt;&lt; Zurück</a>
 </div>

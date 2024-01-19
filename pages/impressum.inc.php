@@ -7,7 +7,7 @@
  */
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/games.webp" alt=""/>
+    <img src="./pics/big/games.webp" alt=""/>
     <span>Impressum<?= createHelpLink(1, 21); ?></span>
 </div>
 
@@ -175,7 +175,7 @@
 </p>
 <p>
     Ein Download aller zu Ihrem Spielprofil zugehörigen Daten ist über die
-    <a href="/?p=einstellungen#download_gdpr">Einstellungen</a> möglich.
+    <a href="./?p=einstellungen#download_gdpr">Einstellungen</a> möglich.
 </p>
 <h2>
     3. Datensicherheit / Datenverarbeitung

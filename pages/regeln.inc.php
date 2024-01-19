@@ -7,7 +7,7 @@
  */
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kword.webp" alt=""/>
+    <img src="./pics/big/kword.webp" alt=""/>
     <span>Die Regeln<?= createHelpLink(1, 19); ?></span>
 </div>
 

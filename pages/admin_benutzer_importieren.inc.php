@@ -7,7 +7,7 @@
  */
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Administrationsbereich - Benutzer importieren</span>
 </div>
 
@@ -36,7 +36,7 @@ Folgende Funktionen können eingestellt werden:
 </ul>
 
 <div class="form AdminImportUser">
-    <form action="/actions/admin_benutzer.php" method="post" enctype="multipart/form-data" name="gdpr_import" id="gdpr_import">
+    <form action="./actions/admin_benutzer.php" method="post" enctype="multipart/form-data" name="gdpr_import" id="gdpr_import">
         <input type="hidden" name="a" value="6"/>
         <input type="hidden" name="token" value="<?= $_SESSION['blm_xsrf_token']; ?>"/>
         <header>Benutzer importieren</header>
@@ -71,5 +71,5 @@ Folgende Funktionen können eingestellt werden:
 </div>
 
 <p>
-    <a href="/?p=admin_benutzer" id="link_back">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_benutzer" id="link_back">&lt;&lt; Zurück</a>
 </p>

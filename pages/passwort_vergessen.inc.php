@@ -13,7 +13,7 @@ $captcha = new Captcha();
 $captcha->createCaptcha();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Password.webp" alt=""/>
+    <img src="./pics/big/Password.webp" alt=""/>
     <span>Passwort vergessen</span>
 </div>
 
@@ -25,7 +25,7 @@ $captcha->createCaptcha();
 </p>
 
 <div class="form">
-    <form action="/actions/pwd_reset.php" method="post">
+    <form action="./actions/pwd_reset.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <header>Passwort wiederherstellen</header>
 

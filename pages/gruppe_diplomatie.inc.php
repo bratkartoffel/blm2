@@ -37,7 +37,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights): void
                 if ($row['Aktiv'] == 1) {
                     printf('<td>%s</td>', formatDateTime(strtotime($row['Seit'])));
                     if ($hasRights) {
-                        printf('<td><a class="cancel_relation" data-type="%s" data-partner="%s" href="/actions/gruppe.php?a=15&amp;id=%d&amp;token=%s">Kündigen</a></td>',
+                        printf('<td><a class="cancel_relation" data-type="%s" data-partner="%s" href="./actions/gruppe.php?a=15&amp;id=%d&amp;token=%s">Kündigen</a></td>',
                             $name, escapeForOutput($row['GruppeName']), $row['ID'], $_SESSION['blm_xsrf_token']);
                     } else {
                         echo '<td>Keine Rechte</td>';
@@ -45,7 +45,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights): void
                 } else {
                     echo '<td>- noch nicht aktiv -</td>';
                     if ($hasRights) {
-                        printf('<td><a class="retract_relation_offer" data-type="%s" data-partner="%s" href="/actions/gruppe.php?a=16&amp;id=%d&amp;token=%s">Zurückziehen</a></td>',
+                        printf('<td><a class="retract_relation_offer" data-type="%s" data-partner="%s" href="./actions/gruppe.php?a=16&amp;id=%d&amp;token=%s">Zurückziehen</a></td>',
                             $name, escapeForOutput($row['GruppeName']), $row['ID'], $_SESSION['blm_xsrf_token']);
                     } else {
                         echo '<td>Keine Rechte</td>';
@@ -66,7 +66,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights): void
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Community_Help.webp" alt=""/>
+    <img src="./pics/big/Community_Help.webp" alt=""/>
     <span>Gruppe - Diplomatie<?= createHelpLink(1, 23); ?></span>
 </div>
 
@@ -102,7 +102,7 @@ function printDiplomacyTable($diplomacy, $name, $hasRights): void
                     if ($rights['group_diplomacy'] == 1) {
                         ?>
                         <a class="war_surrender"
-                           href="/actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                           href="./actions/gruppe.php?a=17&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                            data-name="<?= escapeForOutput($row['GruppeName']); ?>"
                            data-amount="<?= formatCurrency(2 * $row['Betrag']); ?>"
                            data-points="<?= formatPercent(Config::getFloat(Config::SECTION_GROUP, 'war_loose_points')); ?>"
@@ -140,7 +140,7 @@ if ($rights['group_diplomacy'] == 1) {
     <h3>Neue diplomatische Anfrage stellen</h3>
     <div class="form GroupNewDiplomacy">
         <header>Anfrage</header>
-        <form action="/actions/gruppe.php" method="post">
+        <form action="./actions/gruppe.php" method="post">
             <input type="hidden" name="a" value="18"/>
             <div>
                 <label for="relation_typ">Typ:</label>
@@ -189,9 +189,9 @@ if ($rights['group_diplomacy'] == 1) {
                 <td><?= createGroupLink($row['VonId'], $row['VonName']); ?></td>
                 <td>
                     <a id="accept_<?= $row['ID']; ?>"
-                       href="/actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
+                       href="./actions/gruppe.php?a=19&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
                     <a id="refuse_<?= $row['ID']; ?>"
-                       href="/actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
+                       href="./actions/gruppe.php?a=20&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
                 </td>
             </tr>
             <?php

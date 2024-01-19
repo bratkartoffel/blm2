@@ -14,7 +14,7 @@ requireEntryFound($rights, '/?p=gruppe');
 $hasOneRight = false;
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/Community_Help.webp" alt=""/>
+        <img src="./pics/big/Community_Help.webp" alt=""/>
         <span>Gruppe - Einstellungen<?= createHelpLink(1, 23); ?></span>
     </div>
 
@@ -26,7 +26,7 @@ if ($rights['edit_image']) {
     $hasOneRight = true;
     ?>
     <div class="form GroupSetting GroupImage">
-        <form action="/actions/gruppe.php" method="post" enctype="multipart/form-data">
+        <form action="./actions/gruppe.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="a" value="11"/>
             <header>Gruppenbild ändern</header>
             <div>
@@ -50,7 +50,7 @@ if ($rights['edit_description']) {
     $beschreibung = getOrDefault($_GET, 'beschreibung', $data['Beschreibung']);
     ?>
     <div class="form GroupSetting GroupDescription">
-        <form action="/actions/gruppe.php" method="post" name="form_beschreibung">
+        <form action="./actions/gruppe.php" method="post" name="form_beschreibung">
             <input type="hidden" name="a" value="12"/>
             <header><label for="beschreibung">Beschreibung ändern</label></header>
             <div>
@@ -72,7 +72,7 @@ if ($rights['edit_password']) {
     $hasOneRight = true;
     ?>
     <div class="form GroupSetting GroupPassword">
-        <form action="/actions/gruppe.php" method="post">
+        <form action="./actions/gruppe.php" method="post">
             <input type="hidden" name="a" value="13"/>
             <header>Passwort ändern</header>
             <div>
@@ -97,7 +97,7 @@ if ($rights['group_delete'] || Database::getInstance()->getGroupMemberCountById(
     $hasOneRight = true;
     ?>
     <div class="form GroupSetting GroupDelete">
-        <form action="/actions/gruppe.php" method="post">
+        <form action="./actions/gruppe.php" method="post">
             <input type="hidden" name="a" value="14"/>
             <input type="hidden" name="token" value="<?= $_SESSION['blm_xsrf_token']; ?>"/>
             <header>Gruppe löschen</header>

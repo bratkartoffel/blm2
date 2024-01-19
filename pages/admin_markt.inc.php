@@ -10,7 +10,7 @@ $ware = getOrDefault($_GET, 'ware', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.webp" alt=""/>
+    <img src="./pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Marktplatz</span>
 </div>
 
@@ -51,8 +51,8 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= formatCurrency($row['Preis']); ?></td>
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
             <td>
-                <a href="/?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>"> Bearbeiten </a> |
-                <a href="/actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">
+                <a href="./?p=admin_markt_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>"> Bearbeiten </a> |
+                <a href="./actions/admin_markt.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">
                     Löschen </a>
             </td>
         </tr>
@@ -66,6 +66,6 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= createPaginationTable('pages', '/?p=admin_markt&amp;ware=' . escapeForOutput($ware), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
-    <a href="/?p=admin_markt_einstellen">Neues Angebot erstellen</a><br/>
-    <a href="/?p=admin">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_markt_einstellen">Neues Angebot erstellen</a><br/>
+    <a href="./?p=admin">&lt;&lt; Zurück</a>
 </div>

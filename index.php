@@ -72,12 +72,12 @@ sendCspHeader();
 <head>
     <?php
     printHeaderCss(array(
-        '/styles/style.min.css',
-        '/styles/mobile.min.css',
-        '/styles/admin.min.css',
+        './styles/style.min.css',
+        './styles/mobile.min.css',
+        './styles/admin.min.css',
     ));
     printHeaderJs(array(
-        '/js/functions.min.js',
+        './js/functions.min.js',
     ));
     ?>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -119,7 +119,7 @@ sendCspHeader();
                 <?= createNavigationLink('notizblock', 'Notizblock'); ?>
                 <?= createNavigationLink('einstellungen', 'Einstellungen'); ?>
                 <div class="NaviLink">
-                    <a href="chefbox.php" id="link_chefbox" target="_blank">Chefbox</a>
+                    <a href="./chefbox.php" id="link_chefbox" target="_blank">Chefbox</a>
                 </div>
                 <?= (isAdmin() ? createNavigationLink('admin', 'Admin-Bereich') : ''); ?>
             </div>
@@ -132,7 +132,7 @@ sendCspHeader();
                 <?= createNavigationLink('hilfe', 'Hilfe'); ?>
                 <?= createNavigationLink('impressum', 'Impressum / Datenschutz'); ?>
                 <div class="NaviSpacer"></div>
-                <div class="NaviLink"><a href="/actions/logout.php" id="link_logout">Abmelden</a></div>
+                <div class="NaviLink"><a href="./actions/logout.php" id="link_logout">Abmelden</a></div>
             </div>
         </div>
 
@@ -197,7 +197,7 @@ sendCspHeader();
     ?>
     <div id="Footer">
         <div>Bioladenmanager 2 Version <?= game_version; ?></div>
-        <div><a href="/?p=impressum">© 2007-2023, Simon Frankenberger</a></div>
+        <div><a href="./?p=impressum">© 2007-2023, Simon Frankenberger</a></div>
         <div>Letzte Änderung: <?= date('d.m.Y H:i', filemtime(__DIR__ . '/include/game_version.inc.php')); ?></div>
     </div>
 </div>

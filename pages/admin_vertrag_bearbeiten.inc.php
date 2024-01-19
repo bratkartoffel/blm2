@@ -11,7 +11,7 @@ $id = getOrDefault($_GET, 'id', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.webp" alt=""/>
+    <img src="./pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Vertrag bearbeiten</span>
 </div>
 
@@ -28,7 +28,7 @@ if (isset($_GET['menge'])) $entry['Menge'] = $_GET['menge'];
 if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
 ?>
 <div class="form AdminEditContract">
-    <form action="/actions/admin_vertrag.php" method="post">
+    <form action="./actions/admin_vertrag.php" method="post">
         <input type="hidden" name="a" value="2"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
@@ -61,5 +61,5 @@ if (isset($_GET['preis'])) $entry['Preis'] = $_GET['preis'];
 </div>
 
 <div>
-    <a href="/?p=admin_vertrag&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_vertrag&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
 </div>

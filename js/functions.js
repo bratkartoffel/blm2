@@ -6,7 +6,7 @@
  */
 
 function ChefboxZeigen() {
-    const popup = window.open('chefbox.php', 'chefbox', 'height=800,width=450,scrollbars=yes,resizable=yes');
+    const popup = window.open('./chefbox.php', 'chefbox', 'height=800,width=450,scrollbars=yes,resizable=yes');
     popup.focus();
     return false;
 }
@@ -16,7 +16,7 @@ function BLMEnde() {
         opener.focus();
         self.close();
     } else {
-        document.location.href = '/actions/logout.php?popup=1';
+        document.location.href = 'actions/logout.php?popup=1';
     }
     return false;
 }
@@ -465,7 +465,7 @@ function setupChefbox() {
             link.onclick = () => BLMNavigation(link.href);
         }
 
-        document.getElementById('show_blm').onclick = () => BLMNavigation('/?p=startseite');
+        document.getElementById('show_blm').onclick = () => BLMNavigation('./?p=startseite');
         document.getElementById('close_popup').onclick = () => BLMEnde();
         document.getElementById('link_show_help').onclick = () => BLMNavigation(document.getElementById('link_show_help').href);
     }
@@ -481,7 +481,7 @@ function setupMessageDeleteAjax() {
         let token = link.getAttribute('data-token');
         link.onclick = function () {
             const req = new XMLHttpRequest();
-            req.open('post', '/actions/ajax.php', true);
+            req.open('post', './actions/ajax.php', true);
             req.onreadystatechange = function () {
                 if (this.readyState !== 4) return;
                 if (this.status === 200 || this.status === 404) {

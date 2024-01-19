@@ -13,7 +13,7 @@ $data = Database::getInstance()->getNotizblock($_SESSION['blm_user']);
 if (isset($_GET['notizblock'])) $data = $_GET['notizblock'];
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/knotes.webp" alt=""/>
+    <img src="./pics/big/knotes.webp" alt=""/>
     <span>Büro<?= createHelpLink(1, 14); ?></span>
 </div>
 
@@ -24,7 +24,7 @@ if (isset($_GET['notizblock'])) $data = $_GET['notizblock'];
 </p>
 
 <div class="form">
-    <form action="/actions/notizblock.php" method="post">
+    <form action="./actions/notizblock.php" method="post">
         <header><label for="notizblock">Notizblock</label></header>
         <textarea id="notizblock" name="notizblock" maxlength="4096"><?= escapeForOutput($data, false); ?></textarea>
         <div>

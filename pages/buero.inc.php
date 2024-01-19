@@ -11,7 +11,7 @@ $groupCash = Database::getInstance()->getGroupCashSumByUserId($_SESSION['blm_use
 $rates = calculateSellRates();
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kspread.webp" alt=""/>
+    <img src="./pics/big/kspread.webp" alt=""/>
     <span>Büro<?= createHelpLink(1, 8); ?></span>
 </div>
 

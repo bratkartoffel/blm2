@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - enhance documentation when running on XAMPP and windows
 - installing the game into the document root is no longer required
   - the game may now run from inside a folder, e.g. http://example.com/games/blm2
+- (mailing) upgrade PHPMailer to 6.9.1
 
 ### Fixed
 

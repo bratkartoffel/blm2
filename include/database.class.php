@@ -71,7 +71,7 @@ class Database
                 Config::get(Config::SECTION_DATABASE, 'username'),
                 Config::get(Config::SECTION_DATABASE, 'password'),
                 array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
-            $this->link->query("SET time_zone = '" . date_default_timezone_get() . "'");
+            $this->link->query("SET time_zone = '" . date('P') . "'");
             $this->queries++;
             $this->slow_query_threshold = Config::getFloat(Config::SECTION_DATABASE, 'slow_query_threshold') / 1000;
 

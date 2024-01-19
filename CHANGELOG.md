@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Changed
+
+- enhance documentation when running on XAMPP and windows
+- installing the game into the document root is no longer required
+  - the game may now run from inside a folder, e.g. http://example.com/games/blm2
+
+### Fixed
+
+- fix connection setup when database server does not support timezone names
 
 ## [1.12.2] - 2023-09-13
 

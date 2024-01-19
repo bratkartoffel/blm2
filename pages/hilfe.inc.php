@@ -310,7 +310,7 @@ Sobald alle Mitglieder eine Gruppe verlassen haben, wird diese automatisch gelö
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/khelpcenter.webp" alt=""/>
+    <img src="./pics/big/khelpcenter.webp" alt=""/>
     <span>Hilfe</span>
 </div>
 
@@ -336,25 +336,25 @@ if (!array_key_exists($cmb, $hilfe_texte)) {
 </div>
 <h2>Unterseiten / Module:</h2>
 <ol>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=1">Registrieren</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=2">Anmelden</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=3">Startseite</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=4">Gebäude</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=5">Plantage</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=6">Forschungszentrum</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=7">Bioladen</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=8">Büro</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=9">Bank</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=10">Verträge</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=11">Marktplatz</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=12">Mafia</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=13">Nachrichten</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=14">Notizblock</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=15">Einstellungen</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=16">Chefbox</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=17">Rangliste</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=18">Serverstatistik</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=19">Regeln</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=21">Impressum</a></li>
-    <li><a href="/?p=hilfe&amp;mod=1&amp;cat=23">Gruppen</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=1">Registrieren</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=2">Anmelden</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=3">Startseite</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=4">Gebäude</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=5">Plantage</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=6">Forschungszentrum</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=7">Bioladen</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=8">Büro</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=9">Bank</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=10">Verträge</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=11">Marktplatz</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=12">Mafia</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=13">Nachrichten</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=14">Notizblock</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=15">Einstellungen</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=16">Chefbox</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=17">Rangliste</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=18">Serverstatistik</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=19">Regeln</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=21">Impressum</a></li>
+    <li><a href="./?p=hilfe&amp;mod=1&amp;cat=23">Gruppen</a></li>
 </ol>

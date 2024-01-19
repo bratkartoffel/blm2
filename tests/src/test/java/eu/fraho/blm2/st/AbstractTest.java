@@ -59,8 +59,8 @@ public abstract class AbstractTest {
             // As gruppe.Kuerzel is a varchar(6), this is perfectly fine
             (int) (Duration.between(LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0), LocalDateTime.now()).toSeconds() / 3)
     );
-    public static final String LOCALHOST = "localhost:8080";
     public static final String INBUCKET_HOST = "localhost:9000";
+    public static final String BASE_URL = "http://localhost:8080/blm2";
     private static final Logger log = LoggerFactory.getLogger(AbstractTest.class);
     private static final WebDriver driver = SeleniumConfig.getWebDriver();
     private static final HttpClient httpClient = HttpClient.newHttpClient();
@@ -70,7 +70,7 @@ public abstract class AbstractTest {
     @BeforeEach
     void resetDriver(TestInfo testInfo) {
         driver.manage().deleteAllCookies();
-        driver.get("http://%s/?test=%s".formatted(LOCALHOST, URLEncoder.encode("%s_%s".formatted(
+        driver.get("%s/?test=%s".formatted(BASE_URL, URLEncoder.encode("%s_%s".formatted(
                         testInfo.getTestClass().map(Class::getName).orElse(null),
                         testInfo.getTestMethod().map(Method::getName).orElse(null)
                 ), StandardCharsets.UTF_8))
@@ -83,7 +83,7 @@ public abstract class AbstractTest {
     static void install() {
         if (installed.compareAndSet(false, true)) {
             try {
-                HttpResponse<String> response = simpleHttpGet("http://%s/install/update.php?secret=changeit".formatted(LOCALHOST));
+                HttpResponse<String> response = simpleHttpGet("%s/install/update.php?secret=changeit".formatted(BASE_URL));
                 if (response.statusCode() != 200) {
                     Assertions.fail(response.body());
                 }
@@ -124,7 +124,7 @@ public abstract class AbstractTest {
 
     protected void login(String username, String password) {
         log.info("Logging in as {}:{}", username, password);
-        driver.get("http://%s/actions/logout.php".formatted(LOCALHOST));
+        driver.get("%s/actions/logout.php".formatted(BASE_URL));
         driver.findElement(By.id("link_anmelden")).click();
         WebElement inhalt = driver.findElement(By.id("Inhalt"));
         inhalt.findElement(By.id("name")).sendKeys(username);
@@ -199,10 +199,10 @@ public abstract class AbstractTest {
         try {
             String testClass = testInfo.getTestClass().map(Class::getSimpleName).orElse(null);
             String testMethod = testInfo.getTestMethod().map(Method::getName).orElse(null);
-            response = simpleHttpGet("http://%s/actions/test-reset-player.php?id=%d&class=%s&method=%s&additional=%d".formatted(LOCALHOST, id, testClass, testMethod, additionInfo));
+            response = simpleHttpGet("%s/actions/test-reset-player.php?id=%d&class=%s&method=%s&additional=%d".formatted(BASE_URL, id, testClass, testMethod, additionInfo));
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
-            Assertions.assertEquals("/actions/logout.php", location.get());
+            Assertions.assertEquals("/blm2/actions/logout.php", location.get());
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
         } catch (AssertionFailedError e) {
@@ -213,10 +213,10 @@ public abstract class AbstractTest {
 
     protected void resetPlayer(int id, String testClass) {
         try {
-            HttpResponse<String> response = simpleHttpGet("http://%s/actions/test-reset-player.php?id=%d&class=%s".formatted(LOCALHOST, id, testClass));
+            HttpResponse<String> response = simpleHttpGet("%s/actions/test-reset-player.php?id=%d&class=%s".formatted(BASE_URL, id, testClass));
             Optional<String> location = response.headers().firstValue("Location");
             Assertions.assertTrue(location.isPresent());
-            Assertions.assertEquals("/actions/logout.php", location.get());
+            Assertions.assertEquals("/blm2/actions/logout.php", location.get());
         } catch (IOException | InterruptedException e) {
             Assertions.fail(e);
         }
@@ -246,7 +246,7 @@ public abstract class AbstractTest {
         HttpClient httpClient = HttpClient.newHttpClient();
         try {
             HttpResponse<String> response = httpClient.send(
-                    HttpRequest.newBuilder().GET().uri(URI.create("http://%s/actions/test-run-cron.php?count=%d".formatted(LOCALHOST, count))).build(),
+                    HttpRequest.newBuilder().GET().uri(URI.create("%s/actions/test-run-cron.php?count=%d".formatted(BASE_URL, count))).build(),
                     HttpResponse.BodyHandlers.ofString()
             );
             Assertions.assertEquals(200, response.statusCode());

@@ -11,7 +11,7 @@ $id = getOrDefault($_GET, 'id', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Administrationsbereich - Gruppe</span>
 </div>
 
@@ -22,7 +22,7 @@ $entry = Database::getInstance()->getGroupInformationById($id);
 requireEntryFound($entry, '/?p=admin_gruppe');
 ?>
 <div class="form AdminEditGroup">
-    <form action="/actions/admin_gruppe.php" method="post">
+    <form action="./actions/admin_gruppe.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <input type="hidden" name="id" value="<?= $id; ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
@@ -71,7 +71,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
     $data = Database::getInstance()->getAllGroupCashById($id);
     foreach ($data as $entry) {
         ?>
-        <form action="/actions/admin_gruppe.php" method="post">
+        <form action="./actions/admin_gruppe.php" method="post">
             <input type="hidden" name="a" value="2"/>
             <input type="hidden" name="id" value="<?= $id; ?>"/>
             <input type="hidden" name="user_id" value="<?= $entry['UserID']; ?>"/>
@@ -120,7 +120,7 @@ requireEntryFound($entry, '/?p=admin_gruppe');
         $data = Database::getInstance()->getAllGroupRightsByGroupId($id);
         foreach ($data as $row) {
             ?>
-            <form action="/actions/admin_gruppe.php" method="post">
+            <form action="./actions/admin_gruppe.php" method="post">
                 <input type="hidden" name="a" value="3"/>
                 <input type="hidden" name="id" value="<?= $id; ?>"/>
                 <input type="hidden" name="user_id" value="<?= escapeForOutput($row['UserId']); ?>"/>
@@ -162,5 +162,5 @@ requireEntryFound($entry, '/?p=admin_gruppe');
 </div>
 
 <div>
-    <a href="/?p=admin_gruppe&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_gruppe&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
 </div>

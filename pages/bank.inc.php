@@ -19,7 +19,7 @@ $resetCreditLimit = calculateResetCreditLimit($data['Gebaeude' . building_bank])
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kwallet.webp" alt=""/>
+    <img src="./pics/big/kwallet.webp" alt=""/>
     <span>Bank<?= createHelpLink(1, 9); ?></span>
 </div>
 
@@ -44,7 +44,7 @@ $resetCreditLimit = calculateResetCreditLimit($data['Gebaeude' . building_bank])
 <h3 id="cur_bank_account">Ihr Kontostand: <?php echo formatCurrency($data['Bank']); ?></h3>
 
 <div class="form Bank">
-    <form action="/actions/bank.php" method="post" name="form_bank" id="form_bank">
+    <form action="./actions/bank.php" method="post" name="form_bank" id="form_bank">
         <header>Transaktion durchführen</header>
         <div>
             <label for="art">Art:</label>

@@ -22,7 +22,7 @@ for ($i = 0; $i < count($auftraege_db); $i++) {
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/katomic.webp" alt=""/>
+    <img src="./pics/big/katomic.webp" alt=""/>
     <span>Forschungszentrum<?= createHelpLink(1, 6); ?></span>
 </div>
 
@@ -66,7 +66,7 @@ for ($i = 1; $i <= count_wares; $i++) {
             ?>
         </div>
         <div class="Action">
-            <form action="/actions/forschungszentrum.php" method="post">
+            <form action="./actions/forschungszentrum.php" method="post">
                 <input type="hidden" name="was" value="<?= $i; ?>"/>
                 <?php
                 if (!array_key_exists($i, $auftraege)) {
@@ -90,7 +90,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                             <a class="delete_job"
                                data-refund="<?= formatCurrency($auftrag['cost'] * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
                                data-percent="<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
-                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                               href="./actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
                     </div>

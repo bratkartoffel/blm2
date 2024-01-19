@@ -9,7 +9,7 @@
 restrictSitter('Vertraege');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/mydocuments.webp" alt=""/>
+    <img src="./pics/big/mydocuments.webp" alt=""/>
     <span>Verträge<?= createHelpLink(1, 10); ?></span>
 </div>
 
@@ -43,10 +43,10 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
                 <a class="accept_contract" data-id="<?= $entry['ID']; ?>"
-                   href="/actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
+                   href="./actions/vertraege.php?a=2&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Annehmen</a>
                 |
                 <a clasS="reject_contract" data-id="<?= $entry['ID']; ?>"
-                   href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
+                   href="./actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Ablehnen</a>
             </td>
         </tr>
         <?php
@@ -86,7 +86,7 @@ restrictSitter('Vertraege');
             <td><?= formatCurrency($entry['Preis']); ?></td>
             <td><?= formatCurrency($entry['Preis'] * $entry['Menge']); ?></td>
             <td>
-                <a href="/actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Zurückziehen</a>
+                <a href="./actions/vertraege.php?a=3&amp;vid=<?= $entry['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Zurückziehen</a>
             </td>
         </tr>
         <?php
@@ -99,5 +99,5 @@ restrictSitter('Vertraege');
 </table>
 
 <p>
-    <a href="/?p=vertraege_neu">Neuen Vertrag aufsetzen</a>
+    <a href="./?p=vertraege_neu">Neuen Vertrag aufsetzen</a>
 </p>

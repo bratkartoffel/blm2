@@ -13,7 +13,7 @@ requireEntryFound($data, '/?p=rangliste');
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kuser.webp" alt=""/>
+    <img src="./pics/big/kuser.webp" alt=""/>
     <span>Profil von <?= escapeForOutput($data['Name']); ?></span>
 </div>
 
@@ -32,7 +32,7 @@ requireEntryFound($data, '/?p=rangliste');
     </div>
     <div>
         <label for="image">Bild:</label>
-        <span><img src="/pics/profile.php?uid=<?= $data['ID']; ?>&amp;ts=<?= ($data['LastImageChange'] == null ? 0 : strtotime($data['LastImageChange'])); ?>"
+        <span><img src="./pics/profile.php?uid=<?= $data['ID']; ?>&amp;ts=<?= ($data['LastImageChange'] == null ? 0 : strtotime($data['LastImageChange'])); ?>"
                    alt="Profilbild"/></span>
     </div>
     <div>
@@ -63,7 +63,7 @@ requireEntryFound($data, '/?p=rangliste');
         <label for="points">Punkte:</label>
         <span><?= formatPoints($data['Punkte']); ?> (Platz: <?php
             $rank = Database::getInstance()->getPlayerRankById($data['ID']);
-            printf('<a href="/?p=rangliste&amp;q=%s">%d</a>', urlencode($data['Name']), $rank);
+            printf('<a href="./?p=rangliste&amp;q=%s">%d</a>', urlencode($data['Name']), $rank);
             ?>)</span>
     </div>
     <?php
@@ -71,7 +71,7 @@ requireEntryFound($data, '/?p=rangliste');
         ?>
         <div>
             <label for="contact">Kontakt:</label>
-            <span><?= sprintf('<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
+            <span><?= sprintf('<a href="./?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="./?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
                     urlencode($data['Name']), urlencode($data['Name'])); ?></span>
         </div>
         <?php

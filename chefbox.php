@@ -96,33 +96,33 @@ sendCspHeader();
 </table>
 <table id="with_nav_links">
     <tr>
-        <td><a href="/?p=nachrichten_liste">Neue Nachrichten:</a></td>
+        <td><a href="./?p=nachrichten_liste">Neue Nachrichten:</a></td>
         <td><?= $database->getUnreadMessageCount($_SESSION['blm_user']); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=vertraege_liste">Neue Verträge:</a></td>
+        <td><a href="./?p=vertraege_liste">Neue Verträge:</a></td>
         <td><?= $database->getOpenContractCount($_SESSION['blm_user']); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=marktplatz_liste">Marktangebote:</a></td>
+        <td><a href="./?p=marktplatz_liste">Marktangebote:</a></td>
         <td><?= $database->getMarktplatzCount(); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=rangliste">Spieler online:</a></td>
+        <td><a href="./?p=rangliste">Spieler online:</a></td>
         <td><?= $database->getOnlinePlayerCount(); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=bank">Bargeld:</a></td>
+        <td><a href="./?p=bank">Bargeld:</a></td>
         <td><?= formatCurrency($data['Geld']); ?></td>
     </tr>
     <tr>
-        <td><a href="/?p=bank">Bank-Guthaben:</a></td>
+        <td><a href="./?p=bank">Bank-Guthaben:</a></td>
         <td><?= formatCurrency($data['Bank']); ?></td>
     </tr>
 </table>
 <div id="ChefboxFooter">
-    <a id="show_blm" href="/?p=startseite">BLM anzeigen / öffnen</a>
-    <a id="close_popup" href="/?p=startseite">Fenster schliessen</a>
+    <a id="show_blm" href="./?p=startseite">BLM anzeigen / öffnen</a>
+    <a id="close_popup" href="./?p=startseite">Fenster schliessen</a>
 </div>
 </body>
 </html>

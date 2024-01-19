@@ -20,13 +20,16 @@ public class SeleniumConfig {
 
     public static synchronized WebDriver getWebDriver() {
         if (driver == null) {
-            System.out.println("Starting " + System.getProperty("webdriver.firefox.bin"));
             WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions()
                     .setProfile(new FirefoxProfile())
                     .addPreference("intl.accept_languages", "en-US, en");
             if (!OS.WINDOWS.isCurrentOs()) {
                 options.addArguments("-headless");
+            }
+            if (System.getProperty("webdriver.firefox.bin") != null) {
+                System.out.println("Starting " + System.getProperty("webdriver.firefox.bin"));
+                options.setBinary(System.getProperty("webdriver.firefox.bin"));
             }
             driver = new FirefoxDriver(options);
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));

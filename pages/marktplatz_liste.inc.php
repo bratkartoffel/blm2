@@ -12,7 +12,7 @@ $filter = getOrDefault($_GET, 'filter', 0);
 $offset = getOrDefault($_GET, 'offset', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/package_network.webp" alt=""/>
+    <img src="./pics/big/package_network.webp" alt=""/>
     <span>Marktplatz<?= createHelpLink(1, 11); ?></span>
 </div>
 
@@ -51,11 +51,11 @@ $offset = verifyOffset($offset, $offerCount, Config::getInt(Config::SECTION_BASE
             <td>
                 <?php
                 if ($row['VonId'] != $_SESSION['blm_user']) {
-                    printf('<a class="market_buy_offer" data-id="%d" href="/actions/marktplatz.php?a=2&amp;id=%s&amp;token=%s">Kaufen</a>',
+                    printf('<a class="market_buy_offer" data-id="%d" href="./actions/marktplatz.php?a=2&amp;id=%s&amp;token=%s">Kaufen</a>',
                         $rowNr, $row['ID'], $_SESSION['blm_xsrf_token']);
                 } else {
                     $refundWeight = formatWeight(floor($row['Menge'] * Config::getFloat(Config::SECTION_MARKET, 'retract_rate')), false);
-                    printf('<a class="market_retract_offer" data-id="%d" data-refund="%s" href="/actions/marktplatz.php?a=3&amp;id=%s&amp;token=%s">Zurückziehen</a>',
+                    printf('<a class="market_retract_offer" data-id="%d" data-refund="%s" href="./actions/marktplatz.php?a=3&amp;id=%s&amp;token=%s">Zurückziehen</a>',
                         $rowNr, $refundWeight, $row['ID'], $_SESSION['blm_xsrf_token']);
                 }
                 ?>
@@ -71,4 +71,4 @@ $offset = verifyOffset($offset, $offerCount, Config::getInt(Config::SECTION_BASE
 
 <?= createPaginationTable('pages', '/?p=marktplatz_liste', $offset, $offerCount, Config::getInt(Config::SECTION_BASE, 'market_page_size')); ?>
 
-<a href="/?p=marktplatz_verkaufen">Neues Angebot einstellen</a>
+<a href="./?p=marktplatz_verkaufen">Neues Angebot einstellen</a>

@@ -27,14 +27,14 @@ $subject = getOrDefault($_GET, 'subject', $subject);
 $message = getOrDefault($_GET, 'message', $message);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/messenger.webp" alt=""/>
+    <img src="./pics/big/messenger.webp" alt=""/>
     <span>Nachricht schreiben<?= createHelpLink(1, 13); ?></span>
 </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div class="form NachrichtSchreiben">
-    <form action="/actions/nachrichten.php?a=1" method="post">
+    <form action="./actions/nachrichten.php?a=1" method="post">
         <header>Nachricht</header>
         <div>
             <label for="receiver">Empfänger</label>
@@ -60,9 +60,9 @@ $message = getOrDefault($_GET, 'message', $message);
 <div>
     <?php
     if ($reply !== 0) {
-        printf('<a href="/?p=nachrichten_lesen&amp;id=%d">&lt;&lt; Zurück</a>', $reply);
+        printf('<a href="./?p=nachrichten_lesen&amp;id=%d">&lt;&lt; Zurück</a>', $reply);
     } else {
-        echo '<a href="/?p=nachrichten_liste">&lt;&lt; Zurück</a>';
+        echo '<a href="./?p=nachrichten_liste">&lt;&lt; Zurück</a>';
     }
     ?>
 </div>

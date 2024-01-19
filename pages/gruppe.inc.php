@@ -16,7 +16,7 @@ $player = Database::getInstance()->getPlayerNameAndPointsAndGruppeAndPlantageLev
 $rights = array();
 ?>
     <div id="SeitenUeberschrift">
-        <img src="/pics/big/Community_Help.webp" alt=""/>
+        <img src="./pics/big/Community_Help.webp" alt=""/>
         <span>Gruppe<?= createHelpLink(1, 23); ?></span>
     </div>
 
@@ -35,7 +35,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
             zum Gründen müssen Sie Ihre Plantage mindestens auf Stufe 8 haben.
         </p>
         <div class="form GroupCreate">
-            <form action="/actions/gruppe.php" method="post">
+            <form action="./actions/gruppe.php" method="post">
                 <input type="hidden" name="a" value="1"/>
                 <header>Neue Gruppe gründen</header>
                 <div>
@@ -69,7 +69,7 @@ if ($id == 0 || $id == $player['GruppeID']) {
             </form>
         </div>
         <div class="form GroupJoin">
-            <form action="/actions/gruppe.php" method="post">
+            <form action="./actions/gruppe.php" method="post">
                 <input type="hidden" name="a" value="2"/>
                 <header>Gruppe beitreten</header>
                 <div>
@@ -121,7 +121,7 @@ if ($id != 0) {
         <header>Gruppe: <?= escapeForOutput($group['Name']); ?></header>
         <div class="left">
             <div class="GroupImage"><img id="group_image"
-                                         src="/pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($group['LastImageChange'] == null ? 0 : strtotime($group['LastImageChange'])); ?>"
+                                         src="./pics/profile.php?gid=<?= $id; ?>&amp;ts=<?= ($group['LastImageChange'] == null ? 0 : strtotime($group['LastImageChange'])); ?>"
                                          alt="Gruppenbild"/></div>
             <div class="GroupDescription"
                  id="gruppe_beschreibung"><?= replaceBBCode(empty($group['Beschreibung']) ? '[i]Keine Beschreibung verfügbar[/i]' : $group['Beschreibung']); ?></div>
@@ -203,7 +203,7 @@ if ($id != 0) {
             if (array_key_exists('message_write', $rights) && $rights['message_write'] == 1) {
                 ?>
                 <div class="form GroupMessage">
-                    <form action="/actions/gruppe.php" method="post">
+                    <form action="./actions/gruppe.php" method="post">
                         <input type="hidden" name="a" value="4"/>
                         <header><label for="message">Nachricht schreiben</label></header>
                         <textarea cols="80" rows="15" id="message"
@@ -228,13 +228,13 @@ if ($id != 0) {
                     $links = array();
                     if (array_key_exists('message_pin', $rights) && $rights['message_pin'] == 1) {
                         if ($row['Festgepinnt'] == 0) {
-                            $links[] = sprintf('<span><a href="/actions/gruppe.php?a=5&amp;id=%d">Festpinnen</a></span>', $row['ID']);
+                            $links[] = sprintf('<span><a href="./actions/gruppe.php?a=5&amp;id=%d">Festpinnen</a></span>', $row['ID']);
                         } else {
-                            $links[] = sprintf('<span><a href="/actions/gruppe.php?a=6&amp;id=%d">Lösen</a></span>', $row['ID']);
+                            $links[] = sprintf('<span><a href="./actions/gruppe.php?a=6&amp;id=%d">Lösen</a></span>', $row['ID']);
                         }
                     }
                     if (array_key_exists('message_delete', $rights) && $rights['message_delete'] == 1) {
-                        $links[] = sprintf('<span><a href="/actions/gruppe.php?a=7&amp;id=%d">Löschen</a></span>', $row['ID']);
+                        $links[] = sprintf('<span><a href="./actions/gruppe.php?a=7&amp;id=%d">Löschen</a></span>', $row['ID']);
                     }
 
                     if (count($links) > 0) {

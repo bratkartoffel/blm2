@@ -53,7 +53,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                 <div>Dauer: <?= formatDuration($nextDauer); ?></div>
             </div>
             <div class="Action">
-                <form action="/actions/gebaeude.php" method="post">
+                <form action="./actions/gebaeude.php" method="post">
                     <input type="hidden" name="was" value="<?= $buildingId; ?>"/>
                     <?php
                     if ($currentDuration != null) {
@@ -66,7 +66,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
                             <a class="delete_job"
                                data-refund="<?= formatCurrency($currentKosten * Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
                                data-percent="<?= formatPercent(Config::getFloat(Config::SECTION_BASE, 'cancel_refund')); ?>"
-                               href="/actions/auftrag.php?id=<?= $currentID; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                               href="./actions/auftrag.php?id=<?= $currentID; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $buildingId; ?>">Abbrechen</a>
                         </div>
                         <?php
@@ -86,7 +86,7 @@ function printBuildingInformation($playerData, $auftraege, $buildingId, $buildin
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kfm_home.webp" alt=""/>
+    <img src="./pics/big/kfm_home.webp" alt=""/>
     <span>Gebäude<?= createHelpLink(1, 4); ?></span>
 </div>
 

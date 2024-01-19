@@ -22,7 +22,7 @@ if ($data['An'] == $_SESSION['blm_user']) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/xfmail.webp" alt=""/>
+    <img src="./pics/big/xfmail.webp" alt=""/>
     <span>Nachricht lesen<?= createHelpLink(1, 13); ?></span>
 </div>
 
@@ -50,11 +50,11 @@ if ($data['An'] == $_SESSION['blm_user']) {
 </div>
 
 <div>
-    <a href="/?p=nachrichten_liste">&lt;&lt; Zurück</a>
+    <a href="./?p=nachrichten_liste">&lt;&lt; Zurück</a>
     <?php
     if ($data['An'] == $_SESSION['blm_user'] && $data['Von'] != 0 && $data['VonID'] !== null) {
         ?>
-        | <a href="/?p=nachrichten_schreiben&amp;reply=<?= $data['ID']; ?>">Antworten</a>
+        | <a href="./?p=nachrichten_schreiben&amp;reply=<?= $data['ID']; ?>">Antworten</a>
         <?php
     }
     ?>

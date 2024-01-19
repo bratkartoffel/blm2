@@ -11,7 +11,7 @@ $id = getOrDefault($_GET, 'id', 0);
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Administrationsbereich - Benutzer</span>
 </div>
 
@@ -55,7 +55,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
 }
 ?>
 <div class="form AdminEditUser">
-    <form action="/actions/admin_benutzer.php" method="post">
+    <form action="./actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
@@ -154,7 +154,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
             echo createDropdown($groups, $entry['Gruppe'], 'gruppe', false, false, true);
 
             if ($entry['Gruppe'] !== null) {
-                printf(' (<a href="/?p=admin_gruppe_bearbeiten&amp;id=%d">Rechte / Kasse bearbeiten</a>)', $entry['Gruppe']);
+                printf(' (<a href="./?p=admin_gruppe_bearbeiten&amp;id=%d">Rechte / Kasse bearbeiten</a>)', $entry['Gruppe']);
             }
             ?>
         </div>
@@ -176,7 +176,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
 </div>
 <br>
 <div class="form AdminEditUser">
-    <form action="/actions/admin_benutzer.php" method="post">
+    <form action="./actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="2"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
@@ -200,7 +200,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
 </div>
 
 <div class="form AdminEditUser">
-    <form action="/actions/admin_benutzer.php" method="post">
+    <form action="./actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="3"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
@@ -224,7 +224,7 @@ for ($i = 1; $i <= count_buildings; $i++) {
 </div>
 
 <div class="form AdminEditUser">
-    <form action="/actions/admin_benutzer.php" method="post">
+    <form action="./actions/admin_benutzer.php" method="post">
         <input type="hidden" name="a" value="4"/>
         <input type="hidden" name="id" value="<?= escapeForOutput($entry['ID']); ?>"/>
         <input type="hidden" name="o" value="<?= $offset; ?>"/>
@@ -248,5 +248,5 @@ for ($i = 1; $i <= count_buildings; $i++) {
 </div>
 
 <div>
-    <a href="/?p=admin_benutzer&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_benutzer&amp;o=<?= $offset; ?>">&lt;&lt; Zurück</a>
 </div>

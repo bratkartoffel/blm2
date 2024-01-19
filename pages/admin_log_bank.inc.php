@@ -11,7 +11,7 @@ $wohin = getOrDefault($_GET, 'wohin');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.webp" alt=""/>
+    <img src="./pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Bank Logbuch</span>
 </div>
 
@@ -68,5 +68,5 @@ $offset = getOrDefault($_GET, 'o', 0);
     , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
-    <a href="/?p=admin">&lt;&lt; Zurück</a>
+    <a href="./?p=admin">&lt;&lt; Zurück</a>
 </div>

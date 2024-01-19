@@ -75,7 +75,7 @@ const count_buildings = building_bank;
 function abortWithErrorPage(string $body): void
 {
     http_response_code(500);
-    die(sprintf('<!DOCTYPE html><html lang="de"><body><img src="/pics/big/clock.webp" alt="maintenance"/><h2>%s</h2></body></html>', $body));
+    die(sprintf('<!DOCTYPE html><html lang="de"><body><img src="./pics/big/clock.webp" alt="maintenance"/><h2>%s</h2></body></html>', $body));
 }
 
 function verifyInstallation(): void
@@ -693,8 +693,8 @@ function replaceBBCode(string $text): string
                     '<div class="center">\1</div>',
                     '<a href="\1\2">\3</a>',
                     '<a href="\1" target="_blank"><img src="\1" alt="\2"/></a>',
-                    '<a href="/?p=profil&amp;id=\2">\1</a>',
-                    '<a href="/?p=gruppe&amp;id=\2">\1</a>',
+                    '<a href="./?p=profil&amp;id=\2">\1</a>',
+                    '<a href="./?p=gruppe&amp;id=\2">\1</a>',
             ),
             $result
     );
@@ -874,13 +874,13 @@ function verifyOffset(int $offset, int $entriesCount, int $entriesPerPage): int
 function createProfileLink(?int $blm_user, string $name, string $page = 'profil'): string
 {
     if ($blm_user === null || $blm_user === 0) return $name;
-    return sprintf('<a href="/?p=%s&amp;id=%d">%s</a>', $page, $blm_user, escapeForOutput($name));
+    return sprintf('<a href="./?p=%s&amp;id=%d">%s</a>', $page, $blm_user, escapeForOutput($name));
 }
 
 function createGroupLink(?int $group_id, string $name): string
 {
     if ($group_id == 0) return $name;
-    return sprintf('<a href="/?p=gruppe&amp;id=%d">%s</a>', $group_id, escapeForOutput($name));
+    return sprintf('<a href="./?p=gruppe&amp;id=%d">%s</a>', $group_id, escapeForOutput($name));
 }
 
 function formatCurrency(float $amount, bool $withSuffix = true, bool $withThousandsSeparator = true, int $decimals = 2): string
@@ -949,7 +949,7 @@ function createPaginationTable(string $id, string $linkBase, int $currentPage, i
     for ($i = 0; $i < $entriesCount; $i += $entriesPerPage) {
         $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
-            $pages[] = sprintf('<a href="%s&amp;%s=%d%s" id="%s_%d">%d</a>',
+            $pages[] = sprintf('<a href="./%s&amp;%s=%d%s" id="%s_%d">%d</a>',
                     $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $id, $page + 1, $page + 1);
         } else {
             $pages[] = sprintf('<span id="%s_active_%d">%d</span>', $id, $page + 1, $page + 1);
@@ -1014,6 +1014,10 @@ function redirectTo(string $location, ?int $m = null, ?string $anchor = null): v
     }
     if ($anchor != null) {
         $location .= '#' . urlencode($anchor);
+    }
+    if (substr($location, 0, 1) === '/') {
+        // determine path from htdocs root
+       $location = parse_url(Config::get(Config::SECTION_BASE, 'base_url'), PHP_URL_PATH) . $location;
     }
     header('Location: ' . $location, true, 303);
     die();
@@ -1140,7 +1144,7 @@ function sendMail(string $recipient, string $subject, string $templateName, arra
 function createNavigationLink(string $target, string $text, ?string $sitterRightsRequired = null): string
 {
     if (isAccessAllowedIfSitter($sitterRightsRequired)) {
-        return sprintf('<div class="NaviLink"><a href="/?p=%s" id="link_%s" class="%s">%s</a></div>%s',
+        return sprintf('<div class="NaviLink"><a href="./?p=%s" id="link_%s" class="%s">%s</a></div>%s',
                 $target, $target, $target === getCurrentPage() ? 'active' : 'inactive', $text, "\n");
     }
     return '';
@@ -1149,7 +1153,7 @@ function createNavigationLink(string $target, string $text, ?string $sitterRight
 function createHelpLink(int $module, int $category): string
 {
     if (isLoggedIn()) {
-        return sprintf(' <a href="/?p=hilfe&amp;mod=%d&amp;cat=%d" id="link_show_help"><img id="help_image" src="/pics/style/help.webp" alt="Hilfe" /></a>', $module, $category);
+        return sprintf(' <a href="./?p=hilfe&amp;mod=%d&amp;cat=%d" id="link_show_help"><img id="help_image" src="./pics/style/help.webp" alt="Hilfe" /></a>', $module, $category);
     }
     return '';
 }
@@ -1423,25 +1427,25 @@ function createGroupNaviation(int $activePage, int $group_id): string
     $items = array();
 
     if ($activePage == 0) $items[] = '<span>Board</span>';
-    else $items[] = '<span><a href="/?p=gruppe" id="gruppe_board">Board</a></span>';
+    else $items[] = '<span><a href="./?p=gruppe" id="gruppe_board">Board</a></span>';
 
     if ($activePage == 1) $items[] = '<span>Mitgliederverwaltung</span>';
-    else $items[] = '<span><a href="/?p=gruppe_mitgliederverwaltung" id="gruppe_mitgliederverwaltung">Mitgliederverwaltung</a></span>';
+    else $items[] = '<span><a href="./?p=gruppe_mitgliederverwaltung" id="gruppe_mitgliederverwaltung">Mitgliederverwaltung</a></span>';
 
     if ($activePage == 2) $items[] = '<span>Einstellungen</span>';
-    else $items[] = '<span><a href="/?p=gruppe_einstellungen" id="gruppe_einstellungen">Einstellungen</a></span>';
+    else $items[] = '<span><a href="./?p=gruppe_einstellungen" id="gruppe_einstellungen">Einstellungen</a></span>';
 
     $count = Database::getInstance()->countPendingGroupDiplomacy($group_id);
     if ($activePage == 3) $items[] = sprintf('<span>Diplomatie (%d)</span>', $count);
-    else $items[] = sprintf('<span><a href="/?p=gruppe_diplomatie" id="gruppe_diplomatie">Diplomatie (%d)</a></span>', $count);
+    else $items[] = sprintf('<span><a href="./?p=gruppe_diplomatie" id="gruppe_diplomatie">Diplomatie (%d)</a></span>', $count);
 
     if ($activePage == 4) $items[] = '<span>Gruppenkasse</span>';
-    else $items[] = '<span><a href="/?p=gruppe_kasse" id="gruppe_kasse">Gruppenkasse</a></span>';
+    else $items[] = '<span><a href="./?p=gruppe_kasse" id="gruppe_kasse">Gruppenkasse</a></span>';
 
     if ($activePage == 5) $items[] = '<span>Logbuch</span>';
-    else $items[] = '<span><a href="/?p=gruppe_logbuch" id="gruppe_logbuch">Logbuch</a></span>';
+    else $items[] = '<span><a href="./?p=gruppe_logbuch" id="gruppe_logbuch">Logbuch</a></span>';
 
-    $items[] = '<span><a href="/actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" id="leave_group">Gruppe verlassen</a></span>';
+    $items[] = '<span><a href="./actions/gruppe.php?a=3&amp;token=' . $_SESSION['blm_xsrf_token'] . '" id="leave_group">Gruppe verlassen</a></span>';
     return sprintf('<div id="GroupNavigation">%s</div>', implode(' | ', $items));
 }
 

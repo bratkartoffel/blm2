@@ -6,6 +6,8 @@
  */
 package eu.fraho.blm2.st;
 
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,7 @@ public class GroupTests extends AbstractTest {
         WebDriver driver = getDriver();
 
         createGroup("TG" + groupId, String.valueOf(groupId), "meldung_223");
-        Assertions.assertTrue(driver.findElement(By.id("group_image")).getDomAttribute("src").endsWith("&ts=0"));
+        MatcherAssert.assertThat(driver.findElement(By.id("group_image")).getDomAttribute("src"), Matchers.endsWith("&ts=0"));
 
         driver.findElement(By.id("gruppe_einstellungen")).click();
         setValue(By.id("new_pw1"), "foobar");

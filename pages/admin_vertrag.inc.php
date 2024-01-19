@@ -11,7 +11,7 @@ $wen = getOrDefault($_GET, 'wen');
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.webp" alt=""/>
+    <img src="./pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Verträge</span>
 </div>
 
@@ -58,8 +58,8 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= formatCurrency($row['Preis']); ?></td>
             <td><?= formatCurrency($row['Gesamtpreis']); ?></td>
             <td>
-                <a href="/?p=admin_vertrag_bearbeiten&amp;id=<?= $row['ID']; ?>">Bearbeiten</a> |
-                <a href="/actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
+                <a href="./?p=admin_vertrag_bearbeiten&amp;id=<?= $row['ID']; ?>">Bearbeiten</a> |
+                <a href="./actions/admin_vertrag.php?a=3&amp;id=<?= $row['ID']; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
@@ -72,6 +72,6 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= createPaginationTable('pages', '/?p=admin_vertrag&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
-    <a href="/?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
-    <a href="/?p=admin">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>
+    <a href="./?p=admin">&lt;&lt; Zurück</a>
 </div>

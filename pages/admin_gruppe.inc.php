@@ -9,7 +9,7 @@
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Administrationsbereich - Gruppen</span>
 </div>
 
@@ -35,9 +35,9 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= escapeForOutput($row['Kuerzel']); ?></td>
             <td><?= formatDate(strtotime($row['Erstellt'])); ?></td>
             <td>
-                <a href="/?p=admin_gruppe_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
+                <a href="./?p=admin_gruppe_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
                 <a class="delete_group" data-groupname="<?= escapeForOutput($row['Name']); ?>"
-                   href="/actions/admin_gruppe.php?a=4&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
+                   href="./actions/admin_gruppe.php?a=4&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
@@ -49,4 +49,4 @@ $offset = getOrDefault($_GET, 'o', 0);
 </table>
 <?= createPaginationTable('pages', '/?p=admin_gruppe', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
-<a href="/?p=admin">&lt;&lt; Zurück</a>
+<a href="./?p=admin">&lt;&lt; Zurück</a>

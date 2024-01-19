@@ -7,7 +7,7 @@
  */
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.webp" alt=""/>
+    <img src="./pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Testseite</span>
 </div>
 
@@ -36,5 +36,5 @@
 </fieldset>
 
 <div>
-    <a href="/?p=admin">&lt;&lt; Zurück</a>
+    <a href="./?p=admin">&lt;&lt; Zurück</a>
 </div>

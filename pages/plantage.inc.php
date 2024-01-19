@@ -28,7 +28,7 @@ for ($i = 1; $i <= count_wares; $i++) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Staroffice.webp" alt=""/>
+    <img src="./pics/big/Staroffice.webp" alt=""/>
     <span>Plantage<?= createHelpLink(1, 5); ?></span>
 </div>
 
@@ -39,7 +39,7 @@ for ($i = 1; $i <= count_wares; $i++) {
 </p>
 
 <div class="form Schnellanbau">
-    <form action="/actions/plantage.php" method="post" id="fast_plant" data-cost-per-hour="<?= $productionCostSum; ?>"
+    <form action="./actions/plantage.php" method="post" id="fast_plant" data-cost-per-hour="<?= $productionCostSum; ?>"
           data-geld="<?= $data['Geld']; ?>">
         <input type="hidden" name="alles" value="1"/>
         <header>Schnellanbau</header>
@@ -77,7 +77,7 @@ for ($i = 1; $i <= count_wares; $i++) {
             </div>
         </div>
         <div class="Action">
-            <form action="/actions/plantage.php" method="post">
+            <form action="./actions/plantage.php" method="post">
                 <input type="hidden" name="was" value="<?= $i; ?>"/>
                 <?php
                 if (!array_key_exists($i, $auftraege)) {
@@ -111,7 +111,7 @@ for ($i = 1; $i <= count_wares; $i++) {
                         <div>
                             <a class="delete_plant_job"
                                data-refund="<?= formatWeight($auftrag['amount'] * $percent); ?>"
-                               href="/actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                               href="./actions/auftrag.php?id=<?= $auftrag['ID']; ?>&amp;was=<?= $i; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                                id="abort_<?= $i; ?>">Abbrechen</a>
                         </div>
                     </div>

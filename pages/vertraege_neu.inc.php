@@ -18,7 +18,7 @@ if ($ware <= 0 || $ware > count_wares) {
 }
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kfax.webp" alt=""/>
+    <img src="./pics/big/kfax.webp" alt=""/>
     <span>Neuen Vertrag verfassen<?= createHelpLink(1, 10); ?></span>
 </div>
 
@@ -33,7 +33,7 @@ if ($ware <= 0 || $ware > count_wares) {
 $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLevelAndSchoolLevel($_SESSION['blm_user']);
 ?>
 <div class="form VertragNeu">
-    <form action="/actions/vertraege.php" method="post">
+    <form action="./actions/vertraege.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <header>Vertragswerte</header>
         <div>
@@ -83,7 +83,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
                 - <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price')); ?>
             </td>
             <td>
-                <a href="/?p=vertraege_neu&amp;ware=<?= $i; ?>&amp;menge=<?= $data['Lager' . $i]; ?>&amp;preis=<?= $sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price'); ?>">Übernehmen</a>
+                <a href="./?p=vertraege_neu&amp;ware=<?= $i; ?>&amp;menge=<?= $data['Lager' . $i]; ?>&amp;preis=<?= $sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price'); ?>">Übernehmen</a>
             </td>
         </tr>
         <?php
@@ -96,5 +96,5 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
 </table>
 
 <div>
-    <a href="/?p=vertraege_liste">&lt;&lt; Zurück</a>
+    <a href="./?p=vertraege_liste">&lt;&lt; Zurück</a>
 </div>

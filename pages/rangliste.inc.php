@@ -17,7 +17,7 @@ $lastPoints = formatTime(Config::getInt(Config::SECTION_DBCONF, 'lastpoints'));
 $nextPoints = formatTime(Config::getInt(Config::SECTION_DBCONF, 'lastpoints') + Config::getInt(Config::SECTION_BASE, 'points_interval') * 3600);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Rangliste<?= createHelpLink(1, 17); ?></span>
 </div>
 
@@ -77,7 +77,7 @@ $offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BAS
                     echo '<div class="UserRank BetaTester"></div>';
                 }
                 if ($row['GruppeID'] !== null) {
-                    printf(' (<a href="/?p=gruppe&id=%d">%s</a>)',
+                    printf(' (<a href="./?p=gruppe&id=%d">%s</a>)',
                         $row['GruppeID'],
                         $row['GruppeName']);
                 }
@@ -86,10 +86,10 @@ $offset = verifyOffset($offset, $playerCount, Config::getInt(Config::SECTION_BAS
             <td><?= formatPoints($row['Punkte']); ?></td>
             <td><?php
                 if ($row['BenutzerID'] != $_SESSION['blm_user']) {
-                    printf('(<a href="/?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="/?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
+                    printf('(<a href="./?p=nachrichten_schreiben&receiver=%s">IGM</a> | <a href="./?p=vertraege_neu&empfaenger=%s">Vertrag</a>',
                         escapeForOutput($row['BenutzerName']), escapeForOutput($row['BenutzerName']));
                     if (mafiaRequirementsMet($row['Punkte']) && mafiaRequirementsMet($myself['Punkte']) && maybeMafiaOpponents($row['Punkte'], $myself['Punkte'], $groupDiplomacy)) {
-                        printf(' | <a href="/?p=mafia&amp;opponent=%d">Mafia</a>', $row['BenutzerID']);
+                        printf(' | <a href="./?p=mafia&amp;opponent=%d">Mafia</a>', $row['BenutzerID']);
                     }
                     echo ')';
                 }
@@ -191,56 +191,56 @@ $offset_ep = verifyOffset($offset_ep, $epCount, Config::getInt(Config::SECTION_B
 <h2>Verschiedenes</h2>
 <table class="Liste Rangliste">
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=0">Der Bioladenfreak:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=0">Der Bioladenfreak:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderOnlineTime()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit ' . formatDuration($data['Onlinezeit']);
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=1">Der Pate:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=1">Der Pate:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderMafia()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenMafia']) . ' für die Mafia';
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=2">Der Händlerkönig:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=2">Der Händlerkönig:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderMarket()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenMarkt']) . ' auf dem freien Markt';
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=3">Der Baumeister:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=3">Der Baumeister:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderBuildings()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenGebaeude']) . ' für Gebäude';
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=4">Das Genie:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=4">Das Genie:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderResearch()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenForschung']) . ' für die Forschung';
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=5">Der Top-Bauer:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=5">Der Top-Bauer:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderProduction()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Ausgaben von ' . formatCurrency($data['AusgabenProduktion']) . ' für die Produktion';
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=6">Der Kapitalist:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=6">Der Kapitalist:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderInterest()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit Einnahmen von ' . formatCurrency($data['EinnahmenZinsen']) . ' durch Zinsen';
             ?></td>
     </tr>
     <tr>
-        <th><a href="/?p=rangliste_spezial&amp;type=7">Der Mitteilungsbedürftige:</a></th>
+        <th><a href="./?p=rangliste_spezial&amp;type=7">Der Mitteilungsbedürftige:</a></th>
         <td><?php
             $data = Database::getInstance()->getLeaderIgmSent()[0];
             echo createProfileLink($data['ID'], $data['Name']) . ' mit ' . formatPoints($data['IgmGesendet']) . ' gesendeten Nachrichten';

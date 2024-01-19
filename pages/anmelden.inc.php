@@ -9,7 +9,7 @@
 $name = getOrDefault($_GET, 'name');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Password.webp" alt=""/>
+    <img src="./pics/big/Password.webp" alt=""/>
     <span>Anmelden</span>
 </div>
 
@@ -25,7 +25,7 @@ if (isGameLocked()) {
 }
 ?>
 <div class="form LoginForm">
-    <form action="/actions/login.php" method="post">
+    <form action="./actions/login.php" method="post">
         <header>Login für registrierte Benutzer</header>
 
         <div>
@@ -44,5 +44,5 @@ if (isGameLocked()) {
 </div>
 
 <div>
-    <a hreF="/?p=passwort_vergessen" id="link_passwort_vergessen">Passwort vergessen?</a>
+    <a hreF="./?p=passwort_vergessen" id="link_passwort_vergessen">Passwort vergessen?</a>
 </div>

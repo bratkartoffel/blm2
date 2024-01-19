@@ -26,7 +26,7 @@ if ($nextMafiaTs <= time()) {
 
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/core.webp" alt=""/>
+    <img src="./pics/big/core.webp" alt=""/>
     <span>Mafia<?= createHelpLink(1, 12); ?></span>
 </div>
 
@@ -85,7 +85,7 @@ if (!mafiaRequirementsMet($data['Punkte'])) {
 </table>
 
 <div class="form MafiaNewAction">
-    <form action="/actions/mafia.php" method="post">
+    <form action="./actions/mafia.php" method="post">
         <header>Angriff ausführen</header>
         <div>
             <label for="opponent">Gegner</label>

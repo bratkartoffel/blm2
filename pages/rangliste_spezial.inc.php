@@ -126,7 +126,7 @@ switch ($type) {
 ?>
 
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Die Spezial-Rangliste<?= createHelpLink(1, 17); ?></span>
 </div>
 
@@ -151,5 +151,5 @@ switch ($type) {
 </table>
 
 <div>
-    <a href="/?p=rangliste">&lt;&lt; Zurück</a>
+    <a href="./?p=rangliste">&lt;&lt; Zurück</a>
 </div>

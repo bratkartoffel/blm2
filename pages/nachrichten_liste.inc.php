@@ -12,7 +12,7 @@ $offset_in = getOrDefault($_GET, 'o_in', 0);
 $offset_out = getOrDefault($_GET, 'o_out', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/korn.webp" alt=""/>
+    <img src="./pics/big/korn.webp" alt=""/>
     <span>Nachrichten<?= createHelpLink(1, 13); ?></span>
 </div>
 
@@ -45,12 +45,12 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SE
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['VonID'], $row['VonName']); ?></td>
             <td>
-                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"
+                <a href="./?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"
                    id="read_<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
             <td id="action_<?= $row['ID']; ?>">
-                <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_in=<?= $offset_in; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                <a href="./actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_in=<?= $offset_in; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                    id="delete_<?= $row['ID']; ?>" class="delete-message"
                    data-id="<?= $row['ID']; ?>" data-token="<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
@@ -67,8 +67,8 @@ $offset_in = verifyOffset($offset_in, $messageCountIn, Config::getInt(Config::SE
 <?= createPaginationTable("pages_inbox", '/?p=nachrichten_liste', $offset_in, $messageCountIn, Config::getInt(Config::SECTION_BASE, 'messages_page_size'), 'o_in'); ?>
 
 <div>
-    <a href="/?p=nachrichten_schreiben" id="new_message">Neue Nachricht schreiben</a> |
-    <a href="/actions/nachrichten.php?a=3&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>" id="delete_all_messages">Alle
+    <a href="./?p=nachrichten_schreiben" id="new_message">Neue Nachricht schreiben</a> |
+    <a href="./actions/nachrichten.php?a=3&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>" id="delete_all_messages">Alle
         Nachrichten löschen</a>
 </div>
 
@@ -99,7 +99,7 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config:
             <td><?= formatDateTime(strtotime($row['Zeit'])); ?></td>
             <td><?= createProfileLink($row['AnID'], $row['AnName']); ?></td>
             <td>
-                <a href="/?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"
+                <a href="./?p=nachrichten_lesen&amp;id=<?= $row['ID']; ?>"
                    id="read_<?= $row['ID']; ?>"><?= escapeForOutput($row['Betreff']); ?></a>
             </td>
             <td><?= getYesOrNo($row['Gelesen']); ?></td>
@@ -107,7 +107,7 @@ $offset_out = verifyOffset($offset_out, $messageCountOut, Config::getInt(Config:
                 <?php
                 if ($row['Gelesen'] == 0 || $row['AnID'] === null) {
                     ?>
-                    <a href="/actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_out=<?= $offset_out; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
+                    <a href="./actions/nachrichten.php?a=2&amp;id=<?= $row['ID']; ?>&amp;o_out=<?= $offset_out; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>"
                        id="delete_<?= $row['ID']; ?>" class="delete-message"
                        data-id="<?= $row['ID']; ?>" data-token="<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
                     <?php

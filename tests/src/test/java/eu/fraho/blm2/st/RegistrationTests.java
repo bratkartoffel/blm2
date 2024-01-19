@@ -110,11 +110,11 @@ class RegistrationTests extends AbstractTest {
         assertElementPresent(By.id("meldung_135"));
 
         // wrong activation token
-        driver.get("http://%s/actions/activate.php?user=%s&code=x7313f0e320f22cbfa35cfc220508eb3ff457c7e".formatted(LOCALHOST, username));
+        driver.get("%s/actions/activate.php?user=%s&code=x7313f0e320f22cbfa35cfc220508eb3ff457c7e".formatted(AbstractTest.BASE_URL, username));
         assertElementPresent(By.id("meldung_117"));
 
         // correct activation token
-        driver.get("http://%s/actions/activate.php?user=%s&code=%s".formatted(LOCALHOST, username, RANDOM_TOKEN));
+        driver.get("%s/actions/activate.php?user=%s&code=%s".formatted(AbstractTest.BASE_URL, username, RANDOM_TOKEN));
         assertElementPresent(By.id("meldung_241"));
 
         // verify that user can login now

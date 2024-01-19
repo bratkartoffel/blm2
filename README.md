@@ -150,7 +150,7 @@ Execution took 1,215.51 ms
 Die initiale Installtion erstellt auch einen Admin-Benutzer (`admin`) mit einem zufällig generiertem Passwort.
 Das Passwort wird in der Ausgabe angezeigt und ist in dem obigen Beispiel `gCcKhP0KiSwjtXlS`.
 
-### 4) Cronjob einrichten
+### 4a) Cronjob einrichten (Linux)
 
 Das Spiel benötigt einen Cronjob, welcher periodisch läuft. Dies dient dazu, die Zinsen, das Basiseinkommen und diverse
 weitere Funktionen durchzuführen.
@@ -162,7 +162,40 @@ Das Intervall des Cronjobs ist standardmässig 30 Minuten, ein Cronjob auf Syste
 */30    *       *       *       *        /usr/bin/php /var/www/htdocs/cronjobs/cron.php
 ```
 
-### Spiel aktualisieren
+### 4b) Cronjob einrichten (Windows)
+
+Windows selbst bietet keinen klassischen cron, hier muss der Eintag über die "Aufgabenplanung" erstellt werden. 
+Nach einem Rechtsklick im linken Bereich des Fensters auf den obersten Einttrag, "Aufgabenplanung" -> "Aufgabe erstellen"
+wird ein neues Fenster geöffnet. Der Name kann frei gewählt werden, sollte aber zur einfachen Nachvollziehbarkeit
+schlicht "Blm2 Cron" genannt werden.
+
+#### Reiter "Trigger"
+
+Im Reiter "Trigger" kann mittels des Buttons "Neu" ein Zeitplan hinzugefügt werden.
+
+Im oberen Bereich sollte bei "Start" eine "gerade" Zeit ausgewählt werden, so ist das ganze besser plan- und testbar.
+Als Beispiel kann hier auf die letzten 30 Minuten gerundet werden, z.B. `01.01.2024 15:00:00`.
+
+Im Bereich "Erweiterte Einstellungen" muss die Option "Wiederholen alle" angehakt werden.
+Als Intervall sollte "30 Minuten" und im Feld rechts daneben, "für die Dauer von", sollte `Unbegrenzt` gewählt werden.
+
+Mit einem Klick auf "OK" wird der Dialog geschlossen und in der Tabelle der Trigger steht nun ein Eintrag.
+
+#### Reiter "Aktionen"
+
+Anschliessend muss die auszuführende Aktion im Reiter "Aktionen" eingestellt werden.
+Mittels Klick auf den Button "Neu" kann ein Programm definiert werden.
+
+Als "Programm / Script" bitte `php.exe` wählen (`c:\xampp\php\php.exe`).
+
+Als "Argument" bitte den Pfad zu der `cron.php` des Spiels eintragen, z.B.: `c:\xampp\htdocs\cronjobs\cron.php`.
+
+#### Speichern
+
+Mittels "ok" wird die geplante Aufgabe gespeichert und kann in der "Aufgabenplanung" nach der Auswahl des Eintrags
+"Aufgabenplanungsbibliothek" im zentralen Bereich des Fensters in der Liste gesehen, bearbeitet und gelöscht werden.
+
+## Spiel aktualisieren
 
 Nach der Installation einer neuen Version sollte das `update.php` nochmals aufgerufen werden.
 Dies sorgt dafür, dass etwaige Datenbankänderungen nachinstalliert werden.
@@ -170,6 +203,23 @@ Dies sorgt dafür, dass etwaige Datenbankänderungen nachinstalliert werden.
 Anpassungen an der `config.ini` werden hingegen **nicht** automatisch durchgeführt, diese müssen manuell eingetragen
 werden.
 Welche Parameter sich zwischen den Versionen geändert haben können dem [CHANGELOG.md](CHANGELOG.md) entnommen werden.
+
+## Hinweise XAMPP
+
+Das Spiel kann auch lokal in einer XAMPP Installation gespielt oder entwickelt werden, jedoch gibt es hier ein
+paar Besonderheiten zu beachten.
+
+### GD-Bibliothek aktivieren
+
+Einmalig muss im PHP die GD-Erweiterung aktiviert werden. Hierzu muss in der `php/php.ini` die Zeile mit `extension=gd`
+gefunden und eingeschaltet werden:
+```ini
+; vorher:
+;extension=gd
+
+; nachher:
+extension=gd
+```
 
 ## Entwicklung
 
@@ -239,3 +289,4 @@ Hierzu wird ein Java-Projekt mit JUnit und Selenium im `tests/` Ordner verwendet
 Die Tests benötigen eine spezielle Konfiguration des Spiels.
 Hierzu muss der [docker-compose stack](tests/src/test/resources/docker-compose.yaml) aus dem `src/test/resources` Ordner
 gestartet sein. Anschlissend können die Tests aus der IDE oder mittels `./gradlew test` ausgeführt werden.
+

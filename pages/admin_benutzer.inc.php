@@ -9,7 +9,7 @@
 $offset = getOrDefault($_GET, 'o', 0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Login_Manager.webp" alt=""/>
+    <img src="./pics/big/Login_Manager.webp" alt=""/>
     <span>Administrationsbereich - Benutzer</span>
 </div>
 
@@ -39,9 +39,9 @@ $offset = getOrDefault($_GET, 'o', 0);
             <td><?= getYesOrNo($row['Gesperrt']); ?></td>
             <td><?= escapeForOutput($row['Verwarnungen']); ?></td>
             <td>
-                <a href="/?p=admin_benutzer_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
+                <a href="./?p=admin_benutzer_bearbeiten&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>">Bearbeiten</a> |
                 <a class="delete_user" data-username="<?= escapeForOutput($row['Name']); ?>"
-                   href="/actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
+                   href="./actions/admin_benutzer.php?a=5&amp;id=<?= $row['ID']; ?>&amp;o=<?= $offset; ?>&amp;token=<?= $_SESSION['blm_xsrf_token']; ?>">Löschen</a>
             </td>
         </tr>
         <?php
@@ -53,4 +53,4 @@ $offset = getOrDefault($_GET, 'o', 0);
 </table>
 <?= createPaginationTable('pages', '/?p=admin_benutzer', $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
-<a href="/?p=admin">&lt;&lt; Zurück</a> | <a id="link_admin_benutzer_importieren" href="/?p=admin_benutzer_importieren">Importieren</a>
+<a href="./?p=admin">&lt;&lt; Zurück</a> | <a id="link_admin_benutzer_importieren" href="./?p=admin_benutzer_importieren">Importieren</a>

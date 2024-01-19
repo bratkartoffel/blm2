@@ -11,7 +11,7 @@ restrictSitter('NeverAllow');
 $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsById($_SESSION['blm_user']);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/package_settings.webp" alt=""/>
+    <img src="./pics/big/package_settings.webp" alt=""/>
     <span>Büro<?= createHelpLink(1, 15); ?></span>
 </div>
 
@@ -22,7 +22,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </p>
 
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post">
+    <form action="./actions/einstellungen.php" method="post">
         <input type="hidden" name="a" value="6"/>
         <header>EMail Adresse ändern</header>
         <div>
@@ -49,7 +49,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </div>
 
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post">
+    <form action="./actions/einstellungen.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <header>Passwort ändern</header>
         <div>
@@ -73,7 +73,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </div>
 
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post" name="form_beschreibung">
+    <form action="./actions/einstellungen.php" method="post" name="form_beschreibung">
         <input type="hidden" name="a" value="4"/>
         <header><label for="beschreibung">Beschreibung ändern</label></header>
         <div>
@@ -90,7 +90,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </div>
 
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post" enctype="multipart/form-data">
+    <form action="./actions/einstellungen.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="a" value="5"/>
         <header>Bild ändern</header>
         <div>
@@ -107,7 +107,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </div>
 
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post" id="sitterSettings">
+    <form action="./actions/einstellungen.php" method="post" id="sitterSettings">
         <input type="hidden" name="a" value="7"/>
         <header>Sitting konfigurieren</header>
         <div>
@@ -171,7 +171,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </div>
 
 <div class="form Einstellungen" id="download_gdpr">
-    <form action="/actions/einstellungen.php" method="post">
+    <form action="./actions/einstellungen.php" method="post">
         <input type="hidden" name="a" value="8"/>
         <header>Gespeicherte Daten runterladen</header>
         <div>
@@ -197,7 +197,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
     benötigt.
 </p>
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post">
+    <form action="./actions/einstellungen.php" method="post">
         <input type="hidden" name="a" value="2"/>
         <header>Account zurücksetzen</header>
         <div>
@@ -211,7 +211,7 @@ $data = Database::getInstance()->getPlayerEmailAndBeschreibungAndSitterSettingsB
 </div>
 
 <div class="form Einstellungen">
-    <form action="/actions/einstellungen.php" method="post">
+    <form action="./actions/einstellungen.php" method="post">
         <input type="hidden" name="a" value="3"/>
         <header>Account löschen</header>
         <div>

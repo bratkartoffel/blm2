@@ -13,14 +13,14 @@ $menge = getOrDefault($_GET, 'menge', 0);
 $preis = getOrDefault($_GET, 'preis', .0);
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/kservices.webp" alt=""/>
+    <img src="./pics/big/kservices.webp" alt=""/>
     <span>Administrationsbereich - Vertrag erstellen</span>
 </div>
 
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div class="form AdminCreateContract">
-    <form action="/actions/admin_vertrag.php" method="post">
+    <form action="./actions/admin_vertrag.php" method="post">
         <input type="hidden" name="a" value="1"/>
         <header>Vertrag einstellen</header>
         <div>
@@ -50,5 +50,5 @@ $preis = getOrDefault($_GET, 'preis', .0);
 </div>
 
 <div>
-    <a href="/?p=admin_vertrag">&lt;&lt; Zurück</a>
+    <a href="./?p=admin_vertrag">&lt;&lt; Zurück</a>
 </div>

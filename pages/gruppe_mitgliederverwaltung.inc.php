@@ -12,7 +12,7 @@ $rights = Database::getInstance()->getGroupRightsByUserId($_SESSION['blm_user'])
 requireEntryFound($rights, '/?p=gruppe');
 ?>
 <div id="SeitenUeberschrift">
-    <img src="/pics/big/Community_Help.webp" alt=""/>
+    <img src="./pics/big/Community_Help.webp" alt=""/>
     <span>Gruppe - Mitgliederverwaltung<?= createHelpLink(1, 23); ?></span>
 </div>
 
@@ -42,7 +42,7 @@ requireEntryFound($rights, '/?p=gruppe');
     $data = Database::getInstance()->getAllGroupRightsByGroupId($rights['group_id']);
     foreach ($data as $row) {
         ?>
-        <form action="/actions/gruppe.php" method="post">
+        <form action="./actions/gruppe.php" method="post">
             <input type="hidden" name="a" value="9"/>
             <input type="hidden" name="user_id" value="<?= $row['UserId']; ?>"/>
             <tr>
@@ -78,7 +78,7 @@ requireEntryFound($rights, '/?p=gruppe');
                     }
 
                     if ($rights['member_kick'] && $row['user_id'] != $_SESSION['blm_user']) {
-                        printf('<a class="kick_member" data-username="%s" href="/actions/gruppe.php?a=10&amp;user_id=%s&amp;token=%s">Kicken</a>',
+                        printf('<a class="kick_member" data-username="%s" href="./actions/gruppe.php?a=10&amp;user_id=%s&amp;token=%s">Kicken</a>',
                             escapeForOutput($row['UserName']), $row['UserId'], $_SESSION['blm_xsrf_token']);
                     }
                     ?>

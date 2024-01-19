@@ -42,7 +42,7 @@ public class AdminTests extends AbstractTest {
         driver.findElement(By.id("do_import")).click();
         assertElementPresent(By.id("meldung_249"));
 
-        driver.get("http://%s/?p=profil&id=5".formatted(LOCALHOST));
+        driver.get("%s/?p=profil&id=5".formatted(AbstractTest.BASE_URL));
         assertElementPresent(By.id("profile_5"));
     }
 
@@ -67,7 +67,7 @@ public class AdminTests extends AbstractTest {
         driver.findElement(By.id("do_import")).click();
         assertElementPresent(By.id("meldung_249"));
 
-        driver.get("http://%s/?p=profil&id=5".formatted(LOCALHOST));
+        driver.get("%s/?p=profil&id=5".formatted(AbstractTest.BASE_URL));
         assertElementPresent(By.id("meldung_154"));
     }
 
@@ -89,7 +89,7 @@ public class AdminTests extends AbstractTest {
         driver.findElement(By.id("do_import")).click();
         assertElementPresent(By.id("meldung_249"));
 
-        driver.get("http://%s/?p=profil&id=5".formatted(LOCALHOST));
+        driver.get("%s/?p=profil&id=5".formatted(AbstractTest.BASE_URL));
         assertElementPresent(By.id("profile_5"));
     }
 
@@ -111,7 +111,7 @@ public class AdminTests extends AbstractTest {
         driver.findElement(By.id("do_import")).click();
         assertElementPresent(By.id("meldung_176"));
 
-        driver.get("http://%s/?p=profil&id=5".formatted(LOCALHOST));
+        driver.get("%s/?p=profil&id=5".formatted(AbstractTest.BASE_URL));
         assertElementPresent(By.id("meldung_154"));
     }
 }

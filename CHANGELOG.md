@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.13.0] - 2024-01-19
+
 ### Changed
 
 - enhance documentation when running on XAMPP and windows
@@ -485,7 +489,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.12.2...HEAD
+[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.0...HEAD
+
+[1.13.0]: https://github.com/bratkartoffel/blm2/compare/v1.12.2...v1.13.0
 
 [1.12.2]: https://github.com/bratkartoffel/blm2/compare/v1.12.1...v1.12.2
 

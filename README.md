@@ -287,6 +287,6 @@ Diese können in den Einstellungen unter `File / Settings / Tools > File Watcher
 Das Spiel wird mit jeder Änderung durch automatisierte Tests überpüft.
 Hierzu wird ein Java-Projekt mit JUnit und Selenium im `tests/` Ordner verwendet.
 Die Tests benötigen eine spezielle Konfiguration des Spiels.
-Hierzu muss der [docker-compose stack](tests/src/test/resources/docker-compose.yaml) aus dem `src/test/resources` Ordner
+Hierzu muss der [docker-compose stack](tests/src/test/resources/compose.yaml) aus dem `src/test/resources` Ordner
 gestartet sein. Anschlissend können die Tests aus der IDE oder mittels `./gradlew test` ausgeführt werden.
 

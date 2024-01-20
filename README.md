@@ -37,11 +37,11 @@ Die automatischen Tests laufen mit:
 - PHP `7.4.33`
 - MariaDB `10.2.44`.
 
-Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Jannuar 2023) mit:
+Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Jannuar 2024) mit:
 
 - Apache `2.4`
-- PHP `8.1`
-- MariaDB `10.6`
+- PHP `8.2`
+- MariaDB `11.2`
 
 ### 1) Dateien entpacken / hochladen
 
@@ -287,6 +287,6 @@ Diese können in den Einstellungen unter `File / Settings / Tools > File Watcher
 Das Spiel wird mit jeder Änderung durch automatisierte Tests überpüft.
 Hierzu wird ein Java-Projekt mit JUnit und Selenium im `tests/` Ordner verwendet.
 Die Tests benötigen eine spezielle Konfiguration des Spiels.
-Hierzu muss der [docker-compose stack](tests/src/test/resources/docker-compose.yaml) aus dem `src/test/resources` Ordner
+Hierzu muss der [docker-compose stack](tests/src/test/resources/compose.yaml) aus dem `src/test/resources` Ordner
 gestartet sein. Anschlissend können die Tests aus der IDE oder mittels `./gradlew test` ausgeführt werden.
 

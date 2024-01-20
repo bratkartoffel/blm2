@@ -37,11 +37,11 @@ Die automatischen Tests laufen mit:
 - PHP `7.4.33`
 - MariaDB `10.2.44`.
 
-Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Jannuar 2023) mit:
+Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Jannuar 2024) mit:
 
 - Apache `2.4`
-- PHP `8.1`
-- MariaDB `10.6`
+- PHP `8.2`
+- MariaDB `11.2`
 
 ### 1) Dateien entpacken / hochladen
 

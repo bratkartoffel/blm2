@@ -87,7 +87,7 @@ sendCspHeader();
     </tr>
     <tr>
         <td>Nächste Mafia:</td>
-        <td class="countdown"><?= formatDuration(max(0, strtotime($data['NextMafia']) - time())); ?></td>
+        <td class="countdown"><?= !empty($data['NextMafia']) ? formatDuration(max(0, strtotime($data['NextMafia']) - time())) : "Nichts geplant!"; ?></td>
     </tr>
     <tr>
         <td>Logout wegen Inaktivität:</td>

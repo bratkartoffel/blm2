@@ -1158,7 +1158,7 @@ function createHelpLink(int $module, int $category): string
     return '';
 }
 
-function getCurrentPage(): string
+function getCurrentPage() :string
 {
     $adminSeiten = [
             'admin', 'admin_benutzer', 'admin_benutzer_bearbeiten', 'admin_benutzer_importieren',
@@ -1195,6 +1195,7 @@ function getCurrentPage(): string
     } else {
         redirectTo('/?p=index', 101, __LINE__);
     }
+    return 'index';
 }
 
 function buildingRequirementsMet(int $building_id, array $player): bool

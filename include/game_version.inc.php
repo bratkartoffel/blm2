@@ -11,11 +11,11 @@ function getVersionExtra(): ?string
     $git_head = __DIR__ . '/../.git/HEAD';
     if (file_exists($git_head)) {
         $content = file_get_contents($git_head);
-        if (strpos($content, 'ref:') !== false) {
+        if (str_contains($content, 'ref:')) {
             $tmp = explode('/', $content);
             $content = trim($tmp[count($tmp) - 1]);
         }
-        $version_extra = '+' . substr($content, 0, 8);
+        $version_extra = ' + ' . substr($content, 0, 9);
     }
     return $version_extra;
 }

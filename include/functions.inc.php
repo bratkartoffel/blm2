@@ -1156,8 +1156,8 @@ function createHelpLink(int $module, int $category): string
         return sprintf(' <a href="./?p=hilfe&amp;mod=%d&amp;cat=%d" id="link_show_help"><img id="help_image" src="./pics/style/help.webp" alt="Hilfe" /></a>', $module, $category);
     }
     return '';
-}
 
+  
 function getCurrentPage() :string
 {
     $adminSeiten = [

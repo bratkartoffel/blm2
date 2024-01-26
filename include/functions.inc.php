@@ -1158,38 +1158,43 @@ function createHelpLink(int $module, int $category): string
     return '';
 }
 
-function getCurrentPage(): string {
-    $parameter = array_key_exists('p', $_GET) ? $_GET['p'] : 'index';
-
-    $seiten = [
+function getCurrentPage(): string
+{
+    $adminSeiten = [
             'admin', 'admin_benutzer', 'admin_benutzer_bearbeiten', 'admin_benutzer_importieren',
-            'admin_gruppe', 'admin_gruppe_bearbeiten', 'admin_log_bank', 'admin_log_bioladen',
-            'admin_log_gruppenkasse', 'admin_log_login', 'admin_log_mafia', 'admin_log_marktplatz',
-            'admin_log_nachrichten', 'admin_log_vertraege', 'admin_markt', 'admin_markt_bearbeiten',
-            'admin_markt_einstellen', 'admin_test', 'admin_vertrag', 'admin_vertrag_bearbeiten',
-            'admin_vertrag_einstellen', 'bank', 'bioladen', 'buero', 'einstellungen', 'forschungszentrum',
-            'gebaeude', 'gruppe', 'gruppe_diplomatie', 'gruppe_einstellungen', 'gruppe_kasse',
-            'gruppe_krieg_details', 'gruppe_logbuch', 'gruppe_mitgliederverwaltung', 'hilfe',
-            'impressum', 'index', 'mafia', 'marktplatz_liste', 'marktplatz_verkaufen', 'nachrichten_lesen',
-            'nachrichten_liste', 'nachrichten_schreiben', 'notizblock', 'plantage', 'profil', 'rangliste',
-            'rangliste_spezial', 'regeln', 'special', 'statistik', 'vertraege_liste', 'vertraege_neu'
+            'admin_gruppe', 'admin_gruppe_bearbeiten', 'admin_test', 'admin_markt',
+            'admin_vertrag', 'admin_vertrag_einstellen', 'admin_vertrag_bearbeiten',
+            'admin_markt_einstellen', 'admin_markt_bearbeiten', 'admin_log_bank',
+            'admin_log_bioladen', 'admin_log_gruppenkasse', 'admin_log_login',
+            'admin_log_mafia', 'admin_log_marktplatz', 'admin_log_nachrichten',
+            'admin_log_vertraege'
     ];
 
-    $seite = 'index';
+    $userSeiten = [
+            'bank', 'bioladen', 'buero', 'forschungszentrum', 'gebaeude', 'marktplatz_liste',
+            'marktplatz_verkaufen', 'plantage', 'vertraege_liste', 'vertraege_neu', 'mafia',
+            'statistik', 'gruppe', 'gruppe_einstellungen', 'gruppe_mitgliederverwaltung',
+            'gruppe_diplomatie', 'gruppe_kasse', 'gruppe_logbuch', 'gruppe_krieg_details',
+            'rangliste', 'rangliste_spezial', 'index', 'impressum', 'regeln', 'einstellungen',
+            'nachrichten_lesen', 'nachrichten_liste', 'nachrichten_schreiben', 'notizblock',
+            'hilfe', 'profil', 'special'
+    ];
 
-    if (isLoggedIn()) {
-        if (in_array($parameter, $seiten) || ($parameter == 'admin' || isAdmin())) {
-            $seite = $parameter;
-        } elseif (!isAdmin()) {
-            redirectTo('/?p=index', 101, __LINE__);
-        }
+    $gastSeiten = ['anmelden', 'registrieren', 'index', 'passwort_vergessen', 'regeln', 'impressum'];
+
+    $aktuelleSeite = array_key_exists('p', $_GET) ? $_GET['p'] : 'index';
+    $istEingeloggt = isLoggedIn();
+    $istAdmin = isAdmin();
+
+    if ($istEingeloggt && $istAdmin && in_array($aktuelleSeite, $adminSeiten)) {
+        return $aktuelleSeite;
+    } elseif ($istEingeloggt && in_array($aktuelleSeite, $userSeiten)) {
+        return $aktuelleSeite;
+    } elseif (!$istEingeloggt && in_array($aktuelleSeite, $gastSeiten)) {
+        return $aktuelleSeite;
     } else {
-        if (in_array($parameter, ['anmelden', 'index', 'impressum', 'passwort_vergessen', 'regeln', 'registrieren'])) {
-            $seite = $parameter;
-        }
+        redirectTo('/?p=index', 101, __LINE__);
     }
-
-    return $seite;
 }
 
 function buildingRequirementsMet(int $building_id, array $player): bool

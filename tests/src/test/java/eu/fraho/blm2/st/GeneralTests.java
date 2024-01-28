@@ -42,7 +42,7 @@ public class GeneralTests extends AbstractTest {
             "mails/email_change.html.tpl",
             "vendor/PHPMailer/src/VERSION",
     })
-    void testSensitiveFilesInacessible(String path) throws IOException, InterruptedException {
+    void testSensitiveFilesInaccessible(String path) throws IOException, InterruptedException {
         HttpResponse<String> response = simpleHttpGet("%s/%s".formatted(AbstractTest.BASE_URL, path));
         Assertions.assertEquals(4, response.statusCode() / 100);
     }

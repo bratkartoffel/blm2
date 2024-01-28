@@ -1160,89 +1160,41 @@ function createHelpLink(int $module, int $category): string
 
 function getCurrentPage(): string
 {
-    $p = array_key_exists('p', $_GET) ? $_GET['p'] : 'index';
-    if (isLoggedIn()) {
-        switch ($p) {
-            case 'admin':
-            case 'admin_benutzer':
-            case 'admin_benutzer_bearbeiten':
-            case 'admin_benutzer_importieren':
-            case 'admin_gruppe':
-            case 'admin_gruppe_bearbeiten':
-            case 'admin_test':
-            case 'admin_markt':
-            case 'admin_vertrag':
-            case 'admin_vertrag_einstellen':
-            case 'admin_vertrag_bearbeiten':
-            case 'admin_markt_einstellen':
-            case 'admin_markt_bearbeiten':
-            case 'admin_log_bank':
-            case 'admin_log_bioladen':
-            case 'admin_log_gruppenkasse':
-            case 'admin_log_login':
-            case 'admin_log_mafia':
-            case 'admin_log_marktplatz':
-            case 'admin_log_nachrichten':
-            case 'admin_log_vertraege':
-                if (!isAdmin()) {
-                    redirectTo('/?p=index', 101, __LINE__);
-                }
-                $page = $p;
-                break;
-            case 'bank':
-            case 'bioladen':
-            case 'buero':
-            case 'forschungszentrum':
-            case 'gebaeude':
-            case 'marktplatz_liste':
-            case 'marktplatz_verkaufen':
-            case 'plantage':
-            case 'vertraege_liste':
-            case 'vertraege_neu':
-            case 'mafia':
-            case 'statistik':
-            case 'gruppe':
-            case 'gruppe_einstellungen':
-            case 'gruppe_mitgliederverwaltung':
-            case 'gruppe_diplomatie':
-            case 'gruppe_kasse':
-            case 'gruppe_logbuch':
-            case 'gruppe_krieg_details':
-            case 'rangliste':
-            case 'rangliste_spezial':
-            case 'index':
-            case 'impressum':
-            case 'regeln':
-            case 'einstellungen':
-            case 'nachrichten_lesen':
-            case 'nachrichten_liste':
-            case 'nachrichten_schreiben':
-            case 'notizblock':
-            case 'hilfe':
-            case 'profil':
-            case 'special':
-                $page = $p;
-                break;
-            default:
-                $page = 'index';
-                break;
-        }
-    } else {
-        switch ($p) {
-            case 'anmelden':
-            case 'registrieren':
-            case 'index':
-            case 'passwort_vergessen':
-            case 'regeln':
-            case 'impressum':
-                $page = $p;
-                break;
-            default:
-                $page = 'index';
-                break;
-        }
+    $adminSeiten = [
+            'admin', 'admin_benutzer', 'admin_benutzer_bearbeiten', 'admin_benutzer_importieren',
+            'admin_gruppe', 'admin_gruppe_bearbeiten', 'admin_test', 'admin_markt',
+            'admin_vertrag', 'admin_vertrag_einstellen', 'admin_vertrag_bearbeiten',
+            'admin_markt_einstellen', 'admin_markt_bearbeiten', 'admin_log_bank',
+            'admin_log_bioladen', 'admin_log_gruppenkasse', 'admin_log_login',
+            'admin_log_mafia', 'admin_log_marktplatz', 'admin_log_nachrichten',
+            'admin_log_vertraege'
+    ];
+
+    $userSeiten = [
+            'bank', 'bioladen', 'buero', 'forschungszentrum', 'gebaeude', 'marktplatz_liste',
+            'marktplatz_verkaufen', 'plantage', 'vertraege_liste', 'vertraege_neu', 'mafia',
+            'statistik', 'gruppe', 'gruppe_einstellungen', 'gruppe_mitgliederverwaltung',
+            'gruppe_diplomatie', 'gruppe_kasse', 'gruppe_logbuch', 'gruppe_krieg_details',
+            'rangliste', 'rangliste_spezial', 'index', 'impressum', 'regeln', 'einstellungen',
+            'nachrichten_lesen', 'nachrichten_liste', 'nachrichten_schreiben', 'notizblock',
+            'hilfe', 'profil', 'special'
+    ];
+
+    $gastSeiten = ['anmelden', 'registrieren', 'index', 'passwort_vergessen', 'regeln', 'impressum'];
+
+    $aktuelleSeite = array_key_exists('p', $_GET) ? $_GET['p'] : 'index';
+    $istEingeloggt = isLoggedIn();
+    $istAdmin = isAdmin();
+
+    if ($istAdmin && in_array($aktuelleSeite, $adminSeiten)) {
+        return $aktuelleSeite;
+    } elseif ($istEingeloggt && in_array($aktuelleSeite, $userSeiten)) {
+        return $aktuelleSeite;
+    } elseif (!$istEingeloggt && in_array($aktuelleSeite, $gastSeiten)) {
+        return $aktuelleSeite;
     }
-    return $page;
+    redirectTo('/?p=index', 101, __LINE__);
+    return 'index';
 }
 
 function buildingRequirementsMet(int $building_id, array $player): bool

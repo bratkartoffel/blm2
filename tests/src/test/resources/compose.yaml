@@ -32,6 +32,7 @@ services:
       - ./config.ini:/var/www/html/blm2/config/config.ini
       - ./test-reset-player.php:/var/www/html/blm2/actions/test-reset-player.php
       - ./test-run-cron.php:/var/www/html/blm2/actions/test-run-cron.php
+#      - ./xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
 
   inbucket:
     image: inbucket/inbucket:3.0.4

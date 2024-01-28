@@ -30,7 +30,5 @@ RUN apt-get update \
     # clean apt cache
     && rm -rf /var/lib/apt/lists/*
 
-COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
 HEALTHCHECK --interval=60s --timeout=2s \
     CMD curl --silent --fail  http://localhost/ || exit 1

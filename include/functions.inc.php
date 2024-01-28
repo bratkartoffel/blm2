@@ -1192,8 +1192,8 @@ function getCurrentPage(): string
         return $aktuelleSeite;
     } elseif (!$istEingeloggt && in_array($aktuelleSeite, $gastSeiten)) {
         return $aktuelleSeite;
-        redirectTo('/?p=index', 101, __LINE__);
     }
+    redirectTo('/?p=index', 101, __LINE__);
     return 'index';
 }
 

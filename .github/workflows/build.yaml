@@ -59,7 +59,7 @@ jobs:
       - uses: gradle/wrapper-validation-action@56b90f209b02bf6d1deae490e9ef18b21a389cd4 # v1.1.0
       - run: ./gradlew --no-daemon check
         working-directory: tests/
-      - uses: mikepenz/action-junit-report@b1b7f659602565970688b2e2588738b9398e895d # v4.0.4
+      - uses: mikepenz/action-junit-report@5f47764eec0e1c1f19f40c8e60a5ba47e47015c5 # v4.1.0
         if: always() # always run even if the previous step fails
         with:
           report_paths: 'tests/build/test-results/test/TEST-*.xml'

@@ -500,7 +500,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.0...HEAD
+[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.0...HEAD
 
 [1.13.0]: https://github.com/bratkartoffel/blm2/compare/v1.12.2...v1.13.0
 

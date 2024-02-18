@@ -29,15 +29,15 @@ public class PlantageTests extends AbstractTest {
 
         driver.findElement(By.id("link_plantage")).click();
         setValue(By.id("stunden"), "2");
-        assertText(By.id("pr_ko_all"), "Kosten: 2,350.00 €");
+        assertText(By.id("pr_ko_all"), "Kosten: 5,800.00 €");
         driver.findElement(By.id("plant_all")).submit();
         assertElementPresent(By.id("meldung_207"));
         assertElementPresent(By.id("abort_1"));
         assertElementPresent(By.id("abort_2"));
-        assertText(By.id("stat_money"), "12,650.00 €");
+        assertText(By.id("stat_money"), "9,200.00 €");
 
         driver.findElement(By.id("link_buero")).click();
-        assertText(By.id("b_s_3"), "2,350.00 €");
+        assertText(By.id("b_s_3"), "5,800.00 €");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class PlantageTests extends AbstractTest {
 
         driver.findElement(By.id("link_plantage")).click();
         setValue(By.id("stunden"), "13");
-        assertText(By.id("pr_ko_all"), "Kosten: 15,275.00 €");
+        assertText(By.id("pr_ko_all"), "Kosten: 37,700.00 €");
         driver.findElement(By.id("plant_all")).submit();
         assertElementPresent(By.id("meldung_133"));
     }
@@ -61,7 +61,7 @@ public class PlantageTests extends AbstractTest {
         assertElementPresent(By.id("meldung_207"));
         assertElementPresent(By.id("abort_1"));
         assertElementPresent(By.id("plant_2"));
-        assertText(By.id("stat_money"), "12,000.00 €");
+        assertText(By.id("stat_money"), "10,488.00 €");
     }
 
     @Test
@@ -69,7 +69,8 @@ public class PlantageTests extends AbstractTest {
         WebDriver driver = getDriver();
 
         driver.findElement(By.id("link_plantage")).click();
-        setValue(By.id("amount_1"), "16921");
+        int menge = Integer.parseInt(driver.findElement(By.id("amount_1")).getAttribute("data-menge"));
+        setValue(By.id("amount_1"), String.valueOf(12 * menge + 1));
         driver.findElement(By.id("plant_1")).submit();
         assertElementPresent(By.id("meldung_125"));
         assertElementPresent(By.id("plant_1"));
@@ -85,7 +86,7 @@ public class PlantageTests extends AbstractTest {
         setValue(By.id("amount_2"), "3");
         driver.findElement(By.id("plant_2")).submit();
         assertElementPresent(By.id("meldung_207"));
-        assertText(By.id("stat_money"), "14,999.54 €");
+        assertText(By.id("stat_money"), "14,999.41 €");
         assertElementPresent(By.id("plant_1"));
         assertElementPresent(By.id("abort_2"));
         Thread.sleep(TimeUnit.SECONDS.toMillis(3));
@@ -93,7 +94,7 @@ public class PlantageTests extends AbstractTest {
         driver.switchTo().alert().accept();
         assertElementPresent(By.id("meldung_222"));
         assertElementPresent(By.id("plant_2"));
-        assertText(By.id("stat_money"), "14,999.54 €");
+        assertText(By.id("stat_money"), "14,999.41 €");
 
         driver.findElement(By.id("link_bioladen")).click();
         assertText(By.id("cur_amount_2"), "1 kg");

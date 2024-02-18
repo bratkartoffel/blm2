@@ -117,23 +117,23 @@ switch ($testClass) {
         $additional = getOrDefault($_GET, 'additional', 0);
         switch ($additional) {
             case 0:
-                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 3999));
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 19999));
                 break;
 
             case 1:
-                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 5000));
+                Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array('Punkte' => 21000));
                 break;
 
             case 2:
                 Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-                        'Punkte' => 7500,
+                        'Punkte' => 30000,
                         'Gebaeude' . building_pizzeria => 50,
                 ));
                 break;
 
             case 3:
                 Database::getInstance()->updateTableEntry(Database::TABLE_USERS, $id, array(
-                        'Punkte' => 11250,
+                        'Punkte' => 40000,
                         'Gebaeude' . building_fence => 100,
                 ));
                 break;

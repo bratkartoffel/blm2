@@ -3,6 +3,7 @@
 # Please see LICENCE.md for complete licence text.
 
 version: '3.7'
+name: blm2-dev
 services:
   mariadb:
     image: docker.io/mariadb:10.2.44

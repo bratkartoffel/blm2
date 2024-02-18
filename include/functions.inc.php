@@ -945,11 +945,14 @@ function formatPercent(float $amount, bool $withSuffix = true, int $precision = 
 
 function createPaginationTable(string $id, string $linkBase, int $currentPage, int $entriesCount, int $entriesPerPage, string $offsetField = 'o', ?string $anchor = null): string
 {
+    if (substr($linkBase, 0, 1) === '/') {
+        $linkBase = parse_url(Config::get(Config::SECTION_BASE, 'base_url'), PHP_URL_PATH) . $linkBase;
+    }
     $pages = array();
     for ($i = 0; $i < $entriesCount; $i += $entriesPerPage) {
         $page = floor($i / $entriesPerPage);
         if ($page != $currentPage) {
-            $pages[] = sprintf('<a href="./%s&amp;%s=%d%s" id="%s_%d">%d</a>',
+            $pages[] = sprintf('<a href="%s&amp;%s=%d%s" id="%s_%d">%d</a>',
                     $linkBase, $offsetField, $page, $anchor == null ? '' : '#$anchor', $id, $page + 1, $page + 1);
         } else {
             $pages[] = sprintf('<span id="%s_active_%d">%d</span>', $id, $page + 1, $page + 1);
@@ -1017,7 +1020,7 @@ function redirectTo(string $location, ?int $m = null, ?string $anchor = null): v
     }
     if (substr($location, 0, 1) === '/') {
         // determine path from htdocs root
-       $location = parse_url(Config::get(Config::SECTION_BASE, 'base_url'), PHP_URL_PATH) . $location;
+        $location = parse_url(Config::get(Config::SECTION_BASE, 'base_url'), PHP_URL_PATH) . $location;
     }
     header('Location: ' . $location, true, 303);
     die();

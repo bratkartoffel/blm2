@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - (vertraege) keep receiver name when applying amount / price for new contracts
+- (admin) fix filter forms wrong target urls for various admin pages
 
 ## [1.13.1] - 2024-02-18
 

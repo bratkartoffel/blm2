@@ -17,7 +17,7 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="/" method="get">
+    <form action="./" method="get">
         <input type="hidden" name="p" value="admin_markt"/>
         <label for="ware">Ware:</label>
         <?= createWarenDropdown($ware, 'ware'); ?>

@@ -45,7 +45,7 @@ for ($i = 1; $i <= count_wares; $i++) {
         <header>Schnellanbau</header>
         <div>
             <label for="stunden">Produziere</label>
-            <input type="number" id="stunden" name="stunden" value="1" size="2" maxlength="2" min="1"
+            <input type="number" id="stunden" name="stunden" value="1" size="3" maxlength="2" min="1"
                    max="<?= Config::getInt(Config::SECTION_PLANTAGE, 'production_hours_max'); ?>"/>
             Stunde(n) von Allem.
         </div>

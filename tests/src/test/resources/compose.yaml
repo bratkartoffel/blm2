@@ -5,7 +5,7 @@
 version: '3.7'
 services:
   mariadb:
-    image: mariadb:10.2.44
+    image: docker.io/mariadb:10.2.44
 #    image: mysql:8.0.32
     restart: unless-stopped
     environment:
@@ -17,7 +17,7 @@ services:
       - "3306:3306"
 
   application:
-    image: bratkartoffel/web:blm2-dev
+    image: docker.io/bratkartoffel/web:blm2-dev
     build:
       context: .
       dockerfile: Dockerfile-php
@@ -35,7 +35,7 @@ services:
 #      - ./xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
 
   inbucket:
-    image: inbucket/inbucket:3.0.4
+    image: docker.io/inbucket/inbucket:3.0.4
     restart: unless-stopped
     ports:
       - "9000:9000"

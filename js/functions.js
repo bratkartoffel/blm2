@@ -46,7 +46,7 @@ function RechneProduktionsKosten(BasisMenge, BasisPreis, Menge, Geld, TextFeld, 
         minimumFractionDigits: 2, maximumFractionDigits: 2
     }) + ' €';
 
-    if (kosten > Geld || kosten < 0 || isNaN(kosten)) {
+    if (kosten > Geld || kosten <= 0 || isNaN(kosten)) {
         Button.enabled = '';
         Button.disabled = 'disabled';
     } else {

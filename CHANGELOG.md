@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.13.1] - 2024-02-18
+
 ### Changed
 - (balancing) mafia requires more points to be enabled
   - `mafia.min_points: 4000 -> 20000`
@@ -500,7 +504,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.0...HEAD
+[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.1...HEAD
+
+[1.13.1]: https://github.com/bratkartoffel/blm2/compare/v1.13.0...v1.13.1
 
 [1.13.0]: https://github.com/bratkartoffel/blm2/compare/v1.12.2...v1.13.0
 

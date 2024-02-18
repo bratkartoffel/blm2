@@ -63,9 +63,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('pages', '/?p=admin_log_bank&amp;wer=' . escapeForOutput($wer)
-    . '&amp;wohin=' . escapeForOutput($wohin)
-    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_log_bank'
+        . '&amp;wer=' . urlencode($wer)
+        . '&amp;wohin=' . urlencode($wohin)
+        , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="./?p=admin">&lt;&lt; Zurück</a>

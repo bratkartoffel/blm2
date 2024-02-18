@@ -66,10 +66,11 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('pages', '/?p=admin_log_gruppenkasse&amp;wer=' . escapeForOutput($wer)
-    . '&amp;wen=' . escapeForOutput($wen)
-    . '&amp;gruppe=' . $gruppe
-    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_log_gruppenkasse'
+        . '&amp;wer=' . urlencode($wer)
+        . '&amp;wen=' . urlencode($wen)
+        . '&amp;gruppe=' . $gruppe
+        , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="./?p=admin">&lt;&lt; Zurück</a>

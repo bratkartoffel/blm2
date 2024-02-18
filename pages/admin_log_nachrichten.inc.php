@@ -60,9 +60,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('pages', '/?p=admin_log_nachrichten&amp;absender=' . escapeForOutput($filter_sender)
-    . '&amp;empfaenger=' . escapeForOutput($empfaenger)
-    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_log_nachrichten'
+        . '&amp;absender=' . urlencode($absender)
+        . '&amp;empfaenger=' . urlencode($empfaenger)
+        , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="./?p=admin">&lt;&lt; Zurück</a>

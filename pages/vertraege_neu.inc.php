@@ -83,7 +83,7 @@ $data = Database::getInstance()->getPlayerResearchLevelsAndAllStorageAndShopLeve
                 - <?= formatCurrency($sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price')); ?>
             </td>
             <td>
-                <a href="./?p=vertraege_neu&amp;empfaenger=<?= escapeForOutput($empfaenger); ?>&amp;ware=<?= $i; ?>&amp;menge=<?= $data['Lager' . $i]; ?>&amp;preis=<?= $sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price'); ?>">Übernehmen</a>
+                <a href="./?p=vertraege_neu&amp;empfaenger=<?= urlencode($empfaenger); ?>&amp;ware=<?= $i; ?>&amp;menge=<?= $data['Lager' . $i]; ?>&amp;preis=<?= $sellPrice * Config::getFloat(Config::SECTION_CONTRACT, 'max_price'); ?>">Übernehmen</a>
             </td>
         </tr>
         <?php

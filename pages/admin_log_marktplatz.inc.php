@@ -74,10 +74,11 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('pages', '/?p=admin_log_marktplatz&amp;verkaeufer=' . escapeForOutput($verkaeufer)
-    . '&amp;kaeufer=' . escapeForOutput($kaeufer)
-    . '&amp;ware=' . escapeForOutput($ware)
-    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_log_marktplatz'
+        . '&amp;verkaeufer=' . urlencode($verkaeufer)
+        . '&amp;kaeufer=' . urlencode($kaeufer)
+        . '&amp;ware=' . $ware
+        , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="./?p=admin">&lt;&lt; Zurück</a>

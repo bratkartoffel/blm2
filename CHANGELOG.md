@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Changed
+- (balancing) mafia requires more points to be enabled
+  - `mafia.min_points: 4000 -> 20000`
+- (balancing) increase production amount boost for each researched level
+  - `research_lab.production_amount_per_level: 30 -> 75`
+  - `research_lab.production_cost_per_level: 25 -> 100`
+
+### Fixed
+- (plantage) the textfield for hour-production is larger now
+  - previously the textfield content was cut off when a value larger than 9 was selected
+- (plantage) the "produce all" button is now correctly disabled if `0` is selected
+- fix test containers setup when using `podman-compose`
 
 ## [1.13.0] - 2024-01-19
 

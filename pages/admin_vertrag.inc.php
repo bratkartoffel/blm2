@@ -18,7 +18,7 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="/" method="get">
+    <form action="./" method="get">
         <input type="hidden" name="p" value="admin_vertrag"/>
         <label for="wer">Wer:</label>
         <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
@@ -69,7 +69,10 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('pages', '/?p=admin_vertrag&amp;wer=' . escapeForOutput($wer) . '&amp;wen=' . escapeForOutput($wen), $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_vertrag'
+        . '&amp;wer=' . urlencode($wer)
+        . '&amp;wen=' . urlencode($wen)
+        , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="./?p=admin_vertrag_einstellen">Neuen Vertrag erstellen</a><br/>

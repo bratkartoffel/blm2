@@ -7,20 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Fixed
+
+- (vertraege) keep receiver name when applying amount / price for new contracts
+- (admin) fix filter forms wrong target urls for various admin pages
+- (various) fix double slash in pagination urls
+- (various) fix invalid escaping of usernames when inserted as part of an url
 
 ## [1.13.1] - 2024-02-18
 
 ### Changed
+
 - (balancing) mafia requires more points to be enabled
-  - `mafia.min_points: 4000 -> 20000`
+    - `mafia.min_points: 4000 -> 20000`
 - (balancing) increase production amount boost for each researched level
-  - `research_lab.production_amount_per_level: 30 -> 75`
-  - `research_lab.production_cost_per_level: 25 -> 100`
+    - `research_lab.production_amount_per_level: 30 -> 75`
+    - `research_lab.production_cost_per_level: 25 -> 100`
 
 ### Fixed
+
 - (plantage) the textfield for hour-production is larger now
-  - previously the textfield content was cut off when a value larger than 9 was selected
+    - previously the textfield content was cut off when a value larger than 9 was selected
 - (plantage) the "produce all" button is now correctly disabled if `0` is selected
 - fix test containers setup when using `podman-compose`
 
@@ -30,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - enhance documentation when running on XAMPP and windows
 - installing the game into the document root is no longer required
-  - the game may now run from inside a folder, e.g. http://example.com/games/blm2
+    - the game may now run from inside a folder, e.g. http://example.com/games/blm2
 - (mailing) upgrade PHPMailer to 6.9.1
 
 ### Fixed
@@ -51,17 +58,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - document minimum supported mariadb version (`10.1 -> 10.2`)
 - run tests against the minimum supported php and mariadb versions
 - (balancing) change interest rates for bank
-  - `interest_debit_rate_min: 0.011 -> 0.008`
-  - `interest_debit_rate_max: 0.015 -> 0.013`
-  - `interest_credit_rate_min: 0.017 -> 0.008`
-  - `interest_credit_rate_max: 0.023 -> 0.013`
+    - `interest_debit_rate_min: 0.011 -> 0.008`
+    - `interest_debit_rate_max: 0.015 -> 0.013`
+    - `interest_credit_rate_min: 0.017 -> 0.008`
+    - `interest_credit_rate_max: 0.023 -> 0.013`
 
 ### Fixed
 
 - (reset) also reset research levels for the items added in `1.11.5`
 - (reset) calculate final points prior resetting
 - (bank) correctly calculate reset amount
-  - description allowed up to 96h prior reset, but the calculated value was reached after 48h
+    - description allowed up to 96h prior reset, but the calculated value was reached after 48h
 
 ## [1.12.0] - 2023-04-05
 

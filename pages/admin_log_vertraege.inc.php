@@ -20,7 +20,7 @@ $offset = getOrDefault($_GET, 'o', 0);
 <?= getMessageBox(getOrDefault($_GET, 'm', 0)); ?>
 
 <div id="FilterForm">
-    <form action="/" method="get">
+    <form action="./" method="get">
         <input type="hidden" name="p" value="admin_log_vertraege"/>
         <label for="wer">Wer:</label>
         <input type="text" name="wer" id="wer" value="<?= escapeForOutput($wer); ?>"/>
@@ -78,11 +78,12 @@ $offset = getOrDefault($_GET, 'o', 0);
     }
     ?>
 </table>
-<?= createPaginationTable('pages', '/?p=admin_log_vertraege&amp;wer=' . escapeForOutput($wer)
-    . '&amp;wen=' . escapeForOutput($wen)
-    . '&amp;ware=' . escapeForOutput($ware)
-    . '&amp;angenommen=' . escapeForOutput($angenommen)
-    , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
+<?= createPaginationTable('pages', '/?p=admin_log_vertraege'
+        . '&amp;wer=' . urlencode($wer)
+        . '&amp;wen=' . urlencode($wen)
+        . '&amp;ware=' . $ware
+        . '&amp;angenommen=' . $angenommen
+        , $offset, $entriesCount, Config::getInt(Config::SECTION_BASE, 'admin_log_page_size')); ?>
 
 <div>
     <a href="./?p=admin">&lt;&lt; Zurück</a>

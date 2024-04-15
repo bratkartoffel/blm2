@@ -21,7 +21,7 @@ java {
 }
 
 dependencies {
-    testImplementation 'org.slf4j:slf4j-simple:2.0.12'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.13'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
     testImplementation 'org.seleniumhq.selenium:selenium-java:4.19.1'
     testImplementation 'com.evanlennick:retry4j:0.15.0'

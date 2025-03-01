@@ -51,7 +51,7 @@ jobs:
       - uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
           distribution: 'adopt'
-          java-version: '17'
+          java-version: '21'
           cache: 'gradle'
       - uses: browser-actions/setup-firefox@634a60ccd6599686158cf5a570481b4cd30455a2 # v1.5.4
         with:

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [1.13.3] - 2025-07-13
+
 - (various) upgrade PHPMailer to 6.10.0
 
 ## [1.13.2] - 2024-02-20
@@ -515,7 +519,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.2...HEAD
+[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.3...HEAD
+
+[1.13.3]: https://github.com/bratkartoffel/blm2/compare/v1.13.2...v1.13.3
 
 [1.13.2]: https://github.com/bratkartoffel/blm2/compare/v1.13.1...v1.13.2
 

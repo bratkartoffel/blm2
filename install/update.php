@@ -50,6 +50,9 @@ $step = sprintf('Checking installation for version %s:', game_version);
     if (!file_exists('../config/config.ini')) {
         print_status($step, status_fail, 'config/config.ini not found');
     }
+    if (!file_exists('../config/config-defaults.ini')) {
+        print_status($step, status_fail, 'config/config-defaults.ini not found');
+    }
     print_status($step, status_ok);
 }
 
@@ -57,6 +60,12 @@ require_once '../include/functions.inc.php';
 require_once '../include/database.class.php';
 
 $step = 'Verifying upgrade credentials';
+{
+    if (Config::get(Config::SECTION_BASE, 'upgrade_secret') === '!!replace this!!') {
+        http_response_code(401);
+        print_status($step, status_fail, 'the upgrade_secret is not configured');
+    }
+}
 {
     if (php_sapi_name() !== 'cli' && getOrDefault($_GET, 'secret', 'unset') !== Config::get(Config::SECTION_BASE, 'upgrade_secret')) {
         http_response_code(401);
@@ -159,7 +168,7 @@ foreach ($scripts as $script) {
                 $fsChecksum = sha1_file($script);
                 if ($dbChecksum !== $fsChecksum) {
                     print_status($step, status_fail, sprintf('Calculated checksum is different between database (%s) and filesystem (%s). Please correct manually!',
-                        $dbChecksum, $fsChecksum));
+                            $dbChecksum, $fsChecksum));
                 }
             }
         }
@@ -172,9 +181,9 @@ $step = 'Saving update information';
     $database->begin();
     foreach ($executedScripts as $script => $checksum) {
         if ($database->createTableEntry(Database::TABLE_UPDATE_INFO, array(
-                'Script' => $script,
-                'Checksum' => $checksum
-            )) !== 1) {
+                        'Script' => $script,
+                        'Checksum' => $checksum
+                )) !== 1) {
             $database->rollBack();
             print_status($step, status_fail, sprintf('Could not create update_info entry for %s', $script));
         }

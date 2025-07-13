@@ -200,7 +200,7 @@ switch (getOrDefault($_REQUEST, 'a', 0)) {
     // import user
     case 6:
         requireXsrfToken('/?p=admin_benutzer_importieren');
-        $verify = getOrDefault($_POST, 'verify', true);
+        $verify = getOrDefault($_POST, 'verify', false);
         $new_id = getOrDefault($_POST, 'new_id', false);
         $ignore_round = getOrDefault($_POST, 'ignore_round', false);
         $with_logs = getOrDefault($_POST, 'with_logs', false);

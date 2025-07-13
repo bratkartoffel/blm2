@@ -416,7 +416,7 @@ function getMessageBox(int $msg_id): ?string
             $text = sprintf("Die Signatur einer Tabelle stimmt nicht. Stimmt der konfigurierte Algorithmus (%s.%s=%s) mit dem Export überein? Ist die maximale Tabellengrösse (%s.%s=%s) ausreichend?",
                     Config::SECTION_BASE, 'export_hmac',
                     Config::get(Config::SECTION_BASE, 'export_hmac'),
-                    Config::SECTION_BASE, '.import_max_table_size',
+                    Config::SECTION_BASE, 'import_max_table_size',
                     Config::getInt(Config::SECTION_BASE, 'import_max_table_size')
             );
             break;

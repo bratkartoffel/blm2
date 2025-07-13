@@ -27,7 +27,7 @@ public class AdminTests extends AbstractTest {
     @Test
     void testImportLegacyUser() {
         WebDriver driver = getDriver();
-        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/export_test-import-no-metadata.zip")).getFile());
+        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/blm2_export_no_meta.zip")).getFile());
 
         driver.findElement(By.id("link_admin")).click();
         driver.findElement(By.id("link_admin_benutzer")).click();
@@ -52,7 +52,7 @@ public class AdminTests extends AbstractTest {
         getNextUserId();
 
         WebDriver driver = getDriver();
-        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/export_test-import-no-metadata.zip")).getFile());
+        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/blm2_export_no_meta.zip")).getFile());
 
         driver.findElement(By.id("link_admin")).click();
         driver.findElement(By.id("link_admin_benutzer")).click();
@@ -74,7 +74,7 @@ public class AdminTests extends AbstractTest {
     @Test
     void testImportUser() {
         WebDriver driver = getDriver();
-        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/export_test-import.zip")).getFile());
+        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/blm2_export_test.zip")).getFile());
 
         driver.findElement(By.id("link_admin")).click();
         driver.findElement(By.id("link_admin_benutzer")).click();
@@ -96,7 +96,7 @@ public class AdminTests extends AbstractTest {
     @Test
     void testImportUserAltered() {
         WebDriver driver = getDriver();
-        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/export_test-import-altered.zip")).getFile());
+        File importfile = new File(Objects.requireNonNull(AdminTests.class.getResource("/blm2_export_altered.zip")).getFile());
 
         driver.findElement(By.id("link_admin")).click();
         driver.findElement(By.id("link_admin_benutzer")).click();

@@ -6,7 +6,7 @@ Der Bioladenmanager ist ein klassisches Echtzeit-Aufbaustrategie Spiel.
 Pflanze auf deiner Plantage 15 verschiedene Obst- und Gemüsesorten an, erfosche im Forschungszentrum neue Pflanzen und
 verbessere die bereits bekannten.
 Im Bioladen kannst du die Waren an virtuelle Kunden verkaufen und per Marktplatz auch an andere Spieler.
-Mit der Mafia kannst du deine Gegenspieler ausrauben und ihre Plantagen attackieren um dir so einen Vorteil im harten
+Mit der Mafia kannst du deine Gegenspieler ausrauben und ihre Plantagen attackieren, um dir so einen Vorteil im harten
 Wettbewerb zu erkämpfen.
 Organisiere dich mit anderen Spielern in Gruppen, schliesse Bündnisse oder führe Krieg.
 
@@ -37,11 +37,11 @@ Die automatischen Tests laufen mit:
 - PHP `7.4.33`
 - MariaDB `10.2.44`.
 
-Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Jannuar 2024) mit:
+Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Juli 2025) mit:
 
 - Apache `2.4`
-- PHP `8.2`
-- MariaDB `11.2`
+- PHP `8.3`
+- MariaDB `11.8`
 
 ### 1) Dateien entpacken / hochladen
 
@@ -89,8 +89,8 @@ password = "blm2"
 ```
 
 Die als `!!replace this!!` markierten Felder müssen mit zufälligen Werten gefüllt werden.
-Dies dient der Fairness und Sicherheit des Spiels und sorgt dafür, dass die zufällig generierten Werte (unter Anderem
-die Warenkurse des Bioladens und die Zinsraten der Bank) nicht im voraus berechnet werden können.
+Dies dient der Fairness und Sicherheit des Spiels und sorgt dafür, dass die zufällig generierten Werte (unter anderem
+die Warenkurse des Bioladens und die Zinsraten der Bank) nicht im Voraus berechnet werden können.
 Hierzu kann der Generator von
 [dieser Seite](https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new)
 verwendet werden.
@@ -104,10 +104,10 @@ Stattdessen sollten alle von der Standardkonfiguration abweichenden Einstellunge
 ### 3) Installationsprozess starten
 
 Nachdem die Konfiguration angelegt wurde, kann die Installation der Datenbank beginnen.
-Hierzu muss die `install/update.php?secret=__upgrade_secret__` aufgerufen werden.
+Hierzu muss die `install/update.php?secret=upgrade_secret` aufgerufen werden.
 Der Parameter `secret` muss in der Anfrage durch das konfigurierte `upgrade_secret` ersetzt werden.
 
-Die Installation läuft automtisch ab und kann einige Sekunden dauern.
+Die Installation läuft automatisch ab und kann einige Sekunden dauern.
 Währenddessen lädt die Seite und es wird erst nach Abschluss der Installation der Status ausgegeben.
 
 ```text
@@ -147,7 +147,7 @@ Execution took 1,215.51 ms
 102 queries were executed
 ```
 
-Die initiale Installtion erstellt auch einen Admin-Benutzer (`admin`) mit einem zufällig generiertem Passwort.
+Die initiale Installation erstellt auch einen Admin-Benutzer (`admin`) mit einem zufällig generiertem Passwort.
 Das Passwort wird in der Ausgabe angezeigt und ist in dem obigen Beispiel `gCcKhP0KiSwjtXlS`.
 
 ### 4a) Cronjob einrichten (Linux)
@@ -165,7 +165,7 @@ Das Intervall des Cronjobs ist standardmässig 30 Minuten, ein Cronjob auf Syste
 ### 4b) Cronjob einrichten (Windows)
 
 Windows selbst bietet keinen klassischen cron, hier muss der Eintag über die "Aufgabenplanung" erstellt werden. 
-Nach einem Rechtsklick im linken Bereich des Fensters auf den obersten Einttrag, "Aufgabenplanung" -> "Aufgabe erstellen"
+Nach einem Rechtsklick im linken Bereich des Fensters auf den obersten Eintrag, "Aufgabenplanung" → "Aufgabe erstellen"
 wird ein neues Fenster geöffnet. Der Name kann frei gewählt werden, sollte aber zur einfachen Nachvollziehbarkeit
 schlicht "Blm2 Cron" genannt werden.
 
@@ -173,7 +173,7 @@ schlicht "Blm2 Cron" genannt werden.
 
 Im Reiter "Trigger" kann mittels des Buttons "Neu" ein Zeitplan hinzugefügt werden.
 
-Im oberen Bereich sollte bei "Start" eine "gerade" Zeit ausgewählt werden, so ist das ganze besser plan- und testbar.
+Im oberen Bereich sollte bei "Start" eine "gerade" Zeit ausgewählt werden, so ist das Ganze besser plan- und testbar.
 Als Beispiel kann hier auf die letzten 30 Minuten gerundet werden, z.B. `01.01.2024 15:00:00`.
 
 Im Bereich "Erweiterte Einstellungen" muss die Option "Wiederholen alle" angehakt werden.

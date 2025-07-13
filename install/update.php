@@ -76,9 +76,13 @@ $step = 'Verifying upgrade credentials';
 
 $step = 'Verifying secrets changed';
 {
+    if (Config::get(Config::SECTION_BASE, 'random_secret') === '!!replace this!!') {
+        http_response_code(401);
+        print_status($step, status_fail, 'the random_secret is not configured');
+    }
     if (Config::get(Config::SECTION_BASE, 'upgrade_secret') == Config::get(Config::SECTION_BASE, 'random_secret')) {
         http_response_code(401);
-        print_status($step, status_fail, "'base.upgrade_secret' and 'base.random_secret' may not be equal");
+        print_status($step, status_fail, "'upgrade_secret' and 'random_secret' may not be equal");
     }
     print_status($step, status_ok);
 }

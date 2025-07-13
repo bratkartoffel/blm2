@@ -150,6 +150,9 @@ Execution took 1,215.51 ms
 Die initiale Installation erstellt auch einen Admin-Benutzer (`admin`) mit einem zufällig generiertem Passwort.
 Das Passwort wird in der Ausgabe angezeigt und ist in dem obigen Beispiel `gCcKhP0KiSwjtXlS`.
 
+Bekannte Fehler und Lösungen für die Installation sind im
+Kapitel [Bekannte Fehler während der Installation](#bekannte-fehler-während-der-installation) beschrieben.
+
 ### 4a) Cronjob einrichten (Linux)
 
 Das Spiel benötigt einen Cronjob, welcher periodisch läuft. Dies dient dazu, die Zinsen, das Basiseinkommen und diverse
@@ -164,7 +167,7 @@ Das Intervall des Cronjobs ist standardmässig 30 Minuten, ein Cronjob auf Syste
 
 ### 4b) Cronjob einrichten (Windows)
 
-Windows selbst bietet keinen klassischen cron, hier muss der Eintag über die "Aufgabenplanung" erstellt werden. 
+Windows selbst bietet keinen klassischen cron, hier muss der Eintag über die "Aufgabenplanung" erstellt werden.
 Nach einem Rechtsklick im linken Bereich des Fensters auf den obersten Eintrag, "Aufgabenplanung" → "Aufgabe erstellen"
 wird ein neues Fenster geöffnet. Der Name kann frei gewählt werden, sollte aber zur einfachen Nachvollziehbarkeit
 schlicht "Blm2 Cron" genannt werden.
@@ -213,12 +216,13 @@ paar Besonderheiten zu beachten.
 
 Einmalig muss im PHP die GD-Erweiterung aktiviert werden. Hierzu muss in der `php/php.ini` die Zeile mit `extension=gd`
 gefunden und eingeschaltet werden:
+
 ```ini
 ; vorher:
 ;extension=gd
 
 ; nachher:
-extension=gd
+extension = gd
 ```
 
 ## Entwicklung
@@ -290,3 +294,169 @@ Die Tests benötigen eine spezielle Konfiguration des Spiels.
 Hierzu muss der [docker-compose stack](tests/src/test/resources/compose.yaml) aus dem `src/test/resources` Ordner
 gestartet sein. Anschlissend können die Tests aus der IDE oder mittels `./gradlew test` ausgeführt werden.
 
+## Bekannte Fehler während der Installation:
+
+### config/config-defaults.ini not found
+
+Fehlermeldung:
+
+```text
+[FAIL]: Checking installation for version 1.13.3: (config/config-defaults.ini not found)
+```
+
+Beschreibung:
+
+Die Beispiel-Konfigurationsdatei `config/config-defaults.ini` existiert nicht.
+
+Lösung:
+
+Diese Datei darf nicht verändert oder gelöscht werden. Alle Einstellungen, welche vom Standard abweichen, müssen in
+einer separaten Konfigurationsdatei (`config/config.ini`) vorgenommen werden.
+
+### config/config.ini not found
+
+Fehlermeldung:
+
+```text
+[FAIL]: Checking installation for version 1.13.3: (config/config.ini not found)
+```
+
+Beschreibung:
+
+Es wurde keine Konfigurationsdatei (`config/config.ini`) erstellt. Das Spiel benötigt unter anderem eine
+Datenbankverbindung, von daher ist eine Konfigurationsdatei zwingend erforderlich.
+
+Lösung:
+
+Lege die Datei wie in der Installationsanleitung beschrieben an.
+
+### the upgrade_secret is not configured
+
+```text
+[FAIL]: Verifying upgrade credentials (the upgrade_secret is not configured)
+```
+
+Beschreibung:
+
+Für die Installation und Updates wird ein Passwort benötigt. Dieses wurde jedoch in der Konfigurationsdatei nicht
+definiert.
+
+Lösung:
+
+Definiere die Einstellung `upgrade_secret` in der Konfigurationsdatei.
+
+### the random_secret is not configured
+
+```text
+[FAIL]: Verifying secrets changed (the random_secret is not configured)
+```
+
+Beschreibung:
+
+Das Spiel beruht auf deterministischen Zufall und benötigt hierzu einen fix definierten Wert als Basis für den _
+Zufallszahlengenerator. Dieser Wert wurde jedoch in der Konfiguration nicht gesetzt.
+
+Lösung:
+
+Definiere die Einstellung `random_secret` in der Konfigurationsdatei.
+
+### 'upgrade_secret' and 'random_secret' may not be equal
+
+```text
+[FAIL]: Verifying secrets changed ('upgrade_secret' and 'random_secret' may not be equal)
+```
+
+Beschreibung:
+
+Die Einstellungen für `upgrade_secret` und `random_secret` stehen auf dem selben Wert.
+
+Lösung:
+
+Setze unterschiedliche Werte für `upgrade_secret` und `random_secret` in der Konfiguration.
+
+### invalid credentials
+
+Fehlermeldung:
+
+```text
+[FAIL]: Verifying upgrade credentials (invalid credentials)
+```
+
+Beschreibung:
+
+Der Parameter `secret` ist nicht gesetzt oder der Wert stimmt nicht mit dem konfiguriertem Wert `upgrade_secret`
+überein.
+
+Lösung:
+
+Rufe die Installation mit dem korrekten Parameter auf.
+
+### SQLSTATE[HY000] [2002] No such file or directory
+
+### SQLSTATE[HY000] [2002] Connection timed out
+
+### SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+
+Fehlermeldung:
+
+```text
+[FAIL]: Verifying database connection (SQLSTATE[HY000] [2002] No such file or directory)
+oder
+[FAIL]: Verifying database connection (SQLSTATE[HY000] [2002] Connection timed out)
+oder
+[FAIL]: Verifying database connection (SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known)
+```
+
+Beschreibung:
+
+Die Installation kann keine Verbindung zur Datenbank aufbauen.
+
+Lösung:
+
+Bitte prüfe, ob die Einstellungen für `hostname` und `port` in der `[database]` Sektion der Konfiguration korrekt sind.
+
+### SQLSTATE[HY000] [1044] Access denied for user
+
+Fehlermeldung:
+
+```text
+[FAIL]: Verifying database connection (SQLSTATE[HY000] [1044] Access denied for user 'blm2_test'@'%' to database 'blm2_test')
+```
+
+Beschreibung:
+
+Die Zugangsdaten zur Datenbank sind nicht korrekt.
+
+Lösung:
+
+Bitte prüfe, ob die Einstellungen für `username`, `password` und `database` korrekt sind. Die Datenbank muss bereits
+existieren und der angegebene Benutzer benötigt Rechte für DDL-Operationen.
+
+### A thread value other than 1 is not supported by this implementation
+
+Fehlermeldung:
+
+```text
+[NEEDS UPGRADE]: Verifying existing accounts (No accounts found)
+<br />
+<b>Fatal error</b>:  Uncaught ValueError: A thread value other than 1 is not supported by this implementation in /var/www/include/functions.inc.php:1551
+Stack trace:
+#0 /var/www/include/functions.inc.php(1551): password_hash()
+#1 /var/www/include/database.class.php(1513): hashPassword()
+#2 /var/www/install/update.php(193): Database-&gt;createUser()
+#3 {main}
+thrown in <b>/var/www/include/functions.inc.php</b> on line <b>1551</b><br />
+```
+
+Beschreibung:
+
+Die Passwörter der Benutzerkonten werden mittels Argon2id gehasht und sicher gespeichert. Die verwendeten Einstellungen
+werden jedoch von der PHP-Installation nicht unterstützt.
+
+Lösung:
+
+In der `config.ini` muss in der `[base]` Sektion folgende Einstellung gesetzt werden:
+
+```ini
+password_hash_options[threads] = 1
+```

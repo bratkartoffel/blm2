@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+- (various) upgrade PHPMailer to 6.10.0
 
 ## [1.13.2] - 2024-02-20
 

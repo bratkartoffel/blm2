@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - do not delete admin and betatester accounts automatically on round end
+- enable error reporting for install/update.sh
 
 ## [1.13.3] - 2025-07-13
 

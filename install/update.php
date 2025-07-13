@@ -7,6 +7,8 @@
  */
 $start = microtime(true);
 header('Content-Type: text/plain; charset=UTF-8');
+error_reporting(E_ALL);
+ini_set('display_errors', 'true');
 ob_start();
 chdir(__DIR__);
 http_response_code(500);

@@ -1503,9 +1503,9 @@ function handleRoundEnd(): void
     );
 
     // reset all accounts
-    $players = $database->getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin();
+    $players = $database->getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLoginAndAdminAndBetatester();
     foreach ($players as $player) {
-        if ($player['LastLogin'] === null) {
+        if ($player['LastLogin'] === null && $player['Admin'] === 0 && $player['Betatester'] === 0) {
             $status = deleteAccount($player['ID']);
             if ($status !== null) {
                 $database->rollBack();

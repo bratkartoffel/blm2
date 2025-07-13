@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- no changes yet
+### Fixed
+
+- do not delete admin and betatester accounts automatically on round end
 
 ## [1.13.3] - 2025-07-13
 

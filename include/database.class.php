@@ -896,9 +896,9 @@ SELECT action, COUNT(*) AS cnt, SUM(success) AS success, SUM(amount) as amount F
         return $this->executeAndExtractRows($stmt);
     }
 
-    public function getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLogin(): ?array
+    public function getAllPlayerIdsAndNameAndEmailAndEmailActAndLastLoginAndAdminAndBetatester(): ?array
     {
-        $stmt = $this->prepare('SELECT ID, Name, EMail, EMailAct, LastLogin FROM ' . self::TABLE_USERS . ' WHERE ID > 0 ORDER BY Name');
+        $stmt = $this->prepare('SELECT ID, Name, EMail, EMailAct, LastLogin, Admin, Betatester FROM ' . self::TABLE_USERS . ' WHERE ID > 0 ORDER BY Name');
         return $this->executeAndExtractRows($stmt);
     }
 

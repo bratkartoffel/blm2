@@ -25,7 +25,7 @@ services:
     ports:
       - "8080:80"
     tmpfs:
-      - /var/www/html/config
+      - /var/www/html/blm2/config
     volumes:
       - ../../../../:/var/www/html/blm2
       - ../../../../config/config-defaults.ini:/var/www/html/blm2/config/config-defaults.ini

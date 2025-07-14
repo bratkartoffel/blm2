@@ -368,7 +368,7 @@ Definiere die Einstellung `random_secret` in der Konfigurationsdatei.
 
 Beschreibung:
 
-Die Einstellungen für `upgrade_secret` und `random_secret` stehen auf dem selben Wert.
+Die Einstellungen für `upgrade_secret` und `random_secret` stehen auf demselben Wert.
 
 Lösung:
 

@@ -17,10 +17,12 @@ services:
       - "3306:3306"
 
   application:
-    image: docker.io/bratkartoffel/web:blm2-dev
+    image: docker.io/bratkartoffel/web:blm2-dev-${PHP_VERSION:-8.4}
     build:
       context: .
       dockerfile: Dockerfile-php
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4}
     restart: unless-stopped
     ports:
       - "8080:80"

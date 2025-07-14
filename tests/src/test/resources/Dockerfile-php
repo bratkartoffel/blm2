@@ -2,17 +2,19 @@
 # Copyright (c) 2023 Simon Frankenberger
 # Please see LICENCE.md for complete licence text.
 
-FROM php:7.4.33-apache
+ARG PHP_VERSION=8.4
+FROM docker.io/library/php:${PHP_VERSION}-apache
 
 # update system
-RUN apt-get update \
+RUN set -ex \
+    && apt-get update \
     && apt-get dist-upgrade -y \
     # enable headers, rewrite and brotli module
     && a2enmod headers rewrite brotli \
     # install mysql driver
     && docker-php-ext-install pdo pdo_mysql \
     # install dependencies for gd lib
-    && apt-get install -y libfreetype-dev libfreetype6 libgd3 libgd-dev libwebp-dev libwebp6 libzip-dev libzip4 zlib1g-dev zlib1g \
+    && apt-get install -y libfreetype-dev libgd-dev libwebp-dev libzip-dev zlib1g-dev \
     # install gd lib
     && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
     && docker-php-ext-install gd \
@@ -22,12 +24,25 @@ RUN apt-get update \
     && docker-php-source delete \
     && apt-get purge -y libfreetype-dev libgd-dev libwebp-dev libzip-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* \
-    # install xdebug
-    && pecl channel-update pecl.php.net \
-    && pecl install xdebug-3.1.6 \
     # remove not needed packages
     && apt-get --purge -y autoremove \
     # clean apt cache
+    && rm -rf /var/lib/apt/lists/*
+
+# install runtime dependencies for php modules
+RUN set -ex \
+    && apt-get update \
+    && pecl channel-update pecl.php.net \
+    && apt-get install -y libfreetype6 libgd3 libzip4 zlib1g-dev \
+    && ( \
+    if php -v | grep -q "PHP 7.4"; then \
+      apt-get install -y libwebp6; \
+      pecl install xdebug-3.1.6; \
+    else \
+      apt-get install -y libwebp7; \
+      pecl install xdebug-3.4.4; \
+    fi \
+    ) \
     && rm -rf /var/lib/apt/lists/*
 
 HEALTHCHECK --interval=60s --timeout=2s \

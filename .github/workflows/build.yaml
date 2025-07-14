@@ -18,7 +18,7 @@ jobs:
   build:
     strategy:
       matrix:
-        PHP_VERSION: [7.4, 8.4]
+        php: [7.4, 8.4]
     runs-on: ubuntu-latest
     steps:
       - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
@@ -49,9 +49,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           lfs: true
-      - run: docker compose pull --quiet && docker compose up -d -f tests/src/test/resources/compose.yaml
+      - run: docker compose pull --quiet && docker compose up -d
+        working-directory: tests/src/test/resources/
         env:
-          PHP_VERSION: ${PHP_VERSION}
+          PHP_VERSION: ${{ matrix.php }}
       - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'adopt'

@@ -391,6 +391,64 @@ Lösung:
 
 Rufe die Installation mit dem korrekten Parameter auf.
 
+### could not find driver
+
+Fehlermeldung:
+
+```text
+[FAIL]: Verifying database connection (could not find driver)
+```
+
+Beschreibung:
+
+Der Datenbank Treiber wurde nicht installiert.
+
+Lösung:
+
+Bitte stelle sicher, dass das PDO und PDO-MySQL Modul installiert ist.
+
+### zip not found
+
+### gd not found
+
+Fehlermeldung:
+
+```text
+[FAIL]: Verifying PHP modules installed (zip not found)
+oder
+[FAIL]: Verifying PHP modules installed (gd not found)
+```
+
+Beschreibung:
+
+Ein benötigtes PHP-Modul wurde nicht gefunden.
+
+Lösung:
+
+Bitte stelle sicher, dass alle benötigten Module installiert sind.
+
+### argon2 provider (libsodium) doesn't support more than 1 thread
+
+Fehlermeldung:
+
+```text
+[FAIL]: Verifying PHP modules installed (argon2 provider (libsodium) doesn't support more than 1 thread)
+```
+
+Beschreibung:
+
+PHP läuft mit `libsodium` als Provider für das Hashing der Passwörter. Diese Implementierung unterstützt jedoch nicht
+mehrere Threads.
+
+Lösung:
+
+In der Konfiguration muss die Anzahl Threads für die Passwörter auf 1 gestellt sein:
+
+```ini
+[base]
+password_hash_options[threads] = 1
+```
+
 ### SQLSTATE[HY000] [2002] No such file or directory
 
 ### SQLSTATE[HY000] [2002] Connection timed out
@@ -431,32 +489,3 @@ Lösung:
 
 Bitte prüfe, ob die Einstellungen für `username`, `password` und `database` korrekt sind. Die Datenbank muss bereits
 existieren und der angegebene Benutzer benötigt Rechte für DDL-Operationen.
-
-### A thread value other than 1 is not supported by this implementation
-
-Fehlermeldung:
-
-```text
-[NEEDS UPGRADE]: Verifying existing accounts (No accounts found)
-<br />
-<b>Fatal error</b>:  Uncaught ValueError: A thread value other than 1 is not supported by this implementation in /var/www/include/functions.inc.php:1551
-Stack trace:
-#0 /var/www/include/functions.inc.php(1551): password_hash()
-#1 /var/www/include/database.class.php(1513): hashPassword()
-#2 /var/www/install/update.php(193): Database-&gt;createUser()
-#3 {main}
-thrown in <b>/var/www/include/functions.inc.php</b> on line <b>1551</b><br />
-```
-
-Beschreibung:
-
-Die Passwörter der Benutzerkonten werden mittels Argon2id gehasht und sicher gespeichert. Die verwendeten Einstellungen
-werden jedoch von der PHP-Installation nicht unterstützt.
-
-Lösung:
-
-In der `config.ini` muss in der `[base]` Sektion folgende Einstellung gesetzt werden:
-
-```ini
-password_hash_options[threads] = 1
-```

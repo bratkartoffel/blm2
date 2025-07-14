@@ -45,7 +45,7 @@ function print_status(string $step, int $status, ?string $extraInfo = null): voi
 
 
 require_once '../include/game_version.inc.php';
-$step = sprintf('Checking installation for version %s:', game_version);
+$step = sprintf('Checking installation for version %s (running with PHP %s):', game_version, phpversion());
 {
     if (!file_exists('../config/config.ini')) {
         print_status($step, status_fail, 'config/config.ini not found');
@@ -94,6 +94,21 @@ $database = null;
         $database = Database::getInstanceForInstallCheck();
     } catch (PDOException $e) {
         print_status($step, status_fail, $e->getMessage());
+    }
+    print_status($step, status_ok);
+}
+
+$step = 'Verifying PHP modules installed';
+{
+    if (!class_exists('ZipArchive')) {
+        print_status($step, status_fail, 'zip not found');
+    }
+    if (!function_exists('gd_info')) {
+        print_status($step, status_fail, 'gd not found');
+    }
+    if (defined('PASSWORD_ARGON2_PROVIDER') && PASSWORD_ARGON2_PROVIDER === 'sodium'
+            && Config::get(Config::SECTION_BASE, 'password_hash_options')['threads'] !== 1) {
+        print_status($step, status_fail, "argon2 provider (libsodium) doesn't support more than 1 thread");
     }
     print_status($step, status_ok);
 }

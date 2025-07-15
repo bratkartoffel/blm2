@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- no changes yet
+
+## [0.13.4] - 2025-07-15
+
 ### Fixed
 
 - do not delete admin and betatester accounts automatically on round end
@@ -525,7 +529,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial import of this project to GitHub
 
-[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v1.13.3...HEAD
+[Unreleased]: https://github.com/bratkartoffel/blm2/compare/v0.13.4...HEAD
+
+[0.13.4]: https://github.com/bratkartoffel/blm2/compare/v1.13.3...v0.13.4
 
 [1.13.3]: https://github.com/bratkartoffel/blm2/compare/v1.13.2...v1.13.3
 

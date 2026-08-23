@@ -33,14 +33,14 @@ Selbst mit einer Edge-Mobilfunkverbindung ist das Spiel noch sehr gut spielbar.
 
 Die automatischen Tests laufen mit:
 
-- Apache `2.4.56`
+- Apache `2.4.68`
 - PHP `7.4.33`
 - MariaDB `10.2.44`.
 
-Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand Juli 2025) mit:
+Auf dem [Livesystem](https://blm2.fraho.eu) läuft die Anwendung (Stand August 2026) mit:
 
 - Apache `2.4`
-- PHP `8.3`
+- PHP `8.4`
 - MariaDB `11.8`
 
 ### 1) Dateien entpacken / hochladen

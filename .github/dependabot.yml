@@ -10,3 +10,6 @@ updates:
     directory: "/tests/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: gradle-wrapper
+
